@@ -66,6 +66,8 @@ export class EncounterView extends Component {
   private countdownStartTime: number = 0
   private harvestProgress: HarvestProgress | null = null
   private optionHandlers: Array<() => void> = []
+  private _choiceHandled: boolean = false
+  private choiceHandlers: Array<{ button: Node; handler: () => void }> = []
 
   show(input: EncounterInput): Promise<EncounterOutcome> {
     this.currentInput = input
@@ -100,6 +102,7 @@ export class EncounterView extends Component {
     this.mushroomPanel.active = true
     this.mushroomArt.active = false
     this.mushroomResultLabel.node.active = false
+    this._choiceHandled = false
 
     // Show clues
     this.cluesLabel.string = challenge.clues.join('\n')
@@ -158,6 +161,10 @@ export class EncounterView extends Component {
   }
 
   private handleMushroomChoice(challenge: Challenge, chosenId: string, target: MushroomCard): void {
+    // Prevent duplicate handling (from timeout callback firing after user choice)
+    if (this._choiceHandled) return
+    this._choiceHandled = true
+
     // Stop timer
     this.unschedule(this.updateCountdownRing)
 
@@ -194,6 +201,13 @@ export class EncounterView extends Component {
       }
     })
     this.optionHandlers = []
+  }
+
+  private removeChoiceHandlers(): void {
+    this.choiceHandlers.forEach(({ button, handler }) => {
+      button.off(Node.EventType.TOUCH_END, handler, this)
+    })
+    this.choiceHandlers = []
   }
 
   private showMushroomHarvest(target: MushroomCard): void {
@@ -275,13 +289,24 @@ export class EncounterView extends Component {
     this.choiceALabel.string = '绕行'
     this.choiceBLabel.string = '抢先'
 
-    this.choiceAButton.node.once(Node.EventType.TOUCH_END, () => {
-      this.resolveEncounter({ kind: 'animal', choice: 'evade' })
-    })
+    this.removeChoiceHandlers()
 
-    this.choiceBButton.node.once(Node.EventType.TOUCH_END, () => {
+    const handlerA = () => {
+      this.removeChoiceHandlers()
+      this.resolveEncounter({ kind: 'animal', choice: 'evade' })
+    }
+    const handlerB = () => {
+      this.removeChoiceHandlers()
       this.resolveEncounter({ kind: 'animal', choice: 'grab' })
-    })
+    }
+
+    this.choiceAButton.node.on(Node.EventType.TOUCH_END, handlerA, this)
+    this.choiceBButton.node.on(Node.EventType.TOUCH_END, handlerB, this)
+
+    this.choiceHandlers.push(
+      { button: this.choiceAButton.node, handler: handlerA },
+      { button: this.choiceBButton.node, handler: handlerB }
+    )
   }
 
   private showCampfireEncounter(): void {
@@ -290,22 +315,40 @@ export class EncounterView extends Component {
     this.choiceALabel.string = '休息 +1 心'
     this.choiceBLabel.string = '望气（下节点可见）'
 
-    this.choiceAButton.node.once(Node.EventType.TOUCH_END, () => {
-      this.resolveEncounter({ kind: 'campfire', choice: 'heal' })
-    })
+    this.removeChoiceHandlers()
 
-    this.choiceBButton.node.once(Node.EventType.TOUCH_END, () => {
+    const handlerA = () => {
+      this.removeChoiceHandlers()
+      this.resolveEncounter({ kind: 'campfire', choice: 'heal' })
+    }
+    const handlerB = () => {
+      this.removeChoiceHandlers()
       this.resolveEncounter({ kind: 'campfire', choice: 'compass' })
-    })
+    }
+
+    this.choiceAButton.node.on(Node.EventType.TOUCH_END, handlerA, this)
+    this.choiceBButton.node.on(Node.EventType.TOUCH_END, handlerB, this)
+
+    this.choiceHandlers.push(
+      { button: this.choiceAButton.node, handler: handlerA },
+      { button: this.choiceBButton.node, handler: handlerB }
+    )
   }
 
   private showDangerEncounter(): void {
     this.dangerPanel.active = true
     this.dangerLabel.string = '毒菌陷阱'
 
-    this.dangerButton.node.once(Node.EventType.TOUCH_END, () => {
+    this.removeChoiceHandlers()
+
+    const handler = () => {
+      this.removeChoiceHandlers()
       this.resolveEncounter({ kind: 'danger' })
-    })
+    }
+
+    this.dangerButton.node.on(Node.EventType.TOUCH_END, handler, this)
+
+    this.choiceHandlers.push({ button: this.dangerButton.node, handler })
   }
 
   private resolveEncounter(outcome: EncounterOutcome): void {
@@ -330,6 +373,9 @@ export class EncounterView extends Component {
 
     // Remove mushroom option button listeners
     this.removeOptionHandlers()
+
+    // Remove choice button listeners (animal/campfire/danger)
+    this.removeChoiceHandlers()
 
     // Remove harvest touch listeners
     if (this.mushroomArt) {

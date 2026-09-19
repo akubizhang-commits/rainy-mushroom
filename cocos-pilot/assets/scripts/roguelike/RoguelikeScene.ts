@@ -25,8 +25,9 @@ export class RoguelikeScene extends Component {
     this.unsubscribes.forEach(unsub => unsub())
     this.unsubscribes = []
 
-    // Hide settlement screen
+    // Hide settlement and encounter screens
     this.settlement.node.active = false
+    this.encounter.node.active = false
 
     // Create new game instance
     this.game = new (RoguelikeGame as any)({
@@ -66,6 +67,7 @@ export class RoguelikeScene extends Component {
     // Subscribe to game end
     this.unsubscribes.push(
       this.game.on('gameEnded', (payload: any) => {
+        this.encounter.node.active = false
         this.settlement.show(payload)
       })
     )
@@ -75,7 +77,7 @@ export class RoguelikeScene extends Component {
     const type = this.game.enterNode(nodeId)
 
     if (type === 'mushroom') {
-      const enc = this.game.makeMushroomEncounter(performance.now())
+      const enc = this.game.makeMushroomEncounter(Date.now())
       const outcome = await this.encounter.show({
         kind: 'mushroom',
         challenge: enc.challenge,

@@ -50,11 +50,11 @@ export class SettlementView extends Component {
 
   onLoad(): void {
     this.playAgainBtn.node.on(Button.EventType.CLICK, () => {
-      this.events.dispatchEvent(new Event(SettlementEvent.PlayAgain))
+      this.events.emit(SettlementEvent.PlayAgain)
     })
 
     this.exitBtn.node.on(Button.EventType.CLICK, () => {
-      this.events.dispatchEvent(new Event(SettlementEvent.Exit))
+      this.events.emit(SettlementEvent.Exit)
     })
   }
 
