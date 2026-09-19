@@ -1,0 +1,45 @@
+import { SCENES, ECO_REGIONS } from './explorationData.js'
+
+export const FORAGING_RULES=Object.freeze({goal:8,total:10,graceMs:30000,predatorWarningMs:50000,predatorMs:60000,escapeMs:6000,timeLimitMs:180000,eatingMs:3500,restMs:16000,cooldowns:[45000,120000]})
+const wildlife={
+  pine:[['boar','野猪',true],['deer','林鹿',false]],
+  alpine:[['yak','牦牛',false],['yak','牦牛',false]],
+  birch:[['deer','梅花鹿',false],['squirrel','松鼠',true]],
+  meadow:[['deer','林鹿',false],['boar','野猪',true]],
+  mixed:[['squirrel','松鼠',true],['boar','野猪',true]],
+  river:[['deer','狍',false],['squirrel','松鼠',true]],
+  oak:[['boar','野猪',true],['deer','梅花鹿',false]],
+  edge:[['deer','林鹿',false],['boar','野猪',true]]
+}
+const predators={pine:['bear','熊'],alpine:['wolf','狼'],birch:['tiger','老虎'],meadow:['wolf','狼'],mixed:['tiger','老虎'],river:['bear','熊'],oak:['bear','熊'],edge:['wolf','狼']}
+const layouts={
+  pine:[[-1.65,2.8],[3.6,-1.8],[-4.1,-5.3],[1,-8.4],[-5,4.5],[4.2,3.5],[-1.4,-2.7],[5.5,-7.3],[-6,-10.8],[.7,5.0]],
+  alpine:[[-1.65,2.8],[3.1,0],[-3.5,-2.6],[1,-7.4],[-4.8,5.1],[4.3,4],[-1,-1],[5,-5.7],[-5.2,-8],[.8,5]],
+  river:[[-1.65,2.8],[3,-1.8],[-4,-5.3],[2.2,-8.4],[-4.8,4.5],[3.2,3.8],[-1.4,-2.7],[3.8,-5],[-5.8,-9],[.7,5]],
+  meadow:[[-1.65,2.8],[3.8,-1.8],[-4,-5.3],[1,-8.4],[-5,4.5],[4.8,4],[-1.2,-2.5],[5.4,-7],[-6,-10],[.8,5]]
+}
+const NEW_SCENES=[
+ {base:'yn-pine',id:'yn-ridge',name:'山脊疏松林',subtitle:'风露岩脊、疏松与针叶浅层',feature:'ridge',starter:'lactarius-deliciosus',
+  biomeOverrides:{density:12,grass:'#92906b',soil:'#9b8769',sky:'#d5dfce',fog:'#c8d0b9'},poolFocus:'soil'},
+ {base:'hl-mixed',id:'hl-deadwood',name:'苔藓桦木林',subtitle:'白桦、成片厚苔与腐木群',feature:'deadwood',starter:'flammulina-velutipes',
+  biomeOverrides:{density:22,grass:'#56775a',soil:'#665e48',sky:'#b4d0c5',fog:'#a8c2af'},poolFocus:'wood'},
+ {base:'jl-river',id:'jl-backwater',name:'溪湾腐木地',subtitle:'开阔溪湾、低岸与横卧倒木',feature:'backwater',starter:'schizophyllum-commune',
+  biomeOverrides:{density:12,grass:'#779d67',soil:'#8b8061',sky:'#c4dee2',fog:'#c8dbce'},poolFocus:'wood'},
+ {base:'ln-edge',id:'ln-glade',name:'栎林草坡',subtitle:'疏栎缓坡、牧草与林草交界',feature:'glade',starter:'agaricus-campestris',
+  biomeOverrides:{density:8,tree:'oak',leaf:'#a5a26c',grass:'#a6a16d',soil:'#a0895f',sky:'#e0e2c7',fog:'#d7d9b8'},poolFocus:'ground'}
+].map(extra=>{
+ const base=SCENES.find(scene=>scene.id===extra.base)
+ return {...base,...extra,spawns:base.spawns.map((s,i)=>({...s,id:`${extra.id}-seed-${i}`,speciesId:i===0?extra.starter:s.speciesId}))}
+})
+export const FORAGING_SCENES=[...SCENES,...NEW_SCENES].map(scene=>({...scene,goalType:'collect',targetCollectCount:8,targetFindCount:10,capacity:10,timeLimitMs:FORAGING_RULES.timeLimitMs,
+  predator:{kind:predators[scene.environment][0],name:predators[scene.environment][1]},
+  animals:wildlife[scene.environment].map(([kind,name,forager],i)=>({id:`${scene.id}-animal-${i}`,kind,name,forager,x:i===0?(scene.environment==='river'?2.1:-1.1):3,z:5.1-i*1.8})),
+  spawns:Array.from({length:10},(_,index)=>{
+    const original=scene.spawns[index%scene.spawns.length],position=(layouts[scene.environment]||layouts.pine)[index]
+    return {...original,id:`${scene.id}-pick-${index+1}`,count:1,position,foraging:true}
+  })
+}))
+export const FORAGING_SCENE_BY_ID=Object.fromEntries(FORAGING_SCENES.map(scene=>[scene.id,scene]))
+export const FORAGING_REGIONS=ECO_REGIONS.map(region=>({...region,
+ sceneIds:FORAGING_SCENES.filter(scene=>scene.regionId===region.id).map(scene=>scene.id)}))
+export const FORAGING_REGION_BY_ID=Object.fromEntries(FORAGING_REGIONS.map(region=>[region.id,region]))

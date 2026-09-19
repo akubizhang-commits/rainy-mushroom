@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <base href="/">
+  <title>雨后菌语 · 场景预览</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; background: #15241c; color: #eee9d8; font: 14px system-ui; display: flex; align-items: flex-start; justify-content: center; gap: 28px; padding: 24px; }
+    aside { width: 220px; line-height: 1.8; }
+    h1 { font-size: 21px; font-weight: 600; }
+    p { color: #bec8ba; }
+    select, button { width: 100%; padding: 12px; margin: 6px 0; background: #293e30; border: 1px solid #52674f; border-radius: 8px; color: #eee9d8; }
+    canvas { display: block; touch-action: none; background: #263f31; max-width: 100%; }
+    @media(max-width:650px) { body { padding: 0; } aside { display: none; } }
+  </style>
+</head>
+<body>
+  <aside>
+    <h1>雨后菌语</h1>
+    <p>3D 林间探索 · 本地预览</p>
+    <select id="scene"></select>
+    <select id="size"><option value="375,812,54">375 × 812</option><option value="320,568,36">320 × 568</option><option value="430,932,64">430 × 932</option></select>
+    <button id="restart">重新开始</button>
+    <p>WASD 或摇杆移动，右侧拖动环顾，轻点采集。空格或右侧按钮跳起，C 蹲下；Shift 或推满摇杆快跑。采满8朵后可继续探索。</p>
+  </aside>
+  <canvas id="game"></canvas>
+  <script type="module">
+    import { VoxelGame } from './js/voxel/VoxelGame.js'
+    import { ECO_REGION_BY_ID } from './js/data/explorationData.js'
+    import { FORAGING_SCENES as SCENES } from './js/data/foragingScenes.js'
+    import { EXPLORATION_SCREEN } from './js/core/ExplorationState.js'
+    const params = new URLSearchParams(location.search)
+    const canvas = document.querySelector('canvas')
+    const handlers = {}
+    const selectedSize = params.get('size') || '375,812,54'
+    const [width, height, safeTop] = selectedSize.split(',').map(Number)
+    canvas.width = width; canvas.height = height
+    canvas.style.width = `${width}px`; canvas.style.height = `${height}px`
+    const fixture=params.has('specimen')||['collection','correction','result','notes','guide','home','start','pool','pickup','engine'].includes(params.get('screen'))
+    const api = {
+      getStorageSync: key => {if(fixture)return null;try{return JSON.parse(localStorage.getItem('rainy-preview:'+key)||'null')}catch{return null}},
+      setStorageSync: (key,value) => {if(!fixture)localStorage.setItem('rainy-preview:'+key,JSON.stringify(value))},
+      createImage: () => new Image(),
+      createCanvas: () => document.createElement('canvas'),
+      onTouchStart: fn => handlers.start = fn, onTouchMove: fn => handlers.move = fn,
+      onTouchEnd: fn => handlers.end = fn, onTouchCancel: fn => handlers.cancel = fn,
+      onShow: fn => document.addEventListener('visibilitychange', () => { if (!document.hidden) fn() }),
+      onHide: fn => document.addEventListener('visibilitychange', () => { if (document.hidden) fn() }),
+      requestAnimationFrame: fn => requestAnimationFrame(fn)
+    }
+    const game = new VoxelGame(canvas, safeTop, api)
+    window.previewGame = game
+    const sceneSelect = document.querySelector('#scene')
+    for (const scene of SCENES) {
+      const option = document.createElement('option'); option.value = scene.id
+      option.textContent = `${ECO_REGION_BY_ID[scene.regionId].name} / ${scene.name}`
+      sceneSelect.append(option)
+    }
+    sceneSelect.value = params.get('scene') || 'yn-pine'
+    document.querySelector('#size').value = selectedSize
+    const start = () => {
+      params.set('scene', sceneSelect.value)
+      history.replaceState(null, '', location.pathname + '?' + params.toString())
+      game.handleAction(`scene:${sceneSelect.value}`)
+      if(params.get('screen')!=='start')game.handleAction('hunt:'+(params.get('mode')==='timed'?'timed':'relaxed'))
+      game.feedback = ''
+      if(params.get('specimen')){const id=params.get('specimen');game.state.profile.collection[id]={seen:true,sampled:1,encounters:1,identified:params.get('identified')==='1',identificationAttempts:0,studiedClues:0};game.handleAction('nav:collection');game.handleAction('collection:'+id);return}
+      if(params.get('screen')==='guide')game.handleAction('nav:guide')
+      if(params.get('screen')==='home')game.handleAction('nav:home')
+      if(params.get('screen')==='pool')game.handleAction('pool:'+sceneSelect.value)
+      if(params.get('screen')==='result'){
+        for(const spawn of game.state.sceneData.spawns){
+          if(game.state.currentRun.completed)break
+          game.handleAction('fungus:'+spawn.id)
+          if(!game.state.currentRun.completed)game.handleAction('fungus:'+spawn.id)
+        }
+      }
+      if(['collection','correction','notes'].includes(params.get('screen'))) {
+        game.handleAction('fungus:'+game.state.sceneData.spawns[0].id)
+        game.handleAction('nav:collection')
+        game.handleAction('collection:'+game.state.sceneData.spawns[0].speciesId)
+        if(params.get('screen')==='correction'){
+          for(let i=0;i<3;i++)game.handleAction('collectionStudy:next')
+          const wrong=game.state.collectionCandidates.find(c=>c.id!==game.state.selectedCollectionSpecies.id)
+          game.handleAction('collectionIdentify:'+wrong.id)
+        }
+        if(params.get('screen')==='notes'){
+          for(let i=0;i<3;i++)game.handleAction('collectionStudy:next')
+          const id=game.state.selectedCollectionSpecies.id
+          game.handleAction('collectionIdentify:'+id)
+          game.handleAction('note:'+id)
+        }
+      }
+    }
+    sceneSelect.onchange = start
+    document.querySelector('#restart').onclick = start
+    document.querySelector('#size').onchange = event => { params.set('size', event.target.value); params.set('scene',sceneSelect.value); location.search=params }
+    const pointers = new Map()
+    const touch = event => {
+      const rect = canvas.getBoundingClientRect()
+      return { identifier:event.pointerId, clientX:(event.clientX-rect.left)*width/rect.width, clientY:(event.clientY-rect.top)*height/rect.height }
+    }
+    const send=(type,event)=>handlers[type]?.({touches:[...pointers.values()],changedTouches:[touch(event)]})
+    canvas.onpointerdown=event=>{ pointers.set(event.pointerId,touch(event));canvas.setPointerCapture(event.pointerId);send('start',event) }
+    canvas.onpointermove=event=>{if(pointers.has(event.pointerId)){pointers.set(event.pointerId,touch(event));send('move',event)}}
+    canvas.onpointerup=event=>{pointers.delete(event.pointerId);send('end',event)}
+    canvas.onpointercancel=event=>{pointers.delete(event.pointerId);send('cancel',event)}
+    addEventListener('keydown',event=>{
+      if(!game.active)return
+      const key=event.key.toLowerCase()
+      if(['w','a','s','d','shift'].includes(key)){event.preventDefault();game.controls.setKey(key,true)}
+      if(key===' '){event.preventDefault();if(!event.repeat)game.handleAction('jump:up')}
+      if(key==='c'&&!event.repeat){event.preventDefault();game.handleAction('posture:toggle')}
+    })
+    addEventListener('keyup',event=>game.controls.setKey(event.key,false))
+    addEventListener('blur',()=>{pointers.clear();game.controls.reset()})
+    start()
+    if(params.get('screen')==='pickup'){
+      for(const [mode,label] of [['known','演示已鉴别采集'],['unknown','演示未知采集'],['finish','演示最后一朵']]){
+        const button=document.createElement('button');button.textContent=label
+        button.onclick=()=>{
+          start()
+          const spawns=game.state.sceneData.spawns
+          if(mode==='finish')for(const spawn of spawns.slice(0,7)){game.state.brushSpawn(spawn.id);game.state.collectSpawn(spawn.id)}
+          const spawn=spawns[mode==='finish'?7:0]
+          game.state._entry(spawn.speciesId).identified=mode!=='unknown'
+          game.state.brushSpawn(spawn.id)
+          game.handleAction('fungus:'+spawn.id)
+        }
+        document.querySelector('aside').append(button)
+      }
+    }
+  </script>
+</body>
+</html>

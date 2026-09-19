@@ -1,0 +1,26 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>引擎运行检查 · 雨后菌语</title>
+<style>body{margin:0;padding:24px;background:#192c24;color:#eee9d8;font:14px system-ui;display:flex;gap:24px;justify-content:center}aside{width:350px}h1{font-size:23px}p{line-height:1.8;color:#c0cfbf}iframe{border:0;width:375px;height:812px}button{padding:12px;background:#dce4cf;border:0;border-radius:8px;cursor:pointer}table{width:100%;margin:20px 0;border-collapse:collapse}td{padding:12px 4px;border-bottom:1px solid #45604d}td:last-child{text-align:right}@media(max-width:760px){body{flex-direction:column;align-items:center}}</style>
+<aside><h1>引擎运行检查</h1><p>可直接在右侧移动、跳跃和采集。此检查页不读写玩家存档。</p>
+<button id="culling">视野裁剪：开启</button><table id="stats"></table>
+<p>CPU帧耗时是游戏循环在主线程的执行时间，不是GPU耗时。图片缓存按解码后的像素估算。关闭裁剪仅用于检查画面完整性，仍采用分块绘制。</p>
+<p>浏览器结果不能代替手机测试；切换后台时模拟和挑战计时会一起暂停。</p></aside>
+<iframe title="河谷引擎检查场景" src="preview.html?scene=jl-river&size=375%2C812%2C54&screen=engine"></iframe>
+<script>
+const frame=document.querySelector('iframe'),stats=document.querySelector('#stats'),button=document.querySelector('#culling')
+let lastUploads=0,lastTime=performance.now()
+button.onclick=()=>{const g=frame.contentWindow.previewGame;if(g){g.graphics.cullingEnabled=!g.graphics.cullingEnabled;button.textContent='视野裁剪：'+(g.graphics.cullingEnabled?'开启':'关闭')}}
+setInterval(()=>{
+  const g=frame.contentWindow.previewGame;if(!g?.metrics)return
+  const cpu=g.metrics.snapshot(),r=g.graphics.stats,now=performance.now()
+  const rate=(r.uiUploads-lastUploads)/((now-lastTime)/1000);lastUploads=r.uiUploads;lastTime=now
+  const rows=[
+    ['CPU帧耗时 P50 / P95',cpu.cpuP50Ms.toFixed(2)+' / '+cpu.cpuP95Ms.toFixed(2)+' ms'],
+    ['当前提交 / 静态总顶点',r.staticSubmitted+' / '+r.staticTotal],
+    ['可见 / 全部分块',r.visibleChunks+' / '+r.chunks],['本帧绘制调用',r.drawCalls],
+    ['UI纹理更新',rate.toFixed(1)+' 次/秒'],['场景GPU缓冲',g.graphics.resources.length+' 个'],
+    ['图片缓存',g.images.records.size+' 张 / '+(g.images.bytes/1048576).toFixed(1)+' MiB'],
+    ['最近一帧模拟步数',g.lastSimulationSteps],['严重卡顿截去时间',Math.round(g.session.clock.discardedMs)+' ms']]
+  stats.replaceChildren(...rows.map(([name,value])=>{const tr=document.createElement('tr');for(const text of [name,String(value)]){const td=document.createElement('td');td.textContent=text;tr.append(td)}return tr}))
+},1000)
+</script></html>

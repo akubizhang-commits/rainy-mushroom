@@ -1,0 +1,31 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>场景预览图生成</title>
+<style>body{background:#eef1e7;font:16px system-ui}img{width:480px;display:block;margin:12px 0}</style>
+<button id="capture">生成所有场景的游戏预览图</button><div id="output"></div>
+<script type="module">
+import {ForagingState} from '../js/core/ForagingState.js'
+import {FORAGING_SCENES} from '../js/data/foragingScenes.js'
+import {VoxelWorld} from '../js/voxel/VoxelWorld.js'
+import {VoxelRenderer} from '../js/voxel/VoxelRenderer.js'
+const button=document.querySelector('button'),output=document.querySelector('#output')
+button.onclick=async()=>{
+ button.disabled=true
+ try{
+  const canvas=document.createElement('canvas');canvas.width=960;canvas.height=360
+  const ui=document.createElement('canvas');ui.width=960;ui.height=360;ui.getContext('2d')
+  const renderer=new VoxelRenderer(canvas)
+  for(const scene of FORAGING_SCENES){
+   const state=new ForagingState();state.startScene(scene.id);state.startHunt('relaxed')
+   const world=new VoxelWorld(state.sceneData),player={...world.start}
+   player.y+=.6;player.pitch=-.12
+   renderer.setWorld(world);renderer.render(player,state.currentRun,ui,true,true)
+   const image=canvas.toDataURL('image/jpeg',.9)
+   const response=await fetch('/capture/'+scene.id,{method:'POST',body:image})
+   if(!response.ok)throw Error('保存失败：'+scene.id)
+   const label=document.createElement('p');label.textContent=scene.name+' · 已保存';output.append(label)
+   const preview=new Image();preview.src=image;output.append(preview)
+   renderer.releaseWorld()
+  }
+  button.textContent=`全部${FORAGING_SCENES.length}张预览图已保存`
+ }catch(error){output.append(error.stack||String(error));button.disabled=false}
+}
+</script></html>

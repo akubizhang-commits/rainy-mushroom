@@ -1,0 +1,67 @@
+export const clamp = (value, min, max) => Math.max(min, Math.min(max, value))
+export const dot = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2]
+export function normalize(v) {
+  const length = Math.hypot(...v) || 1
+  return v.map(value => value / length)
+}
+
+export function basis(yaw, pitch) {
+  const sy = Math.sin(yaw), cy = Math.cos(yaw), sp = Math.sin(pitch), cp = Math.cos(pitch)
+  return { right: [cy, 0, sy], up: [-sy * sp, cp, cy * sp], forward: [sy * cp, sp, -cy * cp] }
+}
+
+export function cameraMatrix(player, aspect, fov = Math.PI / 3) {
+  const { right: r, up: u, forward: f } = basis(player.yaw, player.pitch)
+  const p = [player.x, player.y, player.z]
+  const view = [r[0], u[0], -f[0], 0, r[1], u[1], -f[1], 0, r[2], u[2], -f[2], 0, -dot(r,p), -dot(u,p), dot(f,p), 1]
+  const near = .06, far = 65, scale = 1 / Math.tan(fov / 2)
+  const projection = [scale/aspect,0,0,0, 0,scale,0,0, 0,0,(far+near)/(near-far),-1, 0,0,2*far*near/(near-far),0]
+  const matrix = new Float32Array(16)
+  for (let col = 0; col < 4; col++) for (let row = 0; row < 4; row++) {
+    for (let k = 0; k < 4; k++) matrix[col*4+row] += projection[k*4+row] * view[col*4+k]
+  }
+  return matrix
+}
+
+export function screenRay(player, x, y, width, height, fov = Math.PI / 3) {
+  const { right, up, forward } = basis(player.yaw, player.pitch)
+  const scale = Math.tan(fov / 2)
+  const dx = (x / width * 2 - 1) * scale * width / height
+  const dy = (1 - y / height * 2) * scale
+  return normalize(forward.map((v,i) => v + right[i] * dx + up[i] * dy))
+}
+
+export function rayBox(origin, direction, box, maxDistance = Infinity) {
+  let near = 0, far = maxDistance
+  for (let axis = 0; axis < 3; axis++) {
+    if (Math.abs(direction[axis]) < 1e-8) {
+      if (origin[axis] < box.min[axis] || origin[axis] > box.max[axis]) return null
+      continue
+    }
+    const a = (box.min[axis] - origin[axis]) / direction[axis]
+    const b = (box.max[axis] - origin[axis]) / direction[axis]
+    near = Math.max(near, Math.min(a,b))
+    far = Math.min(far, Math.max(a,b))
+    if (near > far) return null
+  }
+  return near
+}
+
+export function rayGeometry(origin,direction,shape,maxDistance=Infinity) {
+  const broad=rayBox(origin,direction,shape,maxDistance)
+  if(broad===null || !shape.triangles)return broad
+  let nearest=null
+  const cross=(a,b)=>[a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]]
+  for(const [a,b,c] of shape.triangles) {
+    const e1=b.map((v,i)=>v-a[i]),e2=c.map((v,i)=>v-a[i])
+    const p=cross(direction,e2),det=dot(e1,p)
+    if(Math.abs(det)<1e-8)continue
+    const t=origin.map((v,i)=>v-a[i]),u=dot(t,p)/det
+    if(u<0||u>1)continue
+    const q=cross(t,e1),v=dot(direction,q)/det
+    if(v<0||u+v>1)continue
+    const distance=dot(e2,q)/det
+    if(distance>=0&&distance<=maxDistance&&(nearest===null||distance<nearest))nearest=distance
+  }
+  return nearest
+}

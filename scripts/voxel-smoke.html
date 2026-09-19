@@ -1,0 +1,276 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>3D 运行验证</title><body style="background:#15241c;color:#eee;font:15px system-ui"><h1>3D 运行验证</h1><pre id="result">运行中…</pre><canvas id="game" width="375" height="812"></canvas><script type="module">
+import { SPECIES_KNOWLEDGE } from '../js/data/speciesKnowledge.js'
+import { VoxelGame } from '../js/voxel/VoxelGame.js'
+import { FORAGING_SCENES as SCENES } from '../js/data/foragingScenes.js'
+import { EXPLORATION_SPECIES } from '../js/data/explorationData.js'
+import { VoxelWorld } from '../js/voxel/VoxelWorld.js'
+import { poolForScene, drawSceneSpecies } from '../js/data/speciesPools.js'
+import { cameraMatrix } from '../js/voxel/math.js'
+const results=[],assert=(condition,label)=>{if(!condition)throw Error(label);results.push('PASS '+label);document.querySelector('#result').textContent=results.join('\n')}
+try {
+ const handlers={},api={createCanvas:()=>document.createElement('canvas'),createImage:()=>new Image(),getStorageSync:()=>null,setStorageSync(){},requestAnimationFrame(){},onHide(fn){handlers.hide=fn},onShow(fn){handlers.show=fn}}
+ for(const name of ['Start','Move','End','Cancel'])api['onTouch'+name]=fn=>handlers[name]=fn
+ const canvas=document.querySelector('canvas'),game=new VoxelGame(canvas,54,api)
+ game._loop(100)
+ assert(game.screen==='exploration-home','WebGL 主画布启动首页')
+ for(const scene of SCENES){
+  game.handleAction('scene:'+scene.id);game.handleAction('hunt:relaxed');game._loop(200)
+  assert(game.world.targets.length===scene.spawns.length && game.graphics.gl.getError()===0,scene.id+' 场景与所有菌物绘制无 WebGL 错误')
+ }
+ // Exercise the tutorial pickup on a first visit, independently of the render sweep.
+ game.state.profile.sceneVisits['yn-pine']=0
+ game.handleAction('scene:yn-pine');game.handleAction('hunt:relaxed');game._loop(300)
+ const send=(name,id,x,y)=>handlers[name]({touches:name==='End'?[]:[{identifier:id,clientX:x,clientY:y}],changedTouches:[{identifier:id,clientX:x,clientY:y}]})
+ const startZ=game.player.z
+ send('Start',1,71,674);send('Move',1,71,624)
+ for(let i=0;i<30;i++)game._loop(350+i*33)
+ send('End',1,71,624)
+ assert(game.player.z<startZ-1.5,'真实输入驱动连续步行')
+ assert(game.state.currentRun.hasPanned,'首次移动隐藏操作提示')
+ send('Start',2,280,400);send('Move',2,250,420);send('End',2,250,420)
+ assert(game.player.yaw<-.18 && game.player.pitch<-.15,'右侧拖动改变水平与俯仰视角')
+ game._loop(1400)
+ // Project every visible target box center with the same camera matrix as WebGL.
+ const target=game.world.targets[0]
+ // Aim at the actual model; ecological supports can change its height.
+ const center=target.boxes[0].min.map((v,i)=>(v+target.boxes[0].max[i])/2)
+ const dx=center[0]-game.player.x,dy=center[1]-game.player.y,dz=center[2]-game.player.z
+ game.player.yaw=Math.atan2(dx,-dz);game.player.pitch=Math.atan2(dy,Math.hypot(dx,dz))
+ const matrix=cameraMatrix(game.player,375/812)
+ let point=null
+ for(const box of target.boxes){
+  const p=box.min.map((v,i)=>(v+box.max[i])/2);p.push(1)
+  const clip=[0,1,2,3].map(r=>p.reduce((sum,v,c)=>sum+matrix[c*4+r]*v,0))
+  const x=(clip[0]/clip[3]+1)*375/2,y=(1-clip[1]/clip[3])*812/2
+  if(x>0&&x<375&&y>150&&y<650&&game.pickAt(x,y)?.id===target.id){point={x,y};break}
+ }
+ assert(point,'行走后菌物在屏幕内可直接点击，无需放大镜')
+ send('Start',3,point.x,point.y);send('End',3,point.x,point.y);game._loop(1500)
+ assert(game.screen==='exploration-scene'&&game.state.goalProgress===1&&!game.state.available(target.id),'点击立体菌物直接采集并从场景移除')
+ game.handleAction('nav:basket');game._loop(1550)
+ const pose={...game.player}
+ game.handleAction('nav:explore');game._loop(1600)
+ assert(['x','z','yaw','pitch'].every(key=>game.player[key]===pose[key]) && Math.abs(game.player.y-pose.y)<.1,'返回场景保留玩家位置与朝向（坡地视高平滑收敛）')
+ send('Start',4,341,152);send('End',4,341,152);game._loop(1700)
+ assert(game.state.currentRun.lensEnabled,'右上角图标切换观察焦距')
+ assert(!game.renderer.hitAreas.some(a=>['basket:add','finish:scene'].includes(a.action)),'未达目标时没有底部调查或结束按钮')
+ assert(game.graphics.gl.getError()===0,'全流程无 WebGL 错误')
+ const tapAction=action=>{
+   const area=game.renderer.hitAreas.find(a=>a.action===action)
+   assert(area,'存在操作入口 '+action)
+   send('Start',90,area.x+area.w/2,area.y+area.h/2);send('End',90,area.x+area.w/2,area.y+area.h/2)
+ }
+ tapAction('posture:toggle')
+ for(let i=0;i<20;i++)game._loop(1710+i*4)
+ assert(game.player.crouched&&game.player.y-game.world.heightAt(game.player.x,game.player.z)<1.15,'真实触摸切换蹲下并降低相机')
+ tapAction('posture:toggle')
+ for(let i=0;i<20;i++)game._loop(1790+i*4)
+ assert(!game.player.crouched&&game.graphics.gl.getError()===0,'站起切换正常且蹲行渲染无错误')
+ const speciesId=target.speciesId
+ game.handleAction('nav:collection');game.handleAction('collection:'+speciesId);game._loop(1800)
+ assert(game.screen==='exploration-collection-detail','从收藏打开独立鉴别页')
+ for(let i=0;i<3;i++)game.handleAction('collectionStudy:next')
+ game._loop(1900)
+ const wrong=game.state.collectionCandidates.find(c=>c.id!==speciesId).id
+ game.handleAction('collectionIdentify:'+wrong);game._loop(2000)
+ assert(game.state.collectionLockRemaining()>40000,'鉴别失败锁定45秒并显示对比')
+ assert(!game.renderer.hitAreas.some(a=>a.action.startsWith('collectionIdentify:')),'冷却期间选择按钮不可提交')
+ game.handleAction('scene:yn-pine');game.handleAction('hunt:relaxed');game._loop(3000)
+ for(let i=1;i<=550;i++)game._loop(3000+i*100)
+ assert(game.world.wildlife.actors.length===2&&game.state.currentRun.animalAlerted,'场景动物显示并在30秒后觅食')
+ assert(game.graphics.gl.getError()===0,'动物绘制无 WebGL 错误')
+ for(const t of game.state.sceneData.spawns){if(!game.state.currentRun.completed&&game.state.available(t.id)){game.handleAction('fungus:'+t.id);if(!game.state.currentRun.completed&&game.state.available(t.id))game.handleAction('fungus:'+t.id)}}
+ game._loop(59000)
+ assert(game.screen==='exploration-result'&&game.state.lastResult.status==='success','采满8朵自动完成且结果页正常渲染')
+ assert(game.state.lastResult.newSpeciesIds.length>0&&game.state.lastResult.discoveriesAfter>game.state.lastResult.discoveriesBefore,'林间手记包含首次发现与场景进度增长')
+ const originalWorld=game.world,originalPose={...game.player},attempts=game.state.profile.sceneAttempts['yn-pine'],collectedIds=[...game.state.currentRun.basketSpawnIds]
+ tapAction('bonus:continue');game._loop(59100)
+ assert(game.active&&game.world===originalWorld&&game.player.x===originalPose.x&&game.player.z===originalPose.z,'继续探索保留原场景与位置')
+ assert(collectedIds.every(id=>!game.state.available(id)),'继续探索不会复活已采集目标')
+ const extra=game.state.sceneData.spawns.find(s=>game.state.available(s.id))
+ assert(extra,'达标后仍有可寻找菌物')
+ game.handleAction('fungus:'+extra.id)
+ if(game.state.available(extra.id))game.handleAction('fungus:'+extra.id)
+ game._loop(59200)
+ assert(game.active&&game.state.goalProgress===9,'额外采集仍留在林间')
+ tapAction('finish:scene');game._loop(59300)
+ assert(game.state.lastResult.status==='success'&&game.state.lastResult.bonusCollectedCount===1&&game.state.profile.sceneAttempts['yn-pine']===attempts,'额外收获正确结算且不重复计局')
+ for(const id of ['yn-pine','yn-alpine','hl-mixed']){
+  game.handleAction('scene:'+id);game.handleAction('hunt:timed');game._loop(100000)
+  // Seed the isolated model near the boundary; frame gaps no longer advance timers alone.
+  game.state.tickHunt(0);game.state.tickHunt(59950)
+  game._loop(100049)
+  assert(!game.state.currentRun.predatorActive,id+' 60秒前没有猛兽')
+  game._loop(100100)
+  const predator=game.world.wildlife.actors.find(a=>a.predator)
+  assert(predator&&game.graphics.gl.getError()===0,id+' 猛兽入场且模型绘制无错误')
+  predator.x=game.player.x;predator.z=game.player.z
+  game._loop(100150)
+  assert(game.screen==='exploration-result'&&game.state.lastResult.status==='predator-contact'&&!game.active,'猛兽触碰立即失败并停止输入')
+  assert(game.graphics.gl.getError()===0,'猛兽失败结算页面正常绘制')
+ }
+ game.handleAction('pool:yn-pine');game._loop(170000)
+ assert(game.screen==='exploration-scene-species'&&game.renderer.hitAreas.some(a=>a.action==='poolPage:next'),'场景物种名录显示并支持分页')
+ game.handleAction('poolPage:next');game._loop(170050)
+ assert(game.poolPage===1,'物种名录翻页')
+ game.handleAction('scene:yn-pine');game.handleAction('hunt:relaxed');game._loop(180000);game._loop(360000)
+ assert(!game.state.currentRun.predatorActive&&!game.state.currentRun.completed,'悠闲模式不限时且无致命猛兽')
+ const covered=game.state.sceneData.spawns.find(s=>s.brushable)
+ assert(covered,'存在可拨开的松针或落叶')
+ game.handleAction('fungus:'+covered.id);game._loop(360050)
+ assert(game.state.goalProgress===0&&game.state.currentRun.revealedSpawnIds.includes(covered.id),'第一次点击拨开遮盖，不虚增采集数')
+ game.handleAction('fungus:'+covered.id);game._loop(360100)
+ assert(game.state.goalProgress===1,'再次点击采集露出的菌物')
+ game.handleAction('journal:routes');game._loop(360200)
+ assert(!game.active&&game.renderer.hitAreas.filter(a=>a.action.startsWith('route:')).length===3,'探索中打开手记暂停游戏，显示三条可选路线')
+ const pausedTime=game.state.currentRun.elapsedMs,route=game.state.currentRun.routes[0]
+ game._loop(460200)
+ assert(game.state.currentRun.elapsedMs===pausedTime,'阅读手记不消耗探索时间')
+ game.handleAction('route:'+route.id);game._loop(460250)
+ assert(game.active&&game.state.currentRun.selectedRouteId===route.id&&game.state.currentRun.elapsedMs===pausedTime,'选路线返回林间并保留计时')
+ game.handleAction('journal:commission');game._loop(460300)
+ assert(game.renderer.hitAreas.some(a=>a.action==='commission:skip'),'可选委托显示跳过入口')
+ game.handleAction('commission:skip');game._loop(460350)
+ assert(game.state.commission.skipped,'委托可跳过')
+ game.handleAction('commission:change');game._loop(460400)
+ assert(!game.state.commission.skipped,'跳过后可以重新选择委托')
+ const knownId=covered.speciesId
+ game.state.selectCollectionSpecies(knownId)
+ for(let i=0;i<3;i++)game.state.studyCollection()
+ // Clear the earlier test's cooldown only in this isolated test profile.
+ game.state.profile.collection[knownId].identificationLockedUntil=0
+ game.handleAction('collectionIdentify:'+knownId)
+ game.handleAction('note:'+knownId);game._loop(460450)
+ assert(game.renderer.textDraws.some(t=>t.text===EXPLORATION_SPECIES.find(s=>s.id===knownId).name),'鉴别后寻找笔记展示对应菌物')
+ assert(game.graphics.gl.getError()===0,'手记、路线、委托与笔记页面无WebGL错误')
+ game.handleAction('scene:jl-river');game.handleAction('hunt:timed');game._loop(500000)
+ for(const spawn of game.state.sceneData.spawns.slice(0,8)){
+   game.handleAction('fungus:'+spawn.id)
+   if(!game.state.currentRun.completed&&game.state.available(spawn.id))game.handleAction('fungus:'+spawn.id)
+ }
+ game.handleAction('bonus:continue');game._loop(500100)
+ game.state.tickHunt(0);game.state.tickHunt(60000);game._loop(500150)
+ const bonusPredator=game.world.wildlife.actors.find(a=>a.predator)
+ assert(bonusPredator,'继续探索沿用猛兽入场计时')
+ bonusPredator.x=game.player.x;bonusPredator.z=game.player.z;game._loop(500200)
+ assert(game.state.lastResult.status==='success'&&game.state.lastResult.bonusEndReason==='predator-contact'&&!game.active,'额外探索遭遇猛兽保留成功并停止操作')
+ assert(!game.renderer.hitAreas.some(a=>a.action==='bonus:continue'),'额外探索结束后不能反复续局')
+ const full={collection:Object.fromEntries(EXPLORATION_SPECIES.map(s=>[s.id,{identified:true}]))}
+ const rendered=new Set()
+ for(const scene of SCENES){
+  const pool=poolForScene(scene)
+  for(let offset=0;offset<pool.length;offset+=10){
+   const spawns=drawSceneSpecies(scene,full,2).map((s,i)=>({...s,speciesId:pool[(offset+i)%pool.length].speciesId,substrate:pool[(offset+i)%pool.length].substrate,host:pool[(offset+i)%pool.length].host}))
+   const w=new VoxelWorld({...scene,spawns});game.graphics.setWorld(w)
+   game.graphics.render(w.start,{huntStarted:true,basketSpawnIds:[],eatenSpawnIds:[]},game.canvas,true)
+   assert(game.graphics.gl.getError()===0,scene.id+' 扩展菌种模型绘制正常')
+   spawns.forEach(s=>rendered.add(s.speciesId))
+  }
+ }
+ assert(rendered.size===EXPLORATION_SPECIES.length,`${EXPLORATION_SPECIES.length}种菌物均经过真实WebGL绘制`)
+ game.handleAction('scene:jl-river');game.handleAction('hunt:relaxed');game._loop(100000)
+ const jumpFloor=game.player.feetY
+ send('Start',201,71,674);send('Move',201,71,654)
+ tapAction('jump:up')
+ assert(!game.player.grounded&&game.player.verticalSpeed>0&&game.controls.stick?.id===201,'双指摇杆移动时点击跳起，不丢失摇杆输入')
+ game._loop(100050)
+ assert(game.player.feetY>jumpFloor&&game.graphics.gl.getError()===0,'起跳带动真实相机，WebGL绘制正常')
+ const airborneVelocity=game.player.verticalSpeed
+ tapAction('jump:up');assert(game.player.verticalSpeed===airborneVelocity,'空中点击不会二段跳')
+ send('End',201,71,654)
+ const pausedFeet=game.player.feetY,pausedVelocity=game.player.verticalSpeed
+ game.handleAction('journal:routes');game._loop(100060)
+ assert(game.player.feetY===pausedFeet&&game.player.verticalSpeed===pausedVelocity,'空中打开手记暂停物理，不消耗跳跃过程')
+ game.handleAction('journal:back');game._loop(100070)
+ assert(game.player.feetY===pausedFeet&&game.player.verticalSpeed===pausedVelocity,'恢复首帧保留腾空状态')
+ game._loop(100090)
+ assert(game.player.feetY>pausedFeet,'下一模拟步继续原有跳跃')
+ for(let i=2;i<=30;i++)game._loop(100000+i*50)
+ assert(game.player.grounded&&Math.abs(game.player.feetY-game.world.heightAt(game.player.x,game.player.z))<.01,'松开移动后正常落地')
+ const receiptSpawn=game.state.sceneData.spawns.find(s=>game.state.available(s.id))
+ game.state._entry(receiptSpawn.speciesId).identified=true
+ game.state.brushSpawn(receiptSpawn.id);game.handleAction('fungus:'+receiptSpawn.id);game._loop(101600)
+ const receiptName=EXPLORATION_SPECIES.find(s=>s.id===receiptSpawn.speciesId).name
+ assert(game.pickupNotice.name===receiptName&&game.renderer.textDraws.some(t=>t.text===receiptName),'采集已鉴别菌物显示名称与图片卡片')
+ assert(game.feedback===''&&game.graphics.gl.getError()===0,'采集卡不叠加旧提示且无WebGL错误')
+ game.pickupNotice.until=Date.now()-1;game._loop(101650)
+ assert(game.pickupNotice===null&&!game.renderer.textDraws.some(t=>t.text===receiptName),'采集反馈到时消失，场景继续运行')
+ const beforeHide=game.state.currentRun.elapsedMs
+ handlers.hide();game._loop(999000)
+ assert(game.state.currentRun.elapsedMs===beforeHide&&!game.active,'切到后台后模拟与倒计时同时暂停')
+ handlers.show();game._loop(999100)
+ assert(game.active&&game.state.currentRun.elapsedMs===beforeHide,'返回前台不追赶后台时间')
+ game.handleAction('nav:guide');game._loop(1000000)
+ const idleUploads=game.graphics.stats.uiUploads
+ for(let i=1;i<=120;i++)game._loop(1000000+i*16)
+ assert(game.graphics.stats.uiUploads===idleUploads,'静止手册连续120帧不重传UI纹理')
+ game.handleAction('nav:home');game._loop(1003000)
+ assert(game.world===null&&game.graphics.resources.length===0,'离开场景释放场景GPU缓冲与世界引用')
+ for(let i=0;i<3;i++){
+   game.handleAction('scene:jl-river');game.handleAction('hunt:relaxed');game._loop(1004000+i*100)
+   assert(game.graphics.resources.length<120&&game.graphics.gl.getError()===0,'反复切换场景资源数量受控 '+i)
+ }
+ assert(game.graphics.stats.staticSubmitted<game.graphics.stats.staticTotal,'真实绘制只提交视野内场景分块')
+ const lose=game.graphics.gl.getExtension('WEBGL_lose_context')
+ if(lose){
+   const waitEvent=name=>new Promise((resolve,reject)=>{const timeout=setTimeout(()=>reject(Error(name+' timeout')),8000);canvas.addEventListener(name,()=>{clearTimeout(timeout);resolve()},{once:true})})
+   const lost=waitEvent('webglcontextlost')
+   lose.loseContext();await lost
+   const held=game.state.currentRun.elapsedMs;game._loop(1005000)
+   assert(game.graphics.lost&&game.state.currentRun.elapsedMs===held,'WebGL丢失时暂停模拟')
+   // Wait until the loss event has completed dispatch before requesting restoration.
+   await new Promise(resolve=>setTimeout(resolve,0))
+   const restored=waitEvent('webglcontextrestored')
+   lose.restoreContext();await restored
+   const uploads=game.graphics.stats.uiUploads;game._loop(1005100)
+   assert(!game.graphics.lost&&game.graphics.stats.uiUploads>uploads&&game.graphics.gl.getError()===0,'WebGL恢复后重建场景并重传UI')
+ }
+ game.handleAction('nav:collection');game._loop(1005200)
+ tapAction('collectionPage:next');game._loop(1005230)
+ const savedPage=game.collectionPage,idOnPage=EXPLORATION_SPECIES[savedPage*6].id
+ game.state.profile.collection[idOnPage]={seen:true,sampled:1,identified:true}
+ game.uiDirty=true;game._loop(1005260)
+ await new Promise(resolve=>setTimeout(resolve,150))
+ tapAction('collection:'+idOnPage);game._loop(1005290)
+ await new Promise(resolve=>setTimeout(resolve,150))
+ tapAction('nav:collection');game._loop(1005320)
+ assert(game.collectionPage===savedPage&&game.renderer.hitAreas.some(a=>a.action==='collection:'+idOnPage),'收藏翻页后打开详情，点击返回保留原页与卡片')
+ for(const species of EXPLORATION_SPECIES.slice(0,8))Object.assign(game.state._entry(species.id),{seen:true,sampled:1,identified:false,regions:{},identificationLockedUntil:0})
+ tapAction('collectionFilter:pending');game._loop(1005350)
+ assert(game.collectionFilter==='pending'&&game.collectionPage===0,'真实触摸筛选待鉴别标本')
+ tapAction('collectionPage:next');game._loop(1005380)
+ const pendingId=EXPLORATION_SPECIES[6].id
+ tapAction('collection:'+pendingId);game._loop(1005410)
+ const photoIndex=game.state.collectionPhotoIndex
+ tapAction('collectionPhoto:next');game._loop(1005440)
+ assert(game.state.collectionPhotoIndex===photoIndex+1,'直接点击照片可切换实拍')
+ tapAction('nav:collection');game._loop(1005470)
+ assert(game.collectionPage===1&&game.collectionFilter==='pending','详情返回保留筛选条件和页码')
+ tapAction('collectionFilter:all');game._loop(1005500)
+ assert(game.collectionPage===savedPage,'切回全部收藏恢复原页')
+ game.handleAction('scene:yn-pine');game.handleAction('hunt:timed');game._loop(1005530)
+ const pausedPose={...game.player},pausedWorld=game.world,menuPausedTime=game.state.currentRun.elapsedMs
+ tapAction('nav:pause');game._loop(1065530)
+ assert(game.screen==='exploration-pause'&&!game.active&&game.world===pausedWorld&&game.state.currentRun.elapsedMs===menuPausedTime,'暂停页面保留世界并停止计时')
+ const resumeArea=game.renderer.hitAreas.find(a=>a.action==='nav:explore')
+ send('Start',99,resumeArea.x+resumeArea.w/2,resumeArea.y+resumeArea.h/2);game._loop(1065540)
+ assert(game.renderer.pressedAction==='nav:explore','菜单按下时显示操作反馈')
+ send('End',99,resumeArea.x+resumeArea.w/2,resumeArea.y+resumeArea.h/2);game._loop(1065550)
+ assert(game.active&&game.renderer.pressedAction===null&&['x','z','yaw','pitch'].every(k=>game.player[k]===pausedPose[k]),'继续探索回到原位置，抬手清除按下状态')
+ game.handleAction('nav:collection')
+ const knowledgeId='crucibulum-laeve'
+ Object.assign(game.state._entry(knowledgeId),{seen:true,sampled:2,identified:true,regions:{}})
+ game.handleAction('collection:'+knowledgeId);game._loop(1065560)
+ tapAction('knowledgeTab:1');game._loop(1065570)
+ assert(game.knowledgeTab===1&&game.renderer.textDraws.some(t=>t.text===SPECIES_KNOWLEDGE[knowledgeId].storyTitle),'真实触摸切换到所选菌物的生态知识')
+ tapAction('note:'+knowledgeId);game._loop(1065580)
+ tapAction('journal:back');game._loop(1065590)
+ assert(game.screen==='exploration-collection-detail'&&game.knowledgeTab===1,'从寻找笔记返回保留阅读栏目')
+ tapAction('knowledgeTab:3');game._loop(1065600)
+ let knowledgeCopied=''
+ api.setClipboardData=options=>{knowledgeCopied=options.data;options.success()}
+ tapAction('knowledgeSource:copy');game._loop(1065610)
+ assert(knowledgeCopied===SPECIES_KNOWLEDGE[knowledgeId].source.url&&game.feedback==='资料链接已复制','来源按钮复制所选菌物的准确链接并反馈')
+ document.querySelector('#result').textContent=results.join('\n')+'\nALL PASSED'
+} catch(error){document.querySelector('#result').textContent=results.join('\n')+'\nFAIL '+error.stack;console.error(error)}
+</script></body></html>

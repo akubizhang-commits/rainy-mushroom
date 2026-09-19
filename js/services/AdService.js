@@ -1,0 +1,258 @@
+function configuredId(value) {
+  return typeof value === 'string' ? value.trim() : ''
+}
+
+function asPositiveInteger(value, fallback) {
+  const number = Math.floor(Number(value))
+  return Number.isFinite(number) && number > 0 ? number : fallback
+}
+
+function asNonNegativeNumber(value, fallback) {
+  const number = Number(value)
+  return Number.isFinite(number) && number >= 0 ? number : fallback
+}
+
+export class AdService {
+  constructor(platformApi, config = {}, options = {}) {
+    this.platformApi = platformApi || {}
+    this.enabled = config.enabled !== false
+    this.rewardedVideoAdUnitId = configuredId(config.adUnitIds?.rewardedVideo)
+    this.interstitialAdUnitId = configuredId(config.adUnitIds?.interstitial)
+    this.interstitialEvery = asPositiveInteger(config.interstitial?.everySuccessfulBreaks, 3)
+    this.interstitialCooldownMs = asNonNegativeNumber(config.interstitial?.cooldownMs, 10 * 60 * 1000)
+    this.now = typeof options.now === 'function' ? options.now : () => Date.now()
+    this.rewardedPending = null
+    this.interstitialPending = null
+    this.successfulBreaks = 0
+    this.lastInterstitialAt = -Infinity
+    this.destroyed = false
+  }
+
+  get rewardedAvailable() {
+    return Boolean(!this.destroyed && this.enabled && this.rewardedVideoAdUnitId && typeof this.platformApi.createRewardedVideoAd === 'function')
+  }
+
+  get interstitialAvailable() {
+    return Boolean(!this.destroyed && this.enabled && this.interstitialAdUnitId && typeof this.platformApi.createInterstitialAd === 'function')
+  }
+
+  get rewardedBusy() {
+    return Boolean(this.rewardedPending)
+  }
+
+  showRewardedVideo() {
+    if (!this.rewardedAvailable) return Promise.resolve({ status: 'unavailable' })
+    if (this.rewardedPending) return Promise.resolve({ status: 'busy' })
+
+    return new Promise((resolve) => {
+      const pending = { resolve, phase: 'first-show', rejectCall: null, cleanup: null }
+      this.rewardedPending = pending
+      const ad = this._createRewardedAd(pending)
+      if (!ad) {
+        this._settleRewarded(pending, 'unavailable')
+        return
+      }
+      this._runRewarded(pending, ad)
+    })
+  }
+
+  async maybeShowInterstitial({ successful = false } = {}) {
+    if (!successful) return { status: 'ineligible' }
+    if (!this.interstitialAvailable) return { status: 'unavailable' }
+    if (this.interstitialPending) return { status: 'busy' }
+
+    this.successfulBreaks += 1
+    if (this.successfulBreaks < this.interstitialEvery) return { status: 'frequency' }
+    if (this.now() - this.lastInterstitialAt < this.interstitialCooldownMs) return { status: 'cooldown' }
+    this.successfulBreaks = 0
+
+    const pending = {}
+    this.interstitialPending = pending
+    try {
+      return await this._presentInterstitial(pending)
+    } finally {
+      if (this.interstitialPending === pending) this.interstitialPending = null
+    }
+  }
+
+  destroy() {
+    this.destroyed = true
+    if (this.rewardedPending) this._settleRewarded(this.rewardedPending, 'error', new Error('广告服务已销毁'))
+  }
+
+  _createRewardedAd(pending) {
+    let ad
+    try {
+      ad = this.platformApi.createRewardedVideoAd({ adUnitId: this.rewardedVideoAdUnitId, multiton: true, disableFallbackSharePage: true })
+    } catch (error) {
+      return null
+    }
+    if (!ad || typeof ad.show !== 'function') return null
+
+    let cleaned = false
+    const closeHandler = (result) => {
+      this._settleRewarded(pending, result?.isEnded === true ? 'rewarded' : 'skipped')
+    }
+    const errorHandler = (error) => {
+      if (this.rewardedPending !== pending) return
+      if (pending.rejectCall) pending.rejectCall(error)
+      else this._settleRewarded(pending, 'error', error)
+    }
+    pending.cleanup = () => {
+      if (cleaned) return
+      cleaned = true
+      if (typeof ad.offClose === 'function') ad.offClose(closeHandler)
+      if (typeof ad.offError === 'function') ad.offError(errorHandler)
+      if (typeof ad.destroy === 'function') ad.destroy()
+    }
+    if (typeof ad.onClose === 'function') ad.onClose(closeHandler)
+    if (typeof ad.onError === 'function') ad.onError(errorHandler)
+    return ad
+  }
+
+  async _runRewarded(pending, ad) {
+    try {
+      await this._rewardedCall(pending, () => ad.show())
+    } catch (firstError) {
+      if (this.rewardedPending !== pending) return
+      if (typeof ad.load !== 'function') {
+        this._settleRewarded(pending, 'error', firstError)
+        return
+      }
+      try {
+        pending.phase = 'load'
+        await this._rewardedCall(pending, () => ad.load())
+        if (this.rewardedPending !== pending) return
+        pending.phase = 'retry-show'
+        await this._rewardedCall(pending, () => ad.show())
+      } catch (error) {
+        this._settleRewarded(pending, 'error', error)
+        return
+      }
+    }
+    if (this.rewardedPending !== pending) return
+    pending.phase = 'awaiting-close'
+    pending.rejectCall = null
+  }
+
+  _rewardedCall(pending, operation) {
+    return new Promise((resolve, reject) => {
+      if (this.rewardedPending !== pending) {
+        reject(new Error('广告请求已结束'))
+        return
+      }
+      let settled = false
+      const finish = (handler, value) => {
+        if (settled) return
+        settled = true
+        if (pending.rejectCall === rejectFromEvent) pending.rejectCall = null
+        handler(value)
+      }
+      const rejectFromEvent = (error) => finish(reject, error)
+      pending.rejectCall = rejectFromEvent
+      let output
+      try {
+        output = operation()
+      } catch (error) {
+        finish(reject, error)
+        return
+      }
+      Promise.resolve(output).then(
+        (value) => finish(resolve, value),
+        (error) => finish(reject, error)
+      )
+    })
+  }
+
+  _settleRewarded(pending, status, error = null) {
+    if (this.rewardedPending !== pending) return
+    this.rewardedPending = null
+    pending.rejectCall = null
+    if (pending.cleanup) pending.cleanup()
+    pending.resolve(error ? { status, error } : { status })
+  }
+
+  async _presentInterstitial(pending) {
+    let ad
+    try {
+      ad = this.platformApi.createInterstitialAd({ adUnitId: this.interstitialAdUnitId })
+    } catch (error) {
+      return { status: 'error', error }
+    }
+    if (!ad || typeof ad.show !== 'function') return { status: 'unavailable' }
+
+    let destroyed = false
+    let rejectCall = null
+    let terminalSettled = false
+    let settleTerminal
+    let closeHandler
+    let errorHandler
+    const cleanup = () => {
+      if (destroyed) return
+      destroyed = true
+      if (closeHandler && typeof ad.offClose === 'function') ad.offClose(closeHandler)
+      if (errorHandler && typeof ad.offError === 'function') ad.offError(errorHandler)
+      if (typeof ad.destroy === 'function') ad.destroy()
+    }
+    const terminal = new Promise((resolve) => {
+      settleTerminal = (result) => {
+        if (terminalSettled) return
+        terminalSettled = true
+        rejectCall = null
+        cleanup()
+        resolve(result)
+      }
+    })
+    closeHandler = () => settleTerminal({ status: 'shown' })
+    errorHandler = (error) => {
+      if (rejectCall) rejectCall(error)
+      else settleTerminal({ status: 'error', error })
+    }
+    if (typeof ad.onClose === 'function') ad.onClose(closeHandler)
+    if (typeof ad.onError === 'function') ad.onError(errorHandler)
+
+    const call = (operation) => new Promise((resolve, reject) => {
+      if (this.interstitialPending !== pending || terminalSettled) {
+        reject(new Error('插屏请求已结束'))
+        return
+      }
+      let settled = false
+      const finish = (handler, value) => {
+        if (settled) return
+        settled = true
+        if (rejectCall === rejectFromEvent) rejectCall = null
+        handler(value)
+      }
+      const rejectFromEvent = (error) => finish(reject, error)
+      rejectCall = rejectFromEvent
+      let output
+      try {
+        output = operation()
+      } catch (error) {
+        finish(reject, error)
+        return
+      }
+      Promise.resolve(output).then(
+        (value) => finish(resolve, value),
+        (error) => finish(reject, error)
+      )
+    })
+
+    try {
+      try {
+        await call(() => ad.show())
+      } catch (firstError) {
+        if (terminalSettled) return terminal
+        if (typeof ad.load !== 'function') throw firstError
+        await call(() => ad.load())
+        await call(() => ad.show())
+      }
+    } catch (error) {
+      settleTerminal({ status: 'error', error })
+    }
+
+    const result = await terminal
+    if (result.status === 'shown') this.lastInterstitialAt = this.now()
+    return result
+  }
+}

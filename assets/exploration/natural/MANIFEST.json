@@ -1,0 +1,799 @@
+{
+  "version": 1,
+  "status": "internal-photographic-prototype",
+  "generatedWithImageApi": false,
+  "note": "No OPENAI_API_KEY was available. Backgrounds reuse existing photographs; the eight new image-generation compositions are prepared but have not been generated.",
+  "sprites": [
+    {
+      "speciesId": "amanita-caesareoides",
+      "localPath": "assets/exploration/natural/targets/amanita-caesareoides.png",
+      "modifications": "Polygon cutout, transparent background, resized. Runtime adds contact shadow and partial foreground occlusion.",
+      "source": {
+        "photoId": 143307173,
+        "license": "cc-by-nc",
+        "attribution": "(c) heybrows, some rights reserved (CC BY-NC)",
+        "observation": "https://www.inaturalist.org/observations/86937886",
+        "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/143307173/medium.jpg",
+        "speciesId": "amanita-caesareoides",
+        "scientificName": "Amanita caesareoides",
+        "localPath": "assets/exploration/amanita-caesareoides/detail-1.jpg",
+        "prototypeStatus": "internal-only; verify rights before release"
+      },
+      "usage": "Internal prototype; original source license applies, including NC where present."
+    },
+    {
+      "speciesId": "amanita-exitialis",
+      "localPath": "assets/exploration/natural/targets/amanita-exitialis.png",
+      "modifications": "Polygon cutout, transparent background, resized. Runtime adds contact shadow and partial foreground occlusion.",
+      "source": {
+        "photoId": 137570621,
+        "license": "cc-by-nc",
+        "attribution": "(c) 小铖/Smalltown, some rights reserved (CC BY-NC)",
+        "observation": "https://www.inaturalist.org/observations/83745795",
+        "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/137570621/medium.jpeg",
+        "speciesId": "amanita-exitialis",
+        "scientificName": "Amanita exitialis",
+        "localPath": "assets/exploration/amanita-exitialis/detail-1.jpg",
+        "prototypeStatus": "internal-only; verify rights before release"
+      },
+      "usage": "Internal prototype; original source license applies, including NC where present."
+    },
+    {
+      "speciesId": "amanita-muscaria",
+      "localPath": "assets/exploration/natural/targets/amanita-muscaria.png",
+      "modifications": "Polygon cutout, transparent background, resized. Runtime adds contact shadow and partial foreground occlusion.",
+      "source": {
+        "photoId": 2937852,
+        "license": "cc-by-nc",
+        "attribution": "(c) elephantmom, some rights reserved (CC BY-NC)",
+        "observation": "https://www.inaturalist.org/observations/2623741",
+        "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/2937852/medium.jpg",
+        "speciesId": "amanita-muscaria",
+        "scientificName": "Amanita muscaria",
+        "localPath": "assets/exploration/amanita-muscaria/detail-1.jpg",
+        "prototypeStatus": "internal-only; verify rights before release"
+      },
+      "usage": "Internal prototype; original source license applies, including NC where present."
+    },
+    {
+      "speciesId": "amanita-pallidorosea",
+      "localPath": "assets/exploration/natural/targets/amanita-pallidorosea.png",
+      "modifications": "Polygon cutout, transparent background, resized. Runtime adds contact shadow and partial foreground occlusion.",
+      "source": {
+        "photoId": 575817271,
+        "license": "cc-by-nc",
+        "attribution": "(c) hmwtr, some rights reserved (CC BY-NC)",
+        "observation": "https://www.inaturalist.org/observations/318590389",
+        "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/575817271/medium.jpg",
+        "speciesId": "amanita-pallidorosea",
+        "scientificName": "Amanita pallidorosea",
+        "localPath": "assets/exploration/amanita-pallidorosea/detail-1.jpg",
+        "prototypeStatus": "internal-only; verify rights before release"
+      },
+      "usage": "Internal prototype; original source license applies, including NC where present."
+    },
+    {
+      "speciesId": "armillaria-gallica",
+      "localPath": "assets/exploration/natural/targets/armillaria-gallica.png",
+      "modifications": "Polygon cutout, transparent background, resized. Runtime adds contact shadow and partial foreground occlusion.",
+      "source": {
+        "photoId": 566959334,
+        "license": "cc0",
+        "attribution": "no rights reserved",
+        "observation": "https://www.inaturalist.org/observations/313928994",
+        "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/566959334/medium.jpg",
+        "speciesId": "armillaria-gallica",
+        "scientificName": "Armillaria gallica",
+        "localPath": "assets/exploration/armillaria-gallica/detail-2.jpg",
+        "prototypeStatus": "CC0; research-grade observation reviewed"
+      },
+      "usage": "Internal prototype; original source license applies, including NC where present."
+    },
+    {
+      "speciesId": "coprinus-comatus",
+      "localPath": "assets/exploration/natural/targets/coprinus-comatus.png",
+      "modifications": "Polygon cutout, transparent background, resized. Runtime adds contact shadow and partial foreground occlusion.",
+      "source": {
+        "photoId": 93399523,
+        "license": "cc-by",
+        "attribution": "(c) Tom Norton, some rights reserved (CC BY)",
+        "observation": "https://www.inaturalist.org/observations/58497477",
+        "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/93399523/medium.jpeg",
+        "speciesId": "coprinus-comatus",
+        "scientificName": "Coprinus comatus",
+        "localPath": "assets/exploration/coprinus-comatus/detail-1.jpg",
+        "prototypeStatus": "internal-only; verify rights before release"
+      },
+      "usage": "Internal prototype; original source license applies, including NC where present."
+    },
+    {
+      "speciesId": "hericium-erinaceus",
+      "localPath": "assets/exploration/natural/targets/hericium-erinaceus.png",
+      "modifications": "Polygon cutout, transparent background, resized. Runtime adds contact shadow and partial foreground occlusion.",
+      "source": {
+        "photoId": 101093942,
+        "license": "cc-by-nc",
+        "attribution": "(c) Patrick Coin, some rights reserved (CC BY-NC)",
+        "observation": "https://www.inaturalist.org/observations/62721926",
+        "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/101093942/medium.jpg",
+        "speciesId": "hericium-erinaceus",
+        "scientificName": "Hericium erinaceus",
+        "localPath": "assets/exploration/hericium-erinaceus/detail-2.jpg",
+        "prototypeStatus": "internal-only; verify rights before release"
+      },
+      "usage": "Internal prototype; original source license applies, including NC where present."
+    },
+    {
+      "speciesId": "lepiota-brunneoincarnata",
+      "localPath": "assets/exploration/natural/targets/lepiota-brunneoincarnata.png",
+      "modifications": "Polygon cutout, transparent background, resized. Runtime adds contact shadow and partial foreground occlusion.",
+      "source": {
+        "photoId": 334188957,
+        "license": "cc-by-nc",
+        "attribution": "(c) maricel patino, some rights reserved (CC BY-NC)",
+        "observation": "https://www.inaturalist.org/observations/190612592",
+        "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/334188957/medium.png",
+        "speciesId": "lepiota-brunneoincarnata",
+        "scientificName": "Lepiota brunneoincarnata",
+        "localPath": "assets/exploration/lepiota-brunneoincarnata/detail-1.jpg",
+        "prototypeStatus": "internal-only; verify rights before release"
+      },
+      "usage": "Internal prototype; original source license applies, including NC where present."
+    },
+    {
+      "speciesId": "ophiocordyceps-sinensis",
+      "localPath": "assets/exploration/natural/targets/ophiocordyceps-sinensis.png",
+      "modifications": "Polygon cutout, transparent background, resized. Runtime adds contact shadow and partial foreground occlusion.",
+      "source": {
+        "photoId": 1900728,
+        "license": "cc-by-nc",
+        "attribution": "(c) soraj25, some rights reserved (CC BY-NC)",
+        "observation": "https://www.inaturalist.org/observations/1534230",
+        "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/1900728/medium.JPG",
+        "speciesId": "ophiocordyceps-sinensis",
+        "scientificName": "Ophiocordyceps sinensis",
+        "localPath": "assets/exploration/ophiocordyceps-sinensis/detail-2.jpg",
+        "prototypeStatus": "internal-only; verify rights before release"
+      },
+      "usage": "Internal prototype; original source license applies, including NC where present."
+    },
+    {
+      "speciesId": "pleurotus-citrinopileatus",
+      "localPath": "assets/exploration/natural/targets/pleurotus-citrinopileatus.png",
+      "modifications": "Polygon cutout, transparent background, resized. Runtime adds contact shadow and partial foreground occlusion.",
+      "source": {
+        "photoId": 291837313,
+        "license": "cc-by-nc",
+        "attribution": "(c) cuevo, some rights reserved (CC BY-NC)",
+        "observation": "https://www.inaturalist.org/observations/168399393",
+        "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/291837313/medium.jpg",
+        "speciesId": "pleurotus-citrinopileatus",
+        "scientificName": "Pleurotus citrinopileatus",
+        "localPath": "assets/exploration/pleurotus-citrinopileatus/detail-1.jpg",
+        "prototypeStatus": "internal-only; verify rights before release"
+      },
+      "usage": "Internal prototype; original source license applies, including NC where present."
+    },
+    {
+      "speciesId": "thelephora-ganbajun",
+      "localPath": "assets/exploration/natural/targets/thelephora-ganbajun.png",
+      "modifications": "Polygon cutout, transparent background, resized. Runtime adds contact shadow and partial foreground occlusion.",
+      "source": {
+        "photoId": 144876485,
+        "license": "cc-by-nc",
+        "attribution": "(c) Ran Dai, some rights reserved (CC BY-NC)",
+        "observation": "https://www.inaturalist.org/observations/87844494",
+        "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/144876485/medium.jpg",
+        "speciesId": "thelephora-ganbajun",
+        "scientificName": "Thelephora ganbajun",
+        "localPath": "assets/exploration/thelephora-ganbajun/detail-2.jpg",
+        "prototypeStatus": "internal-only; verify rights before release"
+      },
+      "usage": "Internal prototype; original source license applies, including NC where present."
+    },
+    {
+      "speciesId": "trametes-versicolor",
+      "localPath": "assets/exploration/natural/targets/trametes-versicolor.png",
+      "modifications": "Polygon cutout, transparent background, resized. Runtime adds contact shadow and partial foreground occlusion.",
+      "source": {
+        "photoId": 95491218,
+        "license": "cc-by-nc",
+        "attribution": "(c) kcook, some rights reserved (CC BY-NC)",
+        "observation": "https://www.inaturalist.org/observations/59749620",
+        "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/95491218/medium.jpg",
+        "speciesId": "trametes-versicolor",
+        "scientificName": "Trametes versicolor",
+        "localPath": "assets/exploration/trametes-versicolor/detail-2.jpg",
+        "prototypeStatus": "internal-only; verify rights before release"
+      },
+      "usage": "Internal prototype; original source license applies, including NC where present."
+    },
+    {
+      "speciesId": "tricholoma-matsutake",
+      "localPath": "assets/exploration/natural/targets/tricholoma-matsutake.png",
+      "modifications": "Polygon cutout, transparent background, resized. Runtime adds contact shadow and partial foreground occlusion.",
+      "source": {
+        "photoId": 115545849,
+        "license": "cc-by-nc",
+        "attribution": "(c) Christian Apschner, some rights reserved (CC BY-NC)",
+        "observation": "https://www.inaturalist.org/observations/71012545",
+        "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/115545849/medium.jpg",
+        "speciesId": "tricholoma-matsutake",
+        "scientificName": "Tricholoma matsutake",
+        "localPath": "assets/exploration/tricholoma-matsutake/detail-1.jpg",
+        "prototypeStatus": "internal-only; verify rights before release"
+      },
+      "usage": "Internal prototype; original source license applies, including NC where present."
+    }
+  ],
+  "scenes": [
+    {
+      "sceneId": "yn-pine",
+      "path": "暖湿山地 / 暖湿针阔混交林",
+      "background": "assets/exploration/habitats/yn-pine.jpg",
+      "cropTop": 0,
+      "source": {
+        "sceneId": "yn-pine",
+        "title": "Mysterious forest",
+        "creator": "Martin Vorel",
+        "license": "cc0",
+        "source": "https://libreshot.com/mysterious-forest/",
+        "url": "https://libreshot.com/wp-content/uploads/2020/09/mystery-forest-free-image-861x574.jpg",
+        "localPath": "assets/exploration/habitats/yn-pine.jpg",
+        "usageNote": "Representative game habitat image; not a collection location"
+      },
+      "sourceScope": "Representative atmosphere only, not a locality or validated vegetation reconstruction. Alpine and some forest variants still require new habitat-specific art.",
+      "targets": [
+        {
+          "spawnId": "ynp-1",
+          "position": [
+            0.18,
+            0.76
+          ],
+          "proposedArtPosition": [
+            0.18,
+            0.76
+          ],
+          "foreground": "needles",
+          "hidingPlace": "松针下"
+        },
+        {
+          "spawnId": "ynp-2",
+          "position": [
+            0.85,
+            0.66
+          ],
+          "proposedArtPosition": [
+            0.39,
+            0.65
+          ],
+          "foreground": "tree-behind",
+          "hidingPlace": "树根背后"
+        },
+        {
+          "spawnId": "ynp-3",
+          "position": [
+            0.64,
+            0.8
+          ],
+          "proposedArtPosition": [
+            0.64,
+            0.8
+          ],
+          "foreground": "leaves",
+          "hidingPlace": "落叶之间"
+        },
+        {
+          "spawnId": "ynp-4",
+          "position": [
+            0.43,
+            0.83
+          ],
+          "proposedArtPosition": [
+            0.83,
+            0.69
+          ],
+          "foreground": "needles",
+          "hidingPlace": "松针堆边"
+        }
+      ]
+    },
+    {
+      "sceneId": "yn-alpine",
+      "path": "暖湿山地 / 高寒草甸",
+      "background": "assets/exploration/habitats/yn-alpine.jpg",
+      "cropTop": 0,
+      "source": {
+        "sceneId": "yn-alpine",
+        "title": "Czech landscape",
+        "creator": "Martin Vorel",
+        "license": "cc0",
+        "source": "https://libreshot.com/meadowscape/",
+        "url": "https://libreshot.com/wp-content/uploads/2020/10/czech-landscape_D71_9409-free-image-861x574.jpg",
+        "localPath": "assets/exploration/habitats/yn-alpine.jpg",
+        "usageNote": "Representative game habitat image; not a collection location"
+      },
+      "sourceScope": "Representative atmosphere only, not a locality or validated vegetation reconstruction. Alpine and some forest variants still require new habitat-specific art.",
+      "targets": [
+        {
+          "spawnId": "yna-1",
+          "position": [
+            0.17,
+            0.77
+          ],
+          "proposedArtPosition": [
+            0.17,
+            0.77
+          ],
+          "foreground": "grass",
+          "hidingPlace": "矮草丛中"
+        },
+        {
+          "spawnId": "yna-2",
+          "position": [
+            0.39,
+            0.68
+          ],
+          "proposedArtPosition": [
+            0.39,
+            0.62
+          ],
+          "foreground": "mound",
+          "hidingPlace": "土隙边缘"
+        },
+        {
+          "spawnId": "yna-3",
+          "position": [
+            0.63,
+            0.82
+          ],
+          "proposedArtPosition": [
+            0.63,
+            0.82
+          ],
+          "foreground": "grass",
+          "hidingPlace": "草根之间"
+        },
+        {
+          "spawnId": "yna-4",
+          "position": [
+            0.84,
+            0.76
+          ],
+          "proposedArtPosition": [
+            0.84,
+            0.68
+          ],
+          "foreground": "grass",
+          "hidingPlace": "石旁草丛"
+        }
+      ]
+    },
+    {
+      "sceneId": "hl-mixed",
+      "path": "寒温带森林 / 红松白桦混交林",
+      "background": "assets/exploration/habitats/hl-mixed.jpg",
+      "cropTop": 0,
+      "source": {
+        "sceneId": "hl-mixed",
+        "title": "The way in the foggy forest",
+        "creator": "Martin Vorel",
+        "license": "cc0",
+        "source": "https://libreshot.com/the-way-in-the-foggy-forest/",
+        "url": "https://libreshot.com/wp-content/uploads/2019/12/way-in-foggy-forest-861x574.jpg",
+        "localPath": "assets/exploration/habitats/hl-mixed.jpg",
+        "usageNote": "Representative game habitat image; not a collection location"
+      },
+      "sourceScope": "Representative atmosphere only, not a locality or validated vegetation reconstruction. Alpine and some forest variants still require new habitat-specific art.",
+      "targets": [
+        {
+          "spawnId": "hlm-1",
+          "position": [
+            0.18,
+            0.72
+          ],
+          "proposedArtPosition": [
+            0.18,
+            0.78
+          ],
+          "foreground": "leaves",
+          "hidingPlace": "白桦落叶间"
+        },
+        {
+          "spawnId": "hlm-2",
+          "position": [
+            0.39,
+            0.82
+          ],
+          "proposedArtPosition": [
+            0.39,
+            0.69
+          ],
+          "foreground": "needles",
+          "hidingPlace": "松根旁"
+        },
+        {
+          "spawnId": "hlm-3",
+          "position": [
+            0.82,
+            0.52
+          ],
+          "proposedArtPosition": [
+            0.63,
+            0.43
+          ],
+          "foreground": "bark",
+          "hidingPlace": "阔叶树干"
+        },
+        {
+          "spawnId": "hlm-4",
+          "position": [
+            0.86,
+            0.81
+          ],
+          "proposedArtPosition": [
+            0.83,
+            0.82
+          ],
+          "foreground": "grass",
+          "hidingPlace": "苔地草间"
+        }
+      ]
+    },
+    {
+      "sceneId": "hl-meadow",
+      "path": "冷湿过渡带 / 林缘湿草地",
+      "background": "assets/exploration/habitats/ln-edge.jpg",
+      "cropTop": 0.35,
+      "source": {
+        "sceneId": "ln-edge",
+        "title": "Tree in the mist",
+        "creator": "Martin Vorel",
+        "license": "cc0",
+        "source": "https://libreshot.com/tree-in-the-mist/",
+        "url": "https://libreshot.com/wp-content/uploads/2020/10/magic-tree_D71_9289-free-image-861x574.jpg",
+        "localPath": "assets/exploration/habitats/ln-edge.jpg",
+        "usageNote": "Representative game habitat image; not a collection location"
+      },
+      "sourceScope": "Representative atmosphere only, not a locality or validated vegetation reconstruction. Alpine and some forest variants still require new habitat-specific art.",
+      "targets": [
+        {
+          "spawnId": "hle-1",
+          "position": [
+            0.2,
+            0.915
+          ],
+          "proposedArtPosition": [
+            0.17,
+            0.79
+          ],
+          "foreground": "grass",
+          "hidingPlace": "湿草丛中"
+        },
+        {
+          "spawnId": "hle-2",
+          "position": [
+            0.43,
+            0.91
+          ],
+          "proposedArtPosition": [
+            0.4,
+            0.7
+          ],
+          "foreground": "grass",
+          "hidingPlace": "草叶背后"
+        },
+        {
+          "spawnId": "hle-3",
+          "position": [
+            0.69,
+            0.9
+          ],
+          "proposedArtPosition": [
+            0.63,
+            0.59
+          ],
+          "foreground": "wood",
+          "hidingPlace": "老树桩侧面"
+        },
+        {
+          "spawnId": "hle-4",
+          "position": [
+            0.85,
+            0.91
+          ],
+          "proposedArtPosition": [
+            0.84,
+            0.83
+          ],
+          "foreground": "grass",
+          "hidingPlace": "林缘草根"
+        }
+      ]
+    },
+    {
+      "sceneId": "jl-mixed",
+      "path": "寒温带森林 / 冷湿针阔混交林",
+      "background": "assets/exploration/habitats/yn-pine.jpg",
+      "cropTop": 0,
+      "source": {
+        "sceneId": "yn-pine",
+        "title": "Mysterious forest",
+        "creator": "Martin Vorel",
+        "license": "cc0",
+        "source": "https://libreshot.com/mysterious-forest/",
+        "url": "https://libreshot.com/wp-content/uploads/2020/09/mystery-forest-free-image-861x574.jpg",
+        "localPath": "assets/exploration/habitats/yn-pine.jpg",
+        "usageNote": "Representative game habitat image; not a collection location"
+      },
+      "sourceScope": "Representative atmosphere only, not a locality or validated vegetation reconstruction. Alpine and some forest variants still require new habitat-specific art.",
+      "targets": [
+        {
+          "spawnId": "jlm-1",
+          "position": [
+            0.2,
+            0.82
+          ],
+          "proposedArtPosition": [
+            0.17,
+            0.77
+          ],
+          "foreground": "needles",
+          "hidingPlace": "腐殖层里"
+        },
+        {
+          "spawnId": "jlm-2",
+          "position": [
+            0.86,
+            0.43
+          ],
+          "proposedArtPosition": [
+            0.4,
+            0.4
+          ],
+          "foreground": "bark",
+          "hidingPlace": "老树伤口旁"
+        },
+        {
+          "spawnId": "jlm-3",
+          "position": [
+            0.62,
+            0.8
+          ],
+          "proposedArtPosition": [
+            0.62,
+            0.82
+          ],
+          "foreground": "leaves",
+          "hidingPlace": "厚落叶下"
+        },
+        {
+          "spawnId": "jlm-4",
+          "position": [
+            0.32,
+            0.73
+          ],
+          "proposedArtPosition": [
+            0.83,
+            0.67
+          ],
+          "foreground": "wood",
+          "hidingPlace": "倒木侧面"
+        }
+      ]
+    },
+    {
+      "sceneId": "jl-river",
+      "path": "冷湿过渡带 / 冷湿河谷",
+      "background": "assets/exploration/habitats/jl-river.jpg",
+      "cropTop": 0,
+      "source": {
+        "sceneId": "jl-river",
+        "title": "Modrava – Sumava",
+        "creator": "Martin Vorel",
+        "license": "cc0",
+        "source": "https://libreshot.com/modrava-sumava/",
+        "url": "https://libreshot.com/wp-content/uploads/2020/01/modrava-sumava-861x574.jpg",
+        "localPath": "assets/exploration/habitats/jl-river.jpg",
+        "usageNote": "Representative game habitat image; not a collection location"
+      },
+      "sourceScope": "Representative atmosphere only, not a locality or validated vegetation reconstruction. Alpine and some forest variants still require new habitat-specific art.",
+      "targets": [
+        {
+          "spawnId": "jlr-1",
+          "position": [
+            0.76,
+            0.79
+          ],
+          "proposedArtPosition": [
+            0.18,
+            0.66
+          ],
+          "foreground": "wood",
+          "hidingPlace": "溪边倒木"
+        },
+        {
+          "spawnId": "jlr-2",
+          "position": [
+            0.46,
+            0.47
+          ],
+          "proposedArtPosition": [
+            0.39,
+            0.43
+          ],
+          "foreground": "bark",
+          "hidingPlace": "树洞旁"
+        },
+        {
+          "spawnId": "jlr-3",
+          "position": [
+            0.91,
+            0.66
+          ],
+          "proposedArtPosition": [
+            0.63,
+            0.72
+          ],
+          "foreground": "wood",
+          "hidingPlace": "潮湿树桩"
+        },
+        {
+          "spawnId": "jlr-4",
+          "position": [
+            0.31,
+            0.78
+          ],
+          "proposedArtPosition": [
+            0.83,
+            0.82
+          ],
+          "foreground": "leaves",
+          "hidingPlace": "溪岸落叶间"
+        }
+      ]
+    },
+    {
+      "sceneId": "ln-oak",
+      "path": "温带丘陵林地 / 落叶阔叶林",
+      "background": "assets/exploration/habitats/hl-mixed.jpg",
+      "cropTop": 0,
+      "source": {
+        "sceneId": "hl-mixed",
+        "title": "The way in the foggy forest",
+        "creator": "Martin Vorel",
+        "license": "cc0",
+        "source": "https://libreshot.com/the-way-in-the-foggy-forest/",
+        "url": "https://libreshot.com/wp-content/uploads/2019/12/way-in-foggy-forest-861x574.jpg",
+        "localPath": "assets/exploration/habitats/hl-mixed.jpg",
+        "usageNote": "Representative game habitat image; not a collection location"
+      },
+      "sourceScope": "Representative atmosphere only, not a locality or validated vegetation reconstruction. Alpine and some forest variants still require new habitat-specific art.",
+      "targets": [
+        {
+          "spawnId": "lno-1",
+          "position": [
+            0.19,
+            0.61
+          ],
+          "proposedArtPosition": [
+            0.18,
+            0.76
+          ],
+          "foreground": "roots",
+          "hidingPlace": "橡树根旁"
+        },
+        {
+          "spawnId": "lno-2",
+          "position": [
+            0.4,
+            0.83
+          ],
+          "proposedArtPosition": [
+            0.4,
+            0.71
+          ],
+          "foreground": "leaves",
+          "hidingPlace": "橡叶下面"
+        },
+        {
+          "spawnId": "lno-3",
+          "position": [
+            0.755,
+            0.665
+          ],
+          "proposedArtPosition": [
+            0.62,
+            0.61
+          ],
+          "foreground": "wood",
+          "hidingPlace": "枯枝背面"
+        },
+        {
+          "spawnId": "lno-4",
+          "position": [
+            0.84,
+            0.74
+          ],
+          "proposedArtPosition": [
+            0.83,
+            0.81
+          ],
+          "foreground": "tree-behind",
+          "hidingPlace": "树后腐木"
+        }
+      ]
+    },
+    {
+      "sceneId": "ln-edge",
+      "path": "温带丘陵林地 / 山脚林缘",
+      "background": "assets/exploration/habitats/ln-edge.jpg",
+      "cropTop": 0.35,
+      "source": {
+        "sceneId": "ln-edge",
+        "title": "Tree in the mist",
+        "creator": "Martin Vorel",
+        "license": "cc0",
+        "source": "https://libreshot.com/tree-in-the-mist/",
+        "url": "https://libreshot.com/wp-content/uploads/2020/10/magic-tree_D71_9289-free-image-861x574.jpg",
+        "localPath": "assets/exploration/habitats/ln-edge.jpg",
+        "usageNote": "Representative game habitat image; not a collection location"
+      },
+      "sourceScope": "Representative atmosphere only, not a locality or validated vegetation reconstruction. Alpine and some forest variants still require new habitat-specific art.",
+      "targets": [
+        {
+          "spawnId": "lne-1",
+          "position": [
+            0.17,
+            0.914
+          ],
+          "proposedArtPosition": [
+            0.17,
+            0.8
+          ],
+          "foreground": "grass",
+          "hidingPlace": "草叶阴影里"
+        },
+        {
+          "spawnId": "lne-2",
+          "position": [
+            0.686,
+            0.9
+          ],
+          "proposedArtPosition": [
+            0.39,
+            0.71
+          ],
+          "foreground": "roots",
+          "hidingPlace": "埋木根旁"
+        },
+        {
+          "spawnId": "lne-3",
+          "position": [
+            0.658,
+            0.715
+          ],
+          "proposedArtPosition": [
+            0.63,
+            0.58
+          ],
+          "foreground": "wood",
+          "hidingPlace": "林缘枯木"
+        },
+        {
+          "spawnId": "lne-4",
+          "position": [
+            0.43,
+            0.919
+          ],
+          "proposedArtPosition": [
+            0.83,
+            0.83
+          ],
+          "foreground": "grass",
+          "hidingPlace": "腐殖土边"
+        }
+      ]
+    }
+  ]
+}

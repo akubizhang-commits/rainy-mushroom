@@ -1,0 +1,3 @@
+// Add an ID only after its generated panorama and card have been reviewed and
+// copied into assets/exploration/natural/{scenes,cards}/. No API images exist yet.
+export const GENERATED_HABITAT_IDS = Object.freeze([])

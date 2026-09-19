@@ -1,0 +1,65 @@
+const TAU=Math.PI*2
+
+function shelf(mesh,x,y,z,r,phase){
+  const bands=['#6f6351','#ad9876','#695d4d','#b6a488','#84745c','#cdbd98','#ebe1bf']
+  for(let ring=0;ring<bands.length;ring++){
+    const triangles=[],point=(t,a)=>{
+      const edge=r*(1+.07*Math.sin(a*7+phase)+.025*Math.cos(a*13)),radius=edge*t
+      return [x+Math.sin(a)*radius,y+.026*Math.sin(t*Math.PI)+.012*Math.sin(a*3+phase)*t,z+Math.cos(a)*radius*.83]
+    }
+    for(let j=0;j<26;j++){
+      const a=-1.62+j/26*3.24,b=-1.62+(j+1)/26*3.24,t=ring/bands.length,u=(ring+1)/bands.length
+      triangles.push([point(t,a),point(u,a),point(u,b)],[point(t,a),point(u,b),point(t,b)])
+    }
+    mesh.surface(triangles,bands[ring])
+  }
+  const underside=[],edge=a=>[x+Math.sin(a)*r*(1+.07*Math.sin(a*7+phase)+.025*Math.cos(a*13)),y+.012*Math.sin(a*3+phase),z+Math.cos(a)*r*(1+.07*Math.sin(a*7+phase)+.025*Math.cos(a*13))*.83]
+  for(let j=0;j<26;j++){
+    const a=edge(-1.62+j/26*3.24),b=edge(-1.62+(j+1)/26*3.24),low=p=>[p[0],p[1]-.014,p[2]]
+    underside.push([[x,y-.016,z],low(b),low(a)],[a,low(a),low(b)],[a,low(b),b])
+  }
+  mesh.surface(underside,'#d9ceb0')
+}
+
+function oysterCap(mesh,x,y,z,r,phase){
+  const profile=[[0,.025],[.23,.018],[.55,.043],[.83,.065],[1,.037]]
+  const point=(ring,i)=>{
+    const a=i/24*TAU,rad=r*ring[0]*(1+.07*Math.sin(a*3+phase)+.025*Math.sin(a*7))
+    return [x+Math.cos(a)*rad,y+ring[1]+.011*Math.sin(a*3+phase)*ring[0],z+Math.sin(a)*rad*.8]
+  }
+  for(let k=0;k<profile.length-1;k++){
+    const tris=[]
+    for(let i=0;i<24;i++)tris.push([point(profile[k],i),point(profile[k+1],i+1),point(profile[k+1],i)],[point(profile[k],i),point(profile[k],i+1),point(profile[k+1],i+1)])
+    mesh.surface(tris,['#b99c35','#c9ad46','#d8bf5e','#e8d482'][k])
+  }
+  mesh.lathe(x,y+.022,z,[[0,0],[.010,r*.95],[.015,r]],'#e4d9b0',24,.8)
+  for(let i=0;i<22;i++){
+    const a=i/22*TAU,dx=Math.cos(a),dz=Math.sin(a)*.8
+    mesh.branch([x+dx*.028,y-.018,z+dz*.028],[x+dx*r*.92,y+.024,z+dz*r*.92],.003,.002,'#c3b99a',4)
+  }
+}
+export function woodlandFungus(mesh,id,anchor){
+  const {x,y,z}=anchor
+  if(id==='trametes-versicolor'){
+    for(let i=0;i<5;i++){
+      const onLog=anchor.support==='log',px=x+(onLog?(i-2)*.13:Math.sin(i*2.3)*.10),py=y+.008+(onLog?(i%2)*.023:i*.073),pz=z+(i%2)*.025
+      mesh.smoothEllipsoid(px,py-.005,pz-.025,.065,.022,.065,'#b8a58b',10,6)
+      shelf(mesh,px,py,pz,.25+(i%3)*.025,i*.8)
+    }
+  }else if(id==='pleurotus-citrinopileatus'){
+    for(let i=0;i<5;i++){
+      const a=i*2.4,px=x+Math.cos(a)*.13,pz=z+Math.sin(a)*.1,h=.16+(i%3)*.085,r=.17+(i%3)*.035
+      mesh.branch([x,y,z],[px,y+h*.65,pz],.045,.026,'#c4b995',10)
+      mesh.branch([px,y+h*.65,pz],[px+.025,y+h,pz+.015],.026,.035,'#e0d5ae',10)
+      oysterCap(mesh,px+.025,y+h,pz+.015,r,a)
+    }
+  }else if(id==='hericium-erinaceus'){
+    for(let i=0;i<3;i++)mesh.smoothEllipsoid(x+(i-1)*.105,y+.25+(i%2)*.055,z+.04,.15,.16,.145,i===1?'#ede6cf':'#d9d1b9',16,10)
+    for(let i=0;i<128;i++){
+      const a=i*2.39996,r=.24*Math.sqrt((i+.5)/128),px=x+Math.cos(a)*r,pz=z+.06+Math.sin(a)*r*.66
+      const top=y+.24+Math.sqrt(Math.max(0,1-(r/.27)**2))*.075
+      mesh.branch([px,top,pz],[px+Math.sin(i)*.008,y+.018+(i%7)*.009,pz+.025],.009,.0025,i%3?'#e8e0c7':'#d0c6ae',5)
+    }
+  }else return false
+  return true
+}

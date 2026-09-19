@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>林间素材样板 · 雨后菌语</title>
+<style>
+body{margin:0;background:#192c24;color:#ecebdd;font:15px system-ui;padding:30px}main{max-width:1050px;margin:auto}h1{font-size:26px}p{color:#b8c9b9;line-height:1.6}section{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}article{background:#263c30;border:1px solid #42604a;border-radius:18px;overflow:hidden}canvas{display:block;width:100%;aspect-ratio:1.2}h2{margin:15px 18px 5px;font-size:18px}article p{margin:0 18px 18px;font-size:13px}button{background:#dbdfc9;color:#263c30;border:0;border-radius:8px;padding:10px 18px;margin-bottom:20px}@media(max-width:600px){section{grid-template-columns:1fr}}
+</style>
+<main><h1>林间素材样板</h1><p>游戏同款模型与光照的近景检查。此页不读取或写入玩家存档。</p><button id="motion">暂停动作</button><section>
+<article><canvas id="deer" width="480" height="400"></canvas><h2>林鹿</h2><p>细长口鼻、独立头颈、短角与蹄部，柔和身体明暗。</p></article>
+<article><canvas id="boar" width="480" height="400"></canvas><h2>野猪</h2><p>楔形长吻、獠牙、背鬃与分趾蹄，独立低头嗅闻。</p></article>
+<article><canvas id="yak" width="480" height="400"></canvas><h2>牦牛</h2><p>厚实肩背、弯角、额毛与垂落长毛，独立低头啃食。</p></article>
+<article><canvas id="trametes-versicolor" width="480" height="400"></canvas><h2>云芝</h2><p>薄片层叠、同心色带、波浪状浅色边缘。</p></article>
+<article><canvas id="pleurotus-citrinopileatus" width="480" height="400"></canvas><h2>金顶侧耳</h2><p>大小不同的偏心菌盖，弯曲菌柄与下延菌褶。</p></article>
+<article><canvas id="hericium-erinaceus" width="480" height="400"></canvas><h2>猴头菌</h2><p>相连的浅色菌体与细长下垂菌齿。</p></article>
+</section><p id="status">模型载入中…</p></main>
+<script type="module">
+import { MeshBuilder } from '../js/voxel/geometry.js'
+import { VoxelRenderer } from '../js/voxel/VoxelRenderer.js'
+import { makeMushroom } from '../js/voxel/mushrooms.js'
+import { animalModel } from '../js/voxel/Wildlife.js'
+import { detailedLog,shadowPatch,fern } from '../js/voxel/RiverArt.js'
+import { SPECIES_BY_ID } from '../js/data/explorationData.js'
+import { VOXEL_BIOMES } from '../js/voxel/biomes.js'
+const views=[]
+for(const canvas of document.querySelectorAll('canvas')){
+  const id=canvas.id,mesh=new MeshBuilder(),shadowMesh=new MeshBuilder()
+  mesh.surface([[[-5,0,-5],[-5,0,5],[5,0,-5]],[[5,0,-5],[-5,0,5],[5,0,5]]],'#84956c')
+  const world={mesh,shadowMesh,biome:VOXEL_BIOMES.river,solids:[],targets:[],heightAt:()=>0,_shape(method,args){const shape=mesh[method](...args);this.solids.push(shape);return shape}}
+  let y=0
+  if(['deer','boar','yak'].includes(id)){
+    world.wildlife={modelData:{[id]:animalModel(id)},actors:[{kind:id,x:0,y:0,z:0,yaw:-.3,phase:0,moving:false,mode:'roam',grazing:false}]}
+  }else{
+    if(id==='hericium-erinaceus'){
+      mesh.branch([0,0,-.21],[0,2.4,-.21],.21,.16,'#725741',16);y=.88
+    }else y=detailedLog(world,0,-.06)
+    const entity=makeMushroom({id:'sample',count:1},SPECIES_BY_ID[id],{x:0,y:y+.01,z:.015,attached:true,support:id==='hericium-erinaceus'?'trunk':'log'})
+    world.targets=[entity];world.wildlife={actors:[],modelData:{}}
+  }
+  fern(world,-.9,.2,.85,.8);fern(world,.85,-.5,.65,2)
+  shadowPatch(shadowMesh,0,0,.8,.7,.15,()=>0)
+  world.vertices=mesh.data();world.shadows=shadowMesh.data()
+  const renderer=new VoxelRenderer(canvas),ui=document.createElement('canvas');ui.width=480;ui.height=400
+  renderer.setWorld(world)
+  const player=['deer','boar','yak'].includes(id)?{x:2,y:1.26,z:2.65,yaw:Math.atan2(-2,2.65),pitch:-.06}:{x:.65,y:y+.63,z:1.18,yaw:Math.atan2(-.65,1.18),pitch:-.26}
+  views.push({renderer,world,ui,player})
+}
+let paused=false,time=0,last=null
+document.querySelector('#motion').onclick=()=>{paused=!paused;document.querySelector('#motion').textContent=paused?'播放动作':'暂停动作'}
+function frame(now){
+  if(last!==null&&!paused)time+=Math.min(.05,(now-last)/1000)
+  last=now
+  for(const v of views){
+    const deer=v.world.wildlife.actors[0]
+    if(deer){deer.phase=time;deer.grazing=Math.sin(time*.24)>.3}
+    v.renderer.render(v.player,{huntStarted:true,basketSpawnIds:[],eatenSpawnIds:[],elapsedMs:time*1000},v.ui,true,!v.drawn||!v.renderer.uiUploadVerified)
+    v.drawn=true
+  }
+  const errors=views.map(v=>v.renderer.gl.getError())
+  document.querySelector('#status').textContent=errors.some(Boolean)?'绘制错误：'+errors.join(','):views.length+'个模型绘制正常 · 游戏原创几何资产'
+  requestAnimationFrame(frame)
+}
+requestAnimationFrame(frame)
+</script></html>

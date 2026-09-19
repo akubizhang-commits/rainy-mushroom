@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#173f35"/>
+      <stop offset="1" stop-color="#0a2926"/>
+    </linearGradient>
+    <linearGradient id="ground" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#6f925b"/>
+      <stop offset="1" stop-color="#355c43"/>
+    </linearGradient>
+    <linearGradient id="cap" x1="0.15" y1="0.1" x2="0.85" y2="0.9">
+      <stop offset="0" stop-color="#f3c96f"/>
+      <stop offset="0.58" stop-color="#d5844f"/>
+      <stop offset="1" stop-color="#9a4d3f"/>
+    </linearGradient>
+    <linearGradient id="stem" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fff4d1"/>
+      <stop offset="1" stop-color="#d9c18f"/>
+    </linearGradient>
+    <linearGradient id="drop" x1="0.2" y1="0" x2="0.8" y2="1">
+      <stop offset="0" stop-color="#bcece4"/>
+      <stop offset="1" stop-color="#52b7b0"/>
+    </linearGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="170%">
+      <feDropShadow dx="0" dy="26" stdDeviation="22" flood-color="#061916" flood-opacity="0.48"/>
+    </filter>
+  </defs>
+
+  <rect width="1024" height="1024" rx="220" fill="url(#bg)"/>
+
+  <!-- misty forest silhouettes -->
+  <g opacity="0.34" fill="#7aa07b">
+    <path d="M116 612h68V367h42L150 162 74 367h42z"/>
+    <path d="M816 617h72V331h45L852 111 771 331h45z"/>
+    <path d="M690 613h54V414h34l-61-167-61 167h34z"/>
+    <path d="M250 618h53V433h33l-60-164-59 164h33z"/>
+  </g>
+
+  <!-- rain -->
+  <g fill="none" stroke="#9ed8cf" stroke-width="19" stroke-linecap="round" opacity="0.62">
+    <path d="M280 178l-28 55"/><path d="M401 112l-25 50"/><path d="M629 151l-27 54"/><path d="M747 221l-25 49"/>
+  </g>
+
+  <!-- forest floor -->
+  <path d="M94 744c112-87 219-71 321-34 99 36 183 32 281-3 93-34 165-13 234 40v163H94z" fill="url(#ground)"/>
+  <g fill="none" stroke="#a6bf73" stroke-width="18" stroke-linecap="round">
+    <path d="M171 787c-5-67 7-124 40-170M208 715l-43-28M205 682l41-36"/>
+    <path d="M826 796c1-57-12-105-43-145M795 716l44-25M790 691l-35-30"/>
+  </g>
+
+  <!-- hero mushroom -->
+  <g filter="url(#shadow)">
+    <path d="M420 494c20-35 165-38 190 2-19 67-23 145-4 271 7 47-34 82-94 82s-99-35-91-82c20-122 18-204-1-273z" fill="url(#stem)"/>
+    <path d="M511 267c-151 0-267 103-297 254-8 42 21 70 62 70h470c42 0 71-29 62-70-31-151-145-254-297-254z" fill="url(#cap)"/>
+    <path d="M259 523c86-47 418-47 505 0" fill="none" stroke="#7d3c37" stroke-width="24" stroke-linecap="round" opacity="0.58"/>
+    <g fill="#f9dfa0" opacity="0.92">
+      <ellipse cx="367" cy="405" rx="32" ry="22" transform="rotate(-18 367 405)"/>
+      <ellipse cx="505" cy="341" rx="29" ry="21" transform="rotate(8 505 341)"/>
+      <ellipse cx="648" cy="412" rx="34" ry="23" transform="rotate(19 648 412)"/>
+      <ellipse cx="485" cy="467" rx="22" ry="16" transform="rotate(-9 485 467)"/>
+    </g>
+  </g>
+
+  <!-- signature rain drop -->
+  <path d="M706 243c0 0-69 82-69 135 0 45 31 76 69 76s69-31 69-76c0-53-69-135-69-135z" fill="url(#drop)" stroke="#d7f5ed" stroke-width="13"/>
+  <path d="M683 378c1 18 12 31 29 36" fill="none" stroke="#effff9" stroke-width="13" stroke-linecap="round" opacity="0.8"/>
+
+  <!-- tiny foreground sprouts -->
+  <g fill="none" stroke="#d3d58b" stroke-width="16" stroke-linecap="round">
+    <path d="M342 852c-5-45-24-76-58-94M325 806l43-38"/>
+    <path d="M684 855c6-39 24-68 54-89M702 813l-34-29"/>
+  </g>
+</svg>

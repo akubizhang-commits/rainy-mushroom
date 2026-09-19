@@ -1,0 +1,33 @@
+# macOS
+.DS_Store
+
+# Node
+node_modules/
+*.log
+
+# WeChat mini-game (user-specific dev tool state)
+project.private.config.json
+
+# Cocos Creator generated / cache (root project - legacy WebGL)
+/library/
+/temp/
+/tmp/
+/output/
+/release/
+
+# Cocos Creator generated / cache (cocos-pilot subproject)
+/cocos-pilot/library/
+/cocos-pilot/temp/
+/cocos-pilot/build/
+/cocos-pilot/local/
+
+# Cocos user preferences (per-machine)
+/profiles/
+/cocos-pilot/profiles/
+
+# SDD workspace (from superpowers skill; scratch)
+/.superpowers/
+
+# Editor scratch
+*.swp
+.vscode/*.local.json

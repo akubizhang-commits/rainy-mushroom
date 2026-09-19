@@ -1,0 +1,270 @@
+import { expeditionVariation } from '../data/expeditionVariations.js'
+import { routesForScene, findingNotes, eligibleCommissions, COMMISSIONS, substrateGroup } from '../data/fieldJournal.js'
+import { poolForScene, drawSceneSpecies, identifiedCount } from '../data/speciesPools.js'
+import { ExplorationState } from './ExplorationState.js'
+import { SPECIES_BY_ID,getIdentificationClues,getIdentificationCandidates } from '../data/explorationData.js'
+import { FORAGING_RULES,FORAGING_SCENE_BY_ID,FORAGING_REGION_BY_ID } from '../data/foragingScenes.js'
+
+export class ForagingState extends ExplorationState {
+  constructor(profile) {
+    super(profile)
+    this.profile.tutorialSeen=profile?.tutorialSeen===true
+    this.profile.version=5
+    this.profile.observationRewards={}
+    for(const id of Object.keys(COMMISSIONS))if(profile?.observationRewards?.[id]===true)this.profile.observationRewards[id]=true
+    this.profile.discoveryBadges={}
+    for(const id of ['first-discovery',...Object.keys(FORAGING_SCENE_BY_ID).map(id=>'complete:'+id)])if(profile?.discoveryBadges?.[id])this.profile.discoveryBadges[id]=true
+    this.profile.sceneDiscoveries={}
+    this.profile.sceneDiscoveryHistoryIncomplete={}
+    this.profile.sceneVisits={}
+    this.profile.rainBadgeScenes=Object.fromEntries(Object.keys(FORAGING_SCENE_BY_ID).filter(id=>profile?.rainBadgeScenes?.[id]===true).map(id=>[id,true]))
+    for(const scene of Object.values(FORAGING_SCENE_BY_ID)){
+      const valid=new Set(poolForScene(scene).map(e=>e.speciesId))
+      this.profile.sceneDiscoveries[scene.id]=Array.from(new Set((Array.isArray(profile?.sceneDiscoveries?.[scene.id])?profile.sceneDiscoveries[scene.id]:[]).filter(id=>valid.has(id))))
+      const found=this.profile.sceneDiscoveries[scene.id].length
+      // Old saves retained completion without species-level provenance. Do not
+      // invent species from a region-wide collection or silently report zero.
+      if(found<valid.size&&(profile?.sceneDiscoveryHistoryIncomplete?.[scene.id]===true||
+        (this.profile.completedScenes[scene.id]&&found===0))){
+        this.profile.sceneDiscoveryHistoryIncomplete[scene.id]=true
+      }
+      const visits=Number(profile?.sceneVisits?.[scene.id])
+      this.profile.sceneVisits[scene.id]=Number.isFinite(visits)?Math.max(0,Math.floor(visits)):0
+    }
+    for(const [id,entry] of Object.entries(this.profile.collection)){
+      const raw=profile?.collection?.[id]||{}
+      entry.identificationFailures=Number.isFinite(Number(raw.identificationFailures))?Math.max(0,Math.floor(Number(raw.identificationFailures))):0
+      entry.identificationLockedUntil=Number.isFinite(raw.identificationLockedUntil)?Math.max(0,raw.identificationLockedUntil):0
+      if((profile?.version||0)<5)entry.identificationLockedUntil=Math.min(entry.identificationLockedUntil,Date.now()+FORAGING_RULES.cooldowns[1])
+      entry.lastMistakeId=getIdentificationCandidates(id).some(s=>s.id===raw.lastMistakeId)?raw.lastMistakeId:null
+      entry.studiedClues=Math.min(3,Math.max(0,Math.floor(Number(raw.studiedClues)||0)))
+    }
+    this.collectionPhotoIndex=0
+  }
+  get sceneData(){return this.currentRun?(this.currentRun.sceneSnapshot||FORAGING_SCENE_BY_ID[this.currentRun.sceneId]):null}
+  get regionData(){return FORAGING_REGION_BY_ID[this.selectedRegionId]||null}
+  sceneDefinition(id){return FORAGING_SCENE_BY_ID[id]}
+  sceneSpeciesProgress(id){
+    const scene=FORAGING_SCENE_BY_ID[id],pool=poolForScene(scene),level=identifiedCount(this.profile)
+    const found=(this.profile.sceneDiscoveries[id]||[]).length
+    return {found,total:pool.length,historyIncomplete:Boolean(this.profile.sceneDiscoveryHistoryIncomplete[id])&&found<pool.length,unlocked:pool.filter(e=>e.unlockAt<=level).length,identified:level,pool}
+  }
+  get goalTarget(){return this.sceneData?.targetCollectCount||0}
+  get goalProgress(){return this.currentRun?.collectedMushroomCount||0}
+  startScene(id){
+    const run=super.startScene(id)
+    const scene=FORAGING_SCENE_BY_ID[id],visit=++this.profile.sceneVisits[id]
+    const variation=expeditionVariation(scene,visit)
+    const spawns=drawSceneSpecies(scene,this.profile,visit).map((s,i)=>({...s,position:variation.positions[i],brushable:s.substrate!=='wood'&&(i+visit)%3===0&&i!==0}))
+    if(!spawns.some(s=>s.brushable)){
+      const covered=spawns.find((s,i)=>i>0&&s.substrate!=='wood')
+      if(covered)covered.brushable=true
+    }
+    run.sceneSnapshot={...scene,...variation,spawns}
+    run.routes=routesForScene(scene);run.visitedRouteIds=[];run.selectedRouteId=null
+    run.commissionOptions=eligibleCommissions(run.sceneSnapshot)
+    run.commissionId=run.commissionOptions[(visit-1)%run.commissionOptions.length]
+    run.commissionCompleted=false;run.commissionSkipped=false
+    run.bonusStarted=false;run.baseResult=null
+    run.discoveriesBefore=this.sceneSpeciesProgress(id).found
+    run.newSpeciesIds=[];run.newSceneSpeciesIds=[];run.revealedSpawnIds=[]
+    Object.assign(run,{timeRemainingMs:FORAGING_RULES.timeLimitMs,elapsedMs:0,predatorActive:false,predatorWarned:false,predatorNoticeUntil:0,predatorMessage:'',predatorStatus:'quiet',escapes:0,animalAlerted:false,animalEvents:[],animalNotice:'',animalNoticeUntil:0})
+    return run
+  }
+  startHunt(mode='timed'){
+    if(this.currentRun?.huntStarted)return this.currentRun
+    const run=super.startHunt(mode)
+    run.lastHuntTickAt=null
+    return run
+  }
+  tickHunt(now=Date.now()){
+    const run=this.currentRun
+    if(!run||run.completed||!run.huntStarted)return null
+    if(!Number.isFinite(run.lastHuntTickAt)){run.lastHuntTickAt=now;return null}
+    const elapsed=Math.max(0,now-run.lastHuntTickAt)
+    run.lastHuntTickAt=now;run.elapsedMs+=elapsed
+    if(run.elapsedMs>=FORAGING_RULES.graceMs&&!run.animalAlerted){
+      run.animalAlerted=true
+      if(this.sceneData.animals.some(a=>a.forager))this.announceAnimal('动物开始觅食了，会吃掉附近的菌物')
+    }
+    if(run.huntMode==='timed'&&run.elapsedMs>=FORAGING_RULES.predatorWarningMs&&!run.predatorWarned){
+      run.predatorWarned=true;run.predatorMessage='发现新鲜足迹！猛兽即将出现，留意可遮挡视线的树干和岩石。';run.predatorNoticeUntil=run.elapsedMs+10000
+    }
+    if(run.huntMode==='timed'){
+      run.timeRemainingMs=Math.max(0,FORAGING_RULES.timeLimitMs+(run.adTimeBonusMs||0)-run.elapsedMs)
+      if(run.timeRemainingMs===0)return this._completeRun('time-expired',{highRiskSpecies:[],observationOnlySpecies:[]})
+    }
+    return null
+  }
+  predatorContact(name){
+    const run=this.currentRun
+    if(!run?.huntStarted||run.completed||run.huntMode!=='timed'||!run.predatorActive)return null
+    const result=this._completeRun('predator-contact',{highRiskSpecies:[],observationOnlySpecies:[]})
+    result.predatorName=name
+    return result
+  }
+  announceAnimal(message){const run=this.currentRun;run.animalNotice=message;run.animalNoticeUntil=run.elapsedMs+6500}
+  available(spawnId){const run=this.currentRun;return Boolean(run&&!run.completed&&!run.basketSpawnIds.includes(spawnId)&&!run.eatenSpawnIds.includes(spawnId))}
+  get remainingCount(){return this.sceneData?.spawns.filter(s=>this.available(s.id)).reduce((n,s)=>n+s.count,0)||0}
+  get animalBudget(){if(this.currentRun?.huntMode==='relaxed')return 1;return this.sceneData?this.sceneData.spawns.reduce((n,s)=>n+s.count,0)-this.goalTarget:0}
+  get eatenMushroomCount(){return this.sceneData?.spawns.filter(s=>this.currentRun.eatenSpawnIds.includes(s.id)).reduce((n,s)=>n+s.count,0)||0}
+  canAnimalEat(spawnId){
+    const spawn=this.sceneData?.spawns.find(s=>s.id===spawnId)
+    return Boolean(spawn&&this.currentRun.huntStarted&&this.currentRun.elapsedMs>=FORAGING_RULES.graceMs&&this.available(spawnId)&&this.eatenMushroomCount+spawn.count<=this.animalBudget)
+  }
+  eatSpawn(spawnId,animalName){
+    if(!this.canAnimalEat(spawnId))return false
+    this.currentRun.eatenSpawnIds.push(spawnId)
+    this.currentRun.animalEvents.push({spawnId,animalName,at:this.currentRun.elapsedMs})
+    this.announceAnimal(`${animalName}吃掉了 1 朵菌物 · 林中剩余 ${this.remainingCount} 朵`)
+    return true
+  }
+  collectSpawn(spawnId){
+    const run=this._requireRun()
+    if(!run.huntStarted)throw Error('请先开始采集')
+    if(!this.available(spawnId))return {added:false}
+    const target=this.sceneData.spawns.find(s=>s.id===spawnId)
+    if(target?.brushable&&!run.revealedSpawnIds.includes(spawnId))return {added:false,needsBrushing:true}
+    const {spawn}=this.discover(spawnId)
+    const discoveries=this.profile.sceneDiscoveries[run.sceneId]
+    const isNew=(this._entry(spawn.speciesId).sampled||0)===0
+    if(isNew&&!run.newSpeciesIds.includes(spawn.speciesId))run.newSpeciesIds.push(spawn.speciesId)
+    if(!discoveries.includes(spawn.speciesId)){discoveries.push(spawn.speciesId);run.newSceneSpeciesIds.push(spawn.speciesId)}
+    if(discoveries.length===poolForScene(this.sceneData).length)delete this.profile.sceneDiscoveryHistoryIncomplete[run.sceneId]
+    run.basketSpawnIds.push(spawn.id);run.collectedMushroomCount+=spawn.count
+    run.everSampledSpawnIds.push(spawn.id)
+    this._entry(spawn.speciesId).sampled+=spawn.count
+    this.refreshCommission()
+    return {added:true,isNew,count:spawn.count,result:!run.bonusStarted&&this.canFinish()?this.finishScene():null}
+  }
+  brushSpawn(id){
+    const run=this._requireRun(),spawn=this.sceneData.spawns.find(s=>s.id===id)
+    if(!run.huntStarted||!spawn?.brushable||!this.available(id)||run.revealedSpawnIds.includes(id))return false
+    run.revealedSpawnIds.push(id)
+    return true
+  }
+  nextUnlock(){
+    const count=identifiedCount(this.profile)
+    const thresholds=Array.from(new Set(Object.values(FORAGING_SCENE_BY_ID).flatMap(scene=>poolForScene(scene).map(e=>e.unlockAt)))).sort((a,b)=>a-b)
+    const next=thresholds.find(n=>n>count)
+    return next?{target:next,remaining:next-count}:null
+  }
+  get findingNotes(){return findingNotes(this.profile,this.sceneData?.environment)}
+  chooseRoute(id){
+    if(!this.currentRun||this.currentRun.completed||!this.currentRun.routes.some(r=>r.id===id))return false
+    this.currentRun.selectedRouteId=id
+    return true
+  }
+  visitPosition(x,z){
+    const run=this.currentRun
+    if(!run?.huntStarted||run.completed||!Number.isFinite(x)||!Number.isFinite(z))return false
+    let changed=false
+    for(const route of run.routes){
+      const [rx,rz]=route.points.at(-1)
+      if(Math.hypot(x-rx,z-rz)<2&&!run.visitedRouteIds.includes(route.id)){run.visitedRouteIds.push(route.id);changed=true}
+    }
+    if(changed)this.refreshCommission()
+    return changed
+  }
+  get commission(){
+    const run=this.currentRun
+    if(!run)return null
+    const collected=this.sceneData.spawns.filter(s=>run.basketSpawnIds.includes(s.id))
+    const value=run.commissionId==='routes'?run.visitedRouteIds.length:run.commissionId==='substrates'?new Set(collected.map(substrateGroup)).size:collected.filter(s=>s.brushable&&run.revealedSpawnIds.includes(s.id)).length
+    return {...COMMISSIONS[run.commissionId],id:run.commissionId,progress:Math.min(COMMISSIONS[run.commissionId].target,value),completed:run.commissionCompleted,skipped:run.commissionSkipped}
+  }
+  refreshCommission(){
+    const task=this.commission,run=this.currentRun
+    if(!task||task.skipped||task.completed||task.progress<task.target)return false
+    run.commissionCompleted=true
+    this.profile.observationRewards[task.id]=true
+    return true
+  }
+  changeCommission(skip=false){
+    const run=this.currentRun
+    if(!run||run.completed||run.commissionCompleted)return false
+    run.commissionSkipped=skip
+    if(!skip){const i=run.commissionOptions.indexOf(run.commissionId);run.commissionId=run.commissionOptions[(i+1)%run.commissionOptions.length];this.refreshCommission()}
+    return true
+  }
+  _completeRun(status,overrides={}){
+    if(this.currentRun?.completed)return this.lastResult
+    const run=this._requireRun()
+    let result
+    if(run.bonusStarted){
+      run.completed=true;run.lastHuntTickAt=null
+      result={...run.baseResult,status:'success',bonusEndReason:status,bonusCollectedCount:run.collectedMushroomCount-run.baseResult.collectedMushroomCount,
+        collectedMushroomCount:run.collectedMushroomCount,foundCount:run.foundSpawnIds.length,identifiedCount:this.identifiedSpeciesCount,
+        basketSpeciesIds:this.basketItems.map(item=>item.species.id),eatenCount:run.eatenSpawnIds.length,timeRemainingMs:run.timeRemainingMs}
+      this.lastResult=result
+    }else result=super._completeRun(status,overrides)
+    const progress=this.sceneSpeciesProgress(run.sceneId),badges=[...(run.baseResult?.badges||[])]
+    const earn=(id,label)=>{if(!this.profile.discoveryBadges[id]){this.profile.discoveryBadges[id]=true;badges.push(label)}}
+    if(Object.values(this.profile.collection).some(e=>e.sampled>0))earn('first-discovery','初识菌林')
+    if(progress.found===progress.total)earn('complete:'+run.sceneId,this.sceneData.name+'名录完成')
+    Object.assign(result,{commission:{...this.commission},newSpeciesIds:[...run.newSpeciesIds],newSceneSpeciesIds:[...run.newSceneSpeciesIds],discoveriesBefore:run.discoveriesBefore,discoveriesAfter:progress.found,discoveriesTotal:progress.total,badges,nextUnlock:this.nextUnlock(),escapes:run.escapes||0})
+    return result
+  }
+  get canRewardTime(){
+    const run=this.currentRun
+    return Boolean(run?.huntStarted&&!run.completed&&run.huntMode==='timed'&&!run.adTimeBonusMs&&!run.bonusStarted)
+  }
+  grantRewardTime(run){
+    if(this.currentRun!==run||!this.canRewardTime)return false
+    run.adTimeBonusMs=60000;run.timeRemainingMs+=60000;run.lastHuntTickAt=null
+    return true
+  }
+  get canContinueExploring(){
+    const run=this.currentRun
+    return Boolean(run?.completed&&!run.bonusStarted&&this.lastResult?.sceneId===run.sceneId&&this.lastResult.status==='success'&&(run.huntMode!=='timed'||run.timeRemainingMs>0))
+  }
+  continueExploring(){
+    if(!this.canContinueExploring)return false
+    const run=this.currentRun
+    run.baseResult={...this.lastResult,badges:[...this.lastResult.badges]}
+    run.bonusStarted=true;run.completed=false;run.lastHuntTickAt=null
+    return true
+  }
+  get correctionHint(){
+    const species=this.selectedCollectionSpecies,wrong=SPECIES_BY_ID[this.profile.collection[species?.id]?.lastMistakeId]
+    if(!wrong||!species)return null
+    return {chosenName:wrong.name,chosen:getIdentificationClues(wrong.id)[2].text,actual:getIdentificationClues(species.id)[2].text}
+  }
+  addSelectedToBasket(){return this.collectSpawn(this.currentRun?.selectedSpawnId)}
+  canFinish(){return Boolean(this.currentRun&&!this.currentRun.completed&&this.goalProgress>=this.goalTarget)}
+  finishScene(){return this._completeRun(this.canFinish()?'success':'incomplete',{highRiskSpecies:[],observationOnlySpecies:[]})}
+  // Identification belongs to the collection, including when there is no active run.
+  selectCollectionSpecies(id){const result=super.selectCollectionSpecies(id);this.collectionPhotoIndex=0;return result}
+  get collectionClues(){return this.selectedCollectionSpecies?getIdentificationClues(this.selectedCollectionSpecies.id):[]}
+  get collectionCandidates(){return this.selectedCollectionSpecies?getIdentificationCandidates(this.selectedCollectionSpecies.id):[]}
+  studyCollection(){
+    const species=this.selectedCollectionSpecies
+    if(!species)throw Error('请先选择一项收藏')
+    const entry=this._entry(species.id)
+    if(!entry.identified&&!(entry.sampled>0))throw Error('请先采集这种菌物，再查看鉴别线索')
+    entry.studiedClues=Math.min(3,(entry.studiedClues||0)+1);entry.examined=true
+    const clue=this.collectionClues[entry.studiedClues-1]
+    this.collectionPhotoIndex=clue?.photoIndex||0
+    return clue
+  }
+  collectionLockRemaining(now=Date.now(),id=this.selectedCollectionSpeciesId){return Math.max(0,(this.profile.collection[id]?.identificationLockedUntil||0)-now)}
+  identifyCollection(candidateId,now=Date.now()){
+    const species=this.selectedCollectionSpecies
+    if(!species||!this.profile.collection[species.id]?.seen)throw Error('请先采集这种菌物')
+    const entry=this._entry(species.id)
+    if(entry.identified)return {correct:true,alreadyIdentified:true}
+    if(!(entry.sampled>0))throw Error('请先采集这种菌物')
+    if(this.collectionLockRemaining(now)>0)throw Error('还需等待才能重试。可先探索或鉴别其他菌物')
+    if((entry.studiedClues||0)<3)throw Error('先看完三条线索，再选择名称')
+    if(!this.collectionCandidates.some(c=>c.id===candidateId))throw Error('请从下方选项中选择名称')
+    entry.identificationAttempts++
+    if(candidateId===species.id){entry.identified=true;entry.identificationLockedUntil=0;entry.lastMistakeId=null;entry.identificationFailures=0;return {correct:true,nextUnlock:this.nextUnlock()}}
+    entry.lastMistakeId=candidateId
+    entry.identificationFailures=(entry.identificationFailures||0)+1
+    const cooldownMs=FORAGING_RULES.cooldowns[Math.min(1,entry.identificationFailures-1)]
+    entry.identificationLockedUntil=now+cooldownMs
+    return {correct:false,cooldownMs}
+  }
+  identifySelected(){throw Error('请到菌物收藏中鉴别')}
+  markSelectedRisk(){throw Error('游戏内所有菌物均可采集，知识说明请查看收藏')}
+}
