@@ -9,7 +9,7 @@
     "preview": "python3 scripts/preview-server.py",
     "generate:scene-art": "node scripts/generate-scene-illustrations.mjs",
     "test": "node --test tests/*.test.mjs",
-    "check": "node --check game.js && node --check js/ExplorationGame.js && node --check js/config/adConfig.js && node --check js/core/ExplorationState.js && node --check js/data/explorationData.js && node --check js/data/habitatLayouts.js && node --check js/data/generatedHabitatScenes.js && node --check js/services/AdService.js && node --check js/ui/ExplorationRenderer.js && node --check js/ui/HabitatView.js && node --check js/ui/InputManager.js && node scripts/check-voxel.mjs && node --check js/roguelike/speciesAdapter.mjs && node --check js/roguelike/routeGenerator.mjs && node --check js/roguelike/RoguelikeGame.mjs",
+    "check": "node --check game.js && node --check js/ExplorationGame.js && node --check js/config/adConfig.js && node --check js/core/ExplorationState.js && node --check js/data/explorationData.js && node --check js/data/habitatLayouts.js && node --check js/data/generatedHabitatScenes.js && node --check js/services/AdService.js && node --check js/ui/ExplorationRenderer.js && node --check js/ui/HabitatView.js && node --check js/ui/InputManager.js && node scripts/check-voxel.mjs && node --check js/roguelike/speciesAdapter.mjs && node --check js/roguelike/routeGenerator.mjs && node --check js/roguelike/RoguelikeGame.mjs && node --check js/roguelike/identification.mjs",
     "benchmark:engine": "node scripts/benchmark-engine.mjs",
     "cocos:sync": "node scripts/cocos/sync-shared.mjs",
     "cocos:build": "node scripts/cocos/build.mjs web-mobile",
