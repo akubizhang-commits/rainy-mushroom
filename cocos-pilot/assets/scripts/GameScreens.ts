@@ -1,12 +1,22 @@
 import {HEALTH_NOTICE,FIRST_STEPS,SAFETY_SUMMARY,SAFETY_CARDS,SAFETY_SOURCE} from './shared/js/cocos/GameSession';
 import {Label,Node,Graphics,Color,UITransform,Button,director} from 'cc';
 import {PilotUI,UI} from './PilotUI';
+import {RoguelikeScene} from './roguelike/RoguelikeScene';
 import {FORAGING_REGIONS,FORAGING_SCENES,FORAGING_SCENE_BY_ID,EXPLORATION_SPECIES,PHOTO_RIGHTS,RELEASE_INFO,copyPublicLink,SPECIES_BY_ID,SPECIES_KNOWLEDGE,RARITY_LABELS,collectionItems,findingNotes,COMMISSIONS} from './shared/js/cocos/GameSession';
 export const countdown=(ms:number)=>`${Math.floor(Math.ceil(ms/1000)/60)}:${String(Math.ceil(ms/1000)%60).padStart(2,'0')}`;
 export type ScreenActions={act:(fn:()=>void)=>void,run:(mode:string)=>void,quality:(value:string)=>void,retry:()=>void};
 export class GameScreens{
  timer:Label|null=null;notice:Label|null=null;lock:Label|null=null;joystick:Node|null=null;feedbackLabel:Label|null=null;
  constructor(public u:PilotUI,public s:any,private actions:ScreenActions){}
+ private launchRoguelike(){
+  const overlay=new Node('RoguelikeOverlay');
+  overlay.setParent(this.u.root);
+  const ui=overlay.addComponent(UITransform);
+  ui.setContentSize(this.u.width,this.u.height);
+  overlay.setPosition(0,0,0);
+  const scene=overlay.addComponent(RoguelikeScene);
+  scene.onExit=()=>overlay.destroy();
+ }
  button(text:string,fn:()=>void,parent=this.u.content!,tone='green'){return this.u.button(text,()=>this.actions.act(fn),parent,parent.getComponent(UITransform)!.width-24,52,tone)}
  text(text:string,parent=this.u.content!,size=18,color=UI.ink){return this.u.paragraph(text,parent,Math.max(14,size),color)}
  row(items:Array<[string,()=>void,boolean?]>,parent=this.u.content!){return this.u.row(items.map(([label,fn,selected])=>({label,action:()=>this.actions.act(fn),selected})),parent)}
@@ -27,7 +37,7 @@ export class GameScreens{
  home(){const {s}=this,identified=EXPLORATION_SPECIES.filter(sp=>s.state.profile.collection[sp.id]?.identified).length;
   this.text('选一片林子，开始寻找',undefined,22);this.text(`已鉴别 ${identified}/${EXPLORATION_SPECIES.length} 种 · 已通关 ${s.state.profile.successfulChallenges} 次`,undefined,14,UI.muted);
   this.button('试玩 · 林间寻宝',()=>{if(!this.s.resourceStatus||this.s.resourceStatus==='ready')this.s.open('trial');else this.s.notice('素材准备好后即可试玩')});
-  this.button('🍄 Roguelike 试玩（新玩法预览）',()=>director.loadScene('roguelike-mvp'),undefined,'paper');
+  this.button('🍄 Roguelike 试玩（新玩法预览）',()=>this.launchRoguelike(),undefined,'paper');
   this.row([['菌物收藏',()=>s.openCollection()],['林间手记',()=>s.openJournal('notes')]]);
   for(const region of FORAGING_REGIONS){const n=this.card(region.name,region.climate);this.u.photo(region.sceneIds[0],0,n,124,true);const done=region.sceneIds.filter(id=>s.state.profile.completedScenes[id]).length;this.text(`${done}/${region.sceneIds.length} 处完成 · ${region.subtitle||'多次探索，发现新的菌物'}`,n,14,UI.muted);this.button('进入分区',()=>s.region(region.id),n);this.end(n)}
   this.row([['玩法手册',()=>s.open('guide')],['画面设置',()=>s.open('settings')]]);this.button('资料与图片来源',()=>s.open('sources'),undefined,'paper');this.row([['隐私与存档',()=>s.open('privacy')],['帮助与反馈',()=>s.open('help')]]);this.row([['适龄与健康游戏',()=>s.open('age')],['野生菌安全',()=>s.open('safety')]]);this.text('版本 '+RELEASE_INFO.version,undefined,14,UI.muted);
