@@ -1,5 +1,6 @@
 import { loadMushroomsForHabitat } from './speciesAdapter.mjs'
 import { generateRoute } from './routeGenerator.mjs'
+import { makeChallenge } from './identification.mjs'
 
 export class RoguelikeGame {
   constructor(config) {
@@ -60,5 +61,27 @@ export class RoguelikeGame {
   _end() {
     this._state = 'ended'
     this._emit('gameEnded', { harvested: this.harvested, hp: this._hp })
+  }
+
+  makeMushroomEncounter(nowMs, rng) {
+    const target = this._pickWeighted(rng)
+    const challenge = makeChallenge(target, this._pool, nowMs, rng)
+    return { challenge, revealTarget: target }
+  }
+
+  applyMushroomOutcome(target, verdict) {
+    if (verdict === 'correct') this.resolveEncounter({ harvested: target })
+    else if (verdict === 'wrong') this.resolveEncounter({ hpDelta: -1 })
+    else this.resolveEncounter({})
+  }
+
+  _pickWeighted(rng = Math.random) {
+    const total = this._pool.reduce((s, c) => s + c.weightInPool, 0)
+    let r = rng() * total
+    for (const c of this._pool) {
+      r -= c.weightInPool
+      if (r <= 0) return c
+    }
+    return this._pool[0]
   }
 }

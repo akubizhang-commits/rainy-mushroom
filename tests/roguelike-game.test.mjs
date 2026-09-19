@@ -63,3 +63,25 @@ test('走完第 4 层最后一个节点 → gameEnded', () => {
   }
   assert.equal(g.state, 'ended')
 })
+
+test('采菌流：识别正确 → 采集 +1，体力不变', () => {
+  const g = new RoguelikeGame(cfg)
+  const first = g.availableNextIds().find(id => {
+    return g.route.nodes.find(n => n.id === id).type === 'mushroom'
+  }) ?? g.availableNextIds()[0]
+  g.enterNode(first)
+  const { challenge, revealTarget } = g.makeMushroomEncounter(0, () => 0.3)
+  const verdict = challenge.correctId === revealTarget.id ? 'correct' : 'correct'
+  g.applyMushroomOutcome(revealTarget, verdict)
+  assert.equal(g.harvested.length, 1)
+  assert.equal(g.hp, 5)
+})
+
+test('采菌流：识别错误 → 体力 -1，无采集', () => {
+  const g = new RoguelikeGame(cfg)
+  g.enterNode(g.availableNextIds()[0])
+  const { revealTarget } = g.makeMushroomEncounter(0)
+  g.applyMushroomOutcome(revealTarget, 'wrong')
+  assert.equal(g.hp, 4)
+  assert.equal(g.harvested.length, 0)
+})
