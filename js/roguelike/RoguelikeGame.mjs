@@ -84,4 +84,29 @@ export class RoguelikeGame {
     }
     return this._pool[0]
   }
+
+  resolveAnimalNode(choiceId) {
+    if (choiceId === 'evade') return this.resolveEncounter({})
+    if (choiceId === 'grab') {
+      if (Math.random() < 0.6) {
+        const card = this._pickWeighted()
+        return this.resolveEncounter({ harvested: card })
+      }
+      return this.resolveEncounter({ hpDelta: -1 })
+    }
+    throw new Error('unknown choice')
+  }
+
+  resolveCampfireNode(choiceId) {
+    if (choiceId === 'heal') {
+      const delta = Math.min(1, 5 - this._hp)
+      return this.resolveEncounter({ hpDelta: delta })
+    }
+    if (choiceId === 'compass') return this.resolveEncounter({})
+    throw new Error('unknown choice')
+  }
+
+  resolveDangerNode() {
+    return this.resolveEncounter({ hpDelta: -1 })
+  }
 }

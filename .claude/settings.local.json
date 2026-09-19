@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm test *)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(node --test tests/roguelike-species-adapter.test.mjs)",
+      "Bash(node --check js/roguelike/speciesAdapter.mjs)",
+      "Bash($SDD/review-package *)",
+      "Bash(node *)",
+      "Bash(npm run *)"
+    ]
+  }
+}

@@ -85,3 +85,27 @@ test('采菌流：识别错误 → 体力 -1，无采集', () => {
   assert.equal(g.hp, 4)
   assert.equal(g.harvested.length, 0)
 })
+
+test('动物节点 evade 无损', () => {
+  const g = new RoguelikeGame(cfg)
+  // 找一个动物节点强行走过去（allow 测试绕过 enterNode 的规则）
+  const animalNode = g.route.nodes.find(n => n.type === 'animal') ?? g.route.nodes[1]
+  g._current = animalNode.id
+  g._state = 'inEncounter'
+  g.resolveAnimalNode('evade')
+  assert.equal(g.hp, 5)
+})
+
+test('篝火 heal +1 hp（上限 5）', () => {
+  const g = new RoguelikeGame({ ...cfg, startHp: 3 })
+  g._state = 'inEncounter'
+  g.resolveCampfireNode('heal')
+  assert.equal(g.hp, 4)
+})
+
+test('危险节点固定 -1', () => {
+  const g = new RoguelikeGame(cfg)
+  g._state = 'inEncounter'
+  g.resolveDangerNode()
+  assert.equal(g.hp, 4)
+})
