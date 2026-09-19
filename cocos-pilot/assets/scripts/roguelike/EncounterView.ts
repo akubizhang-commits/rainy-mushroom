@@ -65,6 +65,7 @@ export class EncounterView extends Component {
   private currentInput: EncounterInput | null = null
   private countdownStartTime: number = 0
   private harvestProgress: HarvestProgress | null = null
+  private optionHandlers: Array<() => void> = []
 
   show(input: EncounterInput): Promise<EncounterOutcome> {
     this.currentInput = input
@@ -103,6 +104,9 @@ export class EncounterView extends Component {
     // Show clues
     this.cluesLabel.string = challenge.clues.join('\n')
 
+    // Clear previous handlers
+    this.removeOptionHandlers()
+
     // Show option buttons
     const buttons = [this.optionAButton, this.optionBButton, this.optionCButton]
     const optionLabels = ['A', 'B', 'C']
@@ -114,10 +118,14 @@ export class EncounterView extends Component {
         label.string = optionLabels[i]
       }
 
-      // Attach touch listener
-      btn.node.on(Node.EventType.TOUCH_END, () => {
+      // Create and store handler
+      const handler = () => {
         this.handleMushroomChoice(challenge, challenge.options[i], target)
-      })
+      }
+      this.optionHandlers.push(handler)
+
+      // Attach touch listener
+      btn.node.on(Node.EventType.TOUCH_END, handler, this)
     })
 
     // Start countdown timer
@@ -153,6 +161,9 @@ export class EncounterView extends Component {
     // Stop timer
     this.unschedule(this.updateCountdownRing)
 
+    // Remove option button listeners
+    this.removeOptionHandlers()
+
     const verdict = judge(challenge, chosenId, Date.now())
 
     // Hide option buttons
@@ -173,6 +184,16 @@ export class EncounterView extends Component {
         this.resolveEncounter({ kind: 'mushroom', verdict, target })
       }, 0.5)
     }
+  }
+
+  private removeOptionHandlers(): void {
+    const buttons = [this.optionAButton, this.optionBButton, this.optionCButton]
+    buttons.forEach((btn, i) => {
+      if (btn && this.optionHandlers[i]) {
+        btn.node.off(Node.EventType.TOUCH_END, this.optionHandlers[i], this)
+      }
+    })
+    this.optionHandlers = []
   }
 
   private showMushroomHarvest(target: MushroomCard): void {
@@ -306,6 +327,11 @@ export class EncounterView extends Component {
   onDestroy(): void {
     // Clean up all listeners and scheduled callbacks
     this.unscheduleAllCallbacks()
+
+    // Remove mushroom option button listeners
+    this.removeOptionHandlers()
+
+    // Remove harvest touch listeners
     if (this.mushroomArt) {
       this.mushroomArt.off(Node.EventType.TOUCH_START, this.onHarvestTouchStart, this)
       this.mushroomArt.off(Node.EventType.TOUCH_END, this.onHarvestTouchEnd, this)
