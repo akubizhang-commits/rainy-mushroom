@@ -31,7 +31,7 @@ export class PackView{
  // ---------- menu ----------
  private buildMenu(){const u=this.u,w=u.width,top=u.height/2-u.top;u.box(u.root,BG,0);
   this.label('雨后森林图书馆',u.root,0,top-50,w-40,44,26);this.label(`把书塞进对的柜子 · 已整理 ${this.progress.lit} / ${PACK_LEVELS.length}`,u.root,0,top-92,w-40,28,15,C('#cfdccb'));
-  if(this.progress.locked)this.label('存档无法读取，本次进度不会保存',u.root,0,top-124,w-40,24,13,C('#e8a07a'));
+  if(this.progress.locked||!this.progress.saved)this.label(this.progress.locked?'存档无法读取，本次进度不会保存':'存档写不进去，本次进度不会保存',u.root,0,top-124,w-40,24,13,C('#e8a07a'));
   PACK_LEVELS.forEach((l:any,i:number)=>{const open=this.progress.canOpen(l.id),done=this.progress.completed.includes(l.id);u.button(`${i+1}. ${l.name}${done?'  ✓':open?'':'（未解锁）'}`,()=>{if(open)this.start(l.id)},u.root,w-64,56,open?'green':'paper').setPosition(0,top-180-i*68)})}
  private start(id:string){this.round=new PackRound(packLevelById(id));this.screen='round';this.modal=null;this.saved=true;this.waterShown=0;this.render();this.toast(this.round.level.tip,3.5)}
  private toMenu(){this.round=null;this.screen='menu';this.modal=null;this.render()}
@@ -96,9 +96,9 @@ export class PackView{
   const R=this.rowRects[t.c][t.row],fit=r.preview(h.id,t.c,t.row);
   if(fit==='ok'){const used=r.board.used(t.c,t.row),bh=(b.height==='tall'?R.tall:R.short)-6;g.fillColor=new Color(OK.r,OK.g,OK.b,120);g.rect(R.left+used*R.unit,R.y-R.h/2+3,b.thickness*R.unit-2,bh);g.fill();return}
   g.strokeColor=BAD;g.lineWidth=3;g.rect(R.x-R.w/2,R.y-R.h/2,R.w,R.h);g.stroke();this.reason!.string=REASON[fit]||'';this.reason!.node.setPosition(R.x,R.y-R.h/2-12)}
- // Drops anywhere but the book's own row pull a shelved book out first (1 step); a row under the book then gets a normal placement.
+ // A shelved book comes out (1 step) only when dropped on the floor or another row; anywhere else it goes back for free.
  private drop(h:Held,x:number,y:number){const r=this.round!,t=this.rowAt(x,y),b=r.book(h.id);this.cancelHeld();
-  if(h.from==='shelf'){const at=r.board.where(b);if(t&&at&&at.cabinet===t.c&&at.row===t.row)return;r.remove(h.id)}
+  if(h.from==='shelf'){const at=r.board.where(b);if(t?at&&at.cabinet===t.c&&at.row===t.row:!this.inside(this.floor,x,y))return;r.remove(h.id)}
   const fit=t&&r.status==='playing'?r.place(h.id,t.c,t.row):null;this.apply(r.drain());
   if(fit==='too-tall'||fit==='too-thick'){this.toast(REASON[fit]);this.shake(this.nodes.get(h.id)!)}}
  private tap(id:string){const r=this.round!;if(r.flip(id)){this.apply(r.drain());return}if(r.book(id).state==='floor')this.toast('拖到柜子里；角上有白角的书可以点开看全')}
