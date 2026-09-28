@@ -1,0 +1,20 @@
+export const SECTIONS = {
+  mushroom: { icon: '🍄', name: '菌物', color: '#b8744a' },
+  plant: { icon: '🌿', name: '草木', color: '#5f8f5a' },
+  bird: { icon: '🐦', name: '林鸟', color: '#4f7fa6' },
+  flower: { icon: '🌸', name: '野花', color: '#c0708a' },
+}
+
+export const LIBRARY_LEVELS = [
+  { id: 'library-01', name: '门口的矮书柜', tip: '按住书，拖到同图标那一层、同卷号的格子', sections: ['mushroom', 'plant'], cols: 5, jitter: 0, rowStep: .3, waterSpeed: .00467, leaks: [] },
+  { id: 'library-02', name: '蕨影书柜', tip: '被压住的书要先拿走上面那本', sections: ['mushroom', 'plant', 'bird'], cols: 5, jitter: .05, rowStep: .15, waterSpeed: .00638, leaks: [] },
+  { id: 'library-03', name: '苔藓书柜', tip: '摆满一整层，水位会退下一截', sections: ['mushroom', 'plant', 'bird'], cols: 6, jitter: .06, rowStep: .15, waterSpeed: .00682, leaks: [] },
+  { id: 'library-04', name: '老橡木书柜', tip: '水涨得更快了，先救低处的书', sections: ['mushroom', 'plant', 'bird', 'flower'], cols: 6, jitter: .07, rowStep: .155, waterSpeed: .00784, leaks: [] },
+  { id: 'library-05', name: '漏雨的角落', tip: '湿书看不清，先放到右边的晾书架', sections: ['mushroom', 'plant', 'bird', 'flower'], cols: 6, jitter: .07, rowStep: .155, waterSpeed: .00516, leaks: [{ x: .5, min: 6, max: 8 }] },
+].map(level => ({ ...level, seed: level.id }))
+
+export const levelById = id => LIBRARY_LEVELS.find(level => level.id === id) || null
+
+export function levelBooks(level) {
+  return level.sections.flatMap(section => Array.from({ length: level.cols }, (_, i) => ({ id: `${section}-${i + 1}`, section, volume: i + 1 })))
+}
