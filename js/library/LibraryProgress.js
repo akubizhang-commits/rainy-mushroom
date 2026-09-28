@@ -1,16 +1,19 @@
 import { LIBRARY_LEVELS } from './LibraryLevels.js'
 
 export const LIBRARY_PROGRESS_KEY = 'rainyLibrary.progress.v1'
-const ids = LIBRARY_LEVELS.map(level => level.id)
+export const LIBRARY_IDS = LIBRARY_LEVELS.map(level => level.id)
 
 export class LibraryProgress {
-  constructor(storage) {
+  // Ids and key are parameters so each game mode keeps its own save.
+  constructor(storage, ids = LIBRARY_IDS, key = LIBRARY_PROGRESS_KEY) {
     this.storage = storage
+    this.ids = ids
+    this.key = key
     this.completed = []
     this.saved = true
     this.locked = false
     let raw = null
-    try { raw = storage.getItem(LIBRARY_PROGRESS_KEY) } catch { this.lock(); return }
+    try { raw = storage.getItem(key) } catch { this.lock(); return }
     if (!raw) return
     try {
       const data = JSON.parse(raw)
@@ -28,21 +31,21 @@ export class LibraryProgress {
     this.saved = false
   }
 
-  get next() { return ids.find(id => !this.completed.includes(id)) || ids[ids.length - 1] }
+  get next() { return this.ids.find(id => !this.completed.includes(id)) || this.ids[this.ids.length - 1] }
 
   get lit() { return this.completed.length }
 
   canOpen(id) {
-    const index = ids.indexOf(id)
-    return index >= 0 && ids.slice(0, index).every(prior => this.completed.includes(prior))
+    const index = this.ids.indexOf(id)
+    return index >= 0 && this.ids.slice(0, index).every(prior => this.completed.includes(prior))
   }
 
   complete(id) {
     if (!this.canOpen(id)) return false
-    if (!this.completed.includes(id)) this.completed = ids.filter(level => level === id || this.completed.includes(level))
+    if (!this.completed.includes(id)) this.completed = this.ids.filter(level => level === id || this.completed.includes(level))
     if (this.locked) return false
     try {
-      this.storage.setItem(LIBRARY_PROGRESS_KEY, JSON.stringify({ version: 1, completed: this.completed }))
+      this.storage.setItem(this.key, JSON.stringify({ version: 1, completed: this.completed }))
       this.saved = true
       return true
     } catch {

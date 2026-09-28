@@ -1,6 +1,7 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import { LibraryProgress, LIBRARY_PROGRESS_KEY } from '../js/library/LibraryProgress.js'
+import { PACK_IDS, PACK_PROGRESS_KEY } from '../js/library/PackLevels.js'
 
 const memory = () => { const m = new Map(); return { getItem: k => m.get(k) ?? null, setItem: (k, v) => m.set(k, v), m } }
 
@@ -50,4 +51,21 @@ test('storage failures do not throw', () => {
   assert.equal(q.complete('library-01'), false)
   assert.equal(q.saved, false)
   assert.deepEqual(q.completed, ['library-01'])
+})
+
+test('the packing mode keeps its own level list and save key', () => {
+  const db = memory()
+  db.setItem(LIBRARY_PROGRESS_KEY, JSON.stringify({ version: 1, completed: ['library-01'] }))
+  const p = new LibraryProgress(db, PACK_IDS, PACK_PROGRESS_KEY)
+  assert.equal(p.next, 'pack-01')
+  assert.equal(p.canOpen('library-02'), false)
+  assert.equal(p.complete('pack-01'), true)
+  assert.deepEqual(JSON.parse(db.getItem(PACK_PROGRESS_KEY)), { version: 1, completed: ['pack-01'] })
+  assert.deepEqual(JSON.parse(db.getItem(LIBRARY_PROGRESS_KEY)), { version: 1, completed: ['library-01'] })
+  assert.deepEqual(new LibraryProgress(db).completed, ['library-01'])
+  db.setItem(PACK_PROGRESS_KEY, '{bad')
+  const broken = new LibraryProgress(db, PACK_IDS, PACK_PROGRESS_KEY)
+  assert.equal(broken.locked, true)
+  assert.equal(broken.complete('pack-01'), false)
+  assert.equal(db.getItem(PACK_PROGRESS_KEY), '{bad')
 })

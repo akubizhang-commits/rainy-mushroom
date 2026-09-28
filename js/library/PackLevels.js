@@ -1,0 +1,95 @@
+import { SeededRandom } from './LibraryRandom.js'
+
+export const COLORS = {
+  red: { name: '红', hex: '#c0584a' },
+  blue: { name: '蓝', hex: '#4f7fb0' },
+  green: { name: '绿', hex: '#5c9a5a' },
+}
+
+export const PATTERNS = {
+  cap: { name: '菌伞', icon: '🍄' },
+  leaf: { name: '叶脉', icon: '🍃' },
+  drop: { name: '雨滴', icon: '💧' },
+}
+
+// cabinets[0] is the left cabinet. Row lengths are in thickness units; a cabinet's books exactly fill its rows.
+export const PACK_LEVELS = [
+  {
+    id: 'pack-01', name: '第一场雨', seed: 'pack-01', slack: 2, refund: 1, ambiguous: 0,
+    tip: '把书塞进标志相同的柜子，每一层都要正好塞满',
+    cabinets: [
+      { color: 'red', pattern: 'cap', rows: [{ height: 'short', length: 5 }, { height: 'short', length: 4 }] },
+      { color: 'blue', pattern: 'leaf', rows: [{ height: 'short', length: 4 }, { height: 'short', length: 5 }] },
+    ],
+  },
+  {
+    id: 'pack-02', name: '同色的柜子', seed: 'pack-02', slack: 1.3, refund: 1, ambiguous: 4,
+    tip: '两个柜子都是红色；只露出颜色的书，点一下翻开看花纹',
+    cabinets: [
+      { color: 'red', pattern: 'cap', rows: [{ height: 'tall', length: 4 }, { height: 'short', length: 5 }, { height: 'short', length: 4 }] },
+      { color: 'red', pattern: 'leaf', rows: [{ height: 'short', length: 4 }, { height: 'tall', length: 5 }, { height: 'short', length: 4 }] },
+    ],
+  },
+  {
+    id: 'pack-03', name: '涨水的夜', seed: 'pack-03', slack: 1.25, refund: 1, ambiguous: 7,
+    tip: '花纹一样的书更多了，先想好每一层怎么塞',
+    cabinets: [
+      { color: 'green', pattern: 'drop', rows: [{ height: 'tall', length: 5 }, { height: 'short', length: 6 }, { height: 'short', length: 5 }] },
+      { color: 'blue', pattern: 'drop', rows: [{ height: 'short', length: 5 }, { height: 'short', length: 6 }, { height: 'tall', length: 5 }] },
+    ],
+  },
+]
+
+export const PACK_PROGRESS_KEY = 'rainyLibrary.pack.v1'
+export const PACK_IDS = PACK_LEVELS.map(level => level.id)
+
+export function packLevelById(id) { return PACK_LEVELS.find(level => level.id === id) || null }
+
+export const ATTRS = ['color', 'pattern']
+
+// The attribute both cabinets share, or null when their signs differ completely.
+export function sharedAttr(cabinets) {
+  return ATTRS.find(attr => cabinets.every(c => c[attr] === cabinets[0][attr])) || null
+}
+
+// Indices of cabinets whose sign agrees with everything shown on the book.
+export function candidates(book, cabinets) {
+  const shown = book.flipped ? ATTRS : book.shown
+  return cabinets.map((c, i) => i).filter(i => shown.every(attr => cabinets[i][attr] === book[attr]))
+}
+
+export function isAmbiguous(book, cabinets) { return candidates(book, cabinets).length > 1 }
+
+// Thicker books are likelier, so rows hold two or three books and the counts stay near the level targets.
+const THICKNESS_WEIGHTS = [[1, 1], [2, 2], [3, 2]]
+function pickThickness(rng, left) {
+  const options = THICKNESS_WEIGHTS.filter(([t]) => t <= left), total = options.reduce((sum, [, w]) => sum + w, 0)
+  let roll = rng.next() * total
+  for (const [t, w] of options) if ((roll -= w) < 0) return t
+  return options[options.length - 1][0]
+}
+
+export function generate(level, seed = level.seed) {
+  const rng = new SeededRandom(seed)
+  const raw = []
+  level.cabinets.forEach((cabinet, c) => cabinet.rows.forEach(row => {
+    let left = row.length, first = true
+    while (left > 0) {
+      const thickness = pickThickness(rng, left)
+      const tall = row.height === 'tall' && (first || rng.next() < .5)
+      raw.push({ cabinet: c, color: cabinet.color, pattern: cabinet.pattern, thickness, height: tall ? 'tall' : 'short' })
+      left -= thickness
+      first = false
+    }
+  }))
+  const shared = sharedAttr(level.cabinets)
+  const other = ATTRS.find(attr => attr !== shared)
+  const vague = new Set(shared ? rng.shuffle(raw.map((b, i) => i)).slice(0, level.ambiguous) : [])
+  raw.forEach((book, i) => {
+    if (vague.has(i)) book.shown = [shared]
+    else if (shared) book.shown = rng.next() < .5 ? [other] : ATTRS.slice()
+    else book.shown = [[ 'color' ], [ 'pattern' ], ATTRS.slice()][rng.int(0, 2)]
+  })
+  const books = rng.shuffle(raw).map((book, slot) => ({ ...book, id: `b${slot}`, slot, flipped: false, state: 'floor' }))
+  return { books, steps: Math.ceil(books.length * level.slack) }
+}
