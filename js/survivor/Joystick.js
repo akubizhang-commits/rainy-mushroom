@@ -1,2 +1,75 @@
-// @placeholder T2：Joystick 占位，真实摇杆数学见 T6。
-export const SURVIVOR_JOYSTICK_PLACEHOLDER = true;
+// 虚拟摇杆纯函数（01 §4、02 §5.1）。纯逻辑：不碰 cc / wx，无 Date.now / Math.random。
+//
+// - 死区 DEAD_ZONE = 8：偏移长度 ≤ 8 时输出零向量（视为未移动）。
+// - 半径 RADIUS = 60：偏移在 8–60 之间速度线性从 0 增至 100%，超过 60 按 100% 处理。
+// - 方向永远是手指相对底座中心的方向；返回的 move 是长度 ∈ [0,1] 的向量
+//   （方向 × 线性强度），length 为该强度，便于上层乘以移动速度。
+// - 底座钳制（02 §5.1）：底座中心 x ∈ [safeLeft + 60, 720 − safeRight − 60]，
+//   y ≥ safeBottom + 72。按下点超出可用区时底座中心内移，手指偏移相对内移后的中心计算。
+
+export const DEAD_ZONE = 8
+export const RADIUS = 60
+export const DESIGN_WIDTH = 720
+
+// 设计分辨率宽度内，把底座中心钳制到安全区允许的范围。
+// safe 缺省为全 0（无安全区信息时等价于只用屏幕边界与半径约束）。
+// 返回钳制后的底座中心 { x, y }。
+export function clampBase(center, safe = {}) {
+  const safeLeft = finite(safe.safeLeft, 0)
+  const safeRight = finite(safe.safeRight, 0)
+  const safeBottom = finite(safe.safeBottom, 0)
+
+  let minX = safeLeft + RADIUS
+  let maxX = DESIGN_WIDTH - safeRight - RADIUS
+  // 可用区过窄时退化为居中，避免 min > max 产生 NaN/翻转。
+  if (minX > maxX) {
+    const mid = (safeLeft + (DESIGN_WIDTH - safeRight)) / 2
+    minX = mid
+    maxX = mid
+  }
+  const minY = safeBottom + 72
+
+  return {
+    x: clamp(finite(center.x, 0), minX, maxX),
+    y: Math.max(finite(center.y, 0), minY),
+  }
+}
+
+// 由底座中心与当前触点算移动向量。
+// base：底座中心（通常是 clampBase 的结果）；point：当前手指位置。
+// 返回 { x, y, length }：方向为 point 相对 base，length ∈ [0,1] 为线性强度。
+export function computeMove(base, point) {
+  const dx = finite(point.x, 0) - finite(base.x, 0)
+  const dy = finite(point.y, 0) - finite(base.y, 0)
+  const dist = Math.hypot(dx, dy)
+
+  if (dist <= DEAD_ZONE) {
+    return { x: 0, y: 0, length: 0 }
+  }
+
+  // 8–60 线性 0→1，超过 60 截断为 1。
+  const span = RADIUS - DEAD_ZONE
+  const strength = Math.min((dist - DEAD_ZONE) / span, 1)
+  const inv = 1 / dist
+  return {
+    x: dx * inv * strength,
+    y: dy * inv * strength,
+    length: strength,
+  }
+}
+
+// 便捷组合：按下点先钳制为底座中心，再按当前触点算移动向量。
+// 返回 { base, move }，base 为钳制后的底座中心。
+export function resolve(pressPoint, point, safe = {}) {
+  const base = clampBase(pressPoint, safe)
+  const move = computeMove(base, point)
+  return { base, move }
+}
+
+function clamp(v, lo, hi) {
+  return v < lo ? lo : v > hi ? hi : v
+}
+
+function finite(v, fallback) {
+  return Number.isFinite(v) ? v : fallback
+}

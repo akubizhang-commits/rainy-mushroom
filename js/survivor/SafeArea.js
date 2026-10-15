@@ -1,2 +1,62 @@
-// @placeholder T2：SafeArea 占位，真实安全区数学见 T6。
-export const SURVIVOR_SAFEAREA_PLACEHOLDER = true;
+// 安全区纯函数（02 §2.1、03 §6.1、裁决 D18）。纯逻辑：不碰 cc / wx。
+//
+// SurvivorPlatform.ts 调 wx 接口（getWindowInfo + getMenuButtonBoundingClientRect）
+// 取原始值后调用本模块，使默认值与刘海机型可被 node --test 覆盖。
+//
+// 设计分辨率宽度 720，scale = 720 / windowWidth（设计单位 / 逻辑像素）。
+// 四边距全部换算到设计单位。
+// 接口调用失败（开发者工具、浏览器预览）时退回默认值，不报错。
+
+export const DESIGN_WIDTH = 720
+
+// 02 §2.1：接口失败时的默认四边距（设计单位）。
+export const DEFAULTS = Object.freeze({
+  safeTop: 88,
+  safeBottom: 34,
+  safeLeft: 24,
+  safeRight: 24,
+})
+
+// 计算四边安全区边距。
+// windowInfo：{ windowWidth, windowHeight, safeArea:{ top, bottom, left, right } }
+// capsule：wx.getMenuButtonBoundingClientRect() 结果 { top, bottom, left, right }
+// 任一必需字段缺失 / 非有限 / windowWidth ≤ 0 时整体回退默认值。
+// 返回 { safeTop, safeBottom, safeLeft, safeRight }（设计单位）。
+export function computeSafeArea(windowInfo, capsule) {
+  if (!windowInfo || !capsule) return { ...DEFAULTS }
+
+  const windowWidth = windowInfo.windowWidth
+  const windowHeight = windowInfo.windowHeight
+  const area = windowInfo.safeArea
+
+  if (
+    !area ||
+    !isFinite(windowWidth) ||
+    windowWidth <= 0 ||
+    !isFinite(windowHeight) ||
+    !isFinite(capsule.bottom) ||
+    !isFinite(area.top) ||
+    !isFinite(area.bottom) ||
+    !isFinite(area.left) ||
+    !isFinite(area.right)
+  ) {
+    return { ...DEFAULTS }
+  }
+
+  const scale = DESIGN_WIDTH / windowWidth
+
+  const safeTop = Math.max(capsule.bottom + 8, area.top, 24) * scale
+  const safeBottom = Math.max(windowHeight - area.bottom, 16) * scale
+  const sideRaw = Math.max(area.left, windowWidth - area.right, 0) * scale + 24
+
+  return {
+    safeTop,
+    safeBottom,
+    safeLeft: sideRaw,
+    safeRight: sideRaw,
+  }
+}
+
+function isFinite(v) {
+  return Number.isFinite(v)
+}
