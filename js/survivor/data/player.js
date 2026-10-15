@@ -1,0 +1,16 @@
+// Player base stats (01-gdd §5). Logic layer composes these with passive/permanent
+// modifiers (01 §15.1). Only a frozen JSON literal here: no functions, no imports.
+// All numbers taken verbatim from the 01-gdd §5 table.
+export const PLAYER = Object.freeze({
+  maxHp: 100,        // 最大生命，开局满血
+  moveSpeed: 160,    // 移动速度 /秒
+  pickupRadius: 60,  // 拾取半径；进入后以 600/秒 飞向角色
+  might: 1.0,        // 伤害倍率
+  cooldown: 1.0,     // 冷却倍率，下限 0.5
+  area: 1.0,         // 范围倍率
+  regen: 0,          // 生命回复 /秒，只来自露水类来源
+  invulnTime: 0.5,   // 受击无敌秒数
+  radius: 18,        // 碰撞半径
+  weaponSlots: 4,    // 武器栏
+  passiveSlots: 4,   // 被动栏
+})
