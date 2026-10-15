@@ -1,0 +1,2 @@
+// @placeholder T2：Joystick 占位，真实摇杆数学见 T6。
+export const SURVIVOR_JOYSTICK_PLACEHOLDER = true;
