@@ -1,0 +1,66 @@
+// Same algorithm as js/core/Random.js and js/library/LibraryRandom.js; duplicated so
+// js/survivor stays self-contained for the Cocos sync (03 §1.4). Pure logic only:
+// no Math.random, no Date.now (03 §2, §3.3).
+
+export function hashSeed(value) {
+  const text = String(value)
+  let hash = 2166136261
+  for (let i = 0; i < text.length; i += 1) {
+    hash ^= text.charCodeAt(i)
+    hash = Math.imul(hash, 16777619)
+  }
+  return hash >>> 0
+}
+
+export class SeededRandom {
+  constructor(seed) {
+    this.seed = seed
+    this.state = hashSeed(seed) || 0x6d2b79f5
+  }
+
+  next() {
+    let value = this.state += 0x6d2b79f5
+    value = Math.imul(value ^ (value >>> 15), value | 1)
+    value ^= value + Math.imul(value ^ (value >>> 7), value | 61)
+    return ((value ^ (value >>> 14)) >>> 0) / 4294967296
+  }
+
+  int(min, max) {
+    return Math.floor(this.next() * (max - min + 1)) + min
+  }
+
+  // Uniform float in [min, max).
+  range(min, max) {
+    return min + this.next() * (max - min)
+  }
+
+  // True with the given probability p (clamped to [0, 1]).
+  chance(p) {
+    if (!(p > 0)) return false
+    if (p >= 1) return true
+    return this.next() < p
+  }
+
+  pick(items) {
+    if (!items.length) return undefined
+    return items[this.int(0, items.length - 1)]
+  }
+
+  shuffle(items) {
+    const result = items.slice()
+    for (let i = result.length - 1; i > 0; i -= 1) {
+      const j = this.int(0, i)
+      const current = result[i]
+      result[i] = result[j]
+      result[j] = current
+    }
+    return result
+  }
+
+  // Derive an independent stream for a named purpose (03 §3.3), e.g.
+  // `${seed}:spawn`, `${seed}:draft`. Same (seed, label) always yields the
+  // same child sequence, so adjusting one system never shifts another's stream.
+  derive(label) {
+    return new SeededRandom(this.seed + ':' + label)
+  }
+}
