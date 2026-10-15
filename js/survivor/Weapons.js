@@ -1,0 +1,138 @@
+// Weapon system (03 §3.4 step 7, §3.8). Pure logic only: no Math.random, no Date.now,
+// no cc/wx.
+//
+// Every weapon implements the same interface `{ id, index, tick(world, state, dt) }`
+// and reads all numbers from data/weapons.js — no magic numbers in code. S1 ships only
+// spore_shot. Its rules (01 §6.1, 03 §3.8):
+//   - lock the nearest living enemy (linear scan of enemies.active, ≤202);
+//   - fire `count` projectiles in a fan centred on the aim direction, `spreadDeg` apart;
+//   - each projectile pierces `pierce` enemies, lives `life` seconds;
+//   - 无目标不进入冷却：with no enemy on the field the weapon does not consume cooldown
+//     (so the first shot lands immediately once an enemy appears).
+
+import { WEAPONS } from './data/weapons.js'
+import { actualDamage, actualCooldown } from './Stats.js'
+
+// Shot pool object factory + reset signature used by Projectiles / SurvivorRun.
+export function makeShot() {
+  return {
+    slot: 0,
+    uid: 0,
+    x: 0,
+    y: 0,
+    vx: 0,
+    vy: 0,
+    r: 6,          // 03 §3.2 弹体半径 6
+    damage: 0,
+    knockback: 0,
+    life: 0,
+    pierceLeft: 1,
+    hitUids: [],
+  }
+}
+
+export function resetShot(shot, { x, y, vx, vy, damage, knockback, life, pierce }) {
+  shot.x = x
+  shot.y = y
+  shot.vx = vx
+  shot.vy = vy
+  shot.r = 6
+  shot.damage = damage
+  shot.knockback = knockback
+  shot.life = life
+  shot.pierceLeft = pierce
+  shot.hitUids.length = 0
+}
+
+// Find the nearest living enemy to (px, py); linear scan (03 §3.6). Returns the enemy
+// object or null. Ties resolve to the earliest active-table index (deterministic).
+export function nearestEnemy(enemies, px, py) {
+  let best = null
+  let bestD = Infinity
+  for (let i = 0; i < enemies.count; i += 1) {
+    const e = enemies.active[i]
+    if (e.hp <= 0) continue
+    const dx = e.x - px
+    const dy = e.y - py
+    const d = dx * dx + dy * dy
+    if (d < bestD) {
+      bestD = d
+      best = e
+    }
+  }
+  return best
+}
+
+// Build the fan of aim angles: `count` rays centred on `baseAngle`, `spreadRad` apart.
+// count=1 → [base]; count=2 → base ± spread/2; count=3 → base-spread, base, base+spread.
+export function fanAngles(baseAngle, count, spreadRad, out) {
+  const start = baseAngle - (spreadRad * (count - 1)) / 2
+  for (let i = 0; i < count; i += 1) {
+    out[i] = start + spreadRad * i
+  }
+  return out
+}
+
+const DEG = Math.PI / 180
+
+// spore_shot weapon object.
+export const sporeShot = {
+  id: 'spore_shot',
+  index: WEAPONS.spore_shot.index,
+  tick(world, state, dt) {
+    // Cooldown counts down only while there is a target (无目标不进入冷却).
+    const target = nearestEnemy(world.enemies, world.player.x, world.player.y)
+    if (!target) return
+    if (state.cooldown > 0) {
+      state.cooldown -= dt
+      return
+    }
+    const lvl = WEAPONS.spore_shot.levels[clampLevel(state.level)]
+    const might = world.stats.might
+    const damage = actualDamage(lvl.damage, might)
+    const baseAngle = Math.atan2(target.y - world.player.y, target.x - world.player.x)
+    const spreadRad = (WEAPONS.spore_shot.spreadDeg || 0) * DEG
+    const angles = fanAngles(baseAngle, lvl.count, spreadRad, world.weaponAngleBuf)
+    let fired = 0
+    for (let i = 0; i < lvl.count; i += 1) {
+      const shot = world.shots.acquire()
+      if (!shot) break // pool full → fire fewer this tick (diag counted by caller)
+      const a = angles[i]
+      resetShot(shot, {
+        x: world.player.x,
+        y: world.player.y,
+        vx: Math.cos(a) * lvl.speed,
+        vy: Math.sin(a) * lvl.speed,
+        damage,
+        knockback: lvl.knockback,
+        life: lvl.life,
+        pierce: lvl.pierce,
+      })
+      fired += 1
+    }
+    if (fired > 0) {
+      // Only consume cooldown when at least one shot actually launched.
+      state.cooldown = actualCooldown(lvl.cooldown, world.stats.cooldownMul)
+      world.events.push({ type: 'weaponFired', id: 'spore_shot' })
+    }
+  },
+}
+
+function clampLevel(level) {
+  const max = WEAPONS.spore_shot.levels.length
+  if (!(level >= 1)) return 0
+  if (level > max) return max - 1
+  return level - 1
+}
+
+// Registry of weapon objects by id (S1: spore_shot only).
+export const WEAPON_OBJECTS = Object.freeze({ spore_shot: sporeShot })
+
+// Advance all equipped weapons for one step (03 §3.4 step 7).
+export function stepWeapons(world, dt) {
+  for (let i = 0; i < world.weapons.length; i += 1) {
+    const w = world.weapons[i]
+    const obj = WEAPON_OBJECTS[w.id]
+    if (obj) obj.tick(world, w, dt)
+  }
+}
