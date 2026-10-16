@@ -1,105 +1,52 @@
-import {_decorator,Component,Node,Camera,Canvas,UITransform,Layers,view,ResolutionPolicy,Color,Vec3,Vec2,input,Input,EventTouch,EventMouse,EventKeyboard,KeyCode,geometry,game,Game,sys,profiler,DirectionalLight,Label} from 'cc';
-import {GameSession,FORAGING_SCENE_BY_ID} from './shared/js/cocos/GameSession';
-import {ForageTrialView} from './ForageTrialView';
-import {ForestMeshes} from './ForestMeshes';
-import {PilotUI,UI} from './PilotUI';
-import {GameScreens} from './GameScreens';
-import {renderBrandScreen} from './BrandScreen';
-import {HabitatMaterials} from './HabitatMaterials';
-import {showModelStudy} from './ModelStudy';
-import {capturePreviews} from './PreviewCapture';
-import {runMigrationSmoke} from './MigrationSmoke';
+import {ADVENTURE_LEVELS as LONG_LEVELS} from './shared/js/microforest/ForestAdventureCampaign';
+import {runForestCampaignSmoke} from './ForestCampaignSmoke';
+import {_decorator,Component,Node,Camera,Canvas,UITransform,Layers,view,ResolutionPolicy,Color,sys,profiler} from 'cc';
+import {MicroForestView} from './MicroForestView';
+import {VINES,surfaceY} from './shared/js/microforest/MicroForestState';
+import {runMicroForestSmoke} from './MicroForestSmoke';
+import {LibraryView} from './LibraryView';
+import {PackView} from './PackView';
+import {SurvivorView} from './SurvivorView';
+import {runSurvivorSmoke} from './SurvivorSmoke';
 const {ccclass}=_decorator;
+// Keep the serialized component UUID while replacing the legacy 3D host.
 @ccclass('PinePilot')
 export class PinePilot extends Component{
- session:any;forest:ForestMeshes|null=null;materials=new HabitatMaterials();camera!:Camera;canvas!:Node;ui!:PilotUI;screens:GameScreens|null=null;ready=false;
- keys=new Set<number>();pointers=new Map<number,{x:number,y:number,lastX:number,lastY:number,move:boolean,moved:boolean}>();
- captureMode=false;private lastUI='';private lastPage='';private now=0;private look=new Vec3();private ray=new geometry.Ray();private mouseStart:any=null;private lastTouch=0;private uiEpoch=0;
- private trial:ForageTrialView|null=null;
- private pickupNode:Node|null=null;private pickupKey='';private safeTop=28;private safeBottom=20;private api:any;private savedSettings='';
+ canvas!:Node;microforest:MicroForestView|null=null;library:LibraryView|null=null;pack:PackView|null=null;survivor:SurvivorView|null=null;captureMode=false;
+ demo=false;progressStorage:any=null;
+ safeTop=28;safeBottom=20;
+ private browserResize=()=>{if(sys.isBrowser)view.setFrameSize(window.innerWidth,window.innerHeight);};
  start(){
   view.setDesignResolutionSize(375,812,ResolutionPolicy.FIXED_WIDTH);
-  const wxApi=(globalThis as any).wx;
-  this.api={getStorageSync:(k:string)=>{const raw=wxApi?.getStorageSync?wxApi.getStorageSync(k):sys.localStorage.getItem(k);if(typeof raw==='string'){try{return JSON.parse(raw)}catch{return null}}return raw||null},setStorageSync:(k:string,v:any)=>wxApi?.setStorageSync?wxApi.setStorageSync(k,v):sys.localStorage.setItem(k,JSON.stringify(v))};
-  this.session=new GameSession(this.api,wxApi||{});try{const saved=this.api.getStorageSync('rainy-mushroom-cocos-settings-v1');if(saved)this.session.settings={quality:saved.quality==='performance'?'performance':'balanced',reducedMotion:saved.reducedMotion===true}}catch{}
-  this.savedSettings=JSON.stringify(this.session.settings);
-  this.camera=this.node.scene.getComponentInChildren(Camera)!;this.camera.fov=60;this.camera.near=.045;this.camera.far=100;this.camera.visibility=Layers.Enum.DEFAULT;this.camera.clearFlags=Camera.ClearFlag.SOLID_COLOR;this.camera.clearColor=new Color('#BFD5C8');
-  this.canvas=new Node('Canvas');this.node.scene.addChild(this.canvas);this.canvas.layer=Layers.Enum.UI_2D;this.canvas.addComponent(UITransform);const canvas=this.canvas.addComponent(Canvas);
-  const uiNode=new Node('UI Camera');this.node.scene.addChild(uiNode);const uiCamera=uiNode.addComponent(Camera);uiCamera.projection=Camera.ProjectionType.ORTHO;uiCamera.clearFlags=Camera.ClearFlag.DEPTH_ONLY;uiCamera.visibility=Layers.Enum.UI_2D;uiCamera.priority=10;uiNode.setPosition(0,0,1000);uiCamera.near=1;uiCamera.far=2000;canvas.cameraComponent=uiCamera;
-  this.measureSafeArea();
-  input.on(Input.EventType.KEY_DOWN,this.keyDown,this);input.on(Input.EventType.KEY_UP,this.keyUp,this);input.on(Input.EventType.TOUCH_START,this.touchStart,this);input.on(Input.EventType.TOUCH_MOVE,this.touchMove,this);input.on(Input.EventType.TOUCH_END,this.touchEnd,this);input.on(Input.EventType.TOUCH_CANCEL,this.cancelInput,this);input.on(Input.EventType.MOUSE_DOWN,this.mouseDown,this);input.on(Input.EventType.MOUSE_MOVE,this.mouseMove,this);input.on(Input.EventType.MOUSE_UP,this.mouseUp,this);game.on(Game.EVENT_HIDE,this.hide,this);game.on(Game.EVENT_SHOW,this.show,this);view.on('canvas-resize',this.resize,this);
-  this.session.screen='boot';profiler.hideStats();this.renderUI();
-  this.prepareMaterials();
+  this.canvas=new Node('Forest Canvas');this.node.scene.addChild(this.canvas);this.canvas.layer=Layers.Enum.UI_2D;this.canvas.addComponent(UITransform);
+  const canvas=this.canvas.addComponent(Canvas),cameraNode=new Node('Forest UI Camera');this.node.scene.addChild(cameraNode);
+  const camera=cameraNode.addComponent(Camera);camera.projection=Camera.ProjectionType.ORTHO;camera.clearFlags=Camera.ClearFlag.SOLID_COLOR;
+  camera.clearColor=new Color('#263f3c');camera.visibility=Layers.Enum.UI_2D;cameraNode.setPosition(0,0,1000);camera.near=1;camera.far=2000;canvas.cameraComponent=camera;
+  this.demo=sys.isBrowser&&(new URLSearchParams(window.location.search).has('review')||new URLSearchParams(window.location.search).get('microSmoke')==='1');if(sys.isBrowser&&(new URLSearchParams(window.location.search).get('campaignSmoke')==='1'||new URLSearchParams(window.location.search).has('audit'))){const data=new Map();this.progressStorage={getItem:(k:string)=>data.get(k)||null,setItem:(k:string,v:string)=>data.set(k,v)};}profiler.hideStats();this.measureSafeArea();
+  const query=sys.isBrowser?new URLSearchParams(window.location.search):null;
+  // Survivor entrance (03 §2.2, M1–M2): browser ?survivor or WeChat launch query survivor. The default entry stays PackView until M3.
+  if(this.survivorRequested(query)){const smoke=query?.get('smoke')==='1';if(smoke){const data=new Map();this.progressStorage={getItem:(k:string)=>data.get(k)??null,setItem:(k:string,v:string)=>data.set(k,v)};}this.survivor=new SurvivorView(this);view.on('canvas-resize',this.resize,this);if(sys.isBrowser){window.addEventListener('resize',this.browserResize);this.browserResize();}if(smoke)void runSurvivorSmoke(this);return;}
+  if(!query||!['forest','audit','review','microSmoke','campaignSmoke'].some(k=>query.has(k))){query?.has('library')?this.library=new LibraryView(this):this.pack=new PackView(this);view.on('canvas-resize',this.resize,this);if(sys.isBrowser){window.addEventListener('resize',this.browserResize);this.browserResize();}return;}
+  this.microforest=new MicroForestView(this);view.on('canvas-resize',this.resize,this);if(sys.isBrowser){window.addEventListener('resize',this.browserResize);this.browserResize();}
+  // Review fixtures use memory-only progress; normal player saves are never read or written.
+  if(sys.isBrowser&&new URLSearchParams(window.location.search).has('audit')){
+   const q=new URLSearchParams(window.location.search),v:any=this.microforest;
+   for(const l of LONG_LEVELS){v.progress.complete(l.id);v.rewards.complete(l.id);}
+   const id=q.get('audit');if(LONG_LEVELS.some(l=>l.id===id)){const enter=()=>{if(v.loading||!v.art.ready){this.scheduleOnce(enter,.1);return;}v.chooseLevel(id);const frame=()=>{if(v.loading||!v.art.ready){this.scheduleOnce(frame,.1);return;}const zone=q.get('zone')||'outside';if(zone!=='outside'&&v.state.journey.root.rooms[zone])v.state.journey.enter(zone,v.state.journey.root.rooms[zone].start);const stages=v.state.level.stages||[],st=stages[Number(q.get('stage')||0)];if(st){v.state.journey.place({x:st.entryX,y:st.entryY??90});}if(q.get('focus')==='leaf'&&st){const leaf=v.state.physics.leaves.find((l:any)=>l.x>=st.x&&l.x<st.x+st.width);if(leaf){v.state.journey.place({x:leaf.x-leaf.width*.25,y:leaf.restY-leaf.offset-1.5});v.state.physics.support=leaf.id;}}if(q.get('focus')==='drip'&&st){const drip=v.state.level.drips.find((d:any)=>d.x>=st.x&&d.x<st.x+st.width);if(drip)v.state.journey.place({x:drip.x-65,y:drip.bottom});}if(q.get('focus')==='root'&&st){const root=v.state.level.platforms.find((p:any)=>p.rootCurve&&p.a>=st.x&&p.b<st.x+st.width);if(root){const x=(root.a+root.b)/2;v.state.journey.place({x,y:surfaceY(root,x)});v.state.physics.support=root.id;}}if(q.get('focus')==='grip'&&st){const grip=v.state.grips.find((g:any)=>g.type==='wrap'&&g.x>=st.x&&g.x<st.x+st.width);if(grip){v.state.journey.place({x:grip.x,y:grip.top});v.state.physics.support=grip.host;}}if(q.get('focus')==='crouch'){v.state.journey.place({x:100,y:90});v.state.downHeld=true;v.art.motion.update(v.state,.1);v.art.motion.update(v.state,.1);this.captureMode=true;}if(q.get('focus')==='mushroom'){const cap=v.state.level.platforms.find((p:any)=>p.kind==='mushroom');if(cap){const x=cap.a-65,p=v.state.terrain.filter((p:any)=>x>=p.a&&x<=p.b&&surfaceY(p,x)<=cap.y).sort((a:any,b:any)=>surfaceY(b,x)-surfaceY(a,x))[0];if(p)v.state.journey.place({x,y:surfaceY(p,x)});}}if(q.get('focus')==='push'){const r=v.state.physics.rocks.find((r:any)=>!r.fixed&&!r.buoyant);if(r)v.state.journey.place({x:r.x-r.radius-10,y:r.y});}if(q.get('focus')==='dragonfly'){const a=v.state.journey.actors.find((a:any)=>a.kind==='dragonfly');if(a){const x=a.min-85,p=v.state.terrain.filter((p:any)=>x>=p.a&&x<=p.b&&surfaceY(p,x)<a.flightY-35).sort((p:any,q:any)=>surfaceY(q,x)-surfaceY(p,x))[0];if(p)v.state.journey.place({x,y:surfaceY(p,x)});}}if(q.get('focus')==='exit'){const e=v.state.level.exit;if(Number.isFinite(e.x)){const x=e.x-100,p=v.state.terrain.find((p:any)=>x>=p.a&&x<=p.b&&Math.abs(surfaceY(p,x)-e.y)<45);v.state.journey.place({x,y:p?surfaceY(p,x):e.y});}}if(q.has('health')){v.state.journey.hp=Math.max(0,Math.min(3,Number(q.get('health'))||0));if(v.state.journey.hp===0)v.state.death={age:0,duration:.9,reason:'HUD review',falling:false};this.captureMode=true;}v.update(0);};this.scheduleOnce(frame,.1);};this.scheduleOnce(enter,.1);}
+  }
+  // Browser-only review entrance; regular play always starts at the first bank.
+  if(sys.isBrowser&&new URLSearchParams(window.location.search).get('review')==='canopy'){const v=this.microforest,s=v.state;s.x=2345;s.y=VINES[1].top;s.checkpointStage=3;s.checkpoint={x:VINES[1].x,y:220};s.bridgeUsed=true;s.say('蕨叶路线试玩：走近叶尖，跳向右上方。');v.update(0)}
+  if(sys.isBrowser&&new URLSearchParams(window.location.search).get('review')==='beetle'){const v=this.microforest,s=v.state;s.x=1740;s.y=220;s.checkpointStage=2;s.checkpoint={x:1740,y:220};s.bridgeUsed=true;s.say('向右接近甲虫，提前起跳并继续向前，越过虫背。也可以躲进树皮下。');v.update(0)}
+  if(sys.isBrowser&&new URLSearchParams(window.location.search).get('review')==='obstacles'){const v=this.microforest,s=v.state,r=s.physics.rocks[1];r.x=1930;r.y=220;r.home={x:1930,y:220};s.physics.beetle.x=2030;s.physics.beetle.dir=-1;s.x=1900;s.y=220;s.checkpointStage=2;s.checkpoint={x:1900,y:220};s.say('石头会挡住甲虫。向左推，石头也会停在树皮边；向右推可改变甲虫活动空间。');v.update(0)}
+  if(sys.isBrowser&&new URLSearchParams(window.location.search).get('review')==='physics'){const v=this.microforest,s=v.state;s.x=1435;s.y=220;s.checkpointStage=2;s.checkpoint={x:1435,y:220};s.say('按住 E + 方向推石头；压弯柔茎后推上石头配重。也可跳起攀附蕨类叶柄，沿叶轴越沟。');v.update(0)}
+  if(sys.isBrowser&&new URLSearchParams(window.location.search).get('review')==='bridge'){const v=this.microforest,s=v.state;s.x=1530;s.y=220;s.checkpointStage=2;s.checkpoint={x:1530,y:220};s.say('按 E 压弯柔茎，站在桥上不会回弹；离开后5秒恢复。');v.update(0)}
+  if(sys.isBrowser&&new URLSearchParams(window.location.search).get('campaignSmoke')==='1')this.scheduleOnce(()=>{void runForestCampaignSmoke(this)},.1);
+  if(sys.isBrowser&&new URLSearchParams(window.location.search).get('microSmoke')==='1')this.scheduleOnce(()=>{void runMicroForestSmoke(this)},.1);
  }
- private prepareMaterials(){
-  if(this.session.resourceStatus==='loading')return;this.session.resourceStatus='loading';this.lastUI='';
-  this.materials.load().then(()=>{
-   if(!this.isValid)return;this.ready=true;this.session.resourceStatus='ready';if(this.session.screen==='boot')this.session.screen='home';this.lastUI='';
-   if(sys.isBrowser&&typeof window!=='undefined'&&window.location){
-    const q=new URLSearchParams(window.location.search);
-    if(q.get('trial')==='1')this.session.screen='trial';
-    else if(q.has('loadingPreview'))this.session.screen=q.get('loadingPreview')==='boot'?'boot':'loading';
-    else if(q.has('modelStudy'))showModelStudy(this,q.get('modelStudy')!);
-    else if(q.get('capturePreviews')==='1')capturePreviews(this).then(report=>window.parent.postMessage({type:'rainy-pilot-smoke',...report},window.location.origin));
-    else if(q.get('migrationSmoke')==='1')runMigrationSmoke(this.node,this.materials.items).then(report=>{window.parent.postMessage({type:'rainy-pilot-smoke',...report},window.location.origin);console.log('MIGRATION_SMOKE',JSON.stringify(report))});
-    else if(q.has('scene')&&FORAGING_SCENE_BY_ID[q.get('scene')!]){this.session.selectedSceneId=q.get('scene');this.run('relaxed')}
-   }
-  },err=>{if(!this.isValid)return;console.error(err);this.ready=false;if(this.session.screen==='boot')this.session.screen='home';this.session.resourceStatus='failed';this.session.notice('素材加载未完成，可点击重试（R01）');this.lastUI=''})
- }
- private measureSafeArea(){const size=view.getVisibleSize();try{const api=(globalThis as any).wx,info=api?.getWindowInfo?.()||api?.getSystemInfoSync?.(),capsule=api?.getMenuButtonBoundingClientRect?.();if(info){const scale=size.width/info.windowWidth;this.safeTop=Math.max(22,(capsule?.bottom+8||info.safeArea?.top||24)*scale);this.safeBottom=Math.max(16,(info.windowHeight-(info.safeArea?.bottom||info.windowHeight))*scale+10)}}catch{}}
- private run(mode:string){
-  if(!this.ready){this.session.notice('正在准备场景素材，请稍候');return}
-  if(this.session.requestIntro(mode)){this.cancelInput();this.lastUI='';return}
-  this.cancelInput();this.session.screen='loading';this.lastUI='';
-  this.scheduleOnce(()=>this.action(()=>{
-   this.forest?.destroy();this.forest=null;
-   try{this.session.start(mode);this.forest=new ForestMeshes(this.node,this.session.world,this.materials.items);this.applyLighting();this.positionCamera();this.forest.update(this.session.state.currentRun)}catch(error){this.session.screen='brief';throw error}
-  }),.05)
- }
- private applyLighting(){const s=this.session,world=s.world;if(!world)return;const globals=this.node.scene.globals,light=this.node.scene.getComponentInChildren(DirectionalLight),settings=world.lighting;
-  globals.skybox.enabled=false;globals.ambient.skyIllum=settings.ambient;globals.ambient.skyLightingColor=new Color('#DCE9DF');globals.ambient.groundLightingColor=new Color('#91977A');globals.fog.enabled=true;globals.fog.type=0;globals.fog.fogStart=settings.fogStart;globals.fog.fogEnd=settings.fogEnd;globals.fog.fogColor=new Color(world.biome.fog);this.camera.clearColor=new Color(world.biome.sky);
-  globals.shadows.enabled=s.settings.quality!=='performance';globals.shadows.type=1;globals.shadows.shadowMapSize=512;
-  if(light){light.color=new Color(settings.sun);light.illuminance=settings.illuminance;light.node.setRotationFromEuler(-48,-35,0);light.shadowEnabled=s.settings.quality!=='performance';light.shadowDistance=24;light.shadowPcf=1;light.shadowBias=.0015;light.shadowNormalBias=.015}
- }
- private positionCamera(){const p=this.session.player;if(!p)return;this.camera.node.setPosition(p.x,p.y,p.z);this.look.set(p.x+Math.sin(p.yaw)*Math.cos(p.pitch),p.y+Math.sin(p.pitch),p.z-Math.cos(p.yaw)*Math.cos(p.pitch));this.camera.node.lookAt(this.look)}
- update(dt:number){
-  if(!this.session||this.captureMode)return;
-  if(this.session.screen==='trial'&&this.ready){if(this.forest)this.forest.root.active=false;if(!this.trial){this.cancelInput();this.ui?.destroy();this.trial=new ForageTrialView(this,this.api);this.trial.render()}return}
-this.now+=dt*1000;const s=this.session;
-  if(s.active){if(!Array.from(this.pointers.values()).some(p=>p.move)){s.side=Number(this.keys.has(KeyCode.KEY_D))-Number(this.keys.has(KeyCode.KEY_A));s.forward=Number(this.keys.has(KeyCode.KEY_W))-Number(this.keys.has(KeyCode.KEY_S));s.sprint=this.keys.has(KeyCode.SHIFT_LEFT)}}else this.cancelInput();
-  s.tick(this.now);if(s.active){this.forest?.update(s.state.currentRun);this.positionCamera();if(!s.settings.reducedMotion&&s.settings.quality!=='performance')this.materials.update(this.now/1000)}
-  if(this.forest)this.forest.root.active=['field','pause'].includes(s.screen);
-  const e=s.state.selectedCollectionSpecies?s.state.getCollectionEntry(s.state.selectedCollectionSpecies.id):null;
-  const key=s.screen==='field'?`field:${this.ready}:${s.player?.crouched}:${s.state.currentRun?.hasPanned}`:JSON.stringify([s.screen,this.ready,s.resourceStatus,s.revision,s.collectionPage,s.collectionFilter,s.detailTab,s.journalTab,s.notePage,s.poolPage,s.creditsPage,s.state.collectionPhotoIndex,e?.identified,e?.studiedClues,s.state.collectionLockRemaining()>0,s.player?.crouched,s.state.currentRun?.hasPanned]);
-  if(this.lastUI!==key){this.lastUI=key;this.renderUI()}
-  this.screens?.update();this.updatePickup();
- }
- exitTrial(){this.trial?.destroy();this.trial=null;this.session.home();this.lastUI='';this.lastPage='';this.cancelInput()}
- private action(fn:()=>void){try{fn();const settings=JSON.stringify(this.session.settings);if(settings!==this.savedSettings){this.api.setStorageSync('rainy-mushroom-cocos-settings-v1',this.session.settings);this.savedSettings=settings}}catch(error){console.error(error);this.session.notice(error instanceof Error?error.message:String(error))}if(this.session.screen!=='field')this.lastUI=''}
- private pageKey(){const s=this.session;switch(s.screen){case 'credits':return `credits:${s.creditsPage}`;case 'collection':return `collection:${s.collectionFilter}:${s.collectionPage}`;case 'detail':return `detail:${s.state.selectedCollectionSpeciesId}:${s.detailTab}`;case 'scenes':return `scenes:${s.state.selectedRegionId}`;case 'pool':return `pool:${s.selectedSceneId}:${s.poolPage}`;case 'brief':return `brief:${s.selectedSceneId}`;case 'journal':return `journal:${s.journalTab}:${s.notePage}`;default:return s.screen}}
- private renderUI(){
-  const s=this.session;if(this.ui&&this.lastPage)s.scrollPositions[this.lastPage]=this.ui.scrollY();this.ui?.destroy();this.pickupNode=null;this.pickupKey='';const size=view.getVisibleSize();this.ui=new PilotUI(this.canvas,size.width,size.height,this.safeTop,this.safeBottom);this.screens=null;
-  if(s.screen==='boot'||s.screen==='loading'){this.lastPage='';++this.uiEpoch;renderBrandScreen(this.ui,s.screen==='loading'?s.scene?.name||'林间探索':'');return}
-  this.screens=new GameScreens(this.ui,s,{act:fn=>this.action(fn),run:mode=>this.run(mode),quality:value=>{s.settings.quality=value;this.applyLighting()},retry:()=>this.prepareMaterials()});this.screens.render();this.screens.update();
-  this.lastPage=this.pageKey();const epoch=++this.uiEpoch,y=s.scrollPositions[this.lastPage]||0;this.scheduleOnce(()=>{if(epoch===this.uiEpoch)this.ui.restoreScroll(y)},0);
- }
- private updatePickup(){const s=this.session,p=s.lastPickup,key=s.screen==='field'&&p?.known&&p.until>Date.now()?p.speciesId+':'+p.until:'';if(key===this.pickupKey)return;this.pickupKey=key;this.pickupNode?.destroy();this.pickupNode=null;
-  if(key){const n=this.ui.node('采集实拍',this.ui.root,116,102);n.setPosition(this.ui.width/2-76,this.ui.height/2-this.safeTop-181);this.ui.box(n,UI.paper,13);this.ui.photo(p.speciesId,0,n,82);this.pickupNode=n}
- }
- private eligible(x:number,y:number){const size=view.getVisibleSize();if(y>size.height-this.safeTop-60||y<this.safeBottom)return false;if(x>size.width*.42&&y<this.safeBottom+126)return false;return true}
- private touchStart(e:EventTouch){this.lastTouch=Date.now();if(!this.session.active)return;const p=e.getUILocation();if(!this.eligible(p.x,p.y))return;const size=view.getVisibleSize();this.pointers.set(e.getID(),{x:p.x,y:p.y,lastX:p.x,lastY:p.y,move:p.x<size.width*.42&&p.y<size.height*.43,moved:false})}
- private touchMove(e:EventTouch){const t=this.pointers.get(e.getID());if(!t)return;const p=e.getUILocation();t.moved ||=Math.hypot(p.x-t.x,p.y-t.y)>10;if(t.move){this.session.side=Math.max(-1,Math.min(1,(p.x-t.x)/44));this.session.forward=Math.max(-1,Math.min(1,(p.y-t.y)/44));this.session.sprint=Math.hypot(p.x-t.x,p.y-t.y)>64}else this.rotate(p.x-t.lastX,p.y-t.lastY);t.lastX=p.x;t.lastY=p.y}
- private touchEnd(e:EventTouch){this.lastTouch=Date.now();const t=this.pointers.get(e.getID());if(!t)return;this.pointers.delete(e.getID());if(t.move){this.session.side=this.session.forward=0;this.session.sprint=false}else if(!t.moved){const p=e.getLocation();this.pick(p.x,p.y)}}
- private rotate(dx:number,dy:number){if(!this.session.active)return;this.session.dismissHint();const p=this.session.player;p.yaw-=dx*.0045;p.pitch=Math.max(-1.2,Math.min(1.2,p.pitch+dy*.0045))}
- private pick(x:number,y:number){this.camera.screenPointToRay(x,y,this.ray);this.action(()=>{const hit=this.session.pick([this.ray.o.x,this.ray.o.y,this.ray.o.z],[this.ray.d.x,this.ray.d.y,this.ray.d.z]);if(hit)this.session.collect(hit)})}
- private mouseDown(e:EventMouse){if(Date.now()-this.lastTouch<500)return;const p=e.getUILocation();if(this.session.active&&this.eligible(p.x,p.y))this.mouseStart={x:p.x,y:p.y,lastX:p.x,lastY:p.y,moved:false}}
- private mouseMove(e:EventMouse){if(!this.mouseStart)return;const p=e.getUILocation(),m=this.mouseStart;m.moved ||=Math.hypot(p.x-m.x,p.y-m.y)>10;this.rotate(p.x-m.lastX,p.y-m.lastY);m.lastX=p.x;m.lastY=p.y}
- private mouseUp(e:EventMouse){if(this.mouseStart&&!this.mouseStart.moved&&Date.now()-this.lastTouch>=500){const p=e.getLocation();this.pick(p.x,p.y)}this.mouseStart=null}
- private keyDown(e:EventKeyboard){if(this.trial)return;if(this.session?.adBusy)return;if(this.keys.has(e.keyCode))return;this.keys.add(e.keyCode);if(e.keyCode===KeyCode.SPACE)this.session.jump();if(e.keyCode===KeyCode.KEY_C)this.session.crouch();if(e.keyCode===KeyCode.ESCAPE)this.session.active?this.session.pause():this.session.screen==='pause'?this.session.resume():this.session.back()}
- private keyUp(e:EventKeyboard){this.keys.delete(e.keyCode)}
- private cancelInput(){this.keys.clear();this.pointers.clear();this.mouseStart=null;if(this.session){this.session.side=this.session.forward=0;this.session.sprint=false}}
- private hide(){if(!this.session)return;this.session.suspended=true;this.session.stopInput();this.cancelInput();this.session.save()}
- private show(){if(this.session){this.session.suspended=false;this.session.session.pause()}}
- private resize(){this.measureSafeArea();if(this.trial)this.trial.render();this.lastUI=''}
- onDestroy(){this.trial?.destroy();this.session?.save();this.session?.destroy();input.off(Input.EventType.KEY_DOWN,this.keyDown,this);input.off(Input.EventType.KEY_UP,this.keyUp,this);input.off(Input.EventType.TOUCH_START,this.touchStart,this);input.off(Input.EventType.TOUCH_MOVE,this.touchMove,this);input.off(Input.EventType.TOUCH_END,this.touchEnd,this);input.off(Input.EventType.TOUCH_CANCEL,this.cancelInput,this);input.off(Input.EventType.MOUSE_DOWN,this.mouseDown,this);input.off(Input.EventType.MOUSE_MOVE,this.mouseMove,this);input.off(Input.EventType.MOUSE_UP,this.mouseUp,this);game.off(Game.EVENT_HIDE,this.hide,this);game.off(Game.EVENT_SHOW,this.show,this);view.off('canvas-resize',this.resize,this);this.forest?.destroy();this.ui?.destroy();this.materials.destroy()}
+ private survivorRequested(query:URLSearchParams|null){if(query)return query.has('survivor');try{const q=(globalThis as any).wx?.getLaunchOptionsSync?.()?.query;return !!q&&q.survivor!==undefined}catch{return false}}
+ private measureSafeArea(){try{const api=(globalThis as any).wx,info=api?.getWindowInfo?.()||api?.getSystemInfoSync?.(),capsule=api?.getMenuButtonBoundingClientRect?.();if(info){const scale=view.getVisibleSize().width/info.windowWidth;this.safeTop=Math.max(22,(capsule?.bottom+8||info.safeArea?.top||24)*scale);this.safeBottom=Math.max(16,(info.windowHeight-(info.safeArea?.bottom||info.windowHeight))*scale+10)}}catch{}}
+ update(dt:number){this.survivor?.update(dt);this.library?.update(dt);this.pack?.update(dt);this.microforest?.update(this.captureMode?0:dt)}
+ exitMicroforest(){this.microforest?.destroy();this.microforest=new MicroForestView(this)}
+ private resize(){this.measureSafeArea();this.survivor?.render();this.library?.render();this.pack?.render();this.microforest?.render()}
+ onDestroy(){if(sys.isBrowser)window.removeEventListener('resize',this.browserResize);view.off('canvas-resize',this.resize,this);this.survivor?.destroy();this.survivor=null;this.library?.destroy();this.library=null;this.pack?.destroy();this.pack=null;this.microforest?.destroy();this.microforest=null}
 }
