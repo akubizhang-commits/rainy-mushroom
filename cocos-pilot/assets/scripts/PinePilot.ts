@@ -24,8 +24,8 @@ export class PinePilot extends Component{
   camera.clearColor=new Color('#263f3c');camera.visibility=Layers.Enum.UI_2D;cameraNode.setPosition(0,0,1000);camera.near=1;camera.far=2000;canvas.cameraComponent=camera;
   this.demo=sys.isBrowser&&(new URLSearchParams(window.location.search).has('review')||new URLSearchParams(window.location.search).get('microSmoke')==='1');if(sys.isBrowser&&(new URLSearchParams(window.location.search).get('campaignSmoke')==='1'||new URLSearchParams(window.location.search).has('audit'))){const data=new Map();this.progressStorage={getItem:(k:string)=>data.get(k)||null,setItem:(k:string,v:string)=>data.set(k,v)};}profiler.hideStats();this.measureSafeArea();
   const query=sys.isBrowser?new URLSearchParams(window.location.search):null;
-  // Survivor entrance (03 §2.2, M1–M2): browser ?survivor or WeChat launch query survivor. The default entry stays PackView until M3.
-  if(this.survivorRequested(query)){const smoke=query?.get('smoke')==='1';if(smoke){const data=new Map();this.progressStorage={getItem:(k:string)=>data.get(k)??null,setItem:(k:string,v:string)=>data.set(k,v)};}this.survivor=new SurvivorView(this);view.on('canvas-resize',this.resize,this);if(sys.isBrowser){window.addEventListener('resize',this.browserResize);this.browserResize();}if(smoke)void runSurvivorSmoke(this);return;}
+  // Survivor is the default entry (user decision 2026-09-11). Old views only open from browser parameters (?pack, ?library, forest review keys).
+  if(!this.legacyRequested(query)){const smoke=query?.get('smoke')==='1';if(smoke){const data=new Map();this.progressStorage={getItem:(k:string)=>data.get(k)??null,setItem:(k:string,v:string)=>data.set(k,v)};}this.survivor=new SurvivorView(this);view.on('canvas-resize',this.resize,this);if(sys.isBrowser){window.addEventListener('resize',this.browserResize);this.browserResize();}if(smoke)void runSurvivorSmoke(this);return;}
   if(!query||!['forest','audit','review','microSmoke','campaignSmoke'].some(k=>query.has(k))){query?.has('library')?this.library=new LibraryView(this):this.pack=new PackView(this);view.on('canvas-resize',this.resize,this);if(sys.isBrowser){window.addEventListener('resize',this.browserResize);this.browserResize();}return;}
   this.microforest=new MicroForestView(this);view.on('canvas-resize',this.resize,this);if(sys.isBrowser){window.addEventListener('resize',this.browserResize);this.browserResize();}
   // Review fixtures use memory-only progress; normal player saves are never read or written.
@@ -43,7 +43,7 @@ export class PinePilot extends Component{
   if(sys.isBrowser&&new URLSearchParams(window.location.search).get('campaignSmoke')==='1')this.scheduleOnce(()=>{void runForestCampaignSmoke(this)},.1);
   if(sys.isBrowser&&new URLSearchParams(window.location.search).get('microSmoke')==='1')this.scheduleOnce(()=>{void runMicroForestSmoke(this)},.1);
  }
- private survivorRequested(query:URLSearchParams|null){if(query)return query.has('survivor');try{const q=(globalThis as any).wx?.getLaunchOptionsSync?.()?.query;return !!q&&q.survivor!==undefined}catch{return false}}
+ private legacyRequested(query:URLSearchParams|null){return !!query&&['pack','library','forest','audit','review','microSmoke','campaignSmoke'].some(k=>query.has(k))}
  private measureSafeArea(){try{const api=(globalThis as any).wx,info=api?.getWindowInfo?.()||api?.getSystemInfoSync?.(),capsule=api?.getMenuButtonBoundingClientRect?.();if(info){const scale=view.getVisibleSize().width/info.windowWidth;this.safeTop=Math.max(22,(capsule?.bottom+8||info.safeArea?.top||24)*scale);this.safeBottom=Math.max(16,(info.windowHeight-(info.safeArea?.bottom||info.windowHeight))*scale+10)}}catch{}}
  update(dt:number){this.survivor?.update(dt);this.library?.update(dt);this.pack?.update(dt);this.microforest?.update(this.captureMode?0:dt)}
  exitMicroforest(){this.microforest?.destroy();this.microforest=new MicroForestView(this)}

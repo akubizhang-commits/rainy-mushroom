@@ -18,8 +18,10 @@ test('sync copies the library modules into the Cocos project', () => {
   assert.ok(!sources.includes('js/library/PackBots.js'), 'bots stay out of the build')
 })
 
-test('the default entry is the packing game; ?library=1 and the forest parameters keep the older views', () => {
+test('the default entry is the survivor game; ?pack, ?library and the forest parameters keep the older views', () => {
   const host = read('cocos-pilot/assets/scripts/PinePilot.ts')
+  assert.match(host, /if\(!this\.legacyRequested\(query\)\)\{[^\n]*this\.survivor=new SurvivorView\(this\)/)
+  assert.match(host, /\['pack','library','forest','audit','review','microSmoke','campaignSmoke'\]/)
   assert.match(host, /new PackView\(this\)/)
   assert.match(host, /query\?\.has\('library'\)\?this\.library=new LibraryView\(this\)/)
   assert.match(host, /\['forest','audit','review','microSmoke','campaignSmoke'\]/)
