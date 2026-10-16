@@ -1,13 +1,16 @@
 // S1 player-facing Chinese UI copy (01-gdd §2 合规口径 / 05 §3 口径). Only a frozen
-// JSON literal: no functions, no imports. Scanned by the compliance test (04 §7.1):
-// MUST NOT contain {吃,食用,采食,美味}×{蘑菇,菌} combinations, and MUST NOT contain
-// {击杀,消灭,屠杀,死亡,血,尸}. Uses 净化/驱散/撤离 terminology throughout.
-// @placeholder S1 初稿文案，正式口径随 T12 由运营复核。
+// JSON literal: no functions, no imports. Scanned by tests/survivor-compliance.test.mjs
+// (04 §7.1 锚点 B): MUST NOT contain {吃,食用,采食,美味}×{蘑菇,菌} combinations, and
+// MUST NOT contain {击杀,消灭,屠杀,死亡,血,尸}. Terminology: 敌人被「净化」、浊雾被「驱散」、
+// 胜利后「撤离」；结算统一「净化数」，失败统一「被浊雾笼罩」；回血只用露珠/露水/阳光。
+// T12 运营复核定稿（S1 范围）。
 export const STRINGS = Object.freeze({
   // HUD
   hudTime: '时间',
   hudPurified: '净化数',
   hudLevel: '等级',
+  hudHp: '生命',
+  hudGoal: '守住森林，驱散浊雾直到雨停',
   pauseButton: '暂停',
 
   // 升级三选一
@@ -15,6 +18,9 @@ export const STRINGS = Object.freeze({
   levelUpHintFirst: '选一个能力，组合越多越强',
   cardNewWeapon: '新武器',
   cardUpgrade: '升级',
+  cardLevel: '等级',
+  cardSporeShot: '孢子弹',
+  cardSporeShotDesc: '朝最近的浊雾生灵射出孢子，将它净化',
   cardHealDew: '一捧露水',
   cardHealDewDesc: '立即回复 30 生命',
   cardShinySpore: '闪亮孢子',
@@ -22,7 +28,9 @@ export const STRINGS = Object.freeze({
 
   // 结算
   resultWin: '守住了雨后森林',
+  resultWinDesc: '浊雾被驱散，你平安撤离了森林',
   resultLose: '被浊雾笼罩',
+  resultLoseDesc: '浊雾太浓了，回营地休整一下再出发',
   resultSurvivalTime: '存活时间',
   resultPurified: '净化数',
   resultLevel: '最终等级',
@@ -31,7 +39,7 @@ export const STRINGS = Object.freeze({
   btnPlayAgain: '再来一局',
   btnBackToCamp: '森林营地',
 
-  // 新手首条提示
+  // 新手首条提示（01 §14）
   tutorialMove: '按住屏幕下方拖动来移动，攻击是自动的',
 
   // 暂停菜单
