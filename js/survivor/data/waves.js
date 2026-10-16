@@ -1,10 +1,11 @@
 // Wave data (01-gdd §10). Only a frozen JSON literal: no functions, no imports.
-// S1 scope (07 backlog §1) ships only gnat + beetle, so the wave table covers the
-// time segments whose composition is entirely gnat/beetle: 0:00–1:00 and 1:00–2:00.
-// The 2:00–3:00 segment introduces 灰蛾 moth (20%), which lands in S2 together with
-// the remaining enemies; adding it here would reference an id missing from enemies.js
-// and break validate(). Segments stay contiguous (each `fromSec` equals the previous
-// `toSec`) and every composition sums to 100.
+// S1 scope (07 backlog §1) ships only gnat + beetle. 0:00–1:00 and 1:00–2:00 follow
+// 01 §10 exactly. 2:00–3:00 uses 01 §10's rate (2.2/s) and cap (80), but 01's 灰蛾
+// moth (20%) lands in S2, so S1 splits its share between gnat/beetle (60/40) and
+// skips the 2:30 蚊蚋包围圈 event. This keeps pressure until the 180s timed win
+// (BUG-S1-01); S2 restores the 01 composition and event together with moth.
+// Segments stay contiguous (each `fromSec` equals the previous `toSec`) and every
+// composition sums to 100.
 //
 // `composition` maps enemy id → percent weight (integers summing to 100).
 // `spawnRate` is enemies/second, `cap` is the on-screen cap (01 §10, ≤ limits hard cap).
@@ -27,6 +28,13 @@ export const WAVES = Object.freeze({
       spawnRate: 1.6,
       cap: 50,
       composition: Object.freeze({ gnat: 70, beetle: 30 }),
+    }),
+    Object.freeze({
+      fromSec: 120,
+      toSec: 180,
+      spawnRate: 2.2,
+      cap: 80,
+      composition: Object.freeze({ gnat: 60, beetle: 40 }),
     }),
   ]),
 })

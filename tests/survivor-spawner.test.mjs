@@ -44,7 +44,9 @@ test('segmentAt returns the covering segment and null past the end', () => {
   assert.equal(segmentAt(59.9), WAVES.segments[0])
   assert.equal(segmentAt(60), WAVES.segments[1])
   assert.equal(segmentAt(119.9), WAVES.segments[1])
-  assert.equal(segmentAt(120), null) // S1 only defines 0–120s
+  assert.equal(segmentAt(120), WAVES.segments[2])
+  assert.equal(segmentAt(179.9), WAVES.segments[2])
+  assert.equal(segmentAt(180), null) // S1 defines 0–180s, matching the timed win
 })
 
 test('pickComposition respects the percentage weights (statistical tolerance)', () => {

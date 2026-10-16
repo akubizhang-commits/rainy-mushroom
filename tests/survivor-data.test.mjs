@@ -84,6 +84,11 @@ test('wave on-screen caps stay within the hard limit', () => {
   }
 })
 
+test('wave segments cover the whole timed run (BUG-S1-01: no empty field before the win)', () => {
+  const last = WAVES.segments[WAVES.segments.length - 1]
+  assert.ok(last.toSec >= WAVES.winAtSeconds, `波次需覆盖到 ${WAVES.winAtSeconds}s，实际到 ${last.toSec}s`)
+})
+
 test('waves.winAtSeconds is the 180s timed-victory target (00 §8 D4)', () => {
   assert.equal(WAVES.winAtSeconds, 180)
 })
