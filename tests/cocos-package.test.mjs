@@ -4,12 +4,29 @@ import {mkdtempSync,mkdirSync,writeFileSync,readFileSync,existsSync,rmSync} from
 import {tmpdir} from 'node:os'
 import {join} from 'node:path'
 import {packageWechat} from '../scripts/cocos/package-wechat.mjs'
-test('WeChat packaging relocates complete bundles and declares matching entry scripts',()=>{
+const FIXED=['internal','main','resources']
+function withBuild(bundles,run,extra={}){
  const root=mkdtempSync(join(tmpdir(),'rainy-pack-'));try{
-  mkdirSync(join(root,'src'));writeFileSync(join(root,'src/settings.json'),JSON.stringify({assets:{projectBundles:['internal','main','resources']}}));writeFileSync(join(root,'game.json'),'{}')
-  for(const name of ['internal','main','resources',...Array.from({length:6},(_,i)=>'catalogue-'+i)]){const path=join(root,'assets',name);mkdirSync(path,{recursive:true});writeFileSync(join(path,'config.json'),JSON.stringify({name}));writeFileSync(join(path,'index.js'),'/* bundle module */')}
-  const report=packageWechat(root),settings=JSON.parse(readFileSync(join(root,'src/settings.json'))),game=JSON.parse(readFileSync(join(root,'game.json')))
-  assert.equal(settings.assets.subpackages.length,9);assert.equal(game.subpackages.length,9);assert.ok(report.mainBytes<report.mainLimitBytes)
-  for(const entry of game.subpackages){assert.ok(existsSync(join(root,entry.root,'config.json')));assert.equal(readFileSync(join(root,entry.root,'game.js'),'utf8'),"require('./index.js');\n");assert.ok(!existsSync(join(root,'assets',entry.name)))}
+  mkdirSync(join(root,'src'));writeFileSync(join(root,'src/settings.json'),JSON.stringify({assets:{projectBundles:bundles}}));writeFileSync(join(root,'game.json'),'{}')
+  for(const name of bundles){const path=join(root,'assets',name);mkdirSync(path,{recursive:true});writeFileSync(join(path,'config.json'),JSON.stringify({name}));writeFileSync(join(path,'index.js'),'/* bundle module */');if(extra[name])writeFileSync(join(path,'payload.bin'),Buffer.alloc(extra[name]))}
+  return run(root)
  }finally{rmSync(root,{recursive:true,force:true})}
+}
+function assertPackaged(root,expected){
+ const report=packageWechat(root),settings=JSON.parse(readFileSync(join(root,'src/settings.json'))),game=JSON.parse(readFileSync(join(root,'game.json')))
+ assert.deepEqual(settings.assets.subpackages,expected);assert.deepEqual(game.subpackages.map(entry=>entry.name),expected);assert.deepEqual(Object.keys(report.subpackageBytes),expected);assert.ok(report.mainBytes<report.mainLimitBytes)
+ for(const entry of game.subpackages){assert.ok(existsSync(join(root,entry.root,'config.json')));assert.equal(readFileSync(join(root,entry.root,'game.js'),'utf8'),"require('./index.js');\n");assert.ok(!existsSync(join(root,'assets',entry.name)))}
+}
+test('WeChat packaging relocates complete bundles and declares matching entry scripts',()=>{
+ withBuild(FIXED,root=>assertPackaged(root,FIXED))
+})
+test('WeChat packaging appends the survivor subpackage only when its bundle was built',()=>{
+ withBuild([...FIXED,'survivor'],root=>assertPackaged(root,[...FIXED,'survivor']))
+ withBuild(FIXED,root=>{assert.ok(!existsSync(join(root,'assets/survivor')));assertPackaged(root,FIXED)})
+})
+test('WeChat packaging still requires every fixed bundle',()=>{
+ withBuild(['internal','main'],root=>assert.throws(()=>packageWechat(root),/Missing built bundle resources/))
+})
+test('WeChat packaging keeps the 4 MiB per-subpackage budget for survivor',()=>{
+ withBuild([...FIXED,'survivor'],root=>assert.throws(()=>packageWechat(root),/exceeds project budget/),{survivor:4*1024*1024+1})
 })
