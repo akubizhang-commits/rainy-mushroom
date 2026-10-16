@@ -48,4 +48,27 @@ export const STRINGS = Object.freeze({
 
   // 数据异常兜底（03 §4）
   dataError: '游戏数据异常，请更新到最新版本',
+  // T9 表现层：营地页、暂停、确认、卡片标签、存档提示（02 §4.1–§4.6）
+  gameTitle: '雨后菌语',
+  campStart: '出发',
+  campLoading: '正在准备森林',
+  campLoadFailed: '资源加载失败',
+  campRetry: '重试',
+  campBest: '最佳存活',
+  campWins: '胜利',
+  campCrystals: '露晶',
+  pauseTitle: '暂停',
+  pauseSurvival: '存活',
+  settingSound: '音效',
+  settingVibration: '震动',
+  settingReduceFlash: '减弱闪烁',
+  settingOn: '开',
+  settingOff: '关',
+  quitConfirm: '放弃本局？露晶照常发放。',
+  quitKeep: '继续游戏',
+  quitGiveUp: '放弃',
+  cardSupply: '补给',
+  resultNewRecord: '新纪录',
+  saveLocked: '存档无法读取，本次进度不会保存',
+  saveFailed: '存档写不进去，本次进度不会保存',
 })
