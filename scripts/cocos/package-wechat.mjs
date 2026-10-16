@@ -3,11 +3,13 @@ import {resolve} from 'node:path'
 // Creator 3.8's WeChat AssetManager loads declared subpackages from
 // subpackages/<name>/config.json after wx.loadSubpackage executes game.js.
 // Keep this explicit final packaging step reproducible for both CLI and CI.
-export const OPTIONAL_BUNDLES=['survivor']
+// `resources` is optional: the survivor game ships its art in its own bundle, so
+// Creator only emits `resources` if something is placed under assets/resources.
+export const OPTIONAL_BUNDLES=['resources','survivor']
 export function packageWechat(root){
  const read=p=>JSON.parse(readFileSync(resolve(root,p),'utf8')),write=(p,v)=>writeFileSync(resolve(root,p),JSON.stringify(v,null,2)+'\n')
  // Fixed bundles must exist; optional bundles (survivor, 03 §7.5 / D14) are appended only when built.
- const settings=read('src/settings.json'),game=read('game.json'),names=['internal','main','resources',...OPTIONAL_BUNDLES.filter(name=>existsSync(resolve(root,'assets',name,'config.json')))]
+ const settings=read('src/settings.json'),game=read('game.json'),names=['internal','main',...OPTIONAL_BUNDLES.filter(name=>existsSync(resolve(root,'assets',name,'config.json')))]
  for(const name of names){
   const from=resolve(root,'assets',name),to=resolve(root,'subpackages',name)
   if(!existsSync(resolve(from,'config.json')))throw Error('Missing built bundle '+name)

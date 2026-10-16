@@ -8,7 +8,6 @@ if(!['web-mobile','wechatgame'].includes(platform))throw Error('Unsupported pilo
 const creator=process.env.COCOS_CREATOR_PATH||'/Applications/CocosCreator.app/Contents/MacOS/CocosCreator'
 if(!existsSync(creator))throw Error('Set COCOS_CREATOR_PATH to the Creator 3.8.8 executable')
 const config=spawnSync(process.execPath,[resolve(root,'scripts/prepare-release-config.mjs')],{stdio:'inherit'});if(config.status!==0)process.exit(config.status||1)
-const rights=spawnSync(process.execPath,[resolve(root,'scripts/check-photo-rights.mjs'),'--write'],{stdio:'inherit'});if(rights.status!==0)process.exit(rights.status||1)
 const sync=spawnSync(process.execPath,[resolve(root,'scripts/cocos/sync-shared.mjs')],{stdio:'inherit'})
 if(sync.status!==0)process.exit(sync.status||1)
 const result=spawnSync(creator,['--project',resolve(root,'cocos-pilot'),'--build',`configPath=${resolve(root,'cocos-pilot/build-configs',platform+'.json')}`],{encoding:'utf8',maxBuffer:32*1024*1024})

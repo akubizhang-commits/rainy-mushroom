@@ -4,7 +4,7 @@ import {createHash} from 'node:crypto';
 const root=resolve(import.meta.dirname,'../..'),out=resolve(root,'cocos-pilot/assets/scripts/shared'),seen=new Set(),manifest=[];
 function visit(file){
  if(seen.has(file))return;
- if(!file.startsWith(root+'/js/microforest/')&&!file.startsWith(root+'/js/library/')&&!file.startsWith(root+'/js/survivor/'))throw Error('Unexpected gameplay dependency: '+file);
+ if(!file.startsWith(root+'/js/survivor/'))throw Error('Unexpected gameplay dependency: '+file);
  seen.add(file);const original=readFileSync(file,'utf8');
  for(const match of original.matchAll(/(?:from\s*|import\s*)['"]([^'"]+)['"]/g)){
   if(!match[1].startsWith('.'))throw Error('Shared code must be platform independent');visit(resolve(dirname(file),match[1]));
@@ -14,21 +14,7 @@ function visit(file){
  manifest.push({source:rel,sha256:createHash('sha256').update(original).digest('hex')});
 }
 // Retire stale generated modules; never copy the legacy catalogue into the build.
-for(const name of ['cocos','voxel','core','data','services','adventure','pilot']){const p=resolve(out,'js',name);if(existsSync(p))rmSync(p,{recursive:true});if(existsSync(p+'.meta'))rmSync(p+'.meta');}
-visit(resolve(root,'js/microforest/MicroForestState.js'));
-visit(resolve(root,'js/microforest/CampaignReplay.js'));
-visit(resolve(root,'js/microforest/HeroMotion.js'));
-visit(resolve(root,'js/microforest/ReferenceMotionPlayer.js')); 
-visit(resolve(root,'js/microforest/ForestCamera.js'));
-visit(resolve(root,'js/microforest/ForestCue.js'));
-visit(resolve(root,'js/microforest/ForestLongCampaign.js'));
-visit(resolve(root,'js/microforest/ForestContinuation.js'));
-visit(resolve(root,'js/microforest/ForestAdventureCampaign.js'));
-visit(resolve(root,'js/microforest/AdventureReplay.js'));
-visit(resolve(root,'js/microforest/LongCampaignReplay.js'));
-visit(resolve(root,'js/library/LibraryRound.js'));
-visit(resolve(root,'js/library/LibraryProgress.js'));
-visit(resolve(root,'js/library/PackRound.js'));
+for(const name of ['cocos','voxel','core','data','services','adventure','pilot','microforest','library']){const p=resolve(out,'js',name);if(existsSync(p))rmSync(p,{recursive:true});if(existsSync(p+'.meta'))rmSync(p+'.meta');}
 visit(resolve(root,'js/survivor/SurvivorRun.js'));
 visit(resolve(root,'js/survivor/SurvivorSave.js'));
 visit(resolve(root,'js/survivor/Meta.js'));
