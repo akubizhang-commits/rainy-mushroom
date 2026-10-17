@@ -82,10 +82,11 @@ export class SurvivorView{
   }
   this.screen='battle';this.settled=false;this.endTimer=0;this.result=null;this.moveTime=0;this.tutorialDone=false;this.input.reset();this.render();
  }
- private hide(){if(this.run&&(this.run.state==='playing'||this.run.state==='levelup'))this.run.pause();this.input?.reset()}
+ private hide(){if(this.run&&(this.run.simulating||this.run.state==='levelup'))this.run.pause();this.input?.reset()}
  update(dt:number){
   if(this.disposed||this.screen!=='battle'||!this.run||!this.input)return;
-  const run=this.run,settings=this.profile.settings,playing=run.state==='playing';
+  // cleansing / extract 也推进模拟、接受摇杆（撤离要走进阳光点）
+  const run=this.run,settings=this.profile.settings,playing=run.simulating;
   // 1. 输入
   const v=this.input.vector(dt);run.setInput(playing?v.x:0,playing?v.y:0);
   if(playing&&!this.tutorialDone&&Math.hypot(v.x,v.y)>.1){this.moveTime+=dt;if(this.moveTime>3){this.tutorialDone=true;this.hud.hideTutorial()}}
@@ -105,8 +106,9 @@ export class SurvivorView{
  }
  private syncModal(dt:number){
   const run=this.run,state=run.state,hud=this.hud,input=this.input!;
-  if(state!=='playing'&&input.enabled){input.reset();input.enabled=false}
-  if(state==='playing'){if(hud.modal)hud.closeModal();this.shownOffer=null;input.enabled=true;return}
+  const live=state==='playing'||state==='cleansing'||state==='extract';
+  if(!live&&input.enabled){input.reset();input.enabled=false}
+  if(live){if(hud.modal)hud.closeModal();this.shownOffer=null;input.enabled=true;return}
   if(state==='levelup'){
    if(hud.modal!=='levelup'||this.shownOffer!==run.offer){const p=run.progression;this.shownOffer=run.offer;hud.showLevelup(run.offer,p.level-p.pendingLevels+1,p.totalLevelUps===1)}
    return;

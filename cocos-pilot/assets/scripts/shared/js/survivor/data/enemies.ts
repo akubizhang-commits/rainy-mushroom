@@ -15,6 +15,7 @@
 //   ranged — sporeling: approach while > approachRange, spit a mist bubble every
 //            fireInterval while ≤ fireRange (bubble: speed / damage / life / radius)
 //   charge — elite_beetle (not wired in S2)
+//   boss   — boss_mist_snail: chase + summon / charge / bubbleRing skills, enrage (Boss.js)
 const HP_GROWTH_PER_MIN = 0.15     // 01 §9.1 生命成长系数
 const DAMAGE_GROWTH_PER_MIN = 0.05 // 01 §9.1 接触伤害成长系数
 export const ENEMIES = Object.freeze({
@@ -110,5 +111,43 @@ export const ENEMIES = Object.freeze({
     chargeSpeedMul: 2.5,       // 速度 ×2.5
     hpGrowthPerMin: HP_GROWTH_PER_MIN,
     damageGrowthPerMin: DAMAGE_GROWTH_PER_MIN,
+  }),
+  // Boss（01 §9.2）。数值固定，不走 §9.1 成长（系数为 0），不受远离重定位。出现时间见 waves.boss。
+  // 技能各自独立计时、从出现起算，冷却按“开始到开始”计。
+  boss_mist_snail: Object.freeze({
+    name: '浊雾巨蜗',
+    hp: 10000,
+    moveSpeed: 45,
+    contactDamage: 20,
+    xp: 0,                     // 击败后直接进入撤离阶段
+    radius: 56,
+    knockbackResist: 1,        // 100%
+    firstSeenSec: 420,         // 7:00
+    behavior: 'boss',
+    hpGrowthPerMin: 0,
+    damageGrowthPerMin: 0,
+    summon: Object.freeze({
+      every: 8,                // 召唤虫群：冷却 8 秒
+      enemy: 'gnat',
+      count: 12,               // 12 只蚊蚋，计入敌人上限
+      radius: 96,              // 在 Boss 周围等距生成的半径（初稿待 M2 调）
+    }),
+    charge: Object.freeze({
+      every: 6,                // 雾壳冲撞：冷却 6 秒
+      windup: 0.8,             // 方向箭头预警 0.8 秒
+      duration: 1,             // 冲 1 秒
+      speedMul: 2.5,           // 速度 ×2.5
+    }),
+    bubbleRing: Object.freeze({
+      every: 10,               // 浊雾泡环：冷却 10 秒
+      hpBelow: 0.5,            // 仅生命 <50%
+      count: 8,                // 8 个方向
+      bubble: Object.freeze({ speed: 120, damage: 10, life: 4, radius: 12 }),
+    }),
+    enrage: Object.freeze({
+      atSec: 600,              // 10:00 未击败则狂暴
+      speedMul: 1.3,           // 移速 +30%
+      damageMul: 1.5,          // 所有伤害 +50%
+    }),
   }),
 })

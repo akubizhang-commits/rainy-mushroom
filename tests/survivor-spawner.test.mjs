@@ -49,7 +49,8 @@ test('segmentAt returns the covering segment and null past the end', () => {
   assert.equal(segmentAt(179.9), WAVES.segments[2])
   assert.equal(segmentAt(180), WAVES.segments[3])
   assert.equal(segmentAt(419.9), WAVES.segments[6])
-  assert.equal(segmentAt(420), null) // 7:00–Boss 段 lands with the Boss (08 L6)
+  assert.equal(segmentAt(420), WAVES.segments[7]) // 7:00–Boss 击败, open-ended (08 K2)
+  assert.equal(segmentAt(9999), WAVES.segments[7])
 })
 
 test('pickComposition respects the percentage weights (statistical tolerance)', () => {
@@ -134,14 +135,15 @@ test('every wave segment spawns at its rate with its composition (statistical to
     // Rate: one real pass over the segment (release each step so the cap never bites).
     world.time = seg.fromSec
     let spawned = 0
-    const steps = Math.round((seg.toSec - seg.fromSec) * 60)
+    const span = seg.toSec === null ? 60 : seg.toSec - seg.fromSec // open segment: sample 60 s
+    const steps = Math.round(span * 60)
     for (let i = 0; i < steps; i += 1) {
       spawner.step(world, DT)
       spawned += world.enemies.count
       releaseAll(world)
       world.time = seg.fromSec + (i + 1) * DT
     }
-    const expected = seg.spawnRate * (seg.toSec - seg.fromSec)
+    const expected = seg.spawnRate * span
     assert.ok(Math.abs(spawned - expected) <= 1, `段 ${seg.fromSec}: ${spawned} ≈ ${expected}`)
     // Composition: hold the clock inside the segment for many spawns.
     const counts = {}

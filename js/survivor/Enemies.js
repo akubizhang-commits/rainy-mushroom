@@ -3,7 +3,8 @@
 //
 // Behaviours (01 §9, 03 §3.8): gnat / beetle / snail chase in a straight line; moth
 // chases with a perpendicular sway; sporeling approaches to range and spits mist
-// bubbles; 4:30 cross moths fly straight and are recycled silently off-screen.
+// bubbles; 4:30 cross moths fly straight and are recycled silently off-screen. The
+// Boss (behavior 'boss') is skipped here and driven by Boss.js.
 // Knockback impulses from projectiles decay here; separation pushes overlapping
 // neighbours apart using the spatial grid (≤6 neighbours, 03 §3.6).
 import { ENEMIES } from './data/enemies.js'
@@ -79,6 +80,8 @@ export function stepEnemyBehavior(world, dt) {
   const py = world.player.y
   for (let i = enemies.count - 1; i >= 0; i -= 1) {
     const e = enemies.active[i]
+    // The Boss moves in Boss.js (stepBoss, right after this pass).
+    if (e.behavior === 'boss') continue
     const def = ENEMIES[e.kind]
     // Slow from auras set last step (dew_ring, max of sources), then cleared so it
     // only lasts while the enemy stays inside (03 §3.4 step 4).
@@ -174,10 +177,16 @@ export function stepSeparation(world) {
       const push = (overlap * 0.5) / dist
       const sx = dx * push
       const sy = dy * push
-      e.x += sx
-      e.y += sy
-      other.x -= sx
-      other.y -= sy
+      if (e.behavior === 'boss') {
+        // The Boss (kbRes 100%) is not jostled by small enemies: they take the full push.
+        other.x -= 2 * sx
+        other.y -= 2 * sy
+      } else {
+        e.x += sx
+        e.y += sy
+        other.x -= sx
+        other.y -= sy
+      }
       handled += 1
     }
     // Do not let the enemy overlap the player: slide to touching distance.

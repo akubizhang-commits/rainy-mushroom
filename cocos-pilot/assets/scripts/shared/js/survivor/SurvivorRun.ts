@@ -4,9 +4,12 @@
 // queue, result summary (03 §3.1–§3.4). Pure logic only: no Math.random (uses
 // SurvivorRandom sub-streams), no Date.now, no cc/wx.
 //
-// S1 scope (07 backlog T5): states playing / levelup / paused / won / lost; the
-// cleansing / extract / Boss paths are S2 and intentionally absent. Timed victory
-// (00 §8 D4) fires in the phase step at WAVES.winAtSeconds.
+// States (03 §3.1): playing / levelup / paused / cleansing / extract / won / lost.
+// Victory only comes from the Boss: Boss hp 0 → cleansing (1.5 s, player invulnerable,
+// every enemy and mist bubble purified, no spores — 08 K4) → extract (sunlight point
+// 250 away, no spawns, +5 hp per second) → standing inside for 2 s in a row → won
+// (01 §9.3, §12). The S1 180 s timed victory is only a debug option:
+// `new SurvivorRun({ debug: { timedWinSec: 180 } })` (08 K1, off by default).
 
 import { SimClock, DT } from './SimClock'
 import { SeededRandom } from './SurvivorRandom'
@@ -23,6 +26,7 @@ import { Spawner } from './Spawner'
 import { makeEnemy } from './Enemies'
 import { stepEnemyBehavior, stepSeparation } from './Enemies'
 import { stepWeapons } from './Weapons'
+import { stepBossSchedule, stepBoss, syncBossView, defeatBoss } from './Boss'
 import { makeShot, makeWeaponState } from './Weapons'
 import { stepProjectiles, makeBubble, stepMistBubbles } from './Projectiles'
 import { makeSpore, dropSpore, stepPickups } from './Pickups'
@@ -65,6 +69,9 @@ export class SurvivorRun {
     this.viewport = clampViewport(options.viewport || { width: 720, height: 1560 })
     this.bonuses = options.bonuses || {}
     this.firstRun = !!options.firstRun
+    // 08 K1: debug-only timed victory (seconds); 0 = disabled (default).
+    const debug = options.debug || {}
+    this.timedWinSec = Number.isFinite(debug.timedWinSec) && debug.timedWinSec > 0 ? debug.timedWinSec : 0
 
     const rng = new SeededRandom(this.seed)
     this._spawnRng = rng.derive('spawn')
@@ -121,8 +128,19 @@ export class SurvivorRun {
     // Event queue (one-shot events drained each frame).
     this.events = []
 
+    // Boss + extraction (01 §9.2–§9.3). Read-only for the presentation layer:
+    //   run.boss       — null until 7:00, then {x, y, r, hpRatio, alive, skill, dirX, dirY, enraged, …}
+    //   run.extraction — null until extract, then {x, y, r, progress (0..1), heldSec}
+    this.boss = null
+    this.bossEnemy = null // live pool entity (reserved slot), null once defeated
+    this.bossWarned = false
+    this.extraction = null
+    this._phaseSteps = 0  // cleansing: steps left
+    this._healAcc = 0     // extract: per-second heal accumulator
+
     // Summary bookkeeping.
     this.purified = 0
+    this._bossDefeated = false
     this._killer = ''
     this._outcome = ''
 
@@ -153,27 +171,38 @@ export class SurvivorRun {
   }
 
   // --- fixed-step driver ---
+  // States in which the simulation advances (03 §3.1).
+  get simulating() {
+    return this.state === 'playing' || this.state === 'cleansing' || this.state === 'extract'
+  }
+
   advance(frameDt) {
-    if (this.state !== 'playing') return 0
+    if (!this.simulating) return 0
     const steps = this.clock.advance(frameDt)
     this.diag.droppedTime = this.clock.droppedTime
     let run = 0
     for (let i = 0; i < steps; i += 1) {
-      if (this.state !== 'playing') break
+      if (!this.simulating) break
       this.step()
       run += 1
     }
     return run
   }
 
-  // One fixed step (03 §3.4). Only advances in 'playing'.
+  // One fixed step (03 §3.4). Advances in 'playing', 'cleansing' and 'extract'.
   step() {
+    if (this.state === 'cleansing' || this.state === 'extract') {
+      this._stepAfterBoss(DT)
+      return
+    }
     if (this.state !== 'playing') return
     const dt = DT
     this._stepInput(dt)        // 1 input
     this._stepPlayer(dt)       // 2 player
     this.spawner.step(this, dt) // 3 spawner
+    stepBossSchedule(this)     // 3 Boss warning / spawn
     stepEnemyBehavior(this, dt) // 4 enemies
+    stepBoss(this, dt)         // 4 Boss skills + movement
     this.grid.build(this.enemies.active, this.enemies.count, this.player) // 5 grid
     stepSeparation(this)       // 6 separation
     stepWeapons(this, dt)      // 7 weapons
@@ -182,6 +211,73 @@ export class SurvivorRun {
     this._stepDeaths()         // 10 deaths
     this._stepPickups(dt)      // 11 pickups → maybe levelup
     this._stepPhase(dt)        // 12 phase (win/lose, time += DT)
+    syncBossView(this)
+  }
+
+  // cleansing / extract step: no spawns, no enemies, no pickups (so no level-up can
+  // interrupt the ending). The player still moves and weapons keep orbiting the player.
+  _stepAfterBoss(dt) {
+    this._stepInput(dt)
+    this._stepPlayer(dt)
+    this.grid.build(this.enemies.active, this.enemies.count, this.player)
+    stepWeapons(this, dt)
+    stepProjectiles(this, dt)
+    const cfg = WAVES.extraction
+    if (this.state === 'cleansing') {
+      this._phaseSteps -= 1
+      if (this._phaseSteps <= 0) this._openExtraction()
+    } else {
+      // 每秒回复（01 §9.3 第 5 条），满血时不发 heal 事件。
+      this._healAcc += dt
+      if (this._healAcc >= 1 - 1e-9) {
+        this._healAcc -= 1
+        if (this.player.hp < this.player.maxHp) {
+          this.player.hp = Math.min(this.player.maxHp, this.player.hp + cfg.healPerSec)
+          this.events.push({ type: 'heal', amount: cfg.healPerSec })
+        }
+      }
+      // Stand inside for holdSec in a row; stepping out resets the progress.
+      const x = this.extraction
+      const dx = this.player.x - x.x
+      const dy = this.player.y - x.y
+      if (dx * dx + dy * dy <= x.r * x.r) x._steps += 1
+      else x._steps = 0
+      x.heldSec = x._steps * DT
+      x.progress = Math.min(1, x._steps / x._need)
+    }
+    this.time += DT
+    if (this.state === 'extract' && this.extraction._steps >= this.extraction._need) this._win()
+  }
+
+  // Boss defeated (step 10): 1.5 s cleansing, player invulnerable, purify the field.
+  _enterCleansing() {
+    const cfg = WAVES.extraction
+    this.state = 'cleansing'
+    this._phaseSteps = Math.round(cfg.cleansingSec / DT)
+    this.player.invuln = Math.max(this.player.invuln, cfg.cleansingSec)
+    this.events.push({ type: 'cleansing' })
+    // 08 K4: every remaining enemy is purified (counted) but drops no spores.
+    const enemies = this.enemies
+    for (let i = enemies.count - 1; i >= 0; i -= 1) {
+      const e = enemies.active[i]
+      this.purified += 1
+      this.events.push({ type: 'purified', kind: e.kind, x: e.x, y: e.y })
+      enemies.release(e)
+    }
+    this.mistBubbles.releaseAll()
+    this.shots.releaseAll()
+  }
+
+  // Cleansing over: open the sunlight extraction point 250 away in a random direction.
+  _openExtraction() {
+    const cfg = WAVES.extraction
+    const a = this._spawnRng.next() * Math.PI * 2
+    const x = this.player.x + Math.cos(a) * cfg.distance
+    const y = this.player.y + Math.sin(a) * cfg.distance
+    this.extraction = { x, y, r: cfg.radius, progress: 0, heldSec: 0, _steps: 0, _need: Math.round(cfg.holdSec / DT) }
+    this._healAcc = 0
+    this.state = 'extract'
+    this.events.push({ type: 'extractionOpen', x, y })
   }
 
   _stepInput() {
@@ -216,29 +312,50 @@ export class SurvivorRun {
     for (let k = 0; k < n; k += 1) {
       const e = this.enemies.items[this.queryBuf[k]]
       if (!this.enemies.isActive(e) || e.hp <= 0) continue
-      const rr = this.player.r + e.r
-      const dx = e.x - this.player.x
-      const dy = e.y - this.player.y
-      if (dx * dx + dy * dy > rr * rr) continue
-      // Hit: apply damage, start invulnerability.
-      this.player.hp -= e.damage
-      this.player.invuln = PLAYER.invulnTime
-      this._killer = e.kind
-      this.events.push({ type: 'playerHurt' })
-      break // one hit per invuln window
+      if (this._contact(e)) return // one hit per invuln window
+    }
+    // Large entities (the Boss) live outside the grid (03 §3.6).
+    const large = this.grid.large
+    for (let k = 0; k < large.length; k += 1) {
+      const e = large[k]
+      if (!this.enemies.isActive(e) || e.hp <= 0) continue
+      if (this._contact(e)) return
     }
   }
 
-  // Step 10: resolve deaths (hp ≤ 0) → purify event, spore drop, counter.
+  // Contact test + damage for one enemy; returns true when it hurt the player.
+  _contact(e) {
+    const rr = this.player.r + e.r
+    const dx = e.x - this.player.x
+    const dy = e.y - this.player.y
+    if (dx * dx + dy * dy > rr * rr) return false
+    this.player.hp -= e.damage
+    this.player.invuln = PLAYER.invulnTime
+    this._killer = e.kind
+    this.events.push({ type: 'playerHurt' })
+    return true
+  }
+
+  // Step 10: resolve deaths (hp ≤ 0) → purify event, spore drop, counter. The Boss
+  // reaching 0 starts the cleansing phase (01 §9.3).
   _stepDeaths() {
     const enemies = this.enemies
+    let bossDown = false
     for (let i = enemies.count - 1; i >= 0; i -= 1) {
       const e = enemies.active[i]
       if (e.hp > 0) continue
       this.purified += 1
       this.events.push({ type: 'purified', kind: e.kind, x: e.x, y: e.y })
-      if (e.xp > 0) dropSpore(this, e.x, e.y, e.xp)
+      if (e === this.bossEnemy) {
+        bossDown = true
+        defeatBoss(this)
+      } else if (e.xp > 0) dropSpore(this, e.x, e.y, e.xp)
       enemies.release(e)
+    }
+    if (bossDown) {
+      this._bossDefeated = true
+      this.events.push({ type: 'bossDefeated' })
+      if (this.state === 'playing') this._enterCleansing()
     }
   }
 
@@ -256,7 +373,7 @@ export class SurvivorRun {
     }
   }
 
-  // Step 12: phase — timed victory / death, advance time.
+  // Step 12: phase — death, advance time, debug-only timed victory (08 K1).
   _stepPhase() {
     if (this.player.hp <= 0) {
       this.player.hp = 0
@@ -264,7 +381,7 @@ export class SurvivorRun {
       return
     }
     this.time += DT
-    if (this.time >= WAVES.winAtSeconds) {
+    if (this.state === 'playing' && this.timedWinSec > 0 && this.time >= this.timedWinSec) {
       this._win()
     }
   }
@@ -330,7 +447,7 @@ export class SurvivorRun {
 
   // --- pause / resume / abandon ---
   pause() {
-    if (this.state === 'playing' || this.state === 'levelup') {
+    if (this.simulating || this.state === 'levelup') {
       this._prevState = this.state
       this.state = 'paused'
       return true
@@ -382,7 +499,7 @@ export class SurvivorRun {
       weapons: this.weapons.map((w) => ({ id: w.id, level: w.level })),
       passives: Object.keys(this.passives).map((id) => ({ id, level: this.passives[id] })),
       eliteDefeated: 0,
-      bossDefeated: false,
+      bossDefeated: this._bossDefeated,
       shinyCards: this._bonusCrystals || 0,
       abandoned: !!this._abandoned,
       killer: this._outcome === 'won' ? '' : this._killer,

@@ -1,7 +1,8 @@
 // Wave data (01-gdd §10). Only a frozen JSON literal: no functions, no imports.
-// Segments follow 01 §10 from 0:00 to 7:00 (Boss 出现前). The 7:00–Boss segment and
-// the Boss itself land with 08 L6. Segments stay contiguous (each `fromSec` equals the
-// previous `toSec`) and every composition sums to 100.
+// Segments follow 01 §10 from 0:00 to Boss 击败. The last segment (7:00–Boss 击败) is
+// open-ended: `toSec: null` (08 K2 — must stay JSON-safe, so no Infinity); only the
+// last segment may be null. Segments stay contiguous (each `fromSec` equals the
+// previous `toSec`) and every composition sums to 100. 撤离阶段不刷怪（由状态机停掉）。
 //
 // `composition` maps enemy id → percent weight (integers summing to 100; 0% ids are
 // omitted). `spawnRate` is enemies/second, `cap` is the on-screen cap (01 §10,
@@ -15,10 +16,15 @@
 //           side of the screen, flying straight across; recycled silently on exit
 //   elite — 5:00 精英; `optional: true` means the spawner skips it (S2 未实现)
 //
-// winAtSeconds is the S1 临时「计时胜利」目标（00 §8 D4 = 180s）；08 K1/L6 用 Boss /
-// 撤离替换后降级为调试开关。
+// `boss` (01 §9.2): 6:58 发 bossWarning（atSec − warningSec），7:00 在角色正上方屏外生成。
+//
+// 胜利只走 Boss → cleansing → extract 撤离（01 §12）。S1 的 180 秒计时胜利已移除，
+// 仅保留为 SurvivorRun 调试选项 `debug.timedWinSec`（08 K1，默认关闭）。
 export const WAVES = Object.freeze({
-  winAtSeconds: 180,
+  boss: Object.freeze({ enemy: 'boss_mist_snail', atSec: 420, warningSec: 2 }),
+  // 01 §9.3：击败 Boss → cleansing 演出 1.5 秒（玩家无敌、全场净化）→ 距角色 distance 的随机
+  // 方向生成半径 radius 的阳光撤离点；连续停留 holdSec 秒胜利，离开清零；每秒回复 healPerSec。
+  extraction: Object.freeze({ cleansingSec: 1.5, distance: 250, radius: 50, holdSec: 2, healPerSec: 5 }),
   segments: Object.freeze([
     Object.freeze({
       fromSec: 0,
@@ -68,6 +74,14 @@ export const WAVES = Object.freeze({
       spawnRate: 4.8,
       cap: 200,
       composition: Object.freeze({ gnat: 30, beetle: 20, moth: 20, snail: 15, sporeling: 15 }),
+    }),
+    // 7:00–Boss 击败（开放区间，08 K2）
+    Object.freeze({
+      fromSec: 420,
+      toSec: null,
+      spawnRate: 1.5,
+      cap: 80,
+      composition: Object.freeze({ gnat: 60, moth: 40 }),
     }),
   ]),
   events: Object.freeze([

@@ -210,16 +210,27 @@ test('hp reaching 0 transitions to lost with a killer recorded', () => {
   assert.equal(summary.killer, 'gnat')
 })
 
-test('surviving to winAtSeconds transitions to won with no killer', () => {
+test('without the debug option, surviving 180 s does not win (08 K1)', () => {
   const run = newRun()
-  // Fast-forward time close to the win threshold, then step over it.
-  run.time = WAVES.winAtSeconds - DT / 2
+  run.time = 180 - DT / 2
+  run.step()
+  assert.equal(run.state, 'playing')
+  assert.equal(run.timedWinSec, 0)
+  assert.equal('winAtSeconds' in WAVES, false)
+})
+
+test('debug.timedWinSec keeps the old timed victory as a debug switch', () => {
+  const run = newRun({ debug: { timedWinSec: 180 } })
+  run.time = 180 - DT / 2
   run.step()
   assert.equal(run.state, 'won')
   const summary = run.summary()
   assert.equal(summary.outcome, 'won')
   assert.equal(summary.killer, '')
-  assert.ok(summary.survivalSec >= WAVES.winAtSeconds)
+  assert.equal(summary.bossDefeated, false)
+  assert.ok(summary.survivalSec >= 180)
+  // Invalid values disable it.
+  for (const v of [0, -1, NaN, Infinity, '180']) assert.equal(newRun({ debug: { timedWinSec: v } }).timedWinSec, 0)
 })
 
 test('summary reports purified count and crystal cards', () => {

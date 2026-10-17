@@ -168,10 +168,43 @@ export function validate() {
       sway: ['swayAmplitude', 'swayPeriod'],
       ranged: ['approachRange', 'fireRange', 'fireInterval'],
       charge: ['chargeEvery', 'chargeWindup', 'chargeDuration', 'chargeSpeedMul'],
+      boss: [],
+    }
+    if (enemy.behavior === 'boss') {
+      const groups = {
+        summon: ['every', 'count', 'radius'],
+        charge: ['every', 'windup', 'duration', 'speedMul'],
+        bubbleRing: ['every', 'hpBelow', 'count'],
+        enrage: ['atSec', 'speedMul', 'damageMul'],
+      }
+      for (const [g, gf] of Object.entries(groups)) {
+        const obj = enemy[g]
+        if (!obj || typeof obj !== 'object') {
+          push(`enemies.${id}.${g}`, 'Boss 必须有该技能参数')
+          continue
+        }
+        for (const f of gf) {
+          if (!isPositiveNumber(obj[f])) push(`enemies.${id}.${g}.${f}`, '必须为有限正数')
+        }
+      }
+      if (enemy.summon && !ENEMIES[enemy.summon.enemy]) push(`enemies.${id}.summon.enemy`, '引用了不存在的敌人 id')
+      if (enemy.summon && !isPositiveInt(enemy.summon.count)) push(`enemies.${id}.summon.count`, '必须为正整数')
+      if (enemy.bubbleRing && !isPositiveInt(enemy.bubbleRing.count)) push(`enemies.${id}.bubbleRing.count`, '必须为正整数')
+      if (enemy.bubbleRing && !(enemy.bubbleRing.hpBelow < 1)) push(`enemies.${id}.bubbleRing.hpBelow`, '必须在 (0,1)')
+      if (enemy.charge && !(enemy.charge.windup + enemy.charge.duration < enemy.charge.every)) {
+        push(`enemies.${id}.charge`, '预警 + 冲撞时长必须小于冷却')
+      }
+      const b = enemy.bubbleRing && enemy.bubbleRing.bubble
+      if (!b || typeof b !== 'object') push(`enemies.${id}.bubbleRing.bubble`, '必须有浊雾泡参数')
+      else {
+        for (const f of ['speed', 'damage', 'life', 'radius']) {
+          if (!isPositiveNumber(b[f])) push(`enemies.${id}.bubbleRing.bubble.${f}`, '必须为有限正数')
+        }
+      }
     }
     const fields = behaviorFields[enemy.behavior]
     if (!fields) {
-      push(`enemies.${id}.behavior`, '必须为 chase/sway/ranged/charge 之一')
+      push(`enemies.${id}.behavior`, '必须为 chase/sway/ranged/charge/boss 之一')
     } else {
       for (const f of fields) {
         if (!isPositiveNumber(enemy[f])) push(`enemies.${id}.${f}`, '必须为有限正数')
@@ -189,7 +222,24 @@ export function validate() {
   }
 
   // --- waves ---
-  if (WAVES.winAtSeconds !== 180) push('waves.winAtSeconds', '计时胜利目标必须为 180 秒 (00 §8 D4)')
+  // 08 K1：计时胜利只走 SurvivorRun 调试选项，数据里不再有 winAtSeconds。
+  if ('winAtSeconds' in WAVES) push('waves.winAtSeconds', '已移除（08 K1：计时胜利改为调试选项 debug.timedWinSec）')
+  const boss = WAVES.boss
+  if (!boss || typeof boss !== 'object') {
+    push('waves.boss', '必须为对象')
+  } else {
+    if (!ENEMIES[boss.enemy] || ENEMIES[boss.enemy].behavior !== 'boss') push('waves.boss.enemy', '必须引用 behavior=boss 的敌人')
+    if (!isPositiveNumber(boss.atSec)) push('waves.boss.atSec', '必须为有限正数')
+    if (!(isPositiveNumber(boss.warningSec) && boss.warningSec < boss.atSec)) push('waves.boss.warningSec', '必须为正数且小于 atSec')
+  }
+  const extraction = WAVES.extraction
+  if (!extraction || typeof extraction !== 'object') {
+    push('waves.extraction', '必须为对象')
+  } else {
+    for (const f of ['cleansingSec', 'distance', 'radius', 'holdSec', 'healPerSec']) {
+      if (!isPositiveNumber(extraction[f])) push(`waves.extraction.${f}`, '必须为有限正数')
+    }
+  }
   const segments = WAVES.segments
   if (!Array.isArray(segments) || segments.length === 0) {
     push('waves.segments', '必须为非空数组')
@@ -198,7 +248,11 @@ export function validate() {
     segments.forEach((seg, i) => {
       const at = `waves.segments[${i}]`
       if (!isNonNegativeNumber(seg.fromSec)) push(`${at}.fromSec`, '必须为非负有限数')
-      if (!isPositiveNumber(seg.toSec)) push(`${at}.toSec`, '必须为有限正数')
+      // 08 K2：只有最后一段可以用 toSec: null 表示开放区间（7:00–Boss 击败）。
+      const last = i === segments.length - 1
+      if (seg.toSec === null) {
+        if (!last) push(`${at}.toSec`, '只有最后一段允许为 null')
+      } else if (!isPositiveNumber(seg.toSec)) push(`${at}.toSec`, '必须为有限正数或（仅最后一段）null')
       if (isFiniteNumber(seg.fromSec) && isFiniteNumber(seg.toSec) && seg.toSec <= seg.fromSec) {
         push(`${at}`, 'toSec 必须大于 fromSec (单调递增)')
       }

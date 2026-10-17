@@ -133,11 +133,30 @@ test('enemy behaviour parameters match 01-gdd §9', () => {
   assert.deepEqual([e.chargeEvery, e.chargeWindup, e.chargeDuration, e.chargeSpeedMul], [5, 0.8, 1, 2.5])
 })
 
-test('enemies carry the §9.1 growth coefficients', () => {
+test('enemies carry the §9.1 growth coefficients (Boss is fixed)', () => {
   for (const id of Object.keys(ENEMIES)) {
-    assert.equal(ENEMIES[id].hpGrowthPerMin, 0.15, `${id} hpGrowthPerMin`)
-    assert.equal(ENEMIES[id].damageGrowthPerMin, 0.05, `${id} damageGrowthPerMin`)
+    const boss = id === 'boss_mist_snail'
+    assert.equal(ENEMIES[id].hpGrowthPerMin, boss ? 0 : 0.15, `${id} hpGrowthPerMin`)
+    assert.equal(ENEMIES[id].damageGrowthPerMin, boss ? 0 : 0.05, `${id} damageGrowthPerMin`)
   }
+})
+
+test('boss_mist_snail matches 01-gdd §9.2 stats and skills', () => {
+  const b = ENEMIES.boss_mist_snail
+  assert.deepEqual(
+    [b.hp, b.moveSpeed, b.contactDamage, b.radius, b.knockbackResist, b.xp, b.behavior],
+    [10000, 45, 20, 56, 1, 0, 'boss'],
+  )
+  assert.deepEqual([b.summon.every, b.summon.enemy, b.summon.count], [8, 'gnat', 12])
+  assert.deepEqual([b.charge.every, b.charge.windup, b.charge.duration, b.charge.speedMul], [6, 0.8, 1, 2.5])
+  assert.deepEqual([b.bubbleRing.every, b.bubbleRing.hpBelow, b.bubbleRing.count], [10, 0.5, 8])
+  assert.deepEqual({ ...b.bubbleRing.bubble }, { speed: 120, damage: 10, life: 4, radius: 12 })
+  assert.deepEqual([b.enrage.atSec, b.enrage.speedMul, b.enrage.damageMul], [600, 1.3, 1.5])
+  assert.deepEqual({ ...WAVES.boss }, { enemy: 'boss_mist_snail', atSec: 420, warningSec: 2 })
+})
+
+test('extraction follows 01-gdd §9.3', () => {
+  assert.deepEqual({ ...WAVES.extraction }, { cleansingSec: 1.5, distance: 250, radius: 50, holdSec: 2, healPerSec: 5 })
 })
 
 test('wave segments are contiguous and start at 0', () => {
@@ -166,12 +185,13 @@ test('wave on-screen caps stay within the hard limit', () => {
   }
 })
 
-test('wave segments cover the whole timed run (BUG-S1-01: no empty field before the win)', () => {
-  const last = WAVES.segments[WAVES.segments.length - 1]
-  assert.ok(last.toSec >= WAVES.winAtSeconds, `波次需覆盖到 ${WAVES.winAtSeconds}s，实际到 ${last.toSec}s`)
+test('only the last wave segment is open-ended (08 K2: 7:00–Boss 击败, toSec null)', () => {
+  const segs = WAVES.segments
+  assert.equal(segs[segs.length - 1].toSec, null)
+  for (let i = 0; i < segs.length - 1; i += 1) assert.ok(Number.isFinite(segs[i].toSec), `段 ${i} 有限`)
 })
 
-test('wave segments follow 01-gdd §10 from 0:00 to 7:00 (Boss 出现前)', () => {
+test('wave segments follow 01-gdd §10 from 0:00 to Boss 击败', () => {
   // [from, to, rate, cap, gnat, beetle, moth, snail, sporeling]
   const rows = [
     [0, 60, 1.0, 30, 100, 0, 0, 0, 0],
@@ -181,6 +201,7 @@ test('wave segments follow 01-gdd §10 from 0:00 to 7:00 (Boss 出现前)', () =
     [240, 300, 3.4, 140, 35, 25, 20, 10, 10],
     [300, 360, 4.0, 160, 30, 25, 20, 15, 10],
     [360, 420, 4.8, 200, 30, 20, 20, 15, 15],
+    [420, null, 1.5, 80, 60, 0, 40, 0, 0],
   ]
   const ids = ['gnat', 'beetle', 'moth', 'snail', 'sporeling']
   assert.equal(WAVES.segments.length, rows.length)
@@ -218,8 +239,8 @@ test('wave events follow 01-gdd §10 and reference known enemies', () => {
   assert.equal(elite.optional, true, '精英未实现，保持 optional')
 })
 
-test('waves.winAtSeconds is the 180s timed-victory target (00 §8 D4)', () => {
-  assert.equal(WAVES.winAtSeconds, 180)
+test('waves.winAtSeconds is removed: timed victory is a debug option only (08 K1)', () => {
+  assert.equal('winAtSeconds' in WAVES, false)
 })
 
 test('all data modules survive a JSON round-trip', () => {

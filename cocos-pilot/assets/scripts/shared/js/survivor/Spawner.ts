@@ -44,14 +44,21 @@ export function pickComposition(composition, rng) {
   return last // guards against float rounding when weights sum to exactly 100
 }
 
-// Find the wave segment covering `timeSec`; returns null past the last segment.
+// Find the wave segment covering `timeSec`; the last segment may be open-ended
+// (`toSec: null`, 08 K2). Returns null only past a closed last segment.
 export function segmentAt(timeSec) {
   const segments = WAVES.segments
   for (let i = 0; i < segments.length; i += 1) {
     const s = segments[i]
-    if (timeSec >= s.fromSec && timeSec < s.toSec) return s
+    if (timeSec >= s.fromSec && (s.toSec === null || timeSec < s.toSec)) return s
   }
   return null
+}
+
+// Living enemies that count toward the segment / hard caps. The Boss sits in one of
+// the pool's reserved slots (03 §3.5) and never counts (world.bossEnemy, SurvivorRun).
+export function normalEnemyCount(world) {
+  return world.enemies.count - (world.bossEnemy ? 1 : 0)
 }
 
 export class Spawner {
@@ -72,8 +79,8 @@ export class Spawner {
     this._events(world, minute)
     const seg = segmentAt(world.time)
     if (!seg) {
-      // Past the last defined segment (Boss 段 lands in 08 L6): no routine spawns,
-      // but relocation above still keeps existing enemies in range.
+      // Past a closed last segment: no routine spawns, but relocation above still
+      // keeps existing enemies in range.
       return
     }
     this.accumulator += seg.spawnRate * dt
@@ -82,7 +89,7 @@ export class Spawner {
     this.accumulator -= due
     while (due > 0) {
       due -= 1
-      if (world.enemies.count >= seg.cap) {
+      if (normalEnemyCount(world) >= seg.cap) {
         world.diag.dropped.enemies += 1
         continue
       }
@@ -127,9 +134,23 @@ export class Spawner {
     }
   }
 
+  // Boss 召唤虫群 (01 §9.2): `count` × `id` evenly spaced on a circle of `radius`
+  // around (cx, cy), obeying the global hard cap (fewer spawn when capped). Returns the
+  // number actually spawned.
+  spawnAround(world, id, count, cx, cy, radius) {
+    const minute = Math.floor(world.time / 60)
+    let spawned = 0
+    for (let i = 0; i < count; i += 1) {
+      const a = (TWO_PI * i) / count
+      if (!this._spawnEvent(world, id, minute, { x: cx + Math.cos(a) * radius, y: cy + Math.sin(a) * radius })) break
+      spawned += 1
+    }
+    return spawned
+  }
+
   // Event spawn: global hard cap instead of the segment cap. Returns false when capped.
   _spawnEvent(world, id, minute, at) {
-    if (world.enemies.count >= LIMITS.hardCaps.enemies) {
+    if (normalEnemyCount(world) >= LIMITS.hardCaps.enemies) {
       world.diag.dropped.enemies += 1
       return false
     }
@@ -164,7 +185,8 @@ export class Spawner {
   }
 
   // Relocate enemies that drifted too far back onto the spawn circle (03 §3.8).
-  // Cross-event enemies are exempt: they fly straight and are recycled on exit.
+  // Cross-event enemies are exempt: they fly straight and are recycled on exit. The
+  // Boss is exempt too (01 §9 通用规则：精英与 Boss 不受此规则影响).
   _relocate(world) {
     const enemies = world.enemies
     const px = world.player.x
@@ -172,7 +194,7 @@ export class Spawner {
     const maxD2 = this.relocateDistance * this.relocateDistance
     for (let i = 0; i < enemies.count; i += 1) {
       const e = enemies.active[i]
-      if (e.behavior === 'cross') continue
+      if (e.behavior === 'cross' || e.behavior === 'boss') continue
       const dx = e.x - px
       const dy = e.y - py
       if (dx * dx + dy * dy <= maxD2) continue

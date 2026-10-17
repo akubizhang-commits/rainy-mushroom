@@ -26,7 +26,8 @@ class SpritePool{
 }
 function tint(s:Slot,r:number,g:number,b:number,a:number){const k=((r<<24)>>>0)+(g<<16)+(b<<8)+a;if(s.color===k)return;s.color=k;s.sprite.color=new Color(r,g,b,a)}
 const WHITE=[255,255,255];
-const KIND_TINT:Record<string,number[]>={moth:[0xc8,0xbc,0xe0],snail:[0x9a,0x86,0xc0],sporeling:[0xb8,0xe0,0x9a],elite_beetle:[0xff,0xd8,0x8a]};
+const KIND_TINT:Record<string,number[]>={moth:[0xc8,0xbc,0xe0],snail:[0x9a,0x86,0xc0],sporeling:[0xb8,0xe0,0x9a],elite_beetle:[0xff,0xd8,0x8a],boss_mist_snail:[0x8a,0x70,0xb0]};
+const BIG_KINDS:Record<string,boolean>={beetle:true,snail:true,elite_beetle:true,boss_mist_snail:true};
 type Dot={x:number,y:number,vx:number,vy:number,life:number,gold:boolean};
 export class SurvivorBattleArt{
  root:Node;ready=false;joyBase!:Node;joyKnob!:Node;
@@ -56,8 +57,8 @@ export class SurvivorBattleArt{
  private build(){
   // 节点池上限（03 §6.2）：敌人 160、玩家弹体 120、浊雾泡 40、孢子 150、FX 80。敌人底影已烘焙进敌人帧，每个敌人 1 个节点。
   const L=(name:string)=>this.layer(this.world,name);
-  const spores=L('Spores'),enemies=L('Enemies'),player=L('Player'),shots=L('Player shots'),mist=L('Mist bubbles');const fx=L('FX');
-  this.pools.spores=new SpritePool(spores,150,this);this.pools.enemies=new SpritePool(enemies,160,this);
+  const zones=L('Zones'),spores=L('Spores'),enemies=L('Enemies'),player=L('Player'),shots=L('Player shots'),mist=L('Mist bubbles');const fx=L('FX');
+  this.pools.zones=new SpritePool(zones,2,this);this.pools.spores=new SpritePool(spores,150,this);this.pools.enemies=new SpritePool(enemies,160,this);
   this.pools.shots=new SpritePool(shots,120,this);this.pools.mist=new SpritePool(mist,40,this);this.pools.fx=new SpritePool(fx,80,this);
   this.pools.player=new SpritePool(player,5,this);
   this.joyBase=this.single(this.screen,'joy-base');this.joyKnob=this.single(this.screen,'joy-knob');
@@ -84,6 +85,13 @@ export class SurvivorBattleArt{
   const ox=-(((cx%TILE)+TILE)%TILE),oy=-(((cy%TILE)+TILE)%TILE);this.ground.setPosition(ox,oy);
   const visible=(x:number,y:number)=>Math.abs(x-cx)<hw&&Math.abs(y-cy)<hh;
   // 孢子：菱形，1.2 秒呼吸缩放 ±8%
+  // 阳光撤离点（S2 临时占位，第二批 P1 换光柱帧）：摇杆底圆放大到撤离半径染暖金，内圈按停留进度放大
+  const zp=this.pools.zones;zp.begin();const ex=run.extraction;
+  if(ex){
+   const o=zp.next()!;zp.set(o,'joy-base');o.ui.setContentSize(ex.r*2,ex.r*2);o.node.setPosition(ex.x,ex.y);tint(o,0xff,0xe0,0x8a,150);
+   const k=Math.max(.05,ex.progress),q=zp.next()!;zp.set(q,'joy-base');q.ui.setContentSize(ex.r*2*k,ex.r*2*k);q.node.setPosition(ex.x,ex.y);tint(q,0xff,0xf4,0xc8,230);
+  }
+  zp.end();
   const sp=this.pools.spores;sp.begin();
   for(let i=0;i<run.spores.count;i++){const s=run.spores.active[i];if(!visible(s.x,s.y))continue;const n=sp.next();if(!n)break;sp.set(n,s.tier===2?'spore-l':s.tier===1?'spore-m':'spore-s');const k=1+.08*Math.sin((t+s.uid*.37)*Math.PI*2/1.2);n.node.setPosition(s.x,s.y);n.node.setScale(k,k,1)}
   sp.end();
@@ -92,8 +100,8 @@ export class SurvivorBattleArt{
   for(let i=0;i<run.enemies.count;i++){
    const e=run.enemies.active[i];if(!visible(e.x,e.y))continue;const n=ep.next();if(!n)break;
    const hit=e.lastHitTime>=0&&t-e.lastHitTime<.1,flash=hit&&!reduceFlash,phase=t+e.uid*.37;
-   // S2 临时占位（第二批 P1 换正式帧）：蜗牛/精英借甲虫帧、灰蛾/菌灵借蚊蚋帧，按碰撞半径缩放 + 按种类着色
-   const big=e.kind==='beetle'||e.kind==='snail'||e.kind==='elite_beetle',base=big?'beetle':'gnat';ep.set(n,flash?base+'-flash':base);
+   // S2 临时占位（第二批 P1 换正式帧）：蜗牛/精英/Boss 借甲虫帧、灰蛾/菌灵借蚊蚋帧，按碰撞半径缩放 + 按种类着色
+   const big=!!BIG_KINDS[e.kind],base=big?'beetle':'gnat';ep.set(n,flash?base+'-flash':base);
    const c=flash?WHITE:(KIND_TINT[e.kind]||WHITE);tint(n,c[0],c[1],c[2],255);const rs=e.r/(big?16:10);
    let x=e.x,y=e.y-e.r*.5;if(base==='gnat'){x+=Math.sin(phase*23)*1.5;y+=Math.cos(phase*19)*1.5}else y+=Math.abs(Math.sin(phase*10));
    n.node.setPosition(x,y);const k=(hit&&reduceFlash?1.1:1)*rs;n.node.setScale(base==='beetle'&&p.x<e.x?-k:k,k,1);
