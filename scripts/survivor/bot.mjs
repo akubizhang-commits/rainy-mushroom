@@ -11,6 +11,8 @@
 // 选卡策略（pick）：
 //   random             每次从三张里等概率选一张（SeededRandom(`${seed}:bot`)）
 //   prefer:<weaponId>  偏好某武器：该武器（新卡/升级）> 其它新武器 > 武器升级 > 被动 > 一捧露水 > 其它
+//                      weaponId 可为 data/weapons.js 中任一武器（S2 共 5 把：spore_shot、umbrella_blades、
+//                      dew_ring、raindrop、leaf_boomerang）
 import { SurvivorRun } from '../../js/survivor/SurvivorRun.js'
 import { SeededRandom } from '../../js/survivor/SurvivorRandom.js'
 import { xpToNext } from '../../js/survivor/Progression.js'
@@ -20,7 +22,7 @@ import { PASSIVES } from '../../js/survivor/data/passives.js'
 import { STRINGS } from '../../js/survivor/data/strings.js'
 
 const FRAME = 1 / 60
-export const MAX_SEC = 720 // 单局上限 12 分钟（含 10:00 狂暴后的 2 分钟）
+export const MAX_SEC = 1020 // 单局上限 17 分钟（覆盖 K13：10:00 狂暴 I、11:00 狂暴 II、12:00 起雾壳剥落至 16:00 封顶）
 
 export const MOVES = Object.freeze({ flee: '保守逃跑', spore: '贴孢子' })
 
