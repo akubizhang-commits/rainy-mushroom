@@ -25,6 +25,8 @@ class SpritePool{
  set(s:Slot,key:string){if(s.frame===key)return;s.frame=key;this.art.apply(s.sprite,s.ui,key)}
 }
 function tint(s:Slot,r:number,g:number,b:number,a:number){const k=((r<<24)>>>0)+(g<<16)+(b<<8)+a;if(s.color===k)return;s.color=k;s.sprite.color=new Color(r,g,b,a)}
+const WHITE=[255,255,255];
+const KIND_TINT:Record<string,number[]>={moth:[0xc8,0xbc,0xe0],snail:[0x9a,0x86,0xc0],sporeling:[0xb8,0xe0,0x9a],elite_beetle:[0xff,0xd8,0x8a]};
 type Dot={x:number,y:number,vx:number,vy:number,life:number,gold:boolean};
 export class SurvivorBattleArt{
  root:Node;ready=false;joyBase!:Node;joyKnob!:Node;
@@ -54,9 +56,9 @@ export class SurvivorBattleArt{
  private build(){
   // 节点池上限（03 §6.2）：敌人 160、玩家弹体 120、浊雾泡 40、孢子 150、FX 80。敌人底影已烘焙进敌人帧，每个敌人 1 个节点。
   const L=(name:string)=>this.layer(this.world,name);
-  const spores=L('Spores'),enemies=L('Enemies'),player=L('Player'),shots=L('Player shots');L('Mist bubbles');const fx=L('FX');
+  const spores=L('Spores'),enemies=L('Enemies'),player=L('Player'),shots=L('Player shots'),mist=L('Mist bubbles');const fx=L('FX');
   this.pools.spores=new SpritePool(spores,150,this);this.pools.enemies=new SpritePool(enemies,160,this);
-  this.pools.shots=new SpritePool(shots,120,this);this.pools.fx=new SpritePool(fx,80,this);
+  this.pools.shots=new SpritePool(shots,120,this);this.pools.mist=new SpritePool(mist,40,this);this.pools.fx=new SpritePool(fx,80,this);
   this.pools.player=new SpritePool(player,5,this);
   this.joyBase=this.single(this.screen,'joy-base');this.joyKnob=this.single(this.screen,'joy-knob');
   this.layoutGround();
@@ -90,11 +92,17 @@ export class SurvivorBattleArt{
   for(let i=0;i<run.enemies.count;i++){
    const e=run.enemies.active[i];if(!visible(e.x,e.y))continue;const n=ep.next();if(!n)break;
    const hit=e.lastHitTime>=0&&t-e.lastHitTime<.1,flash=hit&&!reduceFlash,phase=t+e.uid*.37;
-   const base=e.kind==='beetle'?'beetle':'gnat';ep.set(n,flash?base+'-flash':base);
+   // S2 临时占位（第二批 P1 换正式帧）：蜗牛/精英借甲虫帧、灰蛾/菌灵借蚊蚋帧，按碰撞半径缩放 + 按种类着色
+   const big=e.kind==='beetle'||e.kind==='snail'||e.kind==='elite_beetle',base=big?'beetle':'gnat';ep.set(n,flash?base+'-flash':base);
+   const c=flash?WHITE:(KIND_TINT[e.kind]||WHITE);tint(n,c[0],c[1],c[2],255);const rs=e.r/(big?16:10);
    let x=e.x,y=e.y-e.r*.5;if(base==='gnat'){x+=Math.sin(phase*23)*1.5;y+=Math.cos(phase*19)*1.5}else y+=Math.abs(Math.sin(phase*10));
-   n.node.setPosition(x,y);const k=hit&&reduceFlash?1.1:1;n.node.setScale(base==='beetle'&&p.x<e.x?-k:k,k,1);
+   n.node.setPosition(x,y);const k=(hit&&reduceFlash?1.1:1)*rs;n.node.setScale(base==='beetle'&&p.x<e.x?-k:k,k,1);
   }
   ep.end();
+  // 浊雾泡（敌方弹体）：S2 临时用大孢子帧染品红 #E05AD0（02 §1.2），按碰撞直径缩放
+  const mp=this.pools.mist;mp.begin();
+  for(let i=0;i<(run.mistBubbles?run.mistBubbles.count:0);i++){const b=run.mistBubbles.active[i];if(!visible(b.x,b.y))continue;const n=mp.next();if(!n)break;mp.set(n,'spore-l');n.ui.setContentSize(b.r*2,b.r*2);n.node.setPosition(b.x,b.y);tint(n,0xe0,0x5a,0xd0,255)}
+  mp.end();
   // 小旅人：底影 + 方向弧 + 本体 + 生命条
   const pp=this.pools.player;pp.begin();const moving=Math.hypot(run._inX||0,run._inY||0)>.01,feetY=p.y-p.r*.5;
   if(Math.abs(p.dirX)>.05)this.lastDirX=p.dirX>0?1:-1;

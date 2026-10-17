@@ -24,7 +24,7 @@ import { makeEnemy } from './Enemies'
 import { stepEnemyBehavior, stepSeparation } from './Enemies'
 import { stepWeapons } from './Weapons'
 import { makeShot, makeWeaponState } from './Weapons'
-import { stepProjectiles } from './Projectiles'
+import { stepProjectiles, makeBubble, stepMistBubbles } from './Projectiles'
 import { makeSpore, dropSpore, stepPickups } from './Pickups'
 import {
   makeProgression,
@@ -100,6 +100,7 @@ export class SurvivorRun {
     // Pools (03 §7.3).
     this.enemies = new Pool(LIMITS.pools.enemies, makeEnemy)
     this.shots = new Pool(LIMITS.pools.playerProjectiles, makeShot)
+    this.mistBubbles = new Pool(LIMITS.pools.mistBubbles, makeBubble) // enemy projectiles (01 §9)
     this.spores = new Pool(LIMITS.pools.spores, makeSpore)
 
     // Spatial grid + reusable query buffer.
@@ -115,7 +116,7 @@ export class SurvivorRun {
     this.progression = makeProgression()
 
     // Diagnostics (03 §3.1, §10).
-    this.diag = { dropped: { enemies: 0, shots: 0 }, droppedTime: 0 }
+    this.diag = { dropped: { enemies: 0, shots: 0, bubbles: 0 }, droppedTime: 0 }
 
     // Event queue (one-shot events drained each frame).
     this.events = []
@@ -177,7 +178,7 @@ export class SurvivorRun {
     stepSeparation(this)       // 6 separation
     stepWeapons(this, dt)      // 7 weapons
     stepProjectiles(this, dt)  // 8 projectiles
-    this._stepHostile(dt)      // 9 hostile (contact damage)
+    this._stepHostile(dt)      // 9 hostile (mist bubbles, contact damage)
     this._stepDeaths()         // 10 deaths
     this._stepPickups(dt)      // 11 pickups → maybe levelup
     this._stepPhase(dt)        // 12 phase (win/lose, time += DT)
@@ -202,8 +203,14 @@ export class SurvivorRun {
     }
   }
 
-  // Step 9: enemy contact damage to the player (query grid around the player).
-  _stepHostile() {
+  // Step 9: mist bubbles move + hit the player, then enemy contact damage (query grid
+  // around the player). Both respect the shared invulnerability window.
+  _stepHostile(dt) {
+    const bubbleSource = stepMistBubbles(this, dt, PLAYER.invulnTime)
+    if (bubbleSource) {
+      this._killer = 'mist_bubble'
+      this.events.push({ type: 'playerHurt' })
+    }
     if (this.player.invuln > 0) return
     const n = this.grid.queryCircle(this.player.x, this.player.y, this.player.r, this.queryBuf)
     for (let k = 0; k < n; k += 1) {

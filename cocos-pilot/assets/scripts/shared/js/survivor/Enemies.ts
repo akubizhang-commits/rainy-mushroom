@@ -3,9 +3,13 @@
 // Enemy system (03 §3.4 steps 4 & 6, §3.8). Pure logic only: no Math.random,
 // no Date.now, no cc/wx.
 //
-// S1 behaviour is limited to gnat + beetle: both chase the player in a straight line
-// (03 §3.8). Knockback impulses from projectiles decay here; separation pushes
-// overlapping neighbours apart using the spatial grid (≤6 neighbours, 03 §3.6).
+// Behaviours (01 §9, 03 §3.8): gnat / beetle / snail chase in a straight line; moth
+// chases with a perpendicular sway; sporeling approaches to range and spits mist
+// bubbles; 4:30 cross moths fly straight and are recycled silently off-screen.
+// Knockback impulses from projectiles decay here; separation pushes overlapping
+// neighbours apart using the spatial grid (≤6 neighbours, 03 §3.6).
+import { ENEMIES } from './data/enemies'
+import { spawnBubble } from './Projectiles'
 
 export function makeEnemy() {
   return {
@@ -29,6 +33,12 @@ export function makeEnemy() {
     contactCooldown: 0, // per-enemy gate so one enemy hurts the player ≤ once / invuln window
     slow: 0,   // movement slow ratio [0,1); cleared each step 4, re-set by auras (max of sources)
     hitAt: new Float64Array(5), // per weapon index: earliest time this weapon may hit again (03 §3.5)
+    behavior: 'chase', // chase | sway | ranged | cross (data/enemies.js; cross = 4:30 event)
+    age: 0,    // seconds since spawn (moth sway phase)
+    timer: 0,  // ranged: fire cooldown left; cross: lifetime left
+    dirX: 0,   // cross: fixed flight direction
+    dirY: 0,
+    limit: 0,  // cross: recycle once dirX·(x − player.x) exceeds this (screen half-width + margin)
   }
 }
 
@@ -52,27 +62,74 @@ export function resetEnemy(enemy, spec) {
   enemy.contactCooldown = 0
   enemy.slow = 0
   enemy.hitAt.fill(0)
+  enemy.behavior = spec.behavior || 'chase'
+  enemy.age = 0
+  enemy.timer = spec.timer || 0
+  enemy.dirX = spec.dirX || 0
+  enemy.dirY = spec.dirY || 0
+  enemy.limit = spec.limit || 0
 }
 
 const KB_DECAY = 8 // per-second exponential-ish decay of residual knockback
-
-// Step 4: chase the player, apply + decay knockback. Movement integrates here.
+const TWO_PI = Math.PI * 2
+// Step 4: behaviour (chase / sway / ranged / cross), apply + decay knockback.
+// Movement integrates here. Iterates backwards because cross enemies that leave the
+// screen are released (swap-remove) silently: no spores, no purify count (03 §3.8).
 export function stepEnemyBehavior(world, dt) {
   const enemies = world.enemies
   const px = world.player.x
   const py = world.player.y
-  for (let i = 0; i < enemies.count; i += 1) {
+  for (let i = enemies.count - 1; i >= 0; i -= 1) {
     const e = enemies.active[i]
-    // Straight-line tracking toward the player.
+    const def = ENEMIES[e.kind]
+    // Slow from auras set last step (dew_ring, max of sources), then cleared so it
+    // only lasts while the enemy stays inside (03 §3.4 step 4).
+    const slow = e.slow
+    const speed = e.speed * (1 - slow)
+    e.slow = 0
     const dx = px - e.x
     const dy = py - e.y
     const dist = Math.hypot(dx, dy) || 1
-    // Slow from auras set last step (dew_ring, max of sources), then cleared so it
-    // only lasts while the enemy stays inside (03 §3.4 step 4).
-    const speed = e.speed * (1 - e.slow)
-    e.slow = 0
-    const vx = (dx / dist) * speed
-    const vy = (dy / dist) * speed
+    const ux = dx / dist
+    const uy = dy / dist
+    let vx
+    let vy
+    if (e.behavior === 'cross') {
+      // Straight line, no tracking (01 §10 4:30 灰蛾横穿).
+      vx = e.dirX * speed
+      vy = e.dirY * speed
+      e.timer -= dt
+      if (e.timer <= 0 || e.dirX * (e.x - px) > e.limit) {
+        enemies.release(e)
+        continue
+      }
+    } else if (e.behavior === 'sway' && def) {
+      // Tracking + perpendicular sway: lateral offset A·sin(ωt) → velocity A·ω·cos(ωt).
+      const omega = TWO_PI / def.swayPeriod
+      const lateral = def.swayAmplitude * omega * Math.cos(omega * e.age) * (1 - slow)
+      vx = ux * speed - uy * lateral
+      vy = uy * speed + ux * lateral
+    } else if (e.behavior === 'ranged' && def) {
+      // Approach while farther than approachRange, otherwise hold position; spit a
+      // mist bubble every fireInterval while within fireRange (01 §9 迷途菌灵).
+      if (dist > def.approachRange) {
+        vx = ux * speed
+        vy = uy * speed
+      } else {
+        vx = 0
+        vy = 0
+      }
+      if (e.timer > 0) e.timer -= dt
+      if (dist <= def.fireRange && e.timer <= 0) {
+        spawnBubble(world, e.x, e.y, px, py, def.bubble, e.kind)
+        e.timer = def.fireInterval
+      }
+    } else {
+      // Straight-line tracking toward the player (gnat / beetle / snail).
+      vx = ux * speed
+      vy = uy * speed
+    }
+    e.age += dt
     e.x += (vx + e.kbX) * dt
     e.y += (vy + e.kbY) * dt
     e.vx = vx
@@ -84,7 +141,6 @@ export function stepEnemyBehavior(world, dt) {
     if (e.contactCooldown > 0) e.contactCooldown -= dt
   }
 }
-
 // Step 6: push overlapping enemies apart (grid neighbours, ≤6), then keep them from
 // overlapping the player (03 §3.6: slide to player.r + enemy.r along the connecting line).
 export function stepSeparation(world) {

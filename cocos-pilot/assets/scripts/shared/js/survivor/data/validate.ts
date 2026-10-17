@@ -165,6 +165,29 @@ export function validate() {
     if (!isNonNegativeNumber(enemy.firstSeenSec)) push(`enemies.${id}.firstSeenSec`, '必须为非负有限数')
     if (!isNonNegativeNumber(enemy.hpGrowthPerMin)) push(`enemies.${id}.hpGrowthPerMin`, '必须为非负有限数')
     if (!isNonNegativeNumber(enemy.damageGrowthPerMin)) push(`enemies.${id}.damageGrowthPerMin`, '必须为非负有限数')
+    const behaviorFields = {
+      chase: [],
+      sway: ['swayAmplitude', 'swayPeriod'],
+      ranged: ['approachRange', 'fireRange', 'fireInterval'],
+      charge: ['chargeEvery', 'chargeWindup', 'chargeDuration', 'chargeSpeedMul'],
+    }
+    const fields = behaviorFields[enemy.behavior]
+    if (!fields) {
+      push(`enemies.${id}.behavior`, '必须为 chase/sway/ranged/charge 之一')
+    } else {
+      for (const f of fields) {
+        if (!isPositiveNumber(enemy[f])) push(`enemies.${id}.${f}`, '必须为有限正数')
+      }
+    }
+    if (enemy.behavior === 'ranged') {
+      const b = enemy.bubble
+      if (!b || typeof b !== 'object') push(`enemies.${id}.bubble`, '远程敌人必须有浊雾泡参数')
+      else {
+        for (const f of ['speed', 'damage', 'life', 'radius']) {
+          if (!isPositiveNumber(b[f])) push(`enemies.${id}.bubble.${f}`, '必须为有限正数')
+        }
+      }
+    }
   }
 
   // --- waves ---
@@ -201,6 +224,25 @@ export function validate() {
         }
         if (sum !== 100) push(`${at}.composition`, `组成百分比之和必须为 100，当前 ${sum}`)
       }
+    })
+  }
+  // events (01 §10 事件列): sorted by atSec, known type, known enemy, positive count.
+  const events = WAVES.events
+  if (!Array.isArray(events)) {
+    push('waves.events', '必须为数组')
+  } else {
+    events.forEach((ev, i) => {
+      const at = `waves.events[${i}]`
+      if (!isNonNegativeNumber(ev.atSec)) push(`${at}.atSec`, '必须为非负有限数')
+      if (i > 0 && isFiniteNumber(ev.atSec) && ev.atSec < events[i - 1].atSec) {
+        push(`${at}.atSec`, '事件必须按时间升序')
+      }
+      if (!['ring', 'cross', 'elite'].includes(ev.type)) push(`${at}.type`, '必须为 ring/cross/elite 之一')
+      if (!ENEMIES[ev.enemy]) push(`${at}.enemy`, '引用了不存在的敌人 id')
+      if (!isPositiveInt(ev.count)) push(`${at}.count`, '必须为正整数')
+      if (ev.type === 'ring' && !isPositiveNumber(ev.radius)) push(`${at}.radius`, '必须为有限正数')
+      if (ev.type === 'cross' && !isPositiveNumber(ev.spacing)) push(`${at}.spacing`, '必须为有限正数')
+      if (ev.optional !== undefined && typeof ev.optional !== 'boolean') push(`${at}.optional`, '必须为布尔值')
     })
   }
 

@@ -97,23 +97,44 @@ test('passives match 01-gdd §7: per-level effect and Lv5 total; regen/magnet ab
   assert.equal(PASSIVES.magnet, undefined)
 })
 
-test('gnat and beetle match 01-gdd §9 table: hp/moveSpeed/damage/xp/radius', () => {
-  // 01 §9：生命/移速/接触伤害/经验/碰撞半径
-  assert.equal(ENEMIES.gnat.hp, 8)
-  assert.equal(ENEMIES.gnat.moveSpeed, 110)
-  assert.equal(ENEMIES.gnat.contactDamage, 5)
-  assert.equal(ENEMIES.gnat.xp, 1)
-  assert.equal(ENEMIES.gnat.radius, 10)
+test('all enemies match 01-gdd §9 table: hp/moveSpeed/damage/xp/radius/kbRes/firstSeen', () => {
+  // 01 §9：生命/移速/接触伤害/经验/碰撞半径/击退抗性/首次出现
+  const rows = {
+    gnat: [8, 110, 5, 1, 10, 0, 0],
+    beetle: [25, 70, 8, 2, 16, 0.3, 60],
+    moth: [18, 130, 6, 2, 14, 0, 120],
+    snail: [80, 35, 12, 5, 22, 0.8, 180],
+    sporeling: [40, 60, 6, 4, 16, 0.2, 240],
+    elite_beetle: [1500, 80, 15, 50, 28, 0.9, 300],
+  }
+  const fields = ['hp', 'moveSpeed', 'contactDamage', 'xp', 'radius', 'knockbackResist', 'firstSeenSec']
+  for (const [id, row] of Object.entries(rows)) {
+    assert.ok(ENEMIES[id], `${id} 存在`)
+    fields.forEach((f, j) => assert.equal(ENEMIES[id][f], row[j], `${id}.${f}`))
+  }
+})
 
-  assert.equal(ENEMIES.beetle.hp, 25)
-  assert.equal(ENEMIES.beetle.moveSpeed, 70)
-  assert.equal(ENEMIES.beetle.contactDamage, 8)
-  assert.equal(ENEMIES.beetle.xp, 2)
-  assert.equal(ENEMIES.beetle.radius, 16)
+test('enemy behaviour parameters match 01-gdd §9', () => {
+  assert.equal(ENEMIES.gnat.behavior, 'chase')
+  assert.equal(ENEMIES.beetle.behavior, 'chase')
+  assert.equal(ENEMIES.snail.behavior, 'chase')
+  assert.equal(ENEMIES.moth.behavior, 'sway')
+  assert.equal(ENEMIES.moth.swayAmplitude, 40)
+  assert.equal(ENEMIES.moth.swayPeriod, 1.2)
+  const s = ENEMIES.sporeling
+  assert.equal(s.behavior, 'ranged')
+  assert.equal(s.approachRange, 180)
+  assert.equal(s.fireRange, 250)
+  assert.equal(s.fireInterval, 3)
+  assert.equal(s.bubble.speed, 150)
+  assert.equal(s.bubble.damage, 6)
+  assert.equal(s.bubble.life, 3)
+  const e = ENEMIES.elite_beetle
+  assert.deepEqual([e.chargeEvery, e.chargeWindup, e.chargeDuration, e.chargeSpeedMul], [5, 0.8, 1, 2.5])
 })
 
 test('enemies carry the §9.1 growth coefficients', () => {
-  for (const id of ['gnat', 'beetle']) {
+  for (const id of Object.keys(ENEMIES)) {
     assert.equal(ENEMIES[id].hpGrowthPerMin, 0.15, `${id} hpGrowthPerMin`)
     assert.equal(ENEMIES[id].damageGrowthPerMin, 0.05, `${id} damageGrowthPerMin`)
   }
@@ -148,6 +169,53 @@ test('wave on-screen caps stay within the hard limit', () => {
 test('wave segments cover the whole timed run (BUG-S1-01: no empty field before the win)', () => {
   const last = WAVES.segments[WAVES.segments.length - 1]
   assert.ok(last.toSec >= WAVES.winAtSeconds, `波次需覆盖到 ${WAVES.winAtSeconds}s，实际到 ${last.toSec}s`)
+})
+
+test('wave segments follow 01-gdd §10 from 0:00 to 7:00 (Boss 出现前)', () => {
+  // [from, to, rate, cap, gnat, beetle, moth, snail, sporeling]
+  const rows = [
+    [0, 60, 1.0, 30, 100, 0, 0, 0, 0],
+    [60, 120, 1.6, 50, 70, 30, 0, 0, 0],
+    [120, 180, 2.2, 80, 50, 30, 20, 0, 0],
+    [180, 240, 2.8, 110, 40, 30, 20, 10, 0],
+    [240, 300, 3.4, 140, 35, 25, 20, 10, 10],
+    [300, 360, 4.0, 160, 30, 25, 20, 15, 10],
+    [360, 420, 4.8, 200, 30, 20, 20, 15, 15],
+  ]
+  const ids = ['gnat', 'beetle', 'moth', 'snail', 'sporeling']
+  assert.equal(WAVES.segments.length, rows.length)
+  rows.forEach((row, i) => {
+    const seg = WAVES.segments[i]
+    assert.deepEqual([seg.fromSec, seg.toSec, seg.spawnRate, seg.cap], row.slice(0, 4), `段 ${i}`)
+    ids.forEach((id, j) => assert.equal(seg.composition[id] || 0, row[4 + j], `段 ${i} ${id}`))
+  })
+})
+
+test('each enemy first appears in the wave whose fromSec equals its firstSeenSec', () => {
+  for (const id of ['gnat', 'beetle', 'moth', 'snail', 'sporeling']) {
+    const first = WAVES.segments.find((seg) => (seg.composition[id] || 0) > 0)
+    assert.ok(first, `${id} 出现在波次中`)
+    assert.equal(first.fromSec, ENEMIES[id].firstSeenSec, `${id} 首次出现时间`)
+  }
+})
+
+test('wave events follow 01-gdd §10 and reference known enemies', () => {
+  const events = WAVES.events
+  assert.ok(Array.isArray(events))
+  for (let i = 1; i < events.length; i += 1) assert.ok(events[i].atSec >= events[i - 1].atSec, '按时间升序')
+  for (const ev of events) assert.ok(ENEMIES[ev.enemy], `事件引用的敌人 ${ev.enemy} 存在`)
+  const ring = events.find((e) => e.atSec === 150)
+  assert.deepEqual({ ...ring }, { atSec: 150, type: 'ring', enemy: 'gnat', count: 24, radius: 350 })
+  assert.ok(!ring.optional, '2:30 包围圈必做')
+  const cross = events.find((e) => e.atSec === 270)
+  assert.equal(cross.type, 'cross')
+  assert.equal(cross.enemy, 'moth')
+  assert.equal(cross.count, 16)
+  const wall = events.find((e) => e.atSec === 390)
+  assert.deepEqual([wall.type, wall.enemy, wall.count, wall.radius], ['ring', 'snail', 20, 400])
+  const elite = events.find((e) => e.atSec === 300)
+  assert.equal(elite.enemy, 'elite_beetle')
+  assert.equal(elite.optional, true, '精英未实现，保持 optional')
 })
 
 test('waves.winAtSeconds is the 180s timed-victory target (00 §8 D4)', () => {

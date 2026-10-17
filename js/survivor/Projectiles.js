@@ -97,3 +97,59 @@ function rememberHit(shot, uid) {
 
 // Factory for the shots pool (used by SurvivorRun when building pools).
 export { makeShot }
+
+// --- Hostile mist bubbles (01 §9 迷途菌灵, 03 §3.4 step 9, §3.5 mistBubbles 池) ---
+// Straight-line enemy projectiles that only test against the player. Player weapons
+// never touch them (裁决 L4). A bubble is consumed on contact with the player; it deals
+// damage and starts invulnerability only when the player is not already invulnerable.
+export function makeBubble() {
+  return { slot: 0, uid: 0, x: 0, y: 0, vx: 0, vy: 0, r: 12, damage: 0, life: 0, source: '' }
+}
+// Fire one bubble from (x, y) toward (tx, ty). Pool full → counted in diag, not fired.
+export function spawnBubble(world, x, y, tx, ty, spec, source) {
+  const b = world.mistBubbles.acquire()
+  if (!b) {
+    world.diag.dropped.bubbles = (world.diag.dropped.bubbles || 0) + 1
+    return null
+  }
+  const dx = tx - x
+  const dy = ty - y
+  const d = Math.hypot(dx, dy) || 1
+  b.x = x
+  b.y = y
+  b.vx = (dx / d) * spec.speed
+  b.vy = (dy / d) * spec.speed
+  b.r = spec.radius
+  b.damage = spec.damage
+  b.life = spec.life
+  b.source = source
+  return b
+}
+// Move bubbles, expire them, and resolve hits on the player. Returns the bubble that
+// hurt the player this step (or null) so the caller can record the killer / event.
+export function stepMistBubbles(world, dt, invulnTime) {
+  const bubbles = world.mistBubbles
+  const p = world.player
+  let hurtBy = null
+  for (let i = bubbles.count - 1; i >= 0; i -= 1) {
+    const b = bubbles.active[i]
+    b.x += b.vx * dt
+    b.y += b.vy * dt
+    b.life -= dt
+    if (b.life <= 0) {
+      bubbles.release(b)
+      continue
+    }
+    const rr = b.r + p.r
+    const dx = b.x - p.x
+    const dy = b.y - p.y
+    if (dx * dx + dy * dy > rr * rr) continue
+    if (p.invuln <= 0) {
+      p.hp -= b.damage
+      p.invuln = invulnTime
+      hurtBy = b.source
+    }
+    bubbles.release(b)
+  }
+  return hurtBy
+}
