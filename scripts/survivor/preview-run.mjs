@@ -1,98 +1,88 @@
-// 文字版单局预览：驱动纯逻辑层跑完整一局，打印节奏快照。
-// 不涉及渲染，仅用于让人直观感受数值与节奏。用法：
-//   node scripts/survivor/preview-run.mjs [seed] [snapshotEverySec]
-import { SurvivorRun } from '../../js/survivor/SurvivorRun.js'
+// 文字版单局预览：用 bot 驱动纯逻辑层跑完整一局（多武器 / 被动 / Boss / 撤离），打印
+// 每 N 秒快照、每次升级的三选一与选择、Boss 战过程与撤离过程。不涉及渲染。用法：
+//   node scripts/survivor/preview-run.mjs [seed] [--move flee|spore]
+//        [--pick random|prefer:<weaponId>] [--every 30] [--max-sec 720]
+// 默认 seed=preview-001、move=spore、pick=random、every=30。同参数两次输出一致。
+import { playRun, cardName, pickLabel, MOVES, MAX_SEC } from './bot.mjs'
 
-const seed = process.argv[2] || 'preview-001'
-const everySec = Number(process.argv[3]) || 15
-const DT = 1 / 60
-
-const run = new SurvivorRun({ seed, viewport: { width: 720, height: 1560 }, firstRun: true })
-
-// 简单 AI：朝"最近敌人的反方向"逃，场上没敌人就不动。
-function pickFleeInput() {
-  const enemies = run.enemies.active
-  const n = run.enemies.count
-  if (!n) return [0, 0]
-  let bx = 0, by = 0, best = Infinity
-  for (let i = 0; i < n; i += 1) {
-    const e = enemies[i]
-    const dx = e.x - run.player.x
-    const dy = e.y - run.player.y
-    const d = Math.hypot(dx, dy)
-    if (d < best) { best = d; bx = dx; by = dy }
-  }
-  const m = Math.hypot(bx, by) || 1
-  return [-bx / m, -by / m] // 远离最近的敌人
+const args = process.argv.slice(2)
+const opts = { seed: 'preview-001', move: 'spore', pick: 'random', every: 30, maxSec: MAX_SEC }
+for (let i = 0; i < args.length; i += 1) {
+  const a = args[i]
+  const v = args[i + 1]
+  if (a === '--move') { opts.move = v; i += 1 }
+  else if (a === '--pick') { opts.pick = v; i += 1 }
+  else if (a === '--every') { opts.every = Math.max(1, Number(v) || 30); i += 1 }
+  else if (a === '--max-sec') { opts.maxSec = Number(v) || MAX_SEC; i += 1 }
+  else if (!a.startsWith('--')) opts.seed = a
+  else throw new Error(`unknown argument: ${a}`)
 }
 
-// 升级选卡策略：优先升武器，其次治疗，最后露晶。
-function pickCard(offer) {
-  let idx = offer.findIndex((c) => c.kind === 'weapon')
-  if (idx < 0) idx = offer.findIndex((c) => c.kind === 'heal')
-  if (idx < 0) idx = 0
-  return idx
+const mmss = (sec) => `${Math.floor(sec / 60)}:${String(Math.floor(sec % 60)).padStart(2, '0')}`
+const hp = (run) => `${Math.max(0, Math.round(run.player.hp))}/${run.player.maxHp}`
+const build = (run) => {
+  const w = run.weapons.map((x) => `${cardName(x.id)}${x.level}`).join(' ')
+  const p = Object.keys(run.passives).map((id) => `${cardName(id)}${run.passives[id]}`).join(' ')
+  return p ? `${w} ｜ ${p}` : w
+}
+const cardText = (c) => {
+  if (c.kind === 'weapon' || c.kind === 'passive') return `${cardName(c.id)}${c.isNew ? '(新)' : `→Lv${c.level}`}`
+  return cardName(c.id)
 }
 
-const picks = []
-let nextSnap = everySec
-const rows = []
-function snapshot(tag) {
-  rows.push({
-    t: run.time.toFixed(0),
-    tag,
-    state: run.state,
-    hp: `${Math.max(0, Math.round(run.player.hp))}/${run.player.maxHp}`,
-    lvl: run.progression.level,
-    wpn: run.weapons[0].level,
-    enemies: run.enemies.count,
-    shots: run.shots.count,
-    spores: run.spores.count,
-    purified: run.purified,
-  })
-}
+const lines = []
+const log = (s) => lines.push(s)
+let lastBossHpLog = -1
+const bossSkills = { bossSummon: 0, bossCharge: 0, bossBubbleRing: 0 }
+const { rec, run } = playRun({
+  seed: opts.seed,
+  move: opts.move,
+  pick: opts.pick,
+  maxSec: opts.maxSec,
+  hooks: {
+    onSecond(sec, r) {
+      if (r.boss && r.boss.alive) {
+        // Boss 战每 10 秒一行血量
+        const b10 = Math.floor(sec / 10)
+        if (b10 !== lastBossHpLog && sec % 10 === 0) {
+          lastBossHpLog = b10
+          const d = Math.hypot(r.boss.x - r.player.x, r.boss.y - r.player.y)
+          log(`  ${mmss(sec)}  [Boss] 生命 ${(r.boss.hpRatio * 100).toFixed(0)}%  距离 ${d.toFixed(0)}  角色 ${hp(r)}  场上敌人 ${r.enemies.count - 1}`)
+        }
+      }
+      if (sec % opts.every === 0 && r.state !== 'extract' && r.state !== 'cleansing') {
+        log(`■ ${mmss(sec)}  Lv${r.progression.level}  生命 ${hp(r)}  敌人 ${r.enemies.count}  孢子 ${r.spores.count}  净化 ${r.purified}  ${build(r)}`)
+      }
+    },
+    onPick(p) {
+      log(`  ${mmss(p.t)}  升到 Lv${p.level}：${p.offer.map(cardText).join(' / ')}  → 选 ${cardName(p.picked)}`)
+    },
+    onEvent(ev, r) {
+      const t = mmss(r.time)
+      if (ev.type in bossSkills) bossSkills[ev.type] += 1
+      if (ev.type === 'bossWarning') log(`  ${t}  ⚠ Boss 预警`)
+      else if (ev.type === 'bossSpawn') log(`  ${t}  ★ 浊雾巨蜗出现  角色 Lv${r.progression.level} 生命 ${hp(r)}  ${build(r)}`)
+      else if (ev.type === 'bossEnrage') log(`  ${t}  ！Boss 狂暴（移速 +30%，伤害 +50%）`)
+      else if (ev.type === 'bossBubbleRing' && !r._ringLogged) { r._ringLogged = true; log(`  ${t}  Boss 生命 <50%，开始放浊雾泡环`) }
+      else if (ev.type === 'bossDefeated') log(`  ${t}  ✔ 浊雾巨蜗被净化  角色生命 ${hp(r)}`)
+      else if (ev.type === 'cleansing') log(`  ${t}  cleansing：全场净化 1.5 秒`)
+      else if (ev.type === 'extractionOpen') {
+        const d = Math.hypot(ev.x - r.player.x, ev.y - r.player.y)
+        log(`  ${t}  阳光撤离点出现（距离 ${d.toFixed(0)}）`)
+      } else if (ev.type === 'won') log(`  ${t}  ☀ 停留 2 秒完成撤离，胜利`)
+      else if (ev.type === 'lost') log(`  ${t}  ✖ 被浊雾笼罩`)
+    },
+  },
+})
 
-snapshot('开局')
-
-// 以 60fps 推进，最多模拟 240 秒防止意外死循环。
-let guard = 0
-while (run.state !== 'won' && run.state !== 'lost' && guard < 240 * 60) {
-  if (run.simulating) {
-    const [ix, iy] = pickFleeInput()
-    run.setInput(ix, iy)
-    run.advance(DT)
-  } else if (run.state === 'levelup') {
-    const i = pickCard(run.offer)
-    picks.push({ at: run.time.toFixed(0), card: run.offer[i].id })
-    run.choose(i)
-  }
-  guard += 1
-  if (run.state === 'playing' && run.time >= nextSnap) {
-    snapshot(`${nextSnap}s`)
-    nextSnap += everySec
-  }
-}
-snapshot('结束')
-
-// 输出
-const pad = (s, n) => String(s).padEnd(n)
-console.log(`\n雨后菌语 · 单局文字预览   seed=${seed}   (AI 自动逃跑+自动升级)\n`)
-console.log(pad('时间', 6) + pad('阶段', 8) + pad('状态', 9) + pad('血量', 11) + pad('等级', 6) + pad('武器Lv', 8) + pad('敌人', 6) + pad('弹体', 6) + pad('孢子', 6) + '净化')
-console.log('-'.repeat(78))
-for (const r of rows) {
-  console.log(
-    pad(r.t + 's', 6) + pad(r.tag, 8) + pad(r.state, 9) + pad(r.hp, 11) +
-    pad('Lv' + r.lvl, 6) + pad(r.wpn, 8) + pad(r.enemies, 6) + pad(r.shots, 6) +
-    pad(r.spores, 6) + r.purified,
-  )
-}
-
-const s = run.summary()
+console.log(`\n雨后菌语 · 单局文字预览   seed=${opts.seed}   ${MOVES[opts.move]} · ${pickLabel(opts.pick)}   快照每 ${opts.every}s\n`)
+for (const l of lines) console.log(l)
 console.log('\n--- 结算 ---')
-console.log(`结果：${s.outcome === 'won' ? '✅ 击败浊雾巨蜗并撤离，胜利' : '❌ 阵亡'}` + (s.outcome === 'lost' ? `（被 ${s.killer || '未知'} 击倒）` : ''))
-console.log(`存活：${s.survivalSec.toFixed(1)}s   等级：Lv${s.level}   武器：${s.weapons.map((w) => `${w.id} Lv${w.level}`).join(' / ')}   被动：${s.passives.map((p) => `${p.id} Lv${p.level}`).join(' / ') || '无'}   净化总数：${s.purified}`)
-console.log(`升级次数：${picks.length}`)
-if (picks.length) {
-  console.log('升级选牌：' + picks.map((p) => `${p.at}s→${p.card}`).join('  '))
-}
-console.log(`掉帧补偿丢弃：敌人 ${run.diag.dropped.enemies} / 弹体 ${run.diag.dropped.shots}（应为 0）\n`)
+const outcome = rec.outcome === 'won' ? '✅ 击败浊雾巨蜗并撤离，胜利' : rec.outcome === 'lost' ? `❌ 被浊雾笼罩（最后伤害来源：${cardName(rec.killer)}）` : '⏸ 到达时长上限仍未结束'
+console.log(`结果：${outcome}`)
+console.log(`时长：${mmss(rec.survivalSec)}   等级：Lv${rec.level}   构筑：${build(run)}`)
+console.log(`等级节点：1:00 Lv${rec.levelAt[60] ?? '—'} / 3:00 Lv${rec.levelAt[180] ?? '—'} / 5:00 Lv${rec.levelAt[300] ?? '—'} / Boss 出现 Lv${rec.bossLevel ?? '—'}（目标 5–6 / 12–14 / 18–20 / 24–26）`)
+if (rec.bossDefeatSec !== null) console.log(`Boss 战：${(rec.bossDefeatSec - rec.bossSpawnSec).toFixed(1)}s（召唤 ${bossSkills.bossSummon} 次 / 冲撞 ${bossSkills.bossCharge} 次 / 泡环 ${bossSkills.bossBubbleRing} 次）   撤离：${rec.wonSec !== null ? (rec.wonSec - rec.extractOpenSec).toFixed(1) + 's' : '未完成'}`)
+const preRate = rec.spawnedPreBoss ? `${((rec.purifiedPreBoss / rec.spawnedPreBoss) * 100).toFixed(1)}%` : '—'
+console.log(`净化率：0–7:00 ${preRate}，全程 ${((rec.purifiedCombat / Math.max(1, rec.spawned)) * 100).toFixed(1)}%（战斗净化 ${rec.purifiedCombat} / 生成 ${rec.spawned}，另 cleansing 净化 ${rec.purifiedCleansing}）   孢子拾取率 ${((rec.xpBanked / Math.max(1, rec.xpDropped)) * 100).toFixed(1)}%`)
+console.log(`升级次数：${rec.picks.length}   diag.dropped：敌人 ${rec.dropped.enemies}（多为同屏上限已满跳过的刷怪，设计内）/ 弹体 ${rec.dropped.shots} / 浊雾泡 ${rec.dropped.bubbles || 0}   droppedTime ${rec.droppedTime}（应为 0）\n`)
