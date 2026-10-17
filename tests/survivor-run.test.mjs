@@ -156,8 +156,8 @@ test('weapon upgrade / passive cards update the right slot and recompute stats',
   assert.ok(Math.abs(run.stats.might - 1.2) < 1e-9)
   assert.ok(Math.abs(run.stats.areaMul - 1.1) < 1e-9)
   assert.deepEqual(run.summary().passives, [{ id: 'might', level: 2 }, { id: 'area', level: 1 }])
-  // Placeholder weapons are never equipped even if a card slips through.
-  run._applyCard({ kind: 'weapon', id: 'raindrop', level: 1, isNew: true })
+  // Unknown weapon ids are never equipped even if a card slips through.
+  run._applyCard({ kind: 'weapon', id: 'not_a_weapon', level: 1, isNew: true })
   assert.equal(run.weapons.length, 2)
 })
 
@@ -165,6 +165,10 @@ test('weapon slots cap at 4 and passive slots cap at 4 (01 §5)', () => {
   const run = newRun()
   for (const id of ['umbrella_blades', 'dew_ring']) run._applyCard({ kind: 'weapon', id, level: 1, isNew: true })
   assert.equal(run.weapons.length, 3)
+  // 5 选 4（08 K8）：第 4 把装上，第 5 把被拒。
+  run._applyCard({ kind: 'weapon', id: 'raindrop', level: 1, isNew: true })
+  run._applyCard({ kind: 'weapon', id: 'leaf_boomerang', level: 1, isNew: true })
+  assert.deepEqual(run.weapons.map((w) => w.id), ['spore_shot', 'umbrella_blades', 'dew_ring', 'raindrop'])
   for (const id of ['might', 'cooldown', 'area', 'speed']) run._applyCard({ kind: 'passive', id, level: 1, isNew: true })
   assert.equal(run.summary().passives.length, 4)
   // Levels never exceed 5.

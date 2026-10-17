@@ -3,15 +3,17 @@
 // Player projectile system (03 §3.4 step 8). Pure logic only: no Math.random,
 // no Date.now, no cc/wx.
 //
-// Each shot moves in a straight line, queries the enemy grid, applies damage once per
-// enemy (tracked by uid so a reused slot is never double-counted), and ends when it
-// has pierced its budget of enemies or its lifetime expires. Player shots never test
+// Each spore shot moves in a straight line, queries the enemy grid, applies damage once
+// per enemy (tracked by uid so a reused slot is never double-counted), and ends when it
+// has pierced its budget of enemies or its lifetime expires. Leaf shots (kind 'leaf',
+// leaf_boomerang) pierce without limit, fly out and home back to the player, hitting
+// each enemy once per leg. Raindrop zones resolve in stepZones. Player shots never test
 // against mistBubbles (裁决 L4 — S1 has none anyway).
 //
 // Damage is only marked here (sets enemy.hp and enemy.lastHitTime); deaths are
 // resolved together in SurvivorRun step 10 so one step's hits drop loot once.
 
-import { makeShot } from './Weapons'
+import { makeShot, makeZone, enemiesInCircle } from './Weapons'
 
 // Advance every active shot by dt. `world` provides: shots (Pool), enemies (Pool),
 // grid (SpatialGrid), queryBuf (Int32Array), time.
@@ -23,8 +25,16 @@ export function stepProjectiles(world, dt) {
   // Iterate backwards because release() swap-removes into the current index.
   for (let i = shots.count - 1; i >= 0; i -= 1) {
     const shot = shots.active[i]
-    shot.x += shot.vx * dt
-    shot.y += shot.vy * dt
+    const leaf = shot.kind === 'leaf'
+    if (leaf) {
+      if (moveLeaf(shot, world.player, dt)) {
+        shots.release(shot) // back at the player → recycled (01 §6.5)
+        continue
+      }
+    } else {
+      shot.x += shot.vx * dt
+      shot.y += shot.vy * dt
+    }
     shot.life -= dt
     if (shot.life <= 0) {
       shots.release(shot)
@@ -42,15 +52,16 @@ export function stepProjectiles(world, dt) {
       const dy = enemy.y - shot.y
       if (dx * dx + dy * dy > rr * rr) continue
       // Mark damage + knockback; death is resolved in step 10.
-      applyHit(enemy, shot, world.time)
+      applyHit(enemy, shot, world)
       rememberHit(shot, enemy.uid)
+      if (leaf) continue // 无限穿透
       shot.pierceLeft -= 1
       if (shot.pierceLeft <= 0) {
         shots.release(shot)
         ended = true
       }
     }
-    // Also test the `large` list (none in S1, but keep the contract).
+    // Also test the `large` list (the Boss lives there, 03 §3.6).
     if (!ended) {
       const large = grid.large
       for (let k = 0; k < large.length && !ended; k += 1) {
@@ -61,8 +72,9 @@ export function stepProjectiles(world, dt) {
         const dx = enemy.x - shot.x
         const dy = enemy.y - shot.y
         if (dx * dx + dy * dy > rr * rr) continue
-        applyHit(enemy, shot, world.time)
+        applyHit(enemy, shot, world)
         rememberHit(shot, enemy.uid)
+        if (leaf) continue
         shot.pierceLeft -= 1
         if (shot.pierceLeft <= 0) {
           shots.release(shot)
@@ -73,15 +85,77 @@ export function stepProjectiles(world, dt) {
   }
 }
 
-function applyHit(enemy, shot, time) {
+// Leaf boomerang flight (01 §6.5). Out leg: straight along its launch direction until
+// `travelLeft` is used up, then it turns back and forgets its out-leg hits (去程、回程
+// 对同一敌人各结算一次). Back leg: homes on the player's *current* position each step.
+// Returns true when the leaf has reached the player and must be recycled.
+function moveLeaf(shot, player, dt) {
+  if (!shot.returning) {
+    shot.x += shot.vx * dt
+    shot.y += shot.vy * dt
+    shot.travelLeft -= shot.speed * dt
+    if (shot.travelLeft <= 0) {
+      shot.returning = true
+      shot.hitUids.length = 0
+    }
+    return false
+  }
+  const dx = player.x - shot.x
+  const dy = player.y - shot.y
+  const d = Math.hypot(dx, dy)
+  if (d <= shot.catchR) return true
+  const step = Math.min(shot.speed * dt, d)
+  shot.vx = (dx / d) * shot.speed
+  shot.vy = (dy / d) * shot.speed
+  shot.x += (dx / d) * step
+  shot.y += (dy / d) * step
+  return false
+}
+
+function applyHit(enemy, shot, world) {
   enemy.hp -= shot.damage
-  enemy.lastHitTime = time
-  // Knockback along the shot's travel direction, reduced by the enemy's resistance.
-  const speed = Math.hypot(shot.vx, shot.vy) || 1
+  enemy.lastHitTime = world.time
   const push = shot.knockback * (1 - enemy.kbRes)
-  if (push > 0) {
-    enemy.kbX += (shot.vx / speed) * push
-    enemy.kbY += (shot.vy / speed) * push
+  if (!(push > 0)) return
+  if (shot.kind === 'leaf') {
+    // 01 §6 通用击退：沿“角色→敌人”方向（回程也向外推，不把敌人拽向角色）。
+    const dx = enemy.x - world.player.x
+    const dy = enemy.y - world.player.y
+    const d = Math.hypot(dx, dy) || 1
+    enemy.kbX += (dx / d) * push
+    enemy.kbY += (dy / d) * push
+    return
+  }
+  // Spore shot: knockback along the shot's travel direction, reduced by resistance.
+  const speed = Math.hypot(shot.vx, shot.vy) || 1
+  enemy.kbX += (shot.vx / speed) * push
+  enemy.kbY += (shot.vy / speed) * push
+}
+
+// Raindrop zones (01 §6.4, 03 §3.4 step 8): a zone resolves once world.time reaches
+// `at` (0.4 s after the shadow appeared), damaging every enemy within its radius at the
+// locked landing point, then returns to the pool. Knockback along 角色→敌人 (01 §6).
+export function stepZones(world) {
+  const zones = world.zones
+  const t = world.time
+  for (let i = zones.count - 1; i >= 0; i -= 1) {
+    const z = zones.active[i]
+    if (t + 1e-9 < z.at) continue
+    const m = enemiesInCircle(world, z.x, z.y, z.r)
+    for (let k = 0; k < m; k += 1) {
+      const e = world.hitBuf[k]
+      e.hp -= z.damage
+      e.lastHitTime = t
+      const push = z.knockback * (1 - e.kbRes)
+      if (push > 0) {
+        const dx = e.x - world.player.x
+        const dy = e.y - world.player.y
+        const d = Math.hypot(dx, dy) || 1
+        e.kbX += (dx / d) * push
+        e.kbY += (dy / d) * push
+      }
+    }
+    zones.release(z)
   }
 }
 
@@ -97,8 +171,8 @@ function rememberHit(shot, uid) {
   shot.hitUids.push(uid)
 }
 
-// Factory for the shots pool (used by SurvivorRun when building pools).
-export { makeShot }
+// Factories for the shots / zones pools (used by SurvivorRun when building pools).
+export { makeShot, makeZone }
 
 // --- Hostile mist bubbles (01 §9 迷途菌灵, 03 §3.4 step 9, §3.5 mistBubbles 池) ---
 // Straight-line enemy projectiles that only test against the player. Player weapons

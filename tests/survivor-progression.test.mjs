@@ -85,7 +85,7 @@ test('candidate pool follows 01 §8.2 weights and excludes out-of-scope content 
   assert.equal(byKey.get('weapon:spore_shot').card.isNew, false)
   assert.equal(byKey.get('passive:might').weight, WEIGHT_UPGRADE)
   assert.equal(byKey.get('passive:might').card.level, 2)
-  for (const id of ['umbrella_blades', 'dew_ring']) {
+  for (const id of ['umbrella_blades', 'dew_ring', 'raindrop', 'leaf_boomerang']) {
     assert.equal(byKey.get(`weapon:${id}`).weight, WEIGHT_NEW_WEAPON)
     assert.equal(byKey.get(`weapon:${id}`).card.isNew, true)
     assert.equal(byKey.get(`weapon:${id}`).card.level, 1)
@@ -93,21 +93,26 @@ test('candidate pool follows 01 §8.2 weights and excludes out-of-scope content 
   for (const id of ['cooldown', 'area', 'speed']) {
     assert.equal(byKey.get(`passive:${id}`).weight, WEIGHT_NEW_PASSIVE)
   }
-  assert.equal(pool.length, 7)
+  assert.equal(pool.length, 9)
   assert.deepEqual([WEIGHT_UPGRADE, WEIGHT_NEW_WEAPON, WEIGHT_NEW_PASSIVE], [10, 8, 6])
 })
 
-test('raindrop / leaf_boomerang / regen / magnet never appear in any offer', () => {
-  const banned = new Set(['raindrop', 'leaf_boomerang', 'regen', 'magnet'])
+test('regen / magnet never appear in any offer; all five weapons do (08 K8)', () => {
+  const banned = new Set(['regen', 'magnet'])
+  const weaponsSeen = new Set()
   const rng = new SeededRandom('banned')
   let state = START()
   for (let i = 0; i < 2000; i += 1) {
     const offer = draftOffer(state, rng)
-    for (const c of offer) assert.ok(!banned.has(c.id), `offered ${c.id}`)
+    for (const c of offer) {
+      assert.ok(!banned.has(c.id), `offered ${c.id}`)
+      if (c.kind === 'weapon') weaponsSeen.add(c.id)
+    }
     if (i % 50 === 0) state = START()
     // Walk the build forward by taking the first card so later offers cover upgrades.
     state = applyForTest(state, offer[0])
   }
+  assert.deepEqual([...weaponsSeen].sort(), ['dew_ring', 'leaf_boomerang', 'raindrop', 'spore_shot', 'umbrella_blades'])
 })
 
 test('first level-up guarantees at least one new-weapon card (首升保底)', () => {
@@ -154,7 +159,7 @@ test('full weapon slots stop new-weapon cards; full passive slots stop new-passi
 
 test('everything maxed → only fallback cards (兜底卡), still three of them', () => {
   const state = {
-    weapons: [{ id: 'spore_shot', level: 5 }, { id: 'umbrella_blades', level: 5 }, { id: 'dew_ring', level: 5 }],
+    weapons: [{ id: 'spore_shot', level: 5 }, { id: 'umbrella_blades', level: 5 }, { id: 'dew_ring', level: 5 }, { id: 'raindrop', level: 5 }],
     passives: { might: 5, cooldown: 5, area: 5, speed: 5 },
     isFirstLevelUp: false,
   }
@@ -170,7 +175,7 @@ test('everything maxed → only fallback cards (兜底卡), still three of them'
 
 test('one candidate left → it is offered and fallback cards fill the rest', () => {
   const state = {
-    weapons: [{ id: 'spore_shot', level: 4 }, { id: 'umbrella_blades', level: 5 }, { id: 'dew_ring', level: 5 }],
+    weapons: [{ id: 'spore_shot', level: 4 }, { id: 'umbrella_blades', level: 5 }, { id: 'dew_ring', level: 5 }, { id: 'leaf_boomerang', level: 5 }],
     passives: { might: 5, cooldown: 5, area: 5, speed: 5 },
     isFirstLevelUp: false,
   }
@@ -181,8 +186,9 @@ test('one candidate left → it is offered and fallback cards fill the rest', ()
 })
 
 test('10 000 draws: first-card type frequency matches the weight ratio within 5%', () => {
-  // Pool: 1 upgrade (10) + 2 new weapons (16) + 4 new passives (24) = 50.
-  const expected = { upgrade: 10 / 50, newWeapon: 16 / 50, newPassive: 24 / 50 }
+  // Pool: 1 upgrade (W_UP) + 4 new weapons (4 × W_NEW) + 4 new passives (4 × W_PAS).
+  const total = WEIGHT_UPGRADE + 4 * WEIGHT_NEW_WEAPON + 4 * WEIGHT_NEW_PASSIVE
+  const expected = { upgrade: WEIGHT_UPGRADE / total, newWeapon: (4 * WEIGHT_NEW_WEAPON) / total, newPassive: (4 * WEIGHT_NEW_PASSIVE) / total }
   const counts = { upgrade: 0, newWeapon: 0, newPassive: 0 }
   const rng = new SeededRandom('freq')
   const N = 10000
@@ -217,3 +223,58 @@ function applyForTest(state, c) {
   }
   return { weapons, passives, isFirstLevelUp: false }
 }
+
+// --- 5 选 4：武器栏 4 格（08 K8，01 §8.2 第 2 条） ---
+
+test('with 3 weapons owned, the 2 unowned weapons are both new-weapon candidates', () => {
+  const pool = draftCandidates({
+    weapons: [{ id: 'spore_shot', level: 1 }, { id: 'raindrop', level: 1 }, { id: 'leaf_boomerang', level: 1 }],
+    passives: {},
+  })
+  const fresh = pool.filter((p) => p.card.kind === 'weapon' && p.card.isNew).map((p) => p.card.id).sort()
+  assert.deepEqual(fresh, ['dew_ring', 'umbrella_blades'])
+})
+
+test('4 weapons owned (slots full) → no new-weapon card ever, the 5th weapon is left out', () => {
+  const combos = [
+    ['spore_shot', 'umbrella_blades', 'dew_ring', 'raindrop'],
+    ['spore_shot', 'umbrella_blades', 'dew_ring', 'leaf_boomerang'],
+    ['spore_shot', 'raindrop', 'leaf_boomerang', 'dew_ring'],
+  ]
+  for (const ids of combos) {
+    const state = { weapons: ids.map((id) => ({ id, level: 1 })), passives: {}, isFirstLevelUp: true }
+    const left = ['spore_shot', 'umbrella_blades', 'dew_ring', 'raindrop', 'leaf_boomerang'].find((id) => !ids.includes(id))
+    assert.ok(!draftCandidates(state).some((p) => p.card.isNew && p.card.kind === 'weapon'))
+    const rng = new SeededRandom(`full-${left}`)
+    for (let i = 0; i < 500; i += 1) {
+      for (const c of draftOffer(state, rng)) {
+        assert.ok(!(c.kind === 'weapon' && c.isNew), `new weapon ${c.id} offered with full slots`)
+        assert.notEqual(c.id, left)
+      }
+    }
+  }
+})
+
+test('walking random builds: never more than 4 weapons, and every run leaves exactly one out', () => {
+  const ALL = ['spore_shot', 'umbrella_blades', 'dew_ring', 'raindrop', 'leaf_boomerang']
+  const leftOut = new Set()
+  for (let run = 0; run < 60; run += 1) {
+    const rng = new SeededRandom(`walk-${run}`)
+    const pickRng = new SeededRandom(`walk-pick-${run}`)
+    let state = { ...START(), isFirstLevelUp: true }
+    for (let lv = 0; lv < 60; lv += 1) {
+      const offer = draftOffer(state, rng)
+      // Prefer weapon cards so slots fill quickly; otherwise pick at random.
+      const weaponIdx = offer.findIndex((c) => c.kind === 'weapon' && c.isNew)
+      const pick = weaponIdx >= 0 ? offer[weaponIdx] : offer[pickRng.int(0, offer.length - 1)]
+      state = applyForTest(state, pick)
+      assert.ok(state.weapons.length <= 4, 'weapon slots never exceed 4')
+    }
+    assert.equal(state.weapons.length, 4)
+    const missing = ALL.filter((id) => !state.weapons.some((w) => w.id === id))
+    assert.equal(missing.length, 1)
+    leftOut.add(missing[0])
+  }
+  // Over many seeds each of the four non-starting weapons is sometimes the one left out.
+  assert.deepEqual([...leftOut].sort(), ['dew_ring', 'leaf_boomerang', 'raindrop', 'umbrella_blades'])
+})

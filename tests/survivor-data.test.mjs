@@ -70,13 +70,58 @@ test('dew_ring five levels match the 01-gdd §6.3 table', () => {
   assert.equal(w.evolved, null, 'S2 不做进化')
 })
 
-test('raindrop / leaf_boomerang stay as empty placeholders (08 §2)', () => {
-  for (const id of ['raindrop', 'leaf_boomerang']) {
-    assert.equal(WEAPONS[id].placeholder, true)
-    assert.equal(WEAPONS[id].levels.length, 0)
-  }
+test('raindrop five levels match the 01-gdd §6.4 table (08 K8)', () => {
+  // 伤害/落点数/落点半径/冷却/击退
+  const rows = [
+    [22, 2, 45, 2.2, 15],
+    [22, 3, 45, 2.2, 15],
+    [32, 3, 45, 2.2, 15],
+    [32, 3, 60, 2.2, 15],
+    [32, 5, 60, 1.8, 15],
+  ]
+  const fields = ['damage', 'count', 'radius', 'cooldown', 'knockback']
+  const w = WEAPONS.raindrop
+  assert.equal(w.levels.length, 5)
+  rows.forEach((row, i) => fields.forEach((f, j) => assert.equal(w.levels[i][f], row[j], `Lv${i + 1} ${f}`)))
+  // 01 §6.4 文字规则：400 范围选敌、阴影 0.4 秒、无敌人时 150–300 随机落点
+  assert.deepEqual([w.range, w.warnSec, w.fallbackMin, w.fallbackMax], [400, 0.4, 150, 300])
+  assert.equal(w.evolved, null, 'S2 不做进化')
+  assert.equal(w.placeholder, undefined)
+  assert.ok(Math.max(...w.levels.map((l) => l.count)) <= LIMITS.pools.raindropZones)
+})
+
+test('leaf_boomerang five levels match the 01-gdd §6.5 table (08 K8)', () => {
+  // 伤害/片数/最远距离/飞行速度/冷却/击退
+  const rows = [
+    [12, 1, 220, 360, 1.6, 25],
+    [18, 1, 220, 360, 1.6, 25],
+    [18, 2, 220, 360, 1.6, 25],
+    [18, 2, 280, 420, 1.6, 25],
+    [24, 3, 280, 420, 1.6, 30],
+  ]
+  const fields = ['damage', 'count', 'maxDistance', 'speed', 'cooldown', 'knockback']
+  const w = WEAPONS.leaf_boomerang
+  assert.equal(w.levels.length, 5)
+  rows.forEach((row, i) => fields.forEach((f, j) => assert.equal(w.levels[i][f], row[j], `Lv${i + 1} ${f}`)))
+  assert.equal(w.spreadDeg, 25, '多片 25° 扇形')
+  assert.equal(w.evolved, null, 'S2 不做进化')
+  assert.equal(w.placeholder, undefined)
+})
+
+test('all five weapons are drafted content with unique hitAt indices 0–4', () => {
+  assert.deepEqual(Object.keys(WEAPONS), ['spore_shot', 'umbrella_blades', 'dew_ring', 'raindrop', 'leaf_boomerang'])
+  for (const w of Object.values(WEAPONS)) assert.equal(w.levels.length, 5)
   const indices = Object.values(WEAPONS).map((w) => w.index).sort()
   assert.deepEqual(indices, [0, 1, 2, 3, 4])
+  assert.equal(LIMITS.pools.raindropZones, 16)
+  assert.equal(PLAYER.weaponSlots, 4, '5 选 4：武器栏 4 格不变')
+})
+
+test('new weapon cards have names and descriptions in strings (card_<id>)', () => {
+  for (const id of ['raindrop', 'leaf_boomerang']) {
+    assert.equal(STRINGS[`card_${id}`], WEAPONS[id].name)
+    assert.ok(STRINGS[`card_${id}_desc`].length > 0)
+  }
 })
 
 test('passives match 01-gdd §7: per-level effect and Lv5 total; regen/magnet absent in S2', () => {

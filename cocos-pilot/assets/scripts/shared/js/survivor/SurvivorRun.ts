@@ -28,7 +28,7 @@ import { stepEnemyBehavior, stepSeparation } from './Enemies'
 import { stepWeapons } from './Weapons'
 import { stepBossSchedule, stepBoss, syncBossView, defeatBoss } from './Boss'
 import { makeShot, makeWeaponState } from './Weapons'
-import { stepProjectiles, makeBubble, stepMistBubbles } from './Projectiles'
+import { stepProjectiles, stepZones, makeZone, makeBubble, stepMistBubbles } from './Projectiles'
 import { makeSpore, dropSpore, stepPickups } from './Pickups'
 import {
   makeProgression,
@@ -76,6 +76,7 @@ export class SurvivorRun {
     const rng = new SeededRandom(this.seed)
     this._spawnRng = rng.derive('spawn')
     this._draftRng = rng.derive('draft')
+    this.weaponRng = rng.derive('weapon') // raindrop target / fallback picks (03 §3.3)
 
     this.clock = new SimClock()
     this.state = 'playing'
@@ -109,6 +110,7 @@ export class SurvivorRun {
     this.shots = new Pool(LIMITS.pools.playerProjectiles, makeShot)
     this.mistBubbles = new Pool(LIMITS.pools.mistBubbles, makeBubble) // enemy projectiles (01 §9)
     this.spores = new Pool(LIMITS.pools.spores, makeSpore)
+    this.zones = new Pool(LIMITS.pools.raindropZones, makeZone) // raindrop shadows (01 §6.4)
 
     // Spatial grid + reusable query buffer.
     this.grid = new SpatialGrid({ capacity: LIMITS.pools.enemies })
@@ -123,7 +125,7 @@ export class SurvivorRun {
     this.progression = makeProgression()
 
     // Diagnostics (03 §3.1, §10).
-    this.diag = { dropped: { enemies: 0, shots: 0, bubbles: 0 }, droppedTime: 0 }
+    this.diag = { dropped: { enemies: 0, shots: 0, bubbles: 0, zones: 0 }, droppedTime: 0 }
 
     // Event queue (one-shot events drained each frame).
     this.events = []
@@ -207,6 +209,7 @@ export class SurvivorRun {
     stepSeparation(this)       // 6 separation
     stepWeapons(this, dt)      // 7 weapons
     stepProjectiles(this, dt)  // 8 projectiles
+    stepZones(this)            // 8 raindrop zones
     this._stepHostile(dt)      // 9 hostile (mist bubbles, contact damage)
     this._stepDeaths()         // 10 deaths
     this._stepPickups(dt)      // 11 pickups → maybe levelup
@@ -222,6 +225,7 @@ export class SurvivorRun {
     this.grid.build(this.enemies.active, this.enemies.count, this.player)
     stepWeapons(this, dt)
     stepProjectiles(this, dt)
+    stepZones(this)
     const cfg = WAVES.extraction
     if (this.state === 'cleansing') {
       this._phaseSteps -= 1
@@ -266,6 +270,7 @@ export class SurvivorRun {
     }
     this.mistBubbles.releaseAll()
     this.shots.releaseAll()
+    this.zones.releaseAll()
   }
 
   // Cleansing over: open the sunlight extraction point 250 away in a random direction.

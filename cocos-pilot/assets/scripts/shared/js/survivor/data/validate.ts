@@ -5,9 +5,8 @@
 // Run in tests and once in the SurvivorRun constructor; a non-empty result is fatal
 // (03 §4: 表现层显示「游戏数据异常」页面, 不带病运行).
 //
-// Validates player, weapons (spore_shot / umbrella_blades / dew_ring; raindrop and
-// leaf_boomerang only as `placeholder: true` stubs, 08 §2), passives, enemies, waves,
-// limits.
+// Validates player, weapons (all five, 01 §6.1–§6.5; a `placeholder: true` weapon must
+// have empty levels and is excluded from drafts), passives, enemies, waves, limits.
 
 import { PLAYER } from './player'
 import { WEAPONS } from './weapons'
@@ -58,9 +57,9 @@ export function validate() {
   if (!isPositiveInt(PLAYER.passiveSlots)) push('player.passiveSlots', '必须为正整数')
 
   // --- weapons ---
-  // Required per-level fields by weapon id (01 §6.1–§6.3). Every non-placeholder weapon
+  // Required per-level fields by weapon id (01 §6.1–§6.5). Every non-placeholder weapon
   // must be listed here; `positive` fields > 0, `ints` additionally integers,
-  // `ratios` in (0, 1).
+  // `ratios` in (0, 1), `top` = weapon-level (not per-level) positive fields.
   const weaponSchemas = {
     spore_shot: {
       positive: ['damage', 'cooldown', 'count', 'pierce', 'speed', 'knockback', 'life'],
@@ -79,6 +78,20 @@ export function validate() {
       ints: [],
       ratios: ['slow'],
       evolvedRequired: false,
+    },
+    raindrop: {
+      positive: ['damage', 'count', 'radius', 'cooldown', 'knockback'],
+      ints: ['count'],
+      ratios: [],
+      evolvedRequired: false,
+      top: ['range', 'warnSec', 'fallbackMin', 'fallbackMax'],
+    },
+    leaf_boomerang: {
+      positive: ['damage', 'count', 'maxDistance', 'speed', 'cooldown', 'knockback'],
+      ints: ['count'],
+      ratios: [],
+      evolvedRequired: false,
+      top: ['spreadDeg', 'leafRadius', 'catchRadius', 'maxLife'],
     },
   }
   const indices = new Set()
@@ -123,6 +136,25 @@ export function validate() {
     weapon.levels.forEach((lvl, i) => checkLevel(lvl, `weapons.${id}.levels[${i}]`))
     if (id === 'umbrella_blades' && !isPositiveNumber(weapon.bladeRadius)) {
       push(`weapons.${id}.bladeRadius`, '必须为有限正数')
+    }
+    for (const f of schema.top || []) {
+      if (!isPositiveNumber(weapon[f])) push(`weapons.${id}.${f}`, '必须为有限正数')
+    }
+    if (id === 'raindrop') {
+      if (!(weapon.fallbackMin < weapon.fallbackMax)) push(`weapons.${id}.fallbackMin`, '必须小于 fallbackMax')
+      const zoneCap = LIMITS.pools.raindropZones
+      for (let i = 0; i < weapon.levels.length; i += 1) {
+        if (weapon.levels[i].count > zoneCap) push(`weapons.${id}.levels[${i}].count`, `落点数不得超过 limits.pools.raindropZones (${zoneCap})`)
+      }
+    }
+    if (id === 'leaf_boomerang') {
+      // 无限穿透只能靠回收结束：安全寿命必须够飞一个来回。
+      for (let i = 0; i < weapon.levels.length; i += 1) {
+        const lvl = weapon.levels[i]
+        if (isPositiveNumber(lvl.speed) && !(weapon.maxLife > (2 * lvl.maxDistance) / lvl.speed)) {
+          push(`weapons.${id}.maxLife`, `必须大于 Lv${i + 1} 往返时间`)
+        }
+      }
     }
     // Evolution (01 §6: 5 级 + 1 进化). S2 关闭进化（08 §2），新武器可为 null。
     if (weapon.evolved === null && !schema.evolvedRequired) {

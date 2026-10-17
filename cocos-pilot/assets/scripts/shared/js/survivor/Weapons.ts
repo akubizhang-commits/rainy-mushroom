@@ -5,7 +5,8 @@
 //
 // Every weapon implements the same interface `{ id, index, tick(world, state, dt) }`
 // and reads all numbers from data/weapons.js — no magic numbers in code. S2 ships
-// spore_shot, umbrella_blades and dew_ring. spore_shot rules (01 §6.1, 03 §3.8):
+// all five weapons (raindrop / leaf_boomerang per 08 K8/L9, see their objects below).
+// spore_shot rules (01 §6.1, 03 §3.8):
 //   - lock the nearest living enemy (linear scan of enemies.active, ≤202);
 //   - fire `count` projectiles in a fan centred on the aim direction, `spreadDeg` apart;
 //   - each projectile pierces `pierce` enemies, lives `life` seconds;
@@ -36,6 +37,12 @@ export function makeShot() {
     life: 0,
     pierceLeft: 1,
     hitUids: [],
+    // leaf_boomerang only (kind 'leaf'): unlimited pierce, out → back legs.
+    kind: 'spore',   // 'spore' | 'leaf'
+    speed: 0,
+    travelLeft: 0,   // out leg: distance still to fly before turning back
+    returning: false,
+    catchR: 0,       // back leg: recycled once within this distance of the player
   }
 }
 
@@ -50,6 +57,28 @@ export function resetShot(shot, { x, y, vx, vy, damage, knockback, life, pierce 
   shot.life = life
   shot.pierceLeft = pierce
   shot.hitUids.length = 0
+  shot.kind = 'spore'
+  shot.speed = 0
+  shot.travelLeft = 0
+  shot.returning = false
+  shot.catchR = 0
+}
+
+// Leaf (boomerang) shot reset: flies `distance` along (dirX, dirY), then homes back.
+export function resetLeaf(shot, { x, y, dirX, dirY, speed, distance, damage, knockback, r, catchR, life }) {
+  resetShot(shot, { x, y, vx: dirX * speed, vy: dirY * speed, damage, knockback, life, pierce: 0 })
+  shot.r = r
+  shot.kind = 'leaf'
+  shot.speed = speed
+  shot.travelLeft = distance
+  shot.catchR = catchR
+}
+
+// Raindrop zone pool object (03 §3.5 zones 池：雨滴落点 阴影 → 伤害). The landing point is
+// locked when the shadow appears (01 §6.4 落点不追踪); it resolves once world.time
+// reaches `at`.
+export function makeZone() {
+  return { slot: 0, uid: 0, kind: 'raindrop', x: 0, y: 0, r: 0, damage: 0, knockback: 0, bornAt: 0, at: 0 }
 }
 
 // Find the nearest living enemy to (px, py); linear scan (03 §3.6). Returns the enemy
@@ -152,7 +181,7 @@ export function makeWeaponState(id, level = 1) {
 
 // Exact circle test against grid candidates + the large list. Writes matching enemies
 // into world.hitBuf (reused array) and returns the count. Dead/inactive are skipped.
-function enemiesInCircle(world, x, y, r) {
+export function enemiesInCircle(world, x, y, r) {
   const enemies = world.enemies
   const grid = world.grid
   const buf = world.queryBuf
@@ -257,11 +286,134 @@ export const dewRing = {
   },
 }
 
+// raindrop weapon object (01 §6.4). Picks random living enemies within `range` of the
+// player (several drops in one cast prefer different enemies; repeats only once every
+// candidate is used), else lands at a random point 150–300 from the player. Each drop
+// becomes a zone (shadow) locked at that point; Projectiles.stepZones resolves it after
+// `warnSec`. Random numbers come only from world.weaponRng (`${seed}:weapon`, 03 §3.3).
+export const raindrop = {
+  id: 'raindrop',
+  index: WEAPONS.raindrop.index,
+  tick(world, state, dt) {
+    if (state.cooldown > 0) {
+      state.cooldown -= dt
+      if (state.cooldown > 0) return
+    }
+    const def = WEAPONS.raindrop
+    const lvl = def.levels[clampLevel('raindrop', state.level)]
+    const rng = world.weaponRng
+    const px = world.player.x
+    const py = world.player.y
+    // Candidates within range (linear scan, 03 §3.6), into the reusable hit buffer.
+    const enemies = world.enemies
+    const cand = world.hitBuf || (world.hitBuf = new Array(enemies.capacity))
+    const range2 = def.range * def.range
+    let n = 0
+    for (let i = 0; i < enemies.count; i += 1) {
+      const e = enemies.active[i]
+      if (e.hp <= 0) continue
+      const dx = e.x - px
+      const dy = e.y - py
+      if (dx * dx + dy * dy <= range2) cand[n++] = e
+    }
+    const radius = lvl.radius * world.stats.areaMul
+    const damage = actualDamage(lvl.damage, world.stats.might)
+    let left = 0 // candidates not yet picked this cast live in cand[0..left)
+    let dropped = 0
+    for (let i = 0; i < lvl.count; i += 1) {
+      let x
+      let y
+      if (n > 0) {
+        if (left === 0) left = n // every candidate used → allow repeats
+        const j = rng.int(0, left - 1)
+        const e = cand[j]
+        // Move the pick out of the unpicked range (partial Fisher–Yates).
+        cand[j] = cand[left - 1]
+        cand[left - 1] = e
+        left -= 1
+        x = e.x
+        y = e.y
+      } else {
+        const a = rng.next() * Math.PI * 2
+        const d = rng.range(def.fallbackMin, def.fallbackMax)
+        x = px + Math.cos(a) * d
+        y = py + Math.sin(a) * d
+      }
+      const z = world.zones.acquire()
+      if (!z) {
+        dropped += 1
+        continue
+      }
+      z.kind = 'raindrop'
+      z.x = x
+      z.y = y
+      z.r = radius
+      z.damage = damage
+      z.knockback = lvl.knockback
+      z.bornAt = world.time
+      z.at = world.time + def.warnSec
+      world.events.push({ type: 'raindropWarn', x, y, r: radius })
+    }
+    if (dropped > 0 && world.diag) world.diag.dropped.zones = (world.diag.dropped.zones || 0) + dropped
+    state.cooldown += actualCooldown(lvl.cooldown, world.stats.cooldownMul)
+    world.events.push({ type: 'weaponFired', id: 'raindrop' })
+  },
+}
+
+// leaf_boomerang weapon object (01 §6.5): throws `count` leaves along the player's
+// facing, `spreadDeg` apart; max distance × area. Flight/return/hit rules live in
+// Projectiles.stepProjectiles (kind 'leaf'). Pool full → fewer leaves (diag counted).
+export const leafBoomerang = {
+  id: 'leaf_boomerang',
+  index: WEAPONS.leaf_boomerang.index,
+  tick(world, state, dt) {
+    if (state.cooldown > 0) {
+      state.cooldown -= dt
+      if (state.cooldown > 0) return
+    }
+    const def = WEAPONS.leaf_boomerang
+    const lvl = def.levels[clampLevel('leaf_boomerang', state.level)]
+    const p = world.player
+    const fx = Number.isFinite(p.dirX) ? p.dirX : 0
+    const fy = Number.isFinite(p.dirY) ? p.dirY : -1
+    const base = Math.atan2(fy, fx)
+    const angles = fanAngles(base, lvl.count, def.spreadDeg * DEG, world.weaponAngleBuf)
+    const damage = actualDamage(lvl.damage, world.stats.might)
+    const distance = lvl.maxDistance * world.stats.areaMul
+    let fired = 0
+    for (let i = 0; i < lvl.count; i += 1) {
+      const shot = world.shots.acquire()
+      if (!shot) {
+        if (world.diag) world.diag.dropped.shots = (world.diag.dropped.shots || 0) + (lvl.count - i)
+        break
+      }
+      resetLeaf(shot, {
+        x: p.x,
+        y: p.y,
+        dirX: Math.cos(angles[i]),
+        dirY: Math.sin(angles[i]),
+        speed: lvl.speed,
+        distance,
+        damage,
+        knockback: lvl.knockback,
+        r: def.leafRadius,
+        catchR: def.catchRadius,
+        life: def.maxLife,
+      })
+      fired += 1
+    }
+    state.cooldown += actualCooldown(lvl.cooldown, world.stats.cooldownMul)
+    if (fired > 0) world.events.push({ type: 'weaponFired', id: 'leaf_boomerang' })
+  },
+}
+
 // Registry of weapon objects by id.
 export const WEAPON_OBJECTS = Object.freeze({
   spore_shot: sporeShot,
   umbrella_blades: umbrellaBlades,
   dew_ring: dewRing,
+  raindrop,
+  leaf_boomerang: leafBoomerang,
 })
 
 // Advance all equipped weapons for one step (03 §3.4 step 7).

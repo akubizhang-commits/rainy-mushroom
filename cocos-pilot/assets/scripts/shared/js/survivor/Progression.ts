@@ -10,7 +10,8 @@
 //   candidate pool = upgrades of owned, non-maxed weapons/passives (weight 10) + every
 //   unowned weapon while weapon slots remain (8) + every unowned passive while passive
 //   slots remain (6). Only weapons with non-empty `levels` and passives present in
-//   data/passives.js qualify; no evolution cards in S2. Weighted draw without
+//   data/passives.js qualify (S2: all five weapons, 08 K8 — with 4 weapon slots each run
+//   leaves one out; once 4 are owned no new-weapon card appears); no evolution cards in S2. Weighted draw without
 //   replacement; short pools are padded with fallback cards (一捧露水 / 闪亮孢子, may
 //   repeat). First level-up: at least one new-weapon card (首升保底). Pure, so tests
 //   can enumerate it.

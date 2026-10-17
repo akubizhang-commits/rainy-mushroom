@@ -51,6 +51,10 @@ function stateHash(run) {
     const s = run.shots.active[i]
     parts.push(`s${s.uid}:${s.x.toFixed(6)}:${s.y.toFixed(6)}:${s.pierceLeft}`)
   }
+  for (let i = 0; i < run.zones.count; i += 1) {
+    const z = run.zones.active[i]
+    parts.push(`z${z.uid}:${z.x.toFixed(6)}:${z.y.toFixed(6)}:${z.r.toFixed(6)}`)
+  }
   for (let i = 0; i < run.spores.count; i += 1) {
     const sp = run.spores.active[i]
     parts.push(`sp${sp.uid}:${sp.x.toFixed(6)}:${sp.y.toFixed(6)}:${sp.xp}`)
@@ -91,6 +95,32 @@ test('same seed + same inputs → identical summary and per-second state hashes'
   assert.deepEqual(a.hashes, b.hashes, 'per-second state hashes diverge')
   assert.deepEqual(a.summary, b.summary, 'summaries diverge')
   assert.ok(a.hashes.length > 0, 'something actually ran')
+})
+
+test('raindrop + leaf_boomerang runs are reproducible (weapon sub-stream, 03 §3.3)', () => {
+  const play = (seed) => {
+    const run = new SurvivorRun({ seed, viewport: { width: 720, height: 1560 } })
+    run._applyCard({ kind: 'weapon', id: 'raindrop', level: 1, isNew: true })
+    run._applyCard({ kind: 'weapon', id: 'leaf_boomerang', level: 1, isNew: true })
+    const hashes = []
+    let zonesSeen = 0
+    let leavesSeen = 0
+    for (let i = 0; i < 30 * 60; i += 1) {
+      run.setInput(Math.cos(i / 90), Math.sin(i / 90))
+      if (run.state === 'levelup') run.choose(0)
+      if (run.state === 'playing') run.step()
+      zonesSeen = Math.max(zonesSeen, run.zones.count)
+      for (let k = 0; k < run.shots.count; k += 1) if (run.shots.active[k].kind === 'leaf') leavesSeen += 1
+      if ((i + 1) % 60 === 0) hashes.push(stateHash(run))
+      if (run.state === 'won' || run.state === 'lost') break
+    }
+    return { hashes, summary: run.summary(), zonesSeen, leavesSeen }
+  }
+  const a = play('new-weapons')
+  const b = play('new-weapons')
+  assert.ok(a.zonesSeen > 0 && a.leavesSeen > 0, 'both new weapons actually fired')
+  assert.deepEqual(a.hashes, b.hashes)
+  assert.deepEqual(a.summary, b.summary)
 })
 
 test('different seeds produce different trajectories', () => {

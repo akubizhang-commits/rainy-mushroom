@@ -8,10 +8,15 @@ import { PLAYER } from '../js/survivor/data/player.js'
 import { WEAPONS } from '../js/survivor/data/weapons.js'
 import { makeEnemy, resetEnemy } from '../js/survivor/Enemies.js'
 import { stepEnemyBehavior } from '../js/survivor/Enemies.js'
+import { SeededRandom } from '../js/survivor/SurvivorRandom.js'
+import { LIMITS } from '../js/survivor/data/limits.js'
 import {
   sporeShot,
   umbrellaBlades,
   dewRing,
+  raindrop,
+  leafBoomerang,
+  makeZone,
   makeWeaponState,
   stepWeapons,
   nearestEnemy,
@@ -19,19 +24,22 @@ import {
   makeShot,
   resetShot,
 } from '../js/survivor/Weapons.js'
-import { stepProjectiles } from '../js/survivor/Projectiles.js'
+import { stepProjectiles, stepZones } from '../js/survivor/Projectiles.js'
 
 const DT = 1 / 60
 
 // Minimal world fixture holding only what the weapon/projectile systems read.
-function makeWorld() {
+function makeWorld({ shotCap = 32, zoneCap = LIMITS.pools.raindropZones, seed = 'weapons' } = {}) {
   const enemies = new Pool(32, makeEnemy)
-  const shots = new Pool(32, makeShot)
+  const shots = new Pool(shotCap, makeShot)
   const world = {
     time: 0,
-    player: { x: 0, y: 0, r: PLAYER.radius },
+    player: { x: 0, y: 0, r: PLAYER.radius, dirX: 0, dirY: -1 },
     enemies,
     shots,
+    zones: new Pool(zoneCap, makeZone),
+    weaponRng: new SeededRandom(`${seed}:weapon`),
+    diag: { dropped: { enemies: 0, shots: 0, bubbles: 0, zones: 0 } },
     grid: new SpatialGrid({ capacity: 32 }),
     queryBuf: new Int32Array(32),
     weaponAngleBuf: new Float64Array(16),
@@ -347,4 +355,247 @@ test('all equipped weapons act in the same step (multi-weapon)', () => {
   assert.ok(onBlade.hp < 1000, 'umbrella hit')
   assert.equal(1000 - inRing.hp, WEAPONS.dew_ring.levels[0].damage, 'dew ring pulse')
   assert.equal(inRing.slow, WEAPONS.dew_ring.levels[0].slow)
+})
+
+// --- raindrop (01 §6.4) ---
+
+// One full system step for the area/projectile weapons: grid → zones/projectiles → time.
+function stepWorld(world) {
+  rebuild(world)
+  stepProjectiles(world, DT)
+  stepZones(world)
+  world.time += DT
+}
+
+test('raindrop: each level drops `count` zones of `radius` and starts its cooldown', () => {
+  for (let level = 1; level <= 5; level += 1) {
+    const lvl = WEAPONS.raindrop.levels[level - 1]
+    const world = makeWorld()
+    for (let i = 0; i < 8; i += 1) spawnEnemy(world, 40 * i - 140, 100)
+    const state = makeWeaponState('raindrop', level)
+    raindrop.tick(world, state, DT)
+    assert.equal(world.zones.count, lvl.count, `Lv${level} count`)
+    for (const z of world.zones.active.slice(0, world.zones.count)) {
+      assert.equal(z.r, lvl.radius)
+      assert.equal(z.damage, lvl.damage)
+      assert.ok(Math.abs(z.at - WEAPONS.raindrop.warnSec) < 1e-12)
+    }
+    assert.ok(Math.abs(state.cooldown - lvl.cooldown) < 1e-12, `Lv${level} cooldown`)
+    assert.equal(world.events.filter((e) => e.type === 'raindropWarn').length, lvl.count)
+    // Within the cooldown nothing new drops.
+    raindrop.tick(world, state, DT)
+    assert.equal(world.zones.count, lvl.count)
+  }
+})
+
+test('raindrop: one cast targets different enemies first (同次落点不重复选敌)', () => {
+  for (let seed = 0; seed < 50; seed += 1) {
+    const world = makeWorld({ seed: `distinct-${seed}` })
+    for (let i = 0; i < 6; i += 1) spawnEnemy(world, 50 * i - 125, -120)
+    raindrop.tick(world, makeWeaponState('raindrop', 5), DT)
+    const pts = world.zones.active.slice(0, world.zones.count).map((z) => `${z.x},${z.y}`)
+    assert.equal(new Set(pts).size, 5, `seed ${seed}`)
+  }
+  // Fewer enemies than drops: every enemy is used before any repeats (5 drops, 2 enemies → 3/2 split).
+  for (let seed = 0; seed < 30; seed += 1) {
+    const world = makeWorld({ seed: `repeat-${seed}` })
+    const a = spawnEnemy(world, 100, 0)
+    const b = spawnEnemy(world, -100, 0)
+    raindrop.tick(world, makeWeaponState('raindrop', 5), DT)
+    const zs = world.zones.active.slice(0, world.zones.count)
+    const onA = zs.filter((z) => z.x === a.x && z.y === a.y).length
+    const onB = zs.filter((z) => z.x === b.x && z.y === b.y).length
+    assert.equal(onA + onB, 5)
+    assert.ok(onA >= 2 && onB >= 2, `seed ${seed}: ${onA}/${onB}`)
+    // First two drops of the cast hit two different enemies.
+    assert.notEqual(zs[0].x, zs[1].x)
+  }
+})
+
+test('raindrop: only enemies within 400 are targets; none in range → lands 150–300 from the player', () => {
+  for (let seed = 0; seed < 40; seed += 1) {
+    const world = makeWorld({ seed: `fallback-${seed}` })
+    world.player.x = 30
+    world.player.y = -50
+    const far = spawnEnemy(world, 30 + WEAPONS.raindrop.range + 20, -50)
+    raindrop.tick(world, makeWeaponState('raindrop', 5), DT)
+    assert.equal(world.zones.count, 5)
+    for (const z of world.zones.active.slice(0, 5)) {
+      const d = Math.hypot(z.x - 30, z.y + 50)
+      assert.ok(d >= WEAPONS.raindrop.fallbackMin - 1e-9 && d <= WEAPONS.raindrop.fallbackMax + 1e-9, `d=${d}`)
+      assert.ok(!(z.x === far.x && z.y === far.y))
+    }
+  }
+})
+
+test('raindrop: damage lands only after the 0.4 s shadow, at the locked point (落点不追踪)', () => {
+  const world = makeWorld()
+  const lvl = WEAPONS.raindrop.levels[0]
+  const stay = spawnEnemy(world, 120, 0, 1000)
+  const leaver = spawnEnemy(world, -120, 0, 1000)
+  raindrop.tick(world, makeWeaponState('raindrop', 1), DT)
+  assert.equal(world.zones.count, 2)
+  // The leaver walks away right after the shadow appears; the point does not follow.
+  leaver.x = -120 - lvl.radius - leaver.r - 5
+  const warnSteps = Math.round(WEAPONS.raindrop.warnSec / DT)
+  for (let i = 0; i < warnSteps; i += 1) {
+    stepWorld(world)
+    assert.equal(stay.hp, 1000, `no damage at step ${i} (t=${world.time.toFixed(3)})`)
+  }
+  assert.equal(world.zones.count, 2, 'both shadows still pending just before 0.4 s')
+  stepWorld(world) // world.time == 0.4 → resolve
+  assert.equal(world.zones.count, 0, 'zones recycled after resolving')
+  assert.equal(1000 - stay.hp, lvl.damage)
+  assert.equal(leaver.hp, 1000, 'moved out of the locked point → untouched')
+  // Knockback along 角色→敌人.
+  assert.ok(stay.kbX > 0 && Math.abs(stay.kbY) < 1e-9)
+})
+
+test('raindrop: hits every enemy inside the landing radius once; area/might passives apply', () => {
+  const world = withStats(makeWorld(), { area: 5, might: 5 })
+  const lvl = WEAPONS.raindrop.levels[3] // radius 60
+  const target = spawnEnemy(world, 0, -200, 1000)
+  const near = spawnEnemy(world, 0, -200 + lvl.radius * 1.5 - 5, 1000) // inside 60×1.5 (+ own r)
+  // Both enemies stand inside each other's landing radius, so every drop hits both.
+  raindrop.tick(world, makeWeaponState('raindrop', 4), DT)
+  const zs = world.zones.active.slice(0, world.zones.count)
+  for (const z of zs) assert.ok(Math.abs(z.r - lvl.radius * 1.5) < 1e-9)
+  for (let i = 0; i <= Math.round(WEAPONS.raindrop.warnSec / DT); i += 1) stepWorld(world)
+  const dmg = Math.round(lvl.damage * 1.5)
+  // 3 drops on 2 enemies standing within each other's landing radius → each drop hits both.
+  assert.equal(1000 - target.hp, dmg * 3)
+  assert.equal(1000 - near.hp, dmg * 3)
+})
+
+test('raindrop: zones pool cap limits drops (少落) and counts them in diag', () => {
+  const world = makeWorld({ zoneCap: 4 })
+  for (let i = 0; i < 8; i += 1) spawnEnemy(world, 30 * i, 80)
+  raindrop.tick(world, makeWeaponState('raindrop', 5), DT)
+  assert.equal(world.zones.count, 4)
+  assert.equal(world.diag.dropped.zones, 1)
+  // The real run sizes the pool from limits (16).
+  assert.equal(LIMITS.pools.raindropZones, 16)
+})
+
+test('raindrop: same weapon stream → same landing points; different stream differs', () => {
+  const land = (seed) => {
+    const world = makeWorld({ seed })
+    for (let i = 0; i < 10; i += 1) spawnEnemy(world, 30 * i - 150, 60)
+    const state = makeWeaponState('raindrop', 5)
+    const out = []
+    for (let k = 0; k < 4; k += 1) {
+      raindrop.tick(world, state, DT)
+      out.push(...world.zones.active.slice(0, world.zones.count).map((z) => [z.x, z.y]))
+      world.zones.releaseAll()
+      state.cooldown = 0
+    }
+    return out
+  }
+  assert.deepEqual(land('same'), land('same'))
+  assert.notDeepEqual(land('same'), land('other'))
+})
+
+// --- leaf_boomerang (01 §6.5) ---
+
+test('leaf_boomerang: leaf count and 25° fan centred on the facing per level; cooldown per level', () => {
+  for (let level = 1; level <= 5; level += 1) {
+    const lvl = WEAPONS.leaf_boomerang.levels[level - 1]
+    const world = makeWorld()
+    world.player.dirX = 1
+    world.player.dirY = 0
+    const state = makeWeaponState('leaf_boomerang', level)
+    leafBoomerang.tick(world, state, DT)
+    assert.equal(world.shots.count, lvl.count, `Lv${level} count`)
+    const angles = world.shots.active.slice(0, lvl.count).map((s) => Math.atan2(s.vy, s.vx)).sort((a, b) => a - b)
+    const mean = angles.reduce((a, b) => a + b, 0) / angles.length
+    assert.ok(Math.abs(mean) < 1e-9, 'centred on facing')
+    for (let i = 1; i < angles.length; i += 1) assert.ok(Math.abs(angles[i] - angles[i - 1] - (25 * Math.PI) / 180) < 1e-9)
+    for (const s of world.shots.active.slice(0, lvl.count)) {
+      assert.equal(s.kind, 'leaf')
+      assert.ok(Math.abs(Math.hypot(s.vx, s.vy) - lvl.speed) < 1e-9)
+    }
+    assert.ok(Math.abs(state.cooldown - lvl.cooldown) < 1e-12)
+    leafBoomerang.tick(world, state, DT)
+    assert.equal(world.shots.count, lvl.count, 'no re-throw within cooldown')
+  }
+})
+
+test('leaf_boomerang: flies out to max distance (× area), turns back and is recycled at the player', () => {
+  for (const [passives, mul] of [[null, 1], [{ area: 5 }, 1.5]]) {
+    for (const level of [1, 4]) {
+      const lvl = WEAPONS.leaf_boomerang.levels[level - 1]
+      const world = withStats(makeWorld(), passives)
+      leafBoomerang.tick(world, makeWeaponState('leaf_boomerang', level), DT)
+      const leaf = world.shots.active[0]
+      let maxD = 0
+      let steps = 0
+      while (world.shots.count > 0 && steps < 600) {
+        stepWorld(world)
+        if (world.shots.isActive(leaf)) maxD = Math.max(maxD, Math.hypot(leaf.x, leaf.y))
+        steps += 1
+      }
+      assert.equal(world.shots.count, 0, 'recycled')
+      const far = lvl.maxDistance * mul
+      assert.ok(Math.abs(maxD - far) <= lvl.speed * DT + 1e-9, `Lv${level} ×${mul}: reached ${maxD} vs ${far}`)
+      // Round trip ≈ 2 × distance / speed, recycled before the safety lifetime.
+      assert.ok(steps * DT < WEAPONS.leaf_boomerang.maxLife)
+      assert.ok(steps * DT >= (2 * far - WEAPONS.leaf_boomerang.catchRadius) / lvl.speed - 2 * DT)
+    }
+  }
+})
+
+test('leaf_boomerang: unlimited pierce, every enemy hit once going out and once coming back', () => {
+  const world = makeWorld()
+  const lvl = WEAPONS.leaf_boomerang.levels[0]
+  const line = [40, 80, 120, 160, 200].map((d) => spawnEnemy(world, 0, -d, 1000))
+  leafBoomerang.tick(world, makeWeaponState('leaf_boomerang', 1), DT)
+  let outHits = null
+  const leaf = world.shots.active[0]
+  for (let i = 0; i < 600 && world.shots.count > 0; i += 1) {
+    stepWorld(world)
+    if (outHits === null && leaf.returning) outHits = line.map((e) => 1000 - e.hp)
+  }
+  assert.equal(world.shots.count, 0)
+  // By the turn every enemy took exactly one hit (去程), at the end exactly two (回程).
+  assert.deepEqual(outHits, line.map(() => lvl.damage))
+  for (const e of line) assert.equal(1000 - e.hp, 2 * lvl.damage)
+  // Knockback is 角色→敌人 (outwards, -y) on both legs.
+  for (const e of line) assert.ok(e.kbY < 0 && Math.abs(e.kbX) < 1e-9)
+})
+
+test('leaf_boomerang: the return leg homes on the player current position', () => {
+  const world = makeWorld()
+  leafBoomerang.tick(world, makeWeaponState('leaf_boomerang', 1), DT)
+  const leaf = world.shots.active[0]
+  let last = null
+  for (let i = 0; i < 600 && world.shots.isActive(leaf); i += 1) {
+    if (leaf.returning) {
+      // The player walks sideways while the leaf comes back.
+      world.player.x += 120 * DT
+    }
+    last = { x: leaf.x, y: leaf.y, px: world.player.x, py: world.player.y }
+    stepWorld(world)
+  }
+  assert.equal(world.shots.count, 0)
+  assert.ok(world.player.x > 50, 'player actually moved')
+  const d = Math.hypot(last.x - last.px, last.y - last.py)
+  assert.ok(d <= WEAPONS.leaf_boomerang.catchRadius + WEAPONS.leaf_boomerang.levels[0].speed * DT + 1e-9, `caught at ${d}`)
+})
+
+test('leaf_boomerang: shares the 150-shot player projectile pool (fewer leaves when full)', () => {
+  const world = makeWorld({ shotCap: 2 })
+  leafBoomerang.tick(world, makeWeaponState('leaf_boomerang', 5), DT)
+  assert.equal(world.shots.count, 2)
+  assert.equal(world.diag.dropped.shots, 1)
+  assert.equal(LIMITS.pools.playerProjectiles, 150)
+})
+
+test('all five weapons run together through stepWeapons', () => {
+  const world = makeWorld()
+  world.weapons = ['spore_shot', 'umbrella_blades', 'dew_ring', 'raindrop', 'leaf_boomerang'].map((id) => makeWeaponState(id, 1))
+  spawnEnemy(world, 0, -150, 1000)
+  rebuild(world)
+  stepWeapons(world, DT)
+  assert.equal(world.shots.count, 2, 'spore + leaf')
+  assert.equal(world.zones.count, WEAPONS.raindrop.levels[0].count)
 })
