@@ -23,3 +23,4 @@
 - `cocos-pilot/assets/survivor/`：survivor 分包（占位图集），`npm run survivor:art` 重新生成。
 - `js/services/`：广告与隐私服务；`assets/cases/`、`design/`：保留的资料与美术源稿，不进运行包。
 - `docs/`：`docs/survivor/` 是当前依据，其余为历史记录。
+# local-lead-workbenc
