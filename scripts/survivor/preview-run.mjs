@@ -90,7 +90,7 @@ for (const r of rows) {
 const s = run.summary()
 console.log('\n--- 结算 ---')
 console.log(`结果：${s.outcome === 'won' ? '✅ 撑过 180 秒，胜利' : '❌ 阵亡'}` + (s.outcome === 'lost' ? `（被 ${s.killer || '未知'} 击倒）` : ''))
-console.log(`存活：${s.survivalSec.toFixed(1)}s   等级：Lv${s.level}   武器：孢子弹 Lv${s.weapons[0].level}   净化总数：${s.purified}`)
+console.log(`存活：${s.survivalSec.toFixed(1)}s   等级：Lv${s.level}   武器：${s.weapons.map((w) => `${w.id} Lv${w.level}`).join(' / ')}   被动：${s.passives.map((p) => `${p.id} Lv${p.level}`).join(' / ') || '无'}   净化总数：${s.purified}`)
 console.log(`升级次数：${picks.length}`)
 if (picks.length) {
   console.log('升级选牌：' + picks.map((p) => `${p.at}s→${p.card}`).join('  '))

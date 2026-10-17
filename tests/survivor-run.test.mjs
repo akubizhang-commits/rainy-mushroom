@@ -120,17 +120,74 @@ test('multiple queued level-ups pop one after another', () => {
   assert.equal(run.state, 'playing')
 })
 
-test('choosing the weapon upgrade raises the weapon level', () => {
-  const run = newRun()
+function levelUpOnce(run) {
   const spore = run.spores.acquire()
   spore.x = run.player.x
   spore.y = run.player.y
   spore.xp = run.progression.needed
   run.step()
-  const idx = run.offer.findIndex((c) => c.kind === 'weapon')
-  assert.ok(idx >= 0, 'first level-up guarantees the weapon card')
+  assert.equal(run.state, 'levelup')
+}
+
+test('first level-up offers a new weapon; picking it adds a second weapon slot', () => {
+  const run = newRun()
+  levelUpOnce(run)
+  const idx = run.offer.findIndex((c) => c.kind === 'weapon' && c.isNew)
+  assert.ok(idx >= 0, 'first level-up guarantees a new-weapon card')
+  const id = run.offer[idx].id
   run.choose(idx)
+  assert.equal(run.weapons.length, 2)
+  assert.equal(run.weapons[0].id, 'spore_shot')
+  assert.equal(run.weapons[1].id, id)
+  assert.equal(run.weapons[1].level, 1)
+  assert.deepEqual(run.summary().weapons, [{ id: 'spore_shot', level: 1 }, { id, level: 1 }])
+})
+
+test('weapon upgrade / passive cards update the right slot and recompute stats', () => {
+  const run = newRun()
+  run._applyCard({ kind: 'weapon', id: 'spore_shot', level: 2, isNew: false })
   assert.equal(run.weapons[0].level, 2)
+  run._applyCard({ kind: 'weapon', id: 'dew_ring', level: 1, isNew: true })
+  run._applyCard({ kind: 'weapon', id: 'dew_ring', level: 2, isNew: false })
+  assert.deepEqual(run.weapons.map((w) => [w.id, w.level]), [['spore_shot', 2], ['dew_ring', 2]])
+  run._applyCard({ kind: 'passive', id: 'might', level: 1, isNew: true })
+  run._applyCard({ kind: 'passive', id: 'might', level: 2, isNew: false })
+  run._applyCard({ kind: 'passive', id: 'area', level: 1, isNew: true })
+  assert.ok(Math.abs(run.stats.might - 1.2) < 1e-9)
+  assert.ok(Math.abs(run.stats.areaMul - 1.1) < 1e-9)
+  assert.deepEqual(run.summary().passives, [{ id: 'might', level: 2 }, { id: 'area', level: 1 }])
+  // Placeholder weapons are never equipped even if a card slips through.
+  run._applyCard({ kind: 'weapon', id: 'raindrop', level: 1, isNew: true })
+  assert.equal(run.weapons.length, 2)
+})
+
+test('weapon slots cap at 4 and passive slots cap at 4 (01 §5)', () => {
+  const run = newRun()
+  for (const id of ['umbrella_blades', 'dew_ring']) run._applyCard({ kind: 'weapon', id, level: 1, isNew: true })
+  assert.equal(run.weapons.length, 3)
+  for (const id of ['might', 'cooldown', 'area', 'speed']) run._applyCard({ kind: 'passive', id, level: 1, isNew: true })
+  assert.equal(run.summary().passives.length, 4)
+  // Levels never exceed 5.
+  for (let i = 0; i < 10; i += 1) run._applyCard({ kind: 'passive', id: 'speed', level: 6, isNew: false })
+  assert.equal(run.passives.speed, 5)
+})
+
+test('speed passive changes the player displacement per step', () => {
+  const base = newRun()
+  base.setInput(1, 0)
+  base.step()
+  const fast = newRun()
+  fast._applyCard({ kind: 'passive', id: 'speed', level: 1, isNew: true })
+  fast.setInput(1, 0)
+  fast.step()
+  assert.ok(Math.abs(base.player.x - 160 * DT) < 1e-9)
+  assert.ok(Math.abs(fast.player.x - 160 * 1.08 * DT) < 1e-9)
+})
+
+test('summary lists every equipped weapon and passive', () => {
+  const run = newRun()
+  assert.deepEqual(run.summary().weapons, [{ id: 'spore_shot', level: 1 }])
+  assert.deepEqual(run.summary().passives, [])
 })
 
 test('hp reaching 0 transitions to lost with a killer recorded', () => {

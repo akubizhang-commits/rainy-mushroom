@@ -3,12 +3,13 @@
 // Run in tests and once in the SurvivorRun constructor; a non-empty result is fatal
 // (03 §4: 表现层显示「游戏数据异常」页面, 不带病运行).
 //
-// S1 scope: validates the modules shipped in Sprint 1 (player, weapons.spore_shot,
-// enemies gnat/beetle, waves 0–2min segments, limits, strings). Reserved weapons with
-// empty `levels` are skipped (structure placeholders for S2).
+// Validates player, weapons (spore_shot / umbrella_blades / dew_ring; raindrop and
+// leaf_boomerang only as `placeholder: true` stubs, 08 §2), passives, enemies, waves,
+// limits.
 
 import { PLAYER } from './player.js'
 import { WEAPONS } from './weapons.js'
+import { PASSIVES } from './passives.js'
 import { ENEMIES } from './enemies.js'
 import { WAVES } from './waves.js'
 import { LIMITS } from './limits.js'
@@ -55,33 +56,98 @@ export function validate() {
   if (!isPositiveInt(PLAYER.passiveSlots)) push('player.passiveSlots', '必须为正整数')
 
   // --- weapons ---
-  const levelFields = ['damage', 'cooldown', 'count', 'pierce', 'speed', 'knockback', 'life']
+  // Required per-level fields by weapon id (01 §6.1–§6.3). Every non-placeholder weapon
+  // must be listed here; `positive` fields > 0, `ints` additionally integers,
+  // `ratios` in (0, 1).
+  const weaponSchemas = {
+    spore_shot: {
+      positive: ['damage', 'cooldown', 'count', 'pierce', 'speed', 'knockback', 'life'],
+      ints: ['count', 'pierce'],
+      ratios: [],
+      evolvedRequired: true,
+    },
+    umbrella_blades: {
+      positive: ['damage', 'count', 'orbitRadius', 'angularSpeedDeg', 'hitInterval', 'knockback'],
+      ints: ['count'],
+      ratios: [],
+      evolvedRequired: false,
+    },
+    dew_ring: {
+      positive: ['damage', 'radius', 'interval', 'slow'],
+      ints: [],
+      ratios: ['slow'],
+      evolvedRequired: false,
+    },
+  }
+  const indices = new Set()
   for (const [id, weapon] of Object.entries(WEAPONS)) {
-    // Reserved S2 weapons: empty levels array is an allowed placeholder.
-    if (Array.isArray(weapon.levels) && weapon.levels.length === 0) continue
-    if (!Array.isArray(weapon.levels) || weapon.levels.length !== 5) {
-      push(`weapons.${id}.levels`, '必须正好 5 档')
-      continue
-    }
-    weapon.levels.forEach((lvl, i) => {
-      const at = `weapons.${id}.levels[${i}]`
-      for (const f of levelFields) {
-        if (!isPositiveNumber(lvl[f])) push(`${at}.${f}`, '必须为有限正数')
-      }
-      if (!isPositiveInt(lvl.count)) push(`${at}.count`, '必须为正整数')
-      if (!isPositiveInt(lvl.pierce)) push(`${at}.pierce`, '必须为正整数')
-    })
-    // Evolution (01 §6: 5 级 + 1 进化) and its unlocking passive id.
-    if (!weapon.evolved || typeof weapon.evolved !== 'object') {
-      push(`weapons.${id}.evolved`, '必须有进化形态')
+    if (!Number.isInteger(weapon.index) || weapon.index < 0 || weapon.index > 4) {
+      push(`weapons.${id}.index`, '必须为 0–4 的整数（敌人 hitAt 长度 5）')
+    } else if (indices.has(weapon.index)) {
+      push(`weapons.${id}.index`, '与其它武器重复')
     } else {
-      for (const f of levelFields) {
-        if (!isPositiveNumber(weapon.evolved[f])) push(`weapons.${id}.evolved.${f}`, '必须为有限正数')
-      }
+      indices.add(weapon.index)
     }
     if (typeof weapon.evolvesWith !== 'string' || weapon.evolvesWith.length === 0) {
       push(`weapons.${id}.evolvesWith`, '必须指向一个被动 id')
     }
+    // Out-of-scope weapons (08 §2) are explicit placeholders with empty levels.
+    if (weapon.placeholder === true) {
+      if (!Array.isArray(weapon.levels) || weapon.levels.length !== 0) {
+        push(`weapons.${id}.levels`, '占位武器的 levels 必须为空数组')
+      }
+      continue
+    }
+    const schema = weaponSchemas[id]
+    if (!schema) {
+      push(`weapons.${id}`, '未知武器 id（非占位武器必须有校验规则）')
+      continue
+    }
+    if (!Array.isArray(weapon.levels) || weapon.levels.length !== 5) {
+      push(`weapons.${id}.levels`, '必须正好 5 档')
+      continue
+    }
+    const checkLevel = (lvl, at) => {
+      for (const f of schema.positive) {
+        if (!isPositiveNumber(lvl[f])) push(`${at}.${f}`, '必须为有限正数')
+      }
+      for (const f of schema.ints) {
+        if (!isPositiveInt(lvl[f])) push(`${at}.${f}`, '必须为正整数')
+      }
+      for (const f of schema.ratios) {
+        if (!(isPositiveNumber(lvl[f]) && lvl[f] < 1)) push(`${at}.${f}`, '必须在 (0,1)')
+      }
+    }
+    weapon.levels.forEach((lvl, i) => checkLevel(lvl, `weapons.${id}.levels[${i}]`))
+    if (id === 'umbrella_blades' && !isPositiveNumber(weapon.bladeRadius)) {
+      push(`weapons.${id}.bladeRadius`, '必须为有限正数')
+    }
+    // Evolution (01 §6: 5 级 + 1 进化). S2 关闭进化（08 §2），新武器可为 null。
+    if (weapon.evolved === null && !schema.evolvedRequired) {
+      // allowed
+    } else if (!weapon.evolved || typeof weapon.evolved !== 'object') {
+      push(`weapons.${id}.evolved`, '必须有进化形态')
+    } else {
+      checkLevel(weapon.evolved, `weapons.${id}.evolved`)
+    }
+  }
+
+  // --- passives (01 §7) ---
+  const passiveStats = new Set(['might', 'cooldown', 'area', 'moveSpeed'])
+  for (const [id, passive] of Object.entries(PASSIVES)) {
+    const at = `passives.${id}`
+    if (!passiveStats.has(passive.stat)) push(`${at}.stat`, '必须为 might/cooldown/area/moveSpeed 之一')
+    if (!isPositiveNumber(passive.perLevel)) push(`${at}.perLevel`, '必须为有限正数')
+    if (!Array.isArray(passive.levels) || passive.levels.length !== 5) {
+      push(`${at}.levels`, '必须正好 5 档')
+      continue
+    }
+    passive.levels.forEach((v, i) => {
+      // 每级效果相同、线性叠加：Lv(i+1) 累计 = perLevel × (i+1)。
+      if (!isPositiveNumber(v) || Math.abs(v - passive.perLevel * (i + 1)) > 1e-9) {
+        push(`${at}.levels[${i}]`, '必须等于 perLevel × 等级（线性叠加）')
+      }
+    })
   }
 
   // --- enemies ---
@@ -150,7 +216,7 @@ export function validate() {
   if (!isPositiveNumber(LIMITS.spawnMarginU)) push('limits.spawnMarginU', '必须为有限正数')
 
   // --- JSON round-trip (03 §4): guards against functions / Infinity / NaN. ---
-  for (const [name, mod] of [['player', PLAYER], ['weapons', WEAPONS], ['enemies', ENEMIES], ['waves', WAVES], ['limits', LIMITS]]) {
+  for (const [name, mod] of [['player', PLAYER], ['weapons', WEAPONS], ['passives', PASSIVES], ['enemies', ENEMIES], ['waves', WAVES], ['limits', LIMITS]]) {
     if (!jsonRoundTripsEqual(mod)) push(`${name}`, '无法 JSON 往返（混入了函数/Infinity/NaN）')
   }
 

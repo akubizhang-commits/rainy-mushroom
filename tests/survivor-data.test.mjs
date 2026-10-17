@@ -3,6 +3,7 @@ import assert from 'node:assert/strict'
 
 import { PLAYER } from '../js/survivor/data/player.js'
 import { WEAPONS } from '../js/survivor/data/weapons.js'
+import { PASSIVES } from '../js/survivor/data/passives.js'
 import { ENEMIES } from '../js/survivor/data/enemies.js'
 import { WAVES } from '../js/survivor/data/waves.js'
 import { LIMITS } from '../js/survivor/data/limits.js'
@@ -34,6 +35,66 @@ test('spore_shot five levels match the 01-gdd §6.1 table item by item', () => {
     { ...WEAPONS.spore_shot.evolved },
     { name: '孢子风暴', damage: 22, cooldown: 0.6, count: 5, pierce: 3, speed: 480, knockback: 15, life: 1.2 },
   )
+})
+
+test('umbrella_blades five levels match the 01-gdd §6.2 table', () => {
+  // 伤害/片数/旋转半径/角速度/单敌受击间隔/击退
+  const rows = [
+    [8, 2, 70, 200, 0.5, 20],
+    [12, 2, 70, 200, 0.5, 20],
+    [12, 3, 70, 200, 0.5, 20],
+    [12, 3, 90, 220, 0.5, 20],
+    [16, 4, 90, 220, 0.5, 25],
+  ]
+  const fields = ['damage', 'count', 'orbitRadius', 'angularSpeedDeg', 'hitInterval', 'knockback']
+  const w = WEAPONS.umbrella_blades
+  assert.equal(w.levels.length, 5)
+  rows.forEach((row, i) => fields.forEach((f, j) => assert.equal(w.levels[i][f], row[j], `Lv${i + 1} ${f}`)))
+  assert.equal(w.bladeRadius, 16)
+  assert.equal(w.evolved, null, 'S2 不做进化')
+})
+
+test('dew_ring five levels match the 01-gdd §6.3 table', () => {
+  // 伤害/半径/伤害间隔/圈内减速
+  const rows = [
+    [4, 60, 0.8, 0.15],
+    [4, 75, 0.8, 0.15],
+    [7, 75, 0.8, 0.15],
+    [7, 90, 0.8, 0.25],
+    [10, 90, 0.6, 0.25],
+  ]
+  const fields = ['damage', 'radius', 'interval', 'slow']
+  const w = WEAPONS.dew_ring
+  assert.equal(w.levels.length, 5)
+  rows.forEach((row, i) => fields.forEach((f, j) => assert.equal(w.levels[i][f], row[j], `Lv${i + 1} ${f}`)))
+  assert.equal(w.evolved, null, 'S2 不做进化')
+})
+
+test('raindrop / leaf_boomerang stay as empty placeholders (08 §2)', () => {
+  for (const id of ['raindrop', 'leaf_boomerang']) {
+    assert.equal(WEAPONS[id].placeholder, true)
+    assert.equal(WEAPONS[id].levels.length, 0)
+  }
+  const indices = Object.values(WEAPONS).map((w) => w.index).sort()
+  assert.deepEqual(indices, [0, 1, 2, 3, 4])
+})
+
+test('passives match 01-gdd §7: per-level effect and Lv5 total; regen/magnet absent in S2', () => {
+  const expected = { might: [0.1, 'might'], cooldown: [0.08, 'cooldown'], area: [0.1, 'area'], speed: [0.08, 'moveSpeed'] }
+  assert.deepEqual(Object.keys(PASSIVES).sort(), Object.keys(expected).sort())
+  for (const [id, [per, stat]] of Object.entries(expected)) {
+    const p = PASSIVES[id]
+    assert.equal(p.perLevel, per, `${id} perLevel`)
+    assert.equal(p.stat, stat, `${id} stat`)
+    assert.equal(p.levels.length, 5)
+    p.levels.forEach((v, i) => assert.ok(Math.abs(v - per * (i + 1)) < 1e-12, `${id} Lv${i + 1}`))
+  }
+  assert.equal(PASSIVES.might.levels[4], 0.5)
+  assert.equal(PASSIVES.cooldown.levels[4], 0.4)
+  assert.equal(PASSIVES.area.levels[4], 0.5)
+  assert.equal(PASSIVES.speed.levels[4], 0.4)
+  assert.equal(PASSIVES.regen, undefined)
+  assert.equal(PASSIVES.magnet, undefined)
 })
 
 test('gnat and beetle match 01-gdd §9 table: hp/moveSpeed/damage/xp/radius', () => {
@@ -94,7 +155,7 @@ test('waves.winAtSeconds is the 180s timed-victory target (00 §8 D4)', () => {
 })
 
 test('all data modules survive a JSON round-trip', () => {
-  for (const mod of [PLAYER, WEAPONS, ENEMIES, WAVES, LIMITS, STRINGS]) {
+  for (const mod of [PLAYER, WEAPONS, PASSIVES, ENEMIES, WAVES, LIMITS, STRINGS]) {
     assert.deepEqual(JSON.parse(JSON.stringify(mod)), mod)
   }
 })
@@ -119,7 +180,7 @@ test('player-facing strings pass the compliance word-list scan', () => {
 })
 
 test('data modules are frozen', () => {
-  for (const mod of [PLAYER, WEAPONS, ENEMIES, WAVES, LIMITS, STRINGS]) {
+  for (const mod of [PLAYER, WEAPONS, PASSIVES, ENEMIES, WAVES, LIMITS, STRINGS]) {
     assert.ok(Object.isFrozen(mod))
   }
 })

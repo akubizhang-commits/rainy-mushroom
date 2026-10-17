@@ -4,9 +4,8 @@
 // no Math.random, no Date.now, no cc/wx.
 //
 // Stats are recomputed only on open / level-up (03 §3.8) and cached; the step loop
-// reads the cached values. S1 ships one weapon (spore_shot) and no passive cards that
-// change these multipliers, so passive levels default to 0; the formulas still honour
-// 局外 bonuses (Meta.bonuses) so the shape is complete for S2.
+// reads the cached values. `passives` is the run's passive level map `{id: level}`
+// (data/passives.js); 局外 bonuses come from Meta.bonuses.
 //
 // 01 §15.1 公式：
 //   might        = (1 + 局外晨光之力) × (1 + 晨光菌丝)
@@ -16,6 +15,8 @@
 //   拾取半径     = 60 × (1 + 局外孢子亲和) × (1 + 孢子罗盘)
 //   生命回复/秒  = 局外露水祝福 + 露水叶片
 //   实际伤害     = round(武器档位伤害 × might)，最小 1
+
+import { PASSIVES } from './data/passives'
 
 export const COOLDOWN_FLOOR = 0.5
 
@@ -32,17 +33,21 @@ function readBonuses(bonuses) {
   }
 }
 
-// Additive passive terms (S1: all 0; reserved for S2 passive cards).
-function readPassives(passives) {
+// In-run passive terms from the passive level map `{id: level}` (run.passives, 08 L2).
+// Each passive's cumulative bonus at level L is PASSIVES[id].levels[L-1] (01 §7 线性叠加);
+// levels are clamped to [0, levels.length], unknown ids are ignored. regen / magnet are
+// not in data/passives.js in S2, so their terms stay 0.
+export function passiveTerms(passives) {
+  const out = { might: 0, cooldown: 0, area: 0, moveSpeed: 0, pickup: 0, regen: 0 }
   const p = passives || {}
-  return {
-    might: num(p.might),       // 晨光菌丝
-    cooldown: num(p.cooldown), // 湿润苔衣（减冷却比例）
-    area: num(p.area),         // 宽檐菌帽
-    moveSpeed: num(p.moveSpeed), // 蕨叶轻靴
-    pickup: num(p.pickup),     // 孢子罗盘
-    regen: num(p.regen),       // 露水叶片（每秒绝对值）
+  for (const id of Object.keys(PASSIVES)) {
+    const def = PASSIVES[id]
+    const raw = p[id]
+    if (!Number.isFinite(raw)) continue
+    const level = Math.min(def.levels.length, Math.max(0, Math.floor(raw)))
+    if (level > 0) out[def.stat] += def.levels[level - 1]
   }
+  return out
 }
 
 function num(v) {
@@ -53,7 +58,7 @@ function num(v) {
 // `player` is data/player.js. Returns a plain object cached on world.stats.
 export function computeStats(player, bonuses, passives) {
   const b = readBonuses(bonuses)
-  const p = readPassives(passives)
+  const p = passiveTerms(passives)
   const might = (1 + b.might) * (1 + p.might)
   const cooldownMul = Math.max(COOLDOWN_FLOOR, 1 - p.cooldown)
   const areaMul = 1 + p.area

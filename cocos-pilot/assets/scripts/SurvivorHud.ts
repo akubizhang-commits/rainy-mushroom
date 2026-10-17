@@ -95,7 +95,11 @@ export class SurvivorHud{
   const cards:Node[]=[];
   offer.forEach((card,i)=>{
    const n=this.node('card',m,640,cardH),y=y0-i*(cardH+gap);n.setPosition(0,y-40);const op=n.addComponent(UIOpacity);op.opacity=0;this.panel(n,PANEL,card.kind==='weapon'?C('#F2B544'):PANEL_EDGE,20,4);
-   const [name,desc,tag,icon]=card.kind==='weapon'?[STRINGS.cardSporeShot,STRINGS.cardSporeShotDesc,`Lv ${card.level-1}→${card.level}`,C('#F2B544')]:card.kind==='heal'?[STRINGS.cardHealDew,STRINGS.cardHealDewDesc,STRINGS.cardSupply,C('#8FD3FF')]:[STRINGS.cardShinySpore,STRINGS.cardShinySporeDesc,STRINGS.cardSupply,C('#8FD3FF')];
+   // 武器/被动卡按 id 取 card_<id> 文案（孢子弹沿用 S1 键），缺失时显示 id 与通用描述；新卡标“新武器/新被动”，升级卡标 Lv a→b
+   const S=STRINGS as any,build=card.kind==='weapon'||card.kind==='passive',spore=card.id==='spore_shot';
+   const bName=spore?STRINGS.cardSporeShot:(S['card_'+card.id]||card.id),bDesc=spore?STRINGS.cardSporeShotDesc:(S['card_'+card.id+'_desc']||STRINGS.cardGenericDesc);
+   const bTag=card.isNew?(card.kind==='weapon'?STRINGS.cardNewWeapon:STRINGS.cardNewPassive):`Lv ${card.level-1}→${card.level}`;
+   const [name,desc,tag,icon]=build?[bName,bDesc,bTag,card.kind==='weapon'?C('#F2B544'):C('#9FD18B')]:card.kind==='heal'?[STRINGS.cardHealDew,STRINGS.cardHealDewDesc,STRINGS.cardSupply,C('#8FD3FF')]:[STRINGS.cardShinySpore,STRINGS.cardShinySporeDesc,STRINGS.cardSupply,C('#8FD3FF')];
    // 占位图标：圆角方块（武器琥珀 / 兜底水蓝）+ 名称前 2 字（02 §8.5）
    const ic=this.node('icon',n,96,96);ic.setPosition(-320+24+48,0);this.panel(ic,icon,null,16);this.label(name.slice(0,2),ic,0,0,90,90,32,PRIMARY_TEXT);
    this.label(name,n,-320+144+130,40,260,48,32,TEXT,Label.HorizontalAlign.LEFT);

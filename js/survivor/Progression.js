@@ -4,12 +4,18 @@
 // - xpToNext(L) = floor(5 + 6(L − 1) + 0.15(L − 1)²) (01 §15.1 / §15.2 table).
 // - Banking xp can cross several level thresholds at once; each crossing enqueues one
 //   pending level-up. SurvivorRun pops the queue to drive the levelup state.
-// - draftOffer(state, rng) returns three cards. S1 candidate pool = spore_shot upgrade
-//   (while below max level) + fallback cards (一捧露水 heal, 闪亮孢子 crystal). First
-//   level-up guarantees the weapon upgrade is offered (首升保底). All rules are pure so
-//   tests can enumerate them.
+// - draftOffer(state, rng) returns three cards following 01 §8.2 (S2 scope, 08 L4/K3):
+//   candidate pool = upgrades of owned, non-maxed weapons/passives (weight 10) + every
+//   unowned weapon while weapon slots remain (8) + every unowned passive while passive
+//   slots remain (6). Only weapons with non-empty `levels` and passives present in
+//   data/passives.js qualify; no evolution cards in S2. Weighted draw without
+//   replacement; short pools are padded with fallback cards (一捧露水 / 闪亮孢子, may
+//   repeat). First level-up: at least one new-weapon card (首升保底). Pure, so tests
+//   can enumerate it.
 
 import { WEAPONS } from './data/weapons.js'
+import { PASSIVES } from './data/passives.js'
+import { PLAYER } from './data/player.js'
 
 export function xpToNext(level) {
   const L = level
@@ -45,40 +51,102 @@ export function addXp(prog, amount) {
   return gained
 }
 
-// Build the three-card offer for the current pending level-up.
-// `state` = { weaponLevel, isFirstLevelUp }. Rules (03 §3.8, S1 scope):
-//   - If the weapon can still upgrade (weaponLevel < 5):
-//       * first level-up guarantees the upgrade card is included (首升保底);
-//       * otherwise it is included as the primary card.
-//   - Remaining slots filled with distinct fallback cards (heal, crystal).
-//   - If the weapon is maxed, the offer is the two fallback cards + a duplicate-guard
-//     fallback so the player always has three choices.
-export function draftOffer(state, rng) {
-  const weaponLevel = state.weaponLevel
-  const maxLevel = WEAPONS.spore_shot.levels.length
-  const cards = []
-  const canUpgrade = weaponLevel < maxLevel
-  if (canUpgrade) {
-    cards.push(upgradeCard(weaponLevel))
+// Card weights (01 §8.2 第 3 条).
+export const WEIGHT_UPGRADE = 10
+export const WEIGHT_NEW_WEAPON = 8
+export const WEIGHT_NEW_PASSIVE = 6
+
+// Build the candidate list for an offer. `state` = {
+//   weapons: [{id, level}] (equipped, in acquisition order),
+//   passives: {id: level},
+//   weaponSlots?, passiveSlots? (default data/player.js),
+// }. Returns [{card, weight}] in a stable order (owned order, then data order).
+export function draftCandidates(state) {
+  const weapons = state.weapons || []
+  const passives = state.passives || {}
+  const weaponSlots = Number.isInteger(state.weaponSlots) ? state.weaponSlots : PLAYER.weaponSlots
+  const passiveSlots = Number.isInteger(state.passiveSlots) ? state.passiveSlots : PLAYER.passiveSlots
+  const out = []
+  const owned = new Set()
+  for (const w of weapons) {
+    owned.add(w.id)
+    const def = WEAPONS[w.id]
+    if (!def || def.levels.length === 0) continue
+    if (w.level < def.levels.length) {
+      out.push({ card: card('weapon', w.id, w.level + 1, false), weight: WEIGHT_UPGRADE })
+    }
   }
-  // Fallback pool (shuffled deterministically so order is stable per seed).
-  const fallbacks = rng ? rng.shuffle([CARD_HEAL, CARD_CRYSTAL]) : [CARD_HEAL, CARD_CRYSTAL]
-  for (let i = 0; i < fallbacks.length && cards.length < 3; i += 1) {
-    cards.push(fallbacks[i])
+  const ownedPassives = Object.keys(passives).filter((id) => PASSIVES[id] && passives[id] >= 1)
+  for (const id of ownedPassives) {
+    if (passives[id] < PASSIVES[id].levels.length) {
+      out.push({ card: card('passive', id, passives[id] + 1, false), weight: WEIGHT_UPGRADE })
+    }
   }
-  // Still short (weapon maxed, only two fallbacks): pad with the heal card so the
-  // player always sees three cards (S1 候选池不全，走通机制即可 — 07 backlog §1).
-  while (cards.length < 3) {
-    cards.push(CARD_HEAL)
+  if (weapons.length < weaponSlots) {
+    for (const id of Object.keys(WEAPONS)) {
+      if (owned.has(id) || WEAPONS[id].levels.length === 0) continue
+      out.push({ card: card('weapon', id, 1, true), weight: WEIGHT_NEW_WEAPON })
+    }
   }
-  return cards.slice(0, 3)
+  if (ownedPassives.length < passiveSlots) {
+    for (const id of Object.keys(PASSIVES)) {
+      if (ownedPassives.includes(id)) continue
+      out.push({ card: card('passive', id, 1, true), weight: WEIGHT_NEW_PASSIVE })
+    }
+  }
+  return out
 }
 
-function upgradeCard(weaponLevel) {
-  return Object.freeze({
-    kind: 'weapon',
-    id: 'spore_shot',
-    level: weaponLevel + 1,
-    evolution: false,
-  })
+// Build the three-card offer for the current pending level-up (see header). `state` is
+// as in draftCandidates plus `isFirstLevelUp`. Card shape:
+//   {kind:'weapon'|'passive', id, level, isNew, evolution:false} or a fallback card.
+// Without the first-level-up guarantee, offer[i] is the i-th weighted draw, so the
+// first card's type frequency follows the weight ratio.
+export function draftOffer(state, rng) {
+  const pool = draftCandidates(state)
+  const cards = []
+  if (state.isFirstLevelUp) {
+    // 首升保底：先从新武器卡中抽 1 张（权重相同 → 均匀）。
+    let best = -1
+    let total = 0
+    for (let i = 0; i < pool.length; i += 1) if (pool[i].card.kind === 'weapon' && pool[i].card.isNew) total += pool[i].weight
+    if (total > 0) {
+      let roll = rng.next() * total
+      for (let i = 0; i < pool.length; i += 1) {
+        const c = pool[i]
+        if (!(c.card.kind === 'weapon' && c.card.isNew)) continue
+        best = i
+        roll -= c.weight
+        if (roll < 0) break
+      }
+      cards.push(pool[best].card)
+      pool.splice(best, 1)
+    }
+  }
+  while (cards.length < 3 && pool.length > 0) {
+    let total = 0
+    for (let i = 0; i < pool.length; i += 1) total += pool[i].weight
+    let roll = rng.next() * total
+    let pick = pool.length - 1
+    for (let i = 0; i < pool.length; i += 1) {
+      roll -= pool[i].weight
+      if (roll < 0) {
+        pick = i
+        break
+      }
+    }
+    cards.push(pool[pick].card)
+    pool.splice(pick, 1)
+  }
+  // 兜底卡（01 §8.2 第 4 条，可重复）：先放两张不同的，仍不足再补一捧露水。
+  if (cards.length < 3) {
+    const fallbacks = rng.shuffle([CARD_HEAL, CARD_CRYSTAL])
+    for (let i = 0; i < fallbacks.length && cards.length < 3; i += 1) cards.push(fallbacks[i])
+    while (cards.length < 3) cards.push(CARD_HEAL)
+  }
+  return cards
+}
+
+function card(kind, id, level, isNew) {
+  return Object.freeze({ kind, id, level, isNew, evolution: false })
 }

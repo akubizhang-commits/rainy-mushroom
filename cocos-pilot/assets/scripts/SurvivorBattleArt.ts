@@ -109,6 +109,11 @@ export class SurvivorBattleArt{
   // 玩家弹体：沿速度方向旋转
   const sh=this.pools.shots;sh.begin();
   for(let i=0;i<run.shots.count;i++){const s=run.shots.active[i];if(!visible(s.x,s.y))continue;const n=sh.next();if(!n)break;sh.set(n,'spore-shot');n.node.setPosition(s.x,s.y);n.node.angle=Math.atan2(s.vy,s.vx)*180/Math.PI}
+  // S2 临时占位（第二批 P1 换正式帧）：菌伞片用大孢子帧按碰撞直径缩放；露珠环用 16 个净化光点排成圆环
+  for(const w of run.weapons){
+   if(w.id==='umbrella_blades')for(let i=0;i<w.bladeCount;i++){const n=sh.next();if(!n)break;sh.set(n,'spore-l');n.ui.setContentSize(w.bladeR*2,w.bladeR*2);n.node.setPosition(w.bladeX[i],w.bladeY[i]);n.node.angle=t*360}
+   else if(w.id==='dew_ring'&&w.ringR>0)for(let i=0;i<16;i++){const n=sh.next();if(!n)break;sh.set(n,'purify-dot');const a=i/16*Math.PI*2+t*.5;n.node.setPosition(p.x+Math.cos(a)*w.ringR,p.y+Math.sin(a)*w.ringR);n.node.angle=0}
+  }
   sh.end();
   // FX：净化光点（表现层计时）
   const fp=this.pools.fx;fp.begin();

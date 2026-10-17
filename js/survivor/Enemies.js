@@ -25,6 +25,8 @@ export function makeEnemy() {
     kbY: 0,
     lastHitTime: -1,
     contactCooldown: 0, // per-enemy gate so one enemy hurts the player ≤ once / invuln window
+    slow: 0,   // movement slow ratio [0,1); cleared each step 4, re-set by auras (max of sources)
+    hitAt: new Float64Array(5), // per weapon index: earliest time this weapon may hit again (03 §3.5)
   }
 }
 
@@ -46,6 +48,8 @@ export function resetEnemy(enemy, spec) {
   enemy.kbY = 0
   enemy.lastHitTime = -1
   enemy.contactCooldown = 0
+  enemy.slow = 0
+  enemy.hitAt.fill(0)
 }
 
 const KB_DECAY = 8 // per-second exponential-ish decay of residual knockback
@@ -61,8 +65,12 @@ export function stepEnemyBehavior(world, dt) {
     const dx = px - e.x
     const dy = py - e.y
     const dist = Math.hypot(dx, dy) || 1
-    const vx = (dx / dist) * e.speed
-    const vy = (dy / dist) * e.speed
+    // Slow from auras set last step (dew_ring, max of sources), then cleared so it
+    // only lasts while the enemy stays inside (03 §3.4 step 4).
+    const speed = e.speed * (1 - e.slow)
+    e.slow = 0
+    const vx = (dx / dist) * speed
+    const vy = (dy / dist) * speed
     e.x += (vx + e.kbX) * dt
     e.y += (vy + e.kbY) * dt
     e.vx = vx

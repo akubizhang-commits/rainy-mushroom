@@ -25,6 +25,21 @@ export const STRINGS = Object.freeze({
   cardHealDewDesc: '立即回复 30 生命',
   cardShinySpore: '闪亮孢子',
   cardShinySporeDesc: '本局结算露晶 +5',
+  // S2 构筑卡（01 §6.2/§6.3/§7）；键名 card_<id> / card_<id>_desc，供 HUD 按 id 取文案
+  cardNewPassive: '新被动',
+  card_umbrella_blades: '菌伞旋刃',
+  card_umbrella_blades_desc: '小菌伞绕身旋转，碰到浊雾生灵就将它净化',
+  card_dew_ring: '露珠环',
+  card_dew_ring_desc: '周身露珠光环，持续净化圈内浊雾并让它们变慢',
+  card_might: '晨光菌丝',
+  card_might_desc: '所有武器伤害 +10%',
+  card_cooldown: '湿润苔衣',
+  card_cooldown_desc: '武器冷却 −8%',
+  card_area: '宽檐菌帽',
+  card_area_desc: '武器范围 +10%',
+  card_speed: '蕨叶轻靴',
+  card_speed_desc: '移动速度 +8%',
+  cardGenericDesc: '让你更强一点',
 
   // 结算
   resultWin: '守住了雨后森林',

@@ -9,8 +9,11 @@ import {
   draftOffer,
   CARD_HEAL,
   CARD_CRYSTAL,
+  draftCandidates,
+  WEIGHT_UPGRADE,
+  WEIGHT_NEW_WEAPON,
+  WEIGHT_NEW_PASSIVE,
 } from '../js/survivor/Progression.js'
-import { WEAPONS } from '../js/survivor/data/weapons.js'
 
 test('xpToNext matches the 01 §15.2 sample table', () => {
   // | L | 升到 L+1 所需 |
@@ -58,45 +61,159 @@ test('addXp enqueues multiple level-ups when a big pickup crosses several thresh
   assert.equal(prog.xp, 0)
 })
 
-test('draftOffer always returns three cards', () => {
+const START = () => ({ weapons: [{ id: 'spore_shot', level: 1 }], passives: {}, isFirstLevelUp: false })
+const key = (c) => `${c.kind}:${c.id}`
+
+test('draftOffer always returns three distinct non-fallback cards when the pool allows', () => {
   const rng = new SeededRandom('draft')
-  for (let lvl = 1; lvl <= 5; lvl += 1) {
-    const offer = draftOffer({ weaponLevel: lvl, isFirstLevelUp: false }, rng)
-    assert.equal(offer.length, 3, `weaponLevel ${lvl}`)
+  for (let i = 0; i < 200; i += 1) {
+    const offer = draftOffer(START(), rng)
+    assert.equal(offer.length, 3)
+    assert.equal(new Set(offer.map(key)).size, 3, 'no duplicate card in one offer')
+    for (const c of offer) {
+      assert.ok(c.kind === 'weapon' || c.kind === 'passive')
+      assert.equal(c.evolution, false, 'S2 never offers evolution cards')
+    }
   }
 })
 
-test('first level-up guarantees the weapon upgrade card (首升保底)', () => {
-  const rng = new SeededRandom('first')
-  const offer = draftOffer({ weaponLevel: 1, isFirstLevelUp: true }, rng)
-  const upgrade = offer.find((c) => c.kind === 'weapon' && c.id === 'spore_shot')
-  assert.ok(upgrade, 'offer includes the spore_shot upgrade')
-  assert.equal(upgrade.level, 2)
+test('candidate pool follows 01 §8.2 weights and excludes out-of-scope content (K3)', () => {
+  const pool = draftCandidates({ weapons: [{ id: 'spore_shot', level: 2 }], passives: { might: 1 } })
+  const byKey = new Map(pool.map((p) => [key(p.card), p]))
+  assert.equal(byKey.get('weapon:spore_shot').weight, WEIGHT_UPGRADE)
+  assert.equal(byKey.get('weapon:spore_shot').card.level, 3)
+  assert.equal(byKey.get('weapon:spore_shot').card.isNew, false)
+  assert.equal(byKey.get('passive:might').weight, WEIGHT_UPGRADE)
+  assert.equal(byKey.get('passive:might').card.level, 2)
+  for (const id of ['umbrella_blades', 'dew_ring']) {
+    assert.equal(byKey.get(`weapon:${id}`).weight, WEIGHT_NEW_WEAPON)
+    assert.equal(byKey.get(`weapon:${id}`).card.isNew, true)
+    assert.equal(byKey.get(`weapon:${id}`).card.level, 1)
+  }
+  for (const id of ['cooldown', 'area', 'speed']) {
+    assert.equal(byKey.get(`passive:${id}`).weight, WEIGHT_NEW_PASSIVE)
+  }
+  assert.equal(pool.length, 7)
+  assert.deepEqual([WEIGHT_UPGRADE, WEIGHT_NEW_WEAPON, WEIGHT_NEW_PASSIVE], [10, 8, 6])
 })
 
-test('weapon upgrade card is offered whenever the weapon can still level up', () => {
-  const rng = new SeededRandom('upg')
-  for (let lvl = 1; lvl < WEAPONS.spore_shot.levels.length; lvl += 1) {
-    const offer = draftOffer({ weaponLevel: lvl, isFirstLevelUp: false }, rng)
-    const upgrade = offer.find((c) => c.kind === 'weapon')
-    assert.ok(upgrade, `weaponLevel ${lvl} offers an upgrade`)
-    assert.equal(upgrade.level, lvl + 1)
+test('raindrop / leaf_boomerang / regen / magnet never appear in any offer', () => {
+  const banned = new Set(['raindrop', 'leaf_boomerang', 'regen', 'magnet'])
+  const rng = new SeededRandom('banned')
+  let state = START()
+  for (let i = 0; i < 2000; i += 1) {
+    const offer = draftOffer(state, rng)
+    for (const c of offer) assert.ok(!banned.has(c.id), `offered ${c.id}`)
+    if (i % 50 === 0) state = START()
+    // Walk the build forward by taking the first card so later offers cover upgrades.
+    state = applyForTest(state, offer[0])
   }
 })
 
-test('a maxed weapon falls back to filler cards and still offers three (兜底卡)', () => {
+test('first level-up guarantees at least one new-weapon card (首升保底)', () => {
+  for (let i = 0; i < 500; i += 1) {
+    const offer = draftOffer({ ...START(), isFirstLevelUp: true }, new SeededRandom(`first-${i}`))
+    assert.ok(offer.some((c) => c.kind === 'weapon' && c.isNew), `seed first-${i}`)
+  }
+})
+
+test('maxed weapons and passives no longer produce upgrade cards', () => {
+  const state = {
+    weapons: [{ id: 'spore_shot', level: 5 }, { id: 'umbrella_blades', level: 5 }],
+    passives: { might: 5, area: 2 },
+    isFirstLevelUp: false,
+  }
   const rng = new SeededRandom('maxed')
-  const maxLevel = WEAPONS.spore_shot.levels.length
-  const offer = draftOffer({ weaponLevel: maxLevel, isFirstLevelUp: false }, rng)
-  assert.equal(offer.length, 3)
-  assert.ok(offer.every((c) => c.kind !== 'weapon'), 'no weapon upgrade when maxed')
-  // Fallback cards come from the known pool.
+  for (let i = 0; i < 300; i += 1) {
+    for (const c of draftOffer(state, rng)) {
+      assert.notEqual(c.id, 'spore_shot')
+      assert.notEqual(c.id, 'umbrella_blades')
+      assert.notEqual(c.id, 'might')
+      if (c.id === 'area') assert.equal(c.level, 3)
+    }
+  }
+})
+
+test('full weapon slots stop new-weapon cards; full passive slots stop new-passive cards', () => {
+  const rng = new SeededRandom('slots')
+  const state = {
+    weapons: [{ id: 'spore_shot', level: 2 }],
+    passives: { might: 1 },
+    weaponSlots: 1,
+    passiveSlots: 1,
+    isFirstLevelUp: true, // guarantee cannot be met → silently skipped
+  }
+  for (let i = 0; i < 300; i += 1) {
+    const offer = draftOffer(state, rng)
+    assert.equal(offer.length, 3)
+    assert.ok(offer.every((c) => !c.isNew), 'no new weapon/passive with full slots')
+    assert.ok(offer.some((c) => c.id === 'spore_shot'))
+    assert.ok(offer.some((c) => c.id === 'might'))
+  }
+})
+
+test('everything maxed → only fallback cards (兜底卡), still three of them', () => {
+  const state = {
+    weapons: [{ id: 'spore_shot', level: 5 }, { id: 'umbrella_blades', level: 5 }, { id: 'dew_ring', level: 5 }],
+    passives: { might: 5, cooldown: 5, area: 5, speed: 5 },
+    isFirstLevelUp: false,
+  }
   const ids = new Set([CARD_HEAL.id, CARD_CRYSTAL.id])
-  assert.ok(offer.every((c) => ids.has(c.id)))
+  const rng = new SeededRandom('allmax')
+  for (let i = 0; i < 50; i += 1) {
+    const offer = draftOffer(state, rng)
+    assert.equal(offer.length, 3)
+    assert.ok(offer.every((c) => ids.has(c.id)))
+    assert.ok(offer.some((c) => c.id === CARD_HEAL.id) && offer.some((c) => c.id === CARD_CRYSTAL.id))
+  }
+})
+
+test('one candidate left → it is offered and fallback cards fill the rest', () => {
+  const state = {
+    weapons: [{ id: 'spore_shot', level: 4 }, { id: 'umbrella_blades', level: 5 }, { id: 'dew_ring', level: 5 }],
+    passives: { might: 5, cooldown: 5, area: 5, speed: 5 },
+    isFirstLevelUp: false,
+  }
+  const offer = draftOffer(state, new SeededRandom('one'))
+  assert.equal(offer[0].id, 'spore_shot')
+  assert.equal(offer[0].level, 5)
+  assert.ok(offer.slice(1).every((c) => c.kind === 'heal' || c.kind === 'crystal'))
+})
+
+test('10 000 draws: first-card type frequency matches the weight ratio within 5%', () => {
+  // Pool: 1 upgrade (10) + 2 new weapons (16) + 4 new passives (24) = 50.
+  const expected = { upgrade: 10 / 50, newWeapon: 16 / 50, newPassive: 24 / 50 }
+  const counts = { upgrade: 0, newWeapon: 0, newPassive: 0 }
+  const rng = new SeededRandom('freq')
+  const N = 10000
+  for (let i = 0; i < N; i += 1) {
+    const c = draftOffer(START(), rng)[0]
+    if (!c.isNew) counts.upgrade += 1
+    else if (c.kind === 'weapon') counts.newWeapon += 1
+    else counts.newPassive += 1
+  }
+  for (const k of Object.keys(expected)) {
+    const freq = counts[k] / N
+    assert.ok(Math.abs(freq - expected[k]) / expected[k] < 0.05, `${k}: ${freq} vs ${expected[k]}`)
+  }
 })
 
 test('draftOffer is deterministic for the same seed and parameters', () => {
-  const a = draftOffer({ weaponLevel: 2, isFirstLevelUp: false }, new SeededRandom('x'))
-  const b = draftOffer({ weaponLevel: 2, isFirstLevelUp: false }, new SeededRandom('x'))
-  assert.deepEqual(a.map((c) => c.id), b.map((c) => c.id))
+  const a = draftOffer(START(), new SeededRandom('x'))
+  const b = draftOffer(START(), new SeededRandom('x'))
+  assert.deepEqual(a.map(key), b.map(key))
 })
+
+// Minimal mirror of SurvivorRun._applyCard for walking builds in tests.
+function applyForTest(state, c) {
+  const weapons = state.weapons.map((w) => ({ ...w }))
+  const passives = { ...state.passives }
+  if (c.kind === 'weapon') {
+    const w = weapons.find((x) => x.id === c.id)
+    if (w) w.level = c.level
+    else weapons.push({ id: c.id, level: 1 })
+  } else if (c.kind === 'passive') {
+    passives[c.id] = c.level
+  }
+  return { weapons, passives, isFirstLevelUp: false }
+}

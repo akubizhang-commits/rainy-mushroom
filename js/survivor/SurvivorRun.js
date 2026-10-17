@@ -15,12 +15,13 @@ import { PLAYER } from './data/player.js'
 import { WAVES } from './data/waves.js'
 import { LIMITS } from './data/limits.js'
 import { WEAPONS } from './data/weapons.js'
+import { PASSIVES } from './data/passives.js'
 import { validate } from './data/validate.js'
 import { Spawner } from './Spawner.js'
 import { makeEnemy } from './Enemies.js'
 import { stepEnemyBehavior, stepSeparation } from './Enemies.js'
 import { stepWeapons } from './Weapons.js'
-import { makeShot } from './Weapons.js'
+import { makeShot, makeWeaponState } from './Weapons.js'
 import { stepProjectiles } from './Projectiles.js'
 import { makeSpore, dropSpore, stepPickups } from './Pickups.js'
 import {
@@ -73,8 +74,11 @@ export class SurvivorRun {
     this.time = 0
     this.offer = null
 
+    // Passive levels {id: level} in acquisition order (≤ PLAYER.passiveSlots).
+    this.passives = {}
+
     // Derived stats (recomputed on open / level-up).
-    this.stats = computeStats(PLAYER, this.bonuses, null)
+    this.stats = computeStats(PLAYER, this.bonuses, this.passives)
 
     // Player entity.
     this.player = {
@@ -99,10 +103,11 @@ export class SurvivorRun {
     // Spatial grid + reusable query buffer.
     this.grid = new SpatialGrid({ capacity: LIMITS.pools.enemies })
     this.queryBuf = new Int32Array(LIMITS.pools.enemies)
+    this.hitBuf = new Array(LIMITS.pools.enemies) // area-weapon hit list (Weapons.js)
     this.weaponAngleBuf = new Float64Array(16)
 
-    // Weapons: S1 starts with spore_shot at Lv1.
-    this.weapons = [{ id: 'spore_shot', level: 1, cooldown: 0 }]
+    // Weapons (≤ PLAYER.weaponSlots, acquisition order): start with spore_shot Lv1.
+    this.weapons = [makeWeaponState('spore_shot', 1)]
 
     // Progression.
     this.progression = makeProgression()
@@ -261,7 +266,13 @@ export class SurvivorRun {
     this.progression.totalLevelUps += 1
     const isFirst = this.progression.totalLevelUps === 1
     this.offer = draftOffer(
-      { weaponLevel: this.weapons[0].level, isFirstLevelUp: isFirst },
+      {
+        weapons: this.weapons,
+        passives: this.passives,
+        weaponSlots: PLAYER.weaponSlots,
+        passiveSlots: PLAYER.passiveSlots,
+        isFirstLevelUp: isFirst,
+      },
       this._draftRng,
     )
     this.events.push({ type: 'levelUpOffer', cards: this.offer.map((c) => c.id) })
@@ -286,10 +297,21 @@ export class SurvivorRun {
 
   _applyCard(card) {
     if (card.kind === 'weapon') {
-      const w = this.weapons[0]
-      const max = WEAPONS.spore_shot.levels.length
-      if (w.level < max) w.level = card.level
-      this.stats = computeStats(PLAYER, this.bonuses, null)
+      const def = WEAPONS[card.id]
+      if (!def || def.levels.length === 0) return
+      const w = this.weapons.find((x) => x.id === card.id)
+      if (w) {
+        if (w.level < def.levels.length) w.level = Math.min(def.levels.length, card.level)
+      } else if (this.weapons.length < PLAYER.weaponSlots) {
+        this.weapons.push(makeWeaponState(card.id, 1))
+      }
+    } else if (card.kind === 'passive') {
+      const def = PASSIVES[card.id]
+      if (!def) return
+      const cur = this.passives[card.id] || 0
+      if (cur === 0 && Object.keys(this.passives).length >= PLAYER.passiveSlots) return
+      if (cur < def.levels.length) this.passives[card.id] = Math.min(def.levels.length, cur + 1)
+      this.stats = computeStats(PLAYER, this.bonuses, this.passives)
     } else if (card.kind === 'heal') {
       this.player.hp = Math.min(this.player.maxHp, this.player.hp + card.amount)
     } else if (card.kind === 'crystal') {
@@ -349,7 +371,7 @@ export class SurvivorRun {
       purified: this.purified,
       level: this.progression.level,
       weapons: this.weapons.map((w) => ({ id: w.id, level: w.level })),
-      passives: [],
+      passives: Object.keys(this.passives).map((id) => ({ id, level: this.passives[id] })),
       eliteDefeated: 0,
       bossDefeated: false,
       shinyCards: this._bonusCrystals || 0,

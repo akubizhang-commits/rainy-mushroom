@@ -4,13 +4,19 @@
 // no cc/wx.
 //
 // Every weapon implements the same interface `{ id, index, tick(world, state, dt) }`
-// and reads all numbers from data/weapons.js — no magic numbers in code. S1 ships only
-// spore_shot. Its rules (01 §6.1, 03 §3.8):
+// and reads all numbers from data/weapons.js — no magic numbers in code. S2 ships
+// spore_shot, umbrella_blades and dew_ring. spore_shot rules (01 §6.1, 03 §3.8):
 //   - lock the nearest living enemy (linear scan of enemies.active, ≤202);
 //   - fire `count` projectiles in a fan centred on the aim direction, `spreadDeg` apart;
 //   - each projectile pierces `pierce` enemies, lives `life` seconds;
 //   - 无目标不进入冷却：with no enemy on the field the weapon does not consume cooldown
 //     (so the first shot lands immediately once an enemy appears).
+// umbrella_blades (01 §6.2): blades at angle = ω·t + 2πi/n around the player (no pool);
+//   blade radius 16 × area, orbit radius × area; 单敌受击间隔 is per whole weapon
+//   (enemy.hitAt[index]) and scaled by cooldown; knockback along player→enemy.
+// dew_ring (01 §6.3): radius × area; every `interval × cooldown` seconds damages every
+//   enemy inside; enemies inside get slow = max(slow, level slow) each step (enemy step
+//   clears it, so leaving the ring restores speed immediately); no knockback.
 
 import { WEAPONS } from './data/weapons'
 import { actualDamage, actualCooldown } from './Stats'
@@ -89,7 +95,7 @@ export const sporeShot = {
       state.cooldown -= dt
       return
     }
-    const lvl = WEAPONS.spore_shot.levels[clampLevel(state.level)]
+    const lvl = WEAPONS.spore_shot.levels[clampLevel('spore_shot', state.level)]
     const might = world.stats.might
     const damage = actualDamage(lvl.damage, might)
     const baseAngle = Math.atan2(target.y - world.player.y, target.x - world.player.x)
@@ -120,15 +126,143 @@ export const sporeShot = {
   },
 }
 
-function clampLevel(level) {
-  const max = WEAPONS.spore_shot.levels.length
+function clampLevel(id, level) {
+  const max = WEAPONS[id].levels.length
   if (!(level >= 1)) return 0
   if (level > max) return max - 1
   return level - 1
 }
 
-// Registry of weapon objects by id (S1: spore_shot only).
-export const WEAPON_OBJECTS = Object.freeze({ spore_shot: sporeShot })
+// Runtime state for one equipped weapon (run.weapons entry). All fields exist up front
+// so no weapon allocates during the step loop. bladeX/bladeY/bladeCount/bladeR and
+// ringR are written by the weapon each step for the presentation layer to read.
+export const MAX_BLADES = 8
+export function makeWeaponState(id, level = 1) {
+  return {
+    id,
+    level,
+    cooldown: 0, // spore_shot: seconds until next volley; dew_ring: seconds until next pulse
+    bladeCount: 0,
+    bladeR: 0,
+    bladeX: new Float64Array(MAX_BLADES),
+    bladeY: new Float64Array(MAX_BLADES),
+    ringR: 0,
+  }
+}
+
+// Exact circle test against grid candidates + the large list. Writes matching enemies
+// into world.hitBuf (reused array) and returns the count. Dead/inactive are skipped.
+function enemiesInCircle(world, x, y, r) {
+  const enemies = world.enemies
+  const grid = world.grid
+  const buf = world.queryBuf
+  const out = world.hitBuf || (world.hitBuf = new Array(enemies.capacity))
+  let count = 0
+  const n = grid.queryCircle(x, y, r, buf)
+  for (let k = 0; k < n; k += 1) {
+    const e = enemies.items[buf[k]]
+    if (!enemies.isActive(e) || e.hp <= 0) continue
+    const rr = r + e.r
+    const dx = e.x - x
+    const dy = e.y - y
+    if (dx * dx + dy * dy > rr * rr) continue
+    out[count++] = e
+  }
+  const large = grid.large
+  for (let k = 0; k < large.length; k += 1) {
+    const e = large[k]
+    if (!enemies.isActive(e) || e.hp <= 0) continue
+    const rr = r + e.r
+    const dx = e.x - x
+    const dy = e.y - y
+    if (dx * dx + dy * dy > rr * rr) continue
+    out[count++] = e
+  }
+  return count
+}
+
+// umbrella_blades weapon object (01 §6.2).
+export const umbrellaBlades = {
+  id: 'umbrella_blades',
+  index: WEAPONS.umbrella_blades.index,
+  tick(world, state) {
+    const def = WEAPONS.umbrella_blades
+    const lvl = def.levels[clampLevel('umbrella_blades', state.level)]
+    const area = world.stats.areaMul
+    const orbit = lvl.orbitRadius * area
+    const bladeR = def.bladeRadius * area
+    const omega = lvl.angularSpeedDeg * DEG
+    const n = Math.min(lvl.count, MAX_BLADES)
+    const px = world.player.x
+    const py = world.player.y
+    const t = world.time
+    const damage = actualDamage(lvl.damage, world.stats.might)
+    const interval = actualCooldown(lvl.hitInterval, world.stats.cooldownMul)
+    const idx = this.index
+    state.bladeCount = n
+    state.bladeR = bladeR
+    for (let i = 0; i < n; i += 1) {
+      const a = omega * t + (2 * Math.PI * i) / n
+      const bx = px + Math.cos(a) * orbit
+      const by = py + Math.sin(a) * orbit
+      state.bladeX[i] = bx
+      state.bladeY[i] = by
+      const m = enemiesInCircle(world, bx, by, bladeR)
+      for (let k = 0; k < m; k += 1) {
+        const e = world.hitBuf[k]
+        // Per-weapon gate: a second blade touching the same enemy this step is ignored.
+        if (t < e.hitAt[idx]) continue
+        e.hitAt[idx] = t + interval
+        e.hp -= damage
+        e.lastHitTime = t
+        const push = lvl.knockback * (1 - e.kbRes)
+        if (push > 0) {
+          const dx = e.x - px
+          const dy = e.y - py
+          const d = Math.hypot(dx, dy) || 1
+          e.kbX += (dx / d) * push
+          e.kbY += (dy / d) * push
+        }
+      }
+    }
+  },
+}
+
+// dew_ring weapon object (01 §6.3).
+export const dewRing = {
+  id: 'dew_ring',
+  index: WEAPONS.dew_ring.index,
+  tick(world, state, dt) {
+    const lvl = WEAPONS.dew_ring.levels[clampLevel('dew_ring', state.level)]
+    const r = lvl.radius * world.stats.areaMul
+    state.ringR = r
+    const t = world.time
+    const m = enemiesInCircle(world, world.player.x, world.player.y, r)
+    // Slow: take the max of all sources, never stack.
+    for (let k = 0; k < m; k += 1) {
+      const e = world.hitBuf[k]
+      if (lvl.slow > e.slow) e.slow = lvl.slow
+    }
+    if (state.cooldown > 0) {
+      state.cooldown -= dt
+      if (state.cooldown > 0) return
+    }
+    const damage = actualDamage(lvl.damage, world.stats.might)
+    for (let k = 0; k < m; k += 1) {
+      const e = world.hitBuf[k]
+      e.hp -= damage
+      e.lastHitTime = t
+    }
+    state.cooldown += actualCooldown(lvl.interval, world.stats.cooldownMul)
+  },
+}
+
+// Registry of weapon objects by id.
+export const WEAPON_OBJECTS = Object.freeze({
+  spore_shot: sporeShot,
+  umbrella_blades: umbrellaBlades,
+  dew_ring: dewRing,
+})
 
 // Advance all equipped weapons for one step (03 §3.4 step 7).
 export function stepWeapons(world, dt) {
