@@ -81,6 +81,14 @@ export function actualDamage(baseDamage, might) {
   return d < 1 ? 1 : d
 }
 
+// Damage one hit deals to `enemy` (01 §15.1). `damage` is the pre-rounded 实际伤害;
+// `raw` = 武器档位伤害 × might (unrounded). Only an enemy with takenMul ≠ 1 (the Boss
+// under 超时兜底) re-rounds: round(武器档位伤害 × might × 受到伤害倍率)，最小 1.
+export function hitDamage(enemy, damage, raw) {
+  const m = enemy.takenMul
+  if (m === 1 || m === undefined) return damage
+  return actualDamage(raw, m)
+}
 // 实际冷却 = 武器档位冷却 × cooldownMul (floor already applied in cooldownMul).
 export function actualCooldown(baseCooldown, cooldownMul) {
   return baseCooldown * cooldownMul

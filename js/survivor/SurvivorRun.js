@@ -122,8 +122,9 @@ export class SurvivorRun {
     // Progression.
     this.progression = makeProgression()
 
-    // Diagnostics (03 §3.1, §10).
-    this.diag = { dropped: { enemies: 0, shots: 0, bubbles: 0, zones: 0 }, droppedTime: 0 }
+    // Diagnostics (03 §3.1, §10; 08 L11): capSkipped = spawns skipped by the segment /
+    // global hard cap (designed behaviour); dropped = pool full (should stay 0).
+    this.diag = { capSkipped: { enemies: 0 }, dropped: { enemies: 0, shots: 0, bubbles: 0, zones: 0 }, droppedTime: 0 }
 
     // Event queue (one-shot events drained each frame).
     this.events = []

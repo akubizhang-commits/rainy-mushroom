@@ -18,7 +18,7 @@
 //   clears it, so leaving the ring restores speed immediately); no knockback.
 
 import { WEAPONS } from './data/weapons.js'
-import { actualDamage, actualCooldown } from './Stats.js'
+import { actualDamage, actualCooldown, hitDamage } from './Stats.js'
 
 // Shot pool object factory + reset signature used by Projectiles / SurvivorRun.
 export function makeShot() {
@@ -31,6 +31,7 @@ export function makeShot() {
     vy: 0,
     r: 6,          // 03 §3.2 弹体半径 6
     damage: 0,
+    raw: 0,        // unrounded 武器档位伤害 × might (Boss 受到伤害倍率, Stats.hitDamage)
     knockback: 0,
     life: 0,
     pierceLeft: 1,
@@ -44,13 +45,14 @@ export function makeShot() {
   }
 }
 
-export function resetShot(shot, { x, y, vx, vy, damage, knockback, life, pierce }) {
+export function resetShot(shot, { x, y, vx, vy, damage, raw, knockback, life, pierce }) {
   shot.x = x
   shot.y = y
   shot.vx = vx
   shot.vy = vy
   shot.r = 6
   shot.damage = damage
+  shot.raw = raw === undefined ? damage : raw
   shot.knockback = knockback
   shot.life = life
   shot.pierceLeft = pierce
@@ -63,8 +65,8 @@ export function resetShot(shot, { x, y, vx, vy, damage, knockback, life, pierce 
 }
 
 // Leaf (boomerang) shot reset: flies `distance` along (dirX, dirY), then homes back.
-export function resetLeaf(shot, { x, y, dirX, dirY, speed, distance, damage, knockback, r, catchR, life }) {
-  resetShot(shot, { x, y, vx: dirX * speed, vy: dirY * speed, damage, knockback, life, pierce: 0 })
+export function resetLeaf(shot, { x, y, dirX, dirY, speed, distance, damage, raw, knockback, r, catchR, life }) {
+  resetShot(shot, { x, y, vx: dirX * speed, vy: dirY * speed, damage, raw, knockback, life, pierce: 0 })
   shot.r = r
   shot.kind = 'leaf'
   shot.speed = speed
@@ -76,7 +78,7 @@ export function resetLeaf(shot, { x, y, dirX, dirY, speed, distance, damage, kno
 // locked when the shadow appears (01 §6.4 落点不追踪); it resolves once world.time
 // reaches `at`.
 export function makeZone() {
-  return { slot: 0, uid: 0, kind: 'raindrop', x: 0, y: 0, r: 0, damage: 0, knockback: 0, bornAt: 0, at: 0 }
+  return { slot: 0, uid: 0, kind: 'raindrop', x: 0, y: 0, r: 0, damage: 0, raw: 0, knockback: 0, bornAt: 0, at: 0 }
 }
 
 // Find the nearest living enemy to (px, py); linear scan (03 §3.6). Returns the enemy
@@ -139,6 +141,7 @@ export const sporeShot = {
         vx: Math.cos(a) * lvl.speed,
         vy: Math.sin(a) * lvl.speed,
         damage,
+        raw: lvl.damage * might,
         knockback: lvl.knockback,
         life: lvl.life,
         pierce: lvl.pierce,
@@ -240,7 +243,7 @@ export const umbrellaBlades = {
         // Per-weapon gate: a second blade touching the same enemy this step is ignored.
         if (t < e.hitAt[idx]) continue
         e.hitAt[idx] = t + interval
-        e.hp -= damage
+        e.hp -= hitDamage(e, damage, lvl.damage * world.stats.might)
         e.lastHitTime = t
         const push = lvl.knockback * (1 - e.kbRes)
         if (push > 0) {
@@ -277,7 +280,7 @@ export const dewRing = {
     const damage = actualDamage(lvl.damage, world.stats.might)
     for (let k = 0; k < m; k += 1) {
       const e = world.hitBuf[k]
-      e.hp -= damage
+      e.hp -= hitDamage(e, damage, lvl.damage * world.stats.might)
       e.lastHitTime = t
     }
     state.cooldown += actualCooldown(lvl.interval, world.stats.cooldownMul)
@@ -347,6 +350,7 @@ export const raindrop = {
       z.y = y
       z.r = radius
       z.damage = damage
+      z.raw = lvl.damage * world.stats.might
       z.knockback = lvl.knockback
       z.bornAt = world.time
       z.at = world.time + def.warnSec
@@ -393,6 +397,7 @@ export const leafBoomerang = {
         speed: lvl.speed,
         distance,
         damage,
+        raw: lvl.damage * world.stats.might,
         knockback: lvl.knockback,
         r: def.leafRadius,
         catchR: def.catchRadius,

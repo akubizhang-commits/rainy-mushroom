@@ -9,7 +9,11 @@
 // - Composition is drawn by weight from the active wave segment (percent weights).
 // - On-screen cap: never exceed the segment cap or the enemy pool capacity.
 // - Timed events (WAVES.events: 2:30 ring, 4:30 cross, 6:30 snail wall) fire once each
-//   and obey the global hard cap of 200 (01 §10).
+//   and obey the global hard cap of 200 (01 §10). A ring with `gap` (6:30 wall, 08 K12)
+//   anchors its slots on the player's facing and consumes no random numbers.
+// - Diagnostics (08 L11 / OBS-1): spawns skipped because the segment cap or the global
+//   hard cap is full are designed behaviour → diag.capSkipped.enemies; only a full
+//   enemy pool (03 §10) counts as diag.dropped.enemies.
 // - Enemies that drift beyond max(900, spawnRadius + 120) are relocated back onto the
 //   spawn circle around the player (03 §1-2, §3.8).
 
@@ -61,6 +65,13 @@ export function normalEnemyCount(world) {
   return world.enemies.count - (world.bossEnemy ? 1 : 0)
 }
 
+// Facing angle θf of the player (01 §4: last non-zero move direction).
+export function ringAnchorAngle(player) {
+  const fx = Number.isFinite(player.dirX) ? player.dirX : 0
+  const fy = Number.isFinite(player.dirY) ? player.dirY : 0
+  return fx === 0 && fy === 0 ? 0 : Math.atan2(fy, fx)
+}
+
 export class Spawner {
   constructor(viewport, margin, rng) {
     this.spawnRadius = spawnRadiusFor(viewport, margin)
@@ -90,7 +101,7 @@ export class Spawner {
     while (due > 0) {
       due -= 1
       if (normalEnemyCount(world) >= seg.cap) {
-        world.diag.dropped.enemies += 1
+        world.diag.capSkipped.enemies += 1
         continue
       }
       const id = pickComposition(seg.composition, this.rng)
@@ -113,7 +124,17 @@ export class Spawner {
       if (ev.optional) continue
       const px = world.player.x
       const py = world.player.y
-      if (ev.type === 'ring') {
+      if (ev.type === 'ring' && ev.gap) {
+        // 01 §10 蜗牛围墙缺口：slot k at θf + (360°/slots)(k + 0.5); skipped slots stay
+        // empty so the gap faces the player's heading. Spawn in k order, stop at the cap.
+        const slots = ev.gap.slots
+        const facing = ringAnchorAngle(world.player)
+        for (let k = 0; k < slots; k += 1) {
+          if (ev.gap.skip.includes(k)) continue
+          const a = facing + (TWO_PI * (k + 0.5)) / slots
+          if (!this._spawnEvent(world, ev.enemy, minute, { x: px + Math.cos(a) * ev.radius, y: py + Math.sin(a) * ev.radius })) break
+        }
+      } else if (ev.type === 'ring') {
         // Evenly spaced on a circle around the player, then chase (收拢).
         const start = this.rng.next() * TWO_PI
         for (let i = 0; i < ev.count; i += 1) {
@@ -151,7 +172,7 @@ export class Spawner {
   // Event spawn: global hard cap instead of the segment cap. Returns false when capped.
   _spawnEvent(world, id, minute, at) {
     if (normalEnemyCount(world) >= LIMITS.hardCaps.enemies) {
-      world.diag.dropped.enemies += 1
+      world.diag.capSkipped.enemies += 1
       return false
     }
     return this._spawnOne(world, id, minute, at)
@@ -161,7 +182,7 @@ export class Spawner {
     const def = ENEMIES[id]
     const enemy = world.enemies.acquire()
     if (!enemy) {
-      world.diag.dropped.enemies += 1
+      world.diag.dropped.enemies += 1 // pool full (03 §10)
       return false
     }
     resetEnemy(enemy, {

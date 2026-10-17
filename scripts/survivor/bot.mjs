@@ -206,7 +206,7 @@ export function playRun({ seed, move = 'flee', pick = 'random', maxSec = MAX_SEC
     spawned: 0, purifiedCombat: 0, purifiedCleansing: 0,
     spawnedPreBoss: null, purifiedPreBoss: null,
     xpDropped: 0, xpBanked: 0,
-    dropped: null, droppedTime: 0,
+    capSkipped: null, dropped: null, droppedTime: 0,
     hpAtBossSpawn: null, hpAtBossDefeat: null,
     minutes: [],           // 每分钟：{enemies: 平均同屏普通敌人数（每秒采样）, purified: 本分钟战斗净化数, hurt: 本分钟受击次数}
   }
@@ -287,6 +287,7 @@ export function playRun({ seed, move = 'flee', pick = 'random', maxSec = MAX_SEC
   rec.passives = s.passives
   rec.spawned = run.enemies.nextUid - 1 - (rec.bossSpawnSec !== null ? 1 : 0)
   rec.xpBanked = bankedXp(run.progression)
+  rec.capSkipped = { ...run.diag.capSkipped }
   rec.dropped = { ...run.diag.dropped }
   rec.droppedTime = run.diag.droppedTime
   rec.finalHp = Math.max(0, run.player.hp)

@@ -209,7 +209,7 @@ export function validate() {
         summon: ['every', 'count', 'radius'],
         charge: ['every', 'windup', 'duration', 'speedMul'],
         bubbleRing: ['every', 'hpBelow', 'count'],
-        enrage: ['atSec', 'speedMul', 'damageMul'],
+        erosion: ['fromSec', 'everySec', 'takenStep', 'takenMax'],
       }
       for (const [g, gf] of Object.entries(groups)) {
         const obj = enemy[g]
@@ -220,6 +220,31 @@ export function validate() {
         for (const f of gf) {
           if (!isPositiveNumber(obj[f])) push(`enemies.${id}.${g}.${f}`, '必须为有限正数')
         }
+      }
+      // 超时兜底阶段（01 §9.2，08 K13）：按 atSec 严格升序的非空数组；后档替换前档。
+      const phases = enemy.enrage
+      let lastTaken = 1
+      if (!Array.isArray(phases) || phases.length === 0) {
+        push(`enemies.${id}.enrage`, '必须为按 atSec 升序的非空阶段数组')
+      } else {
+        phases.forEach((ph, i) => {
+          const at = `enemies.${id}.enrage[${i}]`
+          for (const f of ['atSec', 'speedMul', 'damageMul']) {
+            if (!isPositiveNumber(ph[f])) push(`${at}.${f}`, '必须为有限正数')
+          }
+          if (i > 0 && !(ph.atSec > phases[i - 1].atSec)) push(`${at}.atSec`, '必须严格大于前一阶段')
+          if (ph.cooldownMul !== undefined && !(isPositiveNumber(ph.cooldownMul) && ph.cooldownMul <= 1)) push(`${at}.cooldownMul`, '必须在 (0,1]')
+          if (ph.takenMul !== undefined && !isPositiveNumber(ph.takenMul)) push(`${at}.takenMul`, '必须为有限正数')
+          if (ph.ringIgnoresHp !== undefined && typeof ph.ringIgnoresHp !== 'boolean') push(`${at}.ringIgnoresHp`, '必须为布尔值')
+        })
+        const last = phases[phases.length - 1]
+        lastTaken = isPositiveNumber(last.takenMul) ? last.takenMul : 1
+        if (enemy.erosion && isFiniteNumber(enemy.erosion.fromSec) && !(enemy.erosion.fromSec > last.atSec)) {
+          push(`enemies.${id}.erosion.fromSec`, '必须晚于最后一个狂暴阶段')
+        }
+      }
+      if (enemy.erosion && isFiniteNumber(enemy.erosion.takenMax) && !(enemy.erosion.takenMax >= lastTaken)) {
+        push(`enemies.${id}.erosion.takenMax`, '不得小于最后阶段的 takenMul')
       }
       if (enemy.summon && !ENEMIES[enemy.summon.enemy]) push(`enemies.${id}.summon.enemy`, '引用了不存在的敌人 id')
       if (enemy.summon && !isPositiveInt(enemy.summon.count)) push(`enemies.${id}.summon.count`, '必须为正整数')
@@ -327,6 +352,26 @@ export function validate() {
       if (!ENEMIES[ev.enemy]) push(`${at}.enemy`, '引用了不存在的敌人 id')
       if (!isPositiveInt(ev.count)) push(`${at}.count`, '必须为正整数')
       if (ev.type === 'ring' && !isPositiveNumber(ev.radius)) push(`${at}.radius`, '必须为有限正数')
+      // 围墙缺口（01 §10，08 K12）：slots 为正整数，skip 为 0…slots−1 内不重复整数，count = slots − skip 数。
+      if (ev.gap !== undefined) {
+        const g = ev.gap
+        if (ev.type !== 'ring') push(`${at}.gap`, '只有 ring 事件可以带 gap')
+        if (!g || typeof g !== 'object') push(`${at}.gap`, '必须为对象')
+        else {
+          if (!isPositiveInt(g.slots)) push(`${at}.gap.slots`, '必须为正整数')
+          if (!Array.isArray(g.skip)) push(`${at}.gap.skip`, '必须为数组')
+          else {
+            const seenSkip = new Set()
+            for (const k of g.skip) {
+              if (!Number.isInteger(k) || k < 0 || !(k < g.slots)) push(`${at}.gap.skip`, `槽号 ${k} 必须在 0…slots−1 内`)
+              else if (seenSkip.has(k)) push(`${at}.gap.skip`, `槽号 ${k} 重复`)
+              seenSkip.add(k)
+            }
+            if (isPositiveInt(g.slots) && ev.count !== g.slots - g.skip.length) push(`${at}.count`, 'gap 事件的 count 必须等于 slots − skip 数')
+          }
+          if (g.anchor !== 'facing') push(`${at}.gap.anchor`, "必须为 'facing'")
+        }
+      }
       if (ev.type === 'cross' && !isPositiveNumber(ev.spacing)) push(`${at}.spacing`, '必须为有限正数')
       if (ev.optional !== undefined && typeof ev.optional !== 'boolean') push(`${at}.optional`, '必须为布尔值')
     })

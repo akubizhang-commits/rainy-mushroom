@@ -11,7 +11,14 @@
 //     charge     — every 6 s: 0.8 s windup (stands still, direction locked → bossCharge
 //                  event + run.boss.dirX/dirY for the arrow), then 1 s at ×2.5 speed
 //     bubbleRing — every 10 s but only while hp < 50%: 8 mist bubbles in 8 directions
-// - Enrage at 10:00 if still alive: move speed +30%, all Boss damage +50%.
+// - 超时兜底 (01 §9.2, 08 K13): `def.enrage` phases sorted by atSec (10:00 狂暴 I,
+//   11:00 狂暴 II) — a later phase REPLACES the earlier multipliers (never stacked):
+//   speedMul (move speed), damageMul (contact + mist bubble), cooldownMul (all three
+//   skills), ringIgnoresHp (bubble ring no longer needs hp < 50%), takenMul (damage the
+//   Boss takes, applied before rounding via enemy.takenMul). `def.erosion` (雾壳剥落)
+//   adds takenStep per full everySec from fromSec, capped at takenMax. Every new stage
+//   (including each erosion layer) emits one bossEnrage event with its stage number.
+//   No timeout defeat.
 // - `world.boss` is the read-only render view (position, hp ratio, current skill /
 //   warning direction). `world.bossEnemy` is the live pool entity (null once defeated).
 import { ENEMIES } from './data/enemies'
@@ -37,6 +44,12 @@ function makeBossView(def) {
     dirX: 0,          // locked charge direction (valid during windup / charge)
     dirY: 0,
     enraged: false,
+    enrageStage: 0,   // 0 = none, 1 = 狂暴 I, 2 = 狂暴 II, 3+ = 狂暴 II + (stage − 2) 层雾壳剥落
+    speedMul: 1,
+    damageMul: 1,
+    cooldownMul: 1,
+    ringIgnoresHp: false,
+    takenMul: 1,      // Boss 受到伤害倍率（mirrored on the entity as enemy.takenMul）
     // Skill cooldowns (seconds until next use, start-to-start).
     summonCd: def.summon.every,
     chargeCd: def.charge.every,
@@ -59,7 +72,7 @@ export function spawnBoss(world) {
   const def = ENEMIES[WAVES.boss.enemy]
   const e = world.enemies.acquire() // reserved slot: normal spawns stop at 200 of 202
   if (!e) {
-    world.diag.dropped.enemies += 1
+    world.diag.dropped.enemies += 1 // pool full (03 §10), not a cap skip
     return null
   }
   const x = world.player.x
@@ -89,13 +102,8 @@ export function stepBoss(world, dt) {
   if (!e) return
   const b = world.boss
   const def = ENEMIES[e.kind]
-  if (!b.enraged && world.time >= def.enrage.atSec) {
-    b.enraged = true
-    e.speed = def.moveSpeed * def.enrage.speedMul
-    e.damage = def.contactDamage * def.enrage.damageMul
-    b.bubble.damage = def.bubbleRing.bubble.damage * def.enrage.damageMul
-    world.events.push({ type: 'bossEnrage' })
-  }
+  const st = bossEnrageAt(def, world.time)
+  if (st.stage !== b.enrageStage) applyEnrage(world, e, b, def, st)
   // Dew-ring slow from last step, cleared like other enemies (03 §3.4 step 4).
   const speed = e.speed * (1 - e.slow)
   e.slow = 0
@@ -110,15 +118,15 @@ export function stepBoss(world, dt) {
   // Summon 虫群.
   b.summonCd -= dt
   if (b.summonCd <= 0) {
-    b.summonCd += def.summon.every
+    b.summonCd += def.summon.every * b.cooldownMul
     const n = world.spawner.spawnAround(world, def.summon.enemy, def.summon.count, e.x, e.y, def.summon.radius)
     world.events.push({ type: 'bossSummon', count: n })
   }
 
   // 浊雾泡环: ready after its cooldown, fires only while hp < hpBelow × maxHp.
   b.ringCd -= dt
-  if (b.ringCd <= 0 && e.hp < e.maxHp * def.bubbleRing.hpBelow) {
-    b.ringCd = def.bubbleRing.every
+  if (b.ringCd <= 0 && (b.ringIgnoresHp || e.hp < e.maxHp * def.bubbleRing.hpBelow)) {
+    b.ringCd = def.bubbleRing.every * b.cooldownMul
     const n = def.bubbleRing.count
     for (let i = 0; i < n; i += 1) {
       const a = (TWO_PI * i) / n
@@ -146,7 +154,7 @@ export function stepBoss(world, dt) {
       b.skillLeft = 0
     }
   } else if (b.chargeCd <= 0) {
-    b.chargeCd += def.charge.every
+    b.chargeCd += def.charge.every * b.cooldownMul
     b.skill = 'windup'
     b.skillLeft = def.charge.windup
     b.dirX = ux
@@ -160,6 +168,63 @@ export function stepBoss(world, dt) {
   e.y += vy * dt
   e.vx = vx
   e.vy = vy
+}
+
+// Enrage stage at game time t (01 §9.2 超时兜底表). Pure: returns the active phase
+// multipliers (later phase replaces earlier) plus the erosion-adjusted takenMul.
+// stage = index of the active phase (1-based) + erosion layers that still change the
+// multiplier (layers past takenMax add no stage).
+const STAGE_EPS = 1e-6 // world.time accumulates DT; treat 659.9999999 as 11:00
+export function bossEnrageAt(def, t) {
+  const phases = def.enrage
+  let phase = null
+  let stage = 0
+  for (let i = 0; i < phases.length; i += 1) {
+    if (t + STAGE_EPS >= phases[i].atSec) {
+      phase = phases[i]
+      stage = i + 1
+    }
+  }
+  const out = {
+    stage,
+    layers: 0,
+    speedMul: phase ? phase.speedMul : 1,
+    damageMul: phase ? phase.damageMul : 1,
+    cooldownMul: phase && phase.cooldownMul ? phase.cooldownMul : 1,
+    ringIgnoresHp: !!(phase && phase.ringIgnoresHp),
+    takenMul: phase && phase.takenMul ? phase.takenMul : 1,
+  }
+  const er = def.erosion
+  if (er && phase && t + STAGE_EPS >= er.fromSec) {
+    const layers = Math.floor((t + STAGE_EPS - er.fromSec) / er.everySec) + 1
+    const maxLayers = Math.ceil((er.takenMax - out.takenMul) / er.takenStep - 1e-9)
+    out.layers = Math.min(layers, maxLayers)
+    out.takenMul = Math.min(er.takenMax, out.takenMul + er.takenStep * out.layers)
+    out.stage += out.layers
+  }
+  return out
+}
+
+function applyEnrage(world, e, b, def, st) {
+  const prevCdMul = b.cooldownMul
+  b.enrageStage = st.stage
+  b.enraged = st.stage > 0
+  b.speedMul = st.speedMul
+  b.damageMul = st.damageMul
+  b.cooldownMul = st.cooldownMul
+  b.ringIgnoresHp = st.ringIgnoresHp
+  b.takenMul = st.takenMul
+  e.speed = def.moveSpeed * st.speedMul
+  e.damage = def.contactDamage * st.damageMul
+  e.takenMul = st.takenMul
+  b.bubble.damage = def.bubbleRing.bubble.damage * st.damageMul
+  // Shorter cooldowns take effect now: no running timer may exceed the new interval.
+  if (st.cooldownMul < prevCdMul) {
+    b.summonCd = Math.min(b.summonCd, def.summon.every * st.cooldownMul)
+    b.chargeCd = Math.min(b.chargeCd, def.charge.every * st.cooldownMul)
+    b.ringCd = Math.min(b.ringCd, def.bubbleRing.every * st.cooldownMul)
+  }
+  world.events.push({ type: 'bossEnrage', stage: st.stage, layers: st.layers, takenMul: st.takenMul })
 }
 
 // Copy the live entity into the read-only view (end of each step).

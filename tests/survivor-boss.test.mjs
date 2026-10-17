@@ -7,6 +7,9 @@ import { WAVES } from '../js/survivor/data/waves.js'
 import { ENEMIES } from '../js/survivor/data/enemies.js'
 import { LIMITS } from '../js/survivor/data/limits.js'
 import { resetEnemy } from '../js/survivor/Enemies.js'
+import { bossEnrageAt } from '../js/survivor/Boss.js'
+import { resetShot } from '../js/survivor/Weapons.js'
+import { hitDamage } from '../js/survivor/Stats.js'
 
 const BOSS = ENEMIES.boss_mist_snail
 const VIEW = { width: 720, height: 1560 }
@@ -69,11 +72,11 @@ test('6:58 bossWarning, 7:00 Boss spawns once straight above the player, off-scr
   const b = run.boss
   assert.equal(b.kind, 'boss_mist_snail')
   assert.equal(b.r, 56)
-  assert.equal(b.maxHp, 10000)
+  assert.equal(b.maxHp, 4500) // 08 K7
   assert.equal(b.alive, true)
   assert.ok(b.hpRatio > 0.99 && b.hpRatio <= 1)
   assert.ok(['chase', 'windup', 'charge'].includes(b.skill))
-  assert.equal(run.bossEnemy.maxHp, 10000, 'fixed hp, no §9.1 growth at minute 7')
+  assert.equal(run.bossEnemy.maxHp, 4500, 'fixed hp, no §9.1 growth at minute 7')
   assert.equal(run.bossEnemy.damage, 20, 'fixed damage, no §9.1 growth')
   assert.ok(run.grid.large.includes(run.bossEnemy), 'r56 → grid large list')
   // Only once, ever.
@@ -211,15 +214,111 @@ test('10:00 enrage: move speed +30%, contact and bubble damage +50%', () => {
   const run = toBoss(newRun())
   clearNormals(run)
   assert.equal(run.boss.enraged, false)
-  run.time = BOSS.enrage.atSec
+  run.time = BOSS.enrage[0].atSec
   const events = stepN(run, 1)
-  assert.equal(events.filter((e) => e.type === 'bossEnrage').length, 1)
+  const enr = events.filter((e) => e.type === 'bossEnrage')
+  assert.equal(enr.length, 1)
+  assert.equal(enr[0].stage, 1)
   assert.equal(run.boss.enraged, true)
   assert.ok(Math.abs(run.bossEnemy.speed - 45 * 1.3) < 1e-9)
   assert.ok(Math.abs(run.bossEnemy.damage - 30) < 1e-9)
   assert.ok(Math.abs(run.boss.bubble.damage - 15) < 1e-9)
+  assert.equal(run.boss.cooldownMul, 1)
+  assert.equal(run.boss.takenMul, 1)
   assert.equal(stepN(run, 60).filter((e) => e.type === 'bossEnrage').length, 0, 'once')
   assert.equal(run.state, 'playing', 'no time-out loss')
+})
+// 01 §9.2 超时兜底表（08 K13）: [time, speed, contact, bubble, cooldownMul, takenMul, stage].
+const ENRAGE_TABLE = [
+  [600, 58.5, 30, 15, 1, 1.0, 1],   // 10:00 狂暴 I
+  [660, 72, 40, 20, 0.5, 1.5, 2],   // 11:00 狂暴 II（替换 I，不连乘）
+  [720, 72, 40, 20, 0.5, 2.0, 3],   // 12:00 剥落 1 层
+  [780, 72, 40, 20, 0.5, 2.5, 4],   // 13:00
+  [840, 72, 40, 20, 0.5, 3.0, 5],   // 14:00
+  [900, 72, 40, 20, 0.5, 3.5, 6],   // 15:00
+  [960, 72, 40, 20, 0.5, 4.0, 7],   // 16:00 封顶
+  [1020, 72, 40, 20, 0.5, 4.0, 7],  // 17:00 仍 ×4.0
+]
+test('timeout fallback: fast-forward 10:00 → 17:00 matches the 01 §9.2 table', () => {
+  const run = toBoss(newRun())
+  clearNormals(run)
+  run.spawner.accumulator = -1e9
+  let lastStage = 0
+  for (const [t, speed, contact, bubble, cd, taken, stage] of ENRAGE_TABLE) {
+    run.time = t
+    run.bossEnemy.hp = run.bossEnemy.maxHp // keep it alive
+    const events = stepN(run, 1).filter((e) => e.type === 'bossEnrage')
+    assert.equal(events.length, stage === lastStage ? 0 : 1, `${t}s: one bossEnrage per new stage`)
+    if (events.length) assert.equal(events[0].stage, stage)
+    lastStage = stage
+    assert.equal(run.boss.enrageStage, stage, `${t}s stage`)
+    assert.ok(Math.abs(run.bossEnemy.speed - speed) < 1e-9, `${t}s speed ${run.bossEnemy.speed}`)
+    assert.ok(Math.abs(run.bossEnemy.damage - contact) < 1e-9, `${t}s contact`)
+    assert.ok(Math.abs(run.boss.bubble.damage - bubble) < 1e-9, `${t}s bubble`)
+    assert.equal(run.boss.cooldownMul, cd, `${t}s cooldownMul`)
+    assert.ok(Math.abs(run.boss.takenMul - taken) < 1e-9, `${t}s takenMul ${run.boss.takenMul}`)
+    assert.equal(run.bossEnemy.takenMul, run.boss.takenMul, 'entity mirrors the view')
+    assert.equal(run.state, 'playing', `${t}s: no time-out loss`)
+  }
+})
+test('bossEnrageAt: each erosion layer is its own stage; floor at full minutes; capped', () => {
+  assert.equal(bossEnrageAt(BOSS, 599.9).stage, 0)
+  assert.equal(bossEnrageAt(BOSS, 659.9).stage, 1)
+  assert.equal(bossEnrageAt(BOSS, 719.9).takenMul, 1.5)
+  assert.equal(bossEnrageAt(BOSS, 779.9).takenMul, 2.0)
+  assert.equal(bossEnrageAt(BOSS, 959.9).takenMul, 3.5)
+  assert.equal(bossEnrageAt(BOSS, 960).takenMul, 4.0)
+  assert.equal(bossEnrageAt(BOSS, 5000).takenMul, 4.0)
+  assert.equal(bossEnrageAt(BOSS, 5000).stage, 7)
+})
+test('enrage II: skill cooldowns ×0.5 (summon 4 s, charge 3 s, ring 5 s), ring ignores hp > 50%', () => {
+  const run = toBoss(newRun())
+  clearNormals(run)
+  run.spawner.accumulator = -1e9
+  run.time = 660
+  run.weapons = [] // no player damage: the Boss stays at full hp (> 50%)
+  run.player.x = 5000 // keep bubbles and the Boss off the player
+  const events = stepN(run, Math.round(20 / DT))
+  assert.equal(run.bossEnemy.hp, run.bossEnemy.maxHp)
+  const gaps = (type) => {
+    const at = events.filter((e) => e.type === type).map((e) => e.at)
+    return at.slice(1).map((t, i) => t - at[i])
+  }
+  const rings = events.filter((e) => e.type === 'bossBubbleRing')
+  assert.ok(rings.length >= 3, `ring fires at full hp in enrage II (${rings.length})`)
+  for (const g of gaps('bossBubbleRing')) assert.ok(Math.abs(g - 5) < 2 * DT, `ring every 5 s (${g})`)
+  for (const g of gaps('bossSummon')) assert.ok(Math.abs(g - 4) < 2 * DT, `summon every 4 s (${g})`)
+  for (const g of gaps('bossCharge')) assert.ok(Math.abs(g - 3) < 2 * DT, `charge every 3 s (${g})`)
+  assert.ok(gaps('bossSummon').length >= 3 && gaps('bossCharge').length >= 3)
+})
+test('Boss takes round(base × might × takenMul) damage, min 1; normal enemies unaffected', () => {
+  // Unit: rounding happens after the multiplier.
+  assert.equal(hitDamage({ takenMul: 1 }, 7, 7), 7)
+  assert.equal(hitDamage({ takenMul: 2.5 }, 7, 7), 18) // round(17.5)
+  assert.equal(hitDamage({ takenMul: 1.5 }, 1, 0.4), 1) // min 1
+  // Integration: a shot hitting the Boss at 13:00 (×2.5).
+  const run = toBoss(newRun())
+  clearNormals(run)
+  run.spawner.accumulator = -1e9
+  run.weapons = []
+  run.time = 780
+  stepN(run, 1)
+  assert.equal(run.boss.takenMul, 2.5)
+  const e = run.bossEnemy
+  const shot = run.shots.acquire()
+  resetShot(shot, { x: e.x, y: e.y, vx: 0, vy: 0, damage: 7, raw: 7, knockback: 0, life: 1, pierce: 1 })
+  const hp0 = e.hp
+  run.step()
+  assert.equal(hp0 - e.hp, 18)
+})
+test('after 12:00 the run never times out: Boss alive at 17:00, state still playing', () => {
+  const run = toBoss(newRun())
+  clearNormals(run)
+  run.spawner.accumulator = -1e9
+  run.time = 1020
+  stepN(run, 120)
+  assert.equal(run.state, 'playing')
+  assert.ok(run.bossEnemy && run.boss.alive)
 })
 
 test('Boss contact damages the player (Boss lives in the grid large list)', () => {

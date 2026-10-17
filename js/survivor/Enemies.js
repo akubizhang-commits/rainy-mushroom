@@ -38,6 +38,7 @@ export function makeEnemy() {
     dirX: 0,   // cross: fixed flight direction
     dirY: 0,
     limit: 0,  // cross: recycle once dirX·(x − player.x) exceeds this (screen half-width + margin)
+    takenMul: 1, // damage-taken multiplier; only the Boss changes it (01 §9.2 超时兜底)
   }
 }
 
@@ -67,6 +68,7 @@ export function resetEnemy(enemy, spec) {
   enemy.dirX = spec.dirX || 0
   enemy.dirY = spec.dirY || 0
   enemy.limit = spec.limit || 0
+  enemy.takenMul = 1
 }
 
 const KB_DECAY = 8 // per-second exponential-ish decay of residual knockback

@@ -94,7 +94,7 @@ test('candidate pool follows 01 §8.2 weights and excludes out-of-scope content 
     assert.equal(byKey.get(`passive:${id}`).weight, WEIGHT_NEW_PASSIVE)
   }
   assert.equal(pool.length, 9)
-  assert.deepEqual([WEIGHT_UPGRADE, WEIGHT_NEW_WEAPON, WEIGHT_NEW_PASSIVE], [10, 8, 6])
+  assert.deepEqual([WEIGHT_UPGRADE, WEIGHT_NEW_WEAPON, WEIGHT_NEW_PASSIVE], [10, 8, 4]) // 08 K11：新被动 6 → 4
 })
 
 test('regen / magnet never appear in any offer; all five weapons do (08 K8)', () => {
@@ -202,6 +202,9 @@ test('10 000 draws: first-card type frequency matches the weight ratio within 5%
     const freq = counts[k] / N
     assert.ok(Math.abs(freq - expected[k]) / expected[k] < 0.05, `${k}: ${freq} vs ${expected[k]}`)
   }
+  // 01 §8.2 参考：10 / 32 / 16（共 58），单张抽到新被动约 28%。
+  assert.equal(total, 58)
+  assert.ok(Math.abs(counts.newPassive / N - 16 / 58) < 0.02, `新被动 ≈ 27.6% (got ${counts.newPassive / N})`)
 })
 
 test('draftOffer is deterministic for the same seed and parameters', () => {

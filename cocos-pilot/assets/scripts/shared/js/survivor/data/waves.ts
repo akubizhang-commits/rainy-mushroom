@@ -13,7 +13,11 @@
 // `events` (01 §10 事件列, sorted by atSec) fire once each when the run clock reaches
 // `atSec`. All event spawns obey the global hard cap (limits.hardCaps.enemies):
 //   ring  — `count` × `enemy` evenly spaced on a circle of `radius` around the player,
-//           then they chase normally (收拢)
+//           then they chase normally (收拢). Without `gap` the start angle is random.
+//           With `gap: {slots, skip, anchor:'facing'}` (01 §10 围墙缺口规则, 08 K12) the
+//           circle is split into `slots` slots at θf + 360°/slots × (k + 0.5), where θf
+//           is the player's facing at trigger time; slots listed in `skip` stay empty and
+//           the rest spawn in k order (no random numbers; count = slots − skip.length)
 //   cross — `count` × `enemy` in a vertical column (`spacing` apart) just outside one
 //           side of the screen, flying straight across; recycled silently on exit
 //   elite — 5:00 精英; `optional: true` means the spawner skips it (S2 未实现)
@@ -31,7 +35,7 @@ export const WAVES = Object.freeze({
     Object.freeze({
       fromSec: 0,
       toSec: 60,
-      spawnRate: 1.0,
+      spawnRate: 1.3, // 08 K9：1.0 → 1.3
       cap: 30,
       composition: Object.freeze({ gnat: 100 }),
     }),
@@ -93,7 +97,14 @@ export const WAVES = Object.freeze({
     Object.freeze({ atSec: 270, type: 'cross', enemy: 'moth', count: 16, spacing: 48 }),
     // 5:00 精英圆壳甲虫 ×1（S2 可选，未实现）
     Object.freeze({ atSec: 300, type: 'elite', enemy: 'elite_beetle', count: 1, optional: true }),
-    // 6:30 蜗牛围墙
-    Object.freeze({ atSec: 390, type: 'ring', enemy: 'snail', count: 20, radius: 400 }),
+    // 6:30 蜗牛围墙（08 K12：14 只 + 朝向缺口，规则见文件头 ring.gap）
+    Object.freeze({
+      atSec: 390,
+      type: 'ring',
+      enemy: 'snail',
+      count: 14,
+      radius: 400,
+      gap: Object.freeze({ slots: 16, skip: Object.freeze([0, 15]), anchor: 'facing' }),
+    }),
   ]),
 })

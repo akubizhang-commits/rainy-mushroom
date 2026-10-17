@@ -117,6 +117,10 @@ test('all five weapons are drafted content with unique hitAt indices 0–4', () 
   assert.equal(PLAYER.weaponSlots, 4, '5 选 4：武器栏 4 格不变')
 })
 
+test('player pickupRadius follows 01 §5 (08 K10: 60 → 100)', () => {
+  assert.equal(PLAYER.pickupRadius, 100)
+})
+
 test('new weapon cards have names and descriptions in strings (card_<id>)', () => {
   for (const id of ['raindrop', 'leaf_boomerang']) {
     assert.equal(STRINGS[`card_${id}`], WEAPONS[id].name)
@@ -190,13 +194,18 @@ test('boss_mist_snail matches 01-gdd §9.2 stats and skills', () => {
   const b = ENEMIES.boss_mist_snail
   assert.deepEqual(
     [b.hp, b.moveSpeed, b.contactDamage, b.radius, b.knockbackResist, b.xp, b.behavior],
-    [10000, 45, 20, 56, 1, 0, 'boss'],
+    [4500, 45, 20, 56, 1, 0, 'boss'], // 08 K7：10000 → 4500
   )
   assert.deepEqual([b.summon.every, b.summon.enemy, b.summon.count], [8, 'gnat', 12])
   assert.deepEqual([b.charge.every, b.charge.windup, b.charge.duration, b.charge.speedMul], [6, 0.8, 1, 2.5])
   assert.deepEqual([b.bubbleRing.every, b.bubbleRing.hpBelow, b.bubbleRing.count], [10, 0.5, 8])
   assert.deepEqual({ ...b.bubbleRing.bubble }, { speed: 120, damage: 10, life: 4, radius: 12 })
-  assert.deepEqual([b.enrage.atSec, b.enrage.speedMul, b.enrage.damageMul], [600, 1.3, 1.5])
+  // 08 K13 / 01 §9.2 超时兜底：阶段数组 + 雾壳剥落。
+  assert.deepEqual(b.enrage.map((p) => ({ ...p })), [
+    { atSec: 600, speedMul: 1.3, damageMul: 1.5 },
+    { atSec: 660, speedMul: 1.6, damageMul: 2.0, cooldownMul: 0.5, ringIgnoresHp: true, takenMul: 1.5 },
+  ])
+  assert.deepEqual({ ...b.erosion }, { fromSec: 720, everySec: 60, takenStep: 0.5, takenMax: 4.0 })
   assert.deepEqual({ ...WAVES.boss }, { enemy: 'boss_mist_snail', atSec: 420, warningSec: 2 })
 })
 
@@ -239,7 +248,7 @@ test('only the last wave segment is open-ended (08 K2: 7:00–Boss 击败, toSec
 test('wave segments follow 01-gdd §10 from 0:00 to Boss 击败', () => {
   // [from, to, rate, cap, gnat, beetle, moth, snail, sporeling]
   const rows = [
-    [0, 60, 1.0, 30, 100, 0, 0, 0, 0],
+    [0, 60, 1.3, 30, 100, 0, 0, 0, 0], // 08 K9：1.0 → 1.3
     [60, 120, 1.6, 50, 70, 30, 0, 0, 0],
     [120, 180, 2.2, 80, 50, 30, 20, 0, 0],
     [180, 240, 2.8, 110, 40, 30, 20, 10, 0],
@@ -277,8 +286,11 @@ test('wave events follow 01-gdd §10 and reference known enemies', () => {
   assert.equal(cross.type, 'cross')
   assert.equal(cross.enemy, 'moth')
   assert.equal(cross.count, 16)
+  assert.equal(ring.gap, undefined, '2:30 包围圈不带缺口')
   const wall = events.find((e) => e.atSec === 390)
-  assert.deepEqual([wall.type, wall.enemy, wall.count, wall.radius], ['ring', 'snail', 20, 400])
+  // 08 K12：14 只、半径 400，16 槽跳过 k = 0/15，以朝向为锚。
+  assert.deepEqual([wall.type, wall.enemy, wall.count, wall.radius], ['ring', 'snail', 14, 400])
+  assert.deepEqual({ ...wall.gap, skip: [...wall.gap.skip] }, { slots: 16, skip: [0, 15], anchor: 'facing' })
   const elite = events.find((e) => e.atSec === 300)
   assert.equal(elite.enemy, 'elite_beetle')
   assert.equal(elite.optional, true, '精英未实现，保持 optional')

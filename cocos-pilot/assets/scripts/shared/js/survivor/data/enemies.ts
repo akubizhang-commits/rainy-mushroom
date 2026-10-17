@@ -15,7 +15,7 @@
 //   ranged — sporeling: approach while > approachRange, spit a mist bubble every
 //            fireInterval while ≤ fireRange (bubble: speed / damage / life / radius)
 //   charge — elite_beetle (not wired in S2)
-//   boss   — boss_mist_snail: chase + summon / charge / bubbleRing skills, enrage (Boss.js)
+//   boss   — boss_mist_snail: chase + summon / charge / bubbleRing skills, enrage phases + erosion (Boss.js)
 const HP_GROWTH_PER_MIN = 0.15     // 01 §9.1 生命成长系数
 const DAMAGE_GROWTH_PER_MIN = 0.05 // 01 §9.1 接触伤害成长系数
 export const ENEMIES = Object.freeze({
@@ -116,7 +116,7 @@ export const ENEMIES = Object.freeze({
   // 技能各自独立计时、从出现起算，冷却按“开始到开始”计。
   boss_mist_snail: Object.freeze({
     name: '浊雾巨蜗',
-    hp: 10000,
+    hp: 4500,                  // 08 K7：10000 → 4500
     moveSpeed: 45,
     contactDamage: 20,
     xp: 0,                     // 击败后直接进入撤离阶段
@@ -144,10 +144,14 @@ export const ENEMIES = Object.freeze({
       count: 8,                // 8 个方向
       bubble: Object.freeze({ speed: 120, damage: 10, life: 4, radius: 12 }),
     }),
-    enrage: Object.freeze({
-      atSec: 600,              // 10:00 未击败则狂暴
-      speedMul: 1.3,           // 移速 +30%
-      damageMul: 1.5,          // 所有伤害 +50%
-    }),
+    // 超时兜底（01 §9.2，08 K13）：按时间升序的阶段，后档替换前档倍率、不连乘。
+    // damageMul 作用于 Boss 接触伤害与浊雾泡；cooldownMul 作用于三个技能冷却；
+    // ringIgnoresHp 时泡环不再要求生命 <50%；takenMul = Boss 受到伤害倍率（乘在取整前）。
+    enrage: Object.freeze([
+      Object.freeze({ atSec: 600, speedMul: 1.3, damageMul: 1.5 }), // 狂暴 I（10:00）
+      Object.freeze({ atSec: 660, speedMul: 1.6, damageMul: 2.0, cooldownMul: 0.5, ringIgnoresHp: true, takenMul: 1.5 }), // 狂暴 II（11:00）
+    ]),
+    // 雾壳剥落：fromSec 起每满 everySec 秒叠 1 层，每层受到伤害 +takenStep，封顶 takenMax。
+    erosion: Object.freeze({ fromSec: 720, everySec: 60, takenStep: 0.5, takenMax: 4.0 }),
   }),
 })

@@ -9,7 +9,7 @@
 // - draftOffer(state, rng) returns three cards following 01 §8.2 (S2 scope, 08 L4/K3):
 //   candidate pool = upgrades of owned, non-maxed weapons/passives (weight 10) + every
 //   unowned weapon while weapon slots remain (8) + every unowned passive while passive
-//   slots remain (6). Only weapons with non-empty `levels` and passives present in
+//   slots remain (4, 08 K11). Only weapons with non-empty `levels` and passives present in
 //   data/passives.js qualify (S2: all five weapons, 08 K8 — with 4 weapon slots each run
 //   leaves one out; once 4 are owned no new-weapon card appears); no evolution cards in S2. Weighted draw without
 //   replacement; short pools are padded with fallback cards (一捧露水 / 闪亮孢子, may
@@ -54,10 +54,10 @@ export function addXp(prog, amount) {
   return gained
 }
 
-// Card weights (01 §8.2 第 3 条).
+// Card weights (01 §8.2 第 3 条权重表). Evolution / fallback cards are not weighted.
 export const WEIGHT_UPGRADE = 10
 export const WEIGHT_NEW_WEAPON = 8
-export const WEIGHT_NEW_PASSIVE = 6
+export const WEIGHT_NEW_PASSIVE = 4 // 08 K11：6 → 4
 
 // Build the candidate list for an offer. `state` = {
 //   weapons: [{id, level}] (equipped, in acquisition order),

@@ -4,7 +4,7 @@
 export const PLAYER = Object.freeze({
   maxHp: 100,        // 最大生命，开局满血
   moveSpeed: 160,    // 移动速度 /秒
-  pickupRadius: 60,  // 拾取半径；进入后以 600/秒 飞向角色
+  pickupRadius: 100, // 拾取半径；进入后以 600/秒 飞向角色（08 K10：60 → 100）
   might: 1.0,        // 伤害倍率
   cooldown: 1.0,     // 冷却倍率，下限 0.5
   area: 1.0,         // 范围倍率

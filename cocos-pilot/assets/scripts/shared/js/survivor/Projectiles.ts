@@ -14,6 +14,7 @@
 // resolved together in SurvivorRun step 10 so one step's hits drop loot once.
 
 import { makeShot, makeZone, enemiesInCircle } from './Weapons'
+import { hitDamage } from './Stats'
 
 // Advance every active shot by dt. `world` provides: shots (Pool), enemies (Pool),
 // grid (SpatialGrid), queryBuf (Int32Array), time.
@@ -113,7 +114,7 @@ function moveLeaf(shot, player, dt) {
 }
 
 function applyHit(enemy, shot, world) {
-  enemy.hp -= shot.damage
+  enemy.hp -= hitDamage(enemy, shot.damage, shot.raw)
   enemy.lastHitTime = world.time
   const push = shot.knockback * (1 - enemy.kbRes)
   if (!(push > 0)) return
@@ -144,7 +145,7 @@ export function stepZones(world) {
     const m = enemiesInCircle(world, z.x, z.y, z.r)
     for (let k = 0; k < m; k += 1) {
       const e = world.hitBuf[k]
-      e.hp -= z.damage
+      e.hp -= hitDamage(e, z.damage, z.raw)
       e.lastHitTime = t
       const push = z.knockback * (1 - e.kbRes)
       if (push > 0) {

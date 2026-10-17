@@ -123,6 +123,7 @@ function summarize(recs) {
     builds,
     weaponCount: count(recs.map((r) => r.weapons.length)),
     passiveCount: count(recs.map((r) => r.passives.length)),
+    capSkipped: recs.reduce((a, r) => a + ((r.capSkipped && r.capSkipped.enemies) || 0), 0),
     dropped: recs.reduce((a, r) => ({
       enemies: a.enemies + (r.dropped.enemies || 0),
       shots: a.shots + (r.dropped.shots || 0),
@@ -169,7 +170,7 @@ say('【2】成长节奏：平均等级（n=到达该时间点的局数）  对�
 say(table(
   ['组合', 'Lv@1:00', 'Lv@3:00', 'Lv@5:00', 'Lv@Boss出现(7:00)', '结束时平均等级'],
   [
-    ['01 §8.4 目标', '5–6', '12–14', '18–20', '24–26', ''],
+    ['01 §8.4 目标', '5（保守 4）', '12–14', '18–20', '24–26', ''],
     ...[...configs.map((c) => [c.label, c.sum]), ['全部', total]].map(([label, s]) => [
       label, avgN(s.lv60), avgN(s.lv180), avgN(s.lv300), avgN(s.lvBoss), num(s.finalLevelMean),
     ]),
@@ -245,8 +246,9 @@ const wonList = Object.entries(wonBuilds).sort((a, b) => b[1] - a[1] || (a[0] < 
 say(wonList.length ? table(['构筑（武器 | 被动）', '通关局数'], wonList.map(([k, v]) => [k, v])) : '（无通关局）')
 say()
 say('【7】诊断')
-say(`diag.dropped（全部局合计）：敌人 ${total.dropped.enemies}（含“同屏上限已满跳过的刷怪”，属设计内行为）/ 弹体 ${total.dropped.shots} / 浊雾泡 ${total.dropped.bubbles}；droppedTime 最大值 ${total.droppedTimeMax}（应为 0）`)
-say(table(['组合', '敌人跳过', '弹体丢弃', '浊雾泡丢弃'], configs.map((c) => [c.label, c.sum.dropped.enemies, c.sum.dropped.shots, c.sum.dropped.bubbles])))
+say(`diag.capSkipped（全部局合计）：敌人 ${total.capSkipped}（同屏上限/全局硬上限已满跳过的刷怪，设计内行为）`)
+say(`diag.dropped（全部局合计，对象池满丢弃，应为 0）：敌人 ${total.dropped.enemies} / 弹体 ${total.dropped.shots} / 浊雾泡 ${total.dropped.bubbles}；droppedTime 最大值 ${total.droppedTimeMax}（应为 0）`)
+say(table(['组合', '敌人上限跳过', '敌人池满丢弃', '弹体丢弃', '浊雾泡丢弃'], configs.map((c) => [c.label, c.sum.capSkipped, c.sum.dropped.enemies, c.sum.dropped.shots, c.sum.dropped.bubbles])))
 console.log(out.join('\n'))
 
 // JSON（tmp/ 已在 .gitignore）

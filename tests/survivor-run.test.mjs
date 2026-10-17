@@ -251,6 +251,31 @@ test('summary reports purified count and crystal cards', () => {
   assert.equal(run.purified, 1)
 })
 
+test('pickup radius 100 (08 K10): a spore at 99 is attracted, one at 101 is not', () => {
+  const run = newRun()
+  assert.equal(run.stats.pickupRadius, 100)
+  run.weapons = []
+  run.spawner.accumulator = -1e9
+  const near = run.spores.acquire()
+  Object.assign(near, { x: 99, y: 0, xp: 1, tier: 0 })
+  const far = run.spores.acquire()
+  Object.assign(far, { x: 0, y: 101, xp: 1, tier: 0 })
+  run.step()
+  assert.ok(near.x < 99, 'inside radius → flies toward the player')
+  assert.equal(far.y, 101, 'outside radius → stays')
+})
+test('diag splits capSkipped (designed cap skips) from dropped (pool full) (08 L11)', () => {
+  const run = newRun()
+  assert.deepEqual({ ...run.diag.capSkipped }, { enemies: 0 })
+  assert.deepEqual({ ...run.diag.dropped }, { enemies: 0, shots: 0, bubbles: 0, zones: 0 })
+  run.weapons = [] // nothing dies: the 0:00–1:00 cap (30) fills up
+  for (let i = 0; i < 40 * 60; i += 1) {
+    run.player.hp = run.player.maxHp
+    run.step()
+  }
+  assert.ok(run.diag.capSkipped.enemies > 0, 'segment cap skips counted')
+  assert.equal(run.diag.dropped.enemies, 0, 'pool never full')
+})
 test('drainEvents returns and clears the event queue', () => {
   const run = newRun()
   run.events.push({ type: 'test' })

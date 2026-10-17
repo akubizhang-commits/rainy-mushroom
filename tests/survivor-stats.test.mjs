@@ -18,7 +18,7 @@ test('base stats with no bonuses/passives match the player data (01 §15.1)', ()
   assert.equal(s.cooldownMul, 1)
   assert.equal(s.areaMul, 1)
   assert.equal(s.moveSpeed, 160)
-  assert.equal(s.pickupRadius, 60)
+  assert.equal(s.pickupRadius, 100) // 08 K10
   assert.equal(s.regenPerSec, 0)
   assert.equal(s.maxHp, 100)
 })
@@ -37,9 +37,9 @@ test('移动速度 = 160 × (1 + 局外轻灵蕨步) × (1 + 蕨叶轻靴): Lv1 
   assert.ok(Math.abs(lv5.moveSpeed - 160 * 1.1 * 1.4) < 1e-9)
 })
 
-test('拾取半径 = 60 × (1 + 局外孢子亲和)（孢子罗盘 S2 未做，项为 0）', () => {
+test('拾取半径 = 100 × (1 + 局外孢子亲和)（孢子罗盘 S2 未做，项为 0）', () => {
   const s = computeStats(PLAYER, { pickup: 0.25 }, { magnet: 3 })
-  assert.ok(Math.abs(s.pickupRadius - 60 * 1.25) < 1e-9)
+  assert.ok(Math.abs(s.pickupRadius - 100 * 1.25) < 1e-9)
 })
 
 test('实际冷却 = base × max(0.5, 1 − 湿润苔衣): Lv1 0.92, Lv5 0.6, never below 0.5', () => {

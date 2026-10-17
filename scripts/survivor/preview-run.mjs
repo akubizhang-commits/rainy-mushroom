@@ -62,7 +62,7 @@ const { rec, run } = playRun({
       if (ev.type in bossSkills) bossSkills[ev.type] += 1
       if (ev.type === 'bossWarning') log(`  ${t}  ⚠ Boss 预警`)
       else if (ev.type === 'bossSpawn') log(`  ${t}  ★ 浊雾巨蜗出现  角色 Lv${r.progression.level} 生命 ${hp(r)}  ${build(r)}`)
-      else if (ev.type === 'bossEnrage') log(`  ${t}  ！Boss 狂暴（移速 +30%，伤害 +50%）`)
+      else if (ev.type === 'bossEnrage') log(`  ${t}  ！Boss ${ev.stage === 1 ? '狂暴 I' : ev.stage === 2 ? '狂暴 II' : `雾壳剥落 ${ev.layers} 层`}（受到伤害 ×${ev.takenMul}）`)
       else if (ev.type === 'bossBubbleRing' && !r._ringLogged) { r._ringLogged = true; log(`  ${t}  Boss 生命 <50%，开始放浊雾泡环`) }
       else if (ev.type === 'bossDefeated') log(`  ${t}  ✔ 浊雾巨蜗被净化  角色生命 ${hp(r)}`)
       else if (ev.type === 'cleansing') log(`  ${t}  cleansing：全场净化 1.5 秒`)
@@ -81,8 +81,8 @@ console.log('\n--- 结算 ---')
 const outcome = rec.outcome === 'won' ? '✅ 击败浊雾巨蜗并撤离，胜利' : rec.outcome === 'lost' ? `❌ 被浊雾笼罩（最后伤害来源：${cardName(rec.killer)}）` : '⏸ 到达时长上限仍未结束'
 console.log(`结果：${outcome}`)
 console.log(`时长：${mmss(rec.survivalSec)}   等级：Lv${rec.level}   构筑：${build(run)}`)
-console.log(`等级节点：1:00 Lv${rec.levelAt[60] ?? '—'} / 3:00 Lv${rec.levelAt[180] ?? '—'} / 5:00 Lv${rec.levelAt[300] ?? '—'} / Boss 出现 Lv${rec.bossLevel ?? '—'}（目标 5–6 / 12–14 / 18–20 / 24–26）`)
+console.log(`等级节点：1:00 Lv${rec.levelAt[60] ?? '—'} / 3:00 Lv${rec.levelAt[180] ?? '—'} / 5:00 Lv${rec.levelAt[300] ?? '—'} / Boss 出现 Lv${rec.bossLevel ?? '—'}（目标 5（保守 4）/ 12–14 / 18–20 / 24–26）`)
 if (rec.bossDefeatSec !== null) console.log(`Boss 战：${(rec.bossDefeatSec - rec.bossSpawnSec).toFixed(1)}s（召唤 ${bossSkills.bossSummon} 次 / 冲撞 ${bossSkills.bossCharge} 次 / 泡环 ${bossSkills.bossBubbleRing} 次）   撤离：${rec.wonSec !== null ? (rec.wonSec - rec.extractOpenSec).toFixed(1) + 's' : '未完成'}`)
 const preRate = rec.spawnedPreBoss ? `${((rec.purifiedPreBoss / rec.spawnedPreBoss) * 100).toFixed(1)}%` : '—'
 console.log(`净化率：0–7:00 ${preRate}，全程 ${((rec.purifiedCombat / Math.max(1, rec.spawned)) * 100).toFixed(1)}%（战斗净化 ${rec.purifiedCombat} / 生成 ${rec.spawned}，另 cleansing 净化 ${rec.purifiedCleansing}）   孢子拾取率 ${((rec.xpBanked / Math.max(1, rec.xpDropped)) * 100).toFixed(1)}%`)
-console.log(`升级次数：${rec.picks.length}   diag.dropped：敌人 ${rec.dropped.enemies}（多为同屏上限已满跳过的刷怪，设计内）/ 弹体 ${rec.dropped.shots} / 浊雾泡 ${rec.dropped.bubbles || 0}   droppedTime ${rec.droppedTime}（应为 0）\n`)
+console.log(`升级次数：${rec.picks.length}   diag.capSkipped：敌人 ${rec.capSkipped.enemies}（同屏上限跳过，设计内）   diag.dropped（对象池满，应为 0）：敌人 ${rec.dropped.enemies} / 弹体 ${rec.dropped.shots} / 浊雾泡 ${rec.dropped.bubbles || 0}   droppedTime ${rec.droppedTime}（应为 0）\n`)

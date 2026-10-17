@@ -11,6 +11,7 @@ import {
   relocateDistanceFor,
   pickComposition,
   segmentAt,
+  ringAnchorAngle,
 } from '../js/survivor/Spawner.js'
 import { LIMITS } from '../js/survivor/data/limits.js'
 import { WAVES } from '../js/survivor/data/waves.js'
@@ -21,9 +22,9 @@ const DT = 1 / 60
 function makeWorld(viewport = { width: 720, height: 1560 }) {
   return {
     time: 0,
-    player: { x: 0, y: 0, r: 18 },
+    player: { x: 0, y: 0, r: 18, dirX: 1, dirY: 0 },
     enemies: new Pool(LIMITS.pools.enemies, makeEnemy),
-    diag: { dropped: { enemies: 0, shots: 0 }, droppedTime: 0 },
+    diag: { capSkipped: { enemies: 0 }, dropped: { enemies: 0, shots: 0 }, droppedTime: 0 },
     viewport,
   }
 }
@@ -66,7 +67,8 @@ test('pickComposition respects the percentage weights (statistical tolerance)', 
 test('spawn rate produces roughly rate × seconds enemies in the first segment', () => {
   const world = makeWorld()
   const spawner = new Spawner(world.viewport, LIMITS.spawnMarginU, new SeededRandom('s:spawn'))
-  const seg = WAVES.segments[0] // rate 1.0, gnat only, cap 30
+  const seg = WAVES.segments[0] // rate 1.3 (08 K9), gnat only, cap 30
+  assert.equal(seg.spawnRate, 1.3)
   // Run 30 simulated seconds (never hit the cap since nothing removes enemies, so
   // check the first few seconds before the cap bites).
   let spawnedBeforeCap = 0
@@ -76,8 +78,8 @@ test('spawn rate produces roughly rate × seconds enemies in the first segment',
     if (world.enemies.count < seg.cap) spawnedBeforeCap = world.enemies.count
     world.time += DT
   }
-  // 10s × 1.0/s ≈ 10 spawns (±1 for accumulator rounding) before cap of 30.
-  assert.ok(spawnedBeforeCap >= 9 && spawnedBeforeCap <= 11, `~10 spawns, got ${spawnedBeforeCap}`)
+  // 10s × 1.3/s ≈ 13 spawns (±1 for accumulator rounding) before cap of 30.
+  assert.ok(spawnedBeforeCap >= 12 && spawnedBeforeCap <= 14, `~13 spawns, got ${spawnedBeforeCap}`)
 })
 
 test('all routine spawns land outside the viewport (on the spawn circle)', () => {
@@ -108,7 +110,21 @@ test('on-screen cap is never exceeded', () => {
     assert.ok(world.enemies.count <= WAVES.segments[1].cap, 'count ≤ segment cap')
     world.time += DT
   }
-  assert.ok(world.diag.dropped.enemies > 0, 'cap drops are counted in diag')
+  // 08 L11：段上限满只加 capSkipped（设计内），dropped 只计对象池满。
+  assert.ok(world.diag.capSkipped.enemies > 0, 'cap skips are counted in diag.capSkipped')
+  assert.equal(world.diag.dropped.enemies, 0, 'cap skips are not pool drops')
+})
+test('a full enemy pool counts only diag.dropped, not capSkipped (08 L11)', () => {
+  const world = makeWorld()
+  world.enemies = new Pool(3, makeEnemy) // pool smaller than the segment cap (30)
+  const spawner = new Spawner(world.viewport, LIMITS.spawnMarginU, new SeededRandom('poolfull'))
+  for (let i = 0; i < 10 * 60; i += 1) {
+    spawner.step(world, DT)
+    world.time += DT
+  }
+  assert.equal(world.enemies.count, 3)
+  assert.ok(world.diag.dropped.enemies > 0, 'pool-full spawns counted as dropped')
+  assert.equal(world.diag.capSkipped.enemies, 0, 'segment cap (30) never reached')
 })
 
 test('enemies that drift beyond relocateDistance are moved back onto the spawn circle', () => {
@@ -258,22 +274,111 @@ test('2:30 ring obeys the global hard cap of 200 and counts the overflow', () =>
     const e = world.enemies.acquire()
     resetEnemy(e, { kind: 'gnat', x: 0, y: 500, r: 10, hp: 8, speed: 0, damage: 0, xp: 1, kbRes: 0 })
   }
-  const dropped0 = world.diag.dropped.enemies
+  const skipped0 = world.diag.capSkipped.enemies
   const ring = triggerEvent(world, spawner, 150)
   assert.equal(ring.length, 10)
   assert.equal(world.enemies.count, LIMITS.hardCaps.enemies)
-  assert.ok(world.diag.dropped.enemies > dropped0, 'overflow counted')
+  assert.ok(world.diag.capSkipped.enemies > skipped0, 'hard-cap overflow counted as capSkipped')
+  assert.equal(world.diag.dropped.enemies, 0, 'hard cap is not a pool drop')
 })
 
-test('6:30 snail wall: 20 snails evenly spaced on a radius-400 circle', () => {
+// 6:30 wall (01 §10 缺口规则, 08 K12): 14 snails at θf + 22.5° × (k + 0.5), k = 1…14.
+function wallAt(facingDeg, seed = 'wall', px = 37, py = -81) {
   const world = makeWorld()
-  const spawner = new Spawner(world.viewport, LIMITS.spawnMarginU, new SeededRandom('wall'))
+  const f = (facingDeg * Math.PI) / 180
+  world.player.x = px
+  world.player.y = py
+  world.player.dirX = Math.cos(f)
+  world.player.dirY = Math.sin(f)
+  const spawner = new Spawner(world.viewport, LIMITS.spawnMarginU, new SeededRandom(seed))
   const wall = triggerEvent(world, spawner, 390)
-  assert.equal(wall.length, 20)
-  for (const e of wall) {
-    assert.equal(e.kind, 'snail')
-    assert.ok(Math.abs(Math.hypot(e.x, e.y) - 400) < 1e-6)
+  return { world, spawner, wall, f }
+}
+const DEG = Math.PI / 180
+function angleDiff(a, b) {
+  let d = (a - b) % (2 * Math.PI)
+  if (d > Math.PI) d -= 2 * Math.PI
+  if (d < -Math.PI) d += 2 * Math.PI
+  return d
+}
+test('6:30 snail wall: exactly 14 snails at θf + 22.5° × (k + 0.5), k = 1…14, radius 400', () => {
+  for (const facing of [0, 90, 137, -60]) {
+    const { world, wall, f } = wallAt(facing)
+    assert.equal(wall.length, 14, `facing ${facing}°`)
+    wall.forEach((e, i) => {
+      assert.equal(e.kind, 'snail')
+      assert.equal(e.behavior, 'chase')
+      const dx = e.x - world.player.x
+      const dy = e.y - world.player.y
+      assert.ok(Math.abs(Math.hypot(dx, dy) - 400) < 1e-6, 'on the 400 circle')
+      const k = i + 1 // spawned in k order 1 → 14
+      const want = f + 22.5 * DEG * (k + 0.5)
+      assert.ok(Math.abs(angleDiff(Math.atan2(dy, dx), want)) < 1e-9, `facing ${facing}° slot k=${k}`)
+    })
   }
+})
+test('6:30 snail wall gap faces the player: centre error < 1°, nearest snails at θf ± 33.75°', () => {
+  for (const facing of [0, 45, 180, -120]) {
+    const { world, wall, f } = wallAt(facing)
+    const rel = wall.map((e) => angleDiff(Math.atan2(e.y - world.player.y, e.x - world.player.x), f))
+    // Gap = the largest angular hole between neighbours; its centre must face θf.
+    const sorted = rel.map((a) => (a + 2 * Math.PI) % (2 * Math.PI)).sort((a, b) => a - b)
+    let best = { size: -1, centre: 0 }
+    for (let i = 0; i < sorted.length; i += 1) {
+      const a = sorted[i]
+      const b = i + 1 < sorted.length ? sorted[i + 1] : sorted[0] + 2 * Math.PI
+      if (b - a > best.size) best = { size: b - a, centre: (a + b) / 2 }
+    }
+    assert.ok(Math.abs(best.size - 67.5 * DEG) < 1e-9, '缺口张角 67.5°')
+    assert.ok(Math.abs(angleDiff(best.centre, 0)) < 1 * DEG, `缺口中心对准朝向 (facing ${facing}°)`)
+    const nearest = Math.min(...rel.map((a) => Math.abs(a)))
+    assert.ok(Math.abs(nearest - 33.75 * DEG) < 1e-9, '两侧最近蜗牛在 θf ± 33.75°')
+  }
+})
+test('6:30 snail wall consumes no random numbers and is identical for the same state', () => {
+  const a = wallAt(73, 'wall-a')
+  const b = wallAt(73, 'wall-b') // different spawn stream, same player state
+  assert.equal(a.wall.length, b.wall.length)
+  a.wall.forEach((e, i) => {
+    assert.equal(e.x, b.wall[i].x)
+    assert.equal(e.y, b.wall[i].y)
+  })
+  // No rng draw: the spawner stream after the event equals a fresh stream with the
+  // same pre-event draws. Compare against a run whose event list skips the wall.
+  const ref = new SeededRandom('wall-c')
+  const probe = wallAt(73, 'wall-c')
+  // triggerEvent made two steps; routine spawns at 6:30 (rate 4.8) draw 2 numbers each.
+  // Re-play those draws on `ref` and the next value must match the spawner's next value.
+  const routine = probe.world.enemies.count - probe.wall.length
+  for (let i = 0; i < routine * 2; i += 1) ref.next()
+  assert.equal(probe.spawner.rng.next(), ref.next(), 'wall drew no random numbers')
+})
+test('ringAnchorAngle reads the player facing (initial right when no direction)', () => {
+  assert.equal(ringAnchorAngle({ dirX: 0, dirY: 0 }), 0)
+  assert.ok(Math.abs(ringAnchorAngle({ dirX: 0, dirY: 1 }) - Math.PI / 2) < 1e-12)
+})
+test('6:30 snail wall obeys the hard cap: spawns k = 1→14 in order and stops at 200', () => {
+  const world = makeWorld()
+  world.player.dirX = 1
+  world.player.dirY = 0
+  const spawner = new Spawner(world.viewport, LIMITS.spawnMarginU, new SeededRandom('wallcap'))
+  for (let i = 0; i < 195; i += 1) {
+    const e = world.enemies.acquire()
+    resetEnemy(e, { kind: 'gnat', x: 0, y: 500, r: 10, hp: 8, speed: 0, damage: 0, xp: 1, kbRes: 0 })
+  }
+  spawner.nextEvent = WAVES.events.findIndex((e) => e.atSec >= 390)
+  spawner.accumulator = -1e9 // suppress routine spawns this step
+  world.time = 390
+  spawner.step(world, DT)
+  assert.equal(world.enemies.count, LIMITS.hardCaps.enemies)
+  const snails = world.enemies.active.slice(0, world.enemies.count).filter((e) => e.kind === 'snail')
+  assert.equal(snails.length, 5)
+  snails.forEach((e, i) => {
+    const want = 22.5 * DEG * (i + 1 + 0.5)
+    assert.ok(Math.abs(angleDiff(Math.atan2(e.y, e.x), want)) < 1e-9, `k=${i + 1}`)
+  })
+  assert.ok(world.diag.capSkipped.enemies > 0)
+  assert.equal(world.diag.dropped.enemies, 0)
 })
 
 test('4:30 moth cross: 16 moths in a column just off one screen edge, flying across', () => {
