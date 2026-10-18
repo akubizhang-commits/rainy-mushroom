@@ -7,19 +7,20 @@ import {SurvivorPlatform,SafeInsets} from './SurvivorPlatform';
 import {SurvivorBattleArt} from './SurvivorBattleArt';
 import {SurvivorInput} from './SurvivorInput';
 import {SurvivorHud,ResultInfo,HUD_TOP_RESERVED} from './SurvivorHud';
+import {SurvivorAudio} from './SurvivorAudio';
 // 生存玩法宿主视图（03 §6.1）。由 PinePilot 持有（入口接入属 T10），接口与 PackView 一致：update / render / destroy。
 // 生命周期：
 //  1. 构造：设计分辨率 720×1280 FIXED_WIDTH（裁决 D10），取安全区，读存档，显示营地轻量页；
 //  2. 并行 loadBundle('survivor')，图集就绪前“出发”禁用；
 //  3. 出发：new SurvivorRun；Game.EVENT_HIDE → run.pause()；
-//  4. 每帧：setInput → advance → drainEvents → BattleArt/HUD 同步 → 按 run.state 开关模态框；
+//  4. 每帧：setInput → advance → drainEvents（FX / 音效 / 震动）→ BattleArt/HUD 同步 → 按 run.state 开关模态框；
 //  5. 结算：Meta.settle → save.save → 结算页；
 //  6. 销毁：解绑、释放图集引用，恢复 375×812。
 const RunCtor:any=SurvivorRun;
 type Screen='camp'|'battle';
 export class SurvivorView{
  run:any=null;screen:Screen='camp';
- private root:Node;private surface:Node;private art:SurvivorBattleArt;private hud:SurvivorHud;private input:SurvivorInput|null=null;
+ private root:Node;private surface:Node;private art:SurvivorBattleArt;private hud:SurvivorHud;private audio:SurvivorAudio;private input:SurvivorInput|null=null;
  private platform:SurvivorPlatform;private save:any;private profile:any;private safe:SafeInsets;private width=720;private height=1280;
  private bundle:AssetManager.Bundle|null=null;private loading=false;private failed=false;private disposed=false;
  private shownOffer:any=null;private settled=false;private endTimer=0;private result:ResultInfo|null=null;private moveTime=0;private tutorialDone=false;private firstRun=false;
@@ -31,26 +32,32 @@ export class SurvivorView{
   this.root=new Node('Survivor');this.root.layer=host.canvas.layer;host.canvas.addChild(this.root);this.root.addComponent(UITransform).setContentSize(this.width,this.height);
   this.art=new SurvivorBattleArt(this.root,this.width,this.height);this.art.root.active=false;
   this.surface=new Node('Joystick surface');this.surface.layer=this.root.layer;this.root.addChild(this.surface);this.surface.addComponent(UITransform).setContentSize(this.width,this.height);
+  this.audio=new SurvivorAudio(this.root);this.audio.setEnabled(this.profile.settings.sound!==false);
   this.hud=this.makeHud();
-  this.platform.onHidden(()=>this.hide());
+  this.platform.onHidden(()=>this.hide());this.platform.onShown(()=>this.audio.resume());
   this.render();void this.loadBundle();
  }
+ // HUD 回调全部来自按钮：统一先播点击音（toggle 在切换后播，关掉音效时不响）
+ private click<T extends any[]>(fn:(...a:T)=>void){return (...a:T)=>{this.audio.play('click');fn(...a)}}
  private makeHud(){return new SurvivorHud(this.root,this.width,this.height,this.safe,{
-  pause:()=>{if(this.run?.pause())this.input?.reset()},
-  choose:(i:number)=>{this.run?.choose(i)},
-  resume:()=>{this.run?.resume()},
-  toggle:(key:string)=>{const st=this.profile.settings;st[key]=!st[key];this.save.save(this.profile);this.profile=this.save.profile;this.hud.showPause(this.run,this.profile.settings)},
-  quit:()=>this.hud.showQuitConfirm(),
-  cancelQuit:()=>this.hud.showPause(this.run,this.profile.settings),
-  abandon:()=>{this.run?.abandon()},
-  again:()=>this.startRun(),
-  camp:()=>{this.run=null;this.screen='camp';this.render()},
+  pause:this.click(()=>{if(this.run?.pause())this.input?.reset()}),
+  choose:this.click((i:number)=>{this.run?.choose(i)}),
+  resume:this.click(()=>{this.run?.resume()}),
+  toggle:(key:string)=>{const st=this.profile.settings;st[key]=!st[key];this.save.save(this.profile);this.profile=this.save.profile;this.audio.setEnabled(this.profile.settings.sound!==false);this.audio.play('click');this.hud.showPause(this.run,this.profile.settings)},
+  quit:this.click(()=>this.hud.showQuitConfirm()),
+  cancelQuit:this.click(()=>this.hud.showPause(this.run,this.profile.settings)),
+  abandon:this.click(()=>{this.run?.abandon()}),
+  again:this.click(()=>this.startRun()),
+  camp:this.click(()=>{this.run=null;this.screen='camp';this.render()}),
  })}
  private async loadBundle(){
   if(this.loading||this.art.ready)return;this.loading=true;this.failed=false;this.render();
   try{
    const bundle=this.bundle||await new Promise<AssetManager.Bundle>((ok,fail)=>assetManager.loadBundle('survivor',(e,b)=>e?fail(e):ok(b)));
-   if(this.disposed)return;this.bundle=bundle;await this.art.load(bundle);
+   if(this.disposed)return;this.bundle=bundle;
+   // 音效与图集并行加载；音效失败只 warn，不阻塞“出发”
+   void this.audio.load(bundle);
+   await this.art.load(bundle);
    if(this.disposed)return;
    this.input=new SurvivorInput(this.surface,this.art.joyBase,this.art.joyKnob,this.width,this.height,this.safe);
   }catch(error){console.error(error);this.failed=true}
@@ -68,7 +75,7 @@ export class SurvivorView{
   this.hud.destroy();this.hud=this.makeHud();
   if(this.screen==='camp'){
    this.art.root.active=false;
-   this.hud.buildCamp({best:this.profile.bestSurvivalSec,wins:this.profile.wins,crystals:this.profile.crystals,ready:this.art.ready,failed:this.failed,saveWarning:this.saveWarning()},()=>this.startRun(),()=>{void this.loadBundle()});
+   this.hud.buildCamp({best:this.profile.bestSurvivalSec,wins:this.profile.wins,crystals:this.profile.crystals,ready:this.art.ready,failed:this.failed,saveWarning:this.saveWarning()},this.click(()=>this.startRun()),this.click(()=>{void this.loadBundle()}));
    return;
   }
   this.art.root.active=true;this.hud.buildBattle(this.firstRun&&!this.tutorialDone);this.shownOffer=null;
@@ -84,7 +91,7 @@ export class SurvivorView{
   }
   this.screen='battle';this.settled=false;this.endTimer=0;this.result=null;this.moveTime=0;this.tutorialDone=false;this.input.reset();this.render();
  }
- private hide(){if(this.run&&(this.run.simulating||this.run.state==='levelup'))this.run.pause();this.input?.reset()}
+ private hide(){if(this.run&&(this.run.simulating||this.run.state==='levelup'))this.run.pause();this.input?.reset();this.audio.suspend()}
  update(dt:number){
   if(this.disposed||this.screen!=='battle'||!this.run||!this.input)return;
   // cleansing / extract 也推进模拟、接受摇杆（撤离要走进阳光点）
@@ -98,7 +105,7 @@ export class SurvivorView{
   // 震动只在下列事件调用（02 §5.3），SurvivorPlatform 内另有频率限制；vibration 关闭时全程不调用
   const vib=settings.vibration;
   for(const e of run.drainEvents()){
-   this.hud.event(e);
+   this.hud.event(e);this.audio.event(e);
    if(e.type==='purified')this.art.purify(e.x,e.y,e.kind,settings.reduceFlash);
    else if(e.type==='pickup')this.art.pickup();
    else if(e.type==='playerHurt'){this.art.hurt();this.hud.hurt(settings.reduceFlash);if(vib)this.platform.vibrate('light')}
@@ -142,7 +149,7 @@ export class SurvivorView{
  get diag(){return {state:this.run?.state||'',activeNodes:this.art.activeNodes,enemies:this.run?.enemies.count||0}}
  destroy(){
   if(this.disposed)return;this.disposed=true;
-  this.platform.destroy();this.input?.destroy();this.input=null;this.art.destroy();this.hud.destroy();this.root.destroy();this.run=null;
+  this.platform.destroy();this.input?.destroy();this.input=null;this.audio.destroy();this.art.destroy();this.hud.destroy();this.root.destroy();this.run=null;
   view.setDesignResolutionSize(375,812,ResolutionPolicy.FIXED_WIDTH);
  }
 }
