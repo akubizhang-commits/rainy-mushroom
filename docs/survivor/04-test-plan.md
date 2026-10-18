@@ -229,7 +229,7 @@ S2 现行口径（2026-09-11 第三轮 用户拍板，08 K21）：S2 的 `surviv
 | CMP-02 | survivor-compliance | 结算与 HUD 计数统一“净化数”；失败统一“被浊雾笼罩” | §7.1 | ✅ |
 | CMP-03 | survivor-compliance | S1 界面文案键齐全（HUD、三选一卡、结算、新手首条提示） | 07 T12 | ✅ |
 | CMP-04 | survivor-data | 数据层文案也通过词表扫描 | §7.1 | ✅ |
-| CMP-05 | 待建 | `Survivor*.ts` 中文 UI 字面量自动扫描 | §7.1 | S2 落自动化；S1 用 §7.1 的手工命令兜底 |
+| CMP-05 | survivor-compliance | `Survivor*.ts` 中文 UI 字面量自动扫描（跳过注释与 console 日志，白名单为空） | §7.1 | ✅（S2 P6 落地） |
 | SYNC-01 | forest-cleanup / cocos:sync | manifest 只允许 microforest/library/survivor 前缀；survivor 入口全部进 manifest | 03 §2.1 | ✅（forest-cleanup 另有 1 条基线失败，见 §2.1） |
 | SYNC-02 | survivor-sync | 文件齐全、sha256 一致、SurvivorBot.js 不在 manifest | 03 §13 | S2（随 SurvivorBot 一起落） |
 | PKG-01 | cocos-package | 有 survivor 分包 4 个、无则 3 个且不报错；每分包 ≤ 4 MiB | 03 §7.5、D14 | ✅ |
