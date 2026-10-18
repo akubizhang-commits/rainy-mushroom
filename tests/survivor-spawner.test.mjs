@@ -416,3 +416,56 @@ test('full 0–7:00 run with events never exceeds segment caps or the hard cap o
   }
   assert.equal(spawner.nextEvent, WAVES.events.length, 'all events consumed')
 })
+
+test('6:00–7:00 segment cap 160 (08 K19): routine spawns stop at 160, the 6:30 wall still adds 14', () => {
+  const seg = segmentAt(361)
+  assert.equal(seg.cap, 160)
+  assert.equal(seg.spawnRate, 4.8)
+  const world = makeWorld()
+  const spawner = new Spawner(world.viewport, LIMITS.spawnMarginU, new SeededRandom('cap160'))
+  spawner.nextEvent = WAVES.events.findIndex((e) => e.atSec >= 390)
+  for (let i = 0; i < 150; i += 1) {
+    const e = world.enemies.acquire()
+    resetEnemy(e, { kind: 'gnat', x: 0, y: 500, r: 10, hp: 8, speed: 0, damage: 0, xp: 1, kbRes: 0 })
+  }
+  // 361 s → 389 s: 4.8/s would add ~134, but routine spawns stop at exactly 160.
+  world.time = 361
+  let maxSeen = 0
+  for (let i = 0; i < 28 * 60; i += 1) {
+    spawner.step(world, DT)
+    maxSeen = Math.max(maxSeen, world.enemies.count)
+    world.time += DT
+  }
+  assert.equal(world.enemies.count, 160, 'filled up to the new cap')
+  assert.equal(maxSeen, 160, 'never above 160 from routine spawns')
+  assert.ok(world.diag.capSkipped.enemies > 0, 'overflow counted as capSkipped')
+  // 6:30 snail wall uses the global hard cap 200: 160 + 14 = 174.
+  const wall = triggerEvent(world, spawner, 390)
+  assert.equal(wall.filter((e) => e.kind === 'snail').length, 14)
+  assert.equal(world.enemies.count, 174)
+  // Routine spawns stay paused while above 160.
+  for (let i = 0; i < 120; i += 1) {
+    spawner.step(world, DT)
+    world.time += DT
+  }
+  assert.equal(world.enemies.count, 174)
+  assert.equal(world.diag.dropped.enemies, 0)
+})
+test('2:00–4:00 spawn rate +15% (08 K16): 2.53 / 3.22 per second, caps 80 / 110 unchanged', () => {
+  for (const [from, rate, cap] of [[120, 2.53, 80], [180, 3.22, 110]]) {
+    const seg = segmentAt(from + 1)
+    assert.deepEqual([seg.spawnRate, seg.cap], [rate, cap])
+    const world = makeWorld()
+    const spawner = new Spawner(world.viewport, LIMITS.spawnMarginU, new SeededRandom(`k16:${from}`))
+    spawner.nextEvent = WAVES.events.length
+    world.time = from
+    let spawned = 0
+    for (let i = 0; i < 60 * 60; i += 1) {
+      spawner.step(world, DT)
+      spawned += world.enemies.count
+      releaseAll(world)
+      world.time = from + (i + 1) * DT
+    }
+    assert.ok(Math.abs(spawned - rate * 60) <= 2, `${from}s: ${spawned} in 60 s ≈ ${rate * 60}`)
+  }
+})

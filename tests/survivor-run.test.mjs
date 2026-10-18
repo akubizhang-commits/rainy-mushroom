@@ -251,18 +251,18 @@ test('summary reports purified count and crystal cards', () => {
   assert.equal(run.purified, 1)
 })
 
-test('pickup radius 100 (08 K10): a spore at 99 is attracted, one at 101 is not', () => {
+test('pickup radius 140 (08 K18): a spore at 139 is attracted, one at 141 is not', () => {
   const run = newRun()
-  assert.equal(run.stats.pickupRadius, 100)
+  assert.equal(run.stats.pickupRadius, 140)
   run.weapons = []
   run.spawner.accumulator = -1e9
   const near = run.spores.acquire()
-  Object.assign(near, { x: 99, y: 0, xp: 1, tier: 0 })
+  Object.assign(near, { x: 139, y: 0, xp: 1, tier: 0 })
   const far = run.spores.acquire()
-  Object.assign(far, { x: 0, y: 101, xp: 1, tier: 0 })
+  Object.assign(far, { x: 0, y: 141, xp: 1, tier: 0 })
   run.step()
-  assert.ok(near.x < 99, 'inside radius → flies toward the player')
-  assert.equal(far.y, 101, 'outside radius → stays')
+  assert.ok(near.x < 139, 'inside radius → flies toward the player')
+  assert.equal(far.y, 141, 'outside radius → stays')
 })
 test('diag splits capSkipped (designed cap skips) from dropped (pool full) (08 L11)', () => {
   const run = newRun()

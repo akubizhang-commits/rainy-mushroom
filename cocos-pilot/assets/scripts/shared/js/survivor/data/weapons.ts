@@ -46,18 +46,19 @@ export const WEAPONS = Object.freeze({
     evolved: null,
   }),
   // 露珠环（01 §6.3）：每档：伤害/半径/伤害间隔(秒，受 cooldown 影响)/圈内减速比例。
-  // 无击退；多个减速来源取最大值不叠加。S2 不做进化，evolved 保持 null。
+  // 无击退；多个减速来源取最大值不叠加。S2 不做进化，evolved 保持 null（进化档半径 145）。
+  // 08 K17（2026-09-11 第二轮）：半径 60/75/75/90/90 → 80/95/95/115/115。
   dew_ring: Object.freeze({
     name: '露珠环',
     index: 2,
     evolvesWith: 'regen',
     evolution: 'dawn_dew_ward',
     levels: Object.freeze([
-      Object.freeze({ damage: 4, radius: 60, interval: 0.8, slow: 0.15 }),
-      Object.freeze({ damage: 4, radius: 75, interval: 0.8, slow: 0.15 }),
-      Object.freeze({ damage: 7, radius: 75, interval: 0.8, slow: 0.15 }),
-      Object.freeze({ damage: 7, radius: 90, interval: 0.8, slow: 0.25 }),
-      Object.freeze({ damage: 10, radius: 90, interval: 0.6, slow: 0.25 }),
+      Object.freeze({ damage: 4, radius: 80, interval: 0.8, slow: 0.15 }),
+      Object.freeze({ damage: 4, radius: 95, interval: 0.8, slow: 0.15 }),
+      Object.freeze({ damage: 7, radius: 95, interval: 0.8, slow: 0.15 }),
+      Object.freeze({ damage: 7, radius: 115, interval: 0.8, slow: 0.25 }),
+      Object.freeze({ damage: 10, radius: 115, interval: 0.6, slow: 0.25 }),
     ]),
     evolved: null,
   }),
@@ -87,7 +88,8 @@ export const WEAPONS = Object.freeze({
   // 沿角色朝向掷出，多片以 spreadDeg=25° 扇形散开；无限穿透，去程、回程对同一敌人各结算一次；
   // 回程追角色当前位置，进入 catchRadius（角色身边）回收。leafRadius = 落叶碰撞半径、
   // maxLife = 安全寿命（秒，防止永远追不上时常驻；01 未规定，开发取值）。
-  // S2 不做进化“秋风叶舞”，evolved 保持 null。
+  // S2 不做进化“秋风叶舞”，evolved 保持 null（进化档最远距离 360）。
+  // 08 K17（2026-09-11 第二轮）：最远距离 220/220/220/280/280 → 280/280/280/340/340。
   leaf_boomerang: Object.freeze({
     name: '落叶回旋镖',
     index: 4,
@@ -98,11 +100,11 @@ export const WEAPONS = Object.freeze({
     catchRadius: 24,
     maxLife: 6,
     levels: Object.freeze([
-      Object.freeze({ damage: 12, count: 1, maxDistance: 220, speed: 360, cooldown: 1.6, knockback: 25 }),
-      Object.freeze({ damage: 18, count: 1, maxDistance: 220, speed: 360, cooldown: 1.6, knockback: 25 }),
-      Object.freeze({ damage: 18, count: 2, maxDistance: 220, speed: 360, cooldown: 1.6, knockback: 25 }),
-      Object.freeze({ damage: 18, count: 2, maxDistance: 280, speed: 420, cooldown: 1.6, knockback: 25 }),
-      Object.freeze({ damage: 24, count: 3, maxDistance: 280, speed: 420, cooldown: 1.6, knockback: 30 }),
+      Object.freeze({ damage: 12, count: 1, maxDistance: 280, speed: 360, cooldown: 1.6, knockback: 25 }),
+      Object.freeze({ damage: 18, count: 1, maxDistance: 280, speed: 360, cooldown: 1.6, knockback: 25 }),
+      Object.freeze({ damage: 18, count: 2, maxDistance: 280, speed: 360, cooldown: 1.6, knockback: 25 }),
+      Object.freeze({ damage: 18, count: 2, maxDistance: 340, speed: 420, cooldown: 1.6, knockback: 25 }),
+      Object.freeze({ damage: 24, count: 3, maxDistance: 340, speed: 420, cooldown: 1.6, knockback: 30 }),
     ]),
     evolved: null,
   }),

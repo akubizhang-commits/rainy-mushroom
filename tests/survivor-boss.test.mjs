@@ -8,7 +8,8 @@ import { ENEMIES } from '../js/survivor/data/enemies.js'
 import { LIMITS } from '../js/survivor/data/limits.js'
 import { resetEnemy } from '../js/survivor/Enemies.js'
 import { bossEnrageAt } from '../js/survivor/Boss.js'
-import { resetShot } from '../js/survivor/Weapons.js'
+import { playRun } from '../scripts/survivor/bot.mjs'
+import { resetShot, makeWeaponState } from '../js/survivor/Weapons.js'
 import { hitDamage } from '../js/survivor/Stats.js'
 
 const BOSS = ENEMIES.boss_mist_snail
@@ -277,8 +278,14 @@ test('enrage II: skill cooldowns ×0.5 (summon 4 s, charge 3 s, ring 5 s), ring 
   run.spawner.accumulator = -1e9
   run.time = 660
   run.weapons = [] // no player damage: the Boss stays at full hp (> 50%)
-  run.player.x = 5000 // keep bubbles and the Boss off the player
-  const events = stepN(run, Math.round(20 / DT))
+  // Keep the player 100 from the Boss (inside the 08 K15 approach band, d ≤ 120) so the
+  // approach chase never suppresses a charge windup and the cadence stays measurable.
+  const events = []
+  for (let i = 0; i < Math.round(20 / DT); i += 1) {
+    run.player.x = run.bossEnemy.x + 100
+    run.player.y = run.bossEnemy.y
+    stepN(run, 1, events)
+  }
   assert.equal(run.bossEnemy.hp, run.bossEnemy.maxHp)
   const gaps = (type) => {
     const at = events.filter((e) => e.type === type).map((e) => e.at)
@@ -522,4 +529,283 @@ test('player hp reaching 0 in the Boss fight still loses', () => {
   assert.equal(run.state, 'lost')
   assert.equal(run.summary().killer, 'boss_mist_snail')
   assert.equal(run.summary().bossDefeated, false)
+})
+
+// --- 贴近追击 (01 §9.2, 08 K15 / L13) ---
+const AP = BOSS.approach
+
+// Boss in the chase state, `d` away from the player along −x, other skills parked.
+function placeBoss(run, t, d) {
+  clearNormals(run)
+  run.spawner.accumulator = -1e9
+  run.weapons = []
+  run.time = t
+  stepN(run, 1) // apply the enrage stage for t
+  const b = run.boss
+  b.skill = 'chase'
+  b.skillLeft = 0
+  b.approaching = false
+  b.summonCd = 999
+  b.ringCd = 999
+  b.chargeCd = 999
+  run.bossEnemy.x = run.player.x - d
+  run.bossEnemy.y = run.player.y
+  run.drainEvents()
+}
+const bossDist = (run) => Math.hypot(run.bossEnemy.x - run.player.x, run.bossEnemy.y - run.player.y)
+// One step; returns how far the Boss moved this step and the drained events.
+function stepMoved(run) {
+  const x = run.bossEnemy.x
+  const y = run.bossEnemy.y
+  const ev = stepN(run, 1)
+  return { moved: Math.hypot(run.bossEnemy.x - x, run.bossEnemy.y - y), ev }
+}
+
+test('approach data matches 01 §9.2 and validate() rejects bad approach parameters', async () => {
+  const { validateBossApproach, maxPlayerMoveSpeed } = await import('../js/survivor/data/validate.js')
+  assert.deepEqual({ ...AP }, { fromStage: 2, enterDist: 120, exitDist: 90, speed: 320 })
+  assert.equal(BOSS.hp, 4500, '08 K16: Boss hp stays 4500')
+  assert.ok(Math.abs(maxPlayerMoveSpeed() - 257.6) < 1e-9, '160 × 1.15 × 1.4')
+  assert.deepEqual(validateBossApproach(AP, BOSS.radius), [])
+  const bad = (patch) => validateBossApproach({ ...AP, ...patch }, BOSS.radius)
+  assert.ok(bad({ enterDist: 90 }).some((m) => m.startsWith('approach.enterDist')), 'enterDist ≤ exitDist')
+  assert.ok(bad({ enterDist: 80, exitDist: 80 }).some((m) => m.startsWith('approach.enterDist')))
+  assert.ok(bad({ exitDist: 74 }).some((m) => m.startsWith('approach.exitDist')), 'exitDist ≤ 56 + 18')
+  assert.ok(bad({ speed: 257.6 }).some((m) => m.startsWith('approach.speed')), 'speed ≤ 257.6')
+  assert.ok(bad({ speed: 200 }).some((m) => m.startsWith('approach.speed')))
+  assert.ok(bad({ fromStage: 0 }).length > 0)
+  assert.ok(validateBossApproach(undefined, BOSS.radius).length > 0, 'missing approach')
+})
+
+test('10:59 (狂暴 I): Boss 300 away keeps 58.5 and never approaches', () => {
+  const run = toBoss(newRun())
+  placeBoss(run, 659, 300)
+  assert.equal(run.boss.enrageStage, 1)
+  for (let i = 0; i < 30; i += 1) {
+    const { moved, ev } = stepMoved(run)
+    assert.ok(Math.abs(moved - 58.5 * DT) < 1e-9, `speed ${moved / DT}`)
+    assert.equal(run.boss.approaching, false)
+    assert.equal(ev.filter((e) => e.type === 'bossApproach').length, 0)
+  }
+})
+
+test('11:00+: Boss 300 away approaches at 320 (one bossApproach), stops at d ≤ 90 and drops back to 72', () => {
+  for (const t of [660, 721, 1000]) { // 狂暴 II and later erosion layers
+    const run = toBoss(newRun())
+    placeBoss(run, t, 300)
+    assert.ok(run.boss.enrageStage >= AP.fromStage)
+    let { moved, ev } = stepMoved(run)
+    assert.equal(run.boss.approaching, true, `${t}s approaching`)
+    assert.ok(Math.abs(moved - 320 * DT) < 1e-9, `${t}s approach speed ${moved / DT}`)
+    let approachEvents = ev.filter((e) => e.type === 'bossApproach').length
+    let steps = 0
+    while (run.boss.approaching && steps < 120) {
+      const d = bossDist(run)
+      ;({ moved, ev } = stepMoved(run))
+      approachEvents += ev.filter((e) => e.type === 'bossApproach').length
+      if (run.boss.approaching) assert.ok(Math.abs(moved - 320 * DT) < 1e-9, 'fixed 320 while approaching')
+      else assert.ok(d <= AP.exitDist + 1e-9, `exits only at d ≤ 90 (${d})`)
+      steps += 1
+    }
+    assert.equal(run.boss.approaching, false)
+    assert.equal(approachEvents, 1, 'one bossApproach per entry')
+    assert.ok(Math.abs(steps * DT - (300 - 90) / 320) < 3 * DT, `closed 210 in ~0.66 s (${steps * DT})`)
+    assert.ok(Math.abs(moved - 72 * DT) < 1e-9, `back to 72 (${moved / DT})`)
+    ;({ moved } = stepMoved(run))
+    assert.equal(run.boss.approaching, false, 'hysteresis: stays out while d ≤ 120')
+    assert.ok(Math.abs(moved - 72 * DT) < 1e-9)
+  }
+})
+
+// Player runs straight away from the Boss at `v`; Boss uses all its skills (charge on).
+function fleeStraight(v, seconds, seed) {
+  const run = toBoss(newRun(seed))
+  placeBoss(run, 660, 300)
+  run.boss.chargeCd = 0.5
+  const dist = []
+  for (let i = 0; i < Math.round(seconds / DT); i += 1) {
+    run.player.x += v * DT // straight line along +x, away from the Boss
+    run.bossEnemy.hp = run.bossEnemy.maxHp
+    stepN(run, 1)
+    clearNormals(run)
+    dist.push(bossDist(run))
+  }
+  return { run, dist }
+}
+function maxGapAbove(dist, limit) {
+  let gap = 0
+  let longest = 0
+  for (const d of dist) {
+    gap = d <= limit ? 0 : gap + 1
+    longest = Math.max(longest, gap)
+  }
+  return longest * DT
+}
+
+test('fleeing straight at 160: within 2 s d ≤ 120, then ≤ 120 at least once in every 3 s charge cycle', () => {
+  const { dist } = fleeStraight(160, 40, 'flee-160')
+  const first = dist.findIndex((d) => d <= AP.enterDist)
+  assert.ok(first >= 0 && first * DT <= 2, `first ≤ 120 at ${first * DT}s`)
+  const rest = dist.slice(first)
+  for (let s = 0; s + Math.round(3 / DT) <= rest.length; s += Math.round(3 / DT)) {
+    const win = rest.slice(s, s + Math.round(3 / DT))
+    assert.ok(Math.min(...win) <= AP.enterDist + 1e-9, `3 s window from ${(first + s) * DT}s: min ${Math.min(...win)}`)
+  }
+  assert.ok(maxGapAbove(rest, AP.enterDist) < 3)
+})
+
+test('fleeing straight at 257.6 (max build): ≤ 120 at least once in every 8 s', () => {
+  const { dist } = fleeStraight(257.6, 60, 'flee-max')
+  const first = dist.findIndex((d) => d <= AP.enterDist)
+  assert.ok(first >= 0 && first * DT <= 8, `first ≤ 120 at ${first * DT}s`)
+  const rest = dist.slice(first)
+  const W = Math.round(8 / DT)
+  for (let s = 0; s + W <= rest.length; s += W) {
+    assert.ok(Math.min(...rest.slice(s, s + W)) <= AP.enterDist + 1e-9, `8 s window from ${(first + s) * DT}s`)
+  }
+  assert.ok(maxGapAbove(rest, AP.enterDist) < 8, `longest stretch > 120: ${maxGapAbove(rest, AP.enterDist)}s`)
+})
+
+test('any movement: from 11:00 the Boss always closes the distance (circling, zig-zag, standing far away)', () => {
+  const patterns = {
+    circle: (i) => [Math.cos(i / 40), Math.sin(i / 40)],
+    zigzag: (i) => [1, (Math.floor(i / 50) % 2) * 2 - 1],
+    reverse: (i) => [(Math.floor(i / 180) % 2) * 2 - 1, 0.3],
+    still: () => [0, 0],
+  }
+  for (const [name, dir] of Object.entries(patterns)) {
+    const run = toBoss(newRun(`any-${name}`))
+    placeBoss(run, 660, 700)
+    run.boss.chargeCd = 1
+    const dist = []
+    for (let i = 0; i < 40 * 60; i += 1) {
+      const [dx, dy] = dir(i)
+      const m = Math.hypot(dx, dy)
+      if (m > 0) {
+        run.player.x += (dx / m) * 257.6 * DT // max-build speed in every pattern
+        run.player.y += (dy / m) * 257.6 * DT
+      }
+      run.bossEnemy.hp = run.bossEnemy.maxHp
+      stepN(run, 1)
+      clearNormals(run)
+      dist.push(bossDist(run))
+    }
+    const first = dist.findIndex((d) => d <= AP.enterDist)
+    assert.ok(first >= 0 && first * DT < 10, `${name}: reached ≤ 120 at ${first * DT}s`)
+    assert.ok(maxGapAbove(dist.slice(first), AP.enterDist) < 8, `${name}: never > 120 for 8 s`)
+  }
+})
+
+test('no windup while approaching; the step after leaving the approach starts exactly one windup', () => {
+  const run = toBoss(newRun())
+  placeBoss(run, 660, 400)
+  run.boss.chargeCd = 0.1 // becomes ready while approaching
+  const events = []
+  let lastApproachStep = -1
+  let i = 0
+  while (i < 600) {
+    const was = run.boss.approaching
+    const ev = stepN(run, 1)
+    events.push(...ev)
+    if (run.boss.approaching) {
+      assert.notEqual(run.boss.skill, 'windup', 'no windup while approaching')
+      assert.equal(ev.filter((e) => e.type === 'bossCharge').length, 0)
+      assert.ok(run.boss.chargeCd >= 0, 'cooldown clamped at 0 while approaching')
+      lastApproachStep = i
+    } else if (was) {
+      assert.equal(i, lastApproachStep + 1)
+      assert.equal(run.boss.skill, 'windup', 'windup right after leaving')
+      assert.equal(ev.filter((e) => e.type === 'bossCharge').length, 1, 'exactly one bossCharge')
+      break
+    }
+    i += 1
+  }
+  assert.ok(lastApproachStep > 0, 'did approach first')
+  assert.equal(events.filter((e) => e.type === 'bossCharge').length, 1)
+})
+
+test('windup / charge in progress are not interrupted; charge speed is 72 × 2.5 = 180', () => {
+  const run = toBoss(newRun())
+  placeBoss(run, 660, 100)
+  run.boss.chargeCd = DT / 2
+  stepN(run, 1)
+  assert.equal(run.boss.skill, 'windup')
+  // Player teleports far away during the windup: no approach, Boss stays still.
+  run.player.x += 600
+  const x0 = run.bossEnemy.x
+  while (run.boss.skill === 'windup') {
+    stepN(run, 1)
+    assert.equal(run.boss.approaching, false, 'not judged during windup')
+  }
+  assert.equal(run.boss.skill, 'charge')
+  assert.equal(run.bossEnemy.x, x0, 'still during windup')
+  let { moved } = stepMoved(run)
+  assert.ok(Math.abs(moved - 180 * DT) < 1e-9, `charge speed ${moved / DT}`)
+  while (run.boss.skill === 'charge') {
+    assert.equal(run.boss.approaching, false, 'not judged during charge')
+    ;({ moved } = stepMoved(run))
+  }
+  assert.equal(run.boss.skill, 'chase')
+  stepN(run, 1)
+  assert.equal(run.boss.approaching, true, 'back in chase → approach judged again')
+})
+
+test('approach speed ignores the dew-ring slow; normal chase is still slowed', () => {
+  const run = toBoss(newRun())
+  placeBoss(run, 660, 160) // Lv5 ring 115 + Boss r56 = 171 ≥ 160: Boss is inside the ring
+  run.weapons = [makeWeaponState('dew_ring', 5)]
+  stepN(run, 1)
+  assert.equal(run.boss.approaching, true)
+  assert.ok(run.bossEnemy.slow > 0, 'ring slow applied to the Boss')
+  const { moved } = stepMoved(run)
+  assert.ok(Math.abs(moved - 320 * DT) < 1e-9, `approach not slowed (${moved / DT})`)
+  // Non-approaching chase inside the ring: 72 × (1 − 0.25).
+  placeBoss(run, 660, 100)
+  run.weapons = [makeWeaponState('dew_ring', 5)]
+  stepN(run, 1)
+  assert.equal(run.boss.approaching, false)
+  const slow = run.bossEnemy.slow
+  assert.ok(slow > 0)
+  const r = stepMoved(run)
+  assert.ok(Math.abs(r.moved - 72 * (1 - slow) * DT) < 1e-9, `chase slowed (${r.moved / DT})`)
+})
+
+test('balance-15 flee + prefer:spore_shot: Boss hp falls before 12:00 (no longer stuck at 83%)', () => {
+  const hp = {}
+  let approaches = 0
+  const { rec } = playRun({
+    seed: 'balance-15',
+    move: 'flee',
+    pick: 'prefer:spore_shot',
+    maxSec: 730,
+    hooks: {
+      onSecond: (s, run) => { if (run.boss) hp[s] = run.boss.hpRatio },
+      onEvent: (ev) => { if (ev.type === 'bossApproach') approaches += 1 },
+    },
+  })
+  assert.ok(approaches > 0, 'the Boss approached the fleeing bot')
+  const at660 = hp[660] ?? 1
+  const before720 = rec.bossDefeatSec !== null && rec.bossDefeatSec < 720 ? 0 : (hp[719] ?? hp[Math.max(...Object.keys(hp).map(Number))])
+  assert.ok(before720 < at660 || (rec.bossDefeatSec !== null && rec.bossDefeatSec < 720), `hp 11:00 ${at660} → 11:59 ${before720}`)
+  assert.ok(rec.bossDefeatSec === null || rec.bossDefeatSec < 720, 'ends before 12:00 if defeated')
+})
+
+test('a Boss fight past 11:00 with approach chasing stays deterministic', () => {
+  const play = () => {
+    const run = toBoss(newRun('approach-det'))
+    run.time = 650
+    const trace = []
+    for (let i = 0; i < 30 * 60; i += 1) {
+      run.player.x += Math.cos(i / 70) * 200 * DT
+      run.player.y += Math.sin(i / 110) * 200 * DT
+      run.bossEnemy && (run.bossEnemy.hp = run.bossEnemy.maxHp)
+      const ev = stepN(run, 1)
+      if (ev.some((e) => e.type === 'bossApproach')) trace.push(`A${i}`)
+      if ((i + 1) % 60 === 0) trace.push(`${run.boss.x.toFixed(6)},${run.boss.y.toFixed(6)},${run.boss.skill},${run.boss.approaching}`)
+    }
+    return trace
+  }
+  const a = play()
+  assert.deepEqual(a, play())
+  assert.ok(a.some((x) => x.startsWith('A')), 'approach happened')
 })

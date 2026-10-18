@@ -33,7 +33,7 @@ function stateHash(run) {
   parts.push(`st${run.state}`)
   if (run.boss) {
     const b = run.boss
-    parts.push(`b${b.x.toFixed(6)},${b.y.toFixed(6)},${b.hp.toFixed(6)},${b.skill},${b.dirX.toFixed(6)},${b.dirY.toFixed(6)},${b.enraged}`)
+    parts.push(`b${b.x.toFixed(6)},${b.y.toFixed(6)},${b.hp.toFixed(6)},${b.skill},${b.dirX.toFixed(6)},${b.dirY.toFixed(6)},${b.enraged},${b.approaching}`)
   }
   if (run.extraction) {
     const x = run.extraction

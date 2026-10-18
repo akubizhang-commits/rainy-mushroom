@@ -17,6 +17,14 @@
 //   adds takenStep per full everySec from fromSec, capped at takenMax. Every new stage
 //   (including each erosion layer) emits one bossEnrage event with its stage number.
 //   No timeout defeat.
+// - 贴近追击 (01 §9.2, 08 K15/L13): from enrageStage ≥ def.approach.fromStage (狂暴 II and
+//   every erosion layer after it), while in 'chase': d > enterDist → approaching (one
+//   bossApproach event per entry); approaching and d ≤ exitDist → back to normal. While
+//   approaching the Boss moves at the fixed approach.speed (no speedMul, ignores dew-ring
+//   slow) and never starts a charge windup (chargeCd keeps counting down, clamped at 0, so
+//   the windup starts on the first non-approaching step). Windup / charge in progress are
+//   never interrupted and charge speed stays the non-approach speed × charge.speedMul.
+//   Distance / time only — no random numbers.
 // - `world.boss` is the read-only render view (position, hp ratio, current skill /
 //   warning direction). `world.bossEnemy` is the live pool entity (null once defeated).
 import { ENEMIES } from './data/enemies.js'
@@ -47,6 +55,7 @@ function makeBossView(def) {
     damageMul: 1,
     cooldownMul: 1,
     ringIgnoresHp: false,
+    approaching: false, // 贴近追击中（01 §9.2，只在狂暴 II 起、skill === 'chase' 时可为 true）
     takenMul: 1,      // Boss 受到伤害倍率（mirrored on the entity as enemy.takenMul）
     // Skill cooldowns (seconds until next use, start-to-start).
     summonCd: def.summon.every,
@@ -133,11 +142,29 @@ export function stepBoss(world, dt) {
     world.events.push({ type: 'bossBubbleRing' })
   }
 
+  // 贴近追击 (01 §9.2): hysteresis on centre distance, only judged while chasing.
+  const ap = def.approach
+  if (!ap || b.enrageStage < ap.fromStage) {
+    b.approaching = false
+  } else if (b.skill === 'chase') {
+    if (!b.approaching && dist > ap.enterDist) {
+      b.approaching = true
+      world.events.push({ type: 'bossApproach' })
+    } else if (b.approaching && dist <= ap.exitDist) {
+      b.approaching = false
+    }
+  }
+
   // 雾壳冲撞 state machine: chase → windup (0.8 s, still) → charge (1 s, ×2.5) → chase.
   b.chargeCd -= dt
   let vx = 0
   let vy = 0
-  if (b.skill === 'windup') {
+  if (b.approaching) {
+    // No windup while approaching: the cooldown stays ready (clamped at 0) instead.
+    b.chargeCd = Math.max(0, b.chargeCd)
+    vx = ux * ap.speed
+    vy = uy * ap.speed
+  } else if (b.skill === 'windup') {
     b.skillLeft -= dt
     if (b.skillLeft <= 1e-9) {
       b.skill = 'charge'

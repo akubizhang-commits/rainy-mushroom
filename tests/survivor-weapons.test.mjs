@@ -339,6 +339,55 @@ test('dew_ring: area passive enlarges the ring; cooldown passive shortens the in
   assert.ok(Math.abs(state.cooldown - lvl.interval * 0.6) < 1e-9)
 })
 
+test('dew_ring new radii (08 K17): Lv1 80 hits a gnat at 90 (80 + r10), not at 91; Lv4 115 reaches a snail at 137', () => {
+  assert.deepEqual(WEAPONS.dew_ring.levels.map((l) => l.radius), [80, 95, 95, 115, 115])
+  const world = makeWorld()
+  const hit = spawnEnemy(world, 90, 0, 1000, 'gnat', 10)
+  const miss = spawnEnemy(world, 0, -91, 1000, 'gnat', 10)
+  const state = makeWeaponState('dew_ring', 1)
+  rebuild(world)
+  dewRing.tick(world, state, DT)
+  assert.equal(state.ringR, 80)
+  assert.equal(1000 - hit.hp, WEAPONS.dew_ring.levels[0].damage, 'gnat centre 90 ≤ 80 + 10 is hit')
+  assert.equal(hit.slow, 0.15)
+  assert.equal(miss.hp, 1000, 'gnat centre 91 is outside')
+  assert.equal(miss.slow, 0)
+  // Lv4/5 115: snail (r22) centre 137 is inside; Boss (r56) at 136 is inside even at Lv1.
+  const w4 = makeWorld()
+  const snail = spawnEnemy(w4, 137, 0, 1000, 'snail', 22)
+  const s4 = makeWeaponState('dew_ring', 4)
+  rebuild(w4)
+  dewRing.tick(w4, s4, DT)
+  assert.equal(s4.ringR, 115)
+  assert.ok(snail.hp < 1000 && snail.slow === 0.25)
+  const w1 = makeWorld()
+  const boss = spawnEnemy(w1, 0, 136, 1000, 'boss_mist_snail', 56)
+  rebuild(w1)
+  dewRing.tick(w1, makeWeaponState('dew_ring', 1), DT)
+  assert.ok(boss.hp < 1000, 'Lv1 reaches the Boss at 136 ≥ approach enterDist 120')
+})
+test('leaf_boomerang new range (08 K17): outbound far point is 280 at Lv1–3 and 340 at Lv4–5', () => {
+  assert.deepEqual(WEAPONS.leaf_boomerang.levels.map((l) => l.maxDistance), [280, 280, 280, 340, 340])
+  for (const [level, far] of [[1, 280], [3, 280], [4, 340], [5, 340]]) {
+    const lvl = WEAPONS.leaf_boomerang.levels[level - 1]
+    const world = makeWorld()
+    leafBoomerang.tick(world, makeWeaponState('leaf_boomerang', level), DT)
+    const leaf = world.shots.active[0]
+    let maxD = 0
+    for (let i = 0; i < 600 && world.shots.count > 0; i += 1) {
+      stepWorld(world)
+      if (world.shots.isActive(leaf)) maxD = Math.max(maxD, Math.hypot(leaf.x, leaf.y))
+    }
+    assert.ok(Math.abs(maxD - far) <= lvl.speed * DT + 1e-9, `Lv${level}: far point ${maxD} vs ${far}`)
+    assert.ok(maxD > 260, 'beyond the conservative bot\'s 260 repel ring')
+  }
+  // An enemy at 275 straight ahead (facing up, −y) is hit going out at Lv1; old 220 never reached it.
+  const world = makeWorld()
+  const e = spawnEnemy(world, 0, -275, 1000)
+  leafBoomerang.tick(world, makeWeaponState('leaf_boomerang', 1), DT)
+  for (let i = 0; i < 120; i += 1) stepWorld(world)
+  assert.ok(e.hp < 1000, 'enemy at 275 hit')
+})
 test('all equipped weapons act in the same step (multi-weapon)', () => {
   const world = makeWorld()
   world.weapons = [

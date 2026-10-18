@@ -14,6 +14,7 @@ import { PASSIVES } from './passives'
 import { ENEMIES } from './enemies'
 import { WAVES } from './waves'
 import { LIMITS } from './limits'
+import { PERMANENT } from './permanent'
 
 function isFiniteNumber(v) {
   return typeof v === 'number' && Number.isFinite(v)
@@ -39,6 +40,41 @@ function jsonRoundTripsEqual(x) {
   if (serialized === undefined) return false
   const parsed = JSON.parse(serialized)
   return JSON.stringify(parsed) === serialized
+}
+
+// 角色理论最高移速（01 §9.2 贴近追击）：基础移速 × (1 + 局外轻灵蕨步满级) × (1 + 蕨叶轻靴满级)
+// = 160 × 1.15 × 1.4 = 257.6。由 permanent.js / passives.js 推导，避免手写常量漂移。
+export function maxPlayerMoveSpeed() {
+  const perm = PERMANENT.find((u) => u.bonus === 'moveSpeed')
+  const permMax = perm ? perm.perLevel * perm.prices.length : 0
+  let passiveMax = 0
+  for (const id of Object.keys(PASSIVES)) {
+    const def = PASSIVES[id]
+    if (def.stat === 'moveSpeed') passiveMax += def.levels[def.levels.length - 1]
+  }
+  return PLAYER.moveSpeed * (1 + permMax) * (1 + passiveMax)
+}
+
+// Boss 贴近追击参数（01 §9.2，08 K15/L13）。返回错误字符串数组，空数组 = 合法。
+// 四个字段为正数；enterDist > exitDist；exitDist > Boss 半径 + 角色半径（不会靠追近撞到角色）；
+// speed > 角色理论最高移速（任何构筑都甩不开）。
+export function validateBossApproach(approach, bossRadius, path = 'approach') {
+  const errors = []
+  const push = (p, msg) => errors.push(`${p}: ${msg}`)
+  if (!approach || typeof approach !== 'object') {
+    push(path, 'Boss 必须有贴近追击参数')
+    return errors
+  }
+  for (const f of ['fromStage', 'enterDist', 'exitDist', 'speed']) {
+    if (!isPositiveNumber(approach[f])) push(`${path}.${f}`, '必须为有限正数')
+  }
+  if (!isPositiveInt(approach.fromStage)) push(`${path}.fromStage`, '必须为正整数')
+  if (!(approach.enterDist > approach.exitDist)) push(`${path}.enterDist`, '必须大于 exitDist')
+  const contact = bossRadius + PLAYER.radius
+  if (!(approach.exitDist > contact)) push(`${path}.exitDist`, `必须大于 Boss 与角色接触距离 ${contact}`)
+  const vmax = Math.round(maxPlayerMoveSpeed() * 1000) / 1000
+  if (!(approach.speed > vmax)) push(`${path}.speed`, `必须大于角色理论最高移速 ${vmax}`)
+  return errors
 }
 
 export function validate() {
@@ -245,6 +281,10 @@ export function validate() {
       }
       if (enemy.erosion && isFiniteNumber(enemy.erosion.takenMax) && !(enemy.erosion.takenMax >= lastTaken)) {
         push(`enemies.${id}.erosion.takenMax`, '不得小于最后阶段的 takenMul')
+      }
+      errors.push(...validateBossApproach(enemy.approach, enemy.radius, `enemies.${id}.approach`))
+      if (enemy.approach && isPositiveInt(enemy.approach.fromStage) && Array.isArray(phases) && enemy.approach.fromStage > phases.length) {
+        push(`enemies.${id}.approach.fromStage`, '不得超过狂暴阶段数')
       }
       if (enemy.summon && !ENEMIES[enemy.summon.enemy]) push(`enemies.${id}.summon.enemy`, '引用了不存在的敌人 id')
       if (enemy.summon && !isPositiveInt(enemy.summon.count)) push(`enemies.${id}.summon.count`, '必须为正整数')

@@ -151,5 +151,9 @@ export const ENEMIES = Object.freeze({
     ]),
     // 雾壳剥落：fromSec 起每满 everySec 秒叠 1 层，每层受到伤害 +takenStep，封顶 takenMax。
     erosion: Object.freeze({ fromSec: 720, everySec: 60, takenStep: 0.5, takenMax: 4.0 }),
+    // 贴近追击（01 §9.2，08 K15）：enrageStage ≥ fromStage（2 = 狂暴 II 及其后所有雾壳剥落层）时，
+    // 中心距 d > enterDist 进入追近、d ≤ exitDist 退出；追近移速固定 speed，不乘狂暴倍率、
+    // 不受露珠环减速；追近期间不起手冲撞。只依赖距离与时间，不消耗随机数。
+    approach: Object.freeze({ fromStage: 2, enterDist: 120, exitDist: 90, speed: 320 }),
   }),
 })

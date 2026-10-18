@@ -57,11 +57,12 @@ test('umbrella_blades five levels match the 01-gdd §6.2 table', () => {
 test('dew_ring five levels match the 01-gdd §6.3 table', () => {
   // 伤害/半径/伤害间隔/圈内减速
   const rows = [
-    [4, 60, 0.8, 0.15],
-    [4, 75, 0.8, 0.15],
-    [7, 75, 0.8, 0.15],
-    [7, 90, 0.8, 0.25],
-    [10, 90, 0.6, 0.25],
+    // 08 K17（2026-09-11 第二轮）：半径 60/75/75/90/90 → 80/95/95/115/115
+    [4, 80, 0.8, 0.15],
+    [4, 95, 0.8, 0.15],
+    [7, 95, 0.8, 0.15],
+    [7, 115, 0.8, 0.25],
+    [10, 115, 0.6, 0.25],
   ]
   const fields = ['damage', 'radius', 'interval', 'slow']
   const w = WEAPONS.dew_ring
@@ -93,11 +94,12 @@ test('raindrop five levels match the 01-gdd §6.4 table (08 K8)', () => {
 test('leaf_boomerang five levels match the 01-gdd §6.5 table (08 K8)', () => {
   // 伤害/片数/最远距离/飞行速度/冷却/击退
   const rows = [
-    [12, 1, 220, 360, 1.6, 25],
-    [18, 1, 220, 360, 1.6, 25],
-    [18, 2, 220, 360, 1.6, 25],
-    [18, 2, 280, 420, 1.6, 25],
-    [24, 3, 280, 420, 1.6, 30],
+    // 08 K17（2026-09-11 第二轮）：最远距离 220/220/220/280/280 → 280/280/280/340/340
+    [12, 1, 280, 360, 1.6, 25],
+    [18, 1, 280, 360, 1.6, 25],
+    [18, 2, 280, 360, 1.6, 25],
+    [18, 2, 340, 420, 1.6, 25],
+    [24, 3, 340, 420, 1.6, 30],
   ]
   const fields = ['damage', 'count', 'maxDistance', 'speed', 'cooldown', 'knockback']
   const w = WEAPONS.leaf_boomerang
@@ -117,8 +119,8 @@ test('all five weapons are drafted content with unique hitAt indices 0–4', () 
   assert.equal(PLAYER.weaponSlots, 4, '5 选 4：武器栏 4 格不变')
 })
 
-test('player pickupRadius follows 01 §5 (08 K10: 60 → 100)', () => {
-  assert.equal(PLAYER.pickupRadius, 100)
+test('player pickupRadius follows 01 §5 (08 K10: 60 → 100, K18: 100 → 140)', () => {
+  assert.equal(PLAYER.pickupRadius, 140)
 })
 
 test('new weapon cards have names and descriptions in strings (card_<id>)', () => {
@@ -250,11 +252,11 @@ test('wave segments follow 01-gdd §10 from 0:00 to Boss 击败', () => {
   const rows = [
     [0, 60, 1.3, 30, 100, 0, 0, 0, 0], // 08 K9：1.0 → 1.3
     [60, 120, 1.6, 50, 70, 30, 0, 0, 0],
-    [120, 180, 2.2, 80, 50, 30, 20, 0, 0],
-    [180, 240, 2.8, 110, 40, 30, 20, 10, 0],
+    [120, 180, 2.53, 80, 50, 30, 20, 0, 0], // 08 K16：2.2 → 2.53（+15%），上限不变
+    [180, 240, 3.22, 110, 40, 30, 20, 10, 0], // 08 K16：2.8 → 3.22（+15%），上限不变
     [240, 300, 3.4, 140, 35, 25, 20, 10, 10],
     [300, 360, 4.0, 160, 30, 25, 20, 15, 10],
-    [360, 420, 4.8, 200, 30, 20, 20, 15, 15],
+    [360, 420, 4.8, 160, 30, 20, 20, 15, 15], // 08 K19：上限 200 → 160，速率不变
     [420, null, 1.5, 80, 60, 0, 40, 0, 0],
   ]
   const ids = ['gnat', 'beetle', 'moth', 'snail', 'sporeling']
