@@ -88,20 +88,19 @@ test('sporeling approaches while > 180 and holds position within 180', () => {
   assert.ok(Math.abs(Math.hypot(e.x, e.y) - d0) < 1e-9, 'holds position')
 })
 
-test('sporeling spits one mist bubble every 3 s while within 250, aimed at the player', () => {
+test('sporeling spits one mist bubble every 2 s while within 250, aimed at the player (08 K21)', () => {
   const world = makeWorld()
   const e = spawn(world, 'sporeling', 0, -200) // within fireRange, outside approachRange
   const fireTimes = []
-  for (let i = 0; i < 10 * 60; i += 1) {
+  for (let i = 0; i < 11 * 60; i += 1) {
     const before = world.mistBubbles.count
     stepEnemyBehavior(world, DT)
     if (world.mistBubbles.count > before) fireTimes.push((i + 1) * DT)
     world.mistBubbles.releaseAll() // isolate firing from bubble flight
   }
-  assert.equal(fireTimes.length, 3, '3 bubbles in 10 s (first after one interval)')
-  assert.ok(Math.abs(fireTimes[0] - 3) < 2 * DT)
-  assert.ok(Math.abs(fireTimes[1] - fireTimes[0] - 3) < 2 * DT)
-  assert.ok(Math.abs(fireTimes[2] - fireTimes[1] - 3) < 2 * DT)
+  assert.equal(fireTimes.length, 5, '5 bubbles in 11 s (first after one interval)')
+  assert.ok(Math.abs(fireTimes[0] - 2) < 2 * DT)
+  for (let k = 1; k < 5; k += 1) assert.ok(Math.abs(fireTimes[k] - fireTimes[k - 1] - 2) < 2 * DT)
   // Aim + speed.
   const world2 = makeWorld()
   spawn(world2, 'sporeling', 0, -200, { timer: 0 })

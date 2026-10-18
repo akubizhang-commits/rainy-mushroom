@@ -63,21 +63,21 @@ export const WAVES = Object.freeze({
       toSec: 300,
       spawnRate: 3.4,
       cap: 140,
-      composition: Object.freeze({ gnat: 35, beetle: 25, moth: 20, snail: 10, sporeling: 10 }),
+      composition: Object.freeze({ gnat: 25, beetle: 25, moth: 20, snail: 10, sporeling: 20 }), // 08 K21：菌灵 10 → 20，蚊蚋 35 → 25
     }),
     Object.freeze({
       fromSec: 300,
       toSec: 360,
       spawnRate: 4.0,
       cap: 160,
-      composition: Object.freeze({ gnat: 30, beetle: 25, moth: 20, snail: 15, sporeling: 10 }),
+      composition: Object.freeze({ gnat: 20, beetle: 25, moth: 20, snail: 15, sporeling: 20 }), // 08 K21：菌灵 10 → 20，蚊蚋 30 → 20
     }),
     Object.freeze({
       fromSec: 360,
       toSec: 420,
       spawnRate: 4.8,
       cap: 160, // 08 K19：200 → 160（6:30 蜗牛围墙仍只受全局硬上限 200）
-      composition: Object.freeze({ gnat: 30, beetle: 20, moth: 20, snail: 15, sporeling: 15 }),
+      composition: Object.freeze({ gnat: 20, beetle: 20, moth: 20, snail: 15, sporeling: 25 }), // 08 K21：菌灵 15 → 25，蚊蚋 30 → 20
     }),
     // 7:00–Boss 击败（开放区间，08 K2）
     Object.freeze({

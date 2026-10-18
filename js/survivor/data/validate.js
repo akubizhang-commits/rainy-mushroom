@@ -55,7 +55,7 @@ export function maxPlayerMoveSpeed() {
 
 // Boss 贴近追击参数（01 §9.2，08 K15/L13）。返回错误字符串数组，空数组 = 合法。
 // 四个字段为正数；enterDist > exitDist；exitDist > Boss 半径 + 角色半径（不会靠追近撞到角色）；
-// speed > 角色理论最高移速（任何构筑都甩不开）。
+// speed > 角色理论最高移速（任何构筑都甩不开）；idleSec（08 K22 无伤触发秒数）为正数。
 export function validateBossApproach(approach, bossRadius, path = 'approach') {
   const errors = []
   const push = (p, msg) => errors.push(`${p}: ${msg}`)
@@ -72,6 +72,8 @@ export function validateBossApproach(approach, bossRadius, path = 'approach') {
   if (!(approach.exitDist > contact)) push(`${path}.exitDist`, `必须大于 Boss 与角色接触距离 ${contact}`)
   const vmax = Math.round(maxPlayerMoveSpeed() * 1000) / 1000
   if (!(approach.speed > vmax)) push(`${path}.speed`, `必须大于角色理论最高移速 ${vmax}`)
+  // 08 K22：无伤触发秒数，为正数
+  if (!isPositiveNumber(approach.idleSec)) push(`${path}.idleSec`, '必须为有限正数')
   return errors
 }
 

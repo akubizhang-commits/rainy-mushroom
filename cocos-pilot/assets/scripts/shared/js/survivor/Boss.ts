@@ -27,6 +27,10 @@
 //   the windup starts on the first non-approaching step). Windup / charge in progress are
 //   never interrupted and charge speed stays the non-approach speed × charge.speedMul.
 //   Distance / time only — no random numbers.
+//   无伤触发 (01 §9.2, 08 K22): independently of the clock, once the Boss has gone
+//   approach.idleSec seconds without taking any damage (counted from its spawn or its last
+//   hit, via enemy.lastHitTime) it latches b.idleApproach = true and the same approach
+//   rules apply for the rest of the fight. The 11:00 (fromStage) rule is unchanged.
 // - `world.boss` is the read-only render view (position, hp ratio, current skill /
 //   warning direction). `world.bossEnemy` is the live pool entity (null once defeated).
 import { ENEMIES } from './data/enemies'
@@ -57,7 +61,9 @@ function makeBossView(def) {
     damageMul: 1,
     cooldownMul: 1,
     ringIgnoresHp: false,
-    approaching: false, // 贴近追击中（01 §9.2，只在狂暴 II 起、skill === 'chase' 时可为 true）
+    approaching: false, // 贴近追击中（01 §9.2，狂暴 II 起或无伤触发后、skill === 'chase' 时可为 true）
+    idleApproach: false, // 08 K22：连续 approach.idleSec 秒未受伤后锁定为 true，本场不再复位
+    spawnedAt: 0,     // 出现时刻（无伤计时起点）
     takenMul: 1,      // Boss 受到伤害倍率（mirrored on the entity as enemy.takenMul）
     // Skill cooldowns (seconds until next use, start-to-start).
     summonCd: def.summon.every,
@@ -100,6 +106,7 @@ export function spawnBoss(world) {
   })
   world.bossEnemy = e
   world.boss = makeBossView(def)
+  world.boss.spawnedAt = world.time
   syncBossView(world)
   world.events.push({ type: 'bossSpawn', x, y })
   return e
@@ -146,7 +153,11 @@ export function stepBoss(world, dt) {
 
   // 贴近追击 (01 §9.2): hysteresis on centre distance, only judged while chasing.
   const ap = def.approach
-  if (!ap || b.enrageStage < ap.fromStage) {
+  if (ap && !b.idleApproach && ap.idleSec) {
+    const lastDamage = Math.max(b.spawnedAt, e.lastHitTime)
+    if (world.time - lastDamage + STAGE_EPS >= ap.idleSec) b.idleApproach = true
+  }
+  if (!ap || (b.enrageStage < ap.fromStage && !b.idleApproach)) {
     b.approaching = false
   } else if (b.skill === 'chase') {
     if (!b.approaching && dist > ap.enterDist) {

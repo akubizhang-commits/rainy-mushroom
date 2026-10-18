@@ -85,7 +85,7 @@ export const ENEMIES = Object.freeze({
     behavior: 'ranged',
     approachRange: 180,        // 距离 > 180 时追近
     fireRange: 250,            // 距离 ≤ 250 时吐泡
-    fireInterval: 3,           // 每 3 秒 1 个
+    fireInterval: 2,           // 每 2 秒 1 个（08 K21：3 → 2）
     bubble: Object.freeze({
       speed: 150,
       damage: 6,
@@ -156,6 +156,8 @@ export const ENEMIES = Object.freeze({
     // 贴近追击（01 §9.2，08 K15）：enrageStage ≥ fromStage（2 = 狂暴 II 及其后所有雾壳剥落层）时，
     // 中心距 d > enterDist 进入追近、d ≤ exitDist 退出；追近移速固定 speed，不乘狂暴倍率、
     // 不受露珠环减速；追近期间不起手冲撞。只依赖距离与时间，不消耗随机数。
-    approach: Object.freeze({ fromStage: 2, enterDist: 120, exitDist: 90, speed: 320 }),
+    // idleSec（08 K22）：Boss 出现后连续 idleSec 秒未受到任何伤害，立即按同一套规则开始追击，
+    // 不等 fromStage；触发后本场保持。
+    approach: Object.freeze({ fromStage: 2, enterDist: 120, exitDist: 90, speed: 320, idleSec: 60 }),
   }),
 })

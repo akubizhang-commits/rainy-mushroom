@@ -548,6 +548,9 @@ function placeBoss(run, t, d) {
   b.summonCd = 999
   b.ringCd = 999
   b.chargeCd = 999
+  // Isolate the 11:00 rule: restart the 08 K22 no-damage timer at t.
+  b.idleApproach = false
+  b.spawnedAt = run.time
   run.bossEnemy.x = run.player.x - d
   run.bossEnemy.y = run.player.y
   run.drainEvents()
@@ -563,7 +566,7 @@ function stepMoved(run) {
 
 test('approach data matches 01 §9.2 and validate() rejects bad approach parameters', async () => {
   const { validateBossApproach, maxPlayerMoveSpeed } = await import('../js/survivor/data/validate.js')
-  assert.deepEqual({ ...AP }, { fromStage: 2, enterDist: 120, exitDist: 90, speed: 320 })
+  assert.deepEqual({ ...AP }, { fromStage: 2, enterDist: 120, exitDist: 90, speed: 320, idleSec: 60 })
   assert.equal(BOSS.hp, 4500, '08 K16: Boss hp stays 4500')
   assert.ok(Math.abs(maxPlayerMoveSpeed() - 257.6) < 1e-9, '160 × 1.15 × 1.4')
   assert.deepEqual(validateBossApproach(AP, BOSS.radius), [])
@@ -574,6 +577,8 @@ test('approach data matches 01 §9.2 and validate() rejects bad approach paramet
   assert.ok(bad({ speed: 257.6 }).some((m) => m.startsWith('approach.speed')), 'speed ≤ 257.6')
   assert.ok(bad({ speed: 200 }).some((m) => m.startsWith('approach.speed')))
   assert.ok(bad({ fromStage: 0 }).length > 0)
+  assert.ok(bad({ idleSec: 0 }).some((m) => m.startsWith('approach.idleSec')), 'idleSec must be > 0')
+  assert.ok(bad({ idleSec: undefined }).some((m) => m.startsWith('approach.idleSec')))
   assert.ok(validateBossApproach(undefined, BOSS.radius).length > 0, 'missing approach')
 })
 
@@ -615,6 +620,74 @@ test('11:00+: Boss 300 away approaches at 320 (one bossApproach), stops at d ≤
     assert.equal(run.boss.approaching, false, 'hysteresis: stays out while d ≤ 120')
     assert.ok(Math.abs(moved - 72 * DT) < 1e-9)
   }
+})
+
+// 08 K22 无伤触发: 60 s without any damage → same approach rules, before 11:00.
+const IDLE_STEPS = Math.round(AP.idleSec / DT)
+test('K22: 60 s without damage (from spawn) starts the approach before 11:00, then latches', () => {
+  const run = toBoss(newRun())
+  placeBoss(run, 450, 300) // 7:30, 狂暴 none; no weapons → the Boss is never hit
+  assert.equal(run.boss.enrageStage, 0)
+  const ev = []
+  for (let i = 0; i < IDLE_STEPS - 2; i += 1) {
+    run.bossEnemy.x = run.player.x - 300 // hold the distance; only the timer matters here
+    run.bossEnemy.y = run.player.y
+    stepN(run, 1, ev)
+    assert.equal(run.boss.approaching, false, `not before 60 s (${i})`)
+  }
+  assert.equal(ev.filter((e) => e.type === 'bossApproach').length, 0)
+  stepN(run, 3, ev)
+  assert.equal(run.boss.idleApproach, true)
+  assert.equal(run.boss.approaching, true, 'approaching once 60 s passed without damage')
+  assert.equal(ev.filter((e) => e.type === 'bossApproach').length, 1)
+  const { moved } = stepMoved(run)
+  assert.ok(Math.abs(moved - 320 * DT) < 1e-9, `same 320 approach speed (${moved / DT})`)
+  // Getting hit again does not switch it off: after exiting at ≤ 90 it re-enters past 120.
+  run.bossEnemy.lastHitTime = run.time
+  let steps = 0
+  while (run.boss.approaching && steps < 120) { stepN(run, 1); steps += 1 }
+  assert.equal(run.boss.approaching, false)
+  assert.ok(bossDist(run) <= AP.exitDist + 1e-9)
+  run.bossEnemy.lastHitTime = run.time
+  run.bossEnemy.x = run.player.x - 300
+  run.bossEnemy.y = run.player.y
+  stepN(run, 1)
+  assert.equal(run.boss.idleApproach, true, 'latched for the rest of the fight')
+  assert.equal(run.boss.approaching, true)
+})
+
+test('K22: a Boss that keeps taking damage (every < 60 s) never approaches before 11:00', () => {
+  const run = toBoss(newRun())
+  placeBoss(run, 450, 300) // 7:30; 2 min of hits ends at 9:30, well before 11:00
+  const ev = []
+  const hitEvery = IDLE_STEPS - 60 // a hit every 59 s
+  for (let i = 1; i <= IDLE_STEPS * 2; i += 1) {
+    if (i % hitEvery === 0) run.bossEnemy.lastHitTime = run.time // what weapon hits record
+    run.bossEnemy.x = run.player.x - 300
+    run.bossEnemy.y = run.player.y
+    stepN(run, 1, ev)
+    assert.equal(run.boss.approaching, false, `step ${i}`)
+  }
+  assert.equal(run.boss.idleApproach, false)
+  assert.equal(ev.filter((e) => e.type === 'bossApproach').length, 0)
+  // Once hits stop, the 60 s count starts from the last hit.
+  const last = run.bossEnemy.lastHitTime
+  while (!run.boss.approaching && run.time < last + AP.idleSec + 1) {
+    run.bossEnemy.x = run.player.x - 300
+    run.bossEnemy.y = run.player.y
+    stepN(run, 1)
+  }
+  assert.equal(run.boss.approaching, true)
+  assert.ok(Math.abs(run.time - (last + AP.idleSec)) < 2 * DT, `60 s after the last hit (${run.time - last})`)
+})
+
+test('K22: a real weapon hit on the Boss records lastHitTime (the idle timer source)', () => {
+  const run = toBoss(newRun())
+  placeBoss(run, 480, 60) // within the default spore_shot / umbrella range
+  run.weapons = [makeWeaponState('umbrella_blades', 1)]
+  const before = run.bossEnemy.lastHitTime
+  stepN(run, 120)
+  assert.ok(run.bossEnemy.lastHitTime > before, 'umbrella blades hit the Boss and reset the timer')
 })
 
 // Player runs straight away from the Boss at `v`; Boss uses all its skills (charge on).

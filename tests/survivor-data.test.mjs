@@ -176,7 +176,7 @@ test('enemy behaviour parameters match 01-gdd §9', () => {
   assert.equal(s.behavior, 'ranged')
   assert.equal(s.approachRange, 180)
   assert.equal(s.fireRange, 250)
-  assert.equal(s.fireInterval, 3)
+  assert.equal(s.fireInterval, 2) // 08 K21：3 → 2
   assert.equal(s.bubble.speed, 150)
   assert.equal(s.bubble.damage, 6)
   assert.equal(s.bubble.life, 3)
@@ -254,9 +254,9 @@ test('wave segments follow 01-gdd §10 from 0:00 to Boss 击败', () => {
     [60, 120, 1.6, 50, 70, 30, 0, 0, 0],
     [120, 180, 2.53, 80, 50, 30, 20, 0, 0], // 08 K16：2.2 → 2.53（+15%），上限不变
     [180, 240, 3.22, 110, 40, 30, 20, 10, 0], // 08 K16：2.8 → 3.22（+15%），上限不变
-    [240, 300, 3.4, 140, 35, 25, 20, 10, 10],
-    [300, 360, 4.0, 160, 30, 25, 20, 15, 10],
-    [360, 420, 4.8, 160, 30, 20, 20, 15, 15], // 08 K19：上限 200 → 160，速率不变
+    [240, 300, 3.4, 140, 25, 25, 20, 10, 20], // 08 K21：菌灵 10 → 20、蚊蚋 35 → 25
+    [300, 360, 4.0, 160, 20, 25, 20, 15, 20], // 08 K21：菌灵 10 → 20、蚊蚋 30 → 20
+    [360, 420, 4.8, 160, 20, 20, 20, 15, 25], // 08 K19：上限 200 → 160；08 K21：菌灵 15 → 25、蚊蚋 30 → 20
     [420, null, 1.5, 80, 60, 0, 40, 0, 0],
   ]
   const ids = ['gnat', 'beetle', 'moth', 'snail', 'sporeling']
