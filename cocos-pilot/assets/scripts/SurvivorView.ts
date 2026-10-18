@@ -95,12 +95,17 @@ export class SurvivorView{
   // 2. 推进固定步长
   run.advance(dt);
   // 3. 一次性事件 → FX / 反馈 / HUD 横幅
+  // 震动只在下列事件调用（02 §5.3），SurvivorPlatform 内另有频率限制；vibration 关闭时全程不调用
+  const vib=settings.vibration;
   for(const e of run.drainEvents()){
    this.hud.event(e);
    if(e.type==='purified')this.art.purify(e.x,e.y,e.kind,settings.reduceFlash);
-   else if(e.type==='playerHurt'){this.art.hurt();this.hud.hurt(settings.reduceFlash);if(settings.vibration)this.platform.vibrate('light')}
-   else if(e.type==='levelUp'){if(settings.vibration)this.platform.vibrate('light')}
-   else if(e.type==='won'||e.type==='lost'){if(settings.vibration)this.platform.vibrate('medium')}
+   else if(e.type==='pickup')this.art.pickup();
+   else if(e.type==='playerHurt'){this.art.hurt();this.hud.hurt(settings.reduceFlash);if(vib)this.platform.vibrate('light')}
+   else if(e.type==='levelUp'){this.art.levelUp();if(vib)this.platform.vibrate('light')}
+   else if(e.type==='bossWarning'){if(vib)this.platform.vibrate('heavy')}
+   else if(e.type==='cleansing'){this.art.cleanse();if(vib)this.platform.vibrate('medium')}
+   else if(e.type==='won'||e.type==='lost'){if(vib)this.platform.vibrate('medium')}
   }
   // 4. 渲染同步
   this.art.sync(run,dt,settings.reduceFlash);this.hud.update(run,dt);

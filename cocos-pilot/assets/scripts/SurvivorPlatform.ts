@@ -13,8 +13,13 @@ export class SurvivorPlatform{
   try{const api=this.wx;info=api?.getWindowInfo?.()||api?.getSystemInfoSync?.()||null;capsule=api?.getMenuButtonBoundingClientRect?.()||null}catch{info=capsule=null}
   return computeSafeArea(info,capsule) as SafeInsets;
  }
- // 02 §5.3：先判断接口存在，失败静默。
- vibrate(type:'light'|'medium'|'heavy'){try{const api=this.wx;if(api&&typeof api.vibrateShort==='function')api.vibrateShort({type,fail(){}})}catch{}}
+ // 02 §5.3：先判断接口存在，失败静默。频率限制：任意两次间隔 ≥ 120ms，light 之间 ≥ 300ms（连续受伤/连升不连震）。
+ private vibeAt=-1e9;private lightAt=-1e9;
+ vibrate(type:'light'|'medium'|'heavy'){
+  const now=Date.now();if(now-this.vibeAt<120||(type==='light'&&now-this.lightAt<300))return;
+  this.vibeAt=now;if(type==='light')this.lightAt=now;
+  try{const api=this.wx;if(api&&typeof api.vibrateShort==='function')api.vibrateShort({type,fail(){}})}catch{}
+ }
  onHidden(fn:()=>void){this.hideFns.push(fn)}
  onShown(fn:()=>void){this.showFns.push(fn)}
  private onHide(){for(const fn of this.hideFns)fn()}
