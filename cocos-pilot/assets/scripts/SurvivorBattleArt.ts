@@ -27,6 +27,7 @@ class SpritePool{
  }
  end(){for(let i=this.used;i<this.shown;i++)this.slots[i].node.active=false;this.shown=this.used}
  get count(){return this.shown}
+ frames(){const o:string[]=[];for(let i=0;i<this.shown;i++)o.push(this.slots[i].frame);return o}
  set(s:Slot,key:string){if(s.frame===key)return;s.frame=key;this.art.apply(s.sprite,s.ui,key)}
 }
 function tint(s:Slot,r:number,g:number,b:number,a:number){const k=((r<<24)>>>0)+(g<<16)+(b<<8)+a;if(s.color===k)return;s.color=k;s.sprite.color=new Color(r,g,b,a)}
@@ -246,6 +247,9 @@ export class SurvivorBattleArt{
  }
  // 冒烟/性能用：战斗层当前激活的动态节点数（不含地面与摇杆）
  get activeNodes(){let n=0;for(const k in this.pools)n+=this.pools[k].count;return n}
+ // 冒烟/性能用：各渲染池当前显示数；shownFrames = 某池当前显示的帧名
+ get poolCounts(){const o:Record<string,number>={};for(const k in this.pools)o[k]=this.pools[k].count;return o}
+ shownFrames(pool:string){return this.pools[pool]?.frames()||[]}
  destroy(){
   this.root.destroy();for(const f of this.frames.values())f.destroy();this.frames.clear();this.groundFrame?.destroy();
   this.texture?.destroy();this.groundTexture?.destroy();this.texture=this.groundTexture=null;this.groundFrame=null;

@@ -195,6 +195,7 @@ export class SurvivorHud{
  // 冒烟读取：HUD 栏位显示数、Boss 血条是否可见
  get slotsShown(){return {weapons:this.slotItems.weapons.length,passives:this.slotItems.passives.length}}
  get bossBarVisible(){return !!this.boss&&this.boss.active&&this.bossShown}
+ get bannerText(){return this.banner?.text||''}
  // ---------- 模态框 ----------
  closeModal(){this.modalNode?.destroy();this.modalNode=null;this.modal=null;this.unlocked=false}
  private openModal(kind:string,alpha:number){this.closeModal();this.modal=kind;return this.modalNode=this.dim(alpha)}

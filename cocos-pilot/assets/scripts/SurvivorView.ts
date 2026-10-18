@@ -20,6 +20,8 @@ const RunCtor:any=SurvivorRun;
 type Screen='camp'|'battle';
 export class SurvivorView{
  run:any=null;screen:Screen='camp';
+ // 性能面板读取：上一帧逻辑步数与耗时（ms，仅 perfClock 由 SurvivorPerf 注入时计时）
+ perfClock:(()=>number)|null=null;steps=0;stepMs=0;
  private root:Node;private surface:Node;private art:SurvivorBattleArt;private hud:SurvivorHud;private audio:SurvivorAudio;private input:SurvivorInput|null=null;
  private platform:SurvivorPlatform;private save:any;private profile:any;private safe:SafeInsets;private width=720;private height=1280;
  private bundle:AssetManager.Bundle|null=null;private loading=false;private failed=false;private disposed=false;
@@ -100,7 +102,8 @@ export class SurvivorView{
   const v=this.input.vector(dt);run.setInput(playing?v.x:0,playing?v.y:0);
   if(playing&&!this.tutorialDone&&Math.hypot(v.x,v.y)>.1){this.moveTime+=dt;if(this.moveTime>3){this.tutorialDone=true;this.hud.hideTutorial()}}
   // 2. 推进固定步长
-  run.advance(dt);
+  // 性能面板（perf=1）注入 perfClock 时才计时
+  const clock=this.perfClock,t0=clock?clock():0;this.steps=run.advance(dt);if(clock)this.stepMs=clock()-t0;
   // 3. 一次性事件 → FX / 反馈 / HUD 横幅
   // 震动只在下列事件调用（02 §5.3），SurvivorPlatform 内另有频率限制；vibration 关闭时全程不调用
   const vib=settings.vibration;

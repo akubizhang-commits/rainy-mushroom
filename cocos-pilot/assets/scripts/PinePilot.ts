@@ -1,12 +1,13 @@
 import {_decorator,Component,Node,Camera,Canvas,UITransform,Layers,view,ResolutionPolicy,Color,sys,profiler} from 'cc';
 import {SurvivorView} from './SurvivorView';
 import {runSurvivorSmoke} from './SurvivorSmoke';
+import {SurvivorPerf,perfEnabled} from './SurvivorPerf';
 const {ccclass}=_decorator;
 // Scene host. The class name and UUID stay so the serialized scene keeps its reference.
 // The only game is the survivor mode; the old forest/library/packing views were removed.
 @ccclass('PinePilot')
 export class PinePilot extends Component{
- canvas!:Node;survivor:SurvivorView|null=null;
+ canvas!:Node;survivor:SurvivorView|null=null;perf:SurvivorPerf|null=null;
  progressStorage:any=null;
  safeTop=28;safeBottom=20;
  private browserResize=()=>{if(sys.isBrowser)view.setFrameSize(window.innerWidth,window.innerHeight);};
@@ -21,12 +22,14 @@ export class PinePilot extends Component{
   const smoke=sys.isBrowser&&new URLSearchParams(window.location.search).get('smoke')==='1';
   if(smoke){const data=new Map();this.progressStorage={getItem:(k:string)=>data.get(k)??null,setItem:(k:string,v:string)=>data.set(k,v)};}
   this.survivor=new SurvivorView(this);
+  // Debug perf panel (?perf=1 / WeChat launch query perf=1); never created otherwise.
+  if(perfEnabled())this.perf=new SurvivorPerf(this);
   view.on('canvas-resize',this.resize,this);
   if(sys.isBrowser){window.addEventListener('resize',this.browserResize);this.browserResize();}
   if(smoke)void runSurvivorSmoke(this);
  }
  private measureSafeArea(){try{const api=(globalThis as any).wx,info=api?.getWindowInfo?.()||api?.getSystemInfoSync?.(),capsule=api?.getMenuButtonBoundingClientRect?.();if(info){const scale=view.getVisibleSize().width/info.windowWidth;this.safeTop=Math.max(22,(capsule?.bottom+8||info.safeArea?.top||24)*scale);this.safeBottom=Math.max(16,(info.windowHeight-(info.safeArea?.bottom||info.windowHeight))*scale+10)}}catch{}}
- update(dt:number){this.survivor?.update(dt)}
+ update(dt:number){this.survivor?.update(dt);this.perf?.update(dt)}
  private resize(){this.measureSafeArea();this.survivor?.render()}
- onDestroy(){if(sys.isBrowser)window.removeEventListener('resize',this.browserResize);view.off('canvas-resize',this.resize,this);this.survivor?.destroy();this.survivor=null}
+ onDestroy(){if(sys.isBrowser)window.removeEventListener('resize',this.browserResize);view.off('canvas-resize',this.resize,this);this.perf?.destroy();this.perf=null;this.survivor?.destroy();this.survivor=null}
 }
