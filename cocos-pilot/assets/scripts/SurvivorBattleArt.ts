@@ -5,6 +5,7 @@ import {ENEMIES} from './shared/js/survivor/data/enemies';
 // - 分层父节点（自下而上）：地面 → 区域（撤离点/冲撞箭头/雨滴落点）→ 孢子 → 敌人 → 小旅人（底影/方向弧/本体/生命条）
 //   → 玩家弹体（含雨滴、菌伞、露珠环、落叶）→ 敌方弹体（浊雾泡）→ FX（净化光点、雨滴水花）→ 摇杆。
 //   层序按 02 §1.3：敌方弹体在玩家攻击之上、拾取物在敌人之下。
+// - 屏幕层：屏外方向指示（Boss / 撤离点，02 §4.3）与摇杆，同样来自战斗图集，和世界层连续合批。
 // - 每层一个 Sprite 节点池，每帧按序分配：只为视口（含 64u 余量）内的实体取节点，本帧未用到的节点隐藏；
 //   节点不跨帧保存实体状态。节点池按需创建，不超过上限。
 // - 战斗层所有动态 Sprite 来自同一张 survivor-battle 图集（裁决 D6），地面单独一张平铺图。
@@ -36,12 +37,16 @@ const R=(key:string,r:number)=>r/SURVIVOR_FRAME_R[key];
 const SPLASH_LIFE=.2;
 type Dot={x:number,y:number,vx:number,vy:number,life:number,gold:boolean};
 type Splash={x:number,y:number,r:number,life:number};
+// 屏外指示可用矩形（屏幕坐标，原点 = 屏幕中心 = 小旅人）：安全区内缩 24u，顶边让出 HUD 区（SurvivorView 计算）
+export type IndicatorBounds={xmin:number,xmax:number,ymin:number,ymax:number};
+const RING_DOTS=24,RING_R=40;
 export class SurvivorBattleArt{
  root:Node;ready=false;joyBase!:Node;joyKnob!:Node;
  private ground:Node;private world:Node;private screen:Node;private frames=new Map<string,SpriteFrame>();
  private image:ImageAsset|null=null;private texture:Texture2D|null=null;private groundImage:ImageAsset|null=null;private groundTexture:Texture2D|null=null;private groundFrame:SpriteFrame|null=null;
  private tiles:Node[]=[];private pools:Record<string,SpritePool>={} as any;private dots:Dot[]=[];private splashes:Splash[]=[];private hurtAt=-99;private lastDirX=1;private clock=0;
  private zonesPrev=new Map<number,number[]>();private zonesNow=new Map<number,number[]>();private dewCd=0;private dewPulseAt=-99;
+ private bounds:IndicatorBounds={xmin:-336,xmax:336,ymin:-600,ymax:270};private ringShown=0;
  constructor(parent:Node,private width:number,private height:number){
   this.root=this.layer(parent,'Survivor battle');this.ground=this.layer(this.root,'Ground');this.world=this.layer(this.root,'World');this.screen=this.layer(this.root,'Screen');
  }
@@ -68,7 +73,8 @@ export class SurvivorBattleArt{
   const zones=L('Zones'),spores=L('Spores'),enemies=L('Enemies'),player=L('Player'),shots=L('Player shots'),mist=L('Mist bubbles');const fx=L('FX');
   this.pools.zones=new SpritePool(zones,3+16,this);this.pools.spores=new SpritePool(spores,150,this);this.pools.enemies=new SpritePool(enemies,160,this);
   this.pools.shots=new SpritePool(shots,120+8,this);this.pools.mist=new SpritePool(mist,40,this);this.pools.fx=new SpritePool(fx,80,this);
-  this.pools.player=new SpritePool(player,5,this);
+  this.pools.player=new SpritePool(player,5,this);this.pools.ring=new SpritePool(player,RING_DOTS,this);
+  this.pools.indicators=new SpritePool(this.layer(this.screen,'Indicators'),4,this);
   this.joyBase=this.single(this.screen,'joy-base');this.joyKnob=this.single(this.screen,'joy-knob');
   this.layoutGround();
  }
@@ -144,6 +150,14 @@ export class SurvivorBattleArt{
   const bg=pp.next()!;pp.set(bg,'white');bg.ui.setContentSize(64,8);bg.node.setPosition(p.x,feetY-12);tint(bg,0x3a,0x2a,0x2a,barA);
   const fill=pp.next()!;pp.set(fill,'white');fill.ui.setContentSize(64*ratio,8);fill.ui.setAnchorPoint(0,.5);fill.node.setPosition(p.x-32,feetY-12);tint(fill,0xe8,0x6a,0x5a,barA);
   pp.end();
+  // 撤离停留进度环（02 §4.3）：角色周围半径 40u、24 个金色光点，按 progress 顺时针点亮（2 秒填满）；离开撤离点 0.2 秒内收回
+  const rp=this.pools.ring;rp.begin();const prog=ex&&run.state!=='won'?ex.progress:0;
+  this.ringShown=prog>=this.ringShown?prog:Math.max(prog,this.ringShown-dt/.2);
+  if(ex&&(this.ringShown>0||Math.hypot(p.x-ex.x,p.y-ex.y)<=ex.r)){
+   const lit=Math.round(this.ringShown*RING_DOTS);
+   for(let i=0;i<RING_DOTS;i++){const a=Math.PI/2-i/RING_DOTS*Math.PI*2,n=rp.next()!;rp.set(n,'purify-dot');n.node.setScale(1,1,1);n.node.setPosition(p.x+Math.cos(a)*RING_R,p.y+Math.sin(a)*RING_R);tint(n,0xf2,0xc1,0x4e,i<lit?255:70)}
+  }
+  rp.end();
   // 玩家弹体：沿速度方向旋转
   const sh=this.pools.shots;sh.begin();
   // 落叶回旋镖：琥珀尖叶按碰撞半径缩放并自转；孢子弹沿速度方向旋转
@@ -166,6 +180,20 @@ export class SurvivorBattleArt{
   for(const sp of this.splashes){const n=fp.next();if(!n)break;fp.set(n,'rain-splash');const f=1-sp.life/SPLASH_LIFE,k=R('rain-splash',sp.r)*(.6+.4*f);n.node.setScale(k,k,1);n.node.setPosition(sp.x,sp.y);tint(n,255,255,255,Math.round(255*(1-f)))}
   for(const d of this.dots){const n=fp.next();if(!n)break;n.node.setScale(1,1,1);fp.set(n,'purify-dot');n.node.setPosition(d.x,d.y);tint(n,d.gold?0xf2:255,d.gold?0xc1:255,d.gold?0x4e:255,Math.round(255*Math.min(1,d.life/.3)))}
   fp.end();
+  // 屏外方向指示（02 §4.3）：Boss 紫色箭头 + 雾壳小图标；Boss 冲撞蓄力时改橙红并脉冲（reduceFlash 时常亮不脉冲）；撤离点金色箭头 + 光圈小图标
+  const ip=this.pools.indicators;ip.begin();
+  if(boss&&boss.alive){const warn=boss.skill==='windup',pulse=warn&&!reduceFlash?1+.2*Math.abs(Math.sin(this.clock*Math.PI*4)):1;
+   this.indicate(ip,boss.x-cx,boss.y-cy,warn?[0xff,0x6b,0x4a]:[0x9b,0x7b,0xc4],56/44*pulse,'boss',R('boss',12))}
+  if(ex&&run.state==='extract')this.indicate(ip,ex.x-cx,ex.y-cy,[0xff,0xe0,0x8a],56/44,'evac-ring',R('evac-ring',12));
+  ip.end();
+ }
+ setBounds(b:IndicatorBounds){this.bounds=b}
+ // 目标在可用矩形内则不显示；否则沿“小旅人 → 目标”方向放到矩形边上，箭头朝外，小图标在箭头内侧
+ private indicate(pool:SpritePool,dx:number,dy:number,rgb:number[],scale:number,icon:string,iconScale:number){
+  const b=this.bounds;if(dx>=b.xmin&&dx<=b.xmax&&dy>=b.ymin&&dy<=b.ymax)return;
+  const tx=dx>0?b.xmax/dx:dx<0?b.xmin/dx:Infinity,ty=dy>0?b.ymax/dy:dy<0?b.ymin/dy:Infinity,k=Math.min(tx,ty),x=dx*k,y=dy*k,d=Math.hypot(dx,dy)||1;
+  const a=pool.next();if(!a)return;pool.set(a,'offscreen-arrow');a.node.setPosition(x,y);a.node.setScale(scale,scale,1);a.node.angle=Math.atan2(dy,dx)*180/Math.PI;tint(a,rgb[0],rgb[1],rgb[2],255);
+  const n=pool.next();if(!n)return;pool.set(n,icon);n.node.setPosition(x-dx/d*40,y-dy/d*40);n.node.setScale(iconScale,iconScale,1);n.node.angle=0;tint(n,255,255,255,255);
  }
  // 冒烟/性能用：战斗层当前激活的动态节点数（不含地面与摇杆）
  get activeNodes(){let n=0;for(const k in this.pools)n+=this.pools[k].count;return n}

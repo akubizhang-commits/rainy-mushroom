@@ -6,7 +6,7 @@ import {STRINGS} from './shared/js/survivor/data/strings';
 import {SurvivorPlatform,SafeInsets} from './SurvivorPlatform';
 import {SurvivorBattleArt} from './SurvivorBattleArt';
 import {SurvivorInput} from './SurvivorInput';
-import {SurvivorHud,ResultInfo} from './SurvivorHud';
+import {SurvivorHud,ResultInfo,HUD_TOP_RESERVED} from './SurvivorHud';
 // 生存玩法宿主视图（03 §6.1）。由 PinePilot 持有（入口接入属 T10），接口与 PackView 一致：update / render / destroy。
 // 生命周期：
 //  1. 构造：设计分辨率 720×1280 FIXED_WIDTH（裁决 D10），取安全区，读存档，显示营地轻量页；
@@ -63,6 +63,8 @@ export class SurvivorView{
   const s=view.getVisibleSize();this.width=s.width;this.height=s.height;this.safe=this.platform.safeArea();
   this.root.getComponent(UITransform)!.setContentSize(this.width,this.height);this.surface.getComponent(UITransform)!.setContentSize(this.width,this.height);
   this.art.resize(this.width,this.height);this.input?.resize(this.width,this.height,this.safe);
+  // 屏外指示矩形：安全区内缩 24u，顶边在 HUD 区（经验条/计时/栏位/Boss 血条）之下
+  const W=this.width/2,H=this.height/2,si=this.safe;this.art.setBounds({xmin:-W+si.safeLeft+24,xmax:W-si.safeRight-24,ymin:-H+si.safeBottom+24,ymax:H-si.safeTop-HUD_TOP_RESERVED});
   this.hud.destroy();this.hud=this.makeHud();
   if(this.screen==='camp'){
    this.art.root.active=false;
@@ -92,8 +94,9 @@ export class SurvivorView{
   if(playing&&!this.tutorialDone&&Math.hypot(v.x,v.y)>.1){this.moveTime+=dt;if(this.moveTime>3){this.tutorialDone=true;this.hud.hideTutorial()}}
   // 2. 推进固定步长
   run.advance(dt);
-  // 3. 一次性事件 → FX / 反馈
+  // 3. 一次性事件 → FX / 反馈 / HUD 横幅
   for(const e of run.drainEvents()){
+   this.hud.event(e);
    if(e.type==='purified')this.art.purify(e.x,e.y,e.kind,settings.reduceFlash);
    else if(e.type==='playerHurt'){this.art.hurt();this.hud.hurt(settings.reduceFlash);if(settings.vibration)this.platform.vibrate('light')}
    else if(e.type==='levelUp'){if(settings.vibration)this.platform.vibrate('light')}
@@ -127,7 +130,8 @@ export class SurvivorView{
   const {profile,earned}=Meta.settle(this.profile,summary);
   if(this.tutorialDone)profile.tutorial={...profile.tutorial,move:true};
   const ok=this.save.save(profile);this.profile=this.save.profile;
-  this.result={won:summary.outcome==='won',survivalSec:summary.survivalSec,purified:summary.purified,level:summary.level,earned,newRecord:Math.floor(summary.survivalSec)>before,saveWarning:ok?'':this.saveWarning()||STRINGS.saveFailed};
+  this.result={won:summary.outcome==='won',survivalSec:summary.survivalSec,purified:summary.purified,level:summary.level,earned,newRecord:Math.floor(summary.survivalSec)>before,saveWarning:ok?'':this.saveWarning()||STRINGS.saveFailed,
+   bossDefeated:!!summary.bossDefeated,weapons:summary.weapons||[],passives:summary.passives||[]};
  }
  // 冒烟/性能面板读取
  get diag(){return {state:this.run?.state||'',activeNodes:this.art.activeNodes,enemies:this.run?.enemies.count||0}}
