@@ -1,7 +1,9 @@
 import {Node,Sprite,SpriteFrame,Texture2D,ImageAsset,Rect,Size,UITransform,Color,AssetManager} from 'cc';
-import {SURVIVOR_FRAMES} from './SurvivorBattleFrames';
+import {SURVIVOR_FRAMES,SURVIVOR_FRAME_R} from './SurvivorBattleFrames';
+import {ENEMIES} from './shared/js/survivor/data/enemies';
 // 战斗渲染（03 §6.2，02 §1.3 / §9.1）。
-// - 分层父节点（自下而上）：地面 → 孢子 → 敌人 → 小旅人（底影/方向弧/本体/生命条）→ 玩家弹体 → 敌方弹体（S1 空）→ FX → 摇杆。
+// - 分层父节点（自下而上）：地面 → 区域（撤离点/冲撞箭头/雨滴落点）→ 孢子 → 敌人 → 小旅人（底影/方向弧/本体/生命条）
+//   → 玩家弹体（含雨滴、菌伞、露珠环、落叶）→ 敌方弹体（浊雾泡）→ FX（净化光点、雨滴水花）→ 摇杆。
 //   层序按 02 §1.3：敌方弹体在玩家攻击之上、拾取物在敌人之下。
 // - 每层一个 Sprite 节点池，每帧按序分配：只为视口（含 64u 余量）内的实体取节点，本帧未用到的节点隐藏；
 //   节点不跨帧保存实体状态。节点池按需创建，不超过上限。
@@ -26,14 +28,20 @@ class SpritePool{
 }
 function tint(s:Slot,r:number,g:number,b:number,a:number){const k=((r<<24)>>>0)+(g<<16)+(b<<8)+a;if(s.color===k)return;s.color=k;s.sprite.color=new Color(r,g,b,a)}
 const WHITE=[255,255,255];
-const KIND_TINT:Record<string,number[]>={moth:[0xc8,0xbc,0xe0],snail:[0x9a,0x86,0xc0],sporeling:[0xb8,0xe0,0x9a],elite_beetle:[0xff,0xd8,0x8a],boss_mist_snail:[0x8a,0x70,0xb0]};
-const BIG_KINDS:Record<string,boolean>={beetle:true,snail:true,elite_beetle:true,boss_mist_snail:true};
+// 敌人种类 → 帧（P1 正式占位，02 §9.2）：每类独立形状；精英复用 beetle 帧按碰撞半径放大 + 光环。
+// 缩放 = 实体碰撞半径 / 帧设计半径（SURVIVOR_FRAME_R）。flip = 头朝 +x、按玩家方位左右翻转。
+const KIND_FRAME:Record<string,string>={gnat:'gnat',beetle:'beetle',moth:'moth',snail:'snail',sporeling:'sporeling',elite_beetle:'beetle',boss_mist_snail:'boss'};
+const FLIP:Record<string,boolean>={beetle:true,snail:true,boss:true};
+const R=(key:string,r:number)=>r/SURVIVOR_FRAME_R[key];
+const SPLASH_LIFE=.2;
 type Dot={x:number,y:number,vx:number,vy:number,life:number,gold:boolean};
+type Splash={x:number,y:number,r:number,life:number};
 export class SurvivorBattleArt{
  root:Node;ready=false;joyBase!:Node;joyKnob!:Node;
  private ground:Node;private world:Node;private screen:Node;private frames=new Map<string,SpriteFrame>();
  private image:ImageAsset|null=null;private texture:Texture2D|null=null;private groundImage:ImageAsset|null=null;private groundTexture:Texture2D|null=null;private groundFrame:SpriteFrame|null=null;
- private tiles:Node[]=[];private pools:Record<string,SpritePool>={} as any;private dots:Dot[]=[];private hurtAt=-99;private lastDirX=1;private clock=0;
+ private tiles:Node[]=[];private pools:Record<string,SpritePool>={} as any;private dots:Dot[]=[];private splashes:Splash[]=[];private hurtAt=-99;private lastDirX=1;private clock=0;
+ private zonesPrev=new Map<number,number[]>();private zonesNow=new Map<number,number[]>();private dewCd=0;private dewPulseAt=-99;
  constructor(parent:Node,private width:number,private height:number){
   this.root=this.layer(parent,'Survivor battle');this.ground=this.layer(this.root,'Ground');this.world=this.layer(this.root,'World');this.screen=this.layer(this.root,'Screen');
  }
@@ -58,8 +66,8 @@ export class SurvivorBattleArt{
   // 节点池上限（03 §6.2）：敌人 160、玩家弹体 120、浊雾泡 40、孢子 150、FX 80。敌人底影已烘焙进敌人帧，每个敌人 1 个节点。
   const L=(name:string)=>this.layer(this.world,name);
   const zones=L('Zones'),spores=L('Spores'),enemies=L('Enemies'),player=L('Player'),shots=L('Player shots'),mist=L('Mist bubbles');const fx=L('FX');
-  this.pools.zones=new SpritePool(zones,2+16,this);this.pools.spores=new SpritePool(spores,150,this);this.pools.enemies=new SpritePool(enemies,160,this);
-  this.pools.shots=new SpritePool(shots,120,this);this.pools.mist=new SpritePool(mist,40,this);this.pools.fx=new SpritePool(fx,80,this);
+  this.pools.zones=new SpritePool(zones,3+16,this);this.pools.spores=new SpritePool(spores,150,this);this.pools.enemies=new SpritePool(enemies,160,this);
+  this.pools.shots=new SpritePool(shots,120+8,this);this.pools.mist=new SpritePool(mist,40,this);this.pools.fx=new SpritePool(fx,80,this);
   this.pools.player=new SpritePool(player,5,this);
   this.joyBase=this.single(this.screen,'joy-base');this.joyKnob=this.single(this.screen,'joy-knob');
   this.layoutGround();
@@ -84,35 +92,46 @@ export class SurvivorBattleArt{
   // 地面平铺随镜头取模偏移
   const ox=-(((cx%TILE)+TILE)%TILE),oy=-(((cy%TILE)+TILE)%TILE);this.ground.setPosition(ox,oy);
   const visible=(x:number,y:number)=>Math.abs(x-cx)<hw&&Math.abs(y-cy)<hh;
-  // 孢子：菱形，1.2 秒呼吸缩放 ±8%
-  // 阳光撤离点（S2 临时占位，第二批 P1 换光柱帧）：摇杆底圆放大到撤离半径染暖金，内圈按停留进度放大
+  // 阳光撤离点（02 §8.4 fx-evac-beam）：地面圈 + 停留进度实心圆 + 光柱（宽 = 撤离直径），在敌人层之下
   const zp=this.pools.zones;zp.begin();const ex=run.extraction;
   if(ex){
-   const o=zp.next()!;zp.set(o,'joy-base');o.ui.setContentSize(ex.r*2,ex.r*2);o.node.setPosition(ex.x,ex.y);tint(o,0xff,0xe0,0x8a,150);
-   const k=Math.max(.05,ex.progress),q=zp.next()!;zp.set(q,'joy-base');q.ui.setContentSize(ex.r*2*k,ex.r*2*k);q.node.setPosition(ex.x,ex.y);tint(q,0xff,0xf4,0xc8,230);
+   const o=zp.next()!;zp.set(o,'evac-ring');const k=R('evac-ring',ex.r);o.node.setScale(k,k,1);o.node.setPosition(ex.x,ex.y);o.node.angle=0;tint(o,255,255,255,255);
+   const f=Math.max(.05,ex.progress)*R('evac-fill',ex.r),q=zp.next()!;zp.set(q,'evac-fill');q.node.setScale(f,f,1);q.node.setPosition(ex.x,ex.y);q.node.angle=0;tint(q,255,255,255,255);
+   const w=zp.next()!;zp.set(w,'evac-beam');w.ui.setContentSize(ex.r*2,ex.r*4.4);w.node.setPosition(ex.x,ex.y);w.node.setScale(1,1,1);w.node.angle=0;tint(w,255,255,255,255);
   }
-  // 雨滴落点阴影（S2 临时占位，第二批 P1 换阴影/雨滴帧）：摇杆底圆按落点半径缩放、染雨蓝，0.4 秒内逐渐加深
-  const zs=run.zones;
-  for(let i=0;i<(zs?zs.count:0);i++){const z=zs.active[i];if(!visible(z.x,z.y))continue;const o=zp.next();if(!o)break;zp.set(o,'joy-base');o.ui.setContentSize(z.r*2,z.r*2);o.node.setPosition(z.x,z.y);const k=Math.max(0,Math.min(1,(t-z.bornAt)/Math.max(1e-6,z.at-z.bornAt)));tint(o,0x6f,0xa8,0xd8,Math.round(70+130*k))}
+  // 冲撞箭头（02 §1.2 危险预告）：Boss 蓄力期间从 Boss 中心指向锁定方向，长 = 冲撞距离，宽 = 碰撞直径，α0.5
+  const boss=run.boss;
+  if(boss&&boss.alive&&boss.skill==='windup'){const d=ENEMIES.boss_mist_snail,len=d.moveSpeed*(boss.speedMul||1)*d.charge.speedMul*d.charge.duration;const o=zp.next()!;zp.set(o,'danger-arrow');o.ui.setContentSize(len,boss.r*2);o.node.setScale(1,1,1);o.node.setPosition(boss.x,boss.y);o.node.angle=Math.atan2(boss.dirY,boss.dirX)*180/Math.PI;tint(o,255,255,255,128)}
+  // 雨滴落点（02 §1.3 冷蓝虚线圈 α0.6）：warnSec 内从 1.25r 收缩到 r；落点消失（结算）时生成水花 FX
+  const zs=run.zones,now=this.zonesNow;now.clear();
+  for(let i=0;i<(zs?zs.count:0);i++){const z=zs.active[i];now.set(z.uid,[z.x,z.y,z.r]);if(!visible(z.x,z.y))continue;const o=zp.next();if(!o)continue;zp.set(o,'rain-mark');const k=Math.max(0,Math.min(1,(t-z.bornAt)/Math.max(1e-6,z.at-z.bornAt))),s=R('rain-mark',z.r)*(1.25-.25*k);o.node.setScale(s,s,1);o.node.setPosition(z.x,z.y);o.node.angle=0;tint(o,255,255,255,Math.round(110+43*k))}
+  for(const [uid,z] of this.zonesPrev)if(!now.has(uid)&&visible(z[0],z[1])){if(this.splashes.length>=16)this.splashes.shift();this.splashes.push({x:z[0],y:z[1],r:z[2],life:SPLASH_LIFE})}
+  this.zonesNow=this.zonesPrev;this.zonesPrev=now;
   zp.end();
+  // 孢子：菱形，1.2 秒呼吸缩放 ±8%
   const sp=this.pools.spores;sp.begin();
   for(let i=0;i<run.spores.count;i++){const s=run.spores.active[i];if(!visible(s.x,s.y))continue;const n=sp.next();if(!n)break;sp.set(n,s.tier===2?'spore-l':s.tier===1?'spore-m':'spore-s');const k=1+.08*Math.sin((t+s.uid*.37)*Math.PI*2/1.2);n.node.setPosition(s.x,s.y);n.node.setScale(k,k,1)}
   sp.end();
   // 敌人：底影烘焙在帧内；受击 0.1 秒闪白（reduceFlash 时改为 1.1 缩放脉冲）
   const ep=this.pools.enemies;ep.begin();
   for(let i=0;i<run.enemies.count;i++){
-   const e=run.enemies.active[i];if(!visible(e.x,e.y))continue;const n=ep.next();if(!n)break;
+   const e=run.enemies.active[i];if(!visible(e.x,e.y))continue;
    const hit=e.lastHitTime>=0&&t-e.lastHitTime<.1,flash=hit&&!reduceFlash,phase=t+e.uid*.37;
-   // S2 临时占位（第二批 P1 换正式帧）：蜗牛/精英/Boss 借甲虫帧、灰蛾/菌灵借蚊蚋帧，按碰撞半径缩放 + 按种类着色
-   const big=!!BIG_KINDS[e.kind],base=big?'beetle':'gnat';ep.set(n,flash?base+'-flash':base);
-   const c=flash?WHITE:(KIND_TINT[e.kind]||WHITE);tint(n,c[0],c[1],c[2],255);const rs=e.r/(big?16:10);
-   let x=e.x,y=e.y-e.r*.5;if(base==='gnat'){x+=Math.sin(phase*23)*1.5;y+=Math.cos(phase*19)*1.5}else y+=Math.abs(Math.sin(phase*10));
-   n.node.setPosition(x,y);const k=(hit&&reduceFlash?1.1:1)*rs;n.node.setScale(base==='beetle'&&p.x<e.x?-k:k,k,1);
+   const key=KIND_FRAME[e.kind],k=(hit&&reduceFlash?1.1:1)*R(key,e.r),flip=FLIP[key]&&p.x<e.x?-1:1;
+   let x=e.x,y=e.y-e.r*.5,sx=1;
+   if(key==='gnat'){x+=Math.sin(phase*23)*1.5;y+=Math.cos(phase*19)*1.5}
+   else if(key==='moth')y+=Math.sin(phase*16)*2;
+   else if(key==='snail'||key==='boss')sx=1+.03*Math.sin(phase*(key==='boss'?3:5)); // 蠕动：x 方向 ±3% 伸缩（02 §8.3）
+   else y+=Math.abs(Math.sin(phase*10));
+   // 精英：紫雾底影外 4u 脉冲描边 #9B7BC4 ↔ #F2C14E，周期 1 秒；reduceFlash 时常亮金色（02 §1.3）
+   if(e.kind==='elite_beetle'){const a=ep.next();if(!a)break;ep.set(a,'elite-aura');const m=reduceFlash?1:.5+.5*Math.sin(t*Math.PI*2);tint(a,Math.round(0x9b+(0xf2-0x9b)*m),Math.round(0x7b+(0xc1-0x7b)*m),Math.round(0xc4+(0x4e-0xc4)*m),255);a.node.setPosition(x,y);a.node.setScale(k,k,1)}
+   const n=ep.next();if(!n)break;ep.set(n,flash?key+'-flash':key);
+   n.node.setPosition(x,y);n.node.setScale(flip*k*sx,k,1);tint(n,255,255,255,255);
   }
   ep.end();
-  // 浊雾泡（敌方弹体）：S2 临时用大孢子帧染品红 #E05AD0（02 §1.2），按碰撞直径缩放
+  // 浊雾泡（敌方弹体）：品红空心环 + 暗紫核（02 §1.2），不旋转，按碰撞半径缩放
   const mp=this.pools.mist;mp.begin();
-  for(let i=0;i<(run.mistBubbles?run.mistBubbles.count:0);i++){const b=run.mistBubbles.active[i];if(!visible(b.x,b.y))continue;const n=mp.next();if(!n)break;mp.set(n,'spore-l');n.ui.setContentSize(b.r*2,b.r*2);n.node.setPosition(b.x,b.y);tint(n,0xe0,0x5a,0xd0,255)}
+  for(let i=0;i<(run.mistBubbles?run.mistBubbles.count:0);i++){const b=run.mistBubbles.active[i];if(!visible(b.x,b.y))continue;const n=mp.next();if(!n)break;mp.set(n,'mist-bubble');const k=R('mist-bubble',b.r);n.node.setScale(k,k,1);n.node.setPosition(b.x,b.y)}
   mp.end();
   // 小旅人：底影 + 方向弧 + 本体 + 生命条
   const pp=this.pools.player;pp.begin();const moving=Math.hypot(run._inX||0,run._inY||0)>.01,feetY=p.y-p.r*.5;
@@ -127,20 +146,25 @@ export class SurvivorBattleArt{
   pp.end();
   // 玩家弹体：沿速度方向旋转
   const sh=this.pools.shots;sh.begin();
-  // 落叶回旋镖（S2 临时占位，第二批 P1 换落叶帧）：中孢子帧按碰撞直径缩放、染叶绿并自转
+  // 落叶回旋镖：琥珀尖叶按碰撞半径缩放并自转；孢子弹沿速度方向旋转
   for(let i=0;i<run.shots.count;i++){const s=run.shots.active[i];if(!visible(s.x,s.y))continue;const n=sh.next();if(!n)break;
-   if(s.kind==='leaf'){sh.set(n,'spore-m');n.ui.setContentSize(s.r*2,s.r*2);n.node.setPosition(s.x,s.y);n.node.angle=t*720;tint(n,0x9f,0xd1,0x6b,255)}
-   else{sh.set(n,'spore-shot');n.node.setPosition(s.x,s.y);n.node.angle=Math.atan2(s.vy,s.vx)*180/Math.PI;tint(n,255,255,255,255)}}
-  // S2 临时占位（第二批 P1 换正式帧）：菌伞片用大孢子帧按碰撞直径缩放；露珠环用 16 个净化光点排成圆环
+   if(s.kind==='leaf'){sh.set(n,'leaf');const k=R('leaf',s.r);n.node.setScale(k,k,1);n.node.setPosition(s.x,s.y);n.node.angle=t*720;tint(n,255,255,255,255)}
+   else{sh.set(n,'spore-shot');n.node.setScale(1,1,1);n.node.setPosition(s.x,s.y);n.node.angle=Math.atan2(s.vy,s.vx)*180/Math.PI;tint(n,255,255,255,255)}}
+  // 雨滴：落点阴影期间从 160u 高处落下（玩家攻击层）
+  for(let i=0;i<(zs?zs.count:0);i++){const z=zs.active[i];if(!visible(z.x,z.y))continue;const n=sh.next();if(!n)break;const k=Math.max(0,Math.min(1,(t-z.bornAt)/Math.max(1e-6,z.at-z.bornAt)));sh.set(n,'raindrop');n.node.setScale(1,1,1);n.node.angle=0;n.node.setPosition(z.x,z.y+160*(1-k*k));tint(n,255,255,255,Math.round(140+115*k))}
+  // 菌伞旋刃按碰撞半径缩放并自转；露珠环按 ringR 缩放，常态 α0.25，结算瞬间 α0.5 闪 0.1 秒（reduceFlash 时不闪，02 §8.4）
   for(const w of run.weapons){
-   if(w.id==='umbrella_blades')for(let i=0;i<w.bladeCount;i++){const n=sh.next();if(!n)break;sh.set(n,'spore-l');n.ui.setContentSize(w.bladeR*2,w.bladeR*2);n.node.setPosition(w.bladeX[i],w.bladeY[i]);n.node.angle=t*360;tint(n,255,255,255,255)}
-   else if(w.id==='dew_ring'&&w.ringR>0)for(let i=0;i<16;i++){const n=sh.next();if(!n)break;sh.set(n,'purify-dot');tint(n,255,255,255,255);const a=i/16*Math.PI*2+t*.5;n.node.setPosition(p.x+Math.cos(a)*w.ringR,p.y+Math.sin(a)*w.ringR);n.node.angle=0}
+   if(w.id==='umbrella_blades')for(let i=0;i<w.bladeCount;i++){const n=sh.next();if(!n)break;sh.set(n,'umbrella-blade');const k=R('umbrella-blade',w.bladeR);n.node.setScale(k,k,1);n.node.setPosition(w.bladeX[i],w.bladeY[i]);n.node.angle=t*360;tint(n,255,255,255,255)}
+   else if(w.id==='dew_ring'&&w.ringR>0){if(w.cooldown>this.dewCd+1e-6)this.dewPulseAt=this.clock;this.dewCd=w.cooldown;const n=sh.next();if(!n)break;sh.set(n,'dew-ring');const k=R('dew-ring',w.ringR);n.node.setScale(k,k,1);n.node.setPosition(p.x,p.y);n.node.angle=0;tint(n,255,255,255,!reduceFlash&&this.clock-this.dewPulseAt<.1?128:64)}
   }
   sh.end();
   // FX：净化光点（表现层计时）
   const fp=this.pools.fx;fp.begin();
   for(let i=this.dots.length-1;i>=0;i--){const d=this.dots[i];d.life-=dt;if(d.life<=0){this.dots.splice(i,1);continue}d.x+=d.vx*dt;d.y+=d.vy*dt}
-  for(const d of this.dots){const n=fp.next();if(!n)break;fp.set(n,'purify-dot');n.node.setPosition(d.x,d.y);tint(n,d.gold?0xf2:255,d.gold?0xc1:255,d.gold?0x4e:255,Math.round(255*Math.min(1,d.life/.3)))}
+  for(let i=this.splashes.length-1;i>=0;i--){const sp=this.splashes[i];sp.life-=dt;if(sp.life<=0)this.splashes.splice(i,1)}
+  // 雨滴落地水花：0.2 秒从 0.6r 扩散到 r 并淡出
+  for(const sp of this.splashes){const n=fp.next();if(!n)break;fp.set(n,'rain-splash');const f=1-sp.life/SPLASH_LIFE,k=R('rain-splash',sp.r)*(.6+.4*f);n.node.setScale(k,k,1);n.node.setPosition(sp.x,sp.y);tint(n,255,255,255,Math.round(255*(1-f)))}
+  for(const d of this.dots){const n=fp.next();if(!n)break;n.node.setScale(1,1,1);fp.set(n,'purify-dot');n.node.setPosition(d.x,d.y);tint(n,d.gold?0xf2:255,d.gold?0xc1:255,d.gold?0x4e:255,Math.round(255*Math.min(1,d.life/.3)))}
   fp.end();
  }
  // 冒烟/性能用：战斗层当前激活的动态节点数（不含地面与摇杆）

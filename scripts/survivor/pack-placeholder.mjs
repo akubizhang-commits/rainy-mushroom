@@ -1,6 +1,7 @@
-// T8 · S1 几何占位图集生成器（02 §8.2 / §9 / §9.1）。
-// 把所有战斗期动态对象（小旅人、gnat、beetle、孢子弹、孢子经验、净化光点、底影、摇杆、
-// 纯白块）光栅化进同一张 survivor-battle 图集，保证 03 §6.2 的同图集合批（裁决 D6）。
+// T8 · S1 / P1 · S2 几何占位图集生成器（02 §8.2 / §9 / §9.1 / §9.2）。
+// 把所有战斗期动态对象（小旅人、全部敌人与 Boss、玩家五种武器表现、浊雾泡、孢子经验、净化光点、
+// 冲撞/方向箭头、撤离点、底影、摇杆、纯白块）光栅化进同一张 survivor-battle 图集，
+// 保证 03 §6.2 的同图集合批（裁决 D6）。S2 新实体的帧尺寸按 data/ 中的碰撞半径换算。
 // 同时生成 256×256 可平铺地面 ground.png（02 §8.6）。
 //
 // 无第三方依赖：4×4 超采样覆盖率 + node:zlib 自写 PNG。输出确定（固定种子），可重复运行。
@@ -13,6 +14,8 @@
 import {writeFileSync} from 'node:fs'
 import {resolve} from 'node:path'
 import {deflateSync} from 'node:zlib'
+import {ENEMIES} from '../../js/survivor/data/enemies.js'
+import {WEAPONS} from '../../js/survivor/data/weapons.js'
 
 const root = resolve(import.meta.dirname, '../..')
 const S = 1.5 // 像素 / u
@@ -168,6 +171,187 @@ function beetle(name, flash) {
 }
 frames.push(beetle('beetle', false), beetle('beetle-flash', true))
 
+// ---------- S2 新实体（P1）：尺寸取自 data/ 碰撞半径 ----------
+// 每个帧按“设计半径”画，k = 数据半径 / 设计半径 等比缩放；frameR 记录帧对应的碰撞半径，
+// 表现层按 实体半径 / frameR 缩放（数据改半径时重跑本脚本即可同步）。
+const frameR = {gnat: 10, beetle: 16}
+const scaled = (k, s) => (x, y) => s(x / k, y / k)
+// 敌人帧：shadow = 紫雾底影（宽 = 碰撞直径 × 1.3，02 §1.3），parts = 本体图层；-flash 为同轮廓纯白剪影、保留底影
+function enemyPair(name, r, designR, W, H, sy, shadow, parts) {
+  const k = r / designR
+  frameR[name] = r
+  const sh = [scaled(k, shadow), ENEMY_MIST]
+  const body = parts.map(([s, c]) => [scaled(k, s), c])
+  frames.push(
+    frame(name, W * k, H * k, 0.5, sy / H, [sh, ...body]),
+    frame(name + '-flash', W * k, H * k, 0.5, sy / H, [sh, [union(...body.map(([s]) => s)), WHITE]]),
+  )
+}
+const MOTH_WING = hex('#7E7466'), MOTH_SPOT = hex('#9A9080')
+const SNAIL_BODY = hex('#5E6B5A'), SNAIL_SHELL = hex('#6E6458'), SNAIL_SPIRAL = hex('#4E463E'), SNAIL_SHINE = hex('#8A8072')
+const SPORE_CAP = hex('#7E6F92'), SPORE_RIM = hex('#5C5070'), SPORE_DOT = hex('#9A8EAD'), SPORE_STEM = hex('#A89F94')
+const EYE = hex('#2B2B2B')
+
+// moth 灰蛾：两片灰褐三角翅组成“领结”形 + 深褐细身 + 触角（02 §8.3，40×32u），设计半径 14
+{
+  const r = ENEMIES.moth.radius, W = 42, H = 40, cx = W / 2, sy = 6, by = sy + 20
+  const wings = union(poly([[cx - 1, by + 1], [cx - 20, by + 13], [cx - 18, by - 12]]), poly([[cx + 1, by + 1], [cx + 20, by + 13], [cx + 18, by - 12]]))
+  enemyPair('moth', r, 14, W, H, sy, ellipse(cx, sy, 14 * 1.3, 5), [
+    [grow(wings, 0.8), BEETLE_DARK],
+    [wings, MOTH_WING],
+    [union(circle(cx - 12, by + 3, 2.6), circle(cx + 12, by + 3, 2.6)), MOTH_SPOT],
+    [ellipse(cx, by, 3, 9), BEETLE_DARK],
+    [union(poly([[cx - 1, by + 8], [cx - 0.2, by + 8], [cx - 5, by + 14], [cx - 5.8, by + 13.4]]), poly([[cx + 1, by + 8], [cx + 0.2, by + 8], [cx + 5, by + 14], [cx + 5.8, by + 13.4]])), BEETLE_DARK],
+  ])
+}
+// snail 雨夜蜗牛：灰绿软足 + 灰褐圆壳与深色螺旋 + 两根眼柄，头朝 +x（02 §8.3，60×40u），设计半径 22
+function snailParts(cx, sy, s) {
+  // s = 相对普通蜗牛的放大倍率（Boss 复用同一套轮廓）
+  const foot = ellipse(cx + 2 * s, sy + 6 * s, 27 * s, 6 * s)
+  const head = ellipse(cx + 22 * s, sy + 11 * s, 6 * s, 7 * s)
+  const stalks = union(
+    poly([[cx + 19 * s, sy + 15 * s], [cx + 21 * s, sy + 15 * s], [cx + 22 * s, sy + 25 * s], [cx + 20.6 * s, sy + 25 * s]]),
+    poly([[cx + 24 * s, sy + 15 * s], [cx + 26 * s, sy + 15 * s], [cx + 28.4 * s, sy + 24 * s], [cx + 27 * s, sy + 24 * s]]),
+  )
+  const tips = union(circle(cx + 21.3 * s, sy + 25.5 * s, 1.8 * s), circle(cx + 27.7 * s, sy + 24.5 * s, 1.8 * s))
+  const shellC = [cx - 4 * s, sy + 21 * s]
+  return {
+    body: union(foot, head, stalks, tips),
+    shell: circle(...shellC, 15 * s),
+    layers: [
+      [union(foot, head, stalks), SNAIL_BODY],
+      [tips, EYE],
+      [circle(...shellC, 15 * s), SNAIL_SHELL],
+      [ring(...shellC, 11 * s, 2.4 * s), SNAIL_SPIRAL],
+      [ring(...shellC, 6 * s, 2.2 * s), SNAIL_SPIRAL],
+      [circle(...shellC, 1.8 * s), SNAIL_SPIRAL],
+      [ellipse(shellC[0] - 6 * s, shellC[1] + 8 * s, 3.6 * s, 2.2 * s), SNAIL_SHINE],
+    ],
+  }
+}
+{
+  const r = ENEMIES.snail.radius, W = 64, H = 48, cx = W / 2 - 2, sy = 7
+  enemyPair('snail', r, 22, W, H, sy, ellipse(W / 2, sy, 22 * 1.3, 6), snailParts(cx, sy, 1).layers)
+}
+// sporeling 迷途菌灵：灰紫半圆菌盖 + 浅灰褐矩形菌柄 + 两点眼（02 §8.3，40×44u），设计半径 16
+{
+  const r = ENEMIES.sporeling.radius, W = 44, H = 52, cx = W / 2, sy = 7, capY = sy + 21
+  const cap = (x, y) => y >= capY && ellipse(cx, capY, 19, 19)(x, y)
+  enemyPair('sporeling', r, 16, W, H, sy, ellipse(cx, sy, 16 * 1.3, 5.5), [
+    [rect(cx - 6, sy + 1, cx + 6, capY + 1), SPORE_STEM],
+    [union(circle(cx - 3, sy + 12, 1.7), circle(cx + 3, sy + 12, 1.7)), EYE],
+    [cap, SPORE_CAP],
+    [(x, y) => y >= capY - 1 && y <= capY + 2.2 && ellipse(cx, capY, 19, 19)(x, y), SPORE_RIM],
+    [union(circle(cx - 8, capY + 9, 2.6), circle(cx + 5, capY + 13, 2.2), circle(cx + 11, capY + 5, 1.8)), SPORE_DOT],
+  ])
+}
+// boss_mist_snail 浊雾巨蜗：蜗牛轮廓 ×2.6 + 深紫半透明雾壳罩住螺壳 + 三团雾絮（02 §8.3，约 170×120u，直径 ≥ 112u），设计半径 56
+{
+  const r = ENEMIES.boss_mist_snail.radius, W = 176, H = 136, sy = 13, s = 2.6, cx = W / 2 - 6
+  const sn = snailParts(cx, sy, s)
+  const shellC = [cx - 4 * s, sy + 21 * s]
+  enemyPair('boss', r, 56, W, H, sy, ellipse(W / 2, sy, 56 * 1.3, 12), [
+    ...sn.layers,
+    [ellipse(shellC[0], shellC[1] + 4, 52, 50), hex('#5A3F78', 0.42)],
+    [union(circle(shellC[0] - 40, shellC[1] + 30, 12), circle(shellC[0] + 6, shellC[1] + 52, 14), circle(shellC[0] + 42, shellC[1] + 30, 10)), hex('#7A5A9A', 0.35)],
+  ])
+}
+// 精英光环：叠在放大的 beetle 帧下（同帧尺寸与锚点），白色椭圆环运行时染 #9B7BC4 ↔ #F2C14E 脉冲（02 §1.3）
+{
+  const W = 48, H = 40, cx = W / 2, sy = 7
+  const outer = ellipse(cx, sy, 24, 8.6), inner = ellipse(cx, sy, 21.6, 6.4)
+  frames.push(frame('elite-aura', W, H, 0.5, sy / H, [[(x, y) => outer(x, y) && !inner(x, y), WHITE]]))
+}
+
+// 浊雾泡（敌弹）：品红 #E05AD0 空心环 + 暗紫 #3A1F45 核，直径 = 碰撞直径（02 §1.2，24u）
+{
+  const r = ENEMIES.sporeling.bubble.radius, W = r * 2 + 2, c = W / 2
+  frameR['mist-bubble'] = r
+  frames.push(frame('mist-bubble', W, W, 0.5, 0.5, [
+    [ring(c, c, r, r * 0.3), hex('#E05AD0')],
+    [circle(c, c, r * 0.5), hex('#3A1F45')],
+  ]))
+}
+// 菌伞旋刃：琥珀半圆伞面 + 暖白菌褶与短柄 + 深琥珀描边，运行时自转（02 §8.4，直径 32u × area）
+{
+  const r = WEAPONS.umbrella_blades.bladeRadius, W = r * 2 + 2, c = W / 2
+  frameR['umbrella-blade'] = r
+  const canopy = (x, y) => y >= c - r * 0.1 && circle(c, c - r * 0.1, r * 0.95)(x, y)
+  const stem = rect(c - r * 0.16, c - r * 0.85, c + r * 0.16, c)
+  frames.push(frame('umbrella-blade', W, W, 0.5, 0.5, [
+    [grow(union(canopy, stem), 1), hex('#B07A2A', 0.95)],
+    [stem, SHOT],
+    [canopy, AMBER],
+    [(x, y) => y >= c - r * 0.1 && y <= c + r * 0.12 && circle(c, c - r * 0.1, r * 0.95)(x, y), SHOT],
+    [ellipse(c - r * 0.4, c + r * 0.45, r * 0.22, r * 0.13), hex('#FFF4D6', 0.8)],
+  ]))
+}
+// 露珠环：浅蓝 #BFE8FF 圆环描边，运行时按 ringR 缩放（02 §8.4，常态 α0.25、结算闪 α0.5）；设计半径 68
+{
+  const R = 68, W = R * 2, c = W / 2
+  frameR['dew-ring'] = R - 1
+  frames.push(frame('dew-ring', W, W, 0.5, 0.5, [[ring(c, c, R - 1, 3), hex('#BFE8FF')], [ring(c, c, R - 4, 3), hex('#BFE8FF', 0.25)]]))
+}
+// 雨滴坠击：落点 = 冷蓝 #9CC8E8 虚线圈（16 段，02 §1.3 “不是危险”）；雨滴 = 浅蓝细长水滴；落地水花 = 浅蓝环 + 6 粒溅点
+{
+  const r = WEAPONS.raindrop.levels[0].radius, W = r * 2 + 2, c = W / 2
+  frameR['rain-mark'] = r; frameR['rain-splash'] = r
+  const dashed = (x, y) => ring(c, c, r, 2.5)(x, y) && Math.floor(((Math.atan2(y - c, x - c) + Math.PI) / (Math.PI * 2)) * 32) % 2 === 0
+  frames.push(frame('rain-mark', W, W, 0.5, 0.5, [[dashed, hex('#9CC8E8')], [circle(c, c, 3), hex('#9CC8E8', 0.8)]]))
+  const drops = []
+  for (let i = 0; i < 6; i++) { const a = (i / 6) * Math.PI * 2 + 0.3; drops.push(circle(c + Math.cos(a) * r * 0.82, c + Math.sin(a) * r * 0.82, 3)) }
+  frames.push(frame('rain-splash', W, W, 0.5, 0.5, [[ring(c, c, r * 0.6, 3), hex('#BFE8FF')], [union(...drops), hex('#E6F6FF')]]))
+  const dW = 10, dH = 30, dc = dW / 2
+  const drop = union(circle(dc, 4.5, 4.2), poly([[dc - 4, 5.4], [dc + 4, 5.4], [dc, dH - 0.5]]))
+  frames.push(frame('raindrop', dW, dH, 0.5, 4.5 / dH, [[grow(drop, 0.6), hex('#6F93B8', 0.9)], [drop, hex('#BFE8FF')], [ellipse(dc - 1.4, 5.5, 1.2, 2), WHITE]]))
+}
+// 落叶回旋镖：琥珀尖椭圆叶（两圆相交）+ 暖白叶脉 + 深琥珀描边，运行时自转（02 §8.4，36×20u），设计半径 10
+{
+  const r = WEAPONS.leaf_boomerang.leafRadius, k = r / 10, W = 38 * k, H = 22 * k, cx = W / 2, cy = H / 2
+  frameR.leaf = r
+  const R = 21.2 * k, d = 11.2 * k
+  const leaf = (x, y) => circle(cx, cy - d, R)(x, y) && circle(cx, cy + d, R)(x, y)
+  frames.push(frame('leaf', W, H, 0.5, 0.5, [
+    [grow(leaf, 1), hex('#B07A2A', 0.95)],
+    [leaf, AMBER],
+    [(x, y) => leaf(x, y) && Math.abs(y - cy) <= 0.8 * k, SHOT],
+    [union(poly([[cx - 6 * k, cy], [cx - 4.6 * k, cy], [cx - 9 * k, cy + 5 * k]]), poly([[cx + 3 * k, cy], [cx + 4.4 * k, cy], [cx, cy - 5 * k]])), SHOT],
+  ]))
+}
+// 冲撞箭头：橙红 #FF6B4A 斜条纹矩形 + 三角箭头，朝 +x、锚点在尾部中心；运行时长度 = 冲撞距离、宽 = 碰撞直径，α0.5（02 §1.2）
+{
+  const W = 64, H = 56, body = rect(0, 14, 44, 42), head = poly([[42, 0], [64, 28], [42, 56]])
+  frames.push(frame('danger-arrow', W, H, 0, 0.5, [
+    [union(body, head), hex('#FF6B4A', 0.55)],
+    [(x, y) => body(x, y) && ((x + y) % 10 + 10) % 10 < 5, hex('#FF6B4A')],
+    [head, hex('#FF6B4A')],
+  ]))
+}
+// 方向指示箭头（屏外精英 / Boss / 撤离点，P2 使用）：白色三角 + 深色描边，运行时染色并旋转，朝 +x（02 §8.5 icon-offscreen 40–56u）
+{
+  const W = 44, H = 44, tri = poly([[8, 6], [40, 22], [8, 38], [16, 22]])
+  frames.push(frame('offscreen-arrow', W, H, 0.5, 0.5, [[grow(tri, 2), hex('#1C2E2B', 0.9)], [tri, WHITE]]))
+}
+// 阳光撤离点（02 §8.4 fx-evac-beam 100×220u）：光柱 = 竖向渐变 #FFE08A → #FFF7D6 并向上淡出，锚点在底部中心；
+// 地面圈 = 浅金描边 + 淡填充；停留进度 = 柔边实心圆。均按半径缩放（光柱宽 = 撤离直径、高 = 2.2 × 宽）
+{
+  const W = 50, H = 110, cx = W / 2, bands = 55
+  const layers = []
+  for (let i = 0; i < bands; i++) {
+    const f = i / (bands - 1), y0 = (i * H) / bands, y1 = ((i + 1) * H) / bands
+    const col = [0xff, Math.round(0xe0 + (0xf7 - 0xe0) * f), Math.round(0x8a + (0xd6 - 0x8a) * f)]
+    layers.push([rect(cx - 25, y0, cx + 25, y1), [...col, 0.18 * (1 - f)]])
+    layers.push([rect(cx - 16, y0, cx + 16, y1), [...col, 0.22 * (1 - f)]])
+    layers.push([rect(cx - 7, y0, cx + 7, y1), [...col, 0.3 * (1 - f)]])
+  }
+  frames.push(frame('evac-beam', W, H, 0.5, 0, layers))
+  const R = 34, rW = R * 2 + 2, c = rW / 2
+  frameR['evac-ring'] = R
+  frames.push(frame('evac-ring', rW, rW, 0.5, 0.5, [[circle(c, c, R), hex('#FFE08A', 0.25)], [ring(c, c, R, 2.5), hex('#FFE08A')]]))
+  frames.push(frame('evac-fill', 24, 24, 0.5, 0.5, [[circle(12, 12, 12), hex('#FFF7D6', 0.35)], [circle(12, 12, 9), hex('#FFF7D6', 0.8)]]))
+  frameR['evac-fill'] = 12
+}
+
 // 孢子弹：暖白椭圆 20×12u + 2 段琥珀拖尾（02 §8.4），朝 +x，运行时按速度旋转。锚点在弹头中心
 {
   const W = 38, H = 12, hx = 28
@@ -289,8 +473,10 @@ writeFileSync(resolve(dir, 'survivor-battle.json'), JSON.stringify({version: 2, 
 const g = ground()
 writeFileSync(resolve(dir, 'ground.png'), png(g.w, g.h, g.data))
 writeFileSync(resolve(root, 'cocos-pilot/assets/scripts/SurvivorBattleFrames.ts'),
-  '// GENERATED by scripts/survivor/pack-placeholder.mjs (T8 S1 geometric placeholders); do not edit.\n' +
+  '// GENERATED by scripts/survivor/pack-placeholder.mjs (T8 S1 / P1 S2 geometric placeholders); do not edit.\n' +
   'export type SurvivorFrame={width:number,height:number,anchorX:number,anchorY:number,x:number,y:number,w:number,h:number};\n' +
   `export const SURVIVOR_ATLAS={width:${width},height:${height}};\n` +
+  '// 帧绘制时对应的碰撞/效果半径（u）：表现层按 实体半径 / SURVIVOR_FRAME_R[帧] 缩放\n' +
+  'export const SURVIVOR_FRAME_R:Record<string,number>=' + JSON.stringify(frameR) + ';\n' +
   'export const SURVIVOR_FRAMES:Record<string,SurvivorFrame>=' + JSON.stringify(table, null, 1) + ';\n')
 console.log(`survivor-battle ${width}x${height}: ${frames.length} frames; ground 256x256`)
