@@ -71,6 +71,11 @@ test('S1 界面文案齐全：HUD、三选一卡、结算、新手首条提示',
   assert.equal(STRINGS.levelUpHintFirst, '选一个能力，组合越多越强')
 })
 
+test('雨滴坠击卡面与首局提示（09 A6 / S3-D2）：提示键存在，卡面说明含“不用瞄准”', () => {
+  assert.equal(STRINGS.levelUpHintRaindrop, '雨滴会自己找浊雾生灵，边躲边打也稳')
+  assert.ok(STRINGS.card_raindrop_desc.includes('不用瞄准'))
+})
+
 // CMP-05（04 §7.1）：cocos-pilot/assets/scripts/Survivor*.ts 中的中文字符串字面量自动扫描。
 // 只扫字符串取值：跳过 // 与 /* */ 注释；console.* 日志的参数不属于面向玩家文案（04 §7.1），不扫。
 // 白名单按 04 §7.1 写成精确条目 { file, text, word, reason }；当前为空。

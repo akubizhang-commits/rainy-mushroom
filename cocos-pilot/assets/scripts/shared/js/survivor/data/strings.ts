@@ -18,6 +18,8 @@ export const STRINGS = Object.freeze({
   // 升级三选一
   levelUpTitle: '选一个能力',
   levelUpHintFirst: '选一个能力，组合越多越强',
+  // 首局首次三选一出现雨滴坠击卡时，在该卡下方追加（01 §14，09 A6 / S3-D2：只提示，不改数值）
+  levelUpHintRaindrop: '雨滴会自己找浊雾生灵，边躲边打也稳',
   cardNewWeapon: '新武器',
   cardUpgrade: '升级',
   cardLevel: '等级',
@@ -34,7 +36,7 @@ export const STRINGS = Object.freeze({
   card_dew_ring: '露珠环',
   card_dew_ring_desc: '周身露珠光环，持续净化圈内浊雾并让它们变慢',
   card_raindrop: '雨滴坠击',
-  card_raindrop_desc: '大雨滴落向附近的浊雾生灵，净化落点周围一片',
+  card_raindrop_desc: '大雨滴自动落向附近的浊雾生灵，不用瞄准，净化落点周围一片',
   card_leaf_boomerang: '落叶回旋镖',
   card_leaf_boomerang_desc: '朝前方掷出落叶，飞远后折返，去回都能净化浊雾生灵',
   card_might: '晨光菌丝',

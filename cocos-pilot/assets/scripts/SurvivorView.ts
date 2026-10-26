@@ -25,7 +25,7 @@ export class SurvivorView{
  private root:Node;private surface:Node;private art:SurvivorBattleArt;private hud:SurvivorHud;private audio:SurvivorAudio;private input:SurvivorInput|null=null;
  private platform:SurvivorPlatform;private save:any;private profile:any;private safe:SafeInsets;private width=720;private height=1280;
  private bundle:AssetManager.Bundle|null=null;private loading=false;private failed=false;private disposed=false;
- private shownOffer:any=null;private settled=false;private endTimer=0;private result:ResultInfo|null=null;private moveTime=0;private tutorialDone=false;private firstRun=false;
+ private shownOffer:any=null;private settled=false;private endTimer=0;private result:ResultInfo|null=null;private moveTime=0;private tutorialDone=false;private firstRun=false;private levelUpHintShown=false;
  constructor(private host:any){
   view.setDesignResolutionSize(720,1280,ResolutionPolicy.FIXED_WIDTH);
   this.platform=new SurvivorPlatform(host);this.safe=this.platform.safeArea();
@@ -91,7 +91,7 @@ export class SurvivorView{
    // 03 §4：数据校验失败属致命错误，不带病运行
    console.error(error);this.run=null;this.screen='camp';this.render();this.hud.label(STRINGS.dataError,this.hud.root,0,0,640,80,28);return;
   }
-  this.screen='battle';this.settled=false;this.endTimer=0;this.result=null;this.moveTime=0;this.tutorialDone=false;this.input.reset();this.render();
+  this.screen='battle';this.settled=false;this.endTimer=0;this.result=null;this.moveTime=0;this.tutorialDone=false;this.levelUpHintShown=false;this.input.reset();this.render();
  }
  private hide(){if(this.run&&(this.run.simulating||this.run.state==='levelup'))this.run.pause();this.input?.reset();this.audio.suspend()}
  update(dt:number){
@@ -128,7 +128,8 @@ export class SurvivorView{
   if(!live&&input.enabled){input.reset();input.enabled=false}
   if(live){if(hud.modal)hud.closeModal();this.shownOffer=null;input.enabled=true;return}
   if(state==='levelup'){
-   if(hud.modal!=='levelup'||this.shownOffer!==run.offer){const p=run.progression;this.shownOffer=run.offer;hud.showLevelup(run.offer,p.level-p.pendingLevels+1,p.totalLevelUps===1)}
+   // 首次升级提示（01 §14）：本局第一次三选一且存档 tutorial.levelUp 未记过；看过后结算时记入存档，只出现一次
+   if(hud.modal!=='levelup'||this.shownOffer!==run.offer){const p=run.progression,first=p.totalLevelUps===1&&!this.profile.tutorial?.levelUp;if(first)this.levelUpHintShown=true;this.shownOffer=run.offer;hud.showLevelup(run.offer,p.level-p.pendingLevels+1,first)}
    return;
   }
   if(state==='paused'){if(hud.modal!=='pause'&&hud.modal!=='confirm')hud.showPause(run,this.profile.settings);return}
@@ -144,6 +145,7 @@ export class SurvivorView{
   this.settled=true;const summary=this.run.summary(),before=this.profile.bestSurvivalSec;
   const {profile,earned}=Meta.settle(this.profile,summary);
   if(this.tutorialDone)profile.tutorial={...profile.tutorial,move:true};
+  if(this.levelUpHintShown)profile.tutorial={...profile.tutorial,levelUp:true};
   const ok=this.save.save(profile);this.profile=this.save.profile;
   this.result={won:summary.outcome==='won',survivalSec:summary.survivalSec,purified:summary.purified,level:summary.level,earned,newRecord:Math.floor(summary.survivalSec)>before,saveWarning:ok?'':this.saveWarning()||STRINGS.saveFailed,
    bossDefeated:!!summary.bossDefeated,weapons:summary.weapons||[],passives:summary.passives||[]};

@@ -25,7 +25,7 @@ const S=STRINGS as any;
 const nameOf=(id:string)=>id==='spore_shot'?STRINGS.cardSporeShot:(S['card_'+id]||id);
 const passivesOf=(p:any):BuildItem[]=>Object.keys(p||{}).map(id=>({id,level:p[id]}));
 export class SurvivorHud{
- root:Node;modal:string|null=null;
+ root:Node;modal:string|null=null;raindropHint=false;
  private hud:Node|null=null;private modalNode:Node|null=null;private xpFill:Node|null=null;private xpShown=0;
  private levelLabel:Label|null=null;private timeLabel:Label|null=null;private purifiedLabel:Label|null=null;private vignette:UIOpacity|null=null;private tutorial:Node[]=[];
  private frame:Graphics|null=null;private text:Node|null=null;private slotLabels:Label[]=[];private slotKey=-1;private slotItems:{weapons:BuildItem[],passives:BuildItem[]}={weapons:[],passives:[]};
@@ -206,6 +206,7 @@ export class SurvivorHud{
   const m=this.openModal('levelup',.6),cardH=200,gap=24,mid=(this.top+this.bottom)/2,y0=mid+cardH+gap-20;
   const backs=this.node('backs',m,this.width,this.height),text=this.node('text',m,this.width,this.height);
   this.label(`${STRINGS.levelUpTitle} · Lv ${level}`,text,0,y0+cardH/2+90,640,64,44,TEXT,Label.HorizontalAlign.CENTER,true);
+  this.raindropHint=first&&offer.some((c:any)=>c.kind==='weapon'&&c.id==='raindrop');
   if(first)this.label(STRINGS.levelUpHintFirst,text,0,y0+cardH/2+40,640,40,28,TEXT2,Label.HorizontalAlign.CENTER,true);
   const cards:Node[][]=[];
   offer.forEach((card,i)=>{
@@ -222,6 +223,8 @@ export class SurvivorHud{
    this.label(name,t,-320+144+130,40,260,48,32,TEXT,Label.HorizontalAlign.LEFT,true);
    this.label(tag,t,320-24-90,40,180,44,28,tagColor,Label.HorizontalAlign.RIGHT,true);
    this.label(desc,t,-320+144+220,-30,440,80,28,TEXT2,Label.HorizontalAlign.LEFT,true);
+   // 首局首次三选一出现雨滴坠击卡时，卡片下方追加提示（01 §14、09 S3-D2：只提示，不改数值）
+   if(first&&card.id==='raindrop'&&card.kind==='weapon')this.label(STRINGS.levelUpHintRaindrop,t,-320+144+220,-82,440,32,24,XP,Label.HorizontalAlign.LEFT,true);
    const b=n.addComponent(Button);b.transition=Button.Transition.NONE;n.on(Button.EventType.CLICK,()=>this.pick(i,cards));
    for(const k of [n,t]){k.setPosition(0,y-40);const op=k.addComponent(UIOpacity);op.opacity=0;tween(k).to(.4,{position:new Vec3(0,y,0)},{easing:'quadOut'}).start();tween(op).to(.4,{opacity:255}).start()}
    cards.push([n,t]);
@@ -256,25 +259,40 @@ export class SurvivorHud{
   this.button(STRINGS.quitGiveUp,box,150,-70,260,96,()=>this.on.abandon(),'secondary');
  }
  // 结算（02 §4.6 / 01 §12）：统一“净化数”，失败“被浊雾笼罩”；胜利标“撤离成功”，击败 Boss 标“浊雾巨蜗已净化”；本局武器与被动图标
+ // 合批（BUG-S2-03）：遮罩、汇总面板与武器/被动格画进模态框自身的同一个 Graphics；两个按钮底板各一个 Graphics（保留按下缩放）；
+ // 全部文字（CHAR 缓存）集中在最后的 text 层连续提交。模态框自身 1 + 2 + 1 个批次，不再与 Label 交错。
  showResult(r:ResultInfo){
-  const m=this.openModal('result',.75);let y=this.top-140;
-  this.label(r.won?STRINGS.resultWin:STRINGS.resultLose,m,0,y,640,72,44,r.won?GOLD:TEXT);y-=64;
-  this.label(r.won?STRINGS.resultWinDesc:STRINGS.resultLoseDesc,m,0,y,640,48,28,TEXT2);y-=52;
+  const m=this.openModal('result',.75),g=m.getComponent(Graphics)!,faces=this.node('faces',m,this.width,this.height),text=this.node('text',m,this.width,this.height);
+  const T=(s:string,x:number,y:number,w:number,h:number,size:number,color=TEXT,align=Label.HorizontalAlign.CENTER)=>this.label(s,text,x,y,w,h,size,color,align,true);
+  let y=this.top-140;
+  T(r.won?STRINGS.resultWin:STRINGS.resultLose,0,y,640,72,44,r.won?GOLD:TEXT);y-=64;
+  T(r.won?STRINGS.resultWinDesc:STRINGS.resultLoseDesc,0,y,640,48,28,TEXT2);y-=52;
   const badges=[r.won?STRINGS.resultExtracted:'',r.bossDefeated?STRINGS.resultBossDefeated:''].filter(Boolean).join(' · ');
-  if(badges)this.label(badges,m,0,y,640,44,28,GOLD);y-=40;
-  const boxH=500,box=this.node('summary',m,640,boxH);box.setPosition(0,y-boxH/2);this.panel(box);
-  const row=(k:string,v:string,yy:number,extra='')=>{this.label(k,box,-150,yy,280,48,28,TEXT2,Label.HorizontalAlign.LEFT);this.label(v,box,90,yy,200,48,32,TEXT,Label.HorizontalAlign.RIGHT);if(extra)this.label(extra,box,250,yy,120,44,24,GOLD)};
+  if(badges)T(badges,0,y,640,44,28,GOLD);y-=40;
+  // 汇总面板：640×500，中心 (0, oy)；以下坐标均为相对面板中心的偏移
+  const boxH=500,oy=y-boxH/2;this.rounded(g,-320,oy-boxH/2,640,boxH,PANEL,PANEL_EDGE,20,2);
+  const row=(k:string,v:string,yy:number,extra='')=>{T(k,-150,oy+yy,280,48,28,TEXT2,Label.HorizontalAlign.LEFT);T(v,90,oy+yy,200,48,32,TEXT,Label.HorizontalAlign.RIGHT);if(extra)T(extra,250,oy+yy,120,44,24,GOLD)};
   row(STRINGS.resultSurvivalTime,mmss(r.survivalSec),210,r.newRecord?STRINGS.resultNewRecord:'');
   row(STRINGS.resultPurified,String(r.purified),155);row(STRINGS.resultLevel,'Lv '+r.level,100);
   // 本局构成：武器 / 被动各 4 格 × 64u
-  this.label(STRINGS.resultBuild,box,-230,-8,140,44,24,TEXT2,Label.HorizontalAlign.LEFT);
-  const icons=this.node('build',box,640,boxH).addComponent(Graphics),iconText=this.node('build-text',box,640,boxH);
-  this.drawSlots(icons,iconText,r.weapons,'weapon',-140,30,64,12);this.drawSlots(icons,iconText,r.passives,'passive',-140,-46,64,12);
+  T(STRINGS.resultBuild,-230,oy-8,140,44,24,TEXT2,Label.HorizontalAlign.LEFT);
+  this.drawSlots(g,text,r.weapons,'weapon',-140,oy+30,64,12);this.drawSlots(g,text,r.passives,'passive',-140,oy-46,64,12);
   row(STRINGS.resultCrystals,`+${r.earned.total} ◆`,-130);
-  const e=r.earned;this.label(`${STRINGS.pauseSurvival} ${e.survival} · ${STRINGS.hudPurified} ${e.purified} · ${STRINGS.campWins} ${e.victory} · ${STRINGS.cardSupply} ${e.shiny}`,box,0,-195,600,40,24,TEXT2);
-  y-=boxH+40;if(r.saveWarning){this.label(r.saveWarning,m,0,y,640,40,24,WARN);y-=50}
-  this.button(STRINGS.btnPlayAgain,m,0,y-56,480,112,()=>this.on.again(),'primary',40);
-  this.button(STRINGS.btnBackToCamp,m,0,y-56-136,480,96,()=>this.on.camp(),'secondary');
+  const e=r.earned;T(`${STRINGS.pauseSurvival} ${e.survival} · ${STRINGS.hudPurified} ${e.purified} · ${STRINGS.campWins} ${e.victory} · ${STRINGS.cardSupply} ${e.shiny}`,0,oy-195,600,40,24,TEXT2);
+  y-=boxH+40;if(r.saveWarning){T(r.saveWarning,0,y,640,40,24,WARN);y-=50}
+  this.splitButton(STRINGS.btnPlayAgain,faces,text,0,y-56,480,112,()=>this.on.again(),'primary',40);
+  this.splitButton(STRINGS.btnBackToCamp,faces,text,0,y-56-136,480,96,()=>this.on.camp(),'secondary');
+ }
+ // 底板与文字分层的按钮（结算页合批用）：底板 Graphics 在 faces 层、文字在 text 层；热区 ≥ 88×88u（02 §5.2），
+ // 按下底板经 Button 缩放 0.96，文字随触摸同步缩放。
+ private splitButton(text:string,faces:Node,textLayer:Node,x:number,y:number,w:number,h:number,fn:()=>void,tone:'primary'|'secondary',size=32){
+  const n=this.node(text,faces,Math.max(88,w),Math.max(88,h));n.setPosition(x,y);
+  const face=this.node('face',n,w,h);this.panel(face,tone==='primary'?PRIMARY:PANEL,tone==='primary'?null:PANEL_EDGE,18);
+  const l=this.label(text,textLayer,x,y,w-24,h,size,tone==='primary'?PRIMARY_TEXT:TEXT,Label.HorizontalAlign.CENTER,true);
+  const b=n.addComponent(Button);b.transition=Button.Transition.SCALE;b.zoomScale=.96;n.on(Button.EventType.CLICK,fn);
+  const press=(k:number)=>()=>{if(l.node.isValid)l.node.setScale(k,k,1)};
+  n.on(Node.EventType.TOUCH_START,press(.96));n.on(Node.EventType.TOUCH_END,press(1));n.on(Node.EventType.TOUCH_CANCEL,press(1));
+  return n;
  }
  private clear(){
   this.closeModal();this.root.destroyAllChildren();this.hud=null;this.xpFill=null;this.levelLabel=this.timeLabel=this.purifiedLabel=null;this.vignette=null;this.tutorial=[];

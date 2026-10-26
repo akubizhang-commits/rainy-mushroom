@@ -11,7 +11,8 @@ import {fillScreen} from './SurvivorPerf';
 // 每个阶段的第一次升级保持三选一 0.6 秒（滑入结束后）再选，采样模态帧 DrawCall（BUG-S1-03，≤ 25）；
 // 阶段结束时断言 HUD 武器/被动栏显示数与 run.weapons / run.passives 一致。
 // 结束后销毁视图，断言设计分辨率恢复 375×812。
-// 断言：无 console.error / 未捕获异常；战斗层激活节点 ≤ 600；战斗帧（playing/cleansing/extract 且无模态框）DrawCall ≤ 25；三选一模态帧 DrawCall ≤ 25。
+// 断言：无 console.error / 未捕获异常；战斗层激活节点 ≤ 600；战斗帧（playing/cleansing/extract 且无模态框）DrawCall ≤ 25；三选一模态帧 DrawCall ≤ 25；
+// 胜利 / 失败结算模态帧（dcByState["won/result"]、["lost/result"]，结算页各停留 0.5 秒采样）DrawCall ≤ 25（BUG-S2-03）。
 // 结果经 postMessage('survivor-smoke') 发给父页，同时写到 window.__survivorSmoke 供无头浏览器读取。
 // 调试钩子（血量回满、直接生成敌人、改 Boss 生命、移动小旅人）只在冒烟里使用；冒烟存档为内存存储（PinePilot 注入），不写正式存档。
 const NODE_BUDGET=600,DRAWCALL_BUDGET=25,FILL=200;
@@ -22,7 +23,7 @@ export async function runSurvivorSmoke(host:any){
  const consoleError=console.error;console.error=(...args:any[])=>{errors.push('console.error: '+args.map(String).join(' '));consoleError.apply(console,args)};
  window.addEventListener('error',onError);window.addEventListener('unhandledrejection',onRejection);
  const frame=()=>new Promise<void>(r=>host.scheduleOnce(r,0));
- let maxNodes=0,maxDrawCalls=0,maxEnemies=0,maxModalDrawCalls=0,modalSamples=0,maxMist=0,maxMistShown=0,maxGlow=0,maxBossArrow=0;const dcByState:Record<string,number>={},dcHist:Record<number,number>={};
+ let raindropHint=false,maxNodes=0,maxDrawCalls=0,maxEnemies=0,maxModalDrawCalls=0,modalSamples=0,maxMist=0,maxMistShown=0,maxGlow=0,maxBossArrow=0;const dcByState:Record<string,number>={},dcHist:Record<number,number>={};
  // 观测：逻辑事件类型（包一层 drainEvents）、渲染池显示过的帧、HUD 横幅文本、出现过的 run.state
  const seen=new Set<string>(),enemyFrames=new Set<string>(),shotFrames=new Set<string>(),banners=new Set<string>(),states=new Set<string>();
  const tap=(r:any)=>{const d=r.drainEvents.bind(r);r.drainEvents=()=>{const out=d();for(const e of out)seen.add(e.type);return out}};
@@ -35,7 +36,7 @@ export async function runSurvivorSmoke(host:any){
   if(!run)return;states.add(run.state);maxEnemies=Math.max(maxEnemies,run.enemies.count);maxMist=Math.max(maxMist,run.mistBubbles.count);
   const pc=v.art.poolCounts;maxMistShown=Math.max(maxMistShown,pc.mist||0);maxGlow=Math.max(maxGlow,pc.glow||0);if(run.boss?.alive)maxBossArrow=Math.max(maxBossArrow,pc.indicators||0);
   for(const f of v.art.shownFrames('enemies'))enemyFrames.add(f);for(const f of v.art.shownFrames('shots'))shotFrames.add(f);
-  const b=v.hud?.bannerText;if(b)banners.add(b);
+  const b=v.hud?.bannerText;if(b)banners.add(b);if(v.hud?.modal==='levelup'&&v.hud.raindropHint)raindropHint=true;
  };
  // 升级选卡：优先新武器卡，否则第一张
  const pick=(run:any)=>{const i=run.offer?run.offer.findIndex((c:any)=>c.kind==='weapon'&&c.isNew):-1;return i>=0?i:0};
@@ -117,12 +118,17 @@ export async function runSurvivorSmoke(host:any){
   await runFor(v,5,true,()=>{run.player.x=ex.x;run.player.y=ex.y},()=>v.hud.modal==='result');
   check(run.state==='won'&&seen.has('won'),'standing in extraction point → won');
   check(v.hud.modal==='result'&&v.result?.won===true&&v.result.bossDefeated,'victory result shown (boss defeated)');
+  // 结算页停留 0.5 秒采样模态帧 DrawCall（BUG-S2-03）
+  await runFor(v,.5,false);
   // 阶段 6：再来一局 → 接触致死 → 失败结算
   v.startRun();await frame();const r2=v.run;check(r2&&r2!==run&&r2.state==='playing','start another run from result');tap(r2);
   r2.player.hp=1;r2.spawner._spawnOne(r2,'beetle',0,{x:r2.player.x,y:r2.player.y});
   await runFor(v,4,false,()=>{},()=>v.hud.modal==='result');
   check(r2.state==='lost'&&seen.has('lost')&&r2.summary().killer==='beetle','contact damage → lost (killer '+r2.summary().killer+')');
   check(v.hud.modal==='result'&&v.result?.won===false,'defeat result shown');
+  await runFor(v,.5,false);
+  // BUG-S2-03：胜利 / 失败结算模态帧 DrawCall ≤ 25
+  for(const k of ['won/result','lost/result'])check((dcByState[k]||0)>0&&dcByState[k]<=DRAWCALL_BUDGET,'result modal draw calls '+k+' = '+dcByState[k]+' ≤ '+DRAWCALL_BUDGET);
   check(modalSamples>0&&maxModalDrawCalls<=DRAWCALL_BUDGET,'level-up modal draw calls max '+maxModalDrawCalls+' ≤ '+DRAWCALL_BUDGET+' ('+modalSamples+' frames)');
   check(maxNodes>0&&maxNodes<=NODE_BUDGET,'battle active nodes max '+maxNodes+' ≤ '+NODE_BUDGET);
   check(maxDrawCalls>0&&maxDrawCalls<=DRAWCALL_BUDGET,'battle-frame draw calls max '+maxDrawCalls+' ≤ '+DRAWCALL_BUDGET);
@@ -134,7 +140,7 @@ export async function runSurvivorSmoke(host:any){
  }catch(e){report(false,String(e))}
  finally{console.error=consoleError;window.removeEventListener('error',onError);window.removeEventListener('unhandledrejection',onRejection)}
  function report(ok:boolean,error=''){
-  const data={type:'survivor-smoke',ok,results,errors,metrics:{maxNodes,maxDrawCalls,maxModalDrawCalls,maxEnemies,maxMist,maxMistShown,states:Array.from(states),events:Array.from(seen),dcByState,dcHist},error};
+  const data={type:'survivor-smoke',ok,results,errors,metrics:{raindropHint,maxNodes,maxDrawCalls,maxModalDrawCalls,maxEnemies,maxMist,maxMistShown,states:Array.from(states),events:Array.from(seen),dcByState,dcHist},error};
   (window as any).__survivorSmoke=data;console.log('[survivor-smoke]',ok?'PASS':'FAIL',JSON.stringify(data));
   if(window.parent!==window)window.parent.postMessage(data,window.location.origin);
  }
