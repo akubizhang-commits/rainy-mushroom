@@ -9,14 +9,14 @@ export const LIMITS = Object.freeze({
   hardCaps: Object.freeze({
     enemies: 200,       // 01 §10 敌人硬上限
     playerProjectiles: 150,
-    enemyProjectiles: 40, // 浊雾泡
+    enemyProjectiles: 60, // 浊雾泡（S3-D1：40 → 60，BUG-S2-01）
     spores: 250,
     pickups: 5,         // 露珠/林风等
   }),
   pools: Object.freeze({
     enemies: 202,       // 03 §7.3 逻辑池容量（含事件/召唤余量）
     playerProjectiles: 150,
-    mistBubbles: 40,
+    mistBubbles: 60,    // S3-D1：40 → 60
     raindropZones: 16,
     spores: 250,
     pickups: 5,
@@ -24,7 +24,7 @@ export const LIMITS = Object.freeze({
   nodes: Object.freeze({
     enemies: 160,       // 03 §6.2 渲染节点池（视口剔除后）
     playerProjectiles: 120,
-    mistBubbles: 40,
+    mistBubbles: 60,    // S3-D1：40 → 60
     spores: 150,
     pickups: 6,
     fx: 80,

@@ -235,6 +235,14 @@ test('each wave composition sums to 100 and references known enemies', () => {
   }
 })
 
+test('enemy projectile (mist bubble) caps are 60 in hardCaps / pools / nodes (S3-D1, BUG-S2-01)', () => {
+  // 01 §10 全局上限“敌方弹体 60”；03 §7.3 池容量、§6.2 渲染节点池同为 60
+  assert.equal(LIMITS.hardCaps.enemyProjectiles, 60)
+  assert.equal(LIMITS.pools.mistBubbles, 60)
+  assert.equal(LIMITS.nodes.mistBubbles, 60)
+  assert.ok(LIMITS.nodes.mistBubbles <= LIMITS.pools.mistBubbles, '渲染节点 ≤ 逻辑池')
+})
+
 test('wave on-screen caps stay within the hard limit', () => {
   for (const seg of WAVES.segments) {
     assert.ok(seg.cap <= LIMITS.hardCaps.enemies, `段 ${seg.fromSec}-${seg.toSec} 同屏上限 ≤ limits`)

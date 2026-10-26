@@ -1,6 +1,7 @@
 import {Node,Sprite,SpriteFrame,Texture2D,ImageAsset,Rect,Size,UITransform,Color,AssetManager} from 'cc';
 import {SURVIVOR_FRAMES,SURVIVOR_FRAME_R} from './SurvivorBattleFrames';
 import {ENEMIES} from './shared/js/survivor/data/enemies';
+import {LIMITS} from './shared/js/survivor/data/limits';
 // 战斗渲染（03 §6.2，02 §1.3 / §9.1）。
 // - 分层父节点（自下而上）：地面 → 区域（撤离点/冲撞箭头/雨滴落点）→ 孢子 → 敌人 → 小旅人（底影/方向弧/本体/生命条）
 //   → 玩家弹体（含雨滴、菌伞、露珠环、落叶）→ 敌方弹体（浊雾泡）→ FX（净化光点、雨滴水花）→ 摇杆。
@@ -79,11 +80,11 @@ export class SurvivorBattleArt{
  apply(sprite:Sprite,ui:UITransform,key:string){const info=SURVIVOR_FRAMES[key];sprite.spriteFrame=this.frame(key);ui.setContentSize(info.width,info.height);ui.setAnchorPoint(info.anchorX,info.anchorY)}
  private single(parent:Node,key:string){const n=new Node(key);n.layer=parent.layer;parent.addChild(n);const ui=n.addComponent(UITransform),s=n.addComponent(Sprite);s.sizeMode=Sprite.SizeMode.CUSTOM;s.trim=false;this.apply(s,ui,key);return n}
  private build(){
-  // 节点池上限（03 §6.2）：敌人 160、玩家弹体 120、浊雾泡 40、孢子 150、FX 80。敌人底影已烘焙进敌人帧，每个敌人 1 个节点。
-  const L=(name:string)=>this.layer(this.world,name);
+  // 节点池上限（03 §6.2，读 LIMITS.nodes）：敌人 160、玩家弹体 120、浊雾泡 60（S3-D1）、孢子 150、FX 80。敌人底影已烘焙进敌人帧，每个敌人 1 个节点。
+  const L=(name:string)=>this.layer(this.world,name),N=LIMITS.nodes;
   const zones=L('Zones'),spores=L('Spores'),enemies=L('Enemies'),player=L('Player'),shots=L('Player shots'),mist=L('Mist bubbles');const fx=L('FX');
-  this.pools.zones=new SpritePool(zones,3+16,this);this.pools.spores=new SpritePool(spores,150,this);this.pools.enemies=new SpritePool(enemies,160,this);
-  this.pools.shots=new SpritePool(shots,120+8,this);this.pools.mist=new SpritePool(mist,40,this);this.pools.fx=new SpritePool(fx,80,this);
+  this.pools.zones=new SpritePool(zones,3+LIMITS.pools.raindropZones,this);this.pools.spores=new SpritePool(spores,N.spores,this);this.pools.enemies=new SpritePool(enemies,N.enemies,this);
+  this.pools.shots=new SpritePool(shots,N.playerProjectiles+8,this);this.pools.mist=new SpritePool(mist,N.mistBubbles,this);this.pools.fx=new SpritePool(fx,N.fx,this);
   this.pools.player=new SpritePool(player,5,this);this.pools.ring=new SpritePool(player,RING_DOTS,this);
   // 全屏提亮（cleansing）放在屏幕层最底，与世界层 FX 同图集连续合批
   this.pools.glow=new SpritePool(this.layer(this.screen,'Glow'),1,this);

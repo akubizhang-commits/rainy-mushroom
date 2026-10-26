@@ -175,6 +175,17 @@ test('player weapons do not cancel mist bubbles (裁决 L4)', () => {
   assert.equal(run.mistBubbles.count, 1, 'bubble untouched by player shots')
 })
 
+test('mist bubble pool holds 60 (S3-D1); the 61st spit is dropped and counted', () => {
+  const world = makeWorld()
+  assert.equal(world.mistBubbles.capacity, 60)
+  for (let i = 0; i < 61; i += 1) spawn(world, 'sporeling', (i - 30) * 4, -200, { timer: 0 })
+  stepEnemyBehavior(world, DT)
+  assert.equal(world.mistBubbles.count, 60, '60 bubbles in flight at once')
+  assert.equal(world.diag.dropped.bubbles, 1, 'pool full → dropped.bubbles++')
+  const run = new SurvivorRun({ seed: 'bubble-cap', viewport: { width: 720, height: 1560 } })
+  assert.equal(run.mistBubbles.capacity, LIMITS.pools.mistBubbles)
+})
+
 test('SurvivorRun applies mist bubble damage and records the killer', () => {
   const run = new SurvivorRun({ seed: 'bubble-run', viewport: { width: 720, height: 1560 } })
   run.player.hp = 5
