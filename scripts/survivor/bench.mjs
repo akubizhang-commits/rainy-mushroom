@@ -137,7 +137,12 @@ function bench8min() {
   const SEC = 480
   globalThis.gc()
   const run = new SurvivorRun({ seed: 'bench-8min', viewport: VIEW, firstRun: true })
-  const picker = makePicker('prefer:spore_shot', 'bench-8min')
+  // 不选进化卡：bot 的偏好策略会优先进化，进化后本种子 7:49 就通关，跑不满 8 分钟。
+  const prefer = makePicker('prefer:spore_shot', 'bench-8min')
+  const picker = (offer) => {
+    const idx = offer.map((c, i) => i).filter((i) => offer[i].kind !== 'evolve')
+    return idx[prefer(idx.map((i) => offer[i]), run)]
+  }
   globalThis.gc()
   const h0 = process.memoryUsage().heapUsed
   let steps = 0

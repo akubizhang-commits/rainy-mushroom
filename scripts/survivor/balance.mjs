@@ -1,4 +1,4 @@
-// 生存玩法多种子自动对局统计（04 §2.3 L3 完整档的 S2 版本，08 L7）。
+// 生存玩法多种子自动对局统计（04 §2.3 L3 完整档，08 L7；S3 起含【8】进化 / 精英 / 拾取物 / 新被动）。
 // 不进构建、不被 sync；只读数据文件，不改数值。用法：
 //   node scripts/survivor/balance.mjs [--seeds 50] [--moves flee,spore]
 //        [--picks random,prefer:spore_shot,prefer:umbrella_blades,prefer:dew_ring,prefer:raindrop,prefer:leaf_boomerang]
@@ -157,8 +157,58 @@ function summarize(recs) {
       enemies: a.enemies + (r.dropped.enemies || 0),
       shots: a.shots + (r.dropped.shots || 0),
       bubbles: a.bubbles + (r.dropped.bubbles || 0),
-    }), { enemies: 0, shots: 0, bubbles: 0 }),
+      pickups: a.pickups + (r.dropped.pickups || 0),
+    }), { enemies: 0, shots: 0, bubbles: 0, pickups: 0 }),
+    capSkippedPickups: recs.reduce((a, r) => a + ((r.capSkipped && r.capSkipped.pickups) || 0), 0),
     droppedTimeMax: Math.max(...recs.map((r) => r.droppedTime)),
+    wonBuilds: new Set(won.map(buildKey)).size,
+    ...s3Summary(recs, won),
+  }
+}
+// S3：进化 / 精英 / 拾取物 / 新被动
+function s3Summary(recs, won) {
+  const evo = recs.filter((r) => r.evolutions.length > 0)
+  const noEvo = recs.filter((r) => r.evolutions.length === 0)
+  const evoById = {}
+  const evoWonById = {}
+  for (const r of recs) for (const e of r.evolutions) {
+    evoById[e.id] = (evoById[e.id] || 0) + 1
+    if (r.outcome === 'won') evoWonById[e.id] = (evoWonById[e.id] || 0) + 1
+  }
+  const elites = recs.filter((r) => r.eliteSpawnSec !== null)
+  const eliteKilled = elites.filter((r) => r.eliteDefeatSec !== null)
+  const sumDrop = (k, f) => recs.reduce((a, r) => a + r.drops[k][f], 0)
+  const hasP = (r, id) => r.passives.some((p) => p.id === id)
+  const collect = (rs) => mean(rs.map((r) => r.xpBanked / Math.max(1, r.xpDropped)))
+  return {
+    evoRuns: evo.length,
+    evoWon: evo.filter((r) => r.outcome === 'won').length,
+    noEvoRuns: noEvo.length,
+    noEvoWon: noEvo.filter((r) => r.outcome === 'won').length,
+    wonEvo: won.filter((r) => r.evolutions.length > 0).length,
+    evoCount: count(recs.map((r) => r.evolutions.length)),
+    evoFirstMedian: median(evo.map((r) => r.evolutions[0].t)),
+    evoFirstMin: evo.length ? Math.min(...evo.map((r) => r.evolutions[0].t)) : NaN,
+    evoFirstMax: evo.length ? Math.max(...evo.map((r) => r.evolutions[0].t)) : NaN,
+    evoBeforeBoss: evo.filter((r) => r.bossSpawnSec === null || r.evolutions[0].t <= r.bossSpawnSec).length,
+    evoOfferedRuns: recs.filter((r) => r.evolveOffered > 0).length,
+    evoById,
+    evoWonById,
+    eliteSpawned: elites.length,
+    eliteKilled: eliteKilled.length,
+    eliteKillMedian: median(eliteKilled.map((r) => r.eliteDefeatSec - r.eliteSpawnSec)),
+    drops: {
+      dew: { spawned: sumDrop('dew', 'spawned'), picked: sumDrop('dew', 'picked'), heal: sumDrop('dew', 'heal') },
+      bigDew: { spawned: sumDrop('bigDew', 'spawned'), picked: sumDrop('bigDew', 'picked'), heal: sumDrop('bigDew', 'heal') },
+      wind: { spawned: sumDrop('wind', 'spawned'), picked: sumDrop('wind', 'picked'), xp: sumDrop('wind', 'xp') },
+      unseen: recs.reduce((a, r) => a + r.dropsUnseen, 0),
+      windRuns: recs.filter((r) => r.drops.wind.picked > 0).length,
+    },
+    regenRuns: recs.filter((r) => hasP(r, 'regen')).length,
+    regenHealMean: mean(recs.filter((r) => hasP(r, 'regen')).map((r) => r.regenHeal)),
+    magnetRuns: recs.filter((r) => hasP(r, 'magnet')).length,
+    collectMagnet: collect(recs.filter((r) => hasP(r, 'magnet'))),
+    collectNoMagnet: collect(recs.filter((r) => !hasP(r, 'magnet'))),
   }
 }
 function count(xs) {
@@ -246,7 +296,7 @@ say(table(
 ))
 say()
 say('【5】各卡被提供 / 被选次数')
-const cardIds = [...WEAPON_IDS, ...PASSIVE_IDS, 'heal_dew', 'shiny_spore']
+const cardIds = [...WEAPON_IDS, ...WEAPON_IDS.map((id) => `evo:${id}`), ...PASSIVE_IDS, 'heal_dew', 'shiny_spore']
 const tallyAll = cardTally(all)
 const randomRecs = all.filter((r) => r.pick === 'random')
 const tallyRand = cardTally(randomRecs)
@@ -293,8 +343,39 @@ say(wonWList.length ? table(['武器组合', '通关局数'], wonWList.map(([k, 
 say()
 say('【7】诊断')
 say(`diag.capSkipped（全部局合计）：敌人 ${total.capSkipped}（同屏上限/全局硬上限已满跳过的刷怪，设计内行为）`)
-say(`diag.dropped（全部局合计，对象池满丢弃，应为 0）：敌人 ${total.dropped.enemies} / 弹体 ${total.dropped.shots} / 浊雾泡 ${total.dropped.bubbles}；droppedTime 最大值 ${total.droppedTimeMax}（应为 0）`)
-say(table(['组合', '敌人上限跳过', '敌人池满丢弃', '弹体丢弃', '浊雾泡丢弃'], configs.map((c) => [c.label, c.sum.capSkipped, c.sum.dropped.enemies, c.sum.dropped.shots, c.sum.dropped.bubbles])))
+say(`diag.dropped（全部局合计，对象池满丢弃，应为 0）：敌人 ${total.dropped.enemies} / 弹体 ${total.dropped.shots} / 浊雾泡 ${total.dropped.bubbles} / 拾取物 ${total.dropped.pickups}；droppedTime 最大值 ${total.droppedTimeMax}（应为 0）`)
+say(`diag.capSkipped.pickups（露珠 3 / 林风 1 场上上限已满、本次掉落作废，设计内）：${total.capSkippedPickups}`)
+say(table(['组合', '敌人上限跳过', '敌人池满丢弃', '弹体丢弃', '浊雾泡丢弃', '拾取物池满丢弃', '拾取物上限跳过'], configs.map((c) => [c.label, c.sum.capSkipped, c.sum.dropped.enemies, c.sum.dropped.shots, c.sum.dropped.bubbles, c.sum.dropped.pickups, c.sum.capSkippedPickups])))
+say()
+say('【8】S3：进化、精英、拾取物、新被动')
+say('进化达成 = 本局至少进化 1 把武器；首次进化时间 = 选进化卡的时刻；“Boss前”= 首次进化不晚于 Boss 出现（或未到 Boss）。')
+say(table(
+  ['组合', '进化达成', '进化局通关率', '未进化局通关率', '通关局中进化占比', '进化把数(0/1/2/3+)', '首次进化中位(最早–最晚)', 'Boss前进化', '见过进化卡的局', '通关局构筑种数'],
+  rowsOf().map(([label, s]) => [
+    label, `${s.evoRuns}（${pct(s.evoRuns, s.n)}）`, pct(s.evoWon, s.evoRuns), pct(s.noEvoWon, s.noEvoRuns), pct(s.wonEvo, s.won),
+    [0, 1, 2].map((k) => s.evoCount[k] || 0).concat([Object.entries(s.evoCount).filter(([k]) => Number(k) >= 3).reduce((a, [, v]) => a + v, 0)]).join('/'),
+    Number.isFinite(s.evoFirstMedian) ? `${mmss(s.evoFirstMedian)}（${mmss(s.evoFirstMin)}–${mmss(s.evoFirstMax)}）` : '—',
+    s.evoBeforeBoss, s.evoOfferedRuns, s.wonBuilds,
+  ]),
+))
+say()
+say('各进化达成次数（全部局 / 其中通关局）：')
+say(table(
+  ['组合', ...WEAPON_IDS.map((id) => cardName(`evo:${id}`))],
+  rowsOf().map(([label, s]) => [label, ...WEAPON_IDS.map((id) => `${s.evoById[id] || 0}/${s.evoWonById[id] || 0}`)]),
+))
+say()
+say('精英（5:00 精英圆壳甲虫）与拾取物（生成 / 拾取；露珠、大露珠回复量为实际回复；林风吸回经验 = 拾取后仍在场被吸回的孢子经验）：')
+say(table(
+  ['组合', '精英出现', '精英击败', '击败用时中位', '露珠 生成/拾取/回复', '大露珠 生成/拾取/回复', '林风 生成/拾取/吸回经验', '捡到林风的局', '露水叶片局数 / 局均回复', '孢子罗盘局 / 其它局 拾取率'],
+  rowsOf().map(([label, s]) => [
+    label, s.eliteSpawned, `${s.eliteKilled}（${pct(s.eliteKilled, s.eliteSpawned)}）`, Number.isFinite(s.eliteKillMedian) ? `${s.eliteKillMedian.toFixed(1)}s` : '—',
+    `${s.drops.dew.spawned}/${s.drops.dew.picked}/${num(s.drops.dew.heal, 0)}`, `${s.drops.bigDew.spawned}/${s.drops.bigDew.picked}/${num(s.drops.bigDew.heal, 0)}`,
+    `${s.drops.wind.spawned}/${s.drops.wind.picked}/${s.drops.wind.xp}`, s.drops.windRuns,
+    `${s.regenRuns} / ${num(s.regenHealMean, 0)}`, `${s.magnetRuns}局 ${pct1(s.collectMagnet)} / ${pct1(s.collectNoMagnet)}`,
+  ]),
+))
+say(`生成同步即被拾取、逐帧扫描没看到的拾取物（不分种类）：${total.drops.unseen}`)
 console.log(out.join('\n'))
 
 // JSON（tmp/ 已在 .gitignore）

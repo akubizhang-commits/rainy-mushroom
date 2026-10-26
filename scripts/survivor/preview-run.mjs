@@ -22,11 +22,12 @@ for (let i = 0; i < args.length; i += 1) {
 const mmss = (sec) => `${Math.floor(sec / 60)}:${String(Math.floor(sec % 60)).padStart(2, '0')}`
 const hp = (run) => `${Math.max(0, Math.round(run.player.hp))}/${run.player.maxHp}`
 const build = (run) => {
-  const w = run.weapons.map((x) => `${cardName(x.id)}${x.level}`).join(' ')
+  const w = run.weapons.map((x) => (x.evolved ? `${cardName(`evo:${x.id}`)}★` : `${cardName(x.id)}${x.level}`)).join(' ')
   const p = Object.keys(run.passives).map((id) => `${cardName(id)}${run.passives[id]}`).join(' ')
   return p ? `${w} ｜ ${p}` : w
 }
 const cardText = (c) => {
+  if (c.kind === 'evolve') return `★进化${cardName(`evo:${c.id}`)}`
   if (c.kind === 'weapon' || c.kind === 'passive') return `${cardName(c.id)}${c.isNew ? '(新)' : `→Lv${c.level}`}`
   return cardName(c.id)
 }
@@ -66,6 +67,9 @@ const { rec, run } = playRun({
       else if (ev.type === 'bossEnrage') log(`  ${t}  ！Boss ${ev.stage === 1 ? '狂暴 I' : ev.stage === 2 ? '狂暴 II' : `雾壳剥落 ${ev.layers} 层`}（受到伤害 ×${ev.takenMul}）`)
       else if (ev.type === 'bossBubbleRing' && !r._ringLogged) { r._ringLogged = true; log(`  ${t}  Boss 生命 <50%，开始放浊雾泡环`) }
       else if (ev.type === 'bossDefeated') log(`  ${t}  ✔ 浊雾巨蜗被净化  角色生命 ${hp(r)}`)
+      else if (ev.type === 'evolved') log(`  ${t}  ★ ${cardName(ev.id)}进化为${cardName(`evo:${ev.id}`)}`)
+      else if (ev.type === 'eliteSpawn') log(`  ${t}  ◆ 精英圆壳甲虫出现`)
+      else if (ev.type === 'eliteDefeated') log(`  ${t}  ◆ 精英圆壳甲虫被净化（掉落大露珠 + 一阵林风）`)
       else if (ev.type === 'cleansing') log(`  ${t}  cleansing：全场净化 1.5 秒`)
       else if (ev.type === 'extractionOpen') {
         const d = Math.hypot(ev.x - r.player.x, ev.y - r.player.y)
@@ -86,4 +90,9 @@ console.log(`等级节点：1:00 Lv${rec.levelAt[60] ?? '—'} / 3:00 Lv${rec.le
 if (rec.bossDefeatSec !== null) console.log(`Boss 战：${(rec.bossDefeatSec - rec.bossSpawnSec).toFixed(1)}s（召唤 ${bossSkills.bossSummon} 次 / 冲撞 ${bossSkills.bossCharge} 次 / 泡环 ${bossSkills.bossBubbleRing} 次）   撤离：${rec.wonSec !== null ? (rec.wonSec - rec.extractOpenSec).toFixed(1) + 's' : '未完成'}`)
 const preRate = rec.spawnedPreBoss ? `${((rec.purifiedPreBoss / rec.spawnedPreBoss) * 100).toFixed(1)}%` : '—'
 console.log(`净化率：0–7:00 ${preRate}，全程 ${((rec.purifiedCombat / Math.max(1, rec.spawned)) * 100).toFixed(1)}%（战斗净化 ${rec.purifiedCombat} / 生成 ${rec.spawned}，另 cleansing 净化 ${rec.purifiedCleansing}）   孢子拾取率 ${((rec.xpBanked / Math.max(1, rec.xpDropped)) * 100).toFixed(1)}%`)
+const evo = rec.evolutions.length ? rec.evolutions.map((e) => `${cardName(`evo:${e.id}`)} ${mmss(e.t)}`).join('、') : '无'
+const elite = rec.eliteSpawnSec === null ? '未出现' : rec.eliteDefeatSec === null ? `${mmss(rec.eliteSpawnSec)} 出现，未击败` : `${mmss(rec.eliteSpawnSec)} 出现，${(rec.eliteDefeatSec - rec.eliteSpawnSec).toFixed(1)}s 击败`
+const d = rec.drops
+console.log(`进化：${evo}（进化卡出现 ${rec.evolveOffered} 次）   精英：${elite}`)
+console.log(`拾取物 生成/拾取：露珠 ${d.dew.spawned}/${d.dew.picked}（回复 ${d.dew.heal.toFixed(0)}） 大露珠 ${d.bigDew.spawned}/${d.bigDew.picked}（回复 ${d.bigDew.heal.toFixed(0)}） 林风 ${d.wind.spawned}/${d.wind.picked}（吸回经验 ${d.wind.xp}）   露水叶片回复 ${rec.regenHeal.toFixed(1)}   最大拾取半径 ${rec.maxPickupRadius.toFixed(0)}`)
 console.log(`升级次数：${rec.picks.length}   diag.capSkipped：敌人 ${rec.capSkipped.enemies}（同屏上限跳过，设计内）   diag.dropped（对象池满，应为 0）：敌人 ${rec.dropped.enemies} / 弹体 ${rec.dropped.shots} / 浊雾泡 ${rec.dropped.bubbles || 0}   droppedTime ${rec.droppedTime}（应为 0）\n`)

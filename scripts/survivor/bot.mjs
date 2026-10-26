@@ -8,11 +8,14 @@
 //   spore 贴孢子型   —— 只躲贴身威胁，其余时间主动去拾取孢子；Boss 战贴近到约 130 绕圈
 //                     （让菌伞旋刃/露珠环能打到 Boss）
 //   两者都会在 Boss 雾壳冲撞预警时横向闪避；撤离阶段直奔阳光撤离点。
+//   走位不主动追露珠 / 林风（与 S2 口径一致），它们只在进入拾取半径后被吸过来。
 // 选卡策略（pick）：
 //   random             每次从三张里等概率选一张（SeededRandom(`${seed}:bot`)）
-//   prefer:<weaponId>  偏好某武器：该武器（新卡/升级）> 其它新武器 > 武器升级 > 被动 > 一捧露水 > 其它
-//                      weaponId 可为 data/weapons.js 中任一武器（S2 共 5 把：spore_shot、umbrella_blades、
+//   prefer:<weaponId>  偏好某武器：进化卡 > 该武器（新卡/升级）> 其它新武器 > 能解锁已有武器进化的新被动
+//                      （01 §7 evolvesWith）> 武器升级 > 其它被动 > 一捧露水 > 其它
+//                      weaponId 可为 data/weapons.js 中任一武器（共 5 把：spore_shot、umbrella_blades、
 //                      dew_ring、raindrop、leaf_boomerang）
+// 选卡记录里进化卡的 id 记为 `evo:<weaponId>`（与同名武器卡区分）。
 import { SurvivorRun } from '../../js/survivor/SurvivorRun.js'
 import { SeededRandom } from '../../js/survivor/SurvivorRandom.js'
 import { xpToNext } from '../../js/survivor/Progression.js'
@@ -32,7 +35,14 @@ export function pickLabel(pick) {
   return pick
 }
 
+const DROP_NAMES = Object.freeze({ dew: '露珠', bigDew: '大露珠', wind: '一阵林风' })
+
+// 选卡记录用的卡 id：进化卡与同名武器卡区分。
+export const offerId = (c) => (c.kind === 'evolve' ? `evo:${c.id}` : c.id)
+
 export function cardName(id) {
+  if (id.startsWith('evo:') && WEAPONS[id.slice(4)]) return WEAPONS[id.slice(4)].evolved.name
+  if (DROP_NAMES[id]) return DROP_NAMES[id]
   if (WEAPONS[id]) return WEAPONS[id].name
   if (PASSIVES[id]) return PASSIVES[id].name
   if (id === 'heal_dew') return STRINGS.cardHealDew
@@ -51,17 +61,26 @@ export function makePicker(pick, seed) {
   if (pick.startsWith('prefer:')) {
     const fav = pick.slice(7)
     if (!WEAPONS[fav]) throw new Error(`unknown weapon in pick strategy: ${fav}`)
-    const rank = (c) => {
-      if (c.kind === 'weapon' && c.id === fav) return 0
-      if (c.kind === 'weapon' && c.isNew) return 1
-      if (c.kind === 'weapon') return 2
-      if (c.kind === 'passive') return 3
-      if (c.kind === 'heal') return 4
-      return 5
+    // run（可选）：用于判断哪些新被动能解锁已有武器的进化；不传时只看偏好武器。
+    const keyPassives = (run) => {
+      const ids = new Set([WEAPONS[fav].evolvesWith])
+      if (run) for (const w of run.weapons) if (!w.evolved && WEAPONS[w.id].evolvesWith) ids.add(WEAPONS[w.id].evolvesWith)
+      return ids
     }
-    return (offer) => {
+    const rank = (c, keys) => {
+      if (c.kind === 'evolve') return 0
+      if (c.kind === 'weapon' && c.id === fav) return 1
+      if (c.kind === 'weapon' && c.isNew) return 2
+      if (c.kind === 'passive' && c.isNew && keys.has(c.id)) return 3
+      if (c.kind === 'weapon') return 4
+      if (c.kind === 'passive') return 5
+      if (c.kind === 'heal') return 6
+      return 7
+    }
+    return (offer, run) => {
+      const keys = keyPassives(run)
       let best = 0
-      for (let i = 1; i < offer.length; i += 1) if (rank(offer[i]) < rank(offer[best])) best = i
+      for (let i = 1; i < offer.length; i += 1) if (rank(offer[i], keys) < rank(offer[best], keys)) best = i
       return best
     }
   }
@@ -210,6 +229,13 @@ export function playRun({ seed, move = 'flee', pick = 'random', maxSec = MAX_SEC
     xpDropped: 0, xpBanked: 0,
     capSkipped: null, dropped: null, droppedTime: 0,
     hpAtBossSpawn: null, hpAtBossDefeat: null,
+    // S3：进化 / 精英 / 拾取物 / 新被动
+    evolveOffered: 0, evolveFirstOfferSec: null,
+    evolutions: [],        // [{id: 武器 id, t}]，按进化顺序
+    eliteSpawnSec: null, eliteDefeatSec: null,
+    drops: { dew: { spawned: 0, picked: 0, heal: 0 }, bigDew: { spawned: 0, picked: 0, heal: 0 }, wind: { spawned: 0, picked: 0, xp: 0 } },
+    regenHeal: 0,          // 露水叶片名义回复量（战斗中每跳 heal 事件 amount 之和，最后一跳可能被满血截断）
+    maxPickupRadius: 0,
     minutes: [],           // 每分钟：{enemies: 平均同屏普通敌人数（每秒采样）, purified: 本分钟战斗净化数, hurt: 本分钟受击次数}
   }
   let minEnemies = 0
@@ -217,6 +243,7 @@ export function playRun({ seed, move = 'flee', pick = 'random', maxSec = MAX_SEC
   let minPurified = 0
   let minHurt = 0
   let cleansingSeen = false
+  let lastDropUid = 0
   let lastSec = 0
   const marks = [60, 180, 300, 420]
   let guard = 0
@@ -229,8 +256,12 @@ export function playRun({ seed, move = 'flee', pick = 'random', maxSec = MAX_SEC
       run.advance(FRAME)
     } else if (run.state === 'levelup') {
       const offer = run.offer
-      const i = picker(offer)
-      const ids = offer.map((c) => c.id)
+      const i = picker(offer, run)
+      const ids = offer.map(offerId)
+      if (offer.some((c) => c.kind === 'evolve')) {
+        rec.evolveOffered += 1
+        if (rec.evolveFirstOfferSec === null) rec.evolveFirstOfferSec = run.time
+      }
       for (const id of ids) rec.offered[id] = (rec.offered[id] || 0) + 1
       rec.picked[ids[i]] = (rec.picked[ids[i]] || 0) + 1
       const pr = { t: run.time, level: run.progression.level, offer: offer.map((c) => ({ id: c.id, kind: c.kind, level: c.level, isNew: c.isNew })), picked: ids[i] }
@@ -241,7 +272,34 @@ export function playRun({ seed, move = 'flee', pick = 'random', maxSec = MAX_SEC
     } else {
       break
     }
+    // 新生成的拾取物（池对象 uid 递增）
+    const dr = run.drops
+    for (let k = 0; k < dr.count; k += 1) {
+      const o = dr.active[k]
+      if (o.uid > lastDropUid) { lastDropUid = o.uid; rec.drops[o.kind].spawned += 1 }
+    }
+    if (run.stats.pickupRadius > rec.maxPickupRadius) rec.maxPickupRadius = run.stats.pickupRadius
+    let lastPickup = ''
     for (const ev of run.drainEvents()) {
+      if (ev.type === 'pickup' && ev.kind !== 'spore') {
+        lastPickup = ev.kind
+        rec.drops[ev.kind].picked += 1
+        if (ev.kind === 'wind') {
+          // 林风拾取后仍在场、被标记飞向角色的孢子经验（拾取同帧已入账的不计）
+          for (let k = 0; k < run.spores.count; k += 1) if (run.spores.active[k].wind) rec.drops.wind.xp += run.spores.active[k].xp
+        }
+        continue
+      }
+      if (ev.type === 'heal') {
+        if (lastPickup === 'dew' || lastPickup === 'bigDew') rec.drops[lastPickup].heal += ev.amount
+        else if (run.state !== 'extract' && !run.extraction) rec.regenHeal += ev.amount
+        lastPickup = ''
+        continue
+      }
+      lastPickup = ''
+      if (ev.type === 'evolved') rec.evolutions.push({ id: ev.id, t: run.time })
+      if (ev.type === 'eliteSpawn' && rec.eliteSpawnSec === null) rec.eliteSpawnSec = run.time
+      if (ev.type === 'eliteDefeated' && rec.eliteDefeatSec === null) rec.eliteDefeatSec = run.time
       if (ev.type === 'cleansing') cleansingSeen = true
       if (ev.type === 'playerHurt') minHurt += 1
       if (ev.type === 'purified' && ev.kind !== 'boss_mist_snail') {
@@ -293,6 +351,8 @@ export function playRun({ seed, move = 'flee', pick = 'random', maxSec = MAX_SEC
   rec.dropped = { ...run.diag.dropped }
   rec.droppedTime = run.diag.droppedTime
   rec.finalHp = Math.max(0, run.player.hp)
+  // 生成后同一步就被拾取、没被逐帧扫描看到的拾取物个数（按种类无法区分，单独记）
+  rec.dropsUnseen = run.drops.nextUid - 1 - (rec.drops.dew.spawned + rec.drops.bigDew.spawned + rec.drops.wind.spawned)
   return { rec, run }
 }
 
