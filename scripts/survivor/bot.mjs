@@ -43,7 +43,7 @@ export function cardName(id) {
 }
 
 // --- 选卡 ---
-function makePicker(pick, seed) {
+export function makePicker(pick, seed) {
   if (pick === 'random') {
     const rng = new SeededRandom(`${seed}:bot`)
     return (offer) => rng.int(0, offer.length - 1)
@@ -69,8 +69,8 @@ function makePicker(pick, seed) {
 }
 
 // --- 移动 ---
-// 返回单位方向向量（或 0 向量）。
-function steer(run, move) {
+// 返回单位方向向量（或 0 向量）。也供 scripts/survivor/update-golden.mjs 固化回放输入。
+export function steer(run, move) {
   const p = run.player
   // 撤离：直奔撤离点中心。
   if (run.state === 'extract' && run.extraction) {
