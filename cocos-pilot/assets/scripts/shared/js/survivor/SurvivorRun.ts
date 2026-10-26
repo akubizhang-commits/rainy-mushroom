@@ -29,11 +29,12 @@ import { stepWeapons } from './Weapons'
 import { stepBossSchedule, stepBoss, syncBossView, defeatBoss } from './Boss'
 import { makeShot, makeWeaponState } from './Weapons'
 import { stepProjectiles, stepZones, makeZone, makeBubble, stepMistBubbles } from './Projectiles'
-import { makeSpore, dropSpore, stepPickups } from './Pickups'
+import { makeSpore, dropSpore, stepPickups, makeDrop, rollDrop, dropEliteLoot } from './Pickups'
 import {
   makeProgression,
   addXp,
   draftOffer,
+  evolvableWeapon,
   xpToNext,
 } from './Progression'
 
@@ -77,6 +78,7 @@ export class SurvivorRun {
     this._spawnRng = rng.derive('spawn')
     this._draftRng = rng.derive('draft')
     this.weaponRng = rng.derive('weapon') // raindrop target / fallback picks (03 §3.3)
+    this.dropRng = rng.derive('drop')     // 露珠 / 林风 掉落（01 §11，03 §3.3）
 
     this.clock = new SimClock()
     this.state = 'playing'
@@ -111,6 +113,8 @@ export class SurvivorRun {
     this.mistBubbles = new Pool(LIMITS.pools.mistBubbles, makeBubble) // enemy projectiles (01 §9)
     this.spores = new Pool(LIMITS.pools.spores, makeSpore)
     this.zones = new Pool(LIMITS.pools.raindropZones, makeZone) // raindrop shadows (01 §6.4)
+    this.drops = new Pool(LIMITS.pools.pickups, makeDrop) // 露珠 / 大露珠 / 林风（01 §11）
+    this.targetBuf = new Array(16) // 孢子风暴多目标（Weapons.nearestEnemies）
 
     // Spatial grid + reusable query buffer.
     this.grid = new SpatialGrid({ capacity: LIMITS.pools.enemies })
@@ -126,7 +130,8 @@ export class SurvivorRun {
 
     // Diagnostics (03 §3.1, §10; 08 L11): capSkipped = spawns skipped by the segment /
     // global hard cap (designed behaviour); dropped = pool full (should stay 0).
-    this.diag = { capSkipped: { enemies: 0 }, dropped: { enemies: 0, shots: 0, bubbles: 0, zones: 0 }, droppedTime: 0 }
+    // pickups: capSkipped = 露珠 / 林风 掉落时同类已达场上上限；dropped = 拾取物池满（01 §11）。
+    this.diag = { capSkipped: { enemies: 0, pickups: 0 }, dropped: { enemies: 0, shots: 0, bubbles: 0, zones: 0, pickups: 0 }, droppedTime: 0 }
 
     // Event queue (one-shot events drained each frame).
     this.events = []
@@ -143,6 +148,7 @@ export class SurvivorRun {
 
     // Summary bookkeeping.
     this.purified = 0
+    this._eliteDefeated = 0 // 精英被击败次数（01 §13.1 露晶精英奖励；cleansing 净化不算）
     this._bossDefeated = false
     this._killer = ''
     this._outcome = ''
@@ -343,7 +349,8 @@ export class SurvivorRun {
   }
 
   // Step 10: resolve deaths (hp ≤ 0) → purify event, spore drop, counter. The Boss
-  // reaching 0 starts the cleansing phase (01 §9.3).
+  // reaching 0 starts the cleansing phase (01 §9.3). Normal enemies roll for 露珠 / 林风;
+  // the elite drops its 50 xp spore + 大露珠 + 林风 (01 §11, S3 B3/B4).
   _stepDeaths() {
     const enemies = this.enemies
     let bossDown = false
@@ -355,7 +362,16 @@ export class SurvivorRun {
       if (e === this.bossEnemy) {
         bossDown = true
         defeatBoss(this)
-      } else if (e.xp > 0) dropSpore(this, e.x, e.y, e.xp)
+      } else {
+        if (e.xp > 0) dropSpore(this, e.x, e.y, e.xp)
+        if (e.behavior === 'charge') {
+          this._eliteDefeated += 1
+          dropEliteLoot(this, e.x, e.y)
+          this.events.push({ type: 'eliteDefeated', x: e.x, y: e.y })
+        } else {
+          rollDrop(this, e.x, e.y)
+        }
+      }
       enemies.release(e)
     }
     if (bossDown) {
@@ -437,6 +453,13 @@ export class SurvivorRun {
       } else if (this.weapons.length < PLAYER.weaponSlots) {
         this.weapons.push(makeWeaponState(card.id, 1))
       }
+    } else if (card.kind === 'evolve') {
+      // 01 §8.3：只在条件仍满足时进化；占原栏位、被动保留，进化后不再升级。
+      const w = evolvableWeapon(this.weapons, this.passives)
+      if (!w || w.id !== card.id) return
+      w.evolved = true
+      w.level = WEAPONS[w.id].levels.length
+      this.events.push({ type: 'evolved', id: w.id })
     } else if (card.kind === 'passive') {
       const def = PASSIVES[card.id]
       if (!def) return
@@ -502,9 +525,9 @@ export class SurvivorRun {
       survivalSec: this.time,
       purified: this.purified,
       level: this.progression.level,
-      weapons: this.weapons.map((w) => ({ id: w.id, level: w.level })),
+      weapons: this.weapons.map((w) => ({ id: w.id, level: w.level, evolved: !!w.evolved })),
       passives: Object.keys(this.passives).map((id) => ({ id, level: this.passives[id] })),
-      eliteDefeated: 0,
+      eliteDefeated: this._eliteDefeated,
       bossDefeated: this._bossDefeated,
       shinyCards: this._bonusCrystals || 0,
       abandoned: !!this._abandoned,

@@ -16,6 +16,7 @@ import {resolve} from 'node:path'
 import {deflateSync} from 'node:zlib'
 import {ENEMIES} from '../../js/survivor/data/enemies.js'
 import {WEAPONS} from '../../js/survivor/data/weapons.js'
+import {PICKUPS} from '../../js/survivor/data/pickups.js'
 
 const root = resolve(import.meta.dirname, '../..')
 const S = 1.5 // 像素 / u
@@ -256,6 +257,28 @@ function snailParts(cx, sy, s) {
     [union(circle(shellC[0] - 40, shellC[1] + 30, 12), circle(shellC[0] + 6, shellC[1] + 52, 14), circle(shellC[0] + 42, shellC[1] + 30, 10)), hex('#7A5A9A', 0.35)],
   ])
 }
+// 精英圆壳甲虫（S3 B5）：beetle 轮廓 + 浅金发光描边 + 更亮的壳，设计半径 16（与 beetle 同尺寸），
+// 运行时按 28 / 16 放大；-flash 为同轮廓纯白剪影。脚下另叠 elite-aura 脉冲环。
+{
+  const W = 52, H = 44, cx = W / 2, sy = 9
+  const shell = ellipse(cx - 2, sy + 14, 17, 12)
+  const head = ellipse(cx + 15, sy + 12, 6, 6)
+  const horn = poly([[cx + 18, sy + 16], [cx + 25, sy + 24], [cx + 16, sy + 19]])
+  const legs = union(rect(cx - 12, sy + 1, cx - 10, sy + 5), rect(cx - 2, sy, cx, sy + 5), rect(cx + 8, sy + 1, cx + 10, sy + 5))
+  const body = union(shell, head, horn, legs)
+  const mist = [ellipse(cx, sy, 21, 6), ENEMY_MIST]
+  frameR.elite = 16
+  frames.push(frame('elite', W, H, 0.5, sy / H, [
+    mist,
+    [grow(body, 2.4), hex('#F2C14E', 0.85)],
+    [legs, BEETLE_DARK],
+    [union(head, horn), BEETLE_DARK],
+    [shell, hex('#7A6A52')],
+    [rect(cx - 2.6, sy + 3, cx - 1.4, sy + 25.5), BEETLE_DARK],
+    [union(ellipse(cx - 9, sy + 19, 4, 2.4), circle(cx + 5, sy + 20, 1.6), circle(cx - 4, sy + 9, 1.4)), hex('#FFE7A8')],
+  ]))
+  frames.push(frame('elite-flash', W, H, 0.5, sy / H, [mist, [grow(body, 2.4), WHITE]]))
+}
 // 精英光环：叠在放大的 beetle 帧下（同帧尺寸与锚点），白色椭圆环运行时染 #9B7BC4 ↔ #F2C14E 脉冲（02 §1.3）
 {
   const W = 48, H = 40, cx = W / 2, sy = 7
@@ -352,6 +375,101 @@ function snailParts(cx, sy, s) {
   frameR['evac-fill'] = 12
 }
 
+// ---------- S3 B5：拾取物（01 §11、02 §8.4；回血物用水滴形，不用蘑菇图形，01 §2） ----------
+// 露珠 / 大露珠：浅蓝水滴（尖端朝上）+ 白色高光；大露珠外加一圈淡金光晕。林风：三道青白风痕 + 一片小绿叶。
+// 帧按 data/pickups.js 的碰撞半径画，frameR 记录半径供运行时缩放。
+function dewDrop(name, r, halo) {
+  const W = r * 2 + 10, H = r * 2.8 + 8, cx = W / 2, cy = r + 4
+  const drop = union(circle(cx, cy, r), poly([[cx - r * 0.82, cy + r * 0.58], [cx + r * 0.82, cy + r * 0.58], [cx, cy + r * 1.9]]))
+  frameR[name] = r
+  const layers = []
+  if (halo) layers.push([ring(cx, cy + r * 0.3, r + 4.5, 2.2), hex('#FFE08A', 0.8)])
+  layers.push(
+    [grow(drop, 1.2), hex('#6F93B8', 0.95)],
+    [drop, hex('#BFE8FF')],
+    [ellipse(cx + r * 0.25, cy - r * 0.2, r * 0.5, r * 0.38), hex('#8FC4EA', 0.7)],
+    [ellipse(cx - r * 0.35, cy + r * 0.3, r * 0.22, r * 0.34), WHITE],
+  )
+  frames.push(frame(name, W, H, 0.5, cy / H, layers))
+}
+dewDrop('dew-drop', PICKUPS.dew.radius, false)
+dewDrop('dew-drop-big', PICKUPS.bigDew.radius, true)
+{
+  const r = PICKUPS.wind.radius, W = r * 2 + 8, c = W / 2
+  frameR.wind = r
+  const streak = (y, x0, x1, curl) => union(
+    rect(c + x0, c + y - 1.3, c + x1, c + y + 1.3),
+    arc(c + x1, c + y + curl, Math.abs(curl) + 1.3, 2.6, curl > 0 ? -Math.PI / 2 : 0, curl > 0 ? Math.PI / 2 : Math.PI / 2 + Math.PI / 2),
+  )
+  const leaf = (x, y) => circle(c + 4, c - 2, 6)(x, y) && circle(c - 2, c + 4, 6)(x, y)
+  frames.push(frame('wind', W, W, 0.5, 0.5, [
+    [circle(c, c, r + 3), hex('#DDF5E8', 0.22)],
+    [grow(union(streak(r * 0.55, -r, r * 0.5, 3), streak(-r * 0.05, -r * 0.7, r * 0.8, -3), streak(-r * 0.65, -r * 0.9, r * 0.3, 2.5)), 0.8), hex('#2F7F6A', 0.6)],
+    [union(streak(r * 0.55, -r, r * 0.5, 3), streak(-r * 0.05, -r * 0.7, r * 0.8, -3), streak(-r * 0.65, -r * 0.9, r * 0.3, 2.5)), hex('#E6FFF4')],
+    [leaf, hex('#9FD18B')],
+  ]))
+}
+
+// ---------- S3 B5：进化武器变体（同形状换色 / 放大；进化名见 strings card_evolve_<id>） ----------
+const GOLD = hex('#F2C14E'), GOLD_DEEP = hex('#B07A2A', 0.95)
+// 孢子风暴：金色弹头 + 3 段拖尾（比孢子弹长）
+{
+  const W = 46, H = 14, hx = 34
+  frames.push(frame('spore-shot-evo', W, H, hx / W, 0.5, [
+    [ellipse(hx - 24, 7, 4.5, 2.6), hex('#F2C14E', 0.35)],
+    [ellipse(hx - 16, 7, 6, 3.4), hex('#F2C14E', 0.6)],
+    [ellipse(hx - 9, 7, 7, 4.2), hex('#F2C14E', 0.9)],
+    [ellipse(hx, 7, 11, 6.6), hex('#FFE7A8')],
+    [ellipse(hx + 2, 8, 4.4, 2.4), WHITE],
+  ]))
+}
+// 菌伞华盖：金色大伞面 + 白斑 + 深琥珀描边（同形状换色）
+{
+  const r = WEAPONS.umbrella_blades.bladeRadius, W = r * 2 + 4, c = W / 2
+  frameR['umbrella-blade-evo'] = r
+  const canopy = (x, y) => y >= c - r * 0.1 && circle(c, c - r * 0.1, r * 0.95)(x, y)
+  const stem = rect(c - r * 0.16, c - r * 0.85, c + r * 0.16, c)
+  frames.push(frame('umbrella-blade-evo', W, W, 0.5, 0.5, [
+    [grow(union(canopy, stem), 1.6), GOLD_DEEP],
+    [stem, SHOT],
+    [canopy, GOLD],
+    [(x, y) => y >= c - r * 0.1 && y <= c + r * 0.12 && circle(c, c - r * 0.1, r * 0.95)(x, y), SHOT],
+    [union(circle(c - r * 0.4, c + r * 0.42, r * 0.14), circle(c + r * 0.15, c + r * 0.6, r * 0.12), circle(c + r * 0.5, c + r * 0.3, r * 0.1)), WHITE],
+  ]))
+}
+// 晨露结界：重绘的双层光环（外圈浅金、内圈浅蓝）+ 8 颗露珠点，设计半径 68（与露珠环相同缩放口径）
+{
+  const R = 68, W = R * 2, c = W / 2
+  frameR['dew-ring-evo'] = R - 1
+  const dots = []
+  for (let i = 0; i < 8; i++) { const a = (i / 8) * Math.PI * 2; dots.push(circle(c + Math.cos(a) * (R - 3), c + Math.sin(a) * (R - 3), 3.2)) }
+  frames.push(frame('dew-ring-evo', W, W, 0.5, 0.5, [
+    [ring(c, c, R - 1, 3), hex('#FFE08A')],
+    [ring(c, c, R - 6, 3), hex('#BFE8FF', 0.8)],
+    [ring(c, c, R - 11, 2), hex('#BFE8FF', 0.3)],
+    [union(...dots), hex('#E6F6FF')],
+  ]))
+}
+// 骤雨：更粗的深蓝雨滴 + 金色高光
+{
+  const dW = 12, dH = 34, dc = dW / 2
+  const drop = union(circle(dc, 5.2, 5), poly([[dc - 4.8, 6.2], [dc + 4.8, 6.2], [dc, dH - 0.5]]))
+  frames.push(frame('raindrop-evo', dW, dH, 0.5, 5.2 / dH, [[grow(drop, 0.7), hex('#3E5F86', 0.95)], [drop, hex('#8FC4EA')], [ellipse(dc - 1.6, 6, 1.4, 2.2), hex('#FFE7A8')]]))
+}
+// 秋风叶舞：橙红秋叶（同形状换色）
+{
+  const r = WEAPONS.leaf_boomerang.leafRadius, k = r / 10, W = 38 * k, H = 22 * k, cx = W / 2, cy = H / 2
+  frameR['leaf-evo'] = r
+  const R = 21.2 * k, d = 11.2 * k
+  const leaf = (x, y) => circle(cx, cy - d, R)(x, y) && circle(cx, cy + d, R)(x, y)
+  frames.push(frame('leaf-evo', W, H, 0.5, 0.5, [
+    [grow(leaf, 1), hex('#8A3A1E', 0.95)],
+    [leaf, hex('#E07A3A')],
+    [(x, y) => leaf(x, y) && Math.abs(y - cy) <= 0.8 * k, hex('#FFE7A8')],
+    [union(poly([[cx - 6 * k, cy], [cx - 4.6 * k, cy], [cx - 9 * k, cy + 5 * k]]), poly([[cx + 3 * k, cy], [cx + 4.4 * k, cy], [cx, cy - 5 * k]])), hex('#FFE7A8')],
+  ]))
+}
+
 // 孢子弹：暖白椭圆 20×12u + 2 段琥珀拖尾（02 §8.4），朝 +x，运行时按速度旋转。锚点在弹头中心
 {
   const W = 38, H = 12, hx = 28
@@ -383,19 +501,43 @@ frames.push(frame('joy-knob', 58, 58, 0.5, 0.5, [[circle(29, 29, 28), hex('#F4F1
 // 纯白块：角色生命条（64×8u，染色）等
 frames.push(frame('white', 6, 6, 0.5, 0.5, [[rect(0, 0, 6, 6), PAPER.map((v, i) => (i < 3 ? 255 : 1))]]))
 
-// ---------- 打包（货架式，2px 透明出血） ----------
-frames.sort((a, b) => b.h - a.h || a.name.localeCompare(b.name))
+// ---------- 打包（天际线 bottom-left，2px 透明出血；S3 B5 起替换货架式，帧变多后仍放得进 512×1024） ----------
+frames.sort((a, b) => b.h - a.h || b.w - a.w || a.name.localeCompare(b.name))
 const PAD = 2
 function pack(width) {
-  let x = PAD, y = PAD, row = 0
+  // skyline：按 x 升序的线段 {x, w, y}，y = 该段已占用的最低可用高度
+  let sky = [{x: 0, w: width, y: 0}]
   const placed = []
+  let height = 0
   for (const f of frames) {
-    if (x + f.w + PAD > width) { x = PAD; y += row + PAD * 2; row = 0 }
-    placed.push({f, x, y})
-    x += f.w + PAD * 2
-    row = Math.max(row, f.h)
+    const fw = f.w + PAD * 2, fh = f.h + PAD * 2
+    let best = null
+    for (let i = 0; i < sky.length; i++) {
+      const x = sky[i].x
+      if (x + fw > width) break
+      let y = 0, span = 0
+      for (let j = i; j < sky.length && span < fw; j++) { y = Math.max(y, sky[j].y); span += sky[j].w }
+      if (span < fw) continue
+      if (!best || y + fh < best.y + fh - 1e-9 || (y + fh === best.y + fh && x < best.x)) best = {x, y}
+    }
+    if (!best) throw Error('survivor-battle pack failed: ' + f.name)
+    placed.push({f, x: best.x + PAD, y: best.y + PAD})
+    height = Math.max(height, best.y + fh)
+    // 更新天际线：[best.x, best.x + fw) 抬到 best.y + fh
+    const next = []
+    const x0 = best.x, x1 = best.x + fw
+    for (const s of sky) {
+      const s1 = s.x + s.w
+      if (s1 <= x0 || s.x >= x1) { next.push(s); continue }
+      if (s.x < x0) next.push({x: s.x, w: x0 - s.x, y: s.y})
+      if (s1 > x1) next.push({x: x1, w: s1 - x1, y: s.y})
+    }
+    next.push({x: x0, w: fw, y: best.y + fh})
+    next.sort((a, b) => a.x - b.x)
+    sky = []
+    for (const s of next) { const last = sky[sky.length - 1]; if (last && last.y === s.y && last.x + last.w === s.x) last.w += s.w; else sky.push({...s}) }
   }
-  return {placed, height: y + row + PAD}
+  return {placed, height}
 }
 const width = 512
 const {placed, height: used} = pack(width)
@@ -473,7 +615,7 @@ writeFileSync(resolve(dir, 'survivor-battle.json'), JSON.stringify({version: 2, 
 const g = ground()
 writeFileSync(resolve(dir, 'ground.png'), png(g.w, g.h, g.data))
 writeFileSync(resolve(root, 'cocos-pilot/assets/scripts/SurvivorBattleFrames.ts'),
-  '// GENERATED by scripts/survivor/pack-placeholder.mjs (T8 S1 / P1 S2 geometric placeholders); do not edit.\n' +
+  '// GENERATED by scripts/survivor/pack-placeholder.mjs (T8 S1 / P1 S2 / S3 B5 geometric placeholders); do not edit.\n' +
   'export type SurvivorFrame={width:number,height:number,anchorX:number,anchorY:number,x:number,y:number,w:number,h:number};\n' +
   `export const SURVIVOR_ATLAS={width:${width},height:${height}};\n` +
   '// 帧绘制时对应的碰撞/效果半径（u）：表现层按 实体半径 / SURVIVOR_FRAME_R[帧] 缩放\n' +

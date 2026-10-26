@@ -856,7 +856,8 @@ test('balance-15 flee + prefer:spore_shot: Boss hp falls before 12:00 (no longer
       onEvent: (ev) => { if (ev.type === 'bossApproach') approaches += 1 },
     },
   })
-  assert.ok(approaches > 0, 'the Boss approached the fleeing bot')
+  // S3 B1–B4（被动 / 进化 / 拾取物 / 精英）后该种子在 11:00 前就能打赢 Boss：此时不需要追击。
+  assert.ok(approaches > 0 || (rec.bossDefeatSec !== null && rec.bossDefeatSec < 660), 'the Boss approached the fleeing bot, or fell before 11:00')
   const at660 = hp[660] ?? 1
   const before720 = rec.bossDefeatSec !== null && rec.bossDefeatSec < 720 ? 0 : (hp[719] ?? hp[Math.max(...Object.keys(hp).map(Number))])
   assert.ok(before720 < at660 || (rec.bossDefeatSec !== null && rec.bossDefeatSec < 720), `hp 11:00 ${at660} → 11:59 ${before720}`)

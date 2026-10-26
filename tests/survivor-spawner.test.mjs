@@ -25,6 +25,7 @@ function makeWorld(viewport = { width: 720, height: 1560 }) {
     player: { x: 0, y: 0, r: 18, dirX: 1, dirY: 0 },
     enemies: new Pool(LIMITS.pools.enemies, makeEnemy),
     diag: { capSkipped: { enemies: 0 }, dropped: { enemies: 0, shots: 0 }, droppedTime: 0 },
+    events: [],
     viewport,
   }
 }
@@ -399,11 +400,67 @@ test('4:30 moth cross: 16 moths in a column just off one screen edge, flying acr
   for (let i = 1; i < ys.length; i += 1) assert.ok(Math.abs(ys[i] - ys[i - 1] - 48) < 1e-9, 'column spacing')
 })
 
-test('optional events (5:00 elite) do not fire', () => {
+test('5:00 elite (S3 B4): exactly one elite_beetle off-screen, hp 1500 × (1 + 0.15 × 5), eliteSpawn event', () => {
   const world = makeWorld()
   const spawner = new Spawner(world.viewport, LIMITS.spawnMarginU, new SeededRandom('elite'))
   triggerEvent(world, spawner, 300)
-  for (let k = 0; k < world.enemies.count; k += 1) assert.notEqual(world.enemies.active[k].kind, 'elite_beetle')
+  const elites = world.enemies.active.slice(0, world.enemies.count).filter((e) => e.kind === 'elite_beetle')
+  assert.equal(elites.length, 1)
+  const e = elites[0]
+  const def = ENEMIES.elite_beetle
+  assert.ok(Math.abs(e.hp - 1500 * (1 + 0.15 * 5)) < 1e-9, `hp ${e.hp}`)
+  assert.equal(e.maxHp, e.hp)
+  assert.ok(Math.abs(e.damage - 15 * (1 + 0.05 * 5)) < 1e-9)
+  assert.deepEqual([e.speed, e.r, e.xp, e.kbRes, e.behavior], [80, 28, 50, 0.9, 'charge'])
+  assert.equal(e.timer, def.chargeEvery, 'first windup after one full interval')
+  const d = Math.hypot(e.x - world.player.x, e.y - world.player.y)
+  assert.ok(Math.abs(d - spawner.spawnRadius) < 1e-6, 'on the off-screen spawn circle')
+  assert.equal(world.events.filter((ev) => ev.type === 'eliteSpawn').length, 1)
+  // Never again for the rest of the run.
+  for (let i = 0; i < 300 * 60; i += 1) {
+    world.time += DT
+    spawner.step(world, DT)
+    for (let k = world.enemies.count - 1; k >= 0; k -= 1) if (world.enemies.active[k].kind !== 'elite_beetle') world.enemies.release(world.enemies.active[k])
+  }
+  let n = 0
+  for (let k = 0; k < world.enemies.count; k += 1) if (world.enemies.active[k].kind === 'elite_beetle') n += 1
+  assert.equal(n, 1)
+  assert.equal(world.events.filter((ev) => ev.type === 'eliteSpawn').length, 1)
+})
+
+test('elite waits for a free slot when the field is at the hard cap of 200, then spawns', () => {
+  const world = makeWorld()
+  const spawner = new Spawner(world.viewport, LIMITS.spawnMarginU, new SeededRandom('elite-cap'))
+  for (let i = 0; i < LIMITS.hardCaps.enemies; i += 1) {
+    const e = world.enemies.acquire()
+    resetEnemy(e, { kind: 'gnat', x: 0, y: 300, r: 10, hp: 8, speed: 0, damage: 0, xp: 1, kbRes: 0 })
+  }
+  triggerEvent(world, spawner, 300)
+  const count = () => { let n = 0; for (let k = 0; k < world.enemies.count; k += 1) if (world.enemies.active[k].kind === 'elite_beetle') n += 1; return n }
+  assert.equal(count(), 0, 'deferred while full')
+  assert.equal(world.enemies.count, LIMITS.hardCaps.enemies)
+  for (let i = 0; i < 30; i += 1) { world.time += DT; spawner.step(world, DT) }
+  assert.equal(count(), 0, 'still waiting')
+  world.enemies.release(world.enemies.active[0])
+  world.time += DT
+  spawner.step(world, DT)
+  assert.equal(count(), 1, 'spawned once a slot freed up')
+  assert.ok(world.enemies.count <= LIMITS.hardCaps.enemies)
+  assert.equal(world.diag.dropped.enemies, 0)
+})
+
+test('elites are never relocated however far away (01 §9 通用规则)', () => {
+  const world = makeWorld()
+  const spawner = new Spawner(world.viewport, LIMITS.spawnMarginU, new SeededRandom('elite-far'))
+  spawner.nextEvent = WAVES.events.length
+  const e = world.enemies.acquire()
+  resetEnemy(e, { kind: 'elite_beetle', x: 5000, y: 0, r: 28, hp: 2625, speed: 80, damage: 18.75, xp: 50, kbRes: 0.9, behavior: 'charge', timer: 5 })
+  const g = world.enemies.acquire()
+  resetEnemy(g, { kind: 'gnat', x: 5000, y: 0, r: 10, hp: 8, speed: 0, damage: 0, xp: 1, kbRes: 0 })
+  world.time = 301
+  spawner.step(world, DT)
+  assert.deepEqual([e.x, e.y], [5000, 0])
+  assert.ok(Math.hypot(g.x, g.y) < 5000, 'normal enemy relocated')
 })
 
 test('full 0–7:00 run with events never exceeds segment caps or the hard cap of 200', () => {

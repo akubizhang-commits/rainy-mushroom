@@ -1,10 +1,17 @@
 import {Node,director,view} from 'cc';
 import {STRINGS} from './shared/js/survivor/data/strings';
 import {fillScreen} from './SurvivorPerf';
+import {spawnDrop,dropSpore} from './shared/js/survivor/Pickups';
+import {computeStats} from './shared/js/survivor/Stats';
+import {PLAYER} from './shared/js/survivor/data/player';
 // 生存玩法浏览器冒烟（03 §2.2 / §10、04 §L5、08 P5）：`?survivor&smoke=1`。
 // 阶段 1：脚本输入（绕圈摇杆）真实时间跑 30 秒，升级优先选新武器卡（否则第一张）；断言新武器上场且有对应渲染帧；
 // 阶段 2：调试钩子快进逻辑时间到 2:45（经过 2:30 蚊蚋包围圈事件）并把敌人池铺满视口，再真实时间跑 10 秒；断言事件横幅；
 // 阶段 3：快进到 5:30（菌灵波段，经过 4:30 灰蛾横穿），真实时间跑 6 秒；断言新敌人（菌灵/灰蛾/蜗牛）与浊雾泡渲染；
+// 阶段 3b（S3 B5）：5:00 精英已出现（eliteSpawn）→ 移到小旅人身边真实时间 2 秒，断言 elite 帧渲染；
+// 阶段 3c：脚下注入露珠（生命 -40 后拾取回复）、远处放孢子再注入林风，断言拾取生效、拾取物帧渲染、远处孢子被吸回；
+// 阶段 3d：把孢子弹置 Lv5 + 湿润苔衣，强制一次升级，断言第 1 张为金边进化卡（HUD evolveShown），停 0.6 秒采样模态帧 DrawCall，
+//         选中后断言武器进化、HUD 武器栏显示进化标识、孢子风暴变体帧渲染；
 // 阶段 4：快进到 Boss 出现（7:00），真实时间跑 3 秒，断言 Boss 血条可见；
 // 阶段 5：Boss 生命置 0 → cleansing（全场净化、横幅）→ extract（撤离点）→ 把小旅人放进撤离点 → won → 胜利结算页；
 // 阶段 6：结算后“再来一局”，生命置 1 并在脚下生成甲虫 → 接触致死 → lost → 失败结算页；
@@ -25,8 +32,8 @@ export async function runSurvivorSmoke(host:any){
  const frame=()=>new Promise<void>(r=>host.scheduleOnce(r,0));
  let raindropHint=false,maxNodes=0,maxDrawCalls=0,maxEnemies=0,maxModalDrawCalls=0,modalSamples=0,maxMist=0,maxMistShown=0,maxGlow=0,maxBossArrow=0;const dcByState:Record<string,number>={},dcHist:Record<number,number>={};
  // 观测：逻辑事件类型（包一层 drainEvents）、渲染池显示过的帧、HUD 横幅文本、出现过的 run.state
- const seen=new Set<string>(),enemyFrames=new Set<string>(),shotFrames=new Set<string>(),banners=new Set<string>(),states=new Set<string>();
- const tap=(r:any)=>{const d=r.drainEvents.bind(r);r.drainEvents=()=>{const out=d();for(const e of out)seen.add(e.type);return out}};
+ const seen=new Set<string>(),pickupKinds=new Set<string>(),dropFrames=new Set<string>(),enemyFrames=new Set<string>(),shotFrames=new Set<string>(),banners=new Set<string>(),states=new Set<string>();
+ const tap=(r:any)=>{const d=r.drainEvents.bind(r);r.drainEvents=()=>{const out=d();for(const e of out){seen.add(e.type);if(e.type==='pickup')pickupKinds.add(e.kind)}return out}};
  const countActive=(n:Node):number=>{if(!n.active)return 0;let c=1;for(const ch of n.children)c+=countActive(ch);return c};
  const sample=(v:any)=>{
   const battle=v.art.root as Node,nodes=battle.active?countActive(battle):0,dc=(director.root as any)?.device?.numDrawCalls||0;
@@ -35,7 +42,7 @@ export async function runSurvivorSmoke(host:any){
   if(st==='playing/'||st==='cleansing/'||st==='extract/')maxDrawCalls=Math.max(maxDrawCalls,dc);
   if(!run)return;states.add(run.state);maxEnemies=Math.max(maxEnemies,run.enemies.count);maxMist=Math.max(maxMist,run.mistBubbles.count);
   const pc=v.art.poolCounts;maxMistShown=Math.max(maxMistShown,pc.mist||0);maxGlow=Math.max(maxGlow,pc.glow||0);if(run.boss?.alive)maxBossArrow=Math.max(maxBossArrow,pc.indicators||0);
-  for(const f of v.art.shownFrames('enemies'))enemyFrames.add(f);for(const f of v.art.shownFrames('shots'))shotFrames.add(f);
+  for(const f of v.art.shownFrames('enemies'))enemyFrames.add(f);for(const f of v.art.shownFrames('drops'))dropFrames.add(f);for(const f of v.art.shownFrames('shots'))shotFrames.add(f);
   const b=v.hud?.bannerText;if(b)banners.add(b);if(v.hud?.modal==='levelup'&&v.hud.raindropHint)raindropHint=true;
  };
  // 升级选卡：优先新武器卡，否则第一张
@@ -101,6 +108,41 @@ export async function runSurvivorSmoke(host:any){
   check(maxMist>0&&maxMistShown>0,'mist bubbles fired (logic max '+maxMist+', rendered max '+maxMistShown+')');
   check(banners.has(STRINGS.bannerEventCross),'cross event banner shown');
   slots('phase 3');
+  // 阶段 3b：5:00 精英
+  check(seen.has('eliteSpawn'),'5:00 elite spawned (eliteSpawn event)');
+  const elite=run.enemies.active.slice(0,run.enemies.count).find((e:any)=>e.kind==='elite_beetle');
+  if(elite){elite.x=run.player.x+160;elite.y=run.player.y;elite.hp=elite.maxHp}
+  await runFor(v,2,true);
+  check(enemyFrames.has('elite')||enemyFrames.has('elite-flash')||run.summary().eliteDefeated>0,'elite rendered ('+(elite?'alive':'already purified')+')');
+  // 阶段 3c：露珠 + 林风
+  while(run.state==='levelup')run.choose(pick(run));
+  run.player.hp=run.player.maxHp-40;const hp0=run.player.hp;
+  // 前面阶段可能已自然掉落并拾取过露珠 / 林风：清空观测，只看注入的这一个
+  pickupKinds.clear();dropFrames.clear();seen.delete('heal');
+  run.drops.releaseAll();check(!!spawnDrop(run,'dew',run.player.x+60,run.player.y),'dew drop injected');
+  const far:any[]=[];for(let i=0;i<6;i++){const a=i/6*Math.PI*2;dropSpore(run,run.player.x+Math.cos(a)*900,run.player.y+Math.sin(a)*900,1);far.push(run.spores.active[run.spores.count-1])}
+  const farUids=far.map((s:any)=>s.uid),farGone=()=>far.every((s:any,i:number)=>!run.spores.isActive(s)||s.uid!==farUids[i]);
+  await runFor(v,5,false,()=>{},()=>pickupKinds.has('dew'));
+  check(pickupKinds.has('dew')&&seen.has('heal')&&dropFrames.has('dew-drop'),'dew drop rendered and picked up, heal event (hp '+Math.round(hp0)+' → '+Math.round(run.player.hp)+')');
+  pickupKinds.clear();banners.delete(STRINGS.bannerWind);
+  run.drops.releaseAll();check(!!spawnDrop(run,'wind',run.player.x+40,run.player.y),'wind drop injected');
+  await runFor(v,8,true,()=>{},()=>pickupKinds.has('wind')&&farGone());
+  check(pickupKinds.has('wind')&&dropFrames.has('wind')&&banners.has(STRINGS.bannerWind),'wind drop rendered, picked up, banner shown');
+  check(farGone(),'wind pulled in far spores');
+  // 阶段 3d：进化卡
+  while(run.state==='levelup')run.choose(pick(run));
+  const sw=run.weapons.find((w:any)=>w.id==='spore_shot');sw.level=5;sw.evolved=false;
+  if(!(run.passives.cooldown>=1))run.passives.cooldown=1;run.stats=computeStats(PLAYER,run.bonuses,run.passives);
+  run.progression.pendingLevels+=1;
+  let evoHeld=0,evoMaxDc=0;
+  for(let i=0;i<240&&run.state!=='levelup';i++){run.player.hp=run.player.maxHp;await frame();sample(v)}
+  check(run.state==='levelup'&&run.offer[0].kind==='evolve'&&run.offer[0].id==='spore_shot','evolution card offered first ('+run.offer?.[0]?.kind+')');
+  for(let i=0;i<120&&evoHeld<36;i++){await frame();sample(v);if(v.hud.modal==='levelup'&&v.hud.unlocked){const dc=(director.root as any)?.device?.numDrawCalls||0;if(evoHeld>0)evoMaxDc=Math.max(evoMaxDc,dc);evoHeld++}}
+  check(v.hud.evolveShown===1,'gold evolution card shown in level-up modal');
+  check(evoHeld>0&&evoMaxDc>0&&evoMaxDc<=DRAWCALL_BUDGET,'evolution modal draw calls max '+evoMaxDc+' ≤ '+DRAWCALL_BUDGET);
+  maxModalDrawCalls=Math.max(maxModalDrawCalls,evoMaxDc);
+  run.choose(0);await runFor(v,1,true);
+  check(sw.evolved===true&&seen.has('evolved')&&v.hud.slotsShown.evolved>=1&&shotFrames.has('spore-shot-evo'),'spore_shot evolved, HUD slot marked, spore-shot-evo rendered');
   // 阶段 4：快进到 Boss 出现（7:00），真实时间 3 秒
   const bossAt=420;
   fastForward(run,()=>!!run.boss,60*300);check(!!run.boss&&run.boss.alive&&run.time>=bossAt-.1,'fast-forward to boss at '+run.time.toFixed(1)+'s');

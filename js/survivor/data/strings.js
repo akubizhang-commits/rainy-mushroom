@@ -45,6 +45,27 @@ export const STRINGS = Object.freeze({
   card_area_desc: '武器范围 +10%',
   card_speed: '蕨叶轻靴',
   card_speed_desc: '移动速度 +8%',
+  // S3 B1 被动（01 §7）
+  card_regen: '露水叶片',
+  card_regen_desc: '每秒回复 +0.4 生命',
+  card_magnet: '孢子罗盘',
+  card_magnet_desc: '拾取范围 +20%，孢子更容易飞过来',
+  // S3 B2/B5 进化卡（01 §6 进化行、§8.2 第 1 条金色边框）；键名 card_evolve_<武器 id>
+  cardEvolve: '进化',
+  slotEvolved: '进',
+  card_evolve_spore_shot: '孢子风暴',
+  card_evolve_spore_shot_desc: '一次射出 5 发孢子，分别追向最近的 5 个浊雾生灵',
+  card_evolve_umbrella_blades: '菌伞华盖',
+  card_evolve_umbrella_blades_desc: '6 片大菌伞绕身飞旋，转得更快、推得更远',
+  card_evolve_dew_ring: '晨露结界',
+  card_evolve_dew_ring_desc: '更大的晨露光环，圈内浊雾生灵大幅变慢',
+  card_evolve_raindrop: '骤雨',
+  card_evolve_raindrop_desc: '一次落下 8 颗大雨滴，不用瞄准，范围更大',
+  card_evolve_leaf_boomerang: '秋风叶舞',
+  card_evolve_leaf_boomerang_desc: '6 片落叶同时向四周掷出，去回都能净化浊雾生灵',
+  // S3 B4/B5 精英与拾取物横幅（01 §9、§11）
+  eliteWarning: '发光的精英甲虫闯进来了，小心它的冲撞',
+  bannerWind: '一阵林风，孢子都飞过来了',
   cardGenericDesc: '让你更强一点',
 
   // 结算

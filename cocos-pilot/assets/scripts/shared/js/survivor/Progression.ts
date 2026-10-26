@@ -6,12 +6,16 @@
 // - xpToNext(L) = floor(5 + 6(L − 1) + 0.15(L − 1)²) (01 §15.1 / §15.2 table).
 // - Banking xp can cross several level thresholds at once; each crossing enqueues one
 //   pending level-up. SurvivorRun pops the queue to drive the levelup state.
-// - draftOffer(state, rng) returns three cards following 01 §8.2 (S2 scope, 08 L4/K3):
+// - draftOffer(state, rng) returns three cards following 01 §8.2 / §8.3:
+//   evolution (S3 B2): a weapon at max level whose `evolvesWith` passive is owned (any level)
+//   and that has not evolved yet is evolvable; if any, card 1 is fixed to the evolution card
+//   of the earliest-acquired evolvable weapon (only one, no random numbers), the other two
+//   are drawn as usual. Evolved weapons never get upgrade cards again.
 //   candidate pool = upgrades of owned, non-maxed weapons/passives (weight 10) + every
 //   unowned weapon while weapon slots remain (8) + every unowned passive while passive
 //   slots remain (4, 08 K11). Only weapons with non-empty `levels` and passives present in
 //   data/passives.js qualify (S2: all five weapons, 08 K8 — with 4 weapon slots each run
-//   leaves one out; once 4 are owned no new-weapon card appears); no evolution cards in S2. Weighted draw without
+//   leaves one out; once 4 are owned no new-weapon card appears). Weighted draw without
 //   replacement; short pools are padded with fallback cards (一捧露水 / 闪亮孢子, may
 //   repeat). First level-up: at least one new-weapon card (首升保底). Pure, so tests
 //   can enumerate it.
@@ -74,7 +78,7 @@ export function draftCandidates(state) {
   for (const w of weapons) {
     owned.add(w.id)
     const def = WEAPONS[w.id]
-    if (!def || def.levels.length === 0) continue
+    if (!def || def.levels.length === 0 || w.evolved) continue
     if (w.level < def.levels.length) {
       out.push({ card: card('weapon', w.id, w.level + 1, false), weight: WEIGHT_UPGRADE })
     }
@@ -100,14 +104,35 @@ export function draftCandidates(state) {
   return out
 }
 
+// 01 §8.3: the earliest-acquired weapon (state.weapons order) that can evolve now, or null.
+// weapons entries are {id, level, evolved?}; passives is {id: level}.
+export function evolvableWeapon(weapons, passives) {
+  const p = passives || {}
+  for (const w of weapons || []) {
+    const def = WEAPONS[w.id]
+    if (!def || !def.evolved || w.evolved) continue
+    if (w.level < def.levels.length) continue
+    if (!(p[def.evolvesWith] >= 1)) continue
+    return w
+  }
+  return null
+}
+// Evolution card (01 §8.2 第 1 条，金色边框由表现层画). level = 进化档（满级 + 1）.
+export function evolveCard(id) {
+  const def = WEAPONS[id]
+  return Object.freeze({ kind: 'evolve', id, level: def.levels.length + 1, isNew: false, evolution: def.evolution })
+}
 // Build the three-card offer for the current pending level-up (see header). `state` is
 // as in draftCandidates plus `isFirstLevelUp`. Card shape:
-//   {kind:'weapon'|'passive', id, level, isNew, evolution:false} or a fallback card.
+//   {kind:'weapon'|'passive', id, level, isNew, evolution:false},
+//   {kind:'evolve', id (weapon id), level, isNew:false, evolution (evolved form id)} or a fallback card.
 // Without the first-level-up guarantee, offer[i] is the i-th weighted draw, so the
 // first card's type frequency follows the weight ratio.
 export function draftOffer(state, rng) {
   const pool = draftCandidates(state)
   const cards = []
+  const evo = evolvableWeapon(state.weapons, state.passives)
+  if (evo) cards.push(evolveCard(evo.id))
   if (state.isFirstLevelUp) {
     // 首升保底：先从新武器卡中抽 1 张（权重相同 → 均匀）。
     let best = -1

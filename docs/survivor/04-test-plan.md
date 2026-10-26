@@ -52,7 +52,7 @@
 |---|---|---|---|
 | R1 站桩 | `replay-idle` | 全程 (0,0)，总选第 0 张 | 结果 lost；summary 与金标准完全相等 |
 | R2 绕圈 | `replay-kite` | 半径约 200 的圆周切线 × 0.3 叠加 bot flee 斥力（纯圆周开环约 2:30 即被包围圈笼罩，到不了 300 秒），bot random 选卡 | summary 相等；第 60/180/300 秒的状态哈希相等 |
-| R3 完整通关 | `replay-win` | 机器人通关局的固化输入（S2 起） | outcome won、bossDefeated true、survivalSec ∈ [420, 600] 且与金标准相等 |
+| R3 完整通关 | `replay-win` | 机器人通关局的固化输入（S2 起；S3 B1–B4 后种子改为 `replay-win-3`，原种子 10:24 才通关） | outcome won、bossDefeated true、survivalSec ∈ [420, 600] 且与金标准相等 |
 | R4 暂停穿插 | `replay-kite` | 同 R2，在第 30、120 秒 pause/resume，levelup 中 pause/resume | 与 R2 结果完全相同（暂停不影响模拟） |
 | R5 帧率无关 | `replay-kite` | 同一输入，分别用 advance(1/60)、advance(1/30)、advance 随机 0–0.083 喂入 | 三者 summary 与状态哈希相同（输入按步而非按帧施加） |
 | R6 双次运行 | 任意 3 个种子 | 同输入运行两次（取前 3 分钟） | 逐步完全一致 |

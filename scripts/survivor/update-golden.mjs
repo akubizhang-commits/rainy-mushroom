@@ -83,9 +83,10 @@ if (args.includes('--inputs')) {
     '纯圆周开环输入约 2:30 就被包围圈笼罩，到不了 R2 要求的 300 秒哈希点，所以叠加 flee 斥力。',
   ], record('replay-kite', kite, 'random'))
   writeInputs('inputs-win.mjs', 'win', [
-    'R3 完整通关（04 §2.2）：bot.mjs 贴孢子型（spore）+ prefer:spore_shot 在种子 replay-win 上的通关局，',
+    'R3 完整通关（04 §2.2）：bot.mjs 贴孢子型（spore）+ prefer:spore_shot 在种子 replay-win-3 上的通关局，',
+    'S3 B1–B4 后原种子 replay-win 在 10:24 才通关（超出 R3 的 [420, 600]），改用 replay-win-3；',
     '每 6 步取一次方向、分量保留 3 位小数后固化。',
-  ], record('replay-win', (run) => steer(run, 'spore'), 'prefer:spore_shot'))
+  ], record('replay-win-3', (run) => steer(run, 'spore'), 'prefer:spore_shot'))
 }
 
 // 金标准：按输入脚本回放（与 tests/survivor-replay.test.mjs 同一驱动）。

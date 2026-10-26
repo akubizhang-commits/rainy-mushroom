@@ -13,7 +13,10 @@ import {
   WEIGHT_UPGRADE,
   WEIGHT_NEW_WEAPON,
   WEIGHT_NEW_PASSIVE,
+  evolvableWeapon,
 } from '../js/survivor/Progression.js'
+import { WEAPONS } from '../js/survivor/data/weapons.js'
+import { PASSIVES } from '../js/survivor/data/passives.js'
 
 test('xpToNext matches the 01 §15.2 sample table', () => {
   // | L | 升到 L+1 所需 |
@@ -72,7 +75,7 @@ test('draftOffer always returns three distinct non-fallback cards when the pool 
     assert.equal(new Set(offer.map(key)).size, 3, 'no duplicate card in one offer')
     for (const c of offer) {
       assert.ok(c.kind === 'weapon' || c.kind === 'passive')
-      assert.equal(c.evolution, false, 'S2 never offers evolution cards')
+      assert.equal(c.evolution, false, 'no evolution card without a Lv5 weapon')
     }
   }
 })
@@ -90,29 +93,33 @@ test('candidate pool follows 01 §8.2 weights and excludes out-of-scope content 
     assert.equal(byKey.get(`weapon:${id}`).card.isNew, true)
     assert.equal(byKey.get(`weapon:${id}`).card.level, 1)
   }
-  for (const id of ['cooldown', 'area', 'speed']) {
+  for (const id of ['cooldown', 'area', 'regen', 'speed', 'magnet']) {
     assert.equal(byKey.get(`passive:${id}`).weight, WEIGHT_NEW_PASSIVE)
   }
-  assert.equal(pool.length, 9)
+  assert.equal(pool.length, 11)
   assert.deepEqual([WEIGHT_UPGRADE, WEIGHT_NEW_WEAPON, WEIGHT_NEW_PASSIVE], [10, 8, 4]) // 08 K11：新被动 6 → 4
 })
 
-test('regen / magnet never appear in any offer; all five weapons do (08 K8)', () => {
-  const banned = new Set(['regen', 'magnet'])
+test('all six passives and all five weapons appear in offers; evolutions show up as builds mature (S3 B1/B2)', () => {
+  const passivesSeen = new Set()
   const weaponsSeen = new Set()
+  const evolvedSeen = new Set()
   const rng = new SeededRandom('banned')
   let state = START()
   for (let i = 0; i < 2000; i += 1) {
     const offer = draftOffer(state, rng)
     for (const c of offer) {
-      assert.ok(!banned.has(c.id), `offered ${c.id}`)
+      if (c.kind === 'passive') passivesSeen.add(c.id)
       if (c.kind === 'weapon') weaponsSeen.add(c.id)
+      if (c.kind === 'evolve') evolvedSeen.add(c.id)
     }
     if (i % 50 === 0) state = START()
     // Walk the build forward by taking the first card so later offers cover upgrades.
     state = applyForTest(state, offer[0])
   }
   assert.deepEqual([...weaponsSeen].sort(), ['dew_ring', 'leaf_boomerang', 'raindrop', 'spore_shot', 'umbrella_blades'])
+  assert.deepEqual([...passivesSeen].sort(), Object.keys(PASSIVES).sort())
+  assert.ok(evolvedSeen.size > 0, 'some evolution card appeared')
 })
 
 test('first level-up guarantees at least one new-weapon card (首升保底)', () => {
@@ -124,13 +131,14 @@ test('first level-up guarantees at least one new-weapon card (首升保底)', ()
 
 test('maxed weapons and passives no longer produce upgrade cards', () => {
   const state = {
-    weapons: [{ id: 'spore_shot', level: 5 }, { id: 'umbrella_blades', level: 5 }],
+    weapons: [{ id: 'spore_shot', level: 5 }, { id: 'umbrella_blades', level: 5, evolved: true }],
     passives: { might: 5, area: 2 },
     isFirstLevelUp: false,
   }
   const rng = new SeededRandom('maxed')
   for (let i = 0; i < 300; i += 1) {
     for (const c of draftOffer(state, rng)) {
+      assert.notEqual(c.kind, 'evolve', 'spore_shot lacks 湿润苔衣, umbrella already evolved')
       assert.notEqual(c.id, 'spore_shot')
       assert.notEqual(c.id, 'umbrella_blades')
       assert.notEqual(c.id, 'might')
@@ -159,7 +167,7 @@ test('full weapon slots stop new-weapon cards; full passive slots stop new-passi
 
 test('everything maxed → only fallback cards (兜底卡), still three of them', () => {
   const state = {
-    weapons: [{ id: 'spore_shot', level: 5 }, { id: 'umbrella_blades', level: 5 }, { id: 'dew_ring', level: 5 }, { id: 'raindrop', level: 5 }],
+    weapons: [{ id: 'spore_shot', level: 5, evolved: true }, { id: 'umbrella_blades', level: 5, evolved: true }, { id: 'dew_ring', level: 5 }, { id: 'raindrop', level: 5, evolved: true }],
     passives: { might: 5, cooldown: 5, area: 5, speed: 5 },
     isFirstLevelUp: false,
   }
@@ -175,7 +183,7 @@ test('everything maxed → only fallback cards (兜底卡), still three of them'
 
 test('one candidate left → it is offered and fallback cards fill the rest', () => {
   const state = {
-    weapons: [{ id: 'spore_shot', level: 4 }, { id: 'umbrella_blades', level: 5 }, { id: 'dew_ring', level: 5 }, { id: 'leaf_boomerang', level: 5 }],
+    weapons: [{ id: 'spore_shot', level: 4 }, { id: 'umbrella_blades', level: 5, evolved: true }, { id: 'dew_ring', level: 5 }, { id: 'leaf_boomerang', level: 5, evolved: true }],
     passives: { might: 5, cooldown: 5, area: 5, speed: 5 },
     isFirstLevelUp: false,
   }
@@ -186,9 +194,9 @@ test('one candidate left → it is offered and fallback cards fill the rest', ()
 })
 
 test('10 000 draws: first-card type frequency matches the weight ratio within 5%', () => {
-  // Pool: 1 upgrade (W_UP) + 4 new weapons (4 × W_NEW) + 4 new passives (4 × W_PAS).
-  const total = WEIGHT_UPGRADE + 4 * WEIGHT_NEW_WEAPON + 4 * WEIGHT_NEW_PASSIVE
-  const expected = { upgrade: WEIGHT_UPGRADE / total, newWeapon: (4 * WEIGHT_NEW_WEAPON) / total, newPassive: (4 * WEIGHT_NEW_PASSIVE) / total }
+  // Pool: 1 upgrade (W_UP) + 4 new weapons (4 × W_NEW) + 6 new passives (6 × W_PAS, S3 B1).
+  const total = WEIGHT_UPGRADE + 4 * WEIGHT_NEW_WEAPON + 6 * WEIGHT_NEW_PASSIVE
+  const expected = { upgrade: WEIGHT_UPGRADE / total, newWeapon: (4 * WEIGHT_NEW_WEAPON) / total, newPassive: (6 * WEIGHT_NEW_PASSIVE) / total }
   const counts = { upgrade: 0, newWeapon: 0, newPassive: 0 }
   const rng = new SeededRandom('freq')
   const N = 10000
@@ -202,9 +210,9 @@ test('10 000 draws: first-card type frequency matches the weight ratio within 5%
     const freq = counts[k] / N
     assert.ok(Math.abs(freq - expected[k]) / expected[k] < 0.05, `${k}: ${freq} vs ${expected[k]}`)
   }
-  // 01 §8.2 参考：10 / 32 / 16（共 58），单张抽到新被动约 28%。
-  assert.equal(total, 58)
-  assert.ok(Math.abs(counts.newPassive / N - 16 / 58) < 0.02, `新被动 ≈ 27.6% (got ${counts.newPassive / N})`)
+  // S3 B1 后开局：10 / 32 / 24（共 66），单张抽到新被动约 36%（01 §8.2 的 28% 是 4 被动时的参考）。
+  assert.equal(total, 66)
+  assert.ok(Math.abs(counts.newPassive / N - 24 / 66) < 0.02, `新被动 ≈ 36.4% (got ${counts.newPassive / N})`)
 })
 
 test('draftOffer is deterministic for the same seed and parameters', () => {
@@ -221,6 +229,8 @@ function applyForTest(state, c) {
     const w = weapons.find((x) => x.id === c.id)
     if (w) w.level = c.level
     else weapons.push({ id: c.id, level: 1 })
+  } else if (c.kind === 'evolve') {
+    weapons.find((x) => x.id === c.id).evolved = true
   } else if (c.kind === 'passive') {
     passives[c.id] = c.level
   }
@@ -280,4 +290,67 @@ test('walking random builds: never more than 4 weapons, and every run leaves exa
   }
   // Over many seeds each of the four non-starting weapons is sometimes the one left out.
   assert.deepEqual([...leftOut].sort(), ['dew_ring', 'leaf_boomerang', 'raindrop', 'umbrella_blades'])
+})
+
+// --- 进化（01 §8.2 第 1 条、§8.3，S3 B2） ---
+
+const maxed = (id, extra = {}) => ({ id, level: WEAPONS[id].levels.length, ...extra })
+
+test('evolution condition: weapon Lv5 AND its passive owned (any level); otherwise no evolution card', () => {
+  const rng = new SeededRandom('evo-cond')
+  for (const [id, w] of Object.entries(WEAPONS)) {
+    // Lv4 + passive Lv5 → no; Lv5 + no passive → no; Lv5 + other passives → no
+    const other = Object.keys(PASSIVES).find((p) => p !== w.evolvesWith)
+    const cases = [
+      { weapons: [{ id, level: 4 }], passives: { [w.evolvesWith]: 5 } },
+      { weapons: [maxed(id)], passives: {} },
+      { weapons: [maxed(id)], passives: { [other]: 5 } },
+      { weapons: [maxed(id, { evolved: true })], passives: { [w.evolvesWith]: 1 } },
+    ]
+    for (const st of cases) {
+      assert.equal(evolvableWeapon(st.weapons, st.passives), null, `${id} ${JSON.stringify(st)}`)
+      for (let i = 0; i < 50; i += 1) assert.ok(draftOffer({ ...st, isFirstLevelUp: false }, rng).every((c) => c.kind !== 'evolve'))
+    }
+    // Lv5 + passive Lv1 → evolution card is always first
+    const ok = { weapons: [maxed(id)], passives: { [w.evolvesWith]: 1 }, isFirstLevelUp: false }
+    assert.equal(evolvableWeapon(ok.weapons, ok.passives).id, id)
+    for (let i = 0; i < 50; i += 1) {
+      const offer = draftOffer(ok, rng)
+      assert.equal(offer.length, 3)
+      assert.deepEqual({ ...offer[0] }, { kind: 'evolve', id, level: 6, isNew: false, evolution: w.evolution })
+      assert.ok(offer.slice(1).every((c) => c.kind !== 'evolve'), 'only one evolution card')
+      assert.ok(!offer.slice(1).some((c) => c.kind === 'weapon' && c.id === id), 'no upgrade card for a maxed weapon')
+    }
+  }
+})
+
+test('two weapons evolvable at once → only the earliest acquired gets the card (mutual exclusion)', () => {
+  const rng = new SeededRandom('evo-two')
+  const a = { weapons: [{ id: 'spore_shot', level: 3 }, maxed('raindrop'), maxed('umbrella_blades')], passives: { might: 1, area: 2 }, isFirstLevelUp: false }
+  const b = { weapons: [{ id: 'spore_shot', level: 3 }, maxed('umbrella_blades'), maxed('raindrop')], passives: { might: 1, area: 2 }, isFirstLevelUp: false }
+  for (let i = 0; i < 200; i += 1) {
+    const oa = draftOffer(a, rng)
+    const ob = draftOffer(b, rng)
+    assert.equal(oa[0].id, 'raindrop')
+    assert.equal(ob[0].id, 'umbrella_blades')
+    assert.equal(oa.filter((c) => c.kind === 'evolve').length, 1)
+    assert.equal(ob.filter((c) => c.kind === 'evolve').length, 1)
+  }
+  // after the first evolves, the second becomes the evolution card
+  const after = { ...a, weapons: [a.weapons[0], maxed('raindrop', { evolved: true }), maxed('umbrella_blades')] }
+  assert.equal(draftOffer(after, rng)[0].id, 'umbrella_blades')
+})
+
+test('with an evolution card, the other two cards are distinct weighted draws from the normal pool', () => {
+  const evo = { weapons: [{ id: 'spore_shot', level: 2 }, maxed('dew_ring')], passives: { might: 1, regen: 1 }, isFirstLevelUp: false }
+  const pool = new Set(draftCandidates(evo).map((p) => key(p.card)))
+  assert.ok(!pool.has('weapon:dew_ring'), 'maxed weapon has no upgrade candidate')
+  const rng = new SeededRandom('evo-rest')
+  for (let i = 0; i < 300; i += 1) {
+    const offer = draftOffer(evo, rng)
+    assert.equal(offer[0].kind, 'evolve')
+    assert.equal(offer[0].id, 'dew_ring')
+    assert.equal(new Set(offer.slice(1).map(key)).size, 2)
+    for (const c of offer.slice(1)) assert.ok(pool.has(key(c)), key(c))
+  }
 })

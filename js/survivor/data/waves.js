@@ -18,7 +18,9 @@
 //           the rest spawn in k order (no random numbers; count = slots − skip.length)
 //   cross — `count` × `enemy` in a vertical column (`spacing` apart) just outside one
 //           side of the screen, flying straight across; recycled silently on exit
-//   elite — 5:00 精英; `optional: true` means the spawner skips it (S2 未实现)
+//   elite — 5:00 精英（S3 B4）：`count` × `enemy` on the spawn circle (random angle, off-screen).
+//           Obeys the global hard cap; when the field is full the spawn waits until a slot
+//           frees up. `optional: true` would make the spawner skip an event (none left).
 //
 // `boss` (01 §9.2): 6:58 发 bossWarning（atSec − warningSec），7:00 在角色正上方屏外生成。
 //
@@ -93,8 +95,8 @@ export const WAVES = Object.freeze({
     Object.freeze({ atSec: 150, type: 'ring', enemy: 'gnat', count: 24, radius: 350 }),
     // 4:30 灰蛾横穿
     Object.freeze({ atSec: 270, type: 'cross', enemy: 'moth', count: 16, spacing: 48 }),
-    // 5:00 精英圆壳甲虫 ×1（S2 可选，未实现）
-    Object.freeze({ atSec: 300, type: 'elite', enemy: 'elite_beetle', count: 1, optional: true }),
+    // 5:00 精英圆壳甲虫 ×1（S3 B4）
+    Object.freeze({ atSec: 300, type: 'elite', enemy: 'elite_beetle', count: 1 }),
     // 6:30 蜗牛围墙（08 K12：14 只 + 朝向缺口，规则见文件头 ring.gap）
     Object.freeze({
       atSec: 390,

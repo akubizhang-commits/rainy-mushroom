@@ -21,7 +21,7 @@ export const LIMITS = Object.freeze({
     mistBubbles: 60,    // S3-D1：40 → 60
     raindropZones: 16,
     spores: 250,
-    pickups: 5,
+    pickups: 5,         // 露珠（≤3）+ 林风（≤1）+ 大露珠（不计上限，用剩下的槽，data/pickups.js）
   }),
   nodes: Object.freeze({
     enemies: 160,       // 03 §6.2 渲染节点池（视口剔除后）

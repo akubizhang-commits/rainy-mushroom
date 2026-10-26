@@ -1,26 +1,28 @@
 {
   "idle": {
     "seed": "replay-idle",
-    "steps": 3079,
-    "levelUps": 3,
+    "steps": 2415,
+    "levelUps": 2,
     "summary": {
       "outcome": "lost",
-      "survivalSec": 51.29999999999837,
-      "purified": 55,
-      "level": 4,
+      "survivalSec": 40.23333333333233,
+      "purified": 40,
+      "level": 3,
       "weapons": [
         {
           "id": "spore_shot",
-          "level": 1
+          "level": 1,
+          "evolved": false
         },
         {
           "id": "dew_ring",
-          "level": 2
+          "level": 1,
+          "evolved": false
         }
       ],
       "passives": [
         {
-          "id": "area",
+          "id": "speed",
           "level": 1
         }
       ],
@@ -33,42 +35,50 @@
   },
   "kite": {
     "seed": "replay-kite",
-    "steps": 22466,
-    "levelUps": 17,
+    "steps": 36000,
+    "levelUps": 24,
     "summary": {
-      "outcome": "lost",
-      "survivalSec": 374.4166666666548,
-      "purified": 943,
-      "level": 18,
+      "outcome": "",
+      "survivalSec": 599.999999999783,
+      "purified": 1545,
+      "level": 25,
       "weapons": [
         {
           "id": "spore_shot",
-          "level": 4
+          "level": 4,
+          "evolved": false
         },
         {
           "id": "dew_ring",
-          "level": 3
+          "level": 5,
+          "evolved": true
         },
         {
           "id": "raindrop",
-          "level": 3
+          "level": 2,
+          "evolved": false
         },
         {
-          "id": "leaf_boomerang",
-          "level": 1
+          "id": "umbrella_blades",
+          "level": 4,
+          "evolved": false
         }
       ],
       "passives": [
         {
-          "id": "area",
-          "level": 5
+          "id": "regen",
+          "level": 2
+        },
+        {
+          "id": "magnet",
+          "level": 3
         },
         {
           "id": "speed",
-          "level": 1
+          "level": 3
         },
         {
-          "id": "cooldown",
+          "id": "might",
           "level": 1
         }
       ],
@@ -76,56 +86,60 @@
       "bossDefeated": false,
       "shinyCards": 0,
       "abandoned": false,
-      "killer": "mist_bubble"
+      "killer": "snail"
     },
     "hashes": {
-      "3600": "82dde8b8",
-      "10800": "6437c202",
-      "18000": "16be00ed"
+      "3600": "972e6ad3",
+      "10800": "bf480d23",
+      "18000": "f99e1487"
     }
   },
   "win": {
-    "seed": "replay-win",
-    "steps": 29141,
+    "seed": "replay-win-3",
+    "steps": 28450,
     "levelUps": 26,
     "summary": {
       "outcome": "won",
-      "survivalSec": 485.6833333332203,
-      "purified": 1477,
+      "survivalSec": 474.1666666665641,
+      "purified": 1444,
       "level": 27,
       "weapons": [
         {
           "id": "spore_shot",
-          "level": 5
+          "level": 5,
+          "evolved": false
         },
         {
           "id": "umbrella_blades",
-          "level": 5
-        },
-        {
-          "id": "leaf_boomerang",
-          "level": 5
+          "level": 5,
+          "evolved": false
         },
         {
           "id": "raindrop",
-          "level": 5
+          "level": 5,
+          "evolved": false
+        },
+        {
+          "id": "dew_ring",
+          "level": 5,
+          "evolved": false
         }
       ],
       "passives": [
         {
           "id": "might",
-          "level": 2
-        },
-        {
-          "id": "speed",
-          "level": 3
+          "level": 4
         },
         {
           "id": "cooldown",
+          "level": 1
+        },
+        {
+          "id": "area",
           "level": 2
         }
       ],
-      "eliteDefeated": 0,
+      "eliteDefeated": 1,
       "bossDefeated": true,
       "shinyCards": 0,
       "abandoned": false,

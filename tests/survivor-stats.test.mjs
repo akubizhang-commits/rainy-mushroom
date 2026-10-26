@@ -37,9 +37,12 @@ test('移动速度 = 160 × (1 + 局外轻灵蕨步) × (1 + 蕨叶轻靴): Lv1 
   assert.ok(Math.abs(lv5.moveSpeed - 160 * 1.1 * 1.4) < 1e-9)
 })
 
-test('拾取半径 = 140 × (1 + 局外孢子亲和)（孢子罗盘 S2 未做，项为 0）', () => {
+test('拾取半径 = 140 × (1 + 局外孢子亲和) × (1 + 孢子罗盘): Lv1 +20%, Lv5 +100% (S3 B1)', () => {
+  assert.ok(Math.abs(computeStats(PLAYER, null, { magnet: 1 }).pickupRadius - 140 * 1.2) < 1e-9)
+  assert.ok(Math.abs(computeStats(PLAYER, null, { magnet: 5 }).pickupRadius - 280) < 1e-9)
   const s = computeStats(PLAYER, { pickup: 0.25 }, { magnet: 3 })
-  assert.ok(Math.abs(s.pickupRadius - 140 * 1.25) < 1e-9)
+  assert.ok(Math.abs(s.pickupRadius - 140 * 1.25 * 1.6) < 1e-9)
+  assert.ok(Math.abs(computeStats(PLAYER, { pickup: 0.45 }, { magnet: 9 }).pickupRadius - 140 * 1.45 * 2) < 1e-9, 'level clamps to Lv5')
 })
 
 test('实际冷却 = base × max(0.5, 1 − 湿润苔衣): Lv1 0.92, Lv5 0.6, never below 0.5', () => {
@@ -60,8 +63,11 @@ test('实际范围 = base × (1 + 宽檐菌帽): Lv1 1.1, Lv5 1.5', () => {
   assert.ok(Math.abs(computeStats(PLAYER, null, { area: 5 }).areaMul - 1.5) < 1e-9)
 })
 
-test('生命回复/秒 = 局外露水祝福（露水叶片 S2 未做，项为 0）', () => {
-  assert.ok(Math.abs(computeStats(PLAYER, { regen: 0.2 }, { regen: 5 }).regenPerSec - 0.2) < 1e-9)
+test('生命回复/秒 = 局外露水祝福 + 露水叶片: Lv1 0.4, Lv5 2.0 (S3 B1)', () => {
+  assert.ok(Math.abs(computeStats(PLAYER, null, { regen: 1 }).regenPerSec - 0.4) < 1e-9)
+  assert.ok(Math.abs(computeStats(PLAYER, null, { regen: 5 }).regenPerSec - 2.0) < 1e-9)
+  assert.ok(Math.abs(computeStats(PLAYER, { regen: 0.2 }, { regen: 5 }).regenPerSec - 2.2) < 1e-9)
+  assert.ok(Math.abs(computeStats(PLAYER, { regen: 0.6 }, {}).regenPerSec - 0.6) < 1e-9)
 })
 
 test('passiveTerms sums every passive at its level and ignores unknown/invalid entries', () => {
@@ -70,8 +76,9 @@ test('passiveTerms sums every passive at its level and ignores unknown/invalid e
   assert.ok(Math.abs(t.cooldown - 0.24) < 1e-9)
   assert.ok(Math.abs(t.area - 0.4) < 1e-9)
   assert.ok(Math.abs(t.moveSpeed - 0.4) < 1e-9)
-  assert.equal(t.pickup, 0)
+  assert.ok(Math.abs(t.pickup - 0.4) < 1e-9, 'magnet Lv2')
   assert.equal(t.regen, 0)
+  assert.ok(Math.abs(passiveTerms({ regen: 3 }).regen - 1.2) < 1e-9)
   const z = passiveTerms({ might: 0, area: -3, speed: NaN })
   assert.deepEqual(z, { might: 0, cooldown: 0, area: 0, moveSpeed: 0, pickup: 0, regen: 0 })
 })

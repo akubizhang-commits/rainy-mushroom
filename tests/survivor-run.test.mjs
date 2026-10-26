@@ -140,7 +140,7 @@ test('first level-up offers a new weapon; picking it adds a second weapon slot',
   assert.equal(run.weapons[0].id, 'spore_shot')
   assert.equal(run.weapons[1].id, id)
   assert.equal(run.weapons[1].level, 1)
-  assert.deepEqual(run.summary().weapons, [{ id: 'spore_shot', level: 1 }, { id, level: 1 }])
+  assert.deepEqual(run.summary().weapons, [{ id: 'spore_shot', level: 1, evolved: false }, { id, level: 1, evolved: false }])
 })
 
 test('weapon upgrade / passive cards update the right slot and recompute stats', () => {
@@ -190,8 +190,9 @@ test('speed passive changes the player displacement per step', () => {
 
 test('summary lists every equipped weapon and passive', () => {
   const run = newRun()
-  assert.deepEqual(run.summary().weapons, [{ id: 'spore_shot', level: 1 }])
+  assert.deepEqual(run.summary().weapons, [{ id: 'spore_shot', level: 1, evolved: false }])
   assert.deepEqual(run.summary().passives, [])
+  assert.equal(run.summary().eliteDefeated, 0)
 })
 
 test('hp reaching 0 transitions to lost with a killer recorded', () => {
@@ -266,8 +267,8 @@ test('pickup radius 140 (08 K18): a spore at 139 is attracted, one at 141 is not
 })
 test('diag splits capSkipped (designed cap skips) from dropped (pool full) (08 L11)', () => {
   const run = newRun()
-  assert.deepEqual({ ...run.diag.capSkipped }, { enemies: 0 })
-  assert.deepEqual({ ...run.diag.dropped }, { enemies: 0, shots: 0, bubbles: 0, zones: 0 })
+  assert.deepEqual({ ...run.diag.capSkipped }, { enemies: 0, pickups: 0 })
+  assert.deepEqual({ ...run.diag.dropped }, { enemies: 0, shots: 0, bubbles: 0, zones: 0, pickups: 0 })
   run.weapons = [] // nothing dies: the 0:00–1:00 cap (30) fills up
   for (let i = 0; i < 40 * 60; i += 1) {
     run.player.hp = run.player.maxHp
@@ -282,4 +283,84 @@ test('drainEvents returns and clears the event queue', () => {
   const drained = run.drainEvents()
   assert.equal(drained.length, 1)
   assert.equal(run.events.length, 0)
+})
+
+// --- S3 B1 露水叶片回血 / B2 进化 ---
+
+test('露水叶片: Lv1 heals 0.4 once per second, Lv5 2.0 (+局外露水祝福), never above max hp', () => {
+  const run = newRun()
+  run.weapons = []
+  run.spawner.step = () => {}
+  run._applyCard({ kind: 'passive', id: 'regen', level: 1, isNew: true })
+  assert.ok(Math.abs(run.stats.regenPerSec - 0.4) < 1e-9)
+  run.player.hp = 50
+  for (let i = 0; i < 60 * 3; i += 1) run.step()
+  assert.ok(Math.abs(run.player.hp - 51.2) < 1e-9, `3 s → +1.2 (got ${run.player.hp})`)
+  for (let lv = 2; lv <= 5; lv += 1) run._applyCard({ kind: 'passive', id: 'regen', level: lv, isNew: false })
+  assert.ok(Math.abs(run.stats.regenPerSec - 2.0) < 1e-9)
+  run.player.hp = run.player.maxHp - 1
+  for (let i = 0; i < 60 * 2; i += 1) run.step()
+  assert.equal(run.player.hp, run.player.maxHp, 'clamped')
+  const withPerm = newRun({ bonuses: { regen: 0.2 } })
+  withPerm._applyCard({ kind: 'passive', id: 'regen', level: 1, isNew: true })
+  assert.ok(Math.abs(withPerm.stats.regenPerSec - 0.6) < 1e-9)
+})
+
+test('孢子罗盘 enlarges the live pickup radius (140 × 1.2 at Lv1)', () => {
+  const run = newRun()
+  run._applyCard({ kind: 'passive', id: 'magnet', level: 1, isNew: true })
+  assert.ok(Math.abs(run.stats.pickupRadius - 168) < 1e-9)
+})
+
+test('evolution: Lv5 weapon + its passive → next level-up card 1 is the evolution; choosing it swaps the tier in place', () => {
+  const run = newRun()
+  run._applyCard({ kind: 'weapon', id: 'dew_ring', level: 1, isNew: true })
+  run.weapons[0].level = 5 // spore_shot Lv5, no 湿润苔衣 → not evolvable
+  run.weapons[1].level = 5
+  run._applyCard({ kind: 'passive', id: 'regen', level: 1, isNew: true })
+  levelUpOnce(run)
+  assert.equal(run.offer[0].kind, 'evolve')
+  assert.equal(run.offer[0].id, 'dew_ring')
+  assert.equal(run.offer[0].evolution, 'dawn_dew_ward')
+  assert.equal(run.offer.filter((c) => c.kind === 'evolve').length, 1)
+  run.choose(0)
+  assert.equal(run.weapons.length, 2, 'occupies its own slot')
+  assert.equal(run.weapons[1].id, 'dew_ring')
+  assert.equal(run.weapons[1].evolved, true)
+  assert.equal(run.passives.regen, 1, 'passive kept')
+  assert.ok(run.drainEvents().some((e) => e.type === 'evolved' && e.id === 'dew_ring'))
+  assert.deepEqual(run.summary().weapons[1], { id: 'dew_ring', level: 5, evolved: true })
+  // Never an upgrade or evolution card for it again.
+  for (let i = 0; i < 40; i += 1) {
+    levelUpOnce(run)
+    assert.ok(!run.offer.some((c) => c.id === 'dew_ring'), 'no dew_ring card after evolving')
+    run.choose(0)
+  }
+  // The live weapon now uses the 晨露结界 tier.
+  run.spawner.step = () => {}
+  run.enemies.releaseAll()
+  run.step()
+  assert.ok(Math.abs(run.weapons[1].ringR - 145 * run.stats.areaMul) < 1e-9)
+})
+
+test('an evolution card chosen after its condition broke does nothing (defensive)', () => {
+  const run = newRun()
+  run.weapons[0].level = 5
+  run._applyCard({ kind: 'evolve', id: 'spore_shot', level: 6, isNew: false, evolution: 'spore_storm' })
+  assert.equal(run.weapons[0].evolved, false, 'no 湿润苔衣 → no evolution')
+  run._applyCard({ kind: 'passive', id: 'cooldown', level: 1, isNew: true })
+  run._applyCard({ kind: 'evolve', id: 'spore_shot', level: 6, isNew: false, evolution: 'spore_storm' })
+  assert.equal(run.weapons[0].evolved, true)
+})
+
+test('six passives draftable, but once 4 are owned no new-passive card appears in a run', () => {
+  const run = newRun()
+  for (const id of ['might', 'regen', 'magnet', 'speed']) run._applyCard({ kind: 'passive', id, level: 1, isNew: true })
+  run._applyCard({ kind: 'passive', id: 'area', level: 1, isNew: true })
+  assert.deepEqual(Object.keys(run.passives), ['might', 'regen', 'magnet', 'speed'], '5th passive refused')
+  for (let i = 0; i < 30; i += 1) {
+    levelUpOnce(run)
+    assert.ok(!run.offer.some((c) => c.kind === 'passive' && c.isNew))
+    run.choose(0)
+  }
 })

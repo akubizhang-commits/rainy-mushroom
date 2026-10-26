@@ -18,7 +18,7 @@ test('PERF-01 满载单步 ≤ 2 ms、8 分钟堆增长 ≤ 5 MB（survivor:benc
   assert.equal(f.weapons.length, 5)
   assert.ok(Number.isFinite(f.avgStepMs) && f.avgStepMs > 0)
   assert.ok(f.avgStepMs <= out.thresholds.avgStepMs, `平均单步 ${f.avgStepMs} ms ≤ 2 ms`)
-  assert.deepEqual(f.dropped, { enemies: 0, shots: 0, bubbles: 0, zones: 0 })
+  assert.deepEqual(f.dropped, { enemies: 0, shots: 0, bubbles: 0, zones: 0, pickups: 0 })
   const m = out.run8min
   assert.ok(m.simSec >= 480, `跑满 8 分钟模拟（${m.simSec}s）`)
   assert.ok(m.heapGrowthBytes <= out.thresholds.heapGrowthBytes, `8 分钟堆增长 ${m.heapGrowthBytes} B ≤ 5 MB`)

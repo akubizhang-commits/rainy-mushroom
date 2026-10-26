@@ -24,7 +24,7 @@ export function fnv1a(str) {
 const q = (v) => Math.round(v * 1000) // 坐标 / 数值 ×1000 取整
 
 // 04 §2.2-3：time、玩家位置与生命、每个活跃敌人 kind/x/y/hp（按池稠密表顺序）、
-// 孢子总经验、等级、武器档位。
+// 孢子总经验、等级、武器档位（进化档记 e，S3 B2）、拾取物（kind/x/y，S3 B3）。
 export function stateHash(run) {
   const parts = [`t${q(run.time)}`, `p${q(run.player.x)},${q(run.player.y)},${q(run.player.hp)}`]
   const en = run.enemies
@@ -35,7 +35,11 @@ export function stateHash(run) {
   let sporeXp = 0
   for (let i = 0; i < run.spores.count; i += 1) sporeXp += run.spores.active[i].xp
   parts.push(`sx${q(sporeXp)}`, `lv${run.progression.level}`)
-  for (const w of run.weapons) parts.push(`w${w.id}${w.level}`)
+  for (const w of run.weapons) parts.push(`w${w.id}${w.level}${w.evolved ? 'e' : ''}`)
+  for (let i = 0; i < run.drops.count; i += 1) {
+    const d = run.drops.active[i]
+    parts.push(`d${d.kind}:${q(d.x)}:${q(d.y)}`)
+  }
   return fnv1a(parts.join('|'))
 }
 

@@ -5,7 +5,11 @@
 //
 // Behaviours (01 §9, 03 §3.8): gnat / beetle / snail chase in a straight line; moth
 // chases with a perpendicular sway; sporeling approaches to range and spits mist
-// bubbles; 4:30 cross moths fly straight and are recycled silently off-screen. The
+// bubbles; 4:30 cross moths fly straight and are recycled silently off-screen; the 5:00
+// elite (behavior 'charge', S3 B4) chases and every chargeEvery seconds (start-to-start,
+// counted from its spawn) stands still for chargeWindup seconds with the direction locked
+// toward the player at windup start (eliteCharge event), then dashes chargeDuration seconds
+// at ×chargeSpeedMul — the same windup / lock pattern as the Boss charge (Boss.js). The
 // Boss (behavior 'boss') is skipped here and driven by Boss.js.
 // Knockback impulses from projectiles decay here; separation pushes overlapping
 // neighbours apart using the spatial grid (≤6 neighbours, 03 §3.6).
@@ -34,10 +38,12 @@ export function makeEnemy() {
     contactCooldown: 0, // per-enemy gate so one enemy hurts the player ≤ once / invuln window
     slow: 0,   // movement slow ratio [0,1); cleared each step 4, re-set by auras (max of sources)
     hitAt: new Float64Array(5), // per weapon index: earliest time this weapon may hit again (03 §3.5)
-    behavior: 'chase', // chase | sway | ranged | cross (data/enemies.js; cross = 4:30 event)
+    behavior: 'chase', // chase | sway | ranged | cross | charge (data/enemies.js; cross = 4:30 event)
     age: 0,    // seconds since spawn (moth sway phase)
-    timer: 0,  // ranged: fire cooldown left; cross: lifetime left
-    dirX: 0,   // cross: fixed flight direction
+    timer: 0,  // ranged: fire cooldown left; cross: lifetime left; charge: seconds to next windup
+    phase: 0,  // charge: 0 chase, 1 windup (still, dir locked), 2 dash
+    phaseLeft: 0, // charge: seconds left in windup / dash
+    dirX: 0,   // cross: fixed flight direction; charge: locked dash direction
     dirY: 0,
     limit: 0,  // cross: recycle once dirX·(x − player.x) exceeds this (screen half-width + margin)
     takenMul: 1, // damage-taken multiplier; only the Boss changes it (01 §9.2 超时兜底)
@@ -67,6 +73,8 @@ export function resetEnemy(enemy, spec) {
   enemy.behavior = spec.behavior || 'chase'
   enemy.age = 0
   enemy.timer = spec.timer || 0
+  enemy.phase = 0
+  enemy.phaseLeft = 0
   enemy.dirX = spec.dirX || 0
   enemy.dirY = spec.dirY || 0
   enemy.limit = spec.limit || 0
@@ -114,6 +122,42 @@ export function stepEnemyBehavior(world, dt) {
       const lateral = def.swayAmplitude * omega * Math.cos(omega * e.age) * (1 - slow)
       vx = ux * speed - uy * lateral
       vy = uy * speed + ux * lateral
+    } else if (e.behavior === 'charge' && def) {
+      // 精英冲撞（01 §9）：chase → windup（原地、锁向）→ dash（×chargeSpeedMul）→ chase。
+      e.timer -= dt
+      if (e.phase === 1) {
+        vx = 0
+        vy = 0
+        e.kbX = 0 // 蓄力期间不被击退挪动
+        e.kbY = 0
+        e.phaseLeft -= dt
+        if (e.phaseLeft <= 1e-9) {
+          e.phase = 2
+          e.phaseLeft = def.chargeDuration
+        }
+      } else if (e.phase === 2) {
+        vx = e.dirX * speed * def.chargeSpeedMul
+        vy = e.dirY * speed * def.chargeSpeedMul
+        e.phaseLeft -= dt
+        if (e.phaseLeft <= 1e-9) {
+          e.phase = 0
+          e.phaseLeft = 0
+        }
+      } else if (e.timer <= 1e-9) {
+        e.timer += def.chargeEvery
+        e.phase = 1
+        e.phaseLeft = def.chargeWindup
+        e.dirX = ux
+        e.dirY = uy
+        vx = 0
+        vy = 0
+        e.kbX = 0
+        e.kbY = 0
+        world.events.push({ type: 'eliteCharge', dx: ux, dy: uy })
+      } else {
+        vx = ux * speed
+        vy = uy * speed
+      }
     } else if (e.behavior === 'ranged' && def) {
       // Approach while farther than approachRange, otherwise hold position; spit a
       // mist bubble every fireInterval while within fireRange (01 §9 迷途菌灵).

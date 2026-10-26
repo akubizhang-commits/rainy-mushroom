@@ -8,6 +8,7 @@ import { ENEMIES } from '../js/survivor/data/enemies.js'
 import { WAVES } from '../js/survivor/data/waves.js'
 import { LIMITS } from '../js/survivor/data/limits.js'
 import { STRINGS } from '../js/survivor/data/strings.js'
+import { PICKUPS } from '../js/survivor/data/pickups.js'
 import { validate } from '../js/survivor/data/validate.js'
 
 test('validate() returns an empty array for the shipped data', () => {
@@ -33,8 +34,9 @@ test('spore_shot five levels match the 01-gdd §6.1 table item by item', () => {
   // 进化：孢子风暴（01 §6.1）
   assert.deepEqual(
     { ...WEAPONS.spore_shot.evolved },
-    { name: '孢子风暴', damage: 22, cooldown: 0.6, count: 5, pierce: 3, speed: 480, knockback: 15, life: 1.2 },
+    { name: '孢子风暴', damage: 22, cooldown: 0.6, count: 5, pierce: 3, speed: 480, knockback: 15, life: 1.2, multiTarget: true },
   )
+  assert.deepEqual([WEAPONS.spore_shot.evolvesWith, WEAPONS.spore_shot.evolution], ['cooldown', 'spore_storm'])
 })
 
 test('umbrella_blades five levels match the 01-gdd §6.2 table', () => {
@@ -51,7 +53,9 @@ test('umbrella_blades five levels match the 01-gdd §6.2 table', () => {
   assert.equal(w.levels.length, 5)
   rows.forEach((row, i) => fields.forEach((f, j) => assert.equal(w.levels[i][f], row[j], `Lv${i + 1} ${f}`)))
   assert.equal(w.bladeRadius, 16)
-  assert.equal(w.evolved, null, 'S2 不做进化')
+  // 进化：菌伞华盖（01 §6.2），宽檐菌帽解锁
+  assert.deepEqual({ ...w.evolved }, { name: '菌伞华盖', damage: 24, count: 6, orbitRadius: 110, angularSpeedDeg: 240, hitInterval: 0.4, knockback: 40 })
+  assert.equal(w.evolvesWith, 'area')
 })
 
 test('dew_ring five levels match the 01-gdd §6.3 table', () => {
@@ -68,9 +72,10 @@ test('dew_ring five levels match the 01-gdd §6.3 table', () => {
   const w = WEAPONS.dew_ring
   assert.equal(w.levels.length, 5)
   rows.forEach((row, i) => fields.forEach((f, j) => assert.equal(w.levels[i][f], row[j], `Lv${i + 1} ${f}`)))
-  assert.equal(w.evolved, null, 'S2 不做进化')
+  // 进化：晨露结界（01 §6.3），露水叶片解锁
+  assert.deepEqual({ ...w.evolved }, { name: '晨露结界', damage: 16, radius: 145, interval: 0.5, slow: 0.4 })
+  assert.equal(w.evolvesWith, 'regen')
 })
-
 test('raindrop five levels match the 01-gdd §6.4 table (08 K8)', () => {
   // 伤害/落点数/落点半径/冷却/击退
   const rows = [
@@ -86,9 +91,11 @@ test('raindrop five levels match the 01-gdd §6.4 table (08 K8)', () => {
   rows.forEach((row, i) => fields.forEach((f, j) => assert.equal(w.levels[i][f], row[j], `Lv${i + 1} ${f}`)))
   // 01 §6.4 文字规则：400 范围选敌、阴影 0.4 秒、无敌人时 150–300 随机落点
   assert.deepEqual([w.range, w.warnSec, w.fallbackMin, w.fallbackMax], [400, 0.4, 150, 300])
-  assert.equal(w.evolved, null, 'S2 不做进化')
+  // 进化：骤雨（01 §6.4），晨光菌丝解锁
+  assert.deepEqual({ ...w.evolved }, { name: '骤雨', damage: 45, count: 8, radius: 70, cooldown: 1.4, knockback: 20 })
+  assert.equal(w.evolvesWith, 'might')
   assert.equal(w.placeholder, undefined)
-  assert.ok(Math.max(...w.levels.map((l) => l.count)) <= LIMITS.pools.raindropZones)
+  assert.ok(Math.max(...w.levels.map((l) => l.count), w.evolved.count) <= LIMITS.pools.raindropZones)
 })
 
 test('leaf_boomerang five levels match the 01-gdd §6.5 table (08 K8)', () => {
@@ -106,7 +113,9 @@ test('leaf_boomerang five levels match the 01-gdd §6.5 table (08 K8)', () => {
   assert.equal(w.levels.length, 5)
   rows.forEach((row, i) => fields.forEach((f, j) => assert.equal(w.levels[i][f], row[j], `Lv${i + 1} ${f}`)))
   assert.equal(w.spreadDeg, 25, '多片 25° 扇形')
-  assert.equal(w.evolved, null, 'S2 不做进化')
+  // 进化：秋风叶舞（01 §6.5），蕨叶轻靴解锁；6 片 60° 间隔向四周（radial）
+  assert.deepEqual({ ...w.evolved }, { name: '秋风叶舞', damage: 36, count: 6, maxDistance: 360, speed: 420, cooldown: 1.4, knockback: 35, radial: true })
+  assert.equal(w.evolvesWith, 'speed')
   assert.equal(w.placeholder, undefined)
 })
 
@@ -130,9 +139,9 @@ test('new weapon cards have names and descriptions in strings (card_<id>)', () =
   }
 })
 
-test('passives match 01-gdd §7: per-level effect and Lv5 total; regen/magnet absent in S2', () => {
-  const expected = { might: [0.1, 'might'], cooldown: [0.08, 'cooldown'], area: [0.1, 'area'], speed: [0.08, 'moveSpeed'] }
-  assert.deepEqual(Object.keys(PASSIVES).sort(), Object.keys(expected).sort())
+test('passives match 01-gdd §7: per-level effect and Lv5 total, all six in table order (S3 B1)', () => {
+  const expected = { might: [0.1, 'might'], cooldown: [0.08, 'cooldown'], area: [0.1, 'area'], regen: [0.4, 'regen'], speed: [0.08, 'moveSpeed'], magnet: [0.2, 'pickup'] }
+  assert.deepEqual(Object.keys(PASSIVES), Object.keys(expected))
   for (const [id, [per, stat]] of Object.entries(expected)) {
     const p = PASSIVES[id]
     assert.equal(p.perLevel, per, `${id} perLevel`)
@@ -144,8 +153,38 @@ test('passives match 01-gdd §7: per-level effect and Lv5 total; regen/magnet ab
   assert.equal(PASSIVES.cooldown.levels[4], 0.4)
   assert.equal(PASSIVES.area.levels[4], 0.5)
   assert.equal(PASSIVES.speed.levels[4], 0.4)
-  assert.equal(PASSIVES.regen, undefined)
-  assert.equal(PASSIVES.magnet, undefined)
+  assert.equal(PASSIVES.regen.levels[4], 2.0, '露水叶片 Lv5 +2.0/秒')
+  assert.equal(PASSIVES.magnet.levels[4], 1.0, '孢子罗盘 Lv5 +100%')
+  assert.equal(PASSIVES.regen.name, '露水叶片')
+  assert.equal(PASSIVES.magnet.name, '孢子罗盘')
+})
+test('every weapon evolves with an existing passive; 孢子罗盘 unlocks nothing (01 §7)', () => {
+  const pairs = Object.fromEntries(Object.entries(WEAPONS).map(([id, w]) => [id, w.evolvesWith]))
+  assert.deepEqual(pairs, { spore_shot: 'cooldown', umbrella_blades: 'area', dew_ring: 'regen', raindrop: 'might', leaf_boomerang: 'speed' })
+  for (const w of Object.values(WEAPONS)) {
+    assert.ok(PASSIVES[w.evolvesWith])
+    assert.ok(w.evolved && typeof w.evolved.name === 'string')
+  }
+  assert.ok(!Object.values(pairs).includes('magnet'))
+})
+test('evolution / passive / elite strings exist (card_evolve_<id>, card_regen, card_magnet)', () => {
+  for (const [id, w] of Object.entries(WEAPONS)) {
+    assert.equal(STRINGS[`card_evolve_${id}`], w.evolved.name, `card_evolve_${id}`)
+    assert.ok(STRINGS[`card_evolve_${id}_desc`].length > 0)
+  }
+  for (const id of ['regen', 'magnet']) {
+    assert.equal(STRINGS[`card_${id}`], PASSIVES[id].name)
+    assert.ok(STRINGS[`card_${id}_desc`].length > 0)
+  }
+  for (const k of ['cardEvolve', 'slotEvolved', 'eliteWarning', 'bannerWind']) assert.ok(STRINGS[k].length > 0, k)
+})
+test('pickups follow 01-gdd §11 (S3 B3)', () => {
+  assert.deepEqual([PICKUPS.dew.heal, PICKUPS.dew.chance, PICKUPS.dew.cap, PICKUPS.dew.lifeSec], [20, 0.008, 3, 30])
+  assert.deepEqual([PICKUPS.bigDew.heal, PICKUPS.bigDew.cap], [50, null])
+  assert.deepEqual([PICKUPS.wind.chance, PICKUPS.wind.cap, PICKUPS.wind.lifeSec], [0.0015, 1, 30])
+  assert.deepEqual([...PICKUPS.eliteDrops], ['bigDew', 'wind'])
+  assert.equal(LIMITS.pools.pickups, 5)
+  assert.equal(LIMITS.hardCaps.pickups, 5)
 })
 
 test('all enemies match 01-gdd §9 table: hp/moveSpeed/damage/xp/radius/kbRes/firstSeen', () => {
@@ -302,8 +341,8 @@ test('wave events follow 01-gdd §10 and reference known enemies', () => {
   assert.deepEqual([wall.type, wall.enemy, wall.count, wall.radius], ['ring', 'snail', 14, 400])
   assert.deepEqual({ ...wall.gap, skip: [...wall.gap.skip] }, { slots: 16, skip: [0, 15], anchor: 'facing' })
   const elite = events.find((e) => e.atSec === 300)
-  assert.equal(elite.enemy, 'elite_beetle')
-  assert.equal(elite.optional, true, '精英未实现，保持 optional')
+  assert.deepEqual({ ...elite }, { atSec: 300, type: 'elite', enemy: 'elite_beetle', count: 1 }, 'S3 B4：5:00 精英必做')
+  assert.ok(events.every((e) => !e.optional), '没有可选事件')
 })
 
 test('waves.winAtSeconds is removed: timed victory is a debug option only (08 K1)', () => {
@@ -311,7 +350,7 @@ test('waves.winAtSeconds is removed: timed victory is a debug option only (08 K1
 })
 
 test('all data modules survive a JSON round-trip', () => {
-  for (const mod of [PLAYER, WEAPONS, PASSIVES, ENEMIES, WAVES, LIMITS, STRINGS]) {
+  for (const mod of [PLAYER, WEAPONS, PASSIVES, ENEMIES, WAVES, LIMITS, STRINGS, PICKUPS]) {
     assert.deepEqual(JSON.parse(JSON.stringify(mod)), mod)
   }
 })
@@ -336,7 +375,7 @@ test('player-facing strings pass the compliance word-list scan', () => {
 })
 
 test('data modules are frozen', () => {
-  for (const mod of [PLAYER, WEAPONS, PASSIVES, ENEMIES, WAVES, LIMITS, STRINGS]) {
+  for (const mod of [PLAYER, WEAPONS, PASSIVES, ENEMIES, WAVES, LIMITS, STRINGS, PICKUPS]) {
     assert.ok(Object.isFrozen(mod))
   }
 })

@@ -35,8 +35,8 @@ function readBonuses(bonuses) {
 
 // In-run passive terms from the passive level map `{id: level}` (run.passives, 08 L2).
 // Each passive's cumulative bonus at level L is PASSIVES[id].levels[L-1] (01 §7 线性叠加);
-// levels are clamped to [0, levels.length], unknown ids are ignored. regen / magnet are
-// not in data/passives.js in S2, so their terms stay 0.
+// levels are clamped to [0, levels.length], unknown ids are ignored. regen（露水叶片）adds
+// to 局外露水祝福, magnet（孢子罗盘）multiplies the pickup radius (S3 B1, 01 §15.1).
 export function passiveTerms(passives) {
   const out = { might: 0, cooldown: 0, area: 0, moveSpeed: 0, pickup: 0, regen: 0 }
   const p = passives || {}

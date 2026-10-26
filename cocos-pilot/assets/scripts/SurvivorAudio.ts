@@ -69,7 +69,9 @@ export class SurvivorAudio{
    case 'levelUp':this.play('levelup');break;
    case 'bossWarning':this.play('boss_warn');break;
    case 'bossSpawn':this.play('boss_appear');break;
-   case 'bossCharge':this.play('boss_charge');break;
+   case 'bossCharge':case 'eliteCharge':this.play('boss_charge');break;
+   case 'eliteSpawn':this.play('boss_warn');break;
+   case 'evolved':this.play('levelup');break;
    case 'won':this.play('win');break;
   }
  }

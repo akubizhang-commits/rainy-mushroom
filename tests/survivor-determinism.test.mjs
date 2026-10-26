@@ -59,6 +59,11 @@ function stateHash(run) {
     const sp = run.spores.active[i]
     parts.push(`sp${sp.uid}:${sp.x.toFixed(6)}:${sp.y.toFixed(6)}:${sp.xp}`)
   }
+  for (let i = 0; i < run.drops.count; i += 1) {
+    const d = run.drops.active[i]
+    parts.push(`d${d.uid}:${d.kind}:${d.x.toFixed(6)}:${d.y.toFixed(6)}:${d.life.toFixed(6)}`)
+  }
+  for (const w of run.weapons) parts.push(`w${w.id}:${w.level}:${w.evolved}`)
   return fnv1a(parts.join('|'))
 }
 
@@ -216,4 +221,36 @@ test('no js/survivor source uses a non-deterministic or platform API', () => {
       assert.ok(!pattern.test(code), `${file} matches forbidden API ${pattern}`)
     }
   }
+})
+
+test('evolutions, the 5:00 elite and drops are reproducible (S3 B1–B4)', () => {
+  const play = (seed) => {
+    const run = new SurvivorRun({ seed, viewport: { width: 720, height: 1560 } })
+    // Fast-track two evolvable weapons so evolution cards show up early.
+    run._applyCard({ kind: 'weapon', id: 'leaf_boomerang', level: 1, isNew: true })
+    run.weapons[0].level = 5
+    run.weapons[1].level = 5
+    run._applyCard({ kind: 'passive', id: 'cooldown', level: 1, isNew: true })
+    run._applyCard({ kind: 'passive', id: 'speed', level: 1, isNew: true })
+    run._applyCard({ kind: 'passive', id: 'magnet', level: 1, isNew: true })
+    const hashes = []
+    const seen = new Set()
+    for (let i = 0; i < 320 * 60; i += 1) {
+      run.setInput(Math.cos(i / 90), Math.sin(i / 120))
+      if (run.state === 'levelup') run.choose(0)
+      run.player.hp = run.player.maxHp
+      if (run.state === 'playing') run.step()
+      for (const ev of run.drainEvents()) seen.add(ev.type)
+      if ((i + 1) % 60 === 0) hashes.push(stateHash(run))
+      if (run.state === 'won' || run.state === 'lost') break
+    }
+    return { hashes, summary: run.summary(), seen, diag: JSON.stringify(run.diag) }
+  }
+  const a = play('s3-det')
+  const b = play('s3-det')
+  for (const t of ['evolved', 'eliteSpawn']) assert.ok(a.seen.has(t), `${t} happened`)
+  assert.ok(a.summary.weapons.filter((w) => w.evolved).length === 2, 'both weapons evolved')
+  assert.deepEqual(a.hashes, b.hashes)
+  assert.deepEqual(a.summary, b.summary)
+  assert.equal(a.diag, b.diag)
 })

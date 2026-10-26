@@ -16,6 +16,12 @@
 // dew_ring (01 §6.3): radius × area; every `interval × cooldown` seconds damages every
 //   enemy inside; enemies inside get slow = max(slow, level slow) each step (enemy step
 //   clears it, so leaving the ring restores speed immediately); no knockback.
+// Evolution (S3 B2, 01 §8.3): once state.evolved is true every weapon reads its `evolved`
+// tier from data/weapons.js instead of Lv5 (tierOf). Same mechanics as Lv5 and still scaled
+// by might / cooldown / area; the only extra rules are the ones 01 spells out:
+//   孢子风暴 (multiTarget) — each shot locks one of the nearest distinct enemies, surplus
+//     shots aim at the nearest; 秋风叶舞 (radial) — leaves go out 360°/count apart around the
+//     player (fan centred on +x), independent of facing.
 
 import { WEAPONS } from './data/weapons.js'
 import { actualDamage, actualCooldown, hitDamage } from './Stats.js'
@@ -124,12 +130,25 @@ export const sporeShot = {
       state.cooldown -= dt
       return
     }
-    const lvl = WEAPONS.spore_shot.levels[clampLevel('spore_shot', state.level)]
+    const lvl = tierOf('spore_shot', state)
     const might = world.stats.might
     const damage = actualDamage(lvl.damage, might)
-    const baseAngle = Math.atan2(target.y - world.player.y, target.x - world.player.x)
-    const spreadRad = (WEAPONS.spore_shot.spreadDeg || 0) * DEG
-    const angles = fanAngles(baseAngle, lvl.count, spreadRad, world.weaponAngleBuf)
+    const px = world.player.x
+    const py = world.player.y
+    const angles = world.weaponAngleBuf
+    if (lvl.multiTarget) {
+      // 孢子风暴：k 个最近的不同敌人各一发，不足时剩余发数打向最近者（01 §6.1）。
+      const targets = world.targetBuf || (world.targetBuf = [])
+      const found = nearestEnemies(world.enemies, px, py, lvl.count, targets)
+      for (let i = 0; i < lvl.count; i += 1) {
+        const e = i < found ? targets[i] : targets[0]
+        angles[i] = Math.atan2(e.y - py, e.x - px)
+      }
+    } else {
+      const baseAngle = Math.atan2(target.y - py, target.x - px)
+      const spreadRad = (WEAPONS.spore_shot.spreadDeg || 0) * DEG
+      fanAngles(baseAngle, lvl.count, spreadRad, angles)
+    }
     let fired = 0
     for (let i = 0; i < lvl.count; i += 1) {
       const shot = world.shots.acquire()
@@ -162,6 +181,39 @@ function clampLevel(id, level) {
   if (level > max) return max - 1
   return level - 1
 }
+// Current tier parameters of an equipped weapon: the evolved tier once evolved (01 §8.3),
+// otherwise the (clamped) level row.
+export function tierOf(id, state) {
+  const def = WEAPONS[id]
+  if (state.evolved && def.evolved) return def.evolved
+  return def.levels[clampLevel(id, state.level)]
+}
+// The `k` nearest living enemies to (px, py), nearest first, written into `out`; returns how
+// many were found (≤ k). Insertion into a k-long sorted list over enemies.active (≤202), so
+// ties resolve to the earlier active-table index (deterministic) and nothing is allocated
+// once `out` has grown to k.
+const nearDist = new Float64Array(16)
+export function nearestEnemies(enemies, px, py, k, out) {
+  let n = 0
+  for (let i = 0; i < enemies.count; i += 1) {
+    const e = enemies.active[i]
+    if (e.hp <= 0) continue
+    const dx = e.x - px
+    const dy = e.y - py
+    const d = dx * dx + dy * dy
+    if (n === k && d >= nearDist[n - 1]) continue
+    let j = n < k ? n : k - 1
+    if (n < k) n += 1
+    while (j > 0 && nearDist[j - 1] > d) {
+      nearDist[j] = nearDist[j - 1]
+      out[j] = out[j - 1]
+      j -= 1
+    }
+    nearDist[j] = d
+    out[j] = e
+  }
+  return n
+}
 
 // Runtime state for one equipped weapon (run.weapons entry). All fields exist up front
 // so no weapon allocates during the step loop. bladeX/bladeY/bladeCount/bladeR and
@@ -171,6 +223,7 @@ export function makeWeaponState(id, level = 1) {
   return {
     id,
     level,
+    evolved: false, // 01 §8.3: true once the evolution card was chosen (tier = data evolved)
     cooldown: 0, // spore_shot: seconds until next volley; dew_ring: seconds until next pulse
     bladeCount: 0,
     bladeR: 0,
@@ -217,7 +270,7 @@ export const umbrellaBlades = {
   index: WEAPONS.umbrella_blades.index,
   tick(world, state) {
     const def = WEAPONS.umbrella_blades
-    const lvl = def.levels[clampLevel('umbrella_blades', state.level)]
+    const lvl = tierOf('umbrella_blades', state)
     const area = world.stats.areaMul
     const orbit = lvl.orbitRadius * area
     const bladeR = def.bladeRadius * area
@@ -263,7 +316,7 @@ export const dewRing = {
   id: 'dew_ring',
   index: WEAPONS.dew_ring.index,
   tick(world, state, dt) {
-    const lvl = WEAPONS.dew_ring.levels[clampLevel('dew_ring', state.level)]
+    const lvl = tierOf('dew_ring', state)
     const r = lvl.radius * world.stats.areaMul
     state.ringR = r
     const t = world.time
@@ -301,7 +354,7 @@ export const raindrop = {
       if (state.cooldown > 0) return
     }
     const def = WEAPONS.raindrop
-    const lvl = def.levels[clampLevel('raindrop', state.level)]
+    const lvl = tierOf('raindrop', state)
     const rng = world.weaponRng
     const px = world.player.x
     const py = world.player.y
@@ -374,12 +427,18 @@ export const leafBoomerang = {
       if (state.cooldown > 0) return
     }
     const def = WEAPONS.leaf_boomerang
-    const lvl = def.levels[clampLevel('leaf_boomerang', state.level)]
+    const lvl = tierOf('leaf_boomerang', state)
     const p = world.player
-    const fx = Number.isFinite(p.dirX) ? p.dirX : 0
-    const fy = Number.isFinite(p.dirY) ? p.dirY : -1
-    const base = Math.atan2(fy, fx)
-    const angles = fanAngles(base, lvl.count, def.spreadDeg * DEG, world.weaponAngleBuf)
+    let angles
+    if (lvl.radial) {
+      // 秋风叶舞：360°/片数 间隔向四周掷出，不依赖朝向（01 §6.5）。
+      angles = fanAngles(0, lvl.count, (2 * Math.PI) / lvl.count, world.weaponAngleBuf)
+    } else {
+      const fx = Number.isFinite(p.dirX) ? p.dirX : 0
+      const fy = Number.isFinite(p.dirY) ? p.dirY : -1
+      const base = Math.atan2(fy, fx)
+      angles = fanAngles(base, lvl.count, def.spreadDeg * DEG, world.weaponAngleBuf)
+    }
     const damage = actualDamage(lvl.damage, world.stats.might)
     const distance = lvl.maxDistance * world.stats.areaMul
     let fired = 0

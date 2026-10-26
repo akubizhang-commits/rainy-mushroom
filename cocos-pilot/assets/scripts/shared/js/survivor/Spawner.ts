@@ -8,14 +8,16 @@
 //   (03 §1-2), at a random angle from the `spawn` sub-stream, centred on the player.
 // - Composition is drawn by weight from the active wave segment (percent weights).
 // - On-screen cap: never exceed the segment cap or the enemy pool capacity.
-// - Timed events (WAVES.events: 2:30 ring, 4:30 cross, 6:30 snail wall) fire once each
-//   and obey the global hard cap of 200 (01 §10). A ring with `gap` (6:30 wall, 08 K12)
+// - Timed events (WAVES.events: 2:30 ring, 4:30 cross, 5:00 elite, 6:30 snail wall) fire
+//   once each and obey the global hard cap of 200 (01 §10). The 5:00 elite (S3 B4) spawns
+//   on the spawn circle at a random angle; if the field is at the hard cap it waits
+//   (pendingElites) and spawns on the first step with a free slot, so it is never lost. A ring with `gap` (6:30 wall, 08 K12)
 //   anchors its slots on the player's facing and consumes no random numbers.
 // - Diagnostics (08 L11 / OBS-1): spawns skipped because the segment cap or the global
 //   hard cap is full are designed behaviour → diag.capSkipped.enemies; only a full
 //   enemy pool (03 §10) counts as diag.dropped.enemies.
 // - Enemies that drift beyond max(900, spawnRadius + 120) are relocated back onto the
-//   spawn circle around the player (03 §1-2, §3.8).
+//   spawn circle around the player (03 §1-2, §3.8). Elites and the Boss are exempt (01 §9).
 
 import { ENEMIES } from './data/enemies'
 import { WAVES } from './data/waves'
@@ -81,6 +83,7 @@ export class Spawner {
     this.rng = rng
     this.accumulator = 0
     this.nextEvent = 0 // index into WAVES.events; each event fires once
+    this.pendingElites = [] // elite events waiting for a free slot under the hard cap
   }
 
   // One step. `world` provides: time, player, enemies (Pool), diag.
@@ -88,6 +91,7 @@ export class Spawner {
     this._relocate(world)
     const minute = Math.floor(world.time / 60) // 01 §9.1: whole minutes
     this._events(world, minute)
+    this._pendingElites(world, minute)
     const seg = segmentAt(world.time)
     if (!seg) {
       // Past a closed last segment: no routine spawns, but relocation above still
@@ -141,6 +145,8 @@ export class Spawner {
           const a = start + (TWO_PI * i) / ev.count
           if (!this._spawnEvent(world, ev.enemy, minute, { x: px + Math.cos(a) * ev.radius, y: py + Math.sin(a) * ev.radius })) break
         }
+      } else if (ev.type === 'elite') {
+        for (let i = 0; i < ev.count; i += 1) this.pendingElites.push(ev.enemy)
       } else if (ev.type === 'cross') {
         // A vertical column just outside one side of the screen, flying straight across.
         const dir = this.rng.next() < 0.5 ? 1 : -1
@@ -152,6 +158,26 @@ export class Spawner {
           if (!this._spawnEvent(world, ev.enemy, minute, { x: px - dir * limit, y, behavior: 'cross', dirX: dir, dirY: 0, limit, timer: life })) break
         }
       }
+    }
+  }
+
+  // 5:00 精英（01 §9 / §10）：hard cap 满时顺延到有空位；生成在屏外刷怪圆上的随机角度，
+  // 生命 / 伤害按生成时的分钟 m 成长（01 §9.1）。One random number per spawned elite.
+  _pendingElites(world, minute) {
+    const queue = this.pendingElites
+    while (queue.length > 0) {
+      if (normalEnemyCount(world) >= LIMITS.hardCaps.enemies) return
+      const id = queue[0]
+      const angle = this.rng.next() * TWO_PI
+      const ok = this._spawnOne(world, id, minute, {
+        x: world.player.x + Math.cos(angle) * this.spawnRadius,
+        y: world.player.y + Math.sin(angle) * this.spawnRadius,
+        timer: ENEMIES[id].chargeEvery,
+      })
+      if (!ok) return // pool full (counted in diag.dropped): retry next step
+      queue.shift()
+      const e = world.enemies.active[world.enemies.count - 1]
+      world.events.push({ type: 'eliteSpawn', x: e.x, y: e.y })
     }
   }
 
@@ -215,7 +241,7 @@ export class Spawner {
     const maxD2 = this.relocateDistance * this.relocateDistance
     for (let i = 0; i < enemies.count; i += 1) {
       const e = enemies.active[i]
-      if (e.behavior === 'cross' || e.behavior === 'boss') continue
+      if (e.behavior === 'cross' || e.behavior === 'boss' || e.behavior === 'charge') continue
       const dx = e.x - px
       const dy = e.y - py
       if (dx * dx + dy * dy <= maxD2) continue

@@ -242,3 +242,85 @@ test('cross moths are exempt from far-distance relocation', () => {
   spawner.step(world, DT)
   assert.equal(e.x, 5000)
 })
+
+// --- 5:00 精英圆壳甲虫冲撞（01 §9，S3 B4） ---
+
+test('elite chases at 80, then every 5 s: 0.8 s windup standing still with the direction locked, 1 s dash at ×2.5', () => {
+  const world = makeWorld()
+  world.events = []
+  const def = ENEMIES.elite_beetle
+  const e = spawn(world, 'elite_beetle', 0, -2000, { timer: def.chargeEvery })
+  const steps = (sec) => Math.round(sec / DT)
+  // Chase for 5 s at 80/s.
+  for (let i = 0; i < steps(5) - 1; i += 1) stepEnemyBehavior(world, DT)
+  assert.equal(e.phase, 0)
+  assert.ok(Math.abs(e.y - (-2000 + 80 * (steps(5) - 1) * DT)) < 1e-6)
+  stepEnemyBehavior(world, DT) // t = 5 s → windup starts
+  assert.equal(e.phase, 1)
+  const charge = world.events.filter((ev) => ev.type === 'eliteCharge')
+  assert.equal(charge.length, 1)
+  assert.ok(Math.abs(charge[0].dx) < 1e-12 && Math.abs(charge[0].dy - 1) < 1e-12, 'locked toward the player')
+  // The player moves sideways during the windup: the elite does not move and the lock stays.
+  const x0 = e.x
+  const y0 = e.y
+  for (let i = 0; i < steps(0.8) - 1; i += 1) {
+    world.player.x += 3
+    stepEnemyBehavior(world, DT)
+    assert.equal(e.phase, 1)
+    assert.deepEqual([e.x, e.y], [x0, y0], 'no movement during windup')
+  }
+  assert.deepEqual([e.dirX, e.dirY], [charge[0].dx, charge[0].dy])
+  stepEnemyBehavior(world, DT)
+  assert.equal(e.phase, 2, 'dash after 0.8 s')
+  // Dash 1 s along the locked direction at 80 × 2.5 = 200/s.
+  const yd = e.y
+  for (let i = 0; i < steps(1) - 1; i += 1) stepEnemyBehavior(world, DT)
+  assert.ok(Math.abs(e.x - x0) < 1e-9, 'straight along the lock even though the player moved')
+  assert.ok(Math.abs(e.y - (yd + 200 * (steps(1) - 1) * DT)) < 1e-6)
+  stepEnemyBehavior(world, DT)
+  assert.equal(e.phase, 0, 'back to chase after 1 s')
+  // Next windup 5 s after the previous one started (start-to-start).
+  let more = 0
+  for (let i = 0; i < steps(5 - 1.8) - 1; i += 1) stepEnemyBehavior(world, DT)
+  more = world.events.filter((ev) => ev.type === 'eliteCharge').length
+  assert.equal(more, 1)
+  stepEnemyBehavior(world, DT)
+  assert.equal(world.events.filter((ev) => ev.type === 'eliteCharge').length, 2)
+})
+
+test('elite in a full run: spawned at 5:00 exactly once, never relocated, defeat drops loot and counts eliteDefeated', () => {
+  const run = new SurvivorRun({ seed: 'elite-run', viewport: { width: 720, height: 1560 } })
+  run.weapons = []
+  let spawned = 0
+  let elite = null
+  while (run.time < 300 + 1) {
+    run.player.hp = run.player.maxHp
+    run.step()
+    for (const ev of run.drainEvents()) if (ev.type === 'eliteSpawn') spawned += 1
+    if (run.state === 'levelup') run.choose(0)
+  }
+  assert.equal(spawned, 1)
+  for (let i = 0; i < run.enemies.count; i += 1) if (run.enemies.active[i].kind === 'elite_beetle') elite = run.enemies.active[i]
+  assert.ok(elite, 'elite on the field')
+  assert.ok(Math.abs(elite.maxHp - 1500 * (1 + 0.15 * 5)) < 1e-9)
+  // Teleport the player far away: the elite is not relocated.
+  run.player.x += 5000
+  const ex = elite.x
+  run.step()
+  run.drainEvents()
+  assert.ok(Math.abs(elite.x - ex) < 200 * DT + 1e-6, 'moved at most one dash step, no relocation jump')
+  run.player.x -= 5000
+  elite.hp = 0
+  run.step()
+  assert.equal(run.summary().eliteDefeated, 1)
+  assert.ok(run.drops.active.slice(0, run.drops.count).some((d) => d.kind === 'bigDew'))
+  assert.ok(run.drops.active.slice(0, run.drops.count).some((d) => d.kind === 'wind'))
+  // Still exactly one elite over the rest of the minute.
+  while (run.time < 360) {
+    run.player.hp = run.player.maxHp
+    run.step()
+    for (const ev of run.drainEvents()) if (ev.type === 'eliteSpawn') spawned += 1
+    if (run.state === 'levelup') run.choose(0)
+  }
+  assert.equal(spawned, 1)
+})

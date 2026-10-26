@@ -17,15 +17,17 @@ export const HUD_TOP_RESERVED=300;
 const SLOT=44,SLOT_GAP=6,SLOTS=4,BOSS_W=560;
 export const mmss=(sec:number)=>{const s=Math.max(0,Math.floor(sec));return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')};
 export type HudHandlers={pause():void,choose(i:number):void,resume():void,toggle(key:string):void,quit():void,abandon():void,cancelQuit():void,again():void,camp():void};
-type BuildItem={id:string,level:number};
+type BuildItem={id:string,level:number,evolved?:boolean};
 export type ResultInfo={won:boolean,survivalSec:number,purified:number,level:number,earned:any,newRecord:boolean,saveWarning:string,bossDefeated:boolean,weapons:BuildItem[],passives:BuildItem[]};
 type Banner={text:string,sec:number,tone:'boss'|'sun',t:number};
 const S=STRINGS as any;
 // 武器/被动名称：孢子弹沿用 S1 键，其余按 card_<id>，缺失时显示 id
 const nameOf=(id:string)=>id==='spore_shot'?STRINGS.cardSporeShot:(S['card_'+id]||id);
+// 进化后的武器名（S3 B5，card_evolve_<武器 id>）
+const evoNameOf=(id:string)=>S['card_evolve_'+id]||nameOf(id);
 const passivesOf=(p:any):BuildItem[]=>Object.keys(p||{}).map(id=>({id,level:p[id]}));
 export class SurvivorHud{
- root:Node;modal:string|null=null;raindropHint=false;
+ root:Node;modal:string|null=null;raindropHint=false;evolveShown=0;
  private hud:Node|null=null;private modalNode:Node|null=null;private xpFill:Node|null=null;private xpShown=0;
  private levelLabel:Label|null=null;private timeLabel:Label|null=null;private purifiedLabel:Label|null=null;private vignette:UIOpacity|null=null;private tutorial:Node[]=[];
  private frame:Graphics|null=null;private text:Node|null=null;private slotLabels:Label[]=[];private slotKey=-1;private slotItems:{weapons:BuildItem[],passives:BuildItem[]}={weapons:[],passives:[]};
@@ -61,9 +63,11 @@ export class SurvivorHud{
   const fs=size>=64?32:24;
   for(let i=0;i<SLOTS;i++){
    const x=x0+i*(size+gap)+size/2,it=items[i];
-   if(it)this.rounded(g,x-size/2,y-size/2,size,size,kind==='weapon'?WEAPON:PASSIVE,null,size*.2);
+   // 进化武器（01 §12 进化标识）：金底 + 暖白描边，格内为进化名首字，右下角“进”
+   const evo=!!it?.evolved;
+   if(it)this.rounded(g,x-size/2,y-size/2,size,size,evo?GOLD:kind==='weapon'?WEAPON:PASSIVE,evo?TEXT:null,size*.2,3);
    else this.rounded(g,x-size/2,y-size/2,size,size,EMPTY,EMPTY_EDGE,size*.2,2);
-   const ch=it?nameOf(it.id).slice(0,1):'',lv=it?String(it.level):'';
+   const ch=it?(evo?evoNameOf(it.id):nameOf(it.id)).slice(0,1):'',lv=it?(evo?STRINGS.slotEvolved:String(it.level)):'';
    if(labels){labels[i*2].string=ch;labels[i*2+1].string=lv}
    else if(it){this.label(ch,text,x-size*.1,y+size*.06,size*.8,size*.8,fs,PRIMARY_TEXT,Label.HorizontalAlign.CENTER,true);this.label(lv,text,x+size*.3,y-size*.22,size*.45,32,24,PRIMARY_TEXT,Label.HorizontalAlign.CENTER,true)}
   }
@@ -143,6 +147,8 @@ export class SurvivorHud{
   else if(e.type==='bossEnrage')this.showBanner(e.stage===1?STRINGS.bannerBossEnrage1:e.stage===2?STRINGS.bannerBossEnrage2:STRINGS.bannerBossErosion,2,'boss');
   else if(e.type==='cleansing'){this.clearBanners();this.showBanner(STRINGS.bannerCleansing,WAVES.extraction.cleansingSec,'sun')}
   else if(e.type==='extractionOpen')this.showBanner(STRINGS.bannerExtractOpen,2.5,'sun');
+  else if(e.type==='eliteSpawn')this.showBanner(STRINGS.eliteWarning,2,'boss');
+  else if(e.type==='pickup'&&e.kind==='wind')this.showBanner(STRINGS.bannerWind,1.5,'sun');
   else if(e.type==='won'||e.type==='lost')this.clearBanners();
  }
  private showBanner(text:string,sec:number,tone:'boss'|'sun'){const b={text,sec,tone,t:0};if(this.banner&&isFinite(this.banner.sec))this.bannerQueue.push(b);else this.startBanner(b)}
@@ -163,11 +169,11 @@ export class SurvivorHud{
   this.lowHp=run.player.hp<run.player.maxHp*.3;if(this.hurtFade>0)this.hurtFade=Math.max(0,this.hurtFade-dt);
   const a=Math.max(this.lowHp?.25:0,this.hurtPeak*(this.hurtFade/.25));this.vignette!.opacity=Math.round(255*a);
   // 武器/被动栏：等级只增不减，签名 = 武器等级和 + 1000 × 被动等级和；只在选卡后变化
-  let key=0;for(const w of run.weapons)key+=w.level;for(const id in run.passives)key+=1000*run.passives[id];
+  let key=0;for(const w of run.weapons)key+=w.level+(w.evolved?100000:0);for(const id in run.passives)key+=1000*run.passives[id];
   // Boss 血条：出现后显示，被净化后收起
   const b=run.boss,showBoss=!!b&&b.alive;
   if(key!==this.slotKey||showBoss!==this.bossShown){
-   this.slotKey=key;this.bossShown=showBoss;this.slotItems={weapons:run.weapons.slice(0,SLOTS).map((w:any)=>({id:w.id,level:w.level})),passives:passivesOf(run.passives).slice(0,SLOTS)};
+   this.slotKey=key;this.bossShown=showBoss;this.slotItems={weapons:run.weapons.slice(0,SLOTS).map((w:any)=>({id:w.id,level:w.level,evolved:!!w.evolved})),passives:passivesOf(run.passives).slice(0,SLOTS)};
    this.boss!.active=showBoss;for(const n of this.bossText)n.active=showBoss;this.drawFrame();
   }
   if(showBoss){
@@ -179,7 +185,7 @@ export class SurvivorHud{
   }
   // 包围圈 / 横穿 / 围墙（WAVES.events）：Spawner.nextEvent 前进即事件已触发；重建 HUD 时不重放
   const fired=run.spawner?.nextEvent||0;if(this.waveSeen<0)this.waveSeen=fired;
-  while(this.waveSeen<fired){const ev:any=WAVES.events[this.waveSeen++];if(!ev||ev.optional)continue;this.showBanner(ev.type==='cross'?STRINGS.bannerEventCross:ev.gap?STRINGS.bannerEventWall:STRINGS.bannerEventRing,2,'boss')}
+  while(this.waveSeen<fired){const ev:any=WAVES.events[this.waveSeen++];if(!ev||ev.optional||ev.type==='elite')continue;this.showBanner(ev.type==='cross'?STRINGS.bannerEventCross:ev.gap?STRINGS.bannerEventWall:STRINGS.bannerEventRing,2,'boss')}
   // 横幅：淡入 0.2 秒、淡出 0.3 秒；extract 阶段队列空时常驻撤离提示
   const state=run.state;
   if(this.banner&&!isFinite(this.banner.sec)&&(state!=='extract'||this.bannerQueue.length))this.startBanner(null);
@@ -193,7 +199,7 @@ export class SurvivorHud{
   }
  }
  // 冒烟读取：HUD 栏位显示数、Boss 血条是否可见
- get slotsShown(){return {weapons:this.slotItems.weapons.length,passives:this.slotItems.passives.length}}
+ get slotsShown(){return {weapons:this.slotItems.weapons.length,passives:this.slotItems.passives.length,evolved:this.slotItems.weapons.filter(w=>w.evolved).length}}
  get bossBarVisible(){return !!this.boss&&this.boss.active&&this.bossShown}
  get bannerText(){return this.banner?.text||''}
  // ---------- 模态框 ----------
@@ -206,18 +212,19 @@ export class SurvivorHud{
   const m=this.openModal('levelup',.6),cardH=200,gap=24,mid=(this.top+this.bottom)/2,y0=mid+cardH+gap-20;
   const backs=this.node('backs',m,this.width,this.height),text=this.node('text',m,this.width,this.height);
   this.label(`${STRINGS.levelUpTitle} · Lv ${level}`,text,0,y0+cardH/2+90,640,64,44,TEXT,Label.HorizontalAlign.CENTER,true);
-  this.raindropHint=first&&offer.some((c:any)=>c.kind==='weapon'&&c.id==='raindrop');
+  this.raindropHint=first&&offer.some((c:any)=>c.kind==='weapon'&&c.id==='raindrop');this.evolveShown=offer.filter((c:any)=>c.kind==='evolve').length;
   if(first)this.label(STRINGS.levelUpHintFirst,text,0,y0+cardH/2+40,640,40,28,TEXT2,Label.HorizontalAlign.CENTER,true);
   const cards:Node[][]=[];
   offer.forEach((card,i)=>{
    // 卡片类型（02 §4.4，色盲可读：颜色 + 文字标签）：新武器 / 新被动 →“新武器/新被动”青绿；升级 → Lv a→b（武器金 / 被动绿）；兜底 →“补给”水蓝
-   const build=card.kind==='weapon'||card.kind==='passive',weapon=card.kind==='weapon',spore=card.id==='spore_shot';
+   // 进化卡（01 §8.2 第 1 条，S3 B5）：金色粗边框 + “进化”标签 + 进化名与说明；与其它卡同一 Graphics / text 层，不增加批次
+   const evolve=card.kind==='evolve',build=card.kind==='weapon'||card.kind==='passive',weapon=card.kind==='weapon',spore=card.id==='spore_shot';
    const bName=nameOf(card.id),bDesc=spore?STRINGS.cardSporeShotDesc:(S['card_'+card.id+'_desc']||STRINGS.cardGenericDesc);
    const bTag=card.isNew?(weapon?STRINGS.cardNewWeapon:STRINGS.cardNewPassive):`Lv ${card.level-1}→${card.level}`;
-   const tone=weapon?WEAPON:build?PASSIVE:SUPPLY,tagColor=!build?SUPPLY:card.isNew?XP:weapon?GOLD:PASSIVE;
-   const [name,desc,tag]=build?[bName,bDesc,bTag]:card.kind==='heal'?[STRINGS.cardHealDew,STRINGS.cardHealDewDesc,STRINGS.cardSupply]:[STRINGS.cardShinySpore,STRINGS.cardShinySporeDesc,STRINGS.cardSupply];
+   const tone=evolve?GOLD:weapon?WEAPON:build?PASSIVE:SUPPLY,tagColor=evolve?GOLD:!build?SUPPLY:card.isNew?XP:weapon?GOLD:PASSIVE;
+   const [name,desc,tag]=evolve?[evoNameOf(card.id),S['card_evolve_'+card.id+'_desc']||STRINGS.cardGenericDesc,`${STRINGS.cardEvolve} · ${bName}`]:build?[bName,bDesc,bTag]:card.kind==='heal'?[STRINGS.cardHealDew,STRINGS.cardHealDewDesc,STRINGS.cardSupply]:[STRINGS.cardShinySpore,STRINGS.cardShinySporeDesc,STRINGS.cardSupply];
    const y=y0-i*(cardH+gap),n=this.node('card',backs,640,cardH),t=this.node('card-text',text,640,cardH);
-   const g=this.panel(n,PANEL,tone,20,4);
+   const g=this.panel(n,PANEL,tone,20,evolve?8:4);
    // 占位图标：圆角方块（武器琥珀 / 被动青绿 / 兜底水蓝）+ 名称前 2 字（02 §8.5）
    this.rounded(g,-320+24,-48,96,96,tone,null,16);this.label(name.slice(0,2),t,-320+24+48,0,90,90,32,PRIMARY_TEXT,Label.HorizontalAlign.CENTER,true);
    this.label(name,t,-320+144+130,40,260,48,32,TEXT,Label.HorizontalAlign.LEFT,true);

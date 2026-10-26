@@ -13,6 +13,7 @@ import { ENEMIES } from './enemies.js'
 import { WAVES } from './waves.js'
 import { LIMITS } from './limits.js'
 import { PERMANENT } from './permanent.js'
+import { PICKUPS } from './pickups.js'
 
 function isFiniteNumber(v) {
   return typeof v === 'number' && Number.isFinite(v)
@@ -107,26 +108,26 @@ export function validate() {
       positive: ['damage', 'count', 'orbitRadius', 'angularSpeedDeg', 'hitInterval', 'knockback'],
       ints: ['count'],
       ratios: [],
-      evolvedRequired: false,
+      evolvedRequired: true,
     },
     dew_ring: {
       positive: ['damage', 'radius', 'interval', 'slow'],
       ints: [],
       ratios: ['slow'],
-      evolvedRequired: false,
+      evolvedRequired: true,
     },
     raindrop: {
       positive: ['damage', 'count', 'radius', 'cooldown', 'knockback'],
       ints: ['count'],
       ratios: [],
-      evolvedRequired: false,
+      evolvedRequired: true,
       top: ['range', 'warnSec', 'fallbackMin', 'fallbackMax'],
     },
     leaf_boomerang: {
       positive: ['damage', 'count', 'maxDistance', 'speed', 'cooldown', 'knockback'],
       ints: ['count'],
       ratios: [],
-      evolvedRequired: false,
+      evolvedRequired: true,
       top: ['spreadDeg', 'leafRadius', 'catchRadius', 'maxLife'],
     },
   }
@@ -182,31 +183,37 @@ export function validate() {
       for (let i = 0; i < weapon.levels.length; i += 1) {
         if (weapon.levels[i].count > zoneCap) push(`weapons.${id}.levels[${i}].count`, `落点数不得超过 limits.pools.raindropZones (${zoneCap})`)
       }
+      if (weapon.evolved && weapon.evolved.count > zoneCap) push(`weapons.${id}.evolved.count`, `落点数不得超过 limits.pools.raindropZones (${zoneCap})`)
     }
     if (id === 'leaf_boomerang') {
       // 无限穿透只能靠回收结束：安全寿命必须够飞一个来回。
-      for (let i = 0; i < weapon.levels.length; i += 1) {
-        const lvl = weapon.levels[i]
+      const tiers = weapon.evolved ? [...weapon.levels, weapon.evolved] : weapon.levels
+      for (let i = 0; i < tiers.length; i += 1) {
+        const lvl = tiers[i]
         if (isPositiveNumber(lvl.speed) && !(weapon.maxLife > (2 * lvl.maxDistance) / lvl.speed)) {
-          push(`weapons.${id}.maxLife`, `必须大于 Lv${i + 1} 往返时间`)
+          push(`weapons.${id}.maxLife`, `必须大于${i < weapon.levels.length ? ` Lv${i + 1}` : '进化档'}往返时间`)
         }
       }
     }
-    // Evolution (01 §6: 5 级 + 1 进化). S2 关闭进化（08 §2），新武器可为 null。
+    // Evolution (01 §6: 5 级 + 1 进化；S3 B2 起五把都必须有进化档)。
     if (weapon.evolved === null && !schema.evolvedRequired) {
       // allowed
     } else if (!weapon.evolved || typeof weapon.evolved !== 'object') {
       push(`weapons.${id}.evolved`, '必须有进化形态')
     } else {
       checkLevel(weapon.evolved, `weapons.${id}.evolved`)
+      if (typeof weapon.evolved.name !== 'string' || weapon.evolved.name.length === 0) push(`weapons.${id}.evolved.name`, '必须有进化名')
+      if (typeof weapon.evolution !== 'string' || weapon.evolution.length === 0) push(`weapons.${id}.evolution`, '必须有进化形态 id')
+      if (!PASSIVES[weapon.evolvesWith]) push(`weapons.${id}.evolvesWith`, '必须指向 data/passives.js 中的被动')
+      if (id === 'umbrella_blades' && weapon.evolved.count > 8) push(`weapons.${id}.evolved.count`, '片数不得超过 8（MAX_BLADES）')
     }
   }
 
   // --- passives (01 §7) ---
-  const passiveStats = new Set(['might', 'cooldown', 'area', 'moveSpeed'])
+  const passiveStats = new Set(['might', 'cooldown', 'area', 'moveSpeed', 'regen', 'pickup'])
   for (const [id, passive] of Object.entries(PASSIVES)) {
     const at = `passives.${id}`
-    if (!passiveStats.has(passive.stat)) push(`${at}.stat`, '必须为 might/cooldown/area/moveSpeed 之一')
+    if (!passiveStats.has(passive.stat)) push(`${at}.stat`, '必须为 might/cooldown/area/moveSpeed/regen/pickup 之一')
     if (!isPositiveNumber(passive.perLevel)) push(`${at}.perLevel`, '必须为有限正数')
     if (!Array.isArray(passive.levels) || passive.levels.length !== 5) {
       push(`${at}.levels`, '必须正好 5 档')
@@ -413,6 +420,7 @@ export function validate() {
         }
       }
       if (ev.type === 'cross' && !isPositiveNumber(ev.spacing)) push(`${at}.spacing`, '必须为有限正数')
+      if (ev.type === 'elite' && ENEMIES[ev.enemy] && ENEMIES[ev.enemy].behavior !== 'charge') push(`${at}.enemy`, 'elite 事件必须引用冲撞型（charge）精英')
       if (ev.optional !== undefined && typeof ev.optional !== 'boolean') push(`${at}.optional`, '必须为布尔值')
     })
   }
@@ -430,8 +438,26 @@ export function validate() {
   }
   if (!isPositiveNumber(LIMITS.spawnMarginU)) push('limits.spawnMarginU', '必须为有限正数')
 
+  // --- pickups (01 §11) ---
+  let capped = 0
+  for (const id of ['dew', 'bigDew', 'wind']) {
+    const d = PICKUPS[id]
+    const at = `pickups.${id}`
+    if (!d || typeof d !== 'object') {
+      push(at, '缺少拾取物参数')
+      continue
+    }
+    for (const f of ['heal', 'chance']) if (!isNonNegativeNumber(d[f])) push(`${at}.${f}`, '必须为非负有限数')
+    for (const f of ['lifeSec', 'radius']) if (!isPositiveNumber(d[f])) push(`${at}.${f}`, '必须为有限正数')
+    if (d.cap !== null && !isPositiveInt(d.cap)) push(`${at}.cap`, '必须为正整数或 null（不计上限）')
+    if (isPositiveInt(d.cap)) capped += d.cap
+  }
+  if (PICKUPS.dew && PICKUPS.wind && !(PICKUPS.dew.chance + PICKUPS.wind.chance < 1)) push('pickups', '露珠 + 林风掉率之和必须小于 1')
+  if (PICKUPS.wind && !isPositiveNumber(PICKUPS.wind.attractSpeed)) push('pickups.wind.attractSpeed', '必须为有限正数')
+  if (!(capped < LIMITS.pools.pickups)) push('pickups', `有上限的拾取物合计 ${capped} 必须小于 limits.pools.pickups，给大露珠留槽`)
+  if (!Array.isArray(PICKUPS.eliteDrops) || PICKUPS.eliteDrops.some((k) => !PICKUPS[k] || k === 'eliteDrops')) push('pickups.eliteDrops', '必须为拾取物 id 数组')
   // --- JSON round-trip (03 §4): guards against functions / Infinity / NaN. ---
-  for (const [name, mod] of [['player', PLAYER], ['weapons', WEAPONS], ['passives', PASSIVES], ['enemies', ENEMIES], ['waves', WAVES], ['limits', LIMITS]]) {
+  for (const [name, mod] of [['player', PLAYER], ['weapons', WEAPONS], ['passives', PASSIVES], ['enemies', ENEMIES], ['waves', WAVES], ['limits', LIMITS], ['pickups', PICKUPS]]) {
     if (!jsonRoundTripsEqual(mod)) push(`${name}`, '无法 JSON 往返（混入了函数/Infinity/NaN）')
   }
 

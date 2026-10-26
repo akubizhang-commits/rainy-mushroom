@@ -648,3 +648,159 @@ test('all five weapons run together through stepWeapons', () => {
   assert.equal(world.shots.count, 2, 'spore + leaf')
   assert.equal(world.zones.count, WEAPONS.raindrop.levels[0].count)
 })
+
+// --- 进化档（01 §6 进化行、§8.3，S3 B2） ---
+
+const evolved = (id) => ({ ...makeWeaponState(id, 5), evolved: true })
+
+test('孢子风暴: 5 shots lock the 5 nearest distinct enemies; evolved damage / speed / pierce / cooldown', () => {
+  const world = makeWorld()
+  const ev = WEAPONS.spore_shot.evolved
+  // 7 enemies at distinct distances and angles; the 5 nearest must each get one shot.
+  const ring = [[100, 0], [0, 120], [-140, 0], [0, -160], [180, 180], [300, 0], [0, 400]]
+  const es = ring.map(([x, y]) => spawnEnemy(world, x, y))
+  const state = evolved('spore_shot')
+  sporeShot.tick(world, state, DT)
+  assert.equal(world.shots.count, ev.count)
+  const aims = world.shots.active.slice(0, ev.count).map((s) => Math.atan2(s.vy, s.vx))
+  const want = es.slice(0, 5).map((e) => Math.atan2(e.y, e.x))
+  assert.deepEqual(aims.map((a) => a.toFixed(9)), want.map((a) => a.toFixed(9)), 'nearest first, one each')
+  for (const s of world.shots.active.slice(0, ev.count)) {
+    assert.ok(Math.abs(Math.hypot(s.vx, s.vy) - ev.speed) < 1e-9)
+    assert.equal(s.pierceLeft, ev.pierce)
+    assert.equal(s.damage, ev.damage)
+    assert.equal(s.knockback, ev.knockback)
+  }
+  assert.ok(Math.abs(state.cooldown - ev.cooldown) < 1e-12)
+})
+
+test('孢子风暴: fewer than 5 enemies → remaining shots go to the nearest; none → no fire, no cooldown', () => {
+  const world = makeWorld()
+  const state = evolved('spore_shot')
+  sporeShot.tick(world, state, DT)
+  assert.equal(world.shots.count, 0)
+  assert.equal(state.cooldown, 0)
+  spawnEnemy(world, 0, 200)
+  spawnEnemy(world, 50, 0)
+  sporeShot.tick(world, state, DT)
+  const aims = world.shots.active.slice(0, 5).map((s) => Math.atan2(s.vy, s.vx).toFixed(9))
+  assert.deepEqual(aims, ['0.000000000', (Math.PI / 2).toFixed(9), '0.000000000', '0.000000000', '0.000000000'])
+})
+
+test('evolved tiers still scale with might / cooldown / area (01 §6 通用规则)', () => {
+  const world = withStats(makeWorld(), { might: 5, cooldown: 5, area: 5 })
+  const st = world.stats
+  // spore_storm
+  spawnEnemy(world, 100, 0)
+  const s = evolved('spore_shot')
+  sporeShot.tick(world, s, DT)
+  assert.equal(world.shots.active[0].damage, Math.round(22 * st.might))
+  assert.ok(Math.abs(s.cooldown - 0.6 * st.cooldownMul) < 1e-12)
+  // 菌伞华盖
+  const u = evolved('umbrella_blades')
+  rebuild(world)
+  umbrellaBlades.tick(world, u, DT)
+  assert.equal(u.bladeCount, 6)
+  assert.ok(Math.abs(u.bladeR - 16 * st.areaMul) < 1e-9)
+  assert.ok(Math.abs(Math.hypot(u.bladeX[0] - world.player.x, u.bladeY[0] - world.player.y) - 110 * st.areaMul) < 1e-9)
+  // 晨露结界
+  const d = evolved('dew_ring')
+  dewRing.tick(world, d, DT)
+  assert.ok(Math.abs(d.ringR - 145 * st.areaMul) < 1e-9)
+  assert.ok(Math.abs(d.cooldown - 0.5 * st.cooldownMul) < 1e-12)
+  // 骤雨
+  const r = evolved('raindrop')
+  raindrop.tick(world, r, DT)
+  assert.equal(world.zones.count, 8)
+  assert.ok(Math.abs(world.zones.active[0].r - 70 * st.areaMul) < 1e-9)
+  assert.equal(world.zones.active[0].damage, Math.round(45 * st.might))
+  assert.ok(Math.abs(r.cooldown - 1.4 * st.cooldownMul) < 1e-12)
+})
+
+test('菌伞华盖: 6 blades, orbit 110, 240°/s, hit interval 0.4, knockback 40', () => {
+  const world = makeWorld()
+  world.time = 0.5
+  const state = evolved('umbrella_blades')
+  rebuild(world)
+  umbrellaBlades.tick(world, state, DT)
+  const omega = (240 * Math.PI) / 180
+  for (let i = 0; i < 6; i += 1) {
+    const a = omega * world.time + (2 * Math.PI * i) / 6
+    assert.ok(Math.abs(state.bladeX[i] - Math.cos(a) * 110) < 1e-9)
+    assert.ok(Math.abs(state.bladeY[i] - Math.sin(a) * 110) < 1e-9)
+  }
+  // Hit gate 0.4 s and knockback 40 on an enemy sitting on blade 0.
+  const e = spawnEnemy(world, state.bladeX[0], state.bladeY[0], 1000)
+  rebuild(world)
+  umbrellaBlades.tick(world, state, DT)
+  assert.equal(1000 - e.hp, 24)
+  assert.ok(Math.abs(e.hitAt[WEAPONS.umbrella_blades.index] - (world.time + 0.4)) < 1e-12)
+  assert.ok(Math.abs(Math.hypot(e.kbX, e.kbY) - 40) < 1e-9)
+})
+
+test('晨露结界: radius 145 hits a gnat at 155 (145 + r10) but not at 156, slows 40%, pulses every 0.5 s', () => {
+  const world = makeWorld()
+  const inside = spawnEnemy(world, 155, 0, 1000)
+  const outside = spawnEnemy(world, 0, 156, 1000)
+  const state = evolved('dew_ring')
+  let pulses = 0
+  let last = inside.hp
+  for (let i = 0; i < 70; i += 1) {
+    world.time = i * DT
+    rebuild(world)
+    dewRing.tick(world, state, DT)
+    if (inside.hp < last) pulses += 1
+    last = inside.hp
+  }
+  assert.equal(pulses, 3, 'pulses at 0, ≈0.5, ≈1.0 within 1.15 s')
+  assert.equal(1000 - inside.hp, 3 * 16)
+  assert.equal(outside.hp, 1000)
+  assert.equal(inside.slow, 0.4)
+  assert.equal(outside.slow, 0)
+})
+
+test('秋风叶舞: 6 leaves 60° apart all around regardless of facing, distance 360, cooldown 1.4', () => {
+  for (const [dx, dy] of [[1, 0], [0, -1], [-0.6, 0.8]]) {
+    const world = makeWorld()
+    world.player.dirX = dx
+    world.player.dirY = dy
+    const state = evolved('leaf_boomerang')
+    leafBoomerang.tick(world, state, DT)
+    assert.equal(world.shots.count, 6)
+    const angles = world.shots.active.slice(0, 6).map((s) => Math.atan2(s.vy, s.vx)).sort((a, b) => a - b)
+    for (let i = 1; i < 6; i += 1) assert.ok(Math.abs(angles[i] - angles[i - 1] - Math.PI / 3) < 1e-9)
+    assert.ok(Math.abs(angles[0] - (-150 * Math.PI) / 180) < 1e-9, 'same pattern for every facing')
+    for (const s of world.shots.active.slice(0, 6)) {
+      assert.equal(s.travelLeft, 360)
+      assert.equal(s.damage, 36)
+      assert.equal(s.knockback, 35)
+      assert.ok(Math.abs(Math.hypot(s.vx, s.vy) - 420) < 1e-9)
+    }
+    assert.ok(Math.abs(state.cooldown - 1.4) < 1e-12)
+  }
+})
+
+test('骤雨: 8 drops of radius 70, damage 45, prefer distinct targets', () => {
+  const world = makeWorld()
+  const es = []
+  for (let i = 0; i < 10; i += 1) es.push(spawnEnemy(world, 30 * i - 150, 120))
+  raindrop.tick(world, evolved('raindrop'), DT)
+  assert.equal(world.zones.count, 8)
+  const spots = new Set(world.zones.active.slice(0, 8).map((z) => `${z.x},${z.y}`))
+  assert.equal(spots.size, 8, '8 different enemies')
+  for (const z of world.zones.active.slice(0, 8)) {
+    assert.equal(z.r, 70)
+    assert.equal(z.damage, 45)
+    assert.equal(z.knockback, 20)
+  }
+})
+
+test('an un-evolved Lv5 weapon still uses its Lv5 row (evolved flag is the only switch)', () => {
+  const world = makeWorld()
+  spawnEnemy(world, 100, 0)
+  const state = makeWeaponState('spore_shot', 5)
+  assert.equal(state.evolved, false)
+  sporeShot.tick(world, state, DT)
+  assert.equal(world.shots.count, 3)
+  assert.equal(world.shots.active[0].damage, 15)
+})
