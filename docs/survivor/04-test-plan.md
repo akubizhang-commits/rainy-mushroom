@@ -1,6 +1,6 @@
 # 雨后菌语 · 测试计划（测试工程师）
 
-版本 v0.2 · 阶段 M1 / Sprint 1（T13 补齐 §3–§9，裁决 D8）· 依据：00-project-plan.md、01-gdd.md、02-ui-ux.md、03-architecture.md、05-operations.md、07-sprint-1-backlog.md
+版本 v0.3 · 阶段 M2 / Sprint 3（S3 A7 / DOC-S2-01 同步：DATA-05、LEG-01、PERF-01、§9.2→§9.3 口径、replay/sync/perf/bot 落地；v0.2 为 T13 补齐 §3–§9，裁决 D8）· 依据：00-project-plan.md、01-gdd.md、02-ui-ux.md、03-architecture.md、05-operations.md、07-sprint-1-backlog.md
 本文定义新玩法的测试分层、用例清单、性能与包体方案、兼容与合规检查、缺陷分级和每个 Sprint 的验收门槛。阈值一律引用上游文档，上游改数值时本文同步改。
 
 ## 0. 概述
@@ -34,28 +34,28 @@
 
 ### 2.1 L1 单元测试约定
 
-- 一个模块一个测试文件，清单与 03 §13 一致（data、pool、grid、stats、weapons、enemies、spawner、progression、pickups、run、meta、save、determinism、compliance、sync、perf、bot），另加 `survivor-joystick.test.mjs`、`survivor-replay.test.mjs`、`survivor-safearea.test.mjs`（裁决 D18 已采纳）。
+- 一个模块一个测试文件，清单与 03 §13 一致（data、pool、grid、stats、weapons、enemies、spawner、progression、pickups、run、meta、save、determinism、compliance、sync、perf、bot；其中 pickups 由 09 B3 新建，其余均已存在于 tests/），另加 `survivor-joystick.test.mjs`、`survivor-replay.test.mjs`、`survivor-safearea.test.mjs`（裁决 D18 已采纳）。
 - 只构造被测系统需要的 `world` 片段，不跑整局。时间相关断言用 `run.step()` 逐步推进，不用真实计时。
 - 存档测试用内存 Map 实现 `{getItem,setItem}`（裁决 D13：SurvivorSave 不依赖 removeItem），可注入“抛异常”的版本。
 - 数值断言引用 `data/*.js` 与 GDD 表格两份来源做对照（`survivor-data.test.mjs`），其它测试只引用数据模块，避免改一次数值要改十处测试。
 - 统计型断言（刷怪组成、掉落概率）固定种子 + 宽容差（如组成百分比 ±5 个百分点、样本 ≥ 2000），不做“随机种子下偶尔失败”的测试。
-- 现有基线：`tests/forest-cleanup.test.mjs` 已失败（03 §1-5），测试报告单列为基线，新改动不得增加失败用例数。
+- 基线：S1 的 `tests/forest-cleanup.test.mjs` 基线失败已随 T15 删除旧玩法一并移除；S2 起 `npm test` 必须 0 失败（S2 结束 279/279）。
 
 ### 2.2 L2 确定性回放测试
 
 目的：整局层面的回归保护，任何未声明的规则或数值变化都会被发现。
 
-1. 输入脚本：`tests/fixtures/survivor/inputs-*.mjs`，描述为“步号区间 → 摇杆向量”与“第 n 次升级 → 选卡下标”的分段表，由 `SurvivorBot` 的确定性策略生成后固化，不依赖机器人的后续改动。
+1. 输入脚本：`tests/fixtures/survivor/inputs-*.mjs`，描述为“步号区间 → 摇杆向量”与“第 n 次升级 → 选卡下标”的分段表，由 `scripts/survivor/bot.mjs` 的确定性策略生成后固化（`node scripts/survivor/update-golden.mjs --inputs`），不依赖机器人的后续改动。驱动 `tests/fixtures/survivor/replay.mjs` 按步（而不是按帧）施加输入。
 2. 用例组：
 
 | 用例 | 种子 | 输入 | 断言 |
 |---|---|---|---|
 | R1 站桩 | `replay-idle` | 全程 (0,0)，总选第 0 张 | 结果 lost；summary 与金标准完全相等 |
-| R2 绕圈 | `replay-kite` | 半径约 200 的圆周移动 | summary 相等；第 60/180/300 秒的状态哈希相等 |
+| R2 绕圈 | `replay-kite` | 半径约 200 的圆周切线 × 0.3 叠加 bot flee 斥力（纯圆周开环约 2:30 即被包围圈笼罩，到不了 300 秒），bot random 选卡 | summary 相等；第 60/180/300 秒的状态哈希相等 |
 | R3 完整通关 | `replay-win` | 机器人通关局的固化输入（S2 起） | outcome won、bossDefeated true、survivalSec ∈ [420, 600] 且与金标准相等 |
 | R4 暂停穿插 | `replay-kite` | 同 R2，在第 30、120 秒 pause/resume，levelup 中 pause/resume | 与 R2 结果完全相同（暂停不影响模拟） |
 | R5 帧率无关 | `replay-kite` | 同一输入，分别用 advance(1/60)、advance(1/30)、advance 随机 0–0.083 喂入 | 三者 summary 与状态哈希相同（输入按步而非按帧施加） |
-| R6 双次运行 | 任意 3 个种子 | 同输入运行两次 | 逐步完全一致 |
+| R6 双次运行 | 任意 3 个种子 | 同输入运行两次（取前 3 分钟） | 逐步完全一致 |
 
 3. 状态哈希：对 `time`、玩家位置与生命、每个活跃敌人 `kind/x/y/hp`（按池稠密表顺序）、孢子总经验、等级、武器档位做 FNV-1a，坐标先乘 1000 取整再入哈希。
 4. 金标准文件 `tests/fixtures/survivor/golden.json`。数值或规则有意变更时，开发运行 `node scripts/survivor/update-golden.mjs` 重新生成，提交说明必须写明原因并附 01 的对应改动；测试工程师审查时把金标准 diff 当作需求变更核对。无对应文档改动的金标准变更一律退回。
@@ -88,14 +88,16 @@
 
 S2 现行口径（2026-09-11 第三轮 用户拍板，08 K21）：S2 的 `survivor:balance` 用 `scripts/survivor/bot.mjs` 的两种走位代替上表策略，50 种子 × 2 走位 × 6 种选卡 = 600 局，上限 17:00。通关率判定线改为：新手型（保守逃跑）30%–60%，熟练型（贴孢子）≤ 80%，总体通关率只记录、不作硬门槛；另需 12:00 后仍在场局数 = 0（08 K15/K22）、新手型 Boss 战中位 ≤ 90 秒、通关局构筑种数 ≥ 27。上表的 kite / greedy / 永久强化口径留待 S3 永久强化上线后启用。
 
-阈值未达标不是代码缺陷，而是数值问题：报告给策划，按 01 规则先改文档再改数据。快速档（`survivor-bot.test.mjs`）只跑 3 个种子 × kite/random，断言跑完不抛错、状态最终为终态、实体数不超容量、`summary` 字段齐全且为有限数。
+S3 继续沿用上段 bot.mjs 两种走位口径（50 种子 × flee/spore × 6 种选卡 = 600 局，上限 17:00；09 C1 不新增 `prefer:regen` / `prefer:magnet`，保持与 S2 可比）；kite / greedy / 永久强化口径到第二批 S3-09（局外成长上线后）再启用。
+
+阈值未达标不是代码缺陷，而是数值问题：报告给策划，按 01 规则先改文档再改数据。快速档（`survivor-bot.test.mjs`，S3 A3 落地）跑 3 个种子（`bot-quick-0…2`）× 两种走位（flee / spore）+ random 选卡，断言跑完不抛错、状态最终为终态（won / lost）、各池实体数峰值不超容量、`droppedTime` 为 0、`summary` 字段齐全且数值字段为有限数。
 
 ### 2.4 L5 Cocos 构建冒烟
 
 1. `npm run cocos:sync`：断言 `shared/js/survivor/` 文件齐全、manifest sha256 一致、SurvivorBot.js 不在 manifest（`survivor-sync.test.mjs`）。
 2. `npm run cocos:build`（web-mobile），浏览器打开 `?survivor&smoke=1`：SurvivorSmoke 脚本输入跑 30 秒，并用调试钩子把时间快进到 6:40 满屏场景再跑 10 秒。断言：控制台无 error、无未捕获异常；战斗层激活节点数 ≤ 600；DrawCall ≤ 25；`run.state` 推进正常；离开视图后设计分辨率恢复 375×812。
 3. `npm run cocos:build:wechat`：构建成功，package-report.json 满足 §6。
-4. 旧玩法回归：`npm test` 全量（旧测试失败数不增加）、`npm run cocos:test`、默认入口仍为 PackView（M3 切换前）。
+4. 入口与回归：`npm test` 全量 0 失败、`npm run cocos:test`；默认入口为 survivor（PinePilot 直接创建 SurvivorView，旧玩法已随 T15 删除，`survivor-host.test.mjs` 覆盖）。
 
 ### 2.5 L6 真机手测
 
@@ -126,8 +128,8 @@ S2 现行口径（2026-09-11 第三轮 用户拍板，08 K21）：S2 的 `surviv
 | world 片段构造 | 测试内小工厂：只造被测系统需要的玩家/敌人/弹体字段（§2.1） | weapons、spawner、grid、run | 内联 |
 | 视口样本 | 720×1280（基准）、720×1560（长屏）、720×960（短屏）、越界值（0、负数、NaN） | run、spawner | run 已覆盖越界钳制 |
 | 安全区样本 | 缺 windowInfo/capsule（开发者工具/浏览器）、普通机型 375×667、刘海机型 390×844 + 手势条、左右缺口机型、非有限字段 | survivor-safearea | 内联 |
-| 输入脚本 | `tests/fixtures/survivor/inputs-*.mjs`（§2.2） | L2 replay | S2 建立 |
-| 金标准 | `tests/fixtures/survivor/golden.json`（§2.2） | L2 replay | S2 建立；S1 由 determinism 的“两次运行一致”兜底 |
+| 输入脚本 | `tests/fixtures/survivor/inputs-*.mjs`（§2.2） | L2 replay | S3 A2 建立（idle / kite / win） |
+| 金标准 | `tests/fixtures/survivor/golden.json`（§2.2） | L2 replay | S3 A2 建立；`npm run survivor:golden` 重生成 |
 
 夹具原则：数值一律从 `js/survivor/data/*.js` 读取，测试内不硬编码第二份（`survivor-data.test.mjs` 除外，它负责与 01 表格对照）；夹具文件不得放进 `js/survivor/`，避免被 sync-shared 带进构建。
 
@@ -156,7 +158,7 @@ S2 现行口径（2026-09-11 第三轮 用户拍板，08 K21）：S2 的 `surviv
 | DATA-02 | survivor-data | spore_shot 五档与 01 §6.1 逐项一致 | 01 §6.1 | ✅ |
 | DATA-03 | survivor-data | gnat/beetle 生命/移速/伤害/经验/半径与 01 §9 一致，含 §9.1 成长系数 | 01 §9 | ✅ |
 | DATA-04 | survivor-data | 波次段从 0 开始首尾相接；组成和为 100 且引用已知敌人；同屏上限 ≤ limits 硬上限 | 01 §10 | ✅ |
-| DATA-05 | survivor-data | `waves.winAtSeconds` = 180（D4） | 00 §8 D4、07 §1 | ✅ |
+| DATA-05 | survivor-data / survivor-run | `waves.winAtSeconds` 已移除；计时胜利只走调试选项 `debug.timedWinSec`（默认 0 不启用，非法值按 0） | 08 K1 | ✅ |
 
 ### 4.3 战斗系统
 
@@ -173,8 +175,9 @@ S2 现行口径（2026-09-11 第三轮 用户拍板，08 K21）：S2 的 `surviv
 | SPN-01 | survivor-spawner | 刷怪半径 = hypot(viewW/2, viewH/2) + 60；重定位距离 = max(900, 半径 + 120) | 03 §1-2 | ✅ |
 | SPN-02 | survivor-spawner | segmentAt 返回覆盖段、越界返回 null；组成按权重（固定种子、±5 个百分点） | 01 §10 | ✅ |
 | SPN-03 | survivor-spawner | 第一段生成数 ≈ 速率 × 秒数；常规生成全部落在视口外；同屏上限从不超出；漂远敌人被移回刷怪圈 | 01 §10、03 §1-2 | ✅ |
-| ENM-01 | survivor-enemies | 直线追踪 + 分离：不叠成一点、不穿过角色 | 01 §18 第 3 条 | S2（S1 由 run/determinism 间接覆盖） |
-| PCK-01 | survivor-pickups | 孢子掉落、吸附、合并与外观档 | 01 §8 | S2（S1 由 run 升级路径间接覆盖） |
+| ENM-01 | survivor-enemies | 直线追踪 + 分离：不叠成一点、不穿过角色；灰蛾摆动、菌灵停距与吐泡、横穿回收 | 01 §9、§18 第 3 条 | ✅（S2） |
+| ENM-02 | survivor-enemies / survivor-data | 敌方弹体上限：`hardCaps.enemyProjectiles`、`pools.mistBubbles`、`nodes.mistBubbles` 均为 60；第 61 个浊雾泡池满丢弃并计 `diag.dropped.bubbles` | 01 §10、03 §7.3、09 S3-D1 | ✅（S3 A1） |
+| PCK-01 | survivor-pickups | 孢子掉落、吸附、合并与外观档；露珠 / 大露珠 / 林风上限与 30 秒消失 | 01 §8、§11 | S3（09 B3 新建 survivor-pickups.test.mjs；孢子部分现由 run 升级路径间接覆盖） |
 
 ### 4.4 成长与整局
 
@@ -187,12 +190,12 @@ S2 现行口径（2026-09-11 第三轮 用户拍板，08 K21）：S2 的 `surviv
 | RUN-02 | survivor-run | setInput 归一化超长向量、忽略非有限值；玩家按输入与移速移动；advance 只在 playing 推进并返回步数 | 03 §3.1 | ✅ |
 | RUN-03 | survivor-run | playing ↔ paused 往返冻结模拟；abandon 仅 paused 可用并转 lost | 03 §3.1 | ✅ |
 | RUN-04 | survivor-run | levelup 冻结模拟，choose() 推进队列，多次升级依次弹出；选升级卡后武器等级 +1 | 01 §8.2 | ✅ |
-| RUN-05 | survivor-run | hp 归零转 lost 并记录 killer；存活到 winAtSeconds 转 won 且无 killer | 07 §1、03 §3.1 | ✅ |
+| RUN-05 | survivor-run | hp 归零转 lost 并记录 killer；Boss → cleansing → extract → won 且无 killer；`debug.timedWinSec` 调试计时胜利 | 08 K1、01 §9.3、03 §3.1 | ✅ |
 | RUN-06 | survivor-run | summary 含净化数与露晶卡；drainEvents 返回并清空事件队列 | 03 §3.1、§3.7 | ✅ |
 | DET-01 | survivor-determinism | 同种子同输入 → summary 与逐秒状态哈希一致；长局（到计时胜利）同样可复现 | 03 §3.3 | ✅ |
 | DET-02 | survivor-determinism | 不同种子轨迹不同 | 03 §3.3 | ✅ |
 | DET-03 | survivor-determinism | 源码禁用 API 扫描（§2.2 第 5 条） | 03 §3.3、§12 | ✅ |
-| RPL-01 | survivor-replay | §2.2 的 R1–R6 | 03 §13 | S2（R1/R2/R4/R5/R6 可在 S2 第一批落；R3 依赖 Boss） |
+| RPL-01 | survivor-replay | §2.2 的 R1–R6；金标准 `tests/fixtures/survivor/golden.json` 由 `npm run survivor:golden` 生成，重复运行字节一致 | 03 §13 | ✅（S3 A2） |
 
 ### 4.5 输入与安全区
 
@@ -230,12 +233,12 @@ S2 现行口径（2026-09-11 第三轮 用户拍板，08 K21）：S2 的 `surviv
 | CMP-03 | survivor-compliance | S1 界面文案键齐全（HUD、三选一卡、结算、新手首条提示） | 07 T12 | ✅ |
 | CMP-04 | survivor-data | 数据层文案也通过词表扫描 | §7.1 | ✅ |
 | CMP-05 | survivor-compliance | `Survivor*.ts` 中文 UI 字面量自动扫描（跳过注释与 console 日志，白名单为空） | §7.1 | ✅（S2 P6 落地） |
-| SYNC-01 | forest-cleanup / cocos:sync | manifest 只允许 microforest/library/survivor 前缀；survivor 入口全部进 manifest | 03 §2.1 | ✅（forest-cleanup 另有 1 条基线失败，见 §2.1） |
-| SYNC-02 | survivor-sync | 文件齐全、sha256 一致、SurvivorBot.js 不在 manifest | 03 §13 | S2（随 SurvivorBot 一起落） |
+| SYNC-01 | survivor-host / cocos:sync | manifest 只含 js/survivor；已删除的旧玩法目录与脚本不能回到构建 | 03 §2.1 | ✅（forest-cleanup 随 T15 移除） |
+| SYNC-02 | survivor-sync | 清单覆盖全部 js/survivor 模块（唯一登记例外 index.js 占位，BUG-S1-05）；清单 sha256 = 源码；shared 副本 = 生成头 + 源码，无清单外副本；bot / 夹具不在清单 | 03 §13 | ✅（S3 A3） |
 | PKG-01 | cocos-package | 有 survivor 分包 4 个、无则 3 个且不报错；每分包 ≤ 4 MiB | 03 §7.5、D14 | ✅ |
-| LEG-01 | library-sync / cocos:test | 默认入口仍为 PackView（M3/T15 前）；旧测试失败数不增加 | 03 §2.2 | ✅ |
-| PERF-01 | survivor-perf / survivor:bench | 满载单步 ≤ 2 ms（报告记实测，目标 ≤ 0.6 ms）、热路径 0 分配、8 分钟堆增长 ≤ 5 MB | 03 §7.2、§7.3 | S2（S1 的 bench/balance 脚本为占位，见 §9.1） |
-| BOT-01 | survivor-bot / survivor:balance | §2.3 快速档与完整档 | §2.3 | S2 |
+| LEG-01 | survivor-host / cocos:test | 默认入口为 survivor（PinePilot → SurvivorView），旧玩法已删除、不能重回构建；`npm test` 0 失败 | 03 §2.2 | ✅ |
+| PERF-01 | survivor-perf / survivor:bench | 满载（200 敌人 + 250 孢子 + 5 武器 Lv5）平均单步 ≤ 2 ms（报告记实测，目标 ≤ 0.6 ms）、8 分钟模拟堆增长 ≤ 5 MB；热路径分配记实测（目标 0，未卡线），基线写 `tmp/survivor-bench.json` | 03 §7.2、§7.3 | ✅（S3 A3；首次要求由 S2 改为 S3） |
+| BOT-01 | survivor-bot / survivor:balance | §2.3 快速档（survivor-bot）与完整档（survivor:balance） | §2.3 | ✅（快速档 S3 A3、完整档 S2） |
 
 ### 4.8 表现层与手测（S1）
 
@@ -266,7 +269,7 @@ S2 现行口径（2026-09-11 第三轮 用户拍板，08 K21）：S2 的 `surviv
 
 ### 5.2 采集与阈值
 
-- 采集：开发者工具与真机都用 `perf=1`，读取 SurvivorPerf 面板的 FPS P50/P95、步耗时、各池计数、`diag.dropped`、DrawCall；每个场景至少采 30 秒稳定段，录屏留档。Node 侧用 `npm run survivor:bench`（S2 实现后）。
+- 采集：开发者工具与真机都用 `perf=1`，读取 SurvivorPerf 面板的 FPS P50/P95、步耗时、各池计数、`diag.dropped`、DrawCall；每个场景至少采 30 秒稳定段，录屏留档。Node 侧用 `npm run survivor:bench`（S3 A3 实现，结果写 `tmp/survivor-bench.json`）。
 - 阈值（D5 分阶段口径，来自 00 §5 与 03 §7）：
 
 | 指标 | M1 / S1 | M2 / S2–S3 | 来源 |
@@ -390,7 +393,7 @@ S2 现行口径（2026-09-11 第三轮 用户拍板，08 K21）：S2 的 `surviv
 
 ### 7.7 旧玩法回归（M3 / T15 前）
 
-每次提测跑 `npm test` 全量与 `npm run cocos:test`：旧测试失败集合必须是基线的子集（当前基线只有 forest-cleanup 的 “retired runtime and resource bundles cannot reenter builds” 1 条）。T15 删除旧玩法后，基线随旧测试一并移除，之后 `npm test` 必须 0 失败。
+每次提测跑 `npm test` 全量与 `npm run cocos:test`。T15 已删除旧玩法，forest-cleanup 基线随旧测试一并移除，`npm test` 必须 0 失败。
 
 ## 8. 缺陷分级（锚点 A）
 
@@ -451,8 +454,8 @@ S1“可玩竖切原型”的验收门槛以 07-sprint-1-backlog.md 各任务的
 
 ### 9.2 S2 / M2 前半：内容齐全、完整通关
 
-- 01 §16 S2 范围全部落地：5 种普通敌人 + 精英 + Boss、撤离胜利、全部武器与 6 被动、5 组进化、拾取物、完整波次表；计时胜利降级为调试开关或移除（07 §1）。
-- 补齐 §4 标 S2 的自动化用例：survivor-enemies、survivor-pickups、survivor-replay（R1–R6，含 R3 通关回放）、survivor-sync、survivor-perf、survivor-bot 快速档，以及 CMP-05 的 Survivor*.ts 自动扫描。
+- S2 实际范围以 08 为准：5 种普通敌人 + Boss、撤离胜利、5 把武器 Lv1–Lv5 与 4 个被动（might / cooldown / area / speed）、完整波次表；计时胜利降级为调试开关（08 K1）。进化、regen / magnet 被动、拾取物、5:00 精英按 08 §2 移出 S2，验收见 §9.3。
+- 补齐 §4 标 S2 的自动化用例：survivor-enemies 与 CMP-05 的 Survivor*.ts 自动扫描在 S2 落地；survivor-replay（R1–R6，含 R3 通关回放）、survivor-sync、survivor-perf、survivor-bot 快速档 S2 未落地（BUG-S2-02），S3 第一批 A2/A3 补齐，见 §9.3。
 - `survivor:balance` 完整档跑通并出报告：random 策略 200 局无异常、`droppedTime` 为 0；kite/greedy 指标出初值（S2 不卡区间，越界转策划）。
 - 性能：中端真机 200 敌人 P50 ≥ 55 fps、P95 帧耗时 ≤ 25 ms；中低端真机降档后 P95 ≤ 40 ms；JS 堆与纹理内存符合 §5.2；Node 满载单步 ≤ 2 ms。
 - 包体：survivor 分包 ≤ 2.5 MiB；其余同 §6。
@@ -460,6 +463,12 @@ S1“可玩竖切原型”的验收门槛以 07-sprint-1-backlog.md 各任务的
 
 ### 9.3 S3 / M2 后半：局外成长、调参、正式素材
 
+S3 第一批（09 §4，★ 用户检查点之前）：
+- A 收尾 S2 欠账：ENM-02 浊雾泡上限 60（`survivor:balance` 的 `diag.dropped.bubbles` 记录实测，仍有丢弃时报项目经理，不再自行上调）；RPL-01（survivor-replay R1–R6）、SYNC-02（survivor-sync）、PERF-01（survivor-perf + 真实 `survivor:bench` 基线）、BOT-01 快速档（survivor-bot）全部通过且 `npm test` 总耗时增加 ≤ 30 秒；冒烟断言胜利 / 失败结算模态帧 DrawCall ≤ 25（BUG-S2-03）；雨滴坠击卡面与首局提示文案通过 §7.1 扫描。
+- B 进化与内容（由 S2 移入，S3 口径）：5 组进化（进化卡固定第 1 张、金边卡、进化后不再出升级卡）、regen / magnet 被动、露珠 / 大露珠 / 林风（新建 survivor-pickups.test.mjs，PCK-01）、5:00 精英 elite_beetle；每次有意改规则都用 `npm run survivor:golden` 重生成金标准，提交说明引用 01 改动（09 S3-D5）。
+- C 平衡复核：§2.3 S3 口径重跑 `survivor:balance` 两次，硬门槛沿用 08 §3.3；结果写 reports/sprint-3-balance.md。
+
+S3 第二批（检查点之后）：
 - 01 §16 S3 范围：局外成长与存档接 UI、新手提示、结算露晶、正式美术与音效。
 - 存档 UI：SAVE-UI、LC-02、AX-02、AX-03 通过（三项设置重启后保持、写失败提示 D4 文案）。
 - 平衡：§2.3 判定线全部落在区间内（kite 无强化通关率 30%–60%、平均时长 6–9 分钟、greedy 满强化通关率 ≥ 90% 等）。

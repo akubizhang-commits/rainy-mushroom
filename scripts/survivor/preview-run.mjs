@@ -1,8 +1,9 @@
 // 文字版单局预览：用 bot 驱动纯逻辑层跑完整一局（多武器 / 被动 / Boss / 撤离），打印
 // 每 N 秒快照、每次升级的三选一与选择、Boss 战过程与撤离过程。不涉及渲染。用法：
 //   node scripts/survivor/preview-run.mjs [seed] [--move flee|spore]
-//        [--pick random|prefer:<weaponId>] [--every 30] [--max-sec 720]
-// 默认 seed=preview-001、move=spore、pick=random、every=30。同参数两次输出一致。
+//        [--pick random|prefer:<weaponId>] [--every N] [--max-sec N]
+// 默认 seed=preview-001、move=spore、pick=random、every=30、max-sec=1020（bot.mjs MAX_SEC）。
+// 只跑单种子；多种子统计用 `npm run survivor:balance`（09 S3-D4）。其它参数报 unknown argument。同参数两次输出一致。
 import { playRun, cardName, pickLabel, MOVES, MAX_SEC } from './bot.mjs'
 
 const args = process.argv.slice(2)

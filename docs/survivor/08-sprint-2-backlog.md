@@ -142,9 +142,9 @@ L12 复核结论为“再调”：通关率总体 55% 达标，但熟练型 76% 
 #### L7 · 平衡脚本与多种子文字预览
 
 - 角色：测试（脚本）+ 策划（读数）
-- 描述：`scripts/survivor/preview-run.mjs` 支持 `--seeds N --strategy random|greedy` 与上限 12 分钟：random 选卡用 SeededRandom(`${seed}:bot`)，greedy 偏好新武器 > 武器升级 > 被动；每个种子输出结局、存活时间、等级、最终构筑（武器与被动及等级）、选卡序列、Boss 战时长、实际净化率。`scripts/survivor/balance.mjs` 去掉占位：默认 50 种子 × 2 策略，汇总胜率、时长分布、构筑组合种数、各卡出现率、Boss 战中位时长，写 JSON 到 `tmp/survivor-balance.json`、终端打印摘要。脚本不改数据文件。
+- 描述（2026-09 S3 A5 按现行脚本改写，BUG-S2-04 / 09 S3-D4）：`scripts/survivor/preview-run.mjs` 为单种子文字预览，用法 `node scripts/survivor/preview-run.mjs <seed> [--move flee|spore] [--pick random|prefer:<id>] [--every N] [--max-sec N]`（默认 preview-001 / spore / random / 30 / 1020）：random 选卡用 SeededRandom(`${seed}:bot`)，`prefer:<id>` 偏好某武器；输出每 N 秒快照、每次三选一与选择、Boss 战与撤离过程、结局、存活时间、等级、最终构筑、净化率。多种子统计由 `npm run survivor:balance` 承担（不给 preview-run 补 `--seeds/--strategy`）。`scripts/survivor/balance.mjs` 去掉占位：默认 50 种子 × 2 策略，汇总胜率、时长分布、构筑组合种数、各卡出现率、Boss 战中位时长，写 JSON 到 `tmp/survivor-balance.json`、终端打印摘要。脚本不改数据文件。
 - 依赖：L4、L6
-- 验收：`npm run survivor:balance` 无异常跑完且 `diag.droppedTime` 为 0；`node scripts/survivor/preview-run.mjs --seeds 5 --strategy random` 在 5 个种子下输出可读构筑表；同参数两次输出一致。
+- 验收：`npm run survivor:balance` 无异常跑完且 `diag.droppedTime` 为 0，并输出多种子构筑表；`node scripts/survivor/preview-run.mjs preview-001 --pick random` 输出可读的单局过程与构筑；同参数两次输出一致。
 - 预估：M
 - 文件：scripts/survivor/preview-run.mjs、scripts/survivor/balance.mjs
 
@@ -159,7 +159,7 @@ L12 复核结论为“再调”：通关率总体 55% 达标，但熟练型 76% 
 
 ### ★ 用户检查点（第一批结束，第二批开工前）
 
-- 项目经理运行 `node scripts/survivor/preview-run.mjs --seeds 5 --strategy random`（另附 greedy 与 `npm run survivor:balance` 摘要），把 5 个种子的构筑表与结局发给用户。
+- 项目经理运行 `npm run survivor:balance`（多种子构筑表与结局摘要），另挑 5 个种子用 `node scripts/survivor/preview-run.mjs <seed> --pick random`（及 `--pick prefer:<id>`）出单局过程，一并发给用户。
 - 进入第二批的门槛：5 个种子中至少 3 种不同的“武器组合 + 主被动”；3 把武器与 4 个被动在 5 局里每项至少出现 1 次；至少 1 局见到 Boss。附 Boss 战中位时长（K6）。
 - 用户确认“构筑有分化”后才开第二批；用户不满意则回到 L1/L4 调整权重或数值（先改 01）。
 - 2026-09-11 检查点结论：形式门槛过线，但武器维度没有分化、通关率 13%、Boss 战中位 192 秒。用户按报告 §3 建议拍板（§3.1 K7–K14），先做下面的“第一批追加”，复核通过后再开第二批。

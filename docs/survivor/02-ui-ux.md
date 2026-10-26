@@ -393,6 +393,7 @@ safeLeft/Right = max(safeArea.left, windowWidth − safeArea.right, 0) × scale 
 
 - 战斗层所有动态 Sprite（角色、敌人、Boss、弹体、拾取物、预告、底影、摇杆）必须来自 `survivor-battle`，不得跨图集，否则打断合批。
 - RGBA 纹理内存口径与 03 §7.3 对齐（survivor-battle 2048×1024 RGBA ≈ 8MB，在 ≤ 32MB 预算内）。
+- 现行占位尺寸（BUG-S2-05 记录）：S2 起 survivor-battle 占位图集为 **512×1024**（36 帧，RGBA 显存 2MB；Boss 两帧 264×204px 放不下 512×512），仍是单图集，合批不受影响；正式美术（09 S3-11）时再定最终尺寸，上限仍为本表的 2048×1024。
 - 新玩法美术合计 ≤ 1.4MB。按 R7，M2 完成重打包后，survivor 不再引用 microforest / microforest-motion 图集，M3 是否删除由用户确认。
 
 下文 §8.3/§8.4 原标注的 survivor-actors、survivor-fx 两类素材现统一归入 `survivor-battle`。
