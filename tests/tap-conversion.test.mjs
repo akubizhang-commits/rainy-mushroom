@@ -6,6 +6,7 @@ import {join,dirname,resolve} from 'node:path'
 import * as packaging from '../scripts/cocos/package-wechat.mjs'
 import {captureBuildFingerprint,verifyBuildStamp} from '../scripts/release-integrity.mjs'
 import {spawnSync} from 'node:child_process'
+import {writeBuildCapabilities} from '../scripts/build-profile.mjs'
 
 function write(root,name,value){const path=join(root,name);fs.mkdirSync(dirname(path),{recursive:true});fs.writeFileSync(path,typeof value==='string'||Buffer.isBuffer(value)?value:JSON.stringify(value))}
 function fixture(t){
@@ -137,6 +138,7 @@ function buildFixture(t,mode='success'){
  write(root,'project.config.json',{appid:'wx1111111111111111',setting:{}})
  write(root,'release/settings.json',{version:'1.1.0-alpha.1',appid:'wx1111111111111111',advertising:{enabled:false},verification:{}})
  write(root,'js/source.js','// original source')
+ writeBuildCapabilities(root,'production')
  const creator=join(root,'Creator.app/Contents/MacOS/CocosCreator')
  write(root,'Creator.app/Contents/Info.plist','<key>CFBundleShortVersionString</key><string>3.8.8</string>')
  write(root,'Creator.app/Contents/Resources/info.json','{}')
@@ -156,7 +158,7 @@ const taskName=${JSON.stringify(mode)}==='wrong-marker'?'wechatgame':config.outp
 console.log('build Task ('+taskName+') Finished');process.exit(${JSON.stringify(mode)}==='creator-failed'?1:36);
 `)
  fs.chmodSync(creator,0o755)
- return {root,creator,run:()=>{const p=spawnSync(process.execPath,[join(root,'scripts/cocos/build.mjs'),'taptap-minigame'],{encoding:'utf8',env:{...process.env,COCOS_CREATOR_PATH:creator}});return {...p,log:(p.stdout||'')+(p.stderr||'')}}}
+ return {root,creator,run:(args=[])=>{const p=spawnSync(process.execPath,[join(root,'scripts/cocos/build.mjs'),'taptap-minigame',...args],{encoding:'utf8',env:{...process.env,COCOS_CREATOR_PATH:creator}});return {...p,log:(p.stdout||'')+(p.stderr||'')}}}
 
 }
 
@@ -235,4 +237,12 @@ for(const mode of ['wrong-marker','fatal-log','creator-failed'])test(`Tap Creato
  assert.notEqual(result.status,0,result.log)
  assert.match(result.log,/Creator Tap intermediate build failed/)
  assert.equal(fs.existsSync(join(root,'cocos-pilot/build/taptap-minigame/latest.json')),false)
+})
+
+
+test('Tap QA profile is preserved through preparation and remains release ineligible',{skip:!officialReady},t=>{
+ const {root,run}=buildFixture(t),result=run(['--profile=qa']);assert.equal(result.status,0,result.log);
+ const output=join(root,'cocos-pilot/build/taptap-minigame'),latest=JSON.parse(fs.readFileSync(join(output,'latest.json')));
+ const manifest=JSON.parse(fs.readFileSync(join(output,latest.manifest)));assert.equal(manifest.fingerprint.profile,'qa');
+ assert.equal(manifest.validation.releaseEligible,false);assert.equal(latest.releaseEligible,false);
 })

@@ -1,3 +1,4 @@
+import {BUILD_CAPABILITIES} from './TowerBuildCapabilities';
 import {TowerBreakthroughScene,BreakthroughModel} from './TowerBreakthroughScene';
 import {TowerBreakthroughAudio} from './TowerBreakthroughAudio';
 import {TowerLevelBeamArt} from './TowerLevelBeamArt';
@@ -166,8 +167,8 @@ export class TowerView {
   // SHOW_ALL reserves letterbox space but does not clip world-space Graphics.
   // Constrain the complete UI/world tree to the same logical input viewport.
   this.root.addComponent(Mask);
-  const storage=towerStorage(this.platform.storage);
-  this.tools=readPlaytestTools(this.platform.storage);
+  const storage=towerStorage(this.platform.storage,BUILD_CAPABILITIES.developerTools);
+  if(BUILD_CAPABILITIES.developerTools)this.tools=readPlaytestTools(this.platform.storage);
   this.store=new TowerCampaignStore(storage,Date.now());
   if(this.store.migrationReport?.reset)this.notice='开发期旧档已重置，已启用新资源规则。';
   if(!this.store.readOnly){const r=this.store.act({type:'sync'},Date.now());if(!r.ok)this.notice=this.reason(r.reason);}
@@ -177,8 +178,8 @@ export class TowerView {
   if(typeof window!=='undefined'){
    window.addEventListener('focus',this.shown);window.addEventListener('blur',this.hide);window.addEventListener('pagehide',this.hide);
    document.addEventListener('visibilitychange',this.visibility);
-   // QA access is only enabled by the existing memory-only smoke switch.
-   if(new URLSearchParams(window.location.search).get('smoke')==='1'){
+   // A smoke URL selects memory storage; only a QA build grants inspection access.
+   if(BUILD_CAPABILITIES.developerTools&&new URLSearchParams(window.location.search).get('smoke')==='1'){
     (window as any).__towerTest={host:this,state:()=>JSON.parse(JSON.stringify(this.store.state)),run:()=>this.run?.snapshot(),action:(a:any)=>this.action(a),enter:(f:number)=>this.enterFloor(f),pause:()=>this.pause(),resume:()=>this.resume(),withdraw:()=>this.withdraw(),page:(p:string)=>this.goto(p)};
    }
   }
@@ -428,7 +429,7 @@ export class TowerView {
    const sizeKey=`${this.width}:${this.height}`;
    if(!this.menu||this.menuSize!==sizeKey){
     this.menu?.destroy();
-    this.menu=new TowerMenu(this.root,this.width,this.height,{action:(a:any)=>this.action(a),page:(p:string)=>this.goto(p),enterFloor:(f:number)=>this.enterFloor(f),resume:()=>this.resume(),training:()=>this.enterTraining(),tools:()=>this.showTools()});
+    this.menu=new TowerMenu(this.root,this.width,this.height,{action:(a:any)=>this.action(a),page:(p:string)=>this.goto(p),enterFloor:(f:number)=>this.enterFloor(f),resume:()=>this.resume(),training:()=>this.enterTraining(),...(BUILD_CAPABILITIES.developerTools?{tools:()=>this.showTools()}:{})});
     this.menuSize=sizeKey;
    }
    this.menu.render({...this.store.state,readOnly:this.store.readOnly,playtest:false},this.page,this.notice||this.reasonIfReadOnly());
@@ -628,7 +629,7 @@ export class TowerView {
   const shade=this.overlay=this.node('暂停菜单',this.root,this.width,this.height);
   shade.addComponent(BlockInputEvents);
   drawMenuVeil(shade,this.width,this.height);
-  const width=Math.min(480,this.width-64),height=188+actions.length*84;
+  const width=Math.min(480,this.width-64),height=(BUILD_CAPABILITIES.developerTools?188:108)+actions.length*84;
   const panel=this.node('暂停面板',shade,width,height);
   const g=panel.addComponent(Graphics);
   g.fillColor=C(UI.surface);g.strokeColor=C(UI.edge);g.lineWidth=1.5;
@@ -642,12 +643,14 @@ export class TowerView {
   close.on(Button.EventType.CLICK,()=>resume?.fn());
   actions.forEach((action,index)=>this.button(action.text,panel,0,height/2-132-index*84,
    width-64,action.fn,action.primary,72,0));
-  const ruleY=-height/2+80;
-  g.moveTo(-width/2+32,ruleY);g.lineTo(width/2-32,ruleY);g.stroke();
-  const tools=this.button('开发者工具',panel,0,-height/2+40,width-64,()=>this.showTools(),false,56,0);
-  tools.getComponent(Graphics)!.clear();
-  const caption=tools.children[0].getComponent(Label)!;
-  caption.fontSize=24;caption.color=C(UI.muted);
+  if(BUILD_CAPABILITIES.developerTools){
+   const ruleY=-height/2+80;
+   g.moveTo(-width/2+32,ruleY);g.lineTo(width/2-32,ruleY);g.stroke();
+   const tools=this.button('开发者工具',panel,0,-height/2+40,width-64,()=>this.showTools(),false,56,0);
+   tools.getComponent(Graphics)!.clear();
+   const caption=tools.children[0].getComponent(Label)!;
+   caption.fontSize=24;caption.color=C(UI.muted);
+  }
  }
  private showBreakthrough(message=''){
   if(!this.run?.state.breakthrough?.safe)return;
@@ -783,7 +786,7 @@ export class TowerView {
   buttons.forEach((b,i)=>{const button=this.button(b.text,actionContent||o,(i%columns-(columns-1)/2)*cell,
    (actionContent?0:actionTop)-buttonHeight/2-Math.floor(i/columns)*step,cell-(actionsOnly?0:18),b.fn,b.primary??(i===buttons.findIndex(action=>!/^(取消|退出|返回|关闭)/.test(action.text))),buttonHeight,actionsOnly?0:12);if(b.disabled)button.getComponent(Button)!.interactable=false;});
  }
- private applyTools(){this.run?.setPlaytestAssist(this.tools.invincible);}
+ private applyTools(){this.run?.setPlaytestAssist(BUILD_CAPABILITIES.developerTools&&this.tools.invincible);}
  private closeTools(){
   if(this.overlay?.name!=='开发者工具遮罩')return false;
   this.render();return true;
@@ -793,7 +796,7 @@ export class TowerView {
   if(this.screen!=='battle')this.menu?.showSettings();
  }
  private showTools(){
-  if(this.pending)return;
+  if(!BUILD_CAPABILITIES.developerTools||this.pending)return;
   if(this.run?.state.phase==='playing'
    ||this.run?.state.phase==='paused'&&this.store.state.activeRun?.snapshot.phase==='playing')this.pause();
   if(this.pending)return;
@@ -827,7 +830,7 @@ export class TowerView {
   this.button('重置游戏进度',box,0,rowY(5),cell,()=>this.resetProgress(),false,buttonHeight);
  }
  private resetProgress(){
-  if(this.pending||this.store.readOnly)return;
+  if(!BUILD_CAPABILITIES.developerTools||this.pending||this.store.readOnly)return;
   const result=this.store.act({type:'playtestReset'},Date.now());
   if(!result.ok){
    this.showModal('操作未完成',this.reason(result.reason),[{text:'返回工具',fn:()=>this.showTools()}]);return;
@@ -837,7 +840,7 @@ export class TowerView {
   this.screen='camp';this.page='hall';this.notice='游戏进度已重置，可以重新开始。';this.render();
  }
  private editPlaytest(type:string,params:any={}){
-  if(this.pending||this.store.readOnly||!['playtestResources','playtestNextStage','playtestAddSkillPoints'].includes(type))return;
+  if(!BUILD_CAPABILITIES.developerTools||this.pending||this.store.readOnly||!['playtestResources','playtestNextStage','playtestAddSkillPoints'].includes(type))return;
   if(type==='playtestNextStage'&&this.training){
    this.showModal('请先结束演武','回到宗门后可提升境界。',[{text:'返回工具',fn:()=>this.showTools()}]);return;
   }
@@ -849,6 +852,7 @@ export class TowerView {
   this.applyTools();this.showTools();
  }
  private changeTools(patch:any){
+  if(!BUILD_CAPABILITIES.developerTools)return;
   const next={...this.tools,...patch};
   try{savePlaytestTools(this.platform.storage,next);}
   catch{this.showModal('设置未保存','工具设置写入失败，当前设置保持。',[{text:'返回工具',fn:()=>this.showTools()}]);return;}
@@ -895,7 +899,7 @@ export class TowerView {
    const before=cultivationAt(p.xp),beforePoints=realmPoints(p.xp),known=new Set(Object.keys(this.run.state.loadout.active));
    const killStart=this.run.state.pickups?.collected.length??this.run.state.killLedger.length;
    const oldX=p.x,oldY=p.y,characterBefore=this.characterArt.sample(this.run.state);
-   const d=Math.max(1,Math.hypot(x,y));this.run.setInput(x/d,y/d);this.run.advance(Math.min(.1,dt)*this.tools.speed,
+   const d=Math.max(1,Math.hypot(x,y));this.run.setInput(x/d,y/d);this.run.advance(Math.min(.1,dt)*(BUILD_CAPABILITIES.developerTools?this.tools.speed:1),
     (cast:any)=>this.characterArt.observeCast(cast));
    this.characterArt.observe(characterBefore,this.run.state);
    this.queueMaterialNotice(this.run.state,killStart);

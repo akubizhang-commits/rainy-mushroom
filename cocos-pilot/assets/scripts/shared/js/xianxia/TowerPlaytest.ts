@@ -40,9 +40,9 @@ export function savePlaytestTools(storage, tools) {
 }
 
 // One live campaign; developer actions use the same atomic save contract.
-export function towerStorage(storage) {
+export function towerStorage(storage, allowPlaytestTools = false) {
   return {
-    allowPlaytestTools: true,
+    allowPlaytestTools: allowPlaytestTools === true,
     getItem: key => storage.getItem(key),
     setItem: (key, record) => storage.setItem(key, record),
   }

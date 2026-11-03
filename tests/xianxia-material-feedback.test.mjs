@@ -9,7 +9,7 @@ import { CAMP_PILLS,cultivationAt } from '../js/xianxia/TowerProfile.js'
 import { realmPoints } from '../js/xianxia/TowerGrowth.js'
 import { ARCHETYPES } from '../js/xianxia/TowerContent.js'
 const source=stripTypeScriptTypes(readFileSync(new URL('../cocos-pilot/assets/scripts/TowerView.ts',import.meta.url),'utf8').replace(/^import .*$/gm,''),{mode:'transform'}).replace(/^export /gm,'')
-const View=runInNewContext(source+'\nTowerView',{materialDrops,collectedMaterials,CAMP_PILLS,cultivationAt,realmPoints,KeyCode:{}})
+const View=runInNewContext(source+'\nTowerView',{materialDrops,collectedMaterials,CAMP_PILLS,cultivationAt,realmPoints,KeyCode:{},BUILD_CAPABILITIES:Object.freeze({profile:'production',developerTools:false})})
 const boss=ARCHETYPES.find(a=>a.role==='boss').id
 const receipt=id=>({id,wave:20,archetype:boss})
 function fixture(){

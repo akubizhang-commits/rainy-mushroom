@@ -67,7 +67,7 @@ test('real kill rewards stop at Foundation and final barriers and settle without
 })
 
 test('developer promotion across a capped battle receipt returns a safe failure',()=>{
- const {disk}=fixture({xp:6599});const store=new TowerCampaignStore(towerStorage(disk),0)
+ const {disk}=fixture({xp:6599});const store=new TowerCampaignStore(towerStorage(disk,true),0)
  store.act({type:'startFloor',floor:1,seed:7},0)
  const run=TowerRun.restore(store.state.activeRun.snapshot)
  for(let i=0;i<600&&run.state.killLedger.length<2;i++){

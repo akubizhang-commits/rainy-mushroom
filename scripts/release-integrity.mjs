@@ -1,4 +1,5 @@
 import fs from 'node:fs'
+import {readBuildProfile} from './build-profile.mjs'
 import {resolve,relative,dirname} from 'node:path'
 import {createHash} from 'node:crypto'
 
@@ -63,14 +64,14 @@ export function captureBuildFingerprint({root=projectRoot,platform,creator=defau
  const config=JSON.parse(fs.readFileSync(resolve(root,'release/settings.json')))
  const tools=JSON.parse(canonical(toolchain??readToolchain({creator})))
  const inputs=[...requiredInputs.map(path=>inputRecord(root,path)),...optionalInputs.map(path=>inputRecord(root,path,true))]
- const identity={schemaVersion:2,platform,inputs,toolchain:tools}
+ const identity={schemaVersion:2,platform,profile:readBuildProfile(root),inputs,toolchain:tools}
  return {...identity,version:config.version,appid:platform==='taptap-minigame'?null:config.appid,...(platform==='taptap-minigame'?{intermediateWechatAppId:config.appid}:{}),sourceDigest:digestSource(root),inputDigest:sha256(canonical(identity))}
 }
 
 export function verifyBuildStamp(stamp,options={}){
- if(stamp?.schemaVersion!==2||!stamp.inputDigest||!stamp.toolchain||!stamp.inputs)throw Error('旧版或不完整的构建记录：需要 schemaVersion 2 完整构建指纹，请重新构建')
+ if(stamp?.schemaVersion!==2||!stamp.inputDigest||!stamp.toolchain||!stamp.inputs||!['production','qa'].includes(stamp.profile))throw Error('旧版或不完整的构建记录：需要 schemaVersion 2 完整构建指纹，请重新构建')
  const current=captureBuildFingerprint(options)
- for(const key of ['schemaVersion','platform','version','appid','intermediateWechatAppId','sourceDigest','inputDigest','inputs','toolchain']){
+ for(const key of ['schemaVersion','platform','profile','version','appid','intermediateWechatAppId','sourceDigest','inputDigest','inputs','toolchain']){
   if(canonical(stamp[key])!==canonical(current[key]))throw Error('构建产物已过期，build inputs or toolchain changed ('+key+')，请重新构建')
  }
  return true

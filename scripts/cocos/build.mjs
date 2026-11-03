@@ -1,3 +1,4 @@
+import {profileFromArgs} from '../build-profile.mjs'
 import {captureBuildFingerprint,stampBuild} from '../release-integrity.mjs'
 import {packageWechat} from './package-wechat.mjs'
 import {spawnSync} from 'node:child_process'
@@ -5,21 +6,24 @@ import {copyFileSync,existsSync,mkdirSync,writeFileSync,rmSync} from 'node:fs'
 import {resolve} from 'node:path'
 const root=resolve(import.meta.dirname,'../..'),platform=process.argv[2]||'web-mobile'
 if(!['web-mobile','wechatgame','taptap-minigame'].includes(platform))throw Error('Unsupported pilot build platform')
+const profile=profileFromArgs(process.argv.slice(3))
+if(process.argv.includes('--release')&&profile!=='production')throw Error('QA build profile cannot be released')
 const creator=process.env.COCOS_CREATOR_PATH||'/Applications/CocosCreator.app/Contents/MacOS/CocosCreator'
 if(!existsSync(creator))throw Error('Set COCOS_CREATOR_PATH to the Creator 3.8.8 executable')
 if(platform==='taptap-minigame'){
  if(process.argv.includes('--release'))throw Error('Tap publication is unavailable: account, platform/device and package limits remain unverified')
  const {buildTap}=await import('./build-tap.mjs')
- await buildTap({root,creator})
+ await buildTap({root,creator,profile})
 }else{
 const output=resolve(root,'cocos-pilot/build',platform),fingerprintOptions={root,platform,creator}
 // A failed rebuild must never retain a previous candidate's validity record.
 rmSync(resolve(output,'release-build.json'),{force:true})
-const config=spawnSync(process.execPath,[resolve(root,'scripts/prepare-release-config.mjs')],{stdio:'inherit'});if(config.status!==0)process.exit(config.status||1)
+const config=spawnSync(process.execPath,[resolve(root,'scripts/prepare-release-config.mjs'),'--profile='+profile],{stdio:'inherit'});if(config.status!==0)process.exit(config.status||1)
 const sync=spawnSync(process.execPath,[resolve(root,'scripts/cocos/sync-shared.mjs')],{stdio:'inherit'})
 if(sync.status!==0)process.exit(sync.status||1)
 // Preparation writes generated inputs; freeze them only after both steps succeed.
 const before=captureBuildFingerprint(fingerprintOptions)
+if(before.profile!==profile)throw Error('Prepared build profile mismatch')
 const result=spawnSync(creator,['--project',resolve(root,'cocos-pilot'),'--build',`configPath=${resolve(root,'cocos-pilot/build-configs',platform+'.json')}`],{encoding:'utf8',maxBuffer:32*1024*1024})
 const log=(result.stdout||'')+(result.stderr||'');const logDir=resolve(root,'cocos-pilot/temp/pilot-builds');mkdirSync(logDir,{recursive:true});writeFileSync(resolve(logDir,platform+'.log'),log)
 // Creator's successful command-line build exits with 36. Also require its completion marker.

@@ -31,7 +31,7 @@ export function checkRelease(stage='publication',{root=projectRoot,creator,toolc
  if(!fs.existsSync(folder))blockers.push('缺少微信构建产物')
  else{
   const files=filesBelow(folder)
-  try{const stamp=JSON.parse(fs.readFileSync(resolve(folder,'release-build.json')));verifyBuildStamp(stamp,{root,platform:'wechatgame',creator,toolchain})}catch(error){blockers.push('构建版本与源码校验失败：'+error.message)}
+  try{const stamp=JSON.parse(fs.readFileSync(resolve(folder,'release-build.json')));verifyBuildStamp(stamp,{root,platform:'wechatgame',creator,toolchain});if(stamp.profile!=='production')blockers.push('QA构建启用了开发能力，不能作为正式发行候选')}catch(error){blockers.push('构建版本与源码校验失败：'+error.message)}
   try{const project=JSON.parse(fs.readFileSync(resolve(folder,'project.config.json')));if(project.appid!==config.appid)blockers.push('构建产物AppID与发布配置不一致')}catch{blockers.push('微信项目配置缺失')}
   for(const file of files){const size=fs.statSync(file).size;totalBytes+=size;if(!file.startsWith(resolve(folder,'subpackages')+'/'))mainBytes+=size}
   if(mainBytes>4*1024*1024||totalBytes>20*1024*1024)blockers.push('主包或总包超过项目设定预算')

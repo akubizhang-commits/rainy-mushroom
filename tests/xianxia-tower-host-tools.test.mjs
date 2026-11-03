@@ -69,9 +69,10 @@ const sources = Object.fromEntries([...dependentArtModules, 'TowerPreferences', 
   ).replace(/^export /gm, ''),
 ]))
 const emittedDefinitions = new Map()
-if (process.env.TOWER_HOST_BUNDLE) {
+let emittedContext = null
+if (process.env.TOWER_HOST_BUNDLE || process.env.TOWER_CAPABILITY_BUNDLE) {
   // Register only; do not execute the game's startup or unrelated modules.
-  const registration = {
+  const registration = emittedContext = {
     System: {
       register(id, dependencies, declare) {
         if (Array.isArray(id)) {
@@ -89,7 +90,7 @@ if (process.env.TOWER_HOST_BUNDLE) {
       },
     },
   }
-  const bundle = resolve(process.env.TOWER_HOST_BUNDLE)
+  const bundle = resolve(process.env.TOWER_HOST_BUNDLE || process.env.TOWER_CAPABILITY_BUNDLE)
   const chunks = resolve(dirname(bundle), '../../src/chunks')
   for (const file of [bundle, ...readdirSync(chunks).filter(name => name.endsWith('.js')).map(name => join(chunks, name))]) {
     runInNewContext(readFileSync(file, 'utf8'), registration, { filename: file })
@@ -121,6 +122,33 @@ function emittedSkillIcons(context) {
     return exports
   }
   return load('chunks:///_virtual/TowerSkillIcons.ts').TowerSkillIcons
+}
+
+// For capability acceptance, execute the actual Creator-emitted host and capability
+// module. Other rendering/game modules retain the same explicit harness boundaries.
+function emittedCapabilityHost(context) {
+ // Definitions close over the registration VM; provide that VM the same browser boundary.
+ Object.assign(emittedContext,context)
+ const cache=new Map(),base='chunks:///_virtual/'
+ const load=name=>{
+  if(cache.has(name))return cache.get(name)
+  const definition=emittedDefinitions.get(base+name);assert.ok(definition,`missing emitted capability dependency: ${name}`)
+  const values={};cache.set(name,values)
+  const module=definition.declare((name,value)=>{if(typeof name==='string')values[name]=value;else Object.assign(values,name);return value})
+  definition.dependencies.forEach((dependency,index)=>{
+   const file=dependency.replace(/^\.\//,'')
+   const imported=dependency==='cc'?{...context,cclegacy:{_RF:{push(){},pop(){}}}}
+    :file==='TowerBuildCapabilities.ts'||file.includes('BabelHelpers')?load(file)
+    :file==='TowerRun.ts'?{...context,stats:combatStats}:context
+   module.setters[index](imported)
+  })
+  module.execute();return values
+ }
+ const actual=load('TowerBuildCapabilities.ts').BUILD_CAPABILITIES
+ assert.equal(actual.profile,context.BUILD_CAPABILITIES.profile,'compiled build must match requested profile')
+ assert.equal(actual.developerTools,context.BUILD_CAPABILITIES.developerTools)
+ assert.equal(Object.isFrozen(actual),true)
+ return load('TowerView.ts').TowerView
 }
 
 const START = 1_800_000_000_000
@@ -281,10 +309,11 @@ function delayedResources() {
 }
 
 function disk() {
-  const data = new Map(), blockedReads = new Set(), blockedWrites = new Set(), writes = []
+  const data = new Map(), blockedReads = new Set(), blockedWrites = new Set(), writes = [], reads = []
   return {
-    data, blockedReads, blockedWrites, writes,
+    data, blockedReads, blockedWrites, writes, reads,
     getItem(key) {
+      reads.push(key)
       if (blockedReads.has(key)) throw new Error(`read failed: ${key}`)
       return data.get(key) ?? null
     },
@@ -323,7 +352,7 @@ function seed(storage, { hp = 100, paused = false, patch = {} } = {}) {
   return storage.getItem(campaign.TOWER_CAMPAIGN_KEY)
 }
 
-function launch(t, storage, { assisted = true, frame = { width: 1280, height: 720 } } = {}) {
+function launch(t, storage, { assisted = true, buildProfile = 'qa', query = null, frame = { width: 1280, height: 720 } } = {}) {
   const clock = { now: START }
   const icons = delayedResources()
   const viewport = { frame: { ...frame }, design: { width: 1280, height: 720 }, policies: [] }
@@ -343,10 +372,11 @@ function launch(t, storage, { assisted = true, frame = { width: 1280, height: 72
     },
   }
   const location = {
-    href: `https://tower.test/game${assisted ? '?playtest=1' : ''}`,
+    href: `https://tower.test/game${query ?? (assisted ? '?playtest=1' : '')}`,
     get search() { return new URL(this.href).search },
   }
   const context = { ...tierTools,
+    BUILD_CAPABILITIES: Object.freeze({profile:buildProfile,developerTools:buildProfile==='qa'}),
     breakthroughReady, floorBreakthroughPreparation, breakthroughOptions, levelUpPresentation,
     CEREMONY_DURATION, ceremonyFrame, createBreakthroughPainter, createJindanPainter, drawLevelBeam,
     FlightStreamState, flightRidePose, NingshenAuraState, JianguAuraState, BumieAuraState, JianxinAuraState,
@@ -416,11 +446,11 @@ function launch(t, storage, { assisted = true, frame = { width: 1280, height: 72
     `(() => { ${sources.TowerArenaView}\nreturn {drawTowerArena,drawTowerArenaMap} })()`,
     context, { filename: 'TowerArenaView.ts' },
   ))
-  const TowerView = runInNewContext(`(() => { ${sources.TowerView}\nreturn TowerView })()`, context, { filename: 'TowerView.ts' })
+  const TowerView = process.env.TOWER_CAPABILITY_BUNDLE ? emittedCapabilityHost(context) : runInNewContext(`(() => { ${sources.TowerView}\nreturn TowerView })()`, context, { filename: 'TowerView.ts' })
   const game = new TowerView({ canvas: new Node('canvas'), progressStorage: storage })
   t.after(() => game.destroy())
   return {
-    game, clock, location, viewport, icons,
+    game, clock, location, viewport, icons, browser: context.window,
     resize(width, height) {
       viewport.frame = { width, height }
       // PinePilot's canvas-resize handler calls this public host entry point.
@@ -3986,3 +4016,42 @@ test('ten-layer golden core distinguishes tenth layer from full consummation',t=
  assert.equal(named(game.menu.root,'角色境界').getComponent(Label).string,'金丹 · 大圆满')
  assert.ok(hasLabel(game.menu.root,'修为已圆满'))
 })
+
+
+// Build capabilities are injected at the compiled-module boundary, never from URL/storage.
+test('T04 production blocks every developer entry and ignores persisted preferences', t => {
+ const storage=disk();seed(storage);storage.setItem(playtest.TOWER_PLAYTEST_TOOLS_KEY,JSON.stringify({speed:3,invincible:true}));
+ storage.reads.length=0;storage.writes.length=0;
+ const {game,browser}=launch(t,storage,{buildProfile:'production',query:'?smoke=1&playtest=1&profile=qa'});
+ assert.equal(game.store.allowPlaytestTools,false);assert.equal(browser.__towerTest,undefined);
+ assert.equal(storage.reads.includes(playtest.TOWER_PLAYTEST_TOOLS_KEY),false);
+ assert.equal(game.menu.handlers.tools,undefined);game.menu.showSettings();
+ assert.equal(descendants(game.root).some(n=>n.name==='开发者工具'),false);
+ const before=game.store.state,raw=storage.getItem(campaign.TOWER_CAMPAIGN_KEY),writes=storage.writes.length;
+ for(const type of ['playtestResources','playtestNextStage','playtestAddSkillPoints','playtestReset','playtestSpiritStones','playtestContribution','playtestMaxLevel','playtestSkillPoints']){
+  assert.equal(game.action({type,grade:0}).reason,'playtest-only',type);assert.equal(game.store.state,before);
+ }
+ game.showTools();game.changeTools({speed:3,invincible:true});game.editPlaytest('playtestResources');game.resetProgress();
+ assert.equal(game.store.state,before);assert.equal(storage.getItem(campaign.TOWER_CAMPAIGN_KEY),raw);assert.equal(storage.writes.length,writes);
+ assert.equal(descendants(game.root).some(n=>n.name==='开发者工具遮罩'),false);
+ game.enterFloor(1);game.update(0);game.tools={speed:3,invincible:true};game.applyTools();
+ assert.equal(game.run._playtestAssist,false);const time=game.run.state.time;game.update(.05);assert.ok(Math.abs(game.run.state.time-time-.05)<1e-9);
+ game.pause();assert.equal(descendants(game.overlay).some(n=>n.name==='开发者工具'),false);
+});
+
+test('T04 QA retains preferences, tools and explicit smoke hook', t => {
+ const storage=disk();seed(storage);storage.setItem(playtest.TOWER_PLAYTEST_TOOLS_KEY,JSON.stringify({speed:3,invincible:true}));storage.reads.length=0;
+ const {game,browser}=launch(t,storage,{buildProfile:'qa',query:'?smoke=1'});
+ assert.equal(game.store.allowPlaytestTools,true);assert.equal(browser.__towerTest.host,game);
+ assert.equal(storage.reads.includes(playtest.TOWER_PLAYTEST_TOOLS_KEY),true);assert.equal(typeof game.menu.handlers.tools,'function');
+ game.showTools();assert.equal(game.overlay.name,'开发者工具遮罩');
+ const stones=game.store.state.spiritStones;assert.equal(game.action({type:'playtestResources'}).ok,true);assert.equal(game.store.state.spiritStones,stones+999000000);
+ game.changeTools({speed:2,invincible:true});assert.deepEqual(JSON.parse(storage.getItem(playtest.TOWER_PLAYTEST_TOOLS_KEY)),{speed:2,invincible:true});
+ game.enterFloor(1);game.update(0);assert.equal(game.run._playtestAssist,true);const time=game.run.state.time;game.update(.05);assert.ok(Math.abs(game.run.state.time-time-.1)<1e-9);
+ game.pause();assert.equal(descendants(game.overlay).some(n=>n.name==='开发者工具'),true);
+});
+
+test('T04 QA build without smoke URL does not expose the test hook', t => {
+ const storage=disk();seed(storage);const {game,browser}=launch(t,storage,{buildProfile:'qa',query:''});
+ assert.equal(game.store.allowPlaytestTools,true);assert.equal(browser.__towerTest,undefined);
+});

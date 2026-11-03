@@ -6,6 +6,7 @@ import {spawnSync} from 'node:child_process'
 import {dirname,join,resolve} from 'node:path'
 import * as integrity from '../scripts/release-integrity.mjs'
 import {checkRelease} from '../scripts/check-release.mjs'
+import {writeBuildCapabilities,readBuildProfile} from '../scripts/build-profile.mjs'
 
 const toolchain={
  node:{version:'v22.22.2',executableSha256:'a'.repeat(64)},
@@ -19,13 +20,14 @@ const sourceFiles={
  'cocos-pilot/build-configs/wechatgame.json':'config\n'
 }
 function write(root,path,value){const file=join(root,path);mkdirSync(dirname(file),{recursive:true});writeFileSync(file,value)}
-function fixture(t){
+function fixture(t,{capabilities=true}={}){
  const root=mkdtempSync(join(tmpdir(),'rainy-integrity-'))
  t.after(()=>rmSync(root,{recursive:true,force:true}))
  const config=JSON.parse(readFileSync(new URL('../release/settings.json',import.meta.url)))
  config.accountType='formal'
  Object.assign(config.verification,{privacyConfigured:true,ageRatingApproved:true,contentFilingApproved:true,miitFilingNumber:'test-only',androidDevicePassed:true,iosDevicePassed:true})
  for(const [path,value] of Object.entries(sourceFiles))write(root,path,value)
+ if(capabilities)writeBuildCapabilities(root,'production')
  for(const path of ['package.json','cocos-pilot/package.json','cocos-pilot/tsconfig.json'])write(root,path,'{}\n')
  for(const path of ['scripts/cocos/build.mjs','scripts/cocos/package-wechat.mjs','scripts/cocos/sync-shared.mjs','scripts/prepare-release-config.mjs','scripts/release-integrity.mjs','scripts/check-release.mjs'])write(root,path,'// fixture\n')
  write(root,'project.config.json',JSON.stringify({appid:config.appid}))
@@ -38,7 +40,7 @@ function capture(options){assert.equal(typeof integrity.captureBuildFingerprint,
 function verify(stamp,options){assert.equal(typeof integrity.verifyBuildStamp,'function','verifyBuildStamp must enforce schema 2');return integrity.verifyBuildStamp(stamp,options)}
 
 test('legacy sourceDigest retains the original four-directory byte algorithm',t=>{
- const {root}=fixture(t)
+ const {root}=fixture(t,{capabilities:false})
  assert.equal(integrity.digestSource(root),'77c725fd1d0dbb1ef5d9dd93f1908f6019afa1ec605232240d29f182a13f26ef')
 })
 
@@ -151,7 +153,7 @@ test('installed-toolchain inspection reads the actual executable, Creator versio
 
 function cliFixture(t,{platform='wechatgame',mode='success',reportFailure=false,missingKeyart=false}={}){
  const setup=fixture(t),{root,folder}=setup
- for(const path of ['scripts/release-integrity.mjs','scripts/cocos/build.mjs','scripts/cocos/package-wechat.mjs','scripts/cocos/sync-shared.mjs','scripts/prepare-release-config.mjs'])cpSync(new URL('../'+path,import.meta.url),join(root,path))
+ for(const path of ['scripts/build-profile.mjs','scripts/release-integrity.mjs','scripts/cocos/build.mjs','scripts/cocos/package-wechat.mjs','scripts/cocos/sync-shared.mjs','scripts/prepare-release-config.mjs'])cpSync(new URL('../'+path,import.meta.url),join(root,path))
  write(root,'package.json','{"type":"module"}')
  write(root,'project.config.json',JSON.stringify({appid:setup.config.appid,setting:{}}))
  write(root,'cocos-pilot/build-configs/wechatgame.json','{"packages":{"wechatgame":{}}}')
@@ -185,8 +187,8 @@ process.exit(mode==='creator-failure'?1:36);
 `)
  chmodSync(creator,0o755)
  write(root,`cocos-pilot/build/${platform}/release-build.json`,'{"schemaVersion":1,"old":true}')
- const run=()=>{
-  const result=spawnSync(process.execPath,[join(root,'scripts/cocos/build.mjs'),platform],{encoding:'utf8',env:{...process.env,COCOS_CREATOR_PATH:creator}})
+ const run=(args=[])=>{
+  const result=spawnSync(process.execPath,[join(root,'scripts/cocos/build.mjs'),platform,...args],{encoding:'utf8',env:{...process.env,COCOS_CREATOR_PATH:creator}})
   return {...result,log:(result.stdout||'')+(result.stderr||'')}
  }
  return {...setup,creator,platform,folder:join(root,'cocos-pilot/build',platform),run}
@@ -279,4 +281,32 @@ test('build CLI accepts a Creator-created directory before final stamp verificat
  assert.equal(result.status,0,result.log)
  assert.ok(existsSync(join(root,'cocos-pilot/settings/v2/default-profiles')))
  assert.equal(verify(JSON.parse(readFileSync(join(folder,'release-build.json'))),{root,creator,platform:'web-mobile'}),true)
+})
+
+
+test('build profile is attested from the compiled capability source and QA is never publishable',t=>{
+ const {root,folder,options}=fixture(t),production=capture(options);assert.equal(production.profile,'production');
+ writeBuildCapabilities(root,'qa');const qa=capture(options);assert.equal(qa.profile,'qa');assert.notEqual(qa.inputDigest,production.inputDigest);
+ assert.throws(()=>verify(production,options),/profile|过期/);integrity.stampBuild(folder,qa,options);
+ assert.equal(verify(qa,options),true);assert.ok(checkRelease('publication',options).blockers.some(message=>/QA构建/.test(message)));
+ assert.ok(checkRelease('submission',options).blockers.some(message=>/QA构建/.test(message)));
+ const falseDeclaration={...qa,profile:'production'};assert.throws(()=>verify(falseDeclaration,options),/profile|过期/);
+ writeBuildCapabilities(root,'production');assert.throws(()=>verify(qa,options),/profile|过期/);
+ integrity.stampBuild(folder,capture(options),options);assert.deepEqual(checkRelease('publication',options).blockers,[]);
+})
+
+for(const profile of ['production','qa'])test(`build CLI emits the explicit ${profile} capability and manifest`,t=>{
+ const {root,creator,folder,run}=cliFixture(t,{platform:'web-mobile'}),result=run(['--profile='+profile]);assert.equal(result.status,0,result.log);
+ assert.equal(readBuildProfile(root),profile);const stamp=JSON.parse(readFileSync(join(folder,'release-build.json')));assert.equal(stamp.profile,profile);
+ assert.equal(verify(stamp,{root,creator,platform:'web-mobile'}),true);
+})
+
+test('default build resets a previous QA capability to production',t=>{
+ const {root,folder,run}=cliFixture(t,{platform:'web-mobile'});writeBuildCapabilities(root,'qa');const result=run();assert.equal(result.status,0,result.log);
+ assert.equal(readBuildProfile(root),'production');assert.equal(JSON.parse(readFileSync(join(folder,'release-build.json'))).profile,'production');
+})
+
+for(const args of [['--profile=dev'],['--profile=qa','--release'],['--profile=qa','--profile=production']])test(`invalid or release-ineligible profile fails before replacing a prior candidate: ${args.join(' ')}`,t=>{
+ const {folder,run}=cliFixture(t),before=readFileSync(join(folder,'release-build.json'),'utf8'),result=run(args);
+ assert.notEqual(result.status,0);assert.match(result.log,/profile/i);assert.equal(readFileSync(join(folder,'release-build.json'),'utf8'),before);
 })

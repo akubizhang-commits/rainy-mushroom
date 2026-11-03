@@ -7,7 +7,7 @@ import {TowerRun,validateTowerSnapshot} from '../js/xianxia/TowerRun.js'
 import {checksum} from '../js/xianxia/Checksum.js'
 function fixture(patch={}) {
  const records=new Map(),disk={getItem:k=>records.get(k)??null,setItem:(k,v)=>records.set(k,v)}
- const adapter=towerStorage(disk);let store=new TowerCampaignStore(adapter,0)
+ const adapter=towerStorage(disk,true);let store=new TowerCampaignStore(adapter,0)
  store.act({type:'sync'},0)
  const envelope=JSON.parse(disk.getItem(TOWER_CAMPAIGN_KEY))
  envelope.data=JSON.stringify({...store.state,...patch});envelope.checksum=checksum(envelope.data)
