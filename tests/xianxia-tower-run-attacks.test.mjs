@@ -202,6 +202,13 @@ test('shot launch uses saved spec speed and poison remains one direct hit with n
   const restored = TowerRun.restore(run.snapshot())
   const actor = restored.state.enemies.find(e => e.id === enemy.id)
   const hp = restored.state.player.hp
+  const startPulses = Math.floor(restored.state.ticks / 180)
+  const hitEvents = []
+  const effect = restored._effect.bind(restored)
+  restored._effect = (kind, x, y, radius, extra) => {
+    if (kind === 'player_hit') hitEvents.push(extra)
+    return effect(kind, x, y, radius, extra)
+  }
   until(restored, actor, () => restored.state.projectiles.some(p => p.hostile))
   const shot = restored.state.projectiles.find(p => p.hostile)
   close(Math.hypot(shot.vx, shot.vy), 333)
@@ -209,8 +216,11 @@ test('shot launch uses saved spec speed and poison remains one direct hit with n
   actor.ai.graceUntil = 99999
   until(restored, actor, () => restored.state.player.hp < hp)
   close(hp - restored.state.player.hp, actor.damage)
+  assert.equal(hitEvents.length, 1)
   ticks(restored, actor, 180)
-  close(hp - restored.state.player.hp, actor.damage)
+  assert.equal(hitEvents.length, 1, 'poison is a single incoming hit, with no DOT event')
+  const pulses = Math.floor(restored.state.ticks / 180) - startPulses
+  close(hp - restored.state.player.hp, actor.damage - pulses * restored.state.player.maxHp / 60)
   assert.ok(!restored.state.zones.some(z => z.hostile && !z.renderOnly))
   assert.ok(validateTowerSnapshot(restored.snapshot()))
 })
@@ -328,7 +338,7 @@ for (const [archetype, reach, cooldown, speed] of [
     for (const hit of [true, false]) {
       const fork = TowerRun.restore(snapshot)
       // Earlier fixture waves leave pickup rewards; isolate attack damage.
-      fork.state.drops = []
+      fork.state.drops = fork.state.drops.filter(d => d.kind !== 'heal')
       const boar = fork.state.enemies.find(e => e.id === enemy.id)
       const distance = hit ? 220 : reach + boar.radius + fork.state.player.radius + 1
       fork.state.player.x = attack.x + attack.dirX * distance

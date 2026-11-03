@@ -61,16 +61,16 @@ test('fixed equipment applies each matching bonus once and wounds retain its res
   near(event.damage, expected*.5)
   near(event.damageParts.physical, expected / 4)
   near(event.damageParts.magic, expected / 4)
-  near(e.qingping.amount, expected * .5*1.15)
-  near(e.qingping.physicalAmount, expected * .25*1.15)
+  near(e.qingping.amount, expected * .5*1.5)
+  near(e.qingping.physicalAmount, expected * .25*1.5)
 })
 
 test('pending mixed wounds merge actual parts and preserve totals across paused restore and refresh', () => {
   const { r, e } = fixture({ sj_mark: 4 })
   hit(r, e, 'sj_yujian')
   hit(r, e, 'sj_shadow')
-  near(e.qingping.amount, 11.5)
-  near(e.qingping.physicalAmount, 8.625)
+  near(e.qingping.amount, 15)
+  near(e.qingping.physicalAmount, 11.25)
   r.pause()
   const saved = r.snapshot()
   r.advance(1)
@@ -88,15 +88,15 @@ test('pending mixed wounds merge actual parts and preserve totals across paused 
     return original(kind, x, y, radius, extra)
   }
   step(resumed, 30)
-  near(parts.physical, 8.625/6*1.01)
-  near(parts.magic, 2.875/6*1.01)
-  near(target.woundPhysicalBudget, 8.625*5/6)
+  near(parts.physical, 11.25/6*1.01)
+  near(parts.magic, 3.75/6*1.01)
+  near(target.woundPhysicalBudget, 11.25*5/6)
   hit(resumed, target, 'sj_shadow')
   const next = TowerRun.restore(resumed.snapshot())
-  near(next.state.enemies.find(x => x.id === e.id).woundPhysicalBudget, 8.625*5/6+2.875)
+  near(next.state.enemies.find(x => x.id === e.id).woundPhysicalBudget, 11.25*5/6+3.75)
   step(resumed, 181)
-  near(parts.physical, 8.625/6*1.01+(8.625*5/6+2.875)*1.02)
-  near(parts.magic, 2.875/6*1.01+(2.875*5/6+2.875)*1.02)
+  near(parts.physical, 11.25/6*1.01+(11.25*5/6+3.75)*1.02)
+  near(parts.magic, 3.75/6*1.01+(3.75*5/6+3.75)*1.02)
   near(target.woundBudget, 0)
   near(target.woundPhysicalBudget, 0)
 })
@@ -106,11 +106,11 @@ test('mitigation and overkill scale both parts; inherited damage is not mitigate
   e.mechanic = { armorUntil: 9999, armor: .5 }
   const event = hit(r, e, 'sj_shadow')
   near(event.damage, 2.5)
-  near(e.qingping.amount, 2.875)
-  near(e.qingping.physicalAmount, 1.4375)
+  near(e.qingping.amount, 3.75)
+  near(e.qingping.physicalAmount, 1.875)
   const before = e.hp
   step(r, 180)
-  near(before - e.hp, 2.875)
+  near(before - e.hp, 3.75)
   e.hp = 3
   const lethal = hit(r, e, 'sj_shadow', 100)
   near(lethal.damageParts.physical, 1.5)
@@ -146,7 +146,7 @@ test('fractional pure physical hits never create negative spell damage or unload
   }
 })
 
-test('sword gate stays an independent mixed burst without crit or wound recursion', () => {
+test('sword gate stays an independent mixed burst with no crit on a noncritical roll or wound recursion', () => {
   const { r, e } = fixture({ sj_gate: 1, sj_mark: 4, sj_heart: 4 })
   r.state.player.attack = 10
   hit(r, e, 'sj_yujian', 1)

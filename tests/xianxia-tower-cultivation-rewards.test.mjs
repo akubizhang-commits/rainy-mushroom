@@ -1,6 +1,6 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { FLOORS, FLOOR01 } from '../js/xianxia/TowerContent.js'
+import { FLOORS, FLOOR01, ARCHETYPES } from '../js/xianxia/TowerContent.js'
 import { towerKillXp } from '../js/xianxia/TowerCultivationRewards.js'
 import { cultivationAt } from '../js/xianxia/TowerProfile.js'
 import { readFileSync } from 'node:fs'
@@ -32,8 +32,13 @@ test('white tiger has an independent resource used by both tower and battle view
   assert.notDeepEqual(read(`${base}tiger.png`), read(`${base}white-tiger.png`))
   assert.notEqual(JSON.parse(read(`${base}tiger.png.meta`)).uuid,
     JSON.parse(read(`${base}white-tiger.png.meta`)).uuid)
+  const boss = ARCHETYPES.find(a => a.id === 'tiger_boss_zhenyan')
+  assert.equal(boss.art_family, 'white-tiger')
+  assert.notEqual(ARCHETYPES.find(a => a.id === 'tiger_normal').art_family, boss.art_family)
+  assert.match(read('cocos-pilot/assets/scripts/TowerMonsterArt.ts').toString(),
+    /new Map\(\(ARCHETYPES as any\[\]\)\.map\(a=>\[a\.id,a\.art_family\]\)\)/)
   for (const name of ['TowerMenu', 'TowerView']) {
     assert.match(read(`cocos-pilot/assets/scripts/${name}.ts`).toString(),
-      /tiger_boss_zhenyan['"]\s*\?\s*['"]white-tiger/)
+      /TowerMonsterArt\.artFamily\(/)
   }
 })

@@ -6,7 +6,7 @@ import { CORE_DROP_RULES, CORE_RANK_VALUES, buildCoreDropPlan } from '../js/xian
 
 const STEP = 1 / 60
 const A = Object.fromEntries(ARCHETYPES.map(a => [a.id, a]))
-const loadout = { active: { sj_wanjian: 1 }, passive: {}, evolutions: [],
+const loadout = { active: { sj_yujian: 1 }, passive: {}, evolutions: [],
   weaponId: 'eq_sword_suwen', weaponQuality: 1, weaponRefine: 0 }
 const make = (extra = {}) => new TowerRun({
   attemptId: 1, floor: 1, seed: 123, hp: 100, xp: 0, normalCoreCounter: 19, loadout, ...extra,
@@ -16,12 +16,18 @@ const key = kill => `${kill.wave}:${kill.id.split(':').at(-1)}`
 const grades = run => Object.fromEntries(run.state.killLedger.map(k => [key(k), k.coreRank]))
 const gradeValue = snapshot => snapshot.killLedger.reduce((sum, kill) => sum + CORE_RANK_VALUES[kill.coreRank], 0)
 
-// Explicit assist plus positioning exercises real authored spawns, full-HP
-// enemies, skill hits and settlement. It is runtime coverage, not balance data.
+// These are loot/settlement tests, not DPS benchmarks. Feed a controlled hit
+// through the real damage/death path on full-HP authored enemies; never edit
+// HP, spawn membership, kill ledgers or reward state. Actual cast budgets have
+// separate coverage in run-growth, weapon-actions and weapon-combat.
 function tick(run, selected = 'all') {
+  for (const id of Object.keys(run.state.cooldowns)) run.state.cooldowns[id] = 999999
   for (const enemy of run.state.enemies) {
-    enemy.x = selected === 'all' || selected === enemy.id ? run.state.player.x + 60 : -800
-    enemy.y = selected === 'all' || selected === enemy.id ? run.state.player.y : -1000
+    const chosen = selected === 'all' || selected === enemy.id
+    enemy.x = chosen ? run.state.player.x + 60 : -800
+    enemy.y = chosen ? run.state.player.y : -1000
+    if (chosen) run._damageEnemy({ target: enemy.id, damage: 1e9,
+      direct: false, scaled: true, source: 'loot-settlement-fixture' })
   }
   run.advance(STEP)
 }
@@ -63,11 +69,11 @@ test('new attempts default to version-one loot and validate uint32 identity with
   }
 })
 
-test('all nine full combat floors pay exact authored grades inside both count and value bounds', () => {
+test('all nine authored floors settle real deaths with exact grades inside both count and value bounds', () => {
   const droppedRoles = new Set(), droppedRanks = new Set()
   let kills = 0
   for (let floor = 1; floor <= 9; floor++) {
-    const run = make({ floor, seed: 456 })
+    const run = make({ floor, seed: 456, xp: 14400 })
     run.setPlaytestAssist(true)
     const identity = clone(run.state.loot), plan = buildCoreDropPlan(floor, identity.seed)
     for (let i = 0; i < 80000 && run.state.phase === 'playing'; i++) {
@@ -76,15 +82,19 @@ test('all nine full combat floors pay exact authored grades inside both count an
       for (const kill of run.state.killLedger.slice(before)) {
         assert.equal(kill.coreRank, plan[key(kill)] ?? 0, `floor ${floor}, ${key(kill)}`)
         assert.ok(kill.coreRank === 0 || kill.coreRank === A[kill.archetype].rank)
-        const visuals = run.state.drops.filter(d => d.kind === 'core' && d.killId === kill.id)
-        assert.equal(visuals.length, kill.coreRank ? 1 : 0)
+        const receipt = `stone:${kill.id}`
+        const visuals = run.state.drops.filter(d => d.kind === 'core' && d.receipts.includes(receipt))
+        const collected = run.state.pickups.collected.filter(id => id === receipt)
+        assert.equal(visuals.length + collected.length, kill.coreRank ? 1 : 0)
         if (kill.coreRank) {
           droppedRoles.add(A[kill.archetype].role)
           droppedRanks.add(kill.coreRank)
-          assert.equal(visuals[0].rank, A[kill.archetype].rank)
-          assert.equal(visuals[0].amount, CORE_RANK_VALUES[kill.coreRank])
-          assert.ok(Number.isFinite(visuals[0].x) && Number.isFinite(visuals[0].y))
-          assert.ok(visuals[0].expiresAt > run.state.time)
+          for (const visual of visuals) {
+            assert.equal(visual.rank, A[kill.archetype].rank)
+            assert.equal(visual.amount, CORE_RANK_VALUES[kill.coreRank] * visual.receipts.length)
+            assert.ok(Number.isFinite(visual.x) && Number.isFinite(visual.y))
+            assert.ok(visual.readyAt >= visual.bornAt + .5)
+          }
         }
       }
     }
@@ -99,7 +109,7 @@ test('all nine full combat floors pay exact authored grades inside both count an
     assert.equal(summary.value, value, 'the UI summary counts kill denominations, excluding clear bonuses')
     assert.equal(summary.value, summary.byRank.reduce((sum, count, index) =>
       sum + count * CORE_RANK_VALUES[index + 1], 0))
-    assert.equal(snapshot.earned.contribution, 100 + 5 * (floor - 1))
+    assert.equal(snapshot.earned.contribution, 0)
     assert.equal(snapshot.normalCoreCounter, 19)
     assert.deepEqual(snapshot.loot, identity)
     assert.deepEqual(Object.fromEntries(Object.entries(grades(run)).filter(([, rank]) => rank > 0)), { ...plan })
@@ -109,7 +119,7 @@ test('all nine full combat floors pay exact authored grades inside both count an
     assert.deepEqual(restored.snapshot(), snapshot, 'terminal reload cannot award again')
     kills += snapshot.killLedger.length
   }
-  assert.equal(kills, 4770)
+  assert.equal(kills, 4772)
   assert.deepEqual([...droppedRoles].sort(), ['boss', 'elite', 'normal'])
   assert.deepEqual([...droppedRanks].sort(), [1, 2, 3, 4, 5, 6, 7])
 })
@@ -194,7 +204,7 @@ test('paused and live JSON resumes retain the same seed, future grades, visuals 
     gradeValue(run.snapshot()) + (run.state.phase === 'won' ? 5 * (run.state.floor - 1) : 0))
 })
 
-test('core visuals are already credited at the kill, persist through reload and never credit on touch or expiry', () => {
+test('core receipts persist at a distance, survive reload and never add a second award on pickup or departure', () => {
   const run = firstDroppedKill({ floor: 9 })
   const saved = run.snapshot(), drop = saved.drops.find(d => d.kind === 'core')
   assert.ok(drop.rank > 1, 'high-rank value must not be mistaken for an item count')
@@ -203,14 +213,18 @@ test('core visuals are already credited at the kill, persist through reload and 
   for (const touch of [false, true]) {
     const restored = TowerRun.restore(clone(saved))
     restored.setPlaytestAssist(true)
-    if (touch) { restored.state.player.x = drop.x; restored.state.player.y = drop.y }
+    restored.state.player.x = drop.x - (touch ? 0 : 200)
+    restored.state.player.y = drop.y
     for (let i = 0; i < 240; i++) tick(restored, null)
     assert.equal(restored.state.killLedger.length, saved.killLedger.length)
     assert.deepEqual(restored.state.earned, saved.earned)
-    assert.ok(!restored.state.drops.some(d => d.kind === 'core' && d.killId === drop.killId))
+    assert.equal(restored.state.drops.some(d => d.id === drop.id), !touch, 'distant receipts have no expiration timer')
+    for (const receipt of drop.receipts) assert.equal(restored.state.pickups.collected.includes(receipt), touch)
     assert.ok(validateTowerSnapshot(restored.snapshot()))
     restored.abandon()
     assert.deepEqual(restored.state.earned, saved.earned)
+    for (const receipt of drop.receipts) assert.equal(restored.state.pickups.collected.filter(id => id === receipt).length, 1)
+    assert.ok(validateTowerSnapshot(restored.snapshot()))
   }
 })
 
@@ -305,10 +319,10 @@ test('corrupt loot identity, grades, monetary totals and core visuals are reject
     ['removed loot identity', s => { delete s.loot }],
     ['wrong visual amount', s => { s.drops[visual].amount++ }],
     ['wrong visual rank', s => { s.drops[visual].rank = 1 }],
-    ['missing kill reference', s => { delete s.drops[visual].killId }],
-    ['unearned kill reference', s => { s.drops[visual].killId = s.enemies[0]?.id ?? 'unearned' }],
+    ['missing reward receipts', s => { delete s.drops[visual].receipts }],
+    ['unearned reward reference', s => { s.drops[visual].receipts = ['stone:unearned'] }],
     ['invalid vertical position', s => { s.drops[visual].y = NaN }],
-    ['invalid expiry', s => { s.drops[visual].expiresAt = Infinity }],
+    ['invalid landing time', s => { s.drops[visual].readyAt = Infinity }],
     ['duplicate core visual', s => { s.drops.push({ ...s.drops[visual], id: 'duplicate-core' }) }],
   ]) assertRejected(saved, mutate, label)
   const originalPlan = buildCoreDropPlan(saved.floor, saved.loot.seed)

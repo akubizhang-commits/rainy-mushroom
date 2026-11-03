@@ -53,7 +53,7 @@ test('fixed weapons expose real speed and independent hit shares, never random a
   assert.equal(W.validateWeapon(forged), false)
 })
 
-test('element affixes start at bao and match their element instead of every attack', () => {
+test('element affixes match their element and mixed queries weight both physical and magic bonuses', () => {
   for (const d of W.WEAPONS) {
     const w = W.createFixedWeapon(d.id, d.quality ? `audit-${d.id}` : 'iron')
     const elemental = w.affixes.filter(a => a.type === 'element')
@@ -64,9 +64,10 @@ test('element affixes start at bao and match their element instead of every atta
   const wind = W.weaponDamageModifiers(w, 'sj_yujian', 'physical', 'wind').flat
   const fire = W.weaponDamageModifiers(w, 'sj_yujian', 'physical', 'fire').flat
   assert.ok(wind > neutral)
-  assert.equal(fire, neutral)
-  assert.equal(W.weaponDamageModifiers(w, 'sj_yujian', 'hybrid', 'wind').flat, wind)
-  assert.ok(W.weaponDescription(w).some(s => s.includes('风属性伤害')))
+  assert.equal(fire, wind, 'current elemental affix covers every non-neutral element')
+  const magic = W.weaponDamageModifiers(w, 'sj_yujian', 'magic', 'wind').flat
+  assert.equal(W.weaponDamageModifiers(w, 'sj_yujian', 'hybrid', 'wind').flat, (wind + magic) / 2)
+  assert.ok(W.weaponDescription(w).some(s => s.includes('全元素伤害')))
 })
 
 test('unlearned skills still allow a visible basic hit, with no damage before its swing', () => {
@@ -122,15 +123,27 @@ test('a target that leaves melee range before contact takes neither basic nor at
   assert.equal(enemy.hp, hp)
 })
 
-test('independent hit settles once per cast and target, does not inherit crit or start another proc', () => {
+test('attached damage settles on each actual hit, inherits resolved damage and never rolls another crit or proc', () => {
   const run = runWith({}, W.createFixedWeapon('eq_sword_zhufeng', 'a')), enemy = targetFor(run)
+  run.state.loadout.passive.sj_heart = 1
   const receipt = run._weaponCast('sj_arc')
   const castContext = { loadout: structuredClone(run.state.loadout), xp: run.state.player.xp, weaponAttack: 10 }
   const hit = { target: enemy.id, damage: 1, direct: true, source: 'sj_arc', ...receipt, castContext }
+  run._random = () => 0
+  const before = enemy.hp
   run._damageEnemy(hit); run._damageEnemy(hit)
+  const parents = run.state.effects.filter(e => e.kind === 'hit' && e.source === 'sj_arc')
   const bonus = run.state.effects.filter(e => e.source === 'weapon_on_hit')
-  assert.equal(bonus.length, 1)
-  assert.equal(bonus[0].element, 'wind')
+  assert.equal(bonus.length, 2)
+  assert.equal(parents.length, 2)
+  const fraction = W.weaponAttackProfile(run.state.loadout.weapon).onHit
+  for (let i = 0; i < 2; i++) {
+    assert.equal(parents[i].critical, true)
+    assert.ok(Math.abs(bonus[i].damage - parents[i].damage * fraction) < 1e-7)
+    assert.equal(bonus[i].attached, true)
+    assert.equal(bonus[i].critical, undefined)
+  }
+  assert.ok(Math.abs(before - enemy.hp - [...parents, ...bonus].reduce((n, e) => n + e.damage, 0)) < 1e-7)
   assert.ok(bonus[0].damage > 0)
   assert.equal(bonus[0].critical, undefined)
   assert.equal(run.state.weaponState.effectiveCasts, 0)

@@ -1,5 +1,7 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
+import { castActionTiming } from '../js/xianxia/TowerSkillTiming.js'
+import { skillForm } from '../js/xianxia/TowerSkillForms.js'
 import { newAttackActions } from '../js/xianxia/TowerAttackActions.js'
 import * as combat from '../js/xianxia/TowerRun.js'
 import { GROWTH_SKILLS, GROWTH_EVOLUTIONS, giftSkills } from '../js/xianxia/TowerGrowth.js'
@@ -50,15 +52,26 @@ for (const [xp, hp, expectedXp, expectedHp, maxHp] of [
   [0, 10, 1, 10, 100],
   [44, 10, 45, 42.4, 108],
   [44, 99, 45, 108, 108],
-  [1484, 10, 1485, 100 * 1.08 ** 8 * 1.35, 100 * 1.08 ** 8 * 1.35],
-  [5399, 10, 5400, 100 * 1.08 ** 16 * 1.35 ** 2, 100 * 1.08 ** 16 * 1.35 ** 2],
+  [1484, 10, 1485, 10 + 30 * 1.08 ** 9, 100 * 1.08 ** 9],
+  [5399, 10, 5400, 10 + 30 * 1.08 ** 17 * 1.35, 100 * 1.08 ** 17 * 1.35],
   [10124, 10, 10125, 10 + 30 * 1.08 ** 23 * 1.35 ** 2, 100 * 1.08 ** 23 * 1.35 ** 2],
   [10919, 10, 10920, 10 + 30 * 1.08 ** 24 * 1.35 ** 2, 100 * 1.08 ** 24 * 1.35 ** 2],
-  [10920, 10, 10920, 10, 100 * 1.08 ** 24 * 1.35 ** 2],
+  [1799, 10, 1800, 10, 100 * 1.08 ** 9],
+  [1800, 10, 1800, 10, 100 * 1.08 ** 9],
+  [6599, 10, 6600, 10, 100 * 1.08 ** 18 * 1.35],
+  [6600, 10, 6600, 10, 100 * 1.08 ** 18 * 1.35],
+  [13484, 10, 13485, 10 + 30 * 1.08 ** 27 * 1.35 ** 2, 100 * 1.08 ** 27 * 1.35 ** 2],
+  [14399, 10, 14400, 10, 100 * 1.08 ** 27 * 1.35 ** 2],
+  [14400, 10, 14400, 10, 100 * 1.08 ** 27 * 1.35 ** 2],
 ]) {
   test(`real kill XP ${xp}→${expectedXp} at ${hp} HP heals only newly crossed levels`, () => {
     const run = make({ xp, hp })
     assert.equal(run.state.player.hp, hp, 'creating a run never reapplies past level healing')
+    if ([1800, 6600].includes(xp)) {
+      assert.equal(run.state.phase, 'paused', 'entering at a bottleneck offers the safe breakthrough prompt')
+      run.resume() // Continue without consuming an item or advancing the realm.
+      assert.equal(run.state.player.xp, xp)
+    }
     healingKill(run, healingEnemies(run))
     assert.equal(run.state.player.xp, expectedXp)
     close(run.state.player.hp, expectedHp)
@@ -84,28 +97,33 @@ for (const [xp, hp, expectedXp, expectedHp, maxHp] of [
 }
 
 test('same-tick authored kills cross two small levels using each new max HP and clamp each heal', () => {
-  for (const [hp, expectedHp] of [[10, 77.392], [99, 116.64]]) {
+  for (const hp of [10, 99]) {
     const run = make({ floor: 9, xp: 44, hp })
     const enemies = healingEnemies(run, 26)
     assert.ok(enemies.every(e => e.role === 'normal' && e.rank === 4))
+    // Spawning 26 real units spans two normal regeneration pulses. Neither
+    // pulse is a level-up reward; retain both mechanics without disabling either.
+    const beforeKillHp = run.state.player.hp
+    close(beforeKillHp, Math.min(100, hp + Math.floor(run.state.ticks / 180) * 100 / 60))
+    const expectedHp = Math.min(116.64, Math.min(108, beforeKillHp + 108 * .3) + 116.64 * .3)
     healingKill(run, enemies)
     assert.equal(run.state.player.xp, 121)
     close(run.state.player.maxHp, 116.64)
     close(run.state.player.hp, expectedHp)
     assert.equal(run.state.earned.xp, 77)
     assert.deepEqual(run.state.clearedWaves, [1])
-    assert.equal(run.state.earned.contribution, 2, 'wave reward does not add XP or another heal')
+    assert.equal(run.state.earned.contribution, 0, 'ordinary waves do not grant point vouchers')
   }
 })
 
 test('level healing uses the equipped player’s actual post-level max HP', () => {
   const loadout = { ...growth({}, maxSkills('passive')), weaponQuality: 4, weaponRefine: 4 }
-  for (const [xp, fullHeal] of [[44, false], [1484, true], [5399, true]]) {
+  for (const xp of [44, 1484, 5399]) {
     const run = make({ xp, hp: 10, loadout })
     const equipment = clone(run.state.loadout)
     healingKill(run, healingEnemies(run))
     const player = run.state.player
-    close(player.hp, fullHeal ? player.maxHp : 10 + player.maxHp * .3)
+    close(player.hp, 10 + player.maxHp * .3)
     assert.deepEqual(run.state.loadout, equipment)
     assert.ok(player.attack > 100, 'real equipped stats are in effect')
     assert.ok(player.moveSpeed > 220, 'real passive stats are in effect')
@@ -135,19 +153,20 @@ test('same-tick lethal damage and a level-up kill retain XP but cannot revive th
 })
 
 test('full floor rewards and restoring a victory never add healing without a new level', () => {
-  const run = make({ xp: 10920, hp: 10 })
+  const run = make({ xp: 14400, hp: 10 })
   for (let i = 0; i < 30000 && run.state.phase === 'playing'; i++) {
     const enemies = [...run.state.enemies]
     if (enemies.length) healingKill(run, enemies)
     else healingTick(run)
     // Healing drops are a separate mechanic and must not enter this probe.
     run.state.drops = run.state.drops.filter(d => d.kind !== 'heal')
-    assert.equal(run.state.player.hp, 10)
+    close(run.state.player.hp, Math.min(run.state.player.maxHp,
+      10 + Math.floor(run.state.ticks / 180) * run.state.player.maxHp / 60))
   }
   assert.equal(run.state.phase, 'won')
   assert.equal(run.state.clearedWaves.length, 20)
   assert.equal(run.state.earned.xp, 0)
-  assert.ok(run.state.earned.contribution > 0)
+  assert.equal(run.state.earned.contribution, 0)
   const restored = TowerRun.restore(run.snapshot())
   restored.advance(60)
   assert.deepEqual(restored.snapshot(), run.snapshot())
@@ -319,15 +338,21 @@ test('all active skills share the action slot and evolutions replace parent rele
 test('new active damage at ranks 1 and 10 stays a per-cast total rather than multiplying decorative swords or eyes', () => {
   for (const rank of [1, 10]) {
     for (const [id, seconds, multiplier] of [
-      ['sj_yujian', .5, .5], ['sj_arc', .7, 1], ['sj_wanjian', .4, 10 / 7],
-      ['sj_line', .5, 1], ['sj_shadow', 1.5, 1], ['sj_formation', 5.3, 6],
+      ['sj_yujian', .5, .5 ** ((rank - 1) / 9)], ['sj_arc', .7, 1], ['sj_wanjian', .4, 10 / 7],
+      ['sj_line', .5, 1], ['sj_shadow', 1.5, 1], ['sj_formation', 5.7, 6], // Rank 10 splits the same budget across seven hits.
     ]) {
       const run = make({ loadout: growth({ [id]: rank }) })
       const e = target(run, 85)
       run.state.cooldowns[id] = 0
       run.advance(.4)
       run.state.cooldowns[id] = 99999
-      if (seconds > .4) run.advance(seconds - .4)
+      // Sequential line/crescent pulses share one budget but may release
+      // after 0.5s. Observe the final authored release plus its short flight.
+      const form = skillForm(id, rank)
+      const releaseEnd = ['sj_arc','sj_line'].includes(id)
+        ? castActionTiming(id, form.hits).releases.at(-1) + 85 / (form.speed || 1000) + STEP : 0
+      const until = Math.max(seconds, releaseEnd)
+      if (until > .4) run.advance(until - .4)
       const skill = GROWTH_SKILLS.find(s => s.id === id)
       close(100000 - e.hp, 106 * skill.damage[rank - 1] * multiplier)
     }
@@ -341,7 +366,7 @@ test('growth passive rank-eight effects retain crit, wound and single-trigger bu
   crit.state.rng = 1
   // Allow the gathered sword to complete its homing flight before checking damage.
   crit.advance(.8)
-  close(100000 - e.hp, 106 * .6 * (1 + .25 + .5))
+  close(100000 - e.hp, 106 * 1.2 * 1.25 * 1.5)
   const wound = make({ loadout: growth({}, { sj_mark: 4 }) })
   const marked = target(wound)
   wound.state.cooldowns.sj_yujian = 0
@@ -349,7 +374,7 @@ test('growth passive rank-eight effects retain crit, wound and single-trigger bu
   wound.state.cooldowns.sj_yujian = 99999
   wound.advance(.7)
   wound.advance(3)
-  close(100000 - marked.hp, 106 * .6 * 1.15)
+  close(100000 - marked.hp, 106 * 1.2 * (.5 + .5 * 1.5))
   const gate = make({ loadout: growth({}, { sj_gate: 4 }) })
   const first = target(gate)
   first.hp = 1
@@ -477,7 +502,7 @@ test('growth training loops with real kills but never teaches, pays rewards, or 
   assert.ok(validateTowerSnapshot(run.snapshot()))
 })
 
-test('all nine growth floors preserve 180 waves, 4770 deaths and bounded grade sums across live JSON replay', () => {
+test('all nine growth floors preserve 180 waves, 4772 deaths and bounded grade sums across live JSON replay', () => {
   const totals = { xp: 0, cores: 0, contribution: 0, deaths: 0 }, families = new Set()
   let counter = 0, replays = 0
   for (let floor = 1; floor <= 9; floor++) {
@@ -516,12 +541,12 @@ test('all nine growth floors preserve 180 waves, 4770 deaths and bounded grade s
     totals.deaths += run.state.killLedger.length
     counter = run.state.normalCoreCounter
   }
-  assert.deepEqual([totals.xp, totals.contribution, totals.deaths], [10920, 1080, 4770])
+  assert.deepEqual([totals.xp, totals.contribution, totals.deaths], [10920, 0, 4772])
   const rules = Object.values(CORE_DROP_RULES)
   assert.ok(totals.cores >= 180 + rules.reduce((sum, rule) => sum + rule.minValue, 0))
   assert.ok(totals.cores <= 180 + rules.reduce((sum, rule) => sum + rule.maxValue, 0))
   assert.equal(counter, 0, 'new loot never advances the legacy normal counter')
-  assert.equal(families.size, 14)
+  assert.deepEqual([...families].sort(), ['bat', 'bear', 'boar', 'crocodile', 'falcon', 'rhino', 'snake', 'spider', 'tiger', 'wolf', 'yak'])
   assert.ok(replays > 180)
 })
 

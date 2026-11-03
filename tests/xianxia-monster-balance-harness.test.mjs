@@ -8,7 +8,7 @@ import {fixture,zoneDanger,steerMechanics} from '../scripts/verify-monster-mecha
 import {FLOORS} from '../js/xianxia/TowerContent.js'
 import {cultivationAt} from '../js/xianxia/TowerProfile.js'
 import {TowerCampaignStore,combatLoadout} from '../js/xianxia/TowerCampaign.js'
-import {TowerRun} from '../js/xianxia/TowerRun.js'
+import {TowerRun,validateTowerSnapshot} from '../js/xianxia/TowerRun.js'
 test('all 81 fixed sword fixtures fit real level, SP, and item eligibility',()=>{
  for(let floor=1;floor<=9;floor++)for(const route of ['qi','array','mixed'])for(const quality of [1,2,4]){
   const f=fixture(floor,route,quality)
@@ -176,16 +176,63 @@ test('bot clears an expanding shockwave instead of oscillating and stepping back
  }
 })
 
-test('bot leaves recorded sweep and charge warnings without reversing into the hit',()=>{
+// Historical snapshots retain their original art/equipment data on disk. Reuse
+// their encounter geometry, but generate a fresh current-schema combat window:
+// old affixes and missing mana/receipt fields must not be silently migrated here.
+function currentEscapeWindow(record) {
+ const old=record.snapshot,bossPose=old.enemies.find(e=>e.role==='boss')
+ const mechanic=old.monsterMechanics.zones.length>0
+ const loadout={growthVersion:1,skillsInitialized:true,active:{},passive:{sj_bone:4},
+  evolutions:[],evolutionLevels:{},tutorialWaves:0,weaponId:'eq_sword_suwen',weaponQuality:1,weaponRefine:0}
+ const run=new TowerRun({attemptId:44,floor:old.floor,seed:601,xp:14400,
+  hp:cultivationAt(14400).maxHp,arenaVersion:1,loadout})
+ // The native-sweep case deliberately isolates the native controller, as in
+ // run-attacks.test.mjs. The charge case retains the real M06 controller.
+ if(!mechanic)delete run.state.monsterMechanics
+ run.setPlaytestAssist(true)
+ for(let frame=0;frame<20000&&!run.state.enemies.some(e=>e.role==='boss');frame++){
+  for(const e of run.state.enemies)run._damageEnemy({target:e.id,damage:1e9,direct:false,scaled:true,source:'encounter-setup'})
+  run.advance(1/60)
+ }
+ const boss=run.state.enemies.find(e=>e.role==='boss')
+ assert.ok(boss,'actual floor-nine Boss spawned after all required earlier kills')
+ const quiet=()=>{
+  for(const e of run.state.enemies)if(e!==boss)e.ai.graceUntil=999999
+ }
+ while(run.state.time<boss.ai.entryUntil){quiet();run.advance(1/60)}
+ Object.assign(run.state.player,{x:old.player.x,y:old.player.y})
+ Object.assign(boss,{x:bossPose.x,y:bossPose.y})
+ boss.ai.graceUntil=mechanic?999999:0;boss.ai.readyAt=0
+ for(let frame=0;frame<600;frame++){
+  quiet();run.advance(1/60)
+  if(mechanic?run.state.monsterMechanics.zones.some(z=>z.skillId==='M06'):boss.ai.attack?.kind==='sweep')break
+ }
+ const zone=mechanic?run.state.monsterMechanics.zones.find(z=>z.skillId==='M06'):
+  run.state.zones.find(z=>z.ownerId===boss.id&&z.kind==='enemy_windup')
+ assert.ok(zone,'real controller emitted the expected warning')
+ assert.equal(zone.shape,mechanic?'capsule':'sector')
+ assert.ok(zoneDanger(zone,run.state.player,run.state.player.radius),'starting pose is actually threatened')
+ const snapshot=run.snapshot()
+ assert.ok(validateTowerSnapshot(snapshot),'current items, stats, mana and all reward receipts remain valid')
+ return snapshot
+}
+
+test('bot leaves recorded sweep and charge geometry in fresh valid combat windows',()=>{
  const windows=JSON.parse(readFileSync(new URL('./fixtures/tower-bot-escape.json',import.meta.url),'utf8'))
  for(const f of windows){
-  const run=TowerRun.restore(f.snapshot),end=run.state.time+f.duration
-  const seen=new Set(run.state.effects.map(e=>e.id));let hits=0
+  const snapshot=currentEscapeWindow(f)
+  const run=TowerRun.restore(snapshot),stationary=TowerRun.restore(snapshot),end=run.state.time+f.duration
+  let movingHits=0,stationaryHits=0
+  for(const [actor,count] of [[run,()=>movingHits++],[stationary,()=>stationaryHits++]]){
+   const effect=actor._effect.bind(actor)
+   actor._effect=(kind,x,y,radius,extra)=>{if(kind==='player_hit')count();return effect(kind,x,y,radius,extra)}
+  }
   while(run.state.phase==='playing'&&run.state.time<end){
    const p=run.state.player;run.setViewport({xmin:p.x-560,xmax:p.x+560,ymin:p.y-315,ymax:p.y+315})
-   steerMechanics(run);run.advance(1/60)
-   for(const e of run.state.effects)if(!seen.has(e.id)){seen.add(e.id);if(e.kind==='player_hit')hits++}
+   steerMechanics(run);run.advance(1/60);stationary.advance(1/60)
   }
-  assert.equal(hits,0,f.name)
+  assert.equal(movingHits,0,f.name)
+  assert.ok(stationaryHits>0,`${f.name}: stationary control must receive the actual warned hit`)
+  assert.ok(validateTowerSnapshot(run.snapshot()))
  }
 })

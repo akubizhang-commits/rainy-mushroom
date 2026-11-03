@@ -2,7 +2,7 @@ import {equipmentPrimaryBonuses} from '../js/xianxia/TowerEquipmentBases.js'
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import { TowerRun, stats, validateTowerSnapshot } from '../js/xianxia/TowerRun.js'
-import { createIronWeapon, createFixedWeapon, weaponFlatAttack, rollWeapon, validateWeapon, weaponDamageModifiers, WEAPONS } from '../js/xianxia/TowerWeapons.js'
+import { createIronWeapon, createFixedWeapon, weaponFlatAttack, weaponAttackProfile, rollWeapon, validateWeapon, weaponDamageModifiers, WEAPONS } from '../js/xianxia/TowerWeapons.js'
 import { createBasicEquipment, createFixedEquipment, EQUIPMENT, rollEquipment, validateEquipment, ringDamageModifiers, ringCooldownReduction, armorModifiers } from '../js/xianxia/TowerEquipment.js'
 import { GROWTH_SKILLS } from '../js/xianxia/TowerGrowth.js'
 import { cultivationAt, cultivationLevelXp } from '../js/xianxia/TowerProfile.js'
@@ -55,7 +55,7 @@ function dummy(run, id = 'target') {
 function hit(run, enemy, source, extra = {}) {
   const before = run.state.effects.length
   run._damageEnemy({ target: enemy.id, damage: 100, direct: true, source, ...extra })
-  // This suite isolates the parent hit's crit/focus/passive formula. Independent
+  // This suite isolates the parent hit's crit/passive formula. Independent
   // attached hits are asserted separately in xianxia-weapon-actions.test.mjs.
   return run.state.effects.slice(before).findLast(e => e.kind === 'hit' && e.source === source && e.targetId === enemy.id)?.damage ?? 0
 }
@@ -150,269 +150,302 @@ test('disabled refinement is rejected for every slot without changing a paused r
   assert.deepEqual(armorModifiers(restored.state.loadout.armor), armorModifiers(saved.loadout.armor))
 })
 
-test('weapon flat and ring crit/focus use additive shares while preserving the original bone/crit baseline', () => {
+// Independent arithmetic from the approved attribute rules. These expectations
+// use item data and explicit passive ranks, never the runtime damage-factor helper.
+const affix = (item, type) => item?.affixes.filter(a => a.type === type).reduce((n, a) => n + a.value, 0) ?? 0
+function rank(loadout, id) {
+  const learned = loadout.passive[id] ?? 0
+  if (!learned) return 0
+  const bonus = ['weapon','armor','ring'].reduce((n, slot) => n + (loadout[slot]?.affixes
+    .filter(a => a.type === 'skillLevel' && (a.target === 'all' || a.target === id))
+    .reduce((sum, a) => sum + a.value, 0) ?? 0), 0)
+  return Math.min(5, learned + bonus)
+}
+function ordinaryFactor(l, parent, type) {
+  const skill = parent !== 'basic_attack'
+  const formation = ['sj_wanjian','sj_formation','evo_wuwo','evo_sixiang'].includes(parent)
+  let product = 1
+  for (const slot of ['weapon','armor','ring']) {
+    const item = l[slot]
+    const bonus = (slot === 'weapon' ? weaponDamageModifiers(item, parent, type).flat : 0)
+      + (skill ? affix(item, 'skillDamage') / 100 : 0)
+      + (skill && formation ? affix(item, 'formationDamage') / 100 : 0)
+    product *= 1 + bonus
+  }
+  return product + [0,.06,.12,.18,.25,.32][rank(l,'sj_bone')]
+}
+function expectedOrdinary(l, parent, parts) {
+  return parts.physical * ordinaryFactor(l,parent,'physical')
+    + parts.magic * ordinaryFactor(l,parent,'magic')
+}
+function critical(l) { return 1.5 + (affix(l.weapon,'critBonus') + affix(l.ring,'critBonus')) / 100 }
+function directShare(l) { return 1 - affix(l.weapon,'bleedConversion') / 100 }
+function regenStep(run) {
+  for (const e of run.state.enemies) { e.x = -700; e.y = -900 }
+  safeStep(run)
+}
+function toPulse(run, count = 1) {
+  const target = (Math.floor(run.state.ticks / 180) + count) * 180
+  while (run.state.ticks < target) regenStep(run)
+}
+function pulseRate(run, safe = false) {
+  return run.state.player.maxHp * Math.min(1/40, 1/60 + affix(run.state.loadout.armor,'healthRegen')/100
+    + (safe ? affix(run.state.loadout.armor,'safeRecovery')/100 : 0))
+}
+
+test('weapon and ring multiply by source, then add bone before the full critical multiplier', () => {
   for (const fixed of [false, true]) {
     const w = weapon('ling', 4, 'qi', fixed), ring = equipment('ring')
     const run = make(w, { ring, focus: 4, passive: { sj_bone: 4, sj_heart: 4 } })
     run._random = () => 0
-    const raw = run.state.player.attack * 2, baseline = raw * 1.25
-    const flat = weaponDamageModifiers(w, 'sj_line', 'physical').flat, r = ringDamageModifiers(ring)
+    const raw = run.state.player.attack * 2, l = run.state.loadout
+    const parts = {physical:raw,magic:0}
+    const expected = expectedOrdinary(l,'sj_line',parts) * critical(l)
     const cast = run._weaponCast('sj_line')
-    const expected = baseline * (1 + flat + r.critBonus + r.special) + raw * .5
-    close(hit(run, dummy(run), 'sj_line', { ...cast, damage: raw }), expected)
-    close(hit(run, dummy(run, 'other'), 'sj_line', { ...cast, damage: raw }), expected)
-    assert.equal(run.state.weaponState.effectiveCasts, 1)
-    assert.equal(run.state.weaponState.focusCount, 0)
-    assert.equal(run.state.loadout.weaponFocusCount, 4)
-    assert.ok(run.state.effects.findLast(e => e.source === 'sj_line').weaponFocus)
-    assert.equal(run.state.player.hp, 50, 'dealing damage never heals through weapon or ring')
-  }
-})
-
-test('focus belongs to the ring, shares a counter across skills and ignores whiffs, zero hits and corpses', () => {
-  const ring = equipment('ring'), run = make(weapon(), { ring }), e = dummy(run)
-  run._random = () => .99999
-  const miss = run._weaponCast('sj_arc')
-  run._damageEnemy({ target: 'absent', damage: 100, direct: true, source: 'sj_arc', ...miss })
-  hit(run, e, 'sj_arc', { ...miss, damage: 0 })
-  assert.equal(run.state.weaponState.focusCount, 0)
-  for (const [i, source] of ['sj_yujian', 'sj_arc', 'sj_shadow', 'sj_line', 'sj_arc', 'sj_line'].entries()) {
-    const d = weaponDamageModifiers(run.state.loadout.weapon, source, 'physical').flat
-    close(hit(run, e, source, run._weaponCast(source)), 100 * (1 + d + (i === 4 ? ringDamageModifiers(ring).special : 0)))
-  }
-  assert.equal(run.state.weaponState.focusCount, 1)
-  assert.equal(run.state.weaponState.effectiveCasts, 6)
-  e.hp = 0; hit(run, e, 'sj_arc', run._weaponCast('sj_arc'))
-  assert.equal(run.state.weaponState.effectiveCasts, 6)
-  for (const ring of [undefined, createBasicEquipment('ring'), equipment('ring', 'fa', 3)]) {
-    const bare = make(weapon(), { ring }), target = dummy(bare)
-    hit(bare, target, 'sj_line', bare._weaponCast('sj_line'))
-    assert.equal(bare.state.weaponState.effectiveCasts, 0)
-    assert.ok(!bare.state.effects.at(-1).weaponFocus)
-  }
-  const training = make(weapon(), { ring, focus: 4, run: { training: true } })
-  hit(training, dummy(training), 'sj_line', training._weaponCast('sj_line'))
-  assert.equal(training.state.weaponState.focusCount, 1)
-  assert.equal(training.state.loadout.weaponFocusCount, 4)
-})
-
-test('zone aliases apply one skill family across damage types and continuous damage excludes ring effects', () => {
-  const ring = equipment('ring')
-  for (const [affinity, pairs] of [
-    ['general', [['shadow', 'sj_shadow'], ['sword_rain', 'sj_yujian'], ['rain', 'sj_yujian'], ['evo_wanjian', 'sj_yujian']]],
-    ['formation', [['formation', 'sj_formation'], ['evo_sixiang', 'sj_formation'], ['orbit', 'sj_wanjian'], ['evo_wuwo', 'sj_wanjian']]],
-    ['qi', [['evo_tiandi', 'sj_line']]],
-  ]) {
-    const w = weapon('fa', 3, affinity), run = make(w, { ring, focus: 4 }), e = dummy(run)
-    run._random = () => .99999
-    const type = affinity === 'formation' ? 'hybrid' : 'physical'
-    for (const [source, parent] of pairs) close(hit(run, e, source), 100 * (1 + weaponDamageModifiers(w, parent, type).flat))
+    for (const id of ['target','other']) close(hit(run,dummy(run,id),'sj_line',
+      {...cast,damage:raw,damageParts:parts}),expected)
+    assert.equal(run.state.weaponState.effectiveCasts, 0)
     assert.equal(run.state.weaponState.focusCount, 4)
-    if (affinity === 'formation') {
-      const phys = weaponDamageModifiers(w, 'sj_formation', 'physical').flat
-      const mixed = weaponDamageModifiers(w, 'sj_formation', 'hybrid').flat
-      close(phys, mixed)
+    assert.equal(run.state.loadout.weaponFocusCount, 4)
+    assert.ok(!run.state.effects.some(e => e.weaponFocus))
+    assert.equal(run.state.player.hp, 50, 'outgoing hits never heal through the weapon or ring')
+  }
+})
+
+test('retired focus never triggers on the fifth cast, whiffs, zero hits, corpses or training', () => {
+  for (const ring of [undefined, createBasicEquipment('ring'), equipment('ring','fa',3), equipment('ring')]) {
+    const run = make(weapon(), {ring,focus:4}), e = dummy(run)
+    run._random = () => .99999
+    const miss = run._weaponCast('sj_arc')
+    run._damageEnemy({target:'absent',damage:100,direct:true,source:'sj_arc',...miss})
+    hit(run,e,'sj_arc',{...miss,damage:0})
+    for (const source of ['sj_yujian','sj_arc','sj_shadow','sj_line','sj_arc','sj_line']) {
+      close(hit(run,e,source,{...run._weaponCast(source),damageParts:{physical:100,magic:0}}),
+        expectedOrdinary(run.state.loadout,source,{physical:100,magic:0}))
+    }
+    assert.equal(run.state.weaponState.focusCount, 4)
+    assert.equal(run.state.weaponState.effectiveCasts, 0)
+    e.hp=0
+    assert.equal(hit(run,e,'sj_arc',run._weaponCast('sj_arc')),0)
+    assert.equal(run.state.weaponState.effectiveCasts, 0)
+    assert.ok(!run.state.effects.some(e=>e.weaponFocus))
+  }
+  const training=make(weapon(),{ring:equipment('ring'),focus:4,run:{training:true}})
+  hit(training,dummy(training),'sj_line',training._weaponCast('sj_line'))
+  assert.equal(training.state.weaponState.focusCount,0)
+  assert.equal(training.state.loadout.weaponFocusCount,4)
+})
+
+test('zone aliases retain their skill family and continuous damage uses ring bonuses and critical hits', () => {
+  const ring=equipment('ring')
+  for (const [affinity,pairs] of [
+    ['general',[['shadow','sj_shadow'],['sword_rain','sj_yujian'],['rain','sj_yujian'],['evo_wanjian','sj_yujian']]],
+    ['formation',[['formation','sj_formation'],['evo_sixiang','sj_formation'],['orbit','sj_wanjian'],['evo_wuwo','sj_wanjian']]],
+    ['qi',[['evo_tiandi','sj_line']]],
+  ]) {
+    const w=weapon('fa',3,affinity),run=make(w,{ring,focus:4,passive:{sj_heart:4}}),e=dummy(run)
+    for (const crit of [false,true]) for (const [source,parent] of pairs) {
+      run._random=()=>crit?0:.99999
+      const parts={physical:50,magic:50}
+      close(hit(run,e,source,{direct:false,damageParts:parts}),
+        expectedOrdinary(run.state.loadout,parent,parts)*(crit?critical(run.state.loadout):1)*directShare(run.state.loadout))
+    }
+    assert.equal(run.state.weaponState.focusCount,4)
+    assert.equal(e.qingping,undefined,'continuous damage cannot trigger direct-only wounds')
+    assert.equal(run.state.swordBursts?.length??0,0)
+  }
+})
+
+test('scaled wound and already-settled burst never repeat enhancement, critical, conversion, attached damage or healing', () => {
+  const run=make(weapon('ling',4,'qi',true),{ring:equipment('ring'),armor:equipment('armor'),focus:4,
+    passive:{sj_mark:4,sj_gate:4,sj_bone:4,sj_heart:4}})
+  let rolls=0;run._random=()=>{rolls++;return 0}
+  const e=dummy(run),direct=hit(run,e,'sj_line',run._weaponCast('sj_line'))
+  close(e.qingping.amount,direct*1.5)
+  close(e.woundBudget,direct*1.5)
+  assert.equal(run.state.swordBursts.length,1)
+  assert.equal(run.state.gateEntries.length,0)
+  const before=clone(run.state.weaponState),armorBefore=clone(run.state.armorState),beforeRolls=rolls
+  for (const source of ['wound','sword_burst']) {
+    const count=run.state.effects.length
+    close(hit(run,e,source,{scaled:true,direct:false,damage:13}),13)
+    assert.equal(run.state.effects.length,count+1,'settled damage adds no attached hit')
+  }
+  assert.equal(rolls,beforeRolls)
+  close(e.qingping.amount,direct*1.5)
+  close(e.woundBudget,direct*1.5)
+  assert.deepEqual(run.state.weaponState,before)
+  assert.deepEqual(run.state.armorState,armorBefore)
+  assert.equal(run.state.player.hp,50)
+})
+
+test('representative two-slot weapon/ring single hits obey current arithmetic and the sixfold ceiling', () => {
+  const bands=['fan','fa','bao','ling'].flatMap(tier=>(tier==='fan'?[1]:[1,2,3,4]).map(quality=>[tier,quality]))
+  for(let wi=-1;wi<bands.length;wi++)for(let ri=-1;ri<bands.length;ri++){
+    const minXp=Math.max(wi<0?0:unlockXp[bands[wi][0]],ri<0?0:unlockXp[bands[ri][0]])
+    for(const cdr of [false,true])for(const fixed of [false,true])for(const xp of [minXp,cultivationLevelXp(30)])for(const passives of [false,true]){
+      const w=wi<0?createIronWeapon():weapon(...bands[wi],'qi',fixed)
+      const ring=ri<0?undefined:equipment('ring',...bands[ri],cdr)
+      const run=make(w,{ring,focus:4,passive:passives?{sj_heart:4,sj_bone:4}:{},run:{xp}}),l=run.state.loadout
+      const raw=run.state.player.attack,parts={physical:raw,magic:0},e=dummy(run)
+      const p=Math.min(1,[0,.08,.14,.20,.28,.36][rank(l,'sj_heart')]+(affix(w,'critChance')+affix(ring,'critChance'))/100)
+      const ordinary=expectedOrdinary(l,'sj_line',parts),share=directShare(l)
+      run._random=()=>.999999
+      close(hit(run,e,'sj_line',{damage:raw,damageParts:parts}),ordinary*share)
+      run._random=()=>0
+      close(hit(run,e,'sj_line',{damage:raw,damageParts:parts}),ordinary*share*(p>0?critical(l):1))
+      const dot=affix(w,'bleedConversion')/100*(1+(affix(w,'bleed')+affix(ring,'dotDamage'))/100)
+      const resolved=ordinary*(1-p+p*critical(l))*(share*(1+affix(w,'onHit')/100)+dot)
+      const mean=resolved/(1-affix(ring,'cooldownReduction')/100)
+      const base=(100*cultivationAt(xp).attackMultiplier+5)*(passives?1.25:1)*(1+(passives ? .28 : 0)*.5)
+      assert.ok(mean/base<=6+1e-8,`weapon=${w.definitionId},ring=${ring?.definitionId},xp=${xp}: ${mean/base} > 6`)
     }
   }
-  const run = make(weapon(), { ring, focus: 4, passive: { sj_heart: 4 } }), e = dummy(run)
-  run._random = () => 0
-  for (const [source, parent, type] of [['formation', 'sj_formation', 'hybrid'], ['sword_rain', 'sj_yujian', 'physical']]) {
-    close(hit(run, e, source), 100 * (1 + weaponDamageModifiers(run.state.loadout.weapon, parent, type).flat))
-  }
-  assert.equal(run.state.weaponState.focusCount, 4)
 })
 
-test('scaled wound/burst never double-enhance damage but never reapply weapon, ring or healing', () => {
-  const run = make(weapon(), { ring: equipment('ring'), armor: equipment('armor'), focus: 4,
-    passive: { sj_mark: 4, sj_gate: 4, sj_bone: 4, sj_heart: 4 } })
-  run._random = () => 0
-  const e = dummy(run), direct = hit(run, e, 'sj_line', run._weaponCast('sj_line'))
-  close(e.qingping.amount, direct * 1.15); close(e.woundBudget, direct * 1.15); assert.equal(run.state.swordBursts.length, 1); assert.equal(run.state.gateEntries.length, 0)
-  const before = clone(run.state.weaponState), armorBefore = clone(run.state.armorState)
-  for (const source of ['wound', 'sword_burst']) close(hit(run, e, source, { scaled: true, direct: false, damage: 13 }), 13)
-  close(e.qingping.amount, direct * 1.15); close(e.woundBudget, direct * 1.15)
-  assert.deepEqual(run.state.weaponState, before)
-  assert.deepEqual(run.state.armorState, armorBefore)
-  assert.equal(run.state.player.hp, 50)
-})
-
-test('all legal weapon/ring grade combinations stay within the shared total budget using actual combat hits', () => {
-  const bands = ['fan','fa','bao','ling'].flatMap(tier => (tier==='fan'?[1]:[1,2,3,4]).map(quality=>[tier,quality]))
-  for (let wi = -1; wi < bands.length; wi++) for (let ri = -1; ri < bands.length; ri++) {
-    const minXp = Math.max(wi < 0 ? 0 : unlockXp[bands[wi][0]], ri < 0 ? 0 : unlockXp[bands[ri][0]])
-    for (const cdr of [false, true]) for (const fixed of [false, true]) for (const xp of [minXp, cultivationLevelXp(27)]) for (const passives of [false, true]) {
-      const w = wi < 0 ? createIronWeapon() : weapon(...bands[wi], 'qi', fixed)
-      const ring = ri < 0 ? undefined : equipment('ring', ...bands[ri], cdr)
-      const r = ring ? ringDamageModifiers(ring) : { critChance: 0, critBonus: 0, special: 0 }
-      const run = make(w, { ring, focus: 4, passive: passives ? { sj_heart: 4, sj_bone: 4 } : {}, run: { xp } })
-      const e = dummy(run), raw = run.state.player.attack, baseP = passives ? .28 : 0
-      const cast = run._weaponCast('sj_line')
-      run._random = () => .999999
-      const normal = hit(run, e, 'sj_line', { ...cast, damage: raw })
-      run._random = () => 0
-      const crit = hit(run, e, 'sj_line', { ...cast, damage: raw })
-      const mean = (normal * (1 - baseP - r.critChance) + crit * (baseP + r.critChance)) / (1 - (ring ? ringCooldownReduction(ring) : 0))
-      const baseline = (100 * cultivationAt(xp).attackMultiplier + 5) * ((passives ? 1.25 : 1) + baseP * .5)
-      const cap = 3 // Current fixed-equipment shared damage budget, including precharged focus and CDR.
-      const flat = weaponDamageModifiers(w, 'sj_line', 'physical').flat
-      const expected = raw * ((passives ? 1.25 : 1) * (1 + flat + (baseP + r.critChance) * r.critBonus + r.special) + (baseP + r.critChance) * .5) / (1 - (ring ? ringCooldownReduction(ring) : 0))
-      close(mean, expected)
-      assert.ok(mean / baseline <= cap + 1e-8, `weapon=${wi},ring=${ri},fixed=${fixed},xp=${xp}: ${mean / baseline} > ${cap}`)
-    }
-  }
-})
-
-test('armor reduction composes with existing vajra and one actual hit schedules exactly one heal', () => {
-  const armor = equipment('armor'), m = armorModifiers(armor)
-  const run = make(createIronWeapon(), { armor, passive: { vajra: 4 }, run: { hp: 100 } })
-  incoming(run, 10)
-  const damage = 10 * (1 - .15) * (1 - m.reduction)
-  close(run.state.player.hp, 100 - damage)
-  close(run.state.armorState.pending.damage, damage)
-  close(run.state.armorState.pending.amount, Math.min(damage, run.state.armorState.entryMaxHp * m.healFraction))
-  assert.ok(m.reduction <= .17)
-  const pending = clone(run.state.armorState.pending)
-  incoming(run, 50, 'during-invulnerability')
-  assert.deepEqual(run.state.armorState.pending, pending)
-  assert.equal(run.state.armorState.triggerCount, 1)
-  safeAdvance(run, .6)
-  incoming(run, 10, 'second-actual-hit')
-  assert.deepEqual(run.state.armorState.pending, pending)
-  assert.equal(run.state.armorState.cooldownUntil, pending.triggeredAt + 20)
+test('physical armor defense composes with vajra; hits do not schedule the retired reactive heal', () => {
+  const armor=equipment('armor'),m=armorModifiers(armor)
+  const run=make(createIronWeapon(),{armor,passive:{vajra:4},run:{hp:100}})
+  incoming(run,10)
+  const damage=10*(1-.15)*(1-m.physicalReduction)
+  close(run.state.player.hp,100-damage)
+  assert.equal(run.state.armorState.healedTotal,0)
+  assert.equal(run.state.armorState.pending,undefined)
+  const before=run.state.player.hp,armorBefore=clone(run.state.armorState)
+  incoming(run,50,'during-invulnerability')
+  close(run.state.player.hp,before)
+  assert.deepEqual(run.state.armorState,armorBefore)
+  for(let i=0;i<36;i++)regenStep(run)
+  incoming(run,10,'second-actual-hit')
+  close(run.state.player.hp,before-damage)
+  assert.equal(run.state.armorState.healedTotal,0)
   assert.ok(validateTowerSnapshot(run.snapshot()))
 })
 
-for (const tier of ['fan', 'fa', 'bao', 'ling']) for (const quality of (tier === 'fan' ? [1] : [1, 4])) {
-  test(`${tier}/${quality} armor heals after its delay, with real loss, entry HP and floor caps`, () => {
-    const armor = equipment('armor', tier, quality), m = armorModifiers(armor)
-    const run = make(createIronWeapon(), { armor })
-    incoming(run, .01)
-    const lost = 50 - run.state.player.hp, receipt = clone(run.state.armorState.pending)
-    assert.equal(receipt.dueAt - receipt.triggeredAt, quality === 4 ? 2 : 3)
-    safeAdvance(run, m.healDelay - STEP)
-    close(run.state.player.hp, 50 - lost)
-    safeStep(run)
-    close(run.state.player.hp, 50)
-    close(run.state.armorState.healedTotal, lost)
-    assert.equal(run.state.armorState.pending, null)
-    assert.ok(validateTowerSnapshot(run.snapshot()))
-    const floorCap = run.state.armorState.entryMaxHp * .1
-    // Exercise a full floor's budget without resetting its cooldown or entry HP.
-    for (let i = 0; i < 160 && run.state.armorState.healedTotal < floorCap - 1e-8; i++) {
-      safeAdvance(run, Math.max(0, run.state.armorState.cooldownUntil - run.state.time))
-      run.state.player.hp = 50
-      incoming(run, 10)
-      safeAdvance(run, m.healDelay)
-      assert.ok(run.state.armorState.healedTotal <= floorCap + 1e-8)
+for(const tier of ['fan','fa','bao','ling'])for(const quality of (tier==='fan'?[1]:[1,4])){
+  test(`${tier}/${quality} armor recovers on three-second pulses, bounded by missing HP without the retired floor cap`,()=>{
+    const run=make(createIronWeapon(),{armor:equipment('armor',tier,quality)})
+    incoming(run,.01)
+    const before=run.state.player.hp
+    while(run.state.ticks<179)regenStep(run)
+    close(run.state.player.hp,before)
+    regenStep(run)
+    const first=Math.min(run.state.player.maxHp-before,pulseRate(run))
+    close(run.state.player.hp,before+first)
+    close(run.state.armorState.healedTotal,first)
+    assert.equal(run.state.armorState.pending,undefined)
+    const initialMax=run.state.player.maxHp
+    for(let n=0;n<10;n++){
+      const hp=run.state.player.hp,healed=run.state.armorState.healedTotal
+      toPulse(run)
+      const amount=Math.min(initialMax-hp,pulseRate(run,true))
+      close(run.state.player.hp,hp+amount)
+      close(run.state.armorState.healedTotal,healed+amount)
+      assert.ok(validateTowerSnapshot(run.snapshot()))
     }
-    close(run.state.armorState.healedTotal, floorCap)
-    const count = run.state.armorState.triggerCount
-    safeAdvance(run, 20); incoming(run, 10)
-    assert.equal(run.state.armorState.pending, null)
-    assert.equal(run.state.armorState.triggerCount, count)
-    assert.ok(validateTowerSnapshot(run.snapshot()))
+    assert.ok(run.state.armorState.healedTotal>initialMax*.1,'current periodic recovery has no old per-floor ten-percent budget')
+    assert.ok(run.state.player.hp<=initialMax)
   })
 }
 
-test('entry max HP does not grow the armor allowance on level up; full HP never banks unused healing', () => {
-  const armor = equipment('armor', 'fan', 1), run = make(createIronWeapon(), { armor, run: { xp: 44 } })
-  const [target] = realTargets(run)
-  incoming(run, 10)
-  const entry = run.state.armorState.entryMaxHp, promised = run.state.armorState.pending.amount
-  run._damageEnemy({ target: target.id, damage: target.hp, direct: false, scaled: true, source: 'fixture' })
+test('level-up changes the next pulse size; full HP never banks unused recovery', () => {
+  const run=make(createIronWeapon(),{armor:equipment('armor','fan',1),run:{xp:44}})
+  const [target]=realTargets(run),entryMax=run.state.player.maxHp
+  run._damageEnemy({target:target.id,damage:target.hp,direct:false,scaled:true,source:'fixture'})
   safeStep(run)
-  assert.ok(run.state.player.maxHp > entry)
-  close(run.state.armorState.entryMaxHp, entry)
-  close(run.state.armorState.pending.amount, promised)
-  run.state.player.hp = run.state.player.maxHp
-  safeAdvance(run, armorModifiers(armor).healDelay)
-  assert.equal(run.state.armorState.healedTotal, 0)
-  assert.equal(run.state.armorState.pending, null)
-  incoming(run, .1)
-  assert.equal(run.state.armorState.pending, null, 'cooldown starts on trigger, even when the heal was unused')
+  assert.ok(run.state.player.maxHp>entryMax)
+  run.state.player.hp=run.state.player.maxHp
+  toPulse(run)
+  assert.equal(run.state.armorState.healedTotal,0)
+  incoming(run,10)
+  const hurt=run.state.player.hp
+  toPulse(run)
+  const amount=Math.min(run.state.player.maxHp-hurt,pulseRate(run))
+  close(run.state.player.hp,hurt+amount)
+  close(run.state.armorState.healedTotal,amount)
   assert.ok(validateTowerSnapshot(run.snapshot()))
 })
 
-test('pending armor heal never revives, including a lethal hit on the exact due tick', () => {
-  const armor = equipment('armor'), run = make(createIronWeapon(), { armor })
-  incoming(run, 1)
-  safeAdvance(run, armorModifiers(armor).healDelay - STEP)
-  incoming(run, 1000, 'lethal-on-due-tick')
-  assert.equal(run.state.phase, 'lost')
-  assert.equal(run.state.player.hp, 0)
-  assert.equal(run.state.armorState.pending, null)
-  assert.equal(run.state.armorState.healedTotal, 0)
+test('periodic recovery never revives, including a lethal hit on the exact pulse tick', () => {
+  const run=make(createIronWeapon(),{armor:equipment('armor')})
+  while(run.state.ticks<179)regenStep(run)
+  incoming(run,1e9,'lethal-on-pulse-tick')
+  assert.equal(run.state.ticks,180)
+  assert.equal(run.state.phase,'lost')
+  assert.equal(run.state.player.hp,0)
+  assert.equal(run.state.armorState.healedTotal,0)
   assert.ok(validateTowerSnapshot(run.snapshot()))
-  const restored = TowerRun.restore(run.snapshot())
+  const restored=TowerRun.restore(run.snapshot())
   restored.advance(60)
-  assert.equal(restored.state.player.hp, 0)
+  assert.equal(restored.state.player.hp,0)
+  assert.deepEqual(restored.snapshot(),run.snapshot())
 })
 
-test('armor pending/cooldown survive pause, JSON restoration and paused skill learning unchanged', () => {
-  const armor = equipment('armor'), run = make(createIronWeapon(), { armor, ring: equipment('ring') })
-  incoming(run, 10); safeAdvance(run, .5); run.pause()
-  const saved = run.snapshot()
-  assert.ok(validateTowerSnapshot(saved))
-  const restored = TowerRun.restore(saved)
-  run.advance(60); assert.deepEqual(run.snapshot(), saved)
-  run.setGrowthLoadout({ ...saved.loadout, passive: { sj_bone: 1 } })
-  assert.deepEqual(run.state.armorState, saved.armorState)
-  restored.setGrowthLoadout({ ...saved.loadout, passive: { sj_bone: 1 } })
-  for (const actor of [run, restored]) { actor.resume(); safeAdvance(actor, 3) }
-  assert.deepEqual(run.snapshot(), restored.snapshot())
-  const after = run.snapshot()
-  assert.ok(after.armorState.healedTotal > 0)
-  assert.equal(after.armorState.cooldownUntil, saved.armorState.cooldownUntil)
-  const resumed = TowerRun.restore(after)
-  incoming(resumed, 1)
-  assert.equal(resumed.state.armorState.pending, null)
-  assert.ok(validateTowerSnapshot(resumed.snapshot()))
-})
-
-test('strict armor snapshot checks reject forged amount, elapsed delay, cooldown, entry HP and spent cap', () => {
-  const run = make(createIronWeapon(), { armor: equipment('armor') })
-  incoming(run, 10); run.pause()
-  const saved = run.snapshot()
-  assert.ok(validateTowerSnapshot(saved))
-  for (const mutate of [
-    s => { delete s.armorState }, s => { s.armorState.entryMaxHp++ },
-    s => { s.armorState.armorId = 'other' }, s => { s.armorState.healedTotal = s.armorState.entryMaxHp * .1 + 1 },
-    s => { s.armorState.healedTotal = -1 }, s => { s.armorState.healedTotal = 1 },
-    s => { s.armorState.pending.amount++ }, s => { s.armorState.pending.damage = 0 },
-    s => { s.armorState.pending.damage = .001 }, s => { s.armorState.pending.dueAt-- },
-    s => { s.armorState.pending.triggeredAt++ }, s => { s.armorState.pending = null },
-    s => { s.armorState.cooldownUntil = s.time }, s => { s.armorState.triggerCount++ },
-    s => { s.armorState.lastTriggerAt = null }, s => { s.armorState.pending.extra = true },
-  ]) {
-    const corrupt = clone(saved); mutate(corrupt)
-    assert.equal(validateTowerSnapshot(corrupt), false, JSON.stringify(corrupt.armorState))
-    assert.throws(() => TowerRun.restore(corrupt))
+test('regeneration clock and ledger survive pause, JSON restore and paused skill learning unchanged', () => {
+  const run=make(createIronWeapon(),{armor:equipment('armor'),ring:equipment('ring')})
+  incoming(run,10);for(let i=0;i<30;i++)regenStep(run);run.pause()
+  const saved=run.snapshot(),restored=TowerRun.restore(saved)
+  run.advance(60);assert.deepEqual(run.snapshot(),saved)
+  for(const actor of [run,restored]){
+    actor.setGrowthLoadout({...saved.loadout,passive:{sj_bone:1}})
+    assert.deepEqual(actor.state.armorState,saved.armorState)
+    actor.resume();toPulse(actor)
   }
+  assert.deepEqual(run.snapshot(),restored.snapshot())
+  assert.ok(run.state.armorState.healedTotal>0)
+  const after=run.snapshot(),again=TowerRun.restore(after)
+  again.pause();again.advance(60);again.resume()
+  assert.deepEqual(again.snapshot(),after)
 })
 
-test('real multi-sword focus is counted once and survives a save between projectile hits', () => {
-  const run = make(weapon(), { ring: equipment('ring'), focus: 4, active: { sj_yujian: 10 } })
-  const targets = realTargets(run, 2)
+test('strict armor snapshots reject forged recovery totals, premature pulses and retired state fields', () => {
+  const run=make(createIronWeapon(),{armor:equipment('armor','ling',1)})
+  incoming(run,10);run.pause()
+  const saved=run.snapshot()
+  assert.ok(validateTowerSnapshot(saved))
+  assert.deepEqual(TowerRun.restore(saved).snapshot(),saved)
+  for(const mutate of [
+    s=>{delete s.armorState},s=>{s.armorState.armorId='other'},
+    s=>{s.armorState.healedTotal=-1},s=>{s.armorState.healedTotal=1},
+    s=>{s.armorState.healedTotal=Infinity},s=>{s.armorState.healedTotal='0'},
+    s=>{s.armorState.entryMaxHp=s.player.maxHp},s=>{s.armorState.pending=null},
+    s=>{s.armorState.cooldownUntil=0},s=>{s.armorState.triggerCount=0},
+    s=>{s.armorState.lastTriggerAt=null},s=>{s.armorState.shield=1},
+  ]){
+    const corrupt=clone(saved);mutate(corrupt)
+    assert.equal(validateTowerSnapshot(corrupt),false)
+    assert.throws(()=>TowerRun.restore(corrupt))
+  }
+  run.resume();toPulse(run);const pulse=run.snapshot()
+  assert.ok(validateTowerSnapshot(pulse),'a genuine pulse is accepted')
+  const corrupt=clone(pulse)
+  corrupt.armorState.healedTotal=pulseRate(run)+1
+  assert.equal(validateTowerSnapshot(corrupt),false,'one elapsed pulse cannot claim more than its maximum')
+  assert.throws(()=>TowerRun.restore(corrupt))
+})
+
+test('real multi-sword hit receipts survive a save between projectile hits without resurrecting focus', () => {
+  const run=make(weapon(),{ring:equipment('ring'),focus:4,active:{sj_yujian:10}})
+  const targets=realTargets(run,2)
   run.state.yujian.ready=10
-  targets[0].x = run.state.player.x + 160; targets[0].y = run.state.player.y - 70
-  targets[1].x = run.state.player.x + 340; targets[1].y = run.state.player.y + 100
-  run.state.cooldowns.sj_yujian = 0
-  for (let i = 0; i < 90 && run.state.weaponState.effectiveCasts === 0; i++) {
+  targets[0].x=run.state.player.x+160;targets[0].y=run.state.player.y-70
+  targets[1].x=run.state.player.x+340;targets[1].y=run.state.player.y+100
+  run.state.cooldowns.sj_yujian=0
+  for(let i=0;i<90&&!run.state.effects.some(e=>e.source==='sj_yujian');i++){
     run.advance(STEP)
     if(run.state.projectiles.length)run.state.cooldowns.sj_yujian=99999
   }
-  assert.equal(run.state.weaponState.effectiveCasts, 1)
-  assert.ok(run.state.projectiles.length > 0)
-  const activeCast=run.state.projectiles.find(p=>p.hitIds.length)?.weaponCastId
-  assert.ok(activeCast, 'the first volley has a hit receipt')
+  assert.ok(run.state.effects.some(e=>e.source==='sj_yujian'))
+  assert.ok(run.state.projectiles.length>0)
+  assert.ok(run.state.projectiles.find(p=>p.hitIds.length)?.weaponCastId,'first volley retains a hit receipt')
   run.pause()
-  const saved = run.snapshot(), restored = TowerRun.restore(saved)
-  assert.equal(saved.weaponState.focusCount, 0)
-  assert.equal(saved.loadout.weaponFocusCount, 4)
-  for (const actor of [run, restored]) { actor.resume(); safeAdvance(actor, 1) }
-  assert.deepEqual(run.snapshot(), restored.snapshot())
-  assert.equal(run.state.weaponState.effectiveCasts, 1)
-  assert.equal(run.state.weaponState.casts.length, 0)
+  const saved=run.snapshot(),restored=TowerRun.restore(saved)
+  assert.equal(saved.weaponState.focusCount,4)
+  assert.equal(saved.loadout.weaponFocusCount,4)
+  for(const actor of [run,restored]){actor.resume();safeAdvance(actor,1)}
+  assert.deepEqual(run.snapshot(),restored.snapshot())
+  assert.equal(run.state.weaponState.effectiveCasts,0)
+  assert.equal(run.state.weaponState.casts.length,0)
   assert.ok(validateTowerSnapshot(run.snapshot()))
 })
 
@@ -449,12 +482,7 @@ test('all active skills and evolutions cross real waves with ring/armor state an
     passive: { sj_bone: 4, sj_heart: 4, sj_mark: 4, sj_gate: 4 },
     evolutions: { evo_wanjian: 2, evo_wuwo: 2, evo_tiandi: 2, evo_sixiang: 2 } })
   incoming(run, 10)
-  const cooldown = run.state.armorState.cooldownUntil
-  // Guarantee actual direct-cast receipts independently of orbit damage
-  // stealing kills in early waves after the approved equipment power increase.
-  const target = dummy(run, 'focus-probe')
-  for (let i = 0; i < 6; i++) hit(run, target, 'sj_line', run._weaponCast('sj_line'))
-  run.state.enemies = run.state.enemies.filter(e => e !== target)
+  const healed = run.state.armorState.healedTotal
   for (const id of Object.keys(run.state.cooldowns)) run.state.cooldowns[id] = 0
   for (let i = 0; i < 3600 && run.state.wave < 3; i++) {
     run.state.player.hp = Math.max(50, run.state.player.hp)
@@ -469,7 +497,9 @@ test('all active skills and evolutions cross real waves with ring/armor state an
     }
   }
   assert.ok(run.state.wave >= 3)
-  assert.ok(run.state.weaponState.effectiveCasts > 5)
-  assert.equal(run.state.armorState.cooldownUntil, cooldown)
+  assert.ok(run.state.weaponState.nextCastId > 1, 'real direct actions created receipts')
+  assert.equal(run.state.weaponState.effectiveCasts, 0)
+  assert.equal(run.state.weaponState.focusCount, 2)
+  assert.ok(run.state.armorState.healedTotal >= healed)
   assert.ok(validateTowerSnapshot(run.snapshot()))
 })

@@ -49,7 +49,7 @@ test('constructor preserves fractional HP, bounds growth/equipment, and copies l
   selected.active.sj_yujian = 1
   assert.equal(run.state.loadout.active.sj_yujian, 5)
   assert.ok(validateTowerSnapshot(run.snapshot()))
-  for (const patch of [{ floor: 10 }, { hp: 0 }, { xp: 10921 }, { normalCoreCounter: 20 },
+  for (const patch of [{ floor: 10 }, { hp: 0 }, { xp: 14401 }, { normalCoreCounter: 20 },
     { loadout: { ...plain, weaponQuality: 5 } }]) assert.throws(() => make(patch))
 })
 
@@ -166,11 +166,11 @@ test('real kills award immediately before full wave; replay and abandonment reta
   assert.ok(validateTowerSnapshot(reload.snapshot()))
 })
 
-test('legacy loot: all 180 authored waves and 4770 deaths retain the old reward totals', () => {
+test('legacy loot: all 180 authored waves and 4772 deaths retain the old reward totals', () => {
   let xp = 0, cores = 0, contribution = 0, deaths = 0, counter = 0
   const families = new Set()
   for (let floor = 1; floor <= 9; floor++) {
-    const run = make({ floor, hp: 120, xp: 10920, normalCoreCounter: counter, lootVersion: 0,
+    const run = make({ floor, hp: 120, xp: 14400, normalCoreCounter: counter, lootVersion: 0,
       loadout: loadout({ sj_yujian: 5, sj_arc: 5, sj_wanjian: 5, sj_formation: 5 }) })
     for (const family of clearControlled(run)) families.add(family)
     assert.ok(validateTowerSnapshot(run.snapshot()), `floor ${floor} valid after clear`)
@@ -183,10 +183,12 @@ test('legacy loot: all 180 authored waves and 4770 deaths retain the old reward 
     assert.equal(run.state.earned.xp, 0)
     assert.equal(run.state.clearedWaves.length, 20)
     if (floor === 1) assert.deepEqual(
-      [run.state.rawKillXp, run.state.earned.cores, run.state.earned.contribution], [180, 63, 100])
+      [run.state.rawKillXp, run.state.earned.cores, run.state.earned.contribution], [180, 63, 0])
   }
-  assert.deepEqual([deaths, xp, cores, contribution, counter], [4770, 10920, 1008, 1080, 16])
-  assert.equal(families.size, 14)
+  // 79号投放：4716普通；精英各阶8/10/19/8/2；Boss三到六阶各2、七阶1。
+  // 旧掉落分支保留：普通235 + 精英436 + Boss260 + 通关180。
+  assert.deepEqual([deaths, xp, cores, contribution, counter], [4772, 10920, 235 + 436 + 260 + 180, 0, 16])
+  assert.deepEqual([...families].sort(), ['bat', 'bear', 'boar', 'crocodile', 'falcon', 'rhino', 'snake', 'spider', 'tiger', 'wolf', 'yak'])
 })
 
 test('training never produces progression and cannot masquerade as a tower clear', () => {
@@ -303,7 +305,7 @@ test('four evolutions preserve windup, six shared ticks, total sword budget and 
     const outgoing = []
     orbit._skills(outgoing)
     for (const hit of outgoing) orbit._damageEnemy(hit)
-    close(100000 - enemy.hp, 106 * .28 * factor * 1.02)
+    close(100000 - enemy.hp, 106 * .28 * factor * 1.18)
   }
   const formation = make({ loadout: loadout({ sj_formation: 5 }, { sj_gate: 3 }, ['evo_sixiang']) })
   const formationTarget = targets(formation)
@@ -312,12 +314,12 @@ test('four evolutions preserve windup, six shared ticks, total sword budget and 
   assert.equal(formation.state.zones.find(z => z.kind === 'formation')?.eyes, 4)
 })
 
-test('heart crit excludes passive bonus, wounds spend only their budget, and gate never invents damage', () => {
+test('critical multiplier includes the passive bonus; legacy wounds and gate spend only their budgets', () => {
   const crit = make({ loadout: loadout({ sj_yujian: 1 }, { sj_heart: 5, sj_bone: 5 }) })
   const critTarget = targets(crit)
   crit.state.rng = 1 // First xorshift roll < 6%.
   crit.advance(.5)
-  close(100000 - critTarget.hp, 106 * (1 + .03 + .5))
+  close(100000 - critTarget.hp, 106 * 1.32 * 1.5)
   const wound = make({ loadout: loadout({ sj_yujian: 1 }, { sj_mark: 5 }) })
   const woundTarget = targets(wound)
   wound.advance(.5)
@@ -334,7 +336,7 @@ test('heart crit excludes passive bonus, wounds spend only their budget, and gat
   assert.ok(gate.state.gateReadyAt > gate.state.time)
 })
 
-test('vajra mitigates damage, magnet changes pickup reach, and tower time never regenerates HP', () => {
+test('vajra mitigates damage and magnet changes pickup reach before the next regeneration pulse', () => {
   const defensive = make({ hp: 100, loadout: loadout({ sj_yujian: 1 }, { vajra: 5 }) })
   const enemy = targets(defensive, 60)
   enemy.ai.graceUntil = 0; enemy.ai.readyAt = 0
@@ -438,6 +440,10 @@ function firstBoss(nativeAttacks = false) {
     if (e === boss) continue
     e.x = -800; e.y = -1000; e.ai.graceUntil = 99999
   }
+  // Begin native-attack measurements just after a real regeneration pulse.
+  // Entry uses full current HP so healing cannot hide a missed/extra hit.
+  run.state.player.hp = run.state.player.maxHp
+  while (run.state.ticks % 180 !== 0) step(run)
   return { run, boss }
 }
 
@@ -449,16 +455,16 @@ test('first-floor boss uses authored gore damage and charge sweeps, with one hit
   assert.equal(boss.ai.attack.kind, 'charge')
   assert.equal(boss.ai.attack.windup, 1.05)
   run.advance(1.1)
-  assert.equal(run.state.player.hp, 120, 'the entire future corridor must not hit at activation')
+  assert.equal(run.state.player.hp, run.state.player.maxHp, 'the entire future corridor must not hit at activation')
   const restored = TowerRun.restore(run.snapshot())
   run.advance(.5); restored.advance(.5)
   assert.deepEqual(restored.snapshot(), run.snapshot())
-  close(run.state.player.hp, 120 - 14.928)
+  close(run.state.player.hp, run.state.player.maxHp - 14.928)
   const gore = firstBoss(true)
   gore.boss.x = 133; gore.boss.y = -60
   gore.boss.ai.entryUntil = 0; gore.boss.ai.graceUntil = 0; gore.boss.ai.readyAt = 0
   gore.run.advance(1.6)
-  close(gore.run.state.player.hp, 120 - 9.332)
+  close(gore.run.state.player.hp, gore.run.state.player.maxHp - 9.332)
 })
 
 test('boss dying first releases exactly four dormant adds and never clears while required units remain', () => {
@@ -476,7 +482,7 @@ test('boss dying first releases exactly four dormant adds and never clears while
   assert.ok(validateTowerSnapshot(run.snapshot()))
   clearControlled(run)
   assert.equal(run.state.killLedger.filter(k => k.wave === 20).length, 9)
-  assert.equal(run.state.earned.contribution, 100)
+  assert.equal(run.state.earned.contribution, 0)
 })
 
 test('boss phase transition waits for entry and existing actions, then offers separately warned second charge', () => {
@@ -529,7 +535,7 @@ test('offscreen boss approaches without damage, and losing visibility cancels a 
   run.advance(.2)
   assert.ok(boss.x < 283, 'offscreen boss must approach rather than wait forever at charge range')
   assert.equal(boss.ai.mode, 'approach')
-  assert.equal(run.state.player.hp, 120)
+  assert.equal(run.state.player.hp, run.state.player.maxHp)
   run.setViewport(null)
   step(run)
   assert.equal(boss.ai.mode, 'windup')
@@ -537,7 +543,7 @@ test('offscreen boss approaches without damage, and losing visibility cancels a 
   step(run)
   assert.equal(boss.ai.mode, 'recovery')
   assert.ok(!run.state.zones.some(z => z.ownerId === boss.id && z.renderOnly))
-  assert.equal(run.state.player.hp, 120)
+  assert.equal(run.state.player.hp, run.state.player.maxHp)
 })
 
 test('boss corridor ends at legal body bounds and boundary clipping stops the remaining combo', () => {
