@@ -5,7 +5,7 @@ import {spawnSync} from 'node:child_process'
 import {captureBuildFingerprint,verifyBuildStamp} from '../release-integrity.mjs'
 import {assertNoSymlinkPath,convertTapBuild,verifyPinnedPlugin} from './tap-convert.mjs'
 
-export async function buildTap({root,creator,profile='production'}){
+export async function buildTap({root,creator,profile='production',stagedAssets=false}){
  buildCapabilities(profile)
  const outputRoot=join(root,'cocos-pilot/build/taptap-minigame'),latest=join(outputRoot,'latest.json'),raw=join(root,'cocos-pilot/build/tap-wechat-intermediate')
  assertNoSymlinkPath(outputRoot);assertNoSymlinkPath(raw)
@@ -25,14 +25,17 @@ export async function buildTap({root,creator,profile='production'}){
  config.packages={...config.packages,'taptap-minigame-tools':{enableTapConvert:false,deleteWechatBuild:false,usePythonScript:false}}
  const logDir=join(root,'cocos-pilot/temp/pilot-builds');fs.mkdirSync(logDir,{recursive:true})
  const configPath=join(logDir,'tap-wechat.config.json');fs.writeFileSync(configPath,JSON.stringify(config,null,2)+'\n')
- const options={root,platform:'taptap-minigame',creator},before=captureBuildFingerprint(options)
+ const options={root,platform:'taptap-minigame',creator,resourcePolicy:stagedAssets?'reviewed':'all'},before=captureBuildFingerprint(options)
  if(before.profile!==profile)throw Error('Prepared Tap build profile mismatch')
  if(before.toolchain.creator.version!==tap.creatorVersion)throw Error('Tap Creator version differs from the audited build configuration')
+ let stage=null,assetTools=null
+ if(stagedAssets){assetTools=await import('./release-assets.mjs');stage=assetTools.createReleaseStage({root})}
  fs.rmSync(raw,{recursive:true,force:true})
- const result=spawnSync(creator,['--project',join(root,'cocos-pilot'),'--build',`configPath=${configPath}`],{encoding:'utf8',maxBuffer:32*1024*1024})
+ const result=spawnSync(creator,['--project',stage?stage.project:join(root,'cocos-pilot'),'--build',`configPath=${configPath}`],{encoding:'utf8',maxBuffer:32*1024*1024})
  const log=(result.stdout||'')+(result.stderr||'');fs.writeFileSync(join(logDir,'taptap-minigame.log'),log)
  // Creator labels completion with outputName, which differs from the source platform.
  if(![0,36].includes(result.status)||!log.includes(`build Task (${config.outputName}) Finished`)||/\b(error TS\d+|Build failed|Can not find class)/i.test(log))throw result.error||Error(`Creator Tap intermediate build failed (${result.status}); see ${logDir}/taptap-minigame.log`)
+ if(stage)assetTools.verifyAndWriteAssetManifest(stage,raw)
  // An early check avoids converting a known stale intermediate. The final check is still mandatory.
  verifyBuildStamp(before,options)
  const converted=await convertTapBuild({source:raw,outputRoot,pluginDir,archivePath,gameVersion:tap.gameVersion,fingerprint:before,effectiveConfig:config,creatorLog:log,verifyInputs:()=>{

@@ -10,10 +10,19 @@ const requiredInputs=[...sourceFolders,'scripts','package.json','project.config.
 const lockfiles=['package-lock.json','npm-shrinkwrap.json','yarn.lock','pnpm-lock.yaml','bun.lock','bun.lockb']
 const optionalInputs=[
  'build-templates','cocos-pilot/build-templates','extensions','cocos-pilot/extensions','packages','cocos-pilot/packages',
- 'tsconfig.json','.npmrc','cocos-pilot/.npmrc',...lockfiles,...lockfiles.map(name=>'cocos-pilot/'+name)
+ 'release/asset-policy.json','tsconfig.json','.npmrc','cocos-pilot/.npmrc',...lockfiles,...lockfiles.map(name=>'cocos-pilot/'+name)
 ]
 const sha256=value=>createHash('sha256').update(value).digest('hex')
 const canonical=value=>JSON.stringify(value,(_key,item)=>item&&typeof item==='object'&&!Array.isArray(item)?Object.fromEntries(Object.keys(item).sort().map(key=>[key,item[key]])):item)
+
+/** Refuse a symlink at any existing output ancestor before a clean rebuild. */
+export function assertSafeBuildOutput(path){
+ let current=resolve(path)
+ while(true){
+  try{if(fs.lstatSync(current).isSymbolicLink())throw Error('Build output symlink is not allowed: '+current)}catch(error){if(error.code!=='ENOENT')throw error}
+  const parent=dirname(current);if(parent===current)break;current=parent
+ }
+}
 
 export function filesBelow(folder){return fs.readdirSync(folder,{withFileTypes:true}).flatMap(e=>e.name==='.DS_Store'?[]:e.isDirectory()?filesBelow(resolve(folder,e.name)):[resolve(folder,e.name)]).sort()}
 // Keep the legacy concatenation, ordering and path spelling for audit compatibility.
@@ -59,19 +68,21 @@ export function readToolchain({creator=defaultCreator}={}){
  }
 }
 
-export function captureBuildFingerprint({root=projectRoot,platform,creator=defaultCreator,toolchain}={}){
+export function captureBuildFingerprint({root=projectRoot,platform,creator=defaultCreator,toolchain,resourcePolicy='all'}={}){
  if(!['web-mobile','wechatgame','taptap-minigame'].includes(platform))throw Error('Unsupported build fingerprint platform')
+ if(!['all','reviewed'].includes(resourcePolicy))throw Error('Unsupported resource policy')
+ if(resourcePolicy==='reviewed'&&!fs.existsSync(resolve(root,'release/asset-policy.json')))throw Error('Reviewed resource policy requires release/asset-policy.json')
  const config=JSON.parse(fs.readFileSync(resolve(root,'release/settings.json')))
  const tools=JSON.parse(canonical(toolchain??readToolchain({creator})))
  const inputs=[...requiredInputs.map(path=>inputRecord(root,path)),...optionalInputs.map(path=>inputRecord(root,path,true))]
- const identity={schemaVersion:2,platform,profile:readBuildProfile(root),inputs,toolchain:tools}
+ const identity={schemaVersion:2,platform,profile:readBuildProfile(root),resourcePolicy,inputs,toolchain:tools}
  return {...identity,version:config.version,appid:platform==='taptap-minigame'?null:config.appid,...(platform==='taptap-minigame'?{intermediateWechatAppId:config.appid}:{}),sourceDigest:digestSource(root),inputDigest:sha256(canonical(identity))}
 }
 
 export function verifyBuildStamp(stamp,options={}){
- if(stamp?.schemaVersion!==2||!stamp.inputDigest||!stamp.toolchain||!stamp.inputs||!['production','qa'].includes(stamp.profile))throw Error('旧版或不完整的构建记录：需要 schemaVersion 2 完整构建指纹，请重新构建')
+ if(stamp?.schemaVersion!==2||!stamp.inputDigest||!stamp.toolchain||!stamp.inputs||!['production','qa'].includes(stamp.profile)||!['all','reviewed'].includes(stamp.resourcePolicy))throw Error('旧版或不完整的构建记录：需要 schemaVersion 2 完整构建指纹，请重新构建')
  const current=captureBuildFingerprint(options)
- for(const key of ['schemaVersion','platform','profile','version','appid','intermediateWechatAppId','sourceDigest','inputDigest','inputs','toolchain']){
+ for(const key of ['schemaVersion','platform','profile','resourcePolicy','version','appid','intermediateWechatAppId','sourceDigest','inputDigest','inputs','toolchain']){
   if(canonical(stamp[key])!==canonical(current[key]))throw Error('构建产物已过期，build inputs or toolchain changed ('+key+')，请重新构建')
  }
  return true

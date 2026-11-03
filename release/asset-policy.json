@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "audit": "docs/technical-review/ASSET_REACHABILITY_RESEARCH.md",
+  "reviewedRuntimeDigest": "ea59163e13c7cbc4d930a4da2bea3d1e433d93819234687dfcbb7736ca78c979",
+  "exclude": [
+    {
+      "path": "tower-skill-fx/flight-stream-v2.png",
+      "sha256": "f0e63103f64c8d3f45f329e047e03c8375b53f6359cd1a25e57f3cf8de4d4797",
+      "metaSha256": "004ccb8e5dc227ef93451fc19dd9f571ce9ecce2548783dc03c8412e2bbf4951",
+      "uuid": "70aced54-e3c0-478c-a7f9-84a706d57ee5",
+      "replacements": [
+        "tower-skill-fx/flight-stream-v3.png"
+      ],
+      "reason": "Audited obsolete version; current typed loaders use retained replacements. Originals remain in the source repository."
+    },
+    {
+      "path": "tower-monsters-motion/boar.png",
+      "sha256": "22a8f5ca42a4001ea61498a1d41f2268111152ce828d5d027e859f5a599da307",
+      "metaSha256": "298516daa1b5c71d653353d4d95867f6310493624b07e982a6c339860dc5aedc",
+      "uuid": "76515ffa-af74-4aff-8e55-aaf9abc2ac60",
+      "replacements": [
+        "tower-monsters-motion/boar-v3.png",
+        "tower-monsters-motion/boar-v3.json",
+        "tower-monsters-motion/boar-v3-enraged.png"
+      ],
+      "reason": "Audited obsolete version; current typed loaders use retained replacements. Originals remain in the source repository."
+    }
+  ]
+}

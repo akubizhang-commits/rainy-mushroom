@@ -1,3 +1,5 @@
+import {BUILD_CAPABILITIES} from './TowerBuildCapabilities';
+import {createTowerPerformance,TowerPerformance} from './TowerPerformance';
 import {_decorator,Component,Node,Camera,Canvas,UITransform,Layers,view,ResolutionPolicy,Color,sys,profiler,director,Director} from 'cc';
 import {TowerView} from './TowerView';
 import {beginTowerResources,endTowerResources} from './TowerResources';
@@ -12,6 +14,9 @@ export class PinePilot extends Component{
  assetLoading:TowerLoadingScreen|null=null;
  private assetQueue:TowerAssetQueue|null=null;
  progressStorage:any=null;
+ performance:TowerPerformance|null=null;
+ private performanceReady=false;
+ private performanceVisibility=()=>this.performance?.setHidden(document.hidden);
  safeTop=28;safeBottom=20;
  private browserResize=()=>{if(sys.isBrowser)view.setFrameSize(window.innerWidth,window.innerHeight);};
  private revealCanvas=()=>{
@@ -22,6 +27,7 @@ export class PinePilot extends Component{
   document.getElementById('tower-boot-loading')?.remove();
  };
  start(){
+  this.setupPerformance();
   view.setDesignResolutionSize(1280,720,ResolutionPolicy.SHOW_ALL);
   this.canvas=new Node('Tower Canvas');this.node.scene.addChild(this.canvas);this.canvas.layer=Layers.Enum.UI_2D;this.canvas.addComponent(UITransform);
   const canvas=this.canvas.addComponent(Canvas),cameraNode=new Node('Tower UI Camera');this.node.scene.addChild(cameraNode);
@@ -31,12 +37,23 @@ export class PinePilot extends Component{
   // Browser smoke (?smoke=1) uses memory-only storage so it never touches a real save.
   const smoke=sys.isBrowser&&new URLSearchParams(window.location.search).get('smoke')==='1';
   if(smoke){const data=new Map();this.progressStorage={getItem:(k:string)=>data.get(k)??null,setItem:(k:string,v:string)=>data.set(k,v)};}
-  this.assetQueue=beginTowerResources();
+  this.assetQueue=beginTowerResources(this.performance?event=>this.performance?.resource(event):undefined);
   this.assetLoading=new TowerLoadingScreen(this.canvas,this.assetQueue,this.browserRestart());
   this.survivor=new TowerView(this);
   director.once(Director.EVENT_AFTER_DRAW,this.revealCanvas);
   view.on('canvas-resize',this.resize,this);
   if(sys.isBrowser){window.addEventListener('resize',this.browserResize);this.browserResize();}
+ }
+ private setupPerformance(){
+  if(!BUILD_CAPABILITIES.developerTools)return;
+  this.performance=createTowerPerformance(BUILD_CAPABILITIES,{environment:sys.isBrowser?'browser-local':'mini-game-unverified'});
+  if(!this.performance)return;
+  this.performance.install(globalThis);this.performance.start('startup');
+  if(sys.isBrowser&&typeof document!=='undefined'){this.performanceVisibility();document.addEventListener('visibilitychange',this.performanceVisibility);}
+ }
+ private stopPerformance(){
+  if(this.performance&&typeof document!=='undefined')document.removeEventListener('visibilitychange',this.performanceVisibility);
+  this.performance?.destroy();this.performance=null;
  }
  /** A full page restart also releases allocations that failed before ownership registration. */
  private browserRestart(): (()=>void)|undefined {
@@ -46,13 +63,18 @@ export class PinePilot extends Component{
  }
  private measureSafeArea(){try{const api=(globalThis as any).wx,info=api?.getWindowInfo?.()||api?.getSystemInfoSync?.(),capsule=api?.getMenuButtonBoundingClientRect?.();if(info){const scale=view.getVisibleSize().width/info.windowWidth;this.safeTop=Math.max(22,(capsule?.bottom+8||info.safeArea?.top||24)*scale);this.safeBottom=Math.max(16,(info.windowHeight-(info.safeArea?.bottom||info.windowHeight))*scale+10)}}catch{}}
  update(dt:number){
-  if(this.assetLoading?.blocked){
-   this.survivor?.prepareAssets();
-   this.assetLoading.update(dt);
-   return;
-  }
-  this.survivor?.update(dt);
+  const sample=this.performance;sample?.frame(dt,!!this.assetLoading?.blocked);
+  const started=sample?.begin();
+  try{
+   if(this.assetLoading?.blocked){
+    this.survivor?.prepareAssets();
+    this.assetLoading.update(dt);
+    return;
+   }
+   if(sample&&!this.performanceReady){this.performanceReady=true;sample.mark('interactive-ready');}
+   this.survivor?.update(dt);
+  }finally{sample?.end('update',started!);}
  }
  private resize(){this.measureSafeArea();this.survivor?.render()}
- onDestroy(){director.off(Director.EVENT_AFTER_DRAW,this.revealCanvas);if(sys.isBrowser)window.removeEventListener('resize',this.browserResize);view.off('canvas-resize',this.resize,this);this.survivor?.destroy();this.survivor=null;this.assetLoading?.destroy();this.assetLoading=null;if(this.assetQueue)endTowerResources(this.assetQueue);this.assetQueue=null}
+ onDestroy(){director.off(Director.EVENT_AFTER_DRAW,this.revealCanvas);if(sys.isBrowser)window.removeEventListener('resize',this.browserResize);view.off('canvas-resize',this.resize,this);this.survivor?.destroy();this.survivor=null;this.assetLoading?.destroy();this.assetLoading=null;if(this.assetQueue)endTowerResources(this.assetQueue);this.assetQueue=null;this.stopPerformance()}
 }

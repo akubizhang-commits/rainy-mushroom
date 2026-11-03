@@ -157,8 +157,8 @@ export class TowerView {
   this.keys.add(e.keyCode);
  };
  private keyUp=(e:EventKeyboard)=>{this.keys.delete(e.keyCode);};
- private hide=()=>{this.presentationHidden=true;this.ritualAudio.stop();if(this.run?.state.phase==='playing')this.pause();else if(this.screen==='camp')this.store.act({type:'sync'},Date.now());this.resetInput();};
- private shown=()=>{this.presentationHidden=false;this.skipFrame=true;this.resetInput();};
+ private hide=()=>{this.presentationHidden=true;this.host?.performance?.setHidden(true);this.ritualAudio.stop();if(this.run?.state.phase==='playing')this.pause();else if(this.screen==='camp')this.actStore({type:'sync'},Date.now());this.resetInput();};
+ private shown=()=>{this.presentationHidden=false;this.host?.performance?.setHidden(false);this.skipFrame=true;this.resetInput();};
  private visibility=()=>{if(document.hidden)this.hide();else this.shown();};
  constructor(private host:any){
   this.measureViewport();
@@ -171,7 +171,7 @@ export class TowerView {
   if(BUILD_CAPABILITIES.developerTools)this.tools=readPlaytestTools(this.platform.storage);
   this.store=new TowerCampaignStore(storage,Date.now());
   if(this.store.migrationReport?.reset)this.notice='开发期旧档已重置，已启用新资源规则。';
-  if(!this.store.readOnly){const r=this.store.act({type:'sync'},Date.now());if(!r.ok)this.notice=this.reason(r.reason);}
+  if(!this.store.readOnly){const r=this.actStore({type:'sync'},Date.now());if(!r.ok)this.notice=this.reason(r.reason);}
   this.platform.onHidden(this.hide);this.platform.onShown(this.shown);
   if(typeof window!=='undefined')window.addEventListener('keydown',this.preventMenuKeyDefault,true);
   input.on(Input.EventType.KEY_DOWN,this.keyDown);input.on(Input.EventType.KEY_UP,this.keyUp);
@@ -227,7 +227,7 @@ export class TowerView {
    this.notice='退点与重修只能在宗门藏经阁进行。';this.render();return result;
   }
   const before=cultivationAt(this.store.state.xp);
-  const r=this.store.act(action,Date.now());
+  const r=this.actStore(action,Date.now());
   if(r.ok){
    if(action.type==='drawForge'||action.type==='drawWeapon'||action.type==='drawEquipment'){
     const d=r.draw||r;this.notice=d.name?`炼制成功：${d.name}`:'炼制完成，请在整备中查看。';
@@ -268,7 +268,7 @@ export class TowerView {
     ],true,undefined,undefined,true);
    return;
   }
-  const result=this.store.act({type:'startFloor',floor,seed:(Date.now()>>>0)||1},Date.now());
+  const result=this.actStore({type:'startFloor',floor,seed:(Date.now()>>>0)||1},Date.now());
   if(!result.ok){this.notice=this.reason(result.reason);this.render();return;}
   this.run=TowerRun.restore(result.snapshot||this.store.state.activeRun.snapshot);
   this.applyTools();
@@ -280,9 +280,17 @@ export class TowerView {
   this.applyTools();
   this.training=true;this.screen='battle';this.notice='';this.render();
  }
+ private actStore(action:any,now:number){
+  const sample=this.host?.performance,started=sample?.begin();
+  try{return this.store.act(action,now);}finally{sample?.end('persist',started);}
+ }
+ private snapshotRun(){
+  const sample=this.host?.performance,started=sample?.begin();
+  try{return this.run.snapshot();}finally{sample?.end('snapshot',started);}
+ }
  private persist(action:any){
   if(this.training)return true;
-  const r=this.store.act(action,Date.now());
+  const r=this.actStore(action,Date.now());
   if(r.ok){this.pending=null;return true;}
   this.pending=action;this.resetInput();this.showModal('保存尚未完成',this.reason(r.reason),[{text:'重试保存',fn:()=>this.retrySave()}]);return false;
  }
@@ -293,14 +301,14 @@ export class TowerView {
  }
  private pause(){
   if(!this.run||this.pending)return;
-  this.run.pause();this.resetInput();this.persist({type:'checkpoint',snapshot:this.run.snapshot()});if(!this.pending)this.render();
+  this.run.pause();this.resetInput();this.persist({type:'checkpoint',snapshot:this.snapshotRun()});if(!this.pending)this.render();
  }
  private openInventory(){
   if(!this.run||this.training||this.pending||this.ceremony||this.menu?.inventoryOpen)return;
   if(this.screen==='skills'){this.goto('inventory');return;}
   const wasPlaying=this.run.state.phase==='playing';
   this.run.pause();this.resetInput();
-  if(!this.persist({type:'checkpoint',snapshot:this.run.snapshot()}))return;
+  if(!this.persist({type:'checkpoint',snapshot:this.snapshotRun()}))return;
   this.menu=new TowerMenu(this.root,this.width,this.height,{action:(a:any)=>this.action(a),page:(p:string)=>this.goto(p),enterFloor:(f:number)=>this.enterFloor(f),resume:()=>this.resume(),training:()=>this.enterTraining()});
   this.menu.showInventory({...this.store.state,readOnly:this.store.readOnly,playtest:false},()=>{
    this.menu?.destroy();this.menu=null;
@@ -312,7 +320,7 @@ export class TowerView {
   // A crash/reload can present a paused local Run while its stored phase was
   // playing. Commit that pause before allowing a permanent allocation.
   this.run.pause();this.resetInput();
-  if(!this.persist({type:'checkpoint',snapshot:this.run.snapshot()}))return;
+  if(!this.persist({type:'checkpoint',snapshot:this.snapshotRun()}))return;
   if(this.pending||this.run.state.phase!=='paused')return;
   this.screen='skills';this.page='library';this.notice='塔内已暂停，可按境界与资源修习功法；重置加点请回藏经阁。';this.render();
  }
@@ -326,7 +334,7 @@ export class TowerView {
   }
   this.applyTools();
   this.run.resume();this.resetInput();
-  if(!this.training&&!this.persist({type:'checkpoint',snapshot:this.run.snapshot()}))return;
+  if(!this.training&&!this.persist({type:'checkpoint',snapshot:this.snapshotRun()}))return;
   this.skipFrame=true;this.screen='battle';this.render();
  }
  private withdraw(){
@@ -335,7 +343,7 @@ export class TowerView {
  }
  private finish(){
   if(!this.run||this.pending)return;
-  const snapshot=this.run.snapshot();
+  const snapshot=this.snapshotRun();
   if(this.training){this.run=null;this.training=false;this.screen='camp';this.page='training';this.notice='演武结束，气血、资源和塔层进度未发生变化。';this.render();return;}
   if(this.persist({type:'finishFloor',snapshot}))this.afterFinish(snapshot);
  }
@@ -375,7 +383,7 @@ export class TowerView {
    this.resetInput();
    if(this.run?.state.phase==='playing'){
     this.run.pause();
-    this.persist({type:'checkpoint',snapshot:this.run.snapshot()});
+    this.persist({type:'checkpoint',snapshot:this.snapshotRun()});
    }
    for(const child of this.root.children)child.active=false;
    if(!this.rotationOverlay){
@@ -681,7 +689,7 @@ export class TowerView {
  private tryBreakthrough(){
   if(this.pending||this.ceremony||this.breakthroughLock>0||!this.run?.state.breakthrough?.safe)return;
   const b=this.run.state.breakthrough;
-  const r=this.store.act({type:'breakthrough',attemptId:this.run.state.attemptId,sequence:b.sequence+1,id:this.breakthroughChoice,buyIfMissing:true},Date.now());
+  const r=this.actStore({type:'breakthrough',attemptId:this.run.state.attemptId,sequence:b.sequence+1,id:this.breakthroughChoice,buyIfMissing:true},Date.now());
   if(!r.ok){this.showBreakthrough(this.reason(r.reason));return;}
   this.run=TowerRun.restore(r.snapshot);this.applyTools();
   this.ceremony={elapsed:0,success:r.success,burstPlayed:false};this.breakthroughLock=CEREMONY_DURATION;
@@ -833,7 +841,7 @@ export class TowerView {
  }
  private resetProgress(){
   if(!BUILD_CAPABILITIES.developerTools||this.pending||this.store.readOnly)return;
-  const result=this.store.act({type:'playtestReset'},Date.now());
+  const result=this.actStore({type:'playtestReset'},Date.now());
   if(!result.ok){
    this.showModal('操作未完成',this.reason(result.reason),[{text:'返回工具',fn:()=>this.showTools()}]);return;
   }
@@ -846,7 +854,7 @@ export class TowerView {
   if(type==='playtestNextStage'&&this.training){
    this.showModal('请先结束演武','回到宗门后可提升境界。',[{text:'返回工具',fn:()=>this.showTools()}]);return;
   }
-  const result=this.store.act({...params,type},Date.now());
+  const result=this.actStore({...params,type},Date.now());
   if(!result.ok){
    this.showModal('操作未完成',this.reason(result.reason),[{text:'返回工具',fn:()=>this.showTools()}]);return;
   }
@@ -881,7 +889,7 @@ export class TowerView {
    this.campElapsed+=dt;
    if(this.campElapsed>5&&!this.store.readOnly){
     this.campElapsed=0;
-    const r=this.store.act({type:'sync'},Date.now());
+    const r=this.actStore({type:'sync'},Date.now());
     if(r.ok){
      const state={...this.store.state,readOnly:false,playtest:false};
      if(this.syncFailed){this.syncFailed=false;this.notice='保存已恢复，可以继续操作。';this.menu?.render(state,this.page,this.notice);}
@@ -901,8 +909,10 @@ export class TowerView {
    const before=cultivationAt(p.xp),beforePoints=realmPoints(p.xp),known=new Set(Object.keys(this.run.state.loadout.active));
    const killStart=this.run.state.pickups?.collected.length??this.run.state.killLedger.length;
    const oldX=p.x,oldY=p.y,characterBefore=this.characterArt.sample(this.run.state);
-   const d=Math.max(1,Math.hypot(x,y));this.run.setInput(x/d,y/d);this.run.advance(Math.min(.1,dt)*(BUILD_CAPABILITIES.developerTools?this.tools.speed:1),
-    (cast:any)=>this.characterArt.observeCast(cast));
+   const d=Math.max(1,Math.hypot(x,y));this.run.setInput(x/d,y/d);
+   const sample=this.host?.performance,started=sample?.begin();
+   try{this.run.advance(Math.min(.1,dt)*(BUILD_CAPABILITIES.developerTools?this.tools.speed:1),
+    (cast:any)=>this.characterArt.observeCast(cast));}finally{sample?.end('simulation',started);}
    this.characterArt.observe(characterBefore,this.run.state);
    this.queueMaterialNotice(this.run.state,killStart);
    const after=cultivationAt(this.run.state.player.xp);
@@ -928,12 +938,16 @@ export class TowerView {
    }
    this.saveElapsed+=dt;
    if(['won','lost','abandoned'].includes(this.run.state.phase)){this.finish();return;}
-   if(this.run.state.phase==='paused'){this.resetInput();if(this.persist({type:'checkpoint',snapshot:this.run.snapshot()}))this.render();return;}
-   if(this.saveElapsed>=.75){this.saveElapsed=0;if(!this.persist({type:'checkpoint',snapshot:this.run.snapshot()}))return;}
+   if(this.run.state.phase==='paused'){this.resetInput();if(this.persist({type:'checkpoint',snapshot:this.snapshotRun()}))this.render();return;}
+   if(this.saveElapsed>=.75){this.saveElapsed=0;if(!this.persist({type:'checkpoint',snapshot:this.snapshotRun()}))return;}
   }
   this.draw();
  }
  private draw(){
+  const sample=this.host?.performance,started=sample?.begin();
+  try{return this.drawScene();}finally{sample?.end('draw',started);}
+ }
+ private drawScene(){
   this.refreshCurrencyHud();
   if(!this.run||!this.world||!this.ui||!this.foreground||!this.warnings||!this.monsterLayer)return;
   const s=this.run.state,p=s.player,W=this.width,H=this.height;

@@ -1,0 +1,301 @@
+{
+  "schemaVersion": 1,
+  "target": "taptap-minigame",
+  "distribution": "ordinary-minigame",
+  "route": "official-cocos-converter",
+  "plugin": {
+    "schemaVersion": 1,
+    "name": "taptap-minigame-tools",
+    "version": "1.2.2",
+    "converterVersion": "2.0.4-ts",
+    "sourceUrl": "https://app-res.tapimg.com/file/2026-04-14/67e7d94f5e586596dab061816d1c509d.zip",
+    "documentationUrl": "https://developer.taptap.cn/minigameapidoc/dev/engine/Cocos-Laya-Egret/",
+    "archiveSha256": "6b8a9a3cc62b6c54cefab397097babb771d9d99f90442cddff06310a4c9ed73f",
+    "archiveBytes": 13755538,
+    "extractedTreeSha256": "024f2f4ba7e04da3579a2d937557ca071687f7d6dc8e8a3b066cd48d9b025ddf",
+    "extractedFileCount": 5465,
+    "treeDigestAlgorithm": "SHA256 of relative POSIX path + NUL + file SHA256 hex + LF, sorted by path; timestamps excluded",
+    "entry": "dist/converter-ts.js#convertWechatToTap",
+    "dependencies": {
+      "fs-extra": "node_modules/fs-extra/lib/index.js",
+      "archiver": "node_modules/archiver/index.js",
+      "@babel/core": "converter/node_modules/@babel/core/lib/index.js",
+      "@babel/preset-env": "converter/node_modules/@babel/preset-env/lib/index.js"
+    },
+    "sizeLimits": {
+      "status": "unverified",
+      "mainBytes": null,
+      "subpackageBytes": null,
+      "totalBytes": null,
+      "reason": "Exact ordinary-minigame upload limits and compressed/uncompressed units require account/backend verification."
+    }
+  },
+  "identity": {
+    "tapGameId": null,
+    "tapAppId": null,
+    "accountVerified": false
+  },
+  "validation": {
+    "offlineConversion": "pass",
+    "platformImport": "not-run",
+    "device": "not-run",
+    "releaseEligible": false
+  },
+  "sizeLimits": {
+    "status": "unverified",
+    "mainBytes": null,
+    "subpackageBytes": null,
+    "totalBytes": null,
+    "reason": "Exact ordinary-minigame upload limits and compressed/uncompressed units require account/backend verification."
+  },
+  "fingerprint": {
+    "schemaVersion": 2,
+    "platform": "taptap-minigame",
+    "profile": "production",
+    "resourcePolicy": "reviewed",
+    "inputs": [
+      {
+        "path": "js",
+        "type": "directory",
+        "sha256": "69234104ce037bbb1ecddd77867e041a9e09100d9c7d88e6051a7cbe292e91c0"
+      },
+      {
+        "path": "cocos-pilot/assets",
+        "type": "directory",
+        "sha256": "ad2f999fa2a6c3b6cbaef1610befe6362a8dfed4d0fc5b1681e89c83173050e8"
+      },
+      {
+        "path": "cocos-pilot/settings",
+        "type": "directory",
+        "sha256": "500a75c70bad66dfac435e7f63134cb5316d6f03338fb4a3496e8e70f6989331"
+      },
+      {
+        "path": "cocos-pilot/build-configs",
+        "type": "directory",
+        "sha256": "e6618f64ceb9ac514bc71d9c23ae4a3089a170d5b0aae07e20a109c37db6c517"
+      },
+      {
+        "path": "scripts",
+        "type": "directory",
+        "sha256": "999acb1a7058e89a02d9b1311249156c2b71fe5a94a1edb99c9cf7df0782ff6e"
+      },
+      {
+        "path": "package.json",
+        "type": "file",
+        "sha256": "6d0b45ff1d0c4e3a4a38436d56836b4124254b91dace0779c08c66cc0e2c574f"
+      },
+      {
+        "path": "project.config.json",
+        "type": "file",
+        "sha256": "0b582b1c88b44955fb7aaf353bd851a365c8051fbb7938c8b5a3587bfffcc653"
+      },
+      {
+        "path": "cocos-pilot/package.json",
+        "type": "file",
+        "sha256": "2180738dade1f74cb7f23273454951d7f0f004ec01d10ea10bfc67089efc294a"
+      },
+      {
+        "path": "cocos-pilot/tsconfig.json",
+        "type": "file",
+        "sha256": "3493b9a45fe113db673fff67e7d6b4f88e138431aa606761046c712d774f4450"
+      },
+      {
+        "path": "release/settings.json",
+        "type": "file",
+        "sha256": "85458670899e0f49ac87335ad42a9d09eec7e5c46fbaa39442f3a56855d7ee6d"
+      },
+      {
+        "path": "build-templates",
+        "type": "missing"
+      },
+      {
+        "path": "cocos-pilot/build-templates",
+        "type": "directory",
+        "sha256": "da817cfc74c0f8bf33ccc9165a36d16e120c922f48db8d408b6a17f1724dab37"
+      },
+      {
+        "path": "extensions",
+        "type": "missing"
+      },
+      {
+        "path": "cocos-pilot/extensions",
+        "type": "missing"
+      },
+      {
+        "path": "packages",
+        "type": "missing"
+      },
+      {
+        "path": "cocos-pilot/packages",
+        "type": "missing"
+      },
+      {
+        "path": "release/asset-policy.json",
+        "type": "file",
+        "sha256": "16928a41831b4fde7603f2c0ac93b2555f58c539a0f71e255dd85f02c7188fc1"
+      },
+      {
+        "path": "tsconfig.json",
+        "type": "missing"
+      },
+      {
+        "path": ".npmrc",
+        "type": "missing"
+      },
+      {
+        "path": "cocos-pilot/.npmrc",
+        "type": "missing"
+      },
+      {
+        "path": "package-lock.json",
+        "type": "missing"
+      },
+      {
+        "path": "npm-shrinkwrap.json",
+        "type": "missing"
+      },
+      {
+        "path": "yarn.lock",
+        "type": "missing"
+      },
+      {
+        "path": "pnpm-lock.yaml",
+        "type": "missing"
+      },
+      {
+        "path": "bun.lock",
+        "type": "missing"
+      },
+      {
+        "path": "bun.lockb",
+        "type": "missing"
+      },
+      {
+        "path": "cocos-pilot/package-lock.json",
+        "type": "missing"
+      },
+      {
+        "path": "cocos-pilot/npm-shrinkwrap.json",
+        "type": "missing"
+      },
+      {
+        "path": "cocos-pilot/yarn.lock",
+        "type": "missing"
+      },
+      {
+        "path": "cocos-pilot/pnpm-lock.yaml",
+        "type": "missing"
+      },
+      {
+        "path": "cocos-pilot/bun.lock",
+        "type": "missing"
+      },
+      {
+        "path": "cocos-pilot/bun.lockb",
+        "type": "missing"
+      }
+    ],
+    "toolchain": {
+      "creator": {
+        "executableSha256": "3a8452496c03e85f2784e64679a1fd203701b0b245125efee02c7923f2bd3464",
+        "releaseInfoSha256": "81113c42d452325e222cb1e1a935524a2c428af1d5c17cc04091236939713ca2",
+        "version": "3.8.8",
+        "versionInfoSha256": "ce05c91cbc65f0407685762c28bd4eaa87bd60dff0f147e191787df04c41b6d6"
+      },
+      "node": {
+        "executableSha256": "463b47d6e984e4f84cd2421dabf5081414e40ab9d967e828b2db7858e707f6de",
+        "version": "v22.22.2"
+      },
+      "scope": "executable-and-release-metadata-only"
+    },
+    "version": "1.1.0-alpha.1",
+    "appid": null,
+    "intermediateWechatAppId": "wx9f4d90648b06b801",
+    "sourceDigest": "5df6dcafd72ba192f504c69acf06dc013c313bd88e2215111ef02eac6e8b93a0",
+    "inputDigest": "b45a5705a868531c5c9a0abfca01bd8a1600c60073b82705f313d7cd2f840a20"
+  },
+  "inputs": {
+    "rawTreeSha256": "5b6a09bc41b706cbf1d8f7c68f820e9439f2e2a1b11d607914e58915ade18ce3",
+    "stagingContentTreeSha256": "b1085b061e4b6254cd3418597e1603cbb155f9fa1bb934bd6d4694b93f68c5e5",
+    "gameVersion": "1.1.0",
+    "effectiveConfig": {
+      "platform": "wechatgame",
+      "debug": false,
+      "startScene": "a04bbf6c-cc50-49b8-9be9-f937d6693528",
+      "scenes": [
+        {
+          "url": "db://assets/scenes/PinePilot.scene",
+          "uuid": "a04bbf6c-cc50-49b8-9be9-f937d6693528"
+        }
+      ],
+      "packages": {
+        "wechatgame": {
+          "orientation": "landscape",
+          "appid": "wx9f4d90648b06b801"
+        },
+        "taptap-minigame-tools": {
+          "enableTapConvert": false,
+          "deleteWechatBuild": false,
+          "usePythonScript": false
+        }
+      },
+      "sourceMaps": false,
+      "bundleConfigs": [],
+      "buildPath": "/Users/zhangnu/.codex/worktrees/technical-governance/rainy-mushroom/cocos-pilot/build",
+      "outputName": "tap-wechat-intermediate"
+    },
+    "effectiveConfigSha256": "c9e9b29185e79593c387ba8a0fa13d5f3150bcf145e456c733bd8a3b6b9708be",
+    "creatorLogSha256": "0eb94380237395b2ce9beb16bf90331cede0738cd8759b1c6c78706b21d9e01b",
+    "stagingTreeSha256": "cb8a7b039a6055dfe0123f77728fea366f7bd61f1a374f19dabe6efee0b34ef1"
+  },
+  "builtAt": "2026-11-03T18:56:09.778Z",
+  "outputs": {
+    "gameTreeSha256": "5e805fc834ead03486af81d0c1f66a771ddd9040b594f0be7c46bcc2d5e38304",
+    "zipTreeSha256": "5e805fc834ead03486af81d0c1f66a771ddd9040b594f0be7c46bcc2d5e38304",
+    "zipSha256": "055f488cac000775b3fb1cf3aa374ab81c6418452ee3defd6bd5e9d83337869f",
+    "zipBytes": 120781438,
+    "fileCount": 793,
+    "uncompressedBytes": 124433845,
+    "mainBytes": 2161716,
+    "subpackageBytes": {
+      "internal": 182481,
+      "main": 2056910,
+      "resources": 120032738
+    },
+    "totalBytes": 124433845
+  },
+  "logs": {
+    "stdoutSha256": "847fc395e4c0bf9a1909f8f56a5c0db6f7551fe27ecd0752b866d0329e404f7f",
+    "stderrSha256": "0ca111e2e7f582978822519d451f01b209b1ecd488bc3b4d7964b6614612c3db",
+    "babel": {
+      "success": 16,
+      "skipped": 0,
+      "failed": 0
+    }
+  },
+  "behavior": {
+    "nodeVersion": "v22.22.2",
+    "childProcessAttempts": [],
+    "networkAttempts": [],
+    "externalLoadedModules": [],
+    "resolvedDependencies": {
+      "fs-extra": "/private/tmp/t03-tap-plugin-readonly/taptap-minigame-tools/node_modules/fs-extra/lib/index.js",
+      "archiver": "/private/tmp/t03-tap-plugin-readonly/taptap-minigame-tools/node_modules/archiver/index.js",
+      "@babel/core": "/private/tmp/t03-tap-plugin-readonly/taptap-minigame-tools/converter/node_modules/@babel/core/lib/index.js",
+      "@babel/preset-env": "/private/tmp/t03-tap-plugin-readonly/taptap-minigame-tools/converter/node_modules/@babel/preset-env/lib/index.js"
+    },
+    "success": true,
+    "writePermissions": {
+      "plugin": false,
+      "source": false,
+      "target": true,
+      "childProcess": false
+    }
+  },
+  "paths": {
+    "source": "/Users/zhangnu/.codex/worktrees/technical-governance/rainy-mushroom/cocos-pilot/build/tap-wechat-intermediate",
+    "scratch": "/private/var/folders/l0/8by043sj5x18nxcrxhx4zwgm0000gn/T/rainy-tap-Qpz2SL",
+    "pluginDir": "/private/tmp/t03-tap-plugin-readonly/taptap-minigame-tools",
+    "archivePath": "/private/tmp/t03-tap-minigame-official-1.2.2.zip"
+  }
+}

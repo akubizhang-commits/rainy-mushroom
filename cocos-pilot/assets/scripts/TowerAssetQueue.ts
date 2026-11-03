@@ -12,6 +12,8 @@ type Entry = {
  path:string;type:any;status:'pending'|'ready'|'failed';asset?:AssetValue;
  bindings:Binding[];attempt:number;token:number;timer:any;
 };
+export type AssetDiagnostic = {stage:'transport'|'binding'|'lifetime'|'optional-audio';status:'start'|'ready'|'failed'|'released';path:string;type:string;attempt:number;token:number;retryable?:boolean;width?:number;height?:number};
+export type AssetDiagnosticObserver = (event:AssetDiagnostic)=>void;
 export type LoadingState = {pending:number;failed:number;completed:number;total:number;restartRequired:number};
 
 /** One host lifetime; transport completion and binding completion are separate. */
@@ -21,7 +23,7 @@ export class TowerAssetQueue {
  private batch:Entry[]=[];
  private blocking=true;
  onChange:((state:LoadingState)=>void)|null=null;
- constructor(private transport:(path:string,type:any,complete:Complete)=>void){}
+ constructor(private transport:(path:string,type:any,complete:Complete)=>void,private diagnostic?:AssetDiagnosticObserver){}
  beginBlocking(){
   if(this.dead||this.blocking)return;
   this.blocking=true;this.batch=[];this.emit();
@@ -74,9 +76,9 @@ export class TowerAssetQueue {
   if(this.dead)return;
   this.dead=true;this.onChange=null;
   for(const group of this.entries.values())for(const e of group.values()){
-   clearTimeout(e.timer);e.bindings=[];e.asset?.decRef();
+   clearTimeout(e.timer);e.bindings=[];if(e.asset)this.observe('lifetime','released',e);e.asset?.decRef();
   }
-  this.entries.clear();this.batch=[];
+  this.entries.clear();this.batch=[];this.diagnostic=undefined;
  }
  private track(e:Entry){
   if(!this.blocking||this.batch.includes(e))return false;
@@ -84,6 +86,11 @@ export class TowerAssetQueue {
   this.batch.push(e);return true;
  }
  private emit(){if(!this.dead)this.onChange?.(this.state);}
+ private observe(stage:AssetDiagnostic['stage'],status:AssetDiagnostic['status'],e:Entry,retryable?:boolean){
+  if(!this.diagnostic)return;
+  // Diagnostic failures never participate in loading or binding decisions.
+  try{this.diagnostic({stage,status,path:e.path,type:e.type?.prototype?.__classname__||e.type?.__classname__||e.type?.name||'UnknownAsset',attempt:e.attempt,token:e.token,...(retryable===undefined?{}:{retryable}),...(stage==='transport'&&status==='ready'?{width:(e.asset as any)?.width,height:(e.asset as any)?.height}:{})});}catch{}
+ }
  private bind(e:Entry,binding:Binding){
   if(this.dead||binding.status!=='pending')return;
   binding.status='running';
@@ -92,6 +99,7 @@ export class TowerAssetQueue {
    // Drop successful callback closures; another binding's retry never repeats it.
    const index=e.bindings.indexOf(binding);
    if(index>=0)e.bindings.splice(index,1);
+   this.observe('binding','ready',e);
   }catch(error){
    binding.status='failed';binding.retryable=binding.options.retryable===true;
    if(binding.options.rollback){
@@ -101,6 +109,7 @@ export class TowerAssetQueue {
      console.error(`[TowerAssets] ${e.path}: binding cleanup failed; restart required`,cleanupError);
     }
    }
+   this.observe('binding','failed',e,binding.retryable);
    console.error(`[TowerAssets] ${e.path}: binding failed${binding.retryable?'':' ; restart required'}`,error);
   }
   this.emit();
@@ -108,16 +117,19 @@ export class TowerAssetQueue {
  private start(e:Entry){
   if(this.dead)return;
   const token=++e.token;e.attempt++;
+  this.observe('transport','start',e);
   let settled=false;
   const finish=(error:any,asset:any)=>{
    if(this.dead||settled||token!==e.token)return;
    settled=true;clearTimeout(e.timer);
    if(error||!asset){
+    this.observe('transport','failed',e);
     if(e.attempt<3)e.timer=setTimeout(()=>this.start(e),400*e.attempt);
     else {e.status='failed';console.warn(`[TowerAssets] ${e.path}: resource unavailable`,error);}
     this.emit();return;
    }
    asset.addRef();e.asset=asset;e.status='ready';
+   this.observe('transport','ready',e);
    // Running bindings remain pending, including while they request dependencies.
    for(const binding of [...e.bindings])this.bind(e,binding);
    this.emit();
