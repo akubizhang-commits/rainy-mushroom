@@ -40,10 +40,10 @@
 
 ## 红绿测试证据
 
-- 首轮核心红灯：49 失败，原因是没有完整输入捕获/校验与工具链 API，旧摘要不能对临时 root 求值，旧门禁没有隔离 root。见 `task-1-core-red.log`。
-- 核心实现后中间状态：48 通过，剩余 1 项门禁集成失败。见 `task-1-core-intermediate.log`。
-- 修正 Creator 测试替身的 ESM 语法后，集成红灯重新确认 8/8 失败：旧调用没有构建前指纹、旧 stamp 在失败时仍存在。此处记录的是消除夹具错误后的红灯，见 `task-1-integration-red.log`。
-- 最终定向命令：`node --test tests/release-integrity.test.mjs tests/release-readiness.test.mjs tests/cocos-package.test.mjs`，67/67 通过（新增 57 + 既有 10），0 失败。见 `task-1-targeted-green.log`。
+- 首轮核心红灯：49 失败，原因是没有完整输入捕获/校验与工具链 API，旧摘要不能对临时 root 求值，旧门禁没有隔离 root。见 `task-1-core-red.log.gz`。
+- 核心实现后中间状态：48 通过，剩余 1 项门禁集成失败。见 `task-1-core-intermediate.log.gz`。
+- 修正 Creator 测试替身的 ESM 语法后，集成红灯重新确认 8/8 失败：旧调用没有构建前指纹、旧 stamp 在失败时仍存在。此处记录的是消除夹具错误后的红灯，见 `task-1-integration-red.log.gz`。
+- 最终定向命令：`node --test tests/release-integrity.test.mjs tests/release-readiness.test.mjs tests/cocos-package.test.mjs`，67/67 通过（新增 57 + 既有 10），0 失败。见 `task-1-targeted-green.log.gz`。
 - `npm run check` 通过，输出 `Source syntax and dependency checks passed`。
 - `git diff --check` 通过。
 
@@ -52,7 +52,7 @@
 - `npm test` 完整运行：2145 项，1582 通过，563 失败，0 cancelled / skipped / todo。
 - 比对基线 `docs/technical-review/evidence/checkpoint-tests.log`（2088 项，1525 通过，563 失败），以每个 `not ok` 的测试名称多重集合比较：新增失败 0，消失失败 0；全部 563 个失败与基线名称及次数完全一致。
 - 结果不是“全量绿灯”：既有 563 项失败仍然存在，没有在 T01 范围内修复或隐藏。
-- 全量原始日志：`task-1-full-tests.log`；逐项失败名称列表：`task-1-failures.json`；机器可读比较：`task-1-failure-comparison.json`。所有失败均逐名记录在这两个证据文件中。全量测试由既有 `xianxia-sword-flow-specialization.test.mjs` 生成的未跟踪 `two-slot-budget.json` 已移到本目录 `task-1-two-slot-budget.json` 保留，避免混入实现改动。
+- 全量原始日志：`task-1-full-tests.log.gz`；逐项失败名称列表：`task-1-failures.json`；机器可读比较：`task-1-failure-comparison.json`。所有失败均逐名记录在这两个证据文件中。全量测试由既有 `xianxia-sword-flow-specialization.test.mjs` 生成的未跟踪 `two-slot-budget.json` 已移到本目录 `task-1-two-slot-budget.json` 保留，避免混入实现改动。
 
 ## 实机只读核验
 
@@ -84,8 +84,8 @@
 
 - `scripts/release-integrity.mjs`：只为显式输入根保留 directory 条目，不再让嵌套空目录及空目录链参与内容摘要；文件的完整相对路径和内容、符号链接路径/目标/引用内容继续纳入。可选根目录 missing 与 empty-directory 仍有区别。
 - `tests/release-integrity.test.mjs`：新增 5 项回归，覆盖嵌套空目录新增/删除、可选根与嵌套空目录的区别、非空目录改名及文件内容变化、指向空目录的符号链接及目标内容变化，以及 Creator 替身在编译期间新建该目录后成功落 stamp 的 CLI 路径。
-- 精准红灯：5 项中 3 失败、2 通过；三项失败均为预期 inputDigest 漂移，路径/符号链接保护用例先行通过。见 `task-1-fix1-red.log`。
-- 修复后执行 `node --test tests/release-integrity.test.mjs tests/release-readiness.test.mjs tests/cocos-package.test.mjs`：72/72 通过，0 失败（新增测试累计 62 项）。见 `task-1-fix1-green.log`。
+- 精准红灯：5 项中 3 失败、2 通过；三项失败均为预期 inputDigest 漂移，路径/符号链接保护用例先行通过。见 `task-1-fix1-red.log.gz`。
+- 修复后执行 `node --test tests/release-integrity.test.mjs tests/release-readiness.test.mjs tests/cocos-package.test.mjs`：72/72 通过，0 失败（新增测试累计 62 项）。见 `task-1-fix1-green.log.gz`。
 - `node --check scripts/release-integrity.mjs`、`git diff --check` 通过。遵照 fix1 指示未重跑全量；上文 2145/1582/563 为初版 T01 的历史全量结果，不代表 fix1 后再次执行。
 - 未再次启动真实 Creator；本次 CLI 回归使用可控 Creator 替身，真实 web 复验仍由主代理安排。不宣称二进制产物字节级可复现。
 
@@ -101,3 +101,5 @@
 ## 主代理真实构建验收
 
 修复后两次实际 Creator Web 构建成功，sourceDigest 与 inputDigest 均一致；第二次产物通过 verifyBuildStamp。见 actual-web-result.json。真实微信最终预算校验仍留在平台/资源任务，未宣称其通过。初次空目录误报及修复结果均保留；独立评审的初审与 fix1 复审没有未解决代码问题。基线源码快照 bf2c50f 已按用户要求推送并核对远端一致。
+
+原始日志以无损 `.log.gz` 保存，解压后的字节与运行输出一致；没有整理或删改失败诊断。

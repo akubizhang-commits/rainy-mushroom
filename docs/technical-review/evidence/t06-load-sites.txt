@@ -1,0 +1,145 @@
+cocos-pilot/assets/scripts/JianxinAuraArt.ts:9: preload(){
+cocos-pilot/assets/scripts/JianxinAuraArt.ts:11:  resources.load('tower-skill-fx/jianxin-aura-v1',ImageAsset,(error,image)=>{
+cocos-pilot/assets/scripts/JianxinAuraArt.ts:20:  this.preload();const pose=this.model.sample(s);
+cocos-pilot/assets/scripts/TowerStoneArt.ts:17: preloadDrops(){
+cocos-pilot/assets/scripts/TowerStoneArt.ts:28:   try{resources.load(`tower-stones/${files[grade]}`,ImageAsset,(error,image)=>this.finish(grade,current,error,image));}
+cocos-pilot/assets/scripts/SwordLineArt.ts:29: preload(){
+cocos-pilot/assets/scripts/SwordLineArt.ts:31:  resources.load('tower-skill-fx/line-sunlight-sword-blue-v3',ImageAsset,(error,image)=>{
+cocos-pilot/assets/scripts/SwordLineArt.ts:41:  resources.load('tower-skill-fx/line-rift-reference-v1',ImageAsset,(error,image)=>{
+cocos-pilot/assets/scripts/SwordLineArt.ts:57:  this.preload();
+cocos-pilot/assets/scripts/LiangyiFormationArt.ts:35: preload(){
+cocos-pilot/assets/scripts/LiangyiFormationArt.ts:37:  for(const art of ART)resources.load(art.path,ImageAsset,(error,image)=>{
+cocos-pilot/assets/scripts/LiangyiFormationArt.ts:110:  this.preload();
+cocos-pilot/assets/scripts/TowerLevelBeamArt.ts:10: preload(){
+cocos-pilot/assets/scripts/TowerLevelBeamArt.ts:26:  this.preload();
+cocos-pilot/assets/scripts/SwordQiArt.ts:31: preload(){
+cocos-pilot/assets/scripts/SwordQiArt.ts:36:   resources.load(spec.path,ImageAsset,(error,image)=>{
+cocos-pilot/assets/scripts/SwordQiArt.ts:54:  this.lastTime=time;this.preload();
+cocos-pilot/assets/scripts/TowerEggArt.ts:17:  resources.load('tower-monsters-motion/egg',ImageAsset,(error,image)=>{
+cocos-pilot/assets/scripts/TowerEggArt.ts:32:   this.load();if(!this.frame)continue;
+cocos-pilot/assets/scripts/QingpingAudio.ts:8: preload(){if(this.requested||this.dead)return;this.requested=true;for(const name of ['swoosh','impact'])resources.load(`tower-skill-fx/qingping-${name}`,AudioClip,(err,clip)=>{if(this.dead||err||!clip)return;clip.addRef();this.clips.set(name,clip)})}
+cocos-pilot/assets/scripts/QingpingAudio.ts:10:  this.preload();if(this.state!==s||s.time<this.time){this.reset();this.state=s}this.time=s.time;
+cocos-pilot/assets/scripts/CrossBurstArt.ts:13: preload(){
+cocos-pilot/assets/scripts/CrossBurstArt.ts:16:   resources.load('tower-skill-fx/'+path,ImageAsset,(error,image)=>{
+cocos-pilot/assets/scripts/CrossBurstArt.ts:28:  this.preload();const live=new Set<string>();
+cocos-pilot/assets/scripts/TowerFallingRockArt.ts:16:  resources.load('tower-monsters-motion/falling-rock',ImageAsset,(error,image)=>{
+cocos-pilot/assets/scripts/TowerFallingRockArt.ts:31:   this.load();
+cocos-pilot/assets/scripts/TowerChainArt.ts:16:  resources.load('tower-monsters-motion/chain',ImageAsset,(error,image)=>{
+cocos-pilot/assets/scripts/TowerChainArt.ts:31:   this.load();
+cocos-pilot/assets/scripts/TowerMenu.ts:973:   resources.load(path, ImageAsset, (error, image) => {
+cocos-pilot/assets/scripts/TowerView.ts:497:  this.monsterArt.preloadFloor(FLOORS[this.run?.state.floor-1]);
+cocos-pilot/assets/scripts/TowerView.ts:498:  this.stoneArt.preloadDrops();
+cocos-pilot/assets/scripts/TowerView.ts:503:  this.levelBeamLayer=this.node('晋升光柱层',root);this.levelBeam.preload();
+cocos-pilot/assets/scripts/TowerView.ts:505:  this.flightLayer=this.node('御剑飞行剑身层',root);this.flightSwordArt.preload();
+cocos-pilot/assets/scripts/TowerView.ts:507:  this.arcLayer=this.node('弦月斩特效层',root);this.arcArt.preload();
+cocos-pilot/assets/scripts/TowerView.ts:508:  this.ritualAudio.preload();
+cocos-pilot/assets/scripts/TowerView.ts:509:  this.burstLayer=this.node('剑罡爆裂层',root);this.burstArt.preload();this.qingpingAudio.preload();
+cocos-pilot/assets/scripts/TowerView.ts:510:  this.convergenceLayer=this.node('万剑归宗特效层',root);this.convergenceArt.preload();
+cocos-pilot/assets/scripts/TowerView.ts:511:  this.lineLayer=this.node('剑破虚空特效层',root);this.lineArt.preload();
+cocos-pilot/assets/scripts/TowerView.ts:512:  this.tiandiLayer=this.node('一剑开天特效层',root);this.tiandiArt.preload();
+cocos-pilot/assets/scripts/TowerView.ts:516:  this.orbitArt.preload();
+cocos-pilot/assets/scripts/TowerView.ts:518:  this.formationLayer=this.node('剑阵落剑层',root);this.formationArt.preload();this.sixiangArt.preload();
+cocos-pilot/assets/scripts/TowerView.ts:519:  this.shadowLayer=this.node('分光连斩层',root);this.shadowArt.preload();
+cocos-pilot/assets/scripts/TowerView.ts:523:  this.qiLayer=this.node('月牙与十字剑气层',root);this.crossBurstArt.preload();this.qiArt.preload();
+cocos-pilot/assets/scripts/TowerView.ts:673:  this.ritual??=new TowerBreakthroughScene();this.ritualAudio.preload();
+cocos-pilot/assets/scripts/TowerCoreArt.ts:17:  resources.load('tower-monsters-motion/core',ImageAsset,(error,image)=>{
+cocos-pilot/assets/scripts/TowerCoreArt.ts:32:   this.load();if(!this.frame)continue;
+cocos-pilot/assets/scripts/TowerLibraryPanel.ts:96:  this.roomArtReady = ROOM_ART.every(name => !!resources.getInfoWithPath(ART_ROOT + name, ImageAsset));
+cocos-pilot/assets/scripts/TowerLibraryPanel.ts:97:  this.bookArtReady = !!resources.getInfoWithPath(ART_ROOT + 'library_open_book', ImageAsset);
+cocos-pilot/assets/scripts/TowerLibraryPanel.ts:258:   resources.load(path, ImageAsset, (error, image) => {
+cocos-pilot/assets/scripts/TowerLibraryPanel.ts:542:  const hasPortrait = entry.icon && resources.getInfoWithPath(portraitPath, ImageAsset);
+cocos-pilot/assets/scripts/TowerSkillIcons.ts:73:    resources.load(`tower-skill-icons/${id}`, ImageAsset, (error, image) => this.finish(current, error, image));
+cocos-pilot/assets/scripts/TowerBreathArt.ts:16:  resources.load('tower-monsters-motion/breath',ImageAsset,(error,image)=>{
+cocos-pilot/assets/scripts/TowerBreathArt.ts:31:   this.load();
+cocos-pilot/assets/scripts/FlightSwordArt.ts:7: preload(){
+cocos-pilot/assets/scripts/FlightSwordArt.ts:9:  resources.load('tower-skill-fx/flight-liuquan-v1',ImageAsset,(err,image)=>{
+cocos-pilot/assets/scripts/FlightSwordArt.ts:16:  if(this.dead||!isValid(parent,true))return;this.preload();
+cocos-pilot/assets/scripts/TowerWindbladeArt.ts:16:  resources.load('tower-monsters-motion/windblade',ImageAsset,(error,image)=>{
+cocos-pilot/assets/scripts/TowerWindbladeArt.ts:31:   this.load();
+cocos-pilot/assets/scripts/SwordBurstArt.ts:11: preload(){
+cocos-pilot/assets/scripts/SwordBurstArt.ts:13:  resources.load('tower-skill-fx/tiandi-solid-sword-v2',ImageAsset,(err,img)=>{if(this.dead||err||!img)return;img.addRef();this.image=img;this.texture=new Texture2D();this.texture.image=img;this.frame=new SpriteFrame();this.frame.texture=this.texture});
+cocos-pilot/assets/scripts/SwordBurstArt.ts:14:  resources.load('tower-skill-fx/sword-burst',AudioClip,(err,clip)=>{if(this.dead||err||!clip)return;clip.addRef();this.clip=clip});
+cocos-pilot/assets/scripts/SwordBurstArt.ts:22:  this.preload();if(this.state!==s||s.time<this.time){this.reset();this.state=s}this.time=s.time;this.covered.clear();
+cocos-pilot/assets/scripts/TowerShockwaveArt.ts:14:  resources.load('tower-monsters-motion/shockwave',ImageAsset,(error,image)=>{
+cocos-pilot/assets/scripts/TowerShockwaveArt.ts:28:   this.load();if(!this.frames.length||state.time<z.activatesAt)continue;
+cocos-pilot/assets/scripts/TowerCrystalArt.ts:17:  resources.load('tower-monsters-motion/crystal',ImageAsset,(error,image)=>{
+cocos-pilot/assets/scripts/TowerCrystalArt.ts:32:   this.load();if(!this.frame)continue;
+cocos-pilot/assets/scripts/SwordArcArt.ts:28: preload(){
+cocos-pilot/assets/scripts/SwordArcArt.ts:30:  resources.load(PROFILES[this.profile].resource,ImageAsset,(error,image)=>{
+cocos-pilot/assets/scripts/SwordArcArt.ts:77:  this.preload();
+cocos-pilot/assets/scripts/OrbitSwordArt.ts:30: preload(){
+cocos-pilot/assets/scripts/OrbitSwordArt.ts:32:  resources.load(ART.path,ImageAsset,(error,image)=>{
+cocos-pilot/assets/scripts/OrbitSwordArt.ts:60:  this.preload();
+cocos-pilot/assets/scripts/OrbitSwordArt.ts:98:   resources.load('tower-skill-fx/jianxin-aura-v1',ImageAsset,(error,image)=>{
+cocos-pilot/assets/scripts/TowerLightningArt.ts:16:  resources.load('tower-monsters-motion/lightning',ImageAsset,(error,image)=>{
+cocos-pilot/assets/scripts/TowerLightningArt.ts:31:   this.load();
+cocos-pilot/assets/scripts/TowerSafeSealArt.ts:16:  resources.load('tower-monsters-motion/safe-seal',ImageAsset,(error,image)=>{
+cocos-pilot/assets/scripts/TowerSafeSealArt.ts:31:   this.load();
+cocos-pilot/assets/scripts/SwordShadowArt.ts:21: preload(){
+cocos-pilot/assets/scripts/SwordShadowArt.ts:23:  resources.load('tower-skill-fx/sword-shadow-luminous-v1',ImageAsset,(error,image)=>{
+cocos-pilot/assets/scripts/SwordShadowArt.ts:47:  this.preload();
+cocos-pilot/assets/scripts/TowerEnvironmentArt.ts:13:   this.requested.add(name);resources.load(`tower-environment/${name}`,ImageAsset,(error,image)=>{
+cocos-pilot/assets/scripts/TowerPillarArt.ts:17:  resources.load('tower-monsters-motion/pillar',ImageAsset,(error,image)=>{
+cocos-pilot/assets/scripts/TowerPillarArt.ts:32:   this.load();if(!this.frame)continue;
+cocos-pilot/assets/scripts/TowerResources.ts:7: return session=new TowerAssetQueue((path,type,complete)=>resources.load(path,type,complete));
+cocos-pilot/assets/scripts/TowerResources.ts:13:/** Preserve the resources.load call shape and typed callbacks in art renderers. */
+cocos-pilot/assets/scripts/TowerResources.ts:15: getInfoWithPath:resources.getInfoWithPath.bind(resources),
+cocos-pilot/assets/scripts/TowerResources.ts:18:  if(!session||(type as unknown)===AudioClip){resources.load(path,type,complete);return;}
+cocos-pilot/assets/scripts/TowerResources.ts:19:  session.load(path,type,complete);
+cocos-pilot/assets/scripts/SixiangFormationArt.ts:35: preload(){
+cocos-pilot/assets/scripts/SixiangFormationArt.ts:37:  for(const art of ART)resources.load(art.path,ImageAsset,(error,image)=>{
+cocos-pilot/assets/scripts/SixiangFormationArt.ts:110:  this.preload();
+cocos-pilot/assets/scripts/FlightStreamArt.ts:10: preload(){
+cocos-pilot/assets/scripts/FlightStreamArt.ts:12:  resources.load('tower-skill-fx/flight-stream-v3',ImageAsset,(error,image)=>{
+cocos-pilot/assets/scripts/FlightStreamArt.ts:21:  this.preload();const pose=this.model.sample(s);this.pose=pose;
+cocos-pilot/assets/scripts/TowerMiasmaArt.ts:16:  resources.load('tower-monsters-motion/miasma',ImageAsset,(error,image)=>{
+cocos-pilot/assets/scripts/TowerMiasmaArt.ts:31:   this.load();
+cocos-pilot/assets/scripts/TowerProjectileArt.ts:66:  const art=sonic?this.sonicArt:poison?this.poisonArt:this.featherArt;this.load(art,false,`tower-monsters-motion/${kind}`);
+cocos-pilot/assets/scripts/TowerProjectileArt.ts:89:  try{resources.load(path||(legacy?'tower-skill-fx/yujian':'tower-skill-fx/orbit-sword-v1'),ImageAsset,(error,image)=>{
+cocos-pilot/assets/scripts/TowerProjectileArt.ts:99:  const art=legacy?this.legacy:this.modern;this.load(art,legacy);
+cocos-pilot/assets/scripts/TowerBreakthroughScene.ts:33:  if(model.target==='筑基'||model.status==='success'&&model.realm==='筑基')this.seated.preload();
+cocos-pilot/assets/scripts/TowerBreakthroughScene.ts:34:  if(model.target==='金丹'||model.status==='success'&&model.realm==='金丹')this.jindan.preload();
+cocos-pilot/assets/scripts/BumieAuraArt.ts:9: preload(){
+cocos-pilot/assets/scripts/BumieAuraArt.ts:11:  resources.load('tower-skill-fx/bumie-aura-v1',ImageAsset,(error,image)=>{
+cocos-pilot/assets/scripts/BumieAuraArt.ts:20:  this.preload();const pose=this.model.sample(s);
+cocos-pilot/assets/scripts/ConvergenceArt.ts:13: preload(){
+cocos-pilot/assets/scripts/ConvergenceArt.ts:16:   resources.load(`tower-skill-fx/${name}`,ImageAsset,(error,image)=>{
+cocos-pilot/assets/scripts/ConvergenceArt.ts:37:  this.preload();this.covered.clear();const seen=new Set<string>();this.trails?.clear();
+cocos-pilot/assets/scripts/TowerBreakthroughArt.ts:20: preload(){
+cocos-pilot/assets/scripts/TowerBreakthroughArt.ts:23:   resources.load(`tower-breakthrough/${name}`,ImageAsset,(error,image)=>{
+cocos-pilot/assets/scripts/TowerBreakthroughArt.ts:44:  this.preload();if(!this.ready)return false;
+cocos-pilot/assets/scripts/TowerLoadingScreen.ts:55:  resources.load('loading/keyart',ImageAsset,(error,image)=>{
+cocos-pilot/assets/scripts/JianguAuraArt.ts:10: preload(){
+cocos-pilot/assets/scripts/JianguAuraArt.ts:12:  resources.load('tower-skill-fx/jiangu-aura-v1',ImageAsset,(error,image)=>{
+cocos-pilot/assets/scripts/JianguAuraArt.ts:21:  this.preload();const pose=this.model.sample(s);
+cocos-pilot/assets/scripts/TowerMonsterArt.ts:53: preloadFloor(floor:any){
+cocos-pilot/assets/scripts/TowerMonsterArt.ts:59:   if(row)this.preload(TowerMonsterArt.artFamily(row.species,id));
+cocos-pilot/assets/scripts/TowerMonsterArt.ts:62: private preload(family:string){
+cocos-pilot/assets/scripts/TowerMonsterArt.ts:67:   renderer.preload(family);return;
+cocos-pilot/assets/scripts/TowerMonsterArt.ts:72:   try{resources.load(`tower-monsters/${family}`,ImageAsset,(error,image)=>this.finish(entry,error,image));}
+cocos-pilot/assets/scripts/TowerMonsterArt.ts:159:    resources.load(`tower-monsters/${family}`, ImageAsset, (error, image) => this.finish(current, error, image));
+cocos-pilot/assets/scripts/TowerMonsterArt.ts:298:   resources.load(path, ImageAsset, (error, image) => {
+cocos-pilot/assets/scripts/TowerMonsterArt.ts:303:   if(this.motionFamily==='boar')resources.load('tower-monsters-motion/boar-v3-enraged', ImageAsset, (error,image)=>{
+cocos-pilot/assets/scripts/TowerMonsterArt.ts:308:   resources.load(path, JsonAsset, (error, json) => {
+cocos-pilot/assets/scripts/TowerSpiderWebArt.ts:16:  resources.load('tower-monsters-motion/spider-web',ImageAsset,(error,image)=>{
+cocos-pilot/assets/scripts/TowerSpiderWebArt.ts:30:   this.load();
+cocos-pilot/assets/scripts/NingshenAuraArt.ts:9: preload(){
+cocos-pilot/assets/scripts/NingshenAuraArt.ts:11:  resources.load('tower-skill-fx/ningshen-aura-v1',ImageAsset,(error,image)=>{
+cocos-pilot/assets/scripts/NingshenAuraArt.ts:20:  this.preload();const pose=this.model.sample(s);
+cocos-pilot/assets/scripts/TowerSectScene.ts:40:  this.load();
+cocos-pilot/assets/scripts/TowerSectScene.ts:87:  resources.load('sect-scene/luoyun',ImageAsset,(error,image)=>{
+cocos-pilot/assets/scripts/TowerBreakthroughAudio.ts:6: preload(){if(this.requested||this.dead)return;this.requested=true;for(const name of ['minor','gather','success','failure'])resources.load(`tower-breakthrough/${name}`,AudioClip,(error,clip)=>{if(this.dead||error||!clip)return;clip.addRef();this.clips.set(name,clip);});}
+cocos-pilot/assets/scripts/TowerBreakthroughAudio.ts:7: play(parent:Node,name:string){this.preload();const clip=this.clips.get(name);if(!clip||!isValid(parent,true)||presentationPreferences().soundVolume===0)return;
+cocos-pilot/assets/scripts/SwordTiandiArt.ts:33: preload(){
+cocos-pilot/assets/scripts/SwordTiandiArt.ts:35:  resources.load('tower-skill-fx/sword-tiandi-v1',ImageAsset,(error,image)=>{
+cocos-pilot/assets/scripts/SwordTiandiArt.ts:49:  resources.load('tower-skill-fx/tiandi-solid-sword-v2',ImageAsset,(error,image)=>{
+cocos-pilot/assets/scripts/SwordTiandiArt.ts:57:  resources.load('tower-skill-fx/convergence-ice-aura-v1',ImageAsset,(error,image)=>{
+cocos-pilot/assets/scripts/SwordTiandiArt.ts:69:  this.preload();
+cocos-pilot/assets/scripts/TowerPlayerHud.ts:186:   resources.load('player-hud/paper-portrait',ImageAsset,(error,asset)=>{
+cocos-pilot/assets/scripts/TowerPlayerHud.ts:203:   resources.load('player-hud/sword-cultivator',ImageAsset,(error,asset)=>{
+cocos-pilot/assets/scripts/TowerCharacterArt.ts:119:  this.load();
+cocos-pilot/assets/scripts/TowerCharacterArt.ts:223:  resources.load('tower-held-weapons-v2/'+id,ImageAsset,(error,image)=>{
+cocos-pilot/assets/scripts/TowerCharacterArt.ts:322:   resources.load(PATH, ImageAsset, (error, image) => {
+cocos-pilot/assets/scripts/TowerCharacterArt.ts:327:   resources.load(PATH, JsonAsset, (error, asset) => {
+cocos-pilot/assets/scripts/TowerCharacterArt.ts:356:   resources.load('tower-character/seal-actions',ImageAsset,(err,image)=>{
+cocos-pilot/assets/scripts/TowerCharacterArt.ts:360:   resources.load('tower-character/seal-actions',JsonAsset,(err,asset)=>{

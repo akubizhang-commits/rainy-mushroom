@@ -1,0 +1,454 @@
+{
+  "scope": "Offline official converter fixture only; no TapTap runtime or platform compatibility claim",
+  "recordedAtUtc": "2026-11-03T16:48:46.930478+00:00",
+  "scratchDirectory": "/private/tmp/t03-fixture-gj7zty71",
+  "archive": {
+    "path": "/private/tmp/t03-tap-minigame-official-1.2.2.zip",
+    "sha256": "6b8a9a3cc62b6c54cefab397097babb771d9d99f90442cddff06310a4c9ed73f",
+    "bytes": 13755538,
+    "matchesPinnedValue": true,
+    "matchesExtractedFiles": true
+  },
+  "pluginBefore": {
+    "path": "/private/tmp/t03-tap-plugin-readonly/taptap-minigame-tools",
+    "treeSha256": "024f2f4ba7e04da3579a2d937557ca071687f7d6dc8e8a3b066cd48d9b025ddf",
+    "fileCount": 5465
+  },
+  "sourceBefore": {
+    "path": "/private/tmp/t03-fixture-gj7zty71/source",
+    "treeSha256": "6f07bb6e8867a2e6c8fa743f6a3eb56a2a21326447cb5593b98490c0f4825123",
+    "fileCount": 9
+  },
+  "treeDigestAlgorithm": "SHA256 of UTF-8 lines sorted by relative POSIX path: path + NUL + file SHA256 hex + LF; file timestamps excluded",
+  "runs": [
+    {
+      "name": "run1",
+      "command": [
+        "/opt/homebrew/bin/node",
+        "--experimental-permission",
+        "--allow-fs-read=*",
+        "--allow-fs-write=/private/tmp/t03-fixture-gj7zty71/run1",
+        "/private/tmp/t03-fixture-gj7zty71/harness.cjs",
+        "run1"
+      ],
+      "exitCode": 0,
+      "stdoutLog": "/private/tmp/t03-fixture-gj7zty71/run1/stdout.log",
+      "stderrLog": "/private/tmp/t03-fixture-gj7zty71/run1/stderr.log",
+      "metrics": {
+        "runName": "run1",
+        "nodeVersion": "v22.22.2",
+        "source": "/private/tmp/t03-fixture-gj7zty71/source",
+        "target": "/private/tmp/t03-fixture-gj7zty71/run1/output",
+        "gameVersion": "1.1.0",
+        "childProcessAttempts": [],
+        "networkAttempts": [],
+        "resolvedDependencies": {
+          "fs-extra": "/private/tmp/t03-tap-plugin-readonly/taptap-minigame-tools/node_modules/fs-extra/lib/index.js",
+          "archiver": "/private/tmp/t03-tap-plugin-readonly/taptap-minigame-tools/node_modules/archiver/index.js",
+          "@babel/core": "/private/tmp/t03-tap-plugin-readonly/taptap-minigame-tools/converter/node_modules/@babel/core/lib/index.js",
+          "@babel/preset-env": "/private/tmp/t03-tap-plugin-readonly/taptap-minigame-tools/converter/node_modules/@babel/preset-env/lib/index.js"
+        },
+        "externalLoadedModules": [],
+        "permissionModel": true,
+        "success": true,
+        "writePermissions": {
+          "plugin": false,
+          "source": false,
+          "runRoot": true
+        }
+      },
+      "sourceAfter": "6f07bb6e8867a2e6c8fa743f6a3eb56a2a21326447cb5593b98490c0f4825123",
+      "pluginAfter": "024f2f4ba7e04da3579a2d937557ca071687f7d6dc8e8a3b066cd48d9b025ddf",
+      "outputTree": {
+        "path": "/private/tmp/t03-fixture-gj7zty71/run1/output/game",
+        "treeSha256": "892ff909dd6bb8cd622ea7903cdf61f52bd653885ec8c34d2e9ff322190c10de",
+        "fileCount": 10,
+        "files": {
+          "check-version.js": "15e98d0e9456ce5bcfa8169b920a07809533f07c783166278673578926837ca8",
+          "game.js": "a07cfcd633122a24836cb96bebe09668be1c6bfd7585cc3aa68d6e37ce0ace08",
+          "game.json": "dfa6af3438582cba9bf0f505bb95582f910b8e0a042b6749d43117b9c1761b74",
+          "src/settings.json": "a301e1508d9d73610dbee053f4ccd3ab2f2e5009a4347e3e1092f7891aeb28e1",
+          "subpackages/stage1/config.json": "48b252932d4726e612b97ad005a4b164193060e0edb2643406bc7750bf80301a",
+          "subpackages/stage1/content.json": "5103bc4812ea7cc6510db4a2a07b87e4c7f6e9d0f2a4c786e0aa5ac69d315d2b",
+          "subpackages/stage1/game.js": "0385722709d4260704031c967da7e0de35c4e446faab33b722d18393538761e0",
+          "subpackages/stage2/config.json": "6d03cf1c112554e8a82e61ed759dcface3be118c6a3b7b6ea74f1d2344b763bf",
+          "subpackages/stage2/content.json": "dbaa4e81bccafc6c7eadb2efdaf7da8ad301011dcba74e8d526665a9645095e4",
+          "subpackages/stage2/game.js": "0385722709d4260704031c967da7e0de35c4e446faab33b722d18393538761e0"
+        }
+      },
+      "zip": {
+        "path": "/private/tmp/t03-fixture-gj7zty71/run1/output/game.zip",
+        "sha256": "2adaccc3ae91de23d33fdb79cdbfdfd766f989942eeef8d13653c02dea418dbb",
+        "bytes": 3317,
+        "fileCount": 10,
+        "entryFiles": {
+          "check-version.js": "15e98d0e9456ce5bcfa8169b920a07809533f07c783166278673578926837ca8",
+          "game.js": "a07cfcd633122a24836cb96bebe09668be1c6bfd7585cc3aa68d6e37ce0ace08",
+          "game.json": "dfa6af3438582cba9bf0f505bb95582f910b8e0a042b6749d43117b9c1761b74",
+          "src/settings.json": "a301e1508d9d73610dbee053f4ccd3ab2f2e5009a4347e3e1092f7891aeb28e1",
+          "subpackages/stage1/config.json": "48b252932d4726e612b97ad005a4b164193060e0edb2643406bc7750bf80301a",
+          "subpackages/stage1/content.json": "5103bc4812ea7cc6510db4a2a07b87e4c7f6e9d0f2a4c786e0aa5ac69d315d2b",
+          "subpackages/stage1/game.js": "0385722709d4260704031c967da7e0de35c4e446faab33b722d18393538761e0",
+          "subpackages/stage2/config.json": "6d03cf1c112554e8a82e61ed759dcface3be118c6a3b7b6ea74f1d2344b763bf",
+          "subpackages/stage2/content.json": "dbaa4e81bccafc6c7eadb2efdaf7da8ad301011dcba74e8d526665a9645095e4",
+          "subpackages/stage2/game.js": "0385722709d4260704031c967da7e0de35c4e446faab33b722d18393538761e0"
+        },
+        "entryTimestamps": {
+          "check-version.js": [
+            2026,
+            11,
+            3,
+            16,
+            48,
+            46
+          ],
+          "game.js": [
+            2026,
+            11,
+            3,
+            16,
+            48,
+            46
+          ],
+          "game.json": [
+            2026,
+            11,
+            3,
+            16,
+            48,
+            46
+          ],
+          "src/settings.json": [
+            2026,
+            11,
+            3,
+            16,
+            48,
+            46
+          ],
+          "subpackages/stage1/config.json": [
+            2026,
+            11,
+            3,
+            16,
+            48,
+            46
+          ],
+          "subpackages/stage1/content.json": [
+            2026,
+            11,
+            3,
+            16,
+            48,
+            46
+          ],
+          "subpackages/stage1/game.js": [
+            2026,
+            11,
+            3,
+            16,
+            48,
+            46
+          ],
+          "subpackages/stage2/config.json": [
+            2026,
+            11,
+            3,
+            16,
+            48,
+            46
+          ],
+          "subpackages/stage2/content.json": [
+            2026,
+            11,
+            3,
+            16,
+            48,
+            46
+          ],
+          "subpackages/stage2/game.js": [
+            2026,
+            11,
+            3,
+            16,
+            48,
+            46
+          ]
+        },
+        "uncompressedBytes": 2913
+      },
+      "gameConfig": {
+        "deviceOrientation": "landscape",
+        "companyName": "Offline fixture",
+        "productName": "T03 fixture",
+        "subPackages": [
+          {
+            "name": "stage1",
+            "root": "subpackages/stage1/"
+          },
+          {
+            "name": "stage2",
+            "root": "subpackages/stage2/"
+          }
+        ],
+        "productVersion": "1.1.0",
+        "convertScriptVersion": "2.0.4-ts"
+      },
+      "settings": {
+        "assets": {
+          "subpackages": [
+            "stage1",
+            "stage2"
+          ]
+        }
+      },
+      "babelSummaries": [
+        "Babel转换完成: 成功 3, 跳过 0, 失败 0"
+      ],
+      "checks": {
+        "processSucceeded": true,
+        "harnessSucceeded": true,
+        "sourceUnchanged": true,
+        "pluginUnchanged": true,
+        "noChildProcessAttempt": true,
+        "noNetworkAttempt": true,
+        "bundledDependenciesOnly": true,
+        "noBabelFailure": true,
+        "outputDirectoryExists": true,
+        "zipExists": true,
+        "zipFileContentsMatchTree": true,
+        "zipRootHasGameFiles": true,
+        "landscapePreserved": true,
+        "gameVersionCorrect": true,
+        "converterVersionCorrect": true,
+        "camelCaseSubPackagesPreserved": true,
+        "cocosSubpackageSettingsPreserved": true,
+        "subpackageEntriesAndConfigsCorrect": true,
+        "noAppIdRequiredOrInserted": true,
+        "runtimeInjectionPresent": true,
+        "versionCheckerCopied": true
+      },
+      "passed": true
+    },
+    {
+      "name": "run2",
+      "command": [
+        "/opt/homebrew/bin/node",
+        "--experimental-permission",
+        "--allow-fs-read=*",
+        "--allow-fs-write=/private/tmp/t03-fixture-gj7zty71/run2",
+        "/private/tmp/t03-fixture-gj7zty71/harness.cjs",
+        "run2"
+      ],
+      "exitCode": 0,
+      "stdoutLog": "/private/tmp/t03-fixture-gj7zty71/run2/stdout.log",
+      "stderrLog": "/private/tmp/t03-fixture-gj7zty71/run2/stderr.log",
+      "metrics": {
+        "runName": "run2",
+        "nodeVersion": "v22.22.2",
+        "source": "/private/tmp/t03-fixture-gj7zty71/source",
+        "target": "/private/tmp/t03-fixture-gj7zty71/run2/output",
+        "gameVersion": "1.1.0",
+        "childProcessAttempts": [],
+        "networkAttempts": [],
+        "resolvedDependencies": {
+          "fs-extra": "/private/tmp/t03-tap-plugin-readonly/taptap-minigame-tools/node_modules/fs-extra/lib/index.js",
+          "archiver": "/private/tmp/t03-tap-plugin-readonly/taptap-minigame-tools/node_modules/archiver/index.js",
+          "@babel/core": "/private/tmp/t03-tap-plugin-readonly/taptap-minigame-tools/converter/node_modules/@babel/core/lib/index.js",
+          "@babel/preset-env": "/private/tmp/t03-tap-plugin-readonly/taptap-minigame-tools/converter/node_modules/@babel/preset-env/lib/index.js"
+        },
+        "externalLoadedModules": [],
+        "permissionModel": true,
+        "success": true,
+        "writePermissions": {
+          "plugin": false,
+          "source": false,
+          "runRoot": true
+        }
+      },
+      "sourceAfter": "6f07bb6e8867a2e6c8fa743f6a3eb56a2a21326447cb5593b98490c0f4825123",
+      "pluginAfter": "024f2f4ba7e04da3579a2d937557ca071687f7d6dc8e8a3b066cd48d9b025ddf",
+      "outputTree": {
+        "path": "/private/tmp/t03-fixture-gj7zty71/run2/output/game",
+        "treeSha256": "892ff909dd6bb8cd622ea7903cdf61f52bd653885ec8c34d2e9ff322190c10de",
+        "fileCount": 10,
+        "files": {
+          "check-version.js": "15e98d0e9456ce5bcfa8169b920a07809533f07c783166278673578926837ca8",
+          "game.js": "a07cfcd633122a24836cb96bebe09668be1c6bfd7585cc3aa68d6e37ce0ace08",
+          "game.json": "dfa6af3438582cba9bf0f505bb95582f910b8e0a042b6749d43117b9c1761b74",
+          "src/settings.json": "a301e1508d9d73610dbee053f4ccd3ab2f2e5009a4347e3e1092f7891aeb28e1",
+          "subpackages/stage1/config.json": "48b252932d4726e612b97ad005a4b164193060e0edb2643406bc7750bf80301a",
+          "subpackages/stage1/content.json": "5103bc4812ea7cc6510db4a2a07b87e4c7f6e9d0f2a4c786e0aa5ac69d315d2b",
+          "subpackages/stage1/game.js": "0385722709d4260704031c967da7e0de35c4e446faab33b722d18393538761e0",
+          "subpackages/stage2/config.json": "6d03cf1c112554e8a82e61ed759dcface3be118c6a3b7b6ea74f1d2344b763bf",
+          "subpackages/stage2/content.json": "dbaa4e81bccafc6c7eadb2efdaf7da8ad301011dcba74e8d526665a9645095e4",
+          "subpackages/stage2/game.js": "0385722709d4260704031c967da7e0de35c4e446faab33b722d18393538761e0"
+        }
+      },
+      "zip": {
+        "path": "/private/tmp/t03-fixture-gj7zty71/run2/output/game.zip",
+        "sha256": "2adaccc3ae91de23d33fdb79cdbfdfd766f989942eeef8d13653c02dea418dbb",
+        "bytes": 3317,
+        "fileCount": 10,
+        "entryFiles": {
+          "check-version.js": "15e98d0e9456ce5bcfa8169b920a07809533f07c783166278673578926837ca8",
+          "game.js": "a07cfcd633122a24836cb96bebe09668be1c6bfd7585cc3aa68d6e37ce0ace08",
+          "game.json": "dfa6af3438582cba9bf0f505bb95582f910b8e0a042b6749d43117b9c1761b74",
+          "src/settings.json": "a301e1508d9d73610dbee053f4ccd3ab2f2e5009a4347e3e1092f7891aeb28e1",
+          "subpackages/stage1/config.json": "48b252932d4726e612b97ad005a4b164193060e0edb2643406bc7750bf80301a",
+          "subpackages/stage1/content.json": "5103bc4812ea7cc6510db4a2a07b87e4c7f6e9d0f2a4c786e0aa5ac69d315d2b",
+          "subpackages/stage1/game.js": "0385722709d4260704031c967da7e0de35c4e446faab33b722d18393538761e0",
+          "subpackages/stage2/config.json": "6d03cf1c112554e8a82e61ed759dcface3be118c6a3b7b6ea74f1d2344b763bf",
+          "subpackages/stage2/content.json": "dbaa4e81bccafc6c7eadb2efdaf7da8ad301011dcba74e8d526665a9645095e4",
+          "subpackages/stage2/game.js": "0385722709d4260704031c967da7e0de35c4e446faab33b722d18393538761e0"
+        },
+        "entryTimestamps": {
+          "check-version.js": [
+            2026,
+            11,
+            3,
+            16,
+            48,
+            46
+          ],
+          "game.js": [
+            2026,
+            11,
+            3,
+            16,
+            48,
+            46
+          ],
+          "game.json": [
+            2026,
+            11,
+            3,
+            16,
+            48,
+            46
+          ],
+          "src/settings.json": [
+            2026,
+            11,
+            3,
+            16,
+            48,
+            46
+          ],
+          "subpackages/stage1/config.json": [
+            2026,
+            11,
+            3,
+            16,
+            48,
+            46
+          ],
+          "subpackages/stage1/content.json": [
+            2026,
+            11,
+            3,
+            16,
+            48,
+            46
+          ],
+          "subpackages/stage1/game.js": [
+            2026,
+            11,
+            3,
+            16,
+            48,
+            46
+          ],
+          "subpackages/stage2/config.json": [
+            2026,
+            11,
+            3,
+            16,
+            48,
+            46
+          ],
+          "subpackages/stage2/content.json": [
+            2026,
+            11,
+            3,
+            16,
+            48,
+            46
+          ],
+          "subpackages/stage2/game.js": [
+            2026,
+            11,
+            3,
+            16,
+            48,
+            46
+          ]
+        },
+        "uncompressedBytes": 2913
+      },
+      "gameConfig": {
+        "deviceOrientation": "landscape",
+        "companyName": "Offline fixture",
+        "productName": "T03 fixture",
+        "subPackages": [
+          {
+            "name": "stage1",
+            "root": "subpackages/stage1/"
+          },
+          {
+            "name": "stage2",
+            "root": "subpackages/stage2/"
+          }
+        ],
+        "productVersion": "1.1.0",
+        "convertScriptVersion": "2.0.4-ts"
+      },
+      "settings": {
+        "assets": {
+          "subpackages": [
+            "stage1",
+            "stage2"
+          ]
+        }
+      },
+      "babelSummaries": [
+        "Babel转换完成: 成功 3, 跳过 0, 失败 0"
+      ],
+      "checks": {
+        "processSucceeded": true,
+        "harnessSucceeded": true,
+        "sourceUnchanged": true,
+        "pluginUnchanged": true,
+        "noChildProcessAttempt": true,
+        "noNetworkAttempt": true,
+        "bundledDependenciesOnly": true,
+        "noBabelFailure": true,
+        "outputDirectoryExists": true,
+        "zipExists": true,
+        "zipFileContentsMatchTree": true,
+        "zipRootHasGameFiles": true,
+        "landscapePreserved": true,
+        "gameVersionCorrect": true,
+        "converterVersionCorrect": true,
+        "camelCaseSubPackagesPreserved": true,
+        "cocosSubpackageSettingsPreserved": true,
+        "subpackageEntriesAndConfigsCorrect": true,
+        "noAppIdRequiredOrInserted": true,
+        "runtimeInjectionPresent": true,
+        "versionCheckerCopied": true
+      },
+      "passed": true
+    }
+  ],
+  "platformValidation": "not-run",
+  "accountValidation": "not-run",
+  "deviceValidation": "not-run",
+  "releaseEligible": false,
+  "repeatability": {
+    "normalizedOutputFilesIdentical": true,
+    "normalizedOutputTreeDigestIdentical": true,
+    "normalizedZipEntryContentsIdentical": true,
+    "binaryZipIdentical": true
+  },
+  "passed": true
+}
