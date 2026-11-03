@@ -1,0 +1,378 @@
+TAP version 13
+# Subtest: build CLI stamps only the successfully packaged WeChat candidate after preparation
+not ok 1 - build CLI stamps only the successfully packaged WeChat candidate after preparation
+  ---
+  duration_ms: 1210.832875
+  type: 'test'
+  location: '/Users/zhangnu/.codex/worktrees/technical-governance/rainy-mushroom/tests/release-integrity.test.mjs:194:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Prepared release configuration: 1.1.0-alpha.1 verified formal account
+    Synced 0 current gameplay module(s)
+    file:///private/var/folders/l0/8by043sj5x18nxcrxhx4zwgm0000gn/T/rainy-integrity-TxKCih/scripts/release-integrity.mjs:69
+     if(stamp?.schemaVersion!==2||!stamp.inputDigest||!stamp.toolchain||!stamp.inputs)throw Error('旧版或不完整的构建记录：需要 schemaVersion 2 完整构建指纹，请重新构建')
+                                                                                            ^
+    
+    Error: 旧版或不完整的构建记录：需要 schemaVersion 2 完整构建指纹，请重新构建
+        at verifyBuildStamp (file:///private/var/folders/l0/8by043sj5x18nxcrxhx4zwgm0000gn/T/rainy-integrity-TxKCih/scripts/release-integrity.mjs:69:89)
+        at stampBuild (file:///private/var/folders/l0/8by043sj5x18nxcrxhx4zwgm0000gn/T/rainy-integrity-TxKCih/scripts/release-integrity.mjs:78:2)
+        at file:///private/var/folders/l0/8by043sj5x18nxcrxhx4zwgm0000gn/T/rainy-integrity-TxKCih/scripts/cocos/build.mjs:20:1
+        at ModuleJob.run (node:internal/modules/esm/module_job:343:25)
+        at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:665:26)
+        at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+    
+    Node.js v22.22.2
+    
+    
+    1 !== 0
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 0
+  actual: 1
+  operator: 'strictEqual'
+  stack: |-
+    verifyBuildStamp (file:///private/var/folders/l0/8by043sj5x18nxcrxhx4zwgm0000gn/T/rainy-integrity-TxKCih/scripts/release-integrity.mjs:69:89)
+    stampBuild (file:///private/var/folders/l0/8by043sj5x18nxcrxhx4zwgm0000gn/T/rainy-integrity-TxKCih/scripts/release-integrity.mjs:78:2)
+    file:///private/var/folders/l0/8by043sj5x18nxcrxhx4zwgm0000gn/T/rainy-integrity-TxKCih/scripts/cocos/build.mjs:20:1
+    ModuleJob.run (node:internal/modules/esm/module_job:343:25)
+    async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:665:26)
+    async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+    TestContext.<anonymous> (file:///Users/zhangnu/.codex/worktrees/technical-governance/rainy-mushroom/tests/release-integrity.test.mjs:196:9)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.start (node:internal/test_runner/test:944:17)
+    startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17)
+  ...
+# Subtest: build CLI stamps web only after copying its loading image
+not ok 2 - build CLI stamps web only after copying its loading image
+  ---
+  duration_ms: 915.905083
+  type: 'test'
+  location: '/Users/zhangnu/.codex/worktrees/technical-governance/rainy-mushroom/tests/release-integrity.test.mjs:204:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Prepared release configuration: 1.1.0-alpha.1 verified formal account
+    Synced 0 current gameplay module(s)
+    file:///private/var/folders/l0/8by043sj5x18nxcrxhx4zwgm0000gn/T/rainy-integrity-lgNPdp/scripts/release-integrity.mjs:69
+     if(stamp?.schemaVersion!==2||!stamp.inputDigest||!stamp.toolchain||!stamp.inputs)throw Error('旧版或不完整的构建记录：需要 schemaVersion 2 完整构建指纹，请重新构建')
+                                                                                            ^
+    
+    Error: 旧版或不完整的构建记录：需要 schemaVersion 2 完整构建指纹，请重新构建
+        at verifyBuildStamp (file:///private/var/folders/l0/8by043sj5x18nxcrxhx4zwgm0000gn/T/rainy-integrity-lgNPdp/scripts/release-integrity.mjs:69:89)
+        at stampBuild (file:///private/var/folders/l0/8by043sj5x18nxcrxhx4zwgm0000gn/T/rainy-integrity-lgNPdp/scripts/release-integrity.mjs:78:2)
+        at file:///private/var/folders/l0/8by043sj5x18nxcrxhx4zwgm0000gn/T/rainy-integrity-lgNPdp/scripts/cocos/build.mjs:20:1
+        at ModuleJob.run (node:internal/modules/esm/module_job:343:25)
+        at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:665:26)
+        at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+    
+    Node.js v22.22.2
+    
+    
+    1 !== 0
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 0
+  actual: 1
+  operator: 'strictEqual'
+  stack: |-
+    verifyBuildStamp (file:///private/var/folders/l0/8by043sj5x18nxcrxhx4zwgm0000gn/T/rainy-integrity-lgNPdp/scripts/release-integrity.mjs:69:89)
+    stampBuild (file:///private/var/folders/l0/8by043sj5x18nxcrxhx4zwgm0000gn/T/rainy-integrity-lgNPdp/scripts/release-integrity.mjs:78:2)
+    file:///private/var/folders/l0/8by043sj5x18nxcrxhx4zwgm0000gn/T/rainy-integrity-lgNPdp/scripts/cocos/build.mjs:20:1
+    ModuleJob.run (node:internal/modules/esm/module_job:343:25)
+    async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:665:26)
+    async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+    TestContext.<anonymous> (file:///Users/zhangnu/.codex/worktrees/technical-governance/rainy-mushroom/tests/release-integrity.test.mjs:206:9)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+# Subtest: failed build {"mode":"bad-bundle","reason":{}} leaves no old or new release stamp
+not ok 3 - failed build {"mode":"bad-bundle","reason":{}} leaves no old or new release stamp
+  ---
+  duration_ms: 891.967917
+  type: 'test'
+  location: '/Users/zhangnu/.codex/worktrees/technical-governance/rainy-mushroom/tests/release-integrity.test.mjs:218:3'
+  failureType: 'testCodeFailure'
+  error: |-
+    The input did not match the regular expression /Missing built bundle main/. Input:
+    
+    'Prepared release configuration: 1.1.0-alpha.1 verified formal account\n' +
+      'Synced 0 current gameplay module(s)\n' +
+      'file:///private/var/folders/l0/8by043sj5x18nxcrxhx4zwgm0000gn/T/rainy-integrity-ha3CCX/scripts/release-integrity.mjs:69\n' +
+      " if(stamp?.schemaVersion!==2||!stamp.inputDigest||!stamp.toolchain||!stamp.inputs)throw Error('旧版或不完整的构建记录：需要 schemaVersion 2 完整构建指纹，请重新构建')\n" +
+      '                                                                                        ^\n' +
+      '\n' +
+      'Error: 旧版或不完整的构建记录：需要 schemaVersion 2 完整构建指纹，请重新构建\n' +
+      '    at verifyBuildStamp (file:///private/var/folders/l0/8by043sj5x18nxcrxhx4zwgm0000gn/T/rainy-integrity-ha3CCX/scripts/release-integrity.mjs:69:89)\n' +
+      '    at stampBuild (file:///private/var/folders/l0/8by043sj5x18nxcrxhx4zwgm0000gn/T/rainy-integrity-ha3CCX/scripts/release-integrity.mjs:78:2)\n' +
+      '    at file:///private/var/folders/l0/8by043sj5x18nxcrxhx4zwgm0000gn/T/rainy-integrity-ha3CCX/scripts/cocos/build.mjs:20:1\n' +
+      '    at ModuleJob.run (node:internal/modules/esm/module_job:343:25)\n' +
+      '    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:665:26)\n' +
+      '    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)\n' +
+      '\n' +
+      'Node.js v22.22.2\n'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual: |-
+    Prepared release configuration: 1.1.0-alpha.1 verified formal account
+    Synced 0 current gameplay module(s)
+    file:///private/var/folders/l0/8by043sj5x18nxcrxhx4zwgm0000gn/T/rainy-integrity-ha3CCX/scripts/release-integrity.mjs:69
+     if(stamp?.schemaVersion!==2||!stamp.inputDigest||!stamp.toolchain||!stamp.inputs)throw Error('旧版或不完整的构建记录：需要 schemaVersion 2 完整构建指纹，请重新构建')
+                                                                                            ^
+    
+    Error: 旧版或不完整的构建记录：需要 schemaVersion 2 完整构建指纹，请重新构建
+        at verifyBuildStamp (file:///private/var/folders/l0/8by043sj5x18nxcrxhx4zwgm0000gn/T/rainy-integrity-ha3CCX/scripts/release-integrity.mjs:69:89)
+        at stampBuild (file:///private/var/folders/l0/8by043sj5x18nxcrxhx4zwgm0000gn/T/rainy-integrity-ha3CCX/scripts/release-integrity.mjs:78:2)
+        at file:///private/var/folders/l0/8by043sj5x18nxcrxhx4zwgm0000gn/T/rainy-integrity-ha3CCX/scripts/cocos/build.mjs:20:1
+        at ModuleJob.run (node:internal/modules/esm/module_job:343:25)
+        at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:665:26)
+        at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+    
+    Node.js v22.22.2
+    
+  operator: 'match'
+  stack: |-
+    TestContext.<anonymous> (file:///Users/zhangnu/.codex/worktrees/technical-governance/rainy-mushroom/tests/release-integrity.test.mjs:221:9)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: failed build {"mode":"creator-failure","reason":{}} leaves no old or new release stamp
+not ok 4 - failed build {"mode":"creator-failure","reason":{}} leaves no old or new release stamp
+  ---
+  duration_ms: 904.324875
+  type: 'test'
+  location: '/Users/zhangnu/.codex/worktrees/technical-governance/rainy-mushroom/tests/release-integrity.test.mjs:218:3'
+  failureType: 'testCodeFailure'
+  error: |-
+    failed candidates must not retain a release stamp
+    
+    true !== false
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: false
+  actual: true
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///Users/zhangnu/.codex/worktrees/technical-governance/rainy-mushroom/tests/release-integrity.test.mjs:222:9)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: failed build {"mode":"source-change","reason":{}} leaves no old or new release stamp
+not ok 5 - failed build {"mode":"source-change","reason":{}} leaves no old or new release stamp
+  ---
+  duration_ms: 916.2825
+  type: 'test'
+  location: '/Users/zhangnu/.codex/worktrees/technical-governance/rainy-mushroom/tests/release-integrity.test.mjs:218:3'
+  failureType: 'testCodeFailure'
+  error: |-
+    The input did not match the regular expression /changed/. Input:
+    
+    'Prepared release configuration: 1.1.0-alpha.1 verified formal account\n' +
+      'Synced 0 current gameplay module(s)\n' +
+      'file:///private/var/folders/l0/8by043sj5x18nxcrxhx4zwgm0000gn/T/rainy-integrity-DIViXu/scripts/release-integrity.mjs:69\n' +
+      " if(stamp?.schemaVersion!==2||!stamp.inputDigest||!stamp.toolchain||!stamp.inputs)throw Error('旧版或不完整的构建记录：需要 schemaVersion 2 完整构建指纹，请重新构建')\n" +
+      '                                                                                        ^\n' +
+      '\n' +
+      'Error: 旧版或不完整的构建记录：需要 schemaVersion 2 完整构建指纹，请重新构建\n' +
+      '    at verifyBuildStamp (file:///private/var/folders/l0/8by043sj5x18nxcrxhx4zwgm0000gn/T/rainy-integrity-DIViXu/scripts/release-integrity.mjs:69:89)\n' +
+      '    at stampBuild (file:///private/var/folders/l0/8by043sj5x18nxcrxhx4zwgm0000gn/T/rainy-integrity-DIViXu/scripts/release-integrity.mjs:78:2)\n' +
+      '    at file:///private/var/folders/l0/8by043sj5x18nxcrxhx4zwgm0000gn/T/rainy-integrity-DIViXu/scripts/cocos/build.mjs:20:1\n' +
+      '    at ModuleJob.run (node:internal/modules/esm/module_job:343:25)\n' +
+      '    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:665:26)\n' +
+      '    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)\n' +
+      '\n' +
+      'Node.js v22.22.2\n'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual: |-
+    Prepared release configuration: 1.1.0-alpha.1 verified formal account
+    Synced 0 current gameplay module(s)
+    file:///private/var/folders/l0/8by043sj5x18nxcrxhx4zwgm0000gn/T/rainy-integrity-DIViXu/scripts/release-integrity.mjs:69
+     if(stamp?.schemaVersion!==2||!stamp.inputDigest||!stamp.toolchain||!stamp.inputs)throw Error('旧版或不完整的构建记录：需要 schemaVersion 2 完整构建指纹，请重新构建')
+                                                                                            ^
+    
+    Error: 旧版或不完整的构建记录：需要 schemaVersion 2 完整构建指纹，请重新构建
+        at verifyBuildStamp (file:///private/var/folders/l0/8by043sj5x18nxcrxhx4zwgm0000gn/T/rainy-integrity-DIViXu/scripts/release-integrity.mjs:69:89)
+        at stampBuild (file:///private/var/folders/l0/8by043sj5x18nxcrxhx4zwgm0000gn/T/rainy-integrity-DIViXu/scripts/release-integrity.mjs:78:2)
+        at file:///private/var/folders/l0/8by043sj5x18nxcrxhx4zwgm0000gn/T/rainy-integrity-DIViXu/scripts/cocos/build.mjs:20:1
+        at ModuleJob.run (node:internal/modules/esm/module_job:343:25)
+        at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:665:26)
+        at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+    
+    Node.js v22.22.2
+    
+  operator: 'match'
+  stack: |-
+    TestContext.<anonymous> (file:///Users/zhangnu/.codex/worktrees/technical-governance/rainy-mushroom/tests/release-integrity.test.mjs:221:9)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: failed build {"mode":"toolchain-change","reason":{}} leaves no old or new release stamp
+not ok 6 - failed build {"mode":"toolchain-change","reason":{}} leaves no old or new release stamp
+  ---
+  duration_ms: 915.2765
+  type: 'test'
+  location: '/Users/zhangnu/.codex/worktrees/technical-governance/rainy-mushroom/tests/release-integrity.test.mjs:218:3'
+  failureType: 'testCodeFailure'
+  error: |-
+    The input did not match the regular expression /changed/. Input:
+    
+    'Prepared release configuration: 1.1.0-alpha.1 verified formal account\n' +
+      'Synced 0 current gameplay module(s)\n' +
+      'file:///private/var/folders/l0/8by043sj5x18nxcrxhx4zwgm0000gn/T/rainy-integrity-3U4LV8/scripts/release-integrity.mjs:69\n' +
+      " if(stamp?.schemaVersion!==2||!stamp.inputDigest||!stamp.toolchain||!stamp.inputs)throw Error('旧版或不完整的构建记录：需要 schemaVersion 2 完整构建指纹，请重新构建')\n" +
+      '                                                                                        ^\n' +
+      '\n' +
+      'Error: 旧版或不完整的构建记录：需要 schemaVersion 2 完整构建指纹，请重新构建\n' +
+      '    at verifyBuildStamp (file:///private/var/folders/l0/8by043sj5x18nxcrxhx4zwgm0000gn/T/rainy-integrity-3U4LV8/scripts/release-integrity.mjs:69:89)\n' +
+      '    at stampBuild (file:///private/var/folders/l0/8by043sj5x18nxcrxhx4zwgm0000gn/T/rainy-integrity-3U4LV8/scripts/release-integrity.mjs:78:2)\n' +
+      '    at file:///private/var/folders/l0/8by043sj5x18nxcrxhx4zwgm0000gn/T/rainy-integrity-3U4LV8/scripts/cocos/build.mjs:20:1\n' +
+      '    at ModuleJob.run (node:internal/modules/esm/module_job:343:25)\n' +
+      '    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:665:26)\n' +
+      '    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)\n' +
+      '\n' +
+      'Node.js v22.22.2\n'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual: |-
+    Prepared release configuration: 1.1.0-alpha.1 verified formal account
+    Synced 0 current gameplay module(s)
+    file:///private/var/folders/l0/8by043sj5x18nxcrxhx4zwgm0000gn/T/rainy-integrity-3U4LV8/scripts/release-integrity.mjs:69
+     if(stamp?.schemaVersion!==2||!stamp.inputDigest||!stamp.toolchain||!stamp.inputs)throw Error('旧版或不完整的构建记录：需要 schemaVersion 2 完整构建指纹，请重新构建')
+                                                                                            ^
+    
+    Error: 旧版或不完整的构建记录：需要 schemaVersion 2 完整构建指纹，请重新构建
+        at verifyBuildStamp (file:///private/var/folders/l0/8by043sj5x18nxcrxhx4zwgm0000gn/T/rainy-integrity-3U4LV8/scripts/release-integrity.mjs:69:89)
+        at stampBuild (file:///private/var/folders/l0/8by043sj5x18nxcrxhx4zwgm0000gn/T/rainy-integrity-3U4LV8/scripts/release-integrity.mjs:78:2)
+        at file:///private/var/folders/l0/8by043sj5x18nxcrxhx4zwgm0000gn/T/rainy-integrity-3U4LV8/scripts/cocos/build.mjs:20:1
+        at ModuleJob.run (node:internal/modules/esm/module_job:343:25)
+        at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:665:26)
+        at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+    
+    Node.js v22.22.2
+    
+  operator: 'match'
+  stack: |-
+    TestContext.<anonymous> (file:///Users/zhangnu/.codex/worktrees/technical-governance/rainy-mushroom/tests/release-integrity.test.mjs:221:9)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: failed build {"reportFailure":true,"reason":{}} leaves no old or new release stamp
+not ok 7 - failed build {"reportFailure":true,"reason":{}} leaves no old or new release stamp
+  ---
+  duration_ms: 618.744542
+  type: 'test'
+  location: '/Users/zhangnu/.codex/worktrees/technical-governance/rainy-mushroom/tests/release-integrity.test.mjs:218:3'
+  failureType: 'testCodeFailure'
+  error: |-
+    The input did not match the regular expression /EISDIR/. Input:
+    
+    'Prepared release configuration: 1.1.0-alpha.1 verified formal account\n' +
+      'Synced 0 current gameplay module(s)\n' +
+      'file:///private/var/folders/l0/8by043sj5x18nxcrxhx4zwgm0000gn/T/rainy-integrity-ebUoPG/scripts/release-integrity.mjs:69\n' +
+      " if(stamp?.schemaVersion!==2||!stamp.inputDigest||!stamp.toolchain||!stamp.inputs)throw Error('旧版或不完整的构建记录：需要 schemaVersion 2 完整构建指纹，请重新构建')\n" +
+      '                                                                                        ^\n' +
+      '\n' +
+      'Error: 旧版或不完整的构建记录：需要 schemaVersion 2 完整构建指纹，请重新构建\n' +
+      '    at verifyBuildStamp (file:///private/var/folders/l0/8by043sj5x18nxcrxhx4zwgm0000gn/T/rainy-integrity-ebUoPG/scripts/release-integrity.mjs:69:89)\n' +
+      '    at stampBuild (file:///private/var/folders/l0/8by043sj5x18nxcrxhx4zwgm0000gn/T/rainy-integrity-ebUoPG/scripts/release-integrity.mjs:78:2)\n' +
+      '    at file:///private/var/folders/l0/8by043sj5x18nxcrxhx4zwgm0000gn/T/rainy-integrity-ebUoPG/scripts/cocos/build.mjs:20:1\n' +
+      '    at ModuleJob.run (node:internal/modules/esm/module_job:343:25)\n' +
+      '    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:665:26)\n' +
+      '    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)\n' +
+      '\n' +
+      'Node.js v22.22.2\n'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual: |-
+    Prepared release configuration: 1.1.0-alpha.1 verified formal account
+    Synced 0 current gameplay module(s)
+    file:///private/var/folders/l0/8by043sj5x18nxcrxhx4zwgm0000gn/T/rainy-integrity-ebUoPG/scripts/release-integrity.mjs:69
+     if(stamp?.schemaVersion!==2||!stamp.inputDigest||!stamp.toolchain||!stamp.inputs)throw Error('旧版或不完整的构建记录：需要 schemaVersion 2 完整构建指纹，请重新构建')
+                                                                                            ^
+    
+    Error: 旧版或不完整的构建记录：需要 schemaVersion 2 完整构建指纹，请重新构建
+        at verifyBuildStamp (file:///private/var/folders/l0/8by043sj5x18nxcrxhx4zwgm0000gn/T/rainy-integrity-ebUoPG/scripts/release-integrity.mjs:69:89)
+        at stampBuild (file:///private/var/folders/l0/8by043sj5x18nxcrxhx4zwgm0000gn/T/rainy-integrity-ebUoPG/scripts/release-integrity.mjs:78:2)
+        at file:///private/var/folders/l0/8by043sj5x18nxcrxhx4zwgm0000gn/T/rainy-integrity-ebUoPG/scripts/cocos/build.mjs:20:1
+        at ModuleJob.run (node:internal/modules/esm/module_job:343:25)
+        at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:665:26)
+        at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+    
+    Node.js v22.22.2
+    
+  operator: 'match'
+  stack: |-
+    TestContext.<anonymous> (file:///Users/zhangnu/.codex/worktrees/technical-governance/rainy-mushroom/tests/release-integrity.test.mjs:221:9)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: failed build {"platform":"web-mobile","missingKeyart":true,"reason":{}} leaves no old or new release stamp
+not ok 8 - failed build {"platform":"web-mobile","missingKeyart":true,"reason":{}} leaves no old or new release stamp
+  ---
+  duration_ms: 889.649833
+  type: 'test'
+  location: '/Users/zhangnu/.codex/worktrees/technical-governance/rainy-mushroom/tests/release-integrity.test.mjs:218:3'
+  failureType: 'testCodeFailure'
+  error: |-
+    failed candidates must not retain a release stamp
+    
+    true !== false
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: false
+  actual: true
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///Users/zhangnu/.codex/worktrees/technical-governance/rainy-mushroom/tests/release-integrity.test.mjs:222:9)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+1..8
+# tests 8
+# suites 0
+# pass 0
+# fail 8
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 7366.639208

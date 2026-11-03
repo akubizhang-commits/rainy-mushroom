@@ -1,0 +1,320 @@
+TAP version 13
+# Subtest: legacy sourceDigest retains the original four-directory byte algorithm
+ok 1 - legacy sourceDigest retains the original four-directory byte algorithm
+  ---
+  duration_ms: 8.655417
+  type: 'test'
+  ...
+# Subtest: identical inputs produce a portable, order-independent schema 2 fingerprint
+ok 2 - identical inputs produce a portable, order-independent schema 2 fingerprint
+  ---
+  duration_ms: 17.162167
+  type: 'test'
+  ...
+# Subtest: changing build input js/source.js invalidates an existing manifest
+ok 3 - changing build input js/source.js invalidates an existing manifest
+  ---
+  duration_ms: 6.920667
+  type: 'test'
+  ...
+# Subtest: changing build input cocos-pilot/assets/asset.txt invalidates an existing manifest
+ok 4 - changing build input cocos-pilot/assets/asset.txt invalidates an existing manifest
+  ---
+  duration_ms: 7.343666
+  type: 'test'
+  ...
+# Subtest: changing build input cocos-pilot/settings/setting.json invalidates an existing manifest
+ok 5 - changing build input cocos-pilot/settings/setting.json invalidates an existing manifest
+  ---
+  duration_ms: 7.632375
+  type: 'test'
+  ...
+# Subtest: changing build input cocos-pilot/build-configs/wechatgame.json invalidates an existing manifest
+ok 6 - changing build input cocos-pilot/build-configs/wechatgame.json invalidates an existing manifest
+  ---
+  duration_ms: 6.822583
+  type: 'test'
+  ...
+# Subtest: changing build input scripts/cocos/build.mjs invalidates an existing manifest
+ok 7 - changing build input scripts/cocos/build.mjs invalidates an existing manifest
+  ---
+  duration_ms: 6.763708
+  type: 'test'
+  ...
+# Subtest: changing build input scripts/cocos/package-wechat.mjs invalidates an existing manifest
+ok 8 - changing build input scripts/cocos/package-wechat.mjs invalidates an existing manifest
+  ---
+  duration_ms: 7.209333
+  type: 'test'
+  ...
+# Subtest: changing build input scripts/cocos/sync-shared.mjs invalidates an existing manifest
+ok 9 - changing build input scripts/cocos/sync-shared.mjs invalidates an existing manifest
+  ---
+  duration_ms: 6.278625
+  type: 'test'
+  ...
+# Subtest: changing build input scripts/prepare-release-config.mjs invalidates an existing manifest
+ok 10 - changing build input scripts/prepare-release-config.mjs invalidates an existing manifest
+  ---
+  duration_ms: 7.585708
+  type: 'test'
+  ...
+# Subtest: changing build input scripts/release-integrity.mjs invalidates an existing manifest
+ok 11 - changing build input scripts/release-integrity.mjs invalidates an existing manifest
+  ---
+  duration_ms: 5.612875
+  type: 'test'
+  ...
+# Subtest: changing build input scripts/check-release.mjs invalidates an existing manifest
+ok 12 - changing build input scripts/check-release.mjs invalidates an existing manifest
+  ---
+  duration_ms: 5.458208
+  type: 'test'
+  ...
+# Subtest: changing build input package.json invalidates an existing manifest
+ok 13 - changing build input package.json invalidates an existing manifest
+  ---
+  duration_ms: 5.988958
+  type: 'test'
+  ...
+# Subtest: changing build input project.config.json invalidates an existing manifest
+ok 14 - changing build input project.config.json invalidates an existing manifest
+  ---
+  duration_ms: 7.465042
+  type: 'test'
+  ...
+# Subtest: changing build input cocos-pilot/package.json invalidates an existing manifest
+ok 15 - changing build input cocos-pilot/package.json invalidates an existing manifest
+  ---
+  duration_ms: 6.540125
+  type: 'test'
+  ...
+# Subtest: changing build input cocos-pilot/tsconfig.json invalidates an existing manifest
+ok 16 - changing build input cocos-pilot/tsconfig.json invalidates an existing manifest
+  ---
+  duration_ms: 7.935
+  type: 'test'
+  ...
+# Subtest: changing build input release/settings.json invalidates an existing manifest
+ok 17 - changing build input release/settings.json invalidates an existing manifest
+  ---
+  duration_ms: 4.817708
+  type: 'test'
+  ...
+# Subtest: changing build input build-templates/web-mobile/index.ejs invalidates an existing manifest
+ok 18 - changing build input build-templates/web-mobile/index.ejs invalidates an existing manifest
+  ---
+  duration_ms: 7.74175
+  type: 'test'
+  ...
+# Subtest: changing build input cocos-pilot/build-templates/web-mobile/index.ejs invalidates an existing manifest
+ok 19 - changing build input cocos-pilot/build-templates/web-mobile/index.ejs invalidates an existing manifest
+  ---
+  duration_ms: 6.250625
+  type: 'test'
+  ...
+# Subtest: optional lockfile package-lock.json appearing invalidates an existing manifest
+ok 20 - optional lockfile package-lock.json appearing invalidates an existing manifest
+  ---
+  duration_ms: 5.825333
+  type: 'test'
+  ...
+# Subtest: optional lockfile npm-shrinkwrap.json appearing invalidates an existing manifest
+ok 21 - optional lockfile npm-shrinkwrap.json appearing invalidates an existing manifest
+  ---
+  duration_ms: 8.250084
+  type: 'test'
+  ...
+# Subtest: optional lockfile yarn.lock appearing invalidates an existing manifest
+ok 22 - optional lockfile yarn.lock appearing invalidates an existing manifest
+  ---
+  duration_ms: 6.682666
+  type: 'test'
+  ...
+# Subtest: optional lockfile pnpm-lock.yaml appearing invalidates an existing manifest
+ok 23 - optional lockfile pnpm-lock.yaml appearing invalidates an existing manifest
+  ---
+  duration_ms: 7.221917
+  type: 'test'
+  ...
+# Subtest: optional lockfile bun.lock appearing invalidates an existing manifest
+ok 24 - optional lockfile bun.lock appearing invalidates an existing manifest
+  ---
+  duration_ms: 6.56975
+  type: 'test'
+  ...
+# Subtest: optional lockfile bun.lockb appearing invalidates an existing manifest
+ok 25 - optional lockfile bun.lockb appearing invalidates an existing manifest
+  ---
+  duration_ms: 6.708542
+  type: 'test'
+  ...
+# Subtest: optional lockfile cocos-pilot/package-lock.json appearing invalidates an existing manifest
+ok 26 - optional lockfile cocos-pilot/package-lock.json appearing invalidates an existing manifest
+  ---
+  duration_ms: 6.616667
+  type: 'test'
+  ...
+# Subtest: optional lockfile cocos-pilot/npm-shrinkwrap.json appearing invalidates an existing manifest
+ok 27 - optional lockfile cocos-pilot/npm-shrinkwrap.json appearing invalidates an existing manifest
+  ---
+  duration_ms: 5.04275
+  type: 'test'
+  ...
+# Subtest: optional lockfile cocos-pilot/yarn.lock appearing invalidates an existing manifest
+ok 28 - optional lockfile cocos-pilot/yarn.lock appearing invalidates an existing manifest
+  ---
+  duration_ms: 7.776375
+  type: 'test'
+  ...
+# Subtest: optional lockfile cocos-pilot/pnpm-lock.yaml appearing invalidates an existing manifest
+ok 29 - optional lockfile cocos-pilot/pnpm-lock.yaml appearing invalidates an existing manifest
+  ---
+  duration_ms: 6.609083
+  type: 'test'
+  ...
+# Subtest: optional lockfile cocos-pilot/bun.lock appearing invalidates an existing manifest
+ok 30 - optional lockfile cocos-pilot/bun.lock appearing invalidates an existing manifest
+  ---
+  duration_ms: 6.701
+  type: 'test'
+  ...
+# Subtest: optional lockfile cocos-pilot/bun.lockb appearing invalidates an existing manifest
+ok 31 - optional lockfile cocos-pilot/bun.lockb appearing invalidates an existing manifest
+  ---
+  duration_ms: 6.335042
+  type: 'test'
+  ...
+# Subtest: optional directory extensions records absence, empty presence, contents and removal
+ok 32 - optional directory extensions records absence, empty presence, contents and removal
+  ---
+  duration_ms: 9.2745
+  type: 'test'
+  ...
+# Subtest: optional directory cocos-pilot/extensions records absence, empty presence, contents and removal
+ok 33 - optional directory cocos-pilot/extensions records absence, empty presence, contents and removal
+  ---
+  duration_ms: 7.6275
+  type: 'test'
+  ...
+# Subtest: optional directory packages records absence, empty presence, contents and removal
+ok 34 - optional directory packages records absence, empty presence, contents and removal
+  ---
+  duration_ms: 7.053083
+  type: 'test'
+  ...
+# Subtest: optional directory cocos-pilot/packages records absence, empty presence, contents and removal
+ok 35 - optional directory cocos-pilot/packages records absence, empty presence, contents and removal
+  ---
+  duration_ms: 10.200667
+  type: 'test'
+  ...
+# Subtest: optional directory build-templates records absence, empty presence, contents and removal
+ok 36 - optional directory build-templates records absence, empty presence, contents and removal
+  ---
+  duration_ms: 8.117792
+  type: 'test'
+  ...
+# Subtest: optional directory cocos-pilot/build-templates records absence, empty presence, contents and removal
+ok 37 - optional directory cocos-pilot/build-templates records absence, empty presence, contents and removal
+  ---
+  duration_ms: 9.714375
+  type: 'test'
+  ...
+# Subtest: new untracked inputs and removed input files invalidate the manifest
+ok 38 - new untracked inputs and removed input files invalidate the manifest
+  ---
+  duration_ms: 8.808292
+  type: 'test'
+  ...
+# Subtest: build output and report writes do not invalidate the input fingerprint
+ok 39 - build output and report writes do not invalidate the input fingerprint
+  ---
+  duration_ms: 6.925041
+  type: 'test'
+  ...
+# Subtest: changed toolchain node.version invalidates the manifest
+ok 40 - changed toolchain node.version invalidates the manifest
+  ---
+  duration_ms: 4.550375
+  type: 'test'
+  ...
+# Subtest: changed toolchain node.executableSha256 invalidates the manifest
+ok 41 - changed toolchain node.executableSha256 invalidates the manifest
+  ---
+  duration_ms: 7.34725
+  type: 'test'
+  ...
+# Subtest: changed toolchain creator.version invalidates the manifest
+ok 42 - changed toolchain creator.version invalidates the manifest
+  ---
+  duration_ms: 5.744667
+  type: 'test'
+  ...
+# Subtest: changed toolchain creator.executableSha256 invalidates the manifest
+ok 43 - changed toolchain creator.executableSha256 invalidates the manifest
+  ---
+  duration_ms: 5.8125
+  type: 'test'
+  ...
+# Subtest: changed toolchain creator.releaseInfoSha256 invalidates the manifest
+ok 44 - changed toolchain creator.releaseInfoSha256 invalidates the manifest
+  ---
+  duration_ms: 7.432791
+  type: 'test'
+  ...
+# Subtest: changed toolchain creator.versionInfoSha256 invalidates the manifest
+ok 45 - changed toolchain creator.versionInfoSha256 invalidates the manifest
+  ---
+  duration_ms: 5.332916
+  type: 'test'
+  ...
+# Subtest: manifest rejects wrong platform and altered declared toolchain
+ok 46 - manifest rejects wrong platform and altered declared toolchain
+  ---
+  duration_ms: 7.812208
+  type: 'test'
+  ...
+# Subtest: final stamp refuses inputs changed since the pre-build capture
+ok 47 - final stamp refuses inputs changed since the pre-build capture
+  ---
+  duration_ms: 6.346916
+  type: 'test'
+  ...
+# Subtest: formal release gate rejects a legacy-only stamp and accepts the complete current stamp
+not ok 48 - formal release gate rejects a legacy-only stamp and accepts the complete current stamp
+  ---
+  duration_ms: 4.740042
+  type: 'test'
+  location: '/Users/zhangnu/.codex/worktrees/technical-governance/rainy-mushroom/tests/release-integrity.test.mjs:121:1'
+  failureType: 'testCodeFailure'
+  error: '["当前AppID尚未核验为正式小游戏账号（当前为测试号或未核验），不能用于正式发布","微信后台隐私指引与官方授权弹窗尚未核验","适龄提示尚未核验通过或正式等级未配置","小游戏内容备案尚未核验通过","小程序工信备案号尚未配置","正式 AppID 下安卓与 iOS 真机验收尚未完成","缺少微信构建产物"]'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///Users/zhangnu/.codex/worktrees/technical-governance/rainy-mushroom/tests/release-integrity.test.mjs:125:9)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: installed-toolchain inspection reads the actual executable, Creator version and release metadata
+ok 49 - installed-toolchain inspection reads the actual executable, Creator version and release metadata
+  ---
+  duration_ms: 7.908
+  type: 'test'
+  ...
+1..49
+# tests 49
+# suites 0
+# pass 48
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 454.493041

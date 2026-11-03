@@ -1,0 +1,442 @@
+TAP version 13
+# Subtest: WeChat packaging relocates the resources build: internal, main and the resources bundle
+ok 1 - WeChat packaging relocates the resources build: internal, main and the resources bundle
+  ---
+  duration_ms: 8.443875
+  type: 'test'
+  ...
+# Subtest: optional bundles (resources) are appended only when built
+ok 2 - optional bundles (resources) are appended only when built
+  ---
+  duration_ms: 11.049333
+  type: 'test'
+  ...
+# Subtest: WeChat packaging still requires every fixed bundle
+ok 3 - WeChat packaging still requires every fixed bundle
+  ---
+  duration_ms: 1.872583
+  type: 'test'
+  ...
+# Subtest: WeChat packaging keeps the 4 MiB per-subpackage budget for resources
+ok 4 - WeChat packaging keeps the 4 MiB per-subpackage budget for resources
+  ---
+  duration_ms: 6.789625
+  type: 'test'
+  ...
+# Subtest: legacy sourceDigest retains the original four-directory byte algorithm
+ok 5 - legacy sourceDigest retains the original four-directory byte algorithm
+  ---
+  duration_ms: 11.974667
+  type: 'test'
+  ...
+# Subtest: identical inputs produce a portable, order-independent schema 2 fingerprint
+ok 6 - identical inputs produce a portable, order-independent schema 2 fingerprint
+  ---
+  duration_ms: 18.048917
+  type: 'test'
+  ...
+# Subtest: changing build input js/source.js invalidates an existing manifest
+ok 7 - changing build input js/source.js invalidates an existing manifest
+  ---
+  duration_ms: 8.410875
+  type: 'test'
+  ...
+# Subtest: changing build input cocos-pilot/assets/asset.txt invalidates an existing manifest
+ok 8 - changing build input cocos-pilot/assets/asset.txt invalidates an existing manifest
+  ---
+  duration_ms: 6.305417
+  type: 'test'
+  ...
+# Subtest: changing build input cocos-pilot/settings/setting.json invalidates an existing manifest
+ok 9 - changing build input cocos-pilot/settings/setting.json invalidates an existing manifest
+  ---
+  duration_ms: 8.279333
+  type: 'test'
+  ...
+# Subtest: changing build input cocos-pilot/build-configs/wechatgame.json invalidates an existing manifest
+ok 10 - changing build input cocos-pilot/build-configs/wechatgame.json invalidates an existing manifest
+  ---
+  duration_ms: 6.99275
+  type: 'test'
+  ...
+# Subtest: changing build input scripts/cocos/build.mjs invalidates an existing manifest
+ok 11 - changing build input scripts/cocos/build.mjs invalidates an existing manifest
+  ---
+  duration_ms: 4.97225
+  type: 'test'
+  ...
+# Subtest: changing build input scripts/cocos/package-wechat.mjs invalidates an existing manifest
+ok 12 - changing build input scripts/cocos/package-wechat.mjs invalidates an existing manifest
+  ---
+  duration_ms: 7.632208
+  type: 'test'
+  ...
+# Subtest: changing build input scripts/cocos/sync-shared.mjs invalidates an existing manifest
+ok 13 - changing build input scripts/cocos/sync-shared.mjs invalidates an existing manifest
+  ---
+  duration_ms: 6.76425
+  type: 'test'
+  ...
+# Subtest: changing build input scripts/prepare-release-config.mjs invalidates an existing manifest
+ok 14 - changing build input scripts/prepare-release-config.mjs invalidates an existing manifest
+  ---
+  duration_ms: 9.310834
+  type: 'test'
+  ...
+# Subtest: changing build input scripts/release-integrity.mjs invalidates an existing manifest
+ok 15 - changing build input scripts/release-integrity.mjs invalidates an existing manifest
+  ---
+  duration_ms: 6.90025
+  type: 'test'
+  ...
+# Subtest: changing build input scripts/check-release.mjs invalidates an existing manifest
+ok 16 - changing build input scripts/check-release.mjs invalidates an existing manifest
+  ---
+  duration_ms: 11.358208
+  type: 'test'
+  ...
+# Subtest: changing build input package.json invalidates an existing manifest
+ok 17 - changing build input package.json invalidates an existing manifest
+  ---
+  duration_ms: 13.990292
+  type: 'test'
+  ...
+# Subtest: changing build input project.config.json invalidates an existing manifest
+ok 18 - changing build input project.config.json invalidates an existing manifest
+  ---
+  duration_ms: 8.952458
+  type: 'test'
+  ...
+# Subtest: changing build input cocos-pilot/package.json invalidates an existing manifest
+ok 19 - changing build input cocos-pilot/package.json invalidates an existing manifest
+  ---
+  duration_ms: 10.723833
+  type: 'test'
+  ...
+# Subtest: changing build input cocos-pilot/tsconfig.json invalidates an existing manifest
+ok 20 - changing build input cocos-pilot/tsconfig.json invalidates an existing manifest
+  ---
+  duration_ms: 7.944334
+  type: 'test'
+  ...
+# Subtest: changing build input release/settings.json invalidates an existing manifest
+ok 21 - changing build input release/settings.json invalidates an existing manifest
+  ---
+  duration_ms: 10.968958
+  type: 'test'
+  ...
+# Subtest: changing build input build-templates/web-mobile/index.ejs invalidates an existing manifest
+ok 22 - changing build input build-templates/web-mobile/index.ejs invalidates an existing manifest
+  ---
+  duration_ms: 17.721875
+  type: 'test'
+  ...
+# Subtest: changing build input cocos-pilot/build-templates/web-mobile/index.ejs invalidates an existing manifest
+ok 23 - changing build input cocos-pilot/build-templates/web-mobile/index.ejs invalidates an existing manifest
+  ---
+  duration_ms: 11.309458
+  type: 'test'
+  ...
+# Subtest: optional lockfile package-lock.json appearing invalidates an existing manifest
+ok 24 - optional lockfile package-lock.json appearing invalidates an existing manifest
+  ---
+  duration_ms: 6.500792
+  type: 'test'
+  ...
+# Subtest: optional lockfile npm-shrinkwrap.json appearing invalidates an existing manifest
+ok 25 - optional lockfile npm-shrinkwrap.json appearing invalidates an existing manifest
+  ---
+  duration_ms: 11.157125
+  type: 'test'
+  ...
+# Subtest: optional lockfile yarn.lock appearing invalidates an existing manifest
+ok 26 - optional lockfile yarn.lock appearing invalidates an existing manifest
+  ---
+  duration_ms: 5.709
+  type: 'test'
+  ...
+# Subtest: optional lockfile pnpm-lock.yaml appearing invalidates an existing manifest
+ok 27 - optional lockfile pnpm-lock.yaml appearing invalidates an existing manifest
+  ---
+  duration_ms: 9.808375
+  type: 'test'
+  ...
+# Subtest: optional lockfile bun.lock appearing invalidates an existing manifest
+ok 28 - optional lockfile bun.lock appearing invalidates an existing manifest
+  ---
+  duration_ms: 9.063667
+  type: 'test'
+  ...
+# Subtest: optional lockfile bun.lockb appearing invalidates an existing manifest
+ok 29 - optional lockfile bun.lockb appearing invalidates an existing manifest
+  ---
+  duration_ms: 8.704666
+  type: 'test'
+  ...
+# Subtest: optional lockfile cocos-pilot/package-lock.json appearing invalidates an existing manifest
+ok 30 - optional lockfile cocos-pilot/package-lock.json appearing invalidates an existing manifest
+  ---
+  duration_ms: 6.86825
+  type: 'test'
+  ...
+# Subtest: optional lockfile cocos-pilot/npm-shrinkwrap.json appearing invalidates an existing manifest
+ok 31 - optional lockfile cocos-pilot/npm-shrinkwrap.json appearing invalidates an existing manifest
+  ---
+  duration_ms: 7.844083
+  type: 'test'
+  ...
+# Subtest: optional lockfile cocos-pilot/yarn.lock appearing invalidates an existing manifest
+ok 32 - optional lockfile cocos-pilot/yarn.lock appearing invalidates an existing manifest
+  ---
+  duration_ms: 6.188292
+  type: 'test'
+  ...
+# Subtest: optional lockfile cocos-pilot/pnpm-lock.yaml appearing invalidates an existing manifest
+ok 33 - optional lockfile cocos-pilot/pnpm-lock.yaml appearing invalidates an existing manifest
+  ---
+  duration_ms: 5.646166
+  type: 'test'
+  ...
+# Subtest: optional lockfile cocos-pilot/bun.lock appearing invalidates an existing manifest
+ok 34 - optional lockfile cocos-pilot/bun.lock appearing invalidates an existing manifest
+  ---
+  duration_ms: 6.96975
+  type: 'test'
+  ...
+# Subtest: optional lockfile cocos-pilot/bun.lockb appearing invalidates an existing manifest
+ok 35 - optional lockfile cocos-pilot/bun.lockb appearing invalidates an existing manifest
+  ---
+  duration_ms: 6.02525
+  type: 'test'
+  ...
+# Subtest: optional directory extensions records absence, empty presence, contents and removal
+ok 36 - optional directory extensions records absence, empty presence, contents and removal
+  ---
+  duration_ms: 11.017916
+  type: 'test'
+  ...
+# Subtest: optional directory cocos-pilot/extensions records absence, empty presence, contents and removal
+ok 37 - optional directory cocos-pilot/extensions records absence, empty presence, contents and removal
+  ---
+  duration_ms: 11.878791
+  type: 'test'
+  ...
+# Subtest: optional directory packages records absence, empty presence, contents and removal
+ok 38 - optional directory packages records absence, empty presence, contents and removal
+  ---
+  duration_ms: 8.625083
+  type: 'test'
+  ...
+# Subtest: optional directory cocos-pilot/packages records absence, empty presence, contents and removal
+ok 39 - optional directory cocos-pilot/packages records absence, empty presence, contents and removal
+  ---
+  duration_ms: 12.134625
+  type: 'test'
+  ...
+# Subtest: optional directory build-templates records absence, empty presence, contents and removal
+ok 40 - optional directory build-templates records absence, empty presence, contents and removal
+  ---
+  duration_ms: 8.944
+  type: 'test'
+  ...
+# Subtest: optional directory cocos-pilot/build-templates records absence, empty presence, contents and removal
+ok 41 - optional directory cocos-pilot/build-templates records absence, empty presence, contents and removal
+  ---
+  duration_ms: 10.522542
+  type: 'test'
+  ...
+# Subtest: new untracked inputs and removed input files invalidate the manifest
+ok 42 - new untracked inputs and removed input files invalidate the manifest
+  ---
+  duration_ms: 10.309625
+  type: 'test'
+  ...
+# Subtest: build output and report writes do not invalidate the input fingerprint
+ok 43 - build output and report writes do not invalidate the input fingerprint
+  ---
+  duration_ms: 7.07
+  type: 'test'
+  ...
+# Subtest: changed toolchain node.version invalidates the manifest
+ok 44 - changed toolchain node.version invalidates the manifest
+  ---
+  duration_ms: 7.890583
+  type: 'test'
+  ...
+# Subtest: changed toolchain node.executableSha256 invalidates the manifest
+ok 45 - changed toolchain node.executableSha256 invalidates the manifest
+  ---
+  duration_ms: 6.249459
+  type: 'test'
+  ...
+# Subtest: changed toolchain creator.version invalidates the manifest
+ok 46 - changed toolchain creator.version invalidates the manifest
+  ---
+  duration_ms: 5.224334
+  type: 'test'
+  ...
+# Subtest: changed toolchain creator.executableSha256 invalidates the manifest
+ok 47 - changed toolchain creator.executableSha256 invalidates the manifest
+  ---
+  duration_ms: 6.020833
+  type: 'test'
+  ...
+# Subtest: changed toolchain creator.releaseInfoSha256 invalidates the manifest
+ok 48 - changed toolchain creator.releaseInfoSha256 invalidates the manifest
+  ---
+  duration_ms: 6.084375
+  type: 'test'
+  ...
+# Subtest: changed toolchain creator.versionInfoSha256 invalidates the manifest
+ok 49 - changed toolchain creator.versionInfoSha256 invalidates the manifest
+  ---
+  duration_ms: 6.456667
+  type: 'test'
+  ...
+# Subtest: manifest rejects wrong platform and altered declared toolchain
+ok 50 - manifest rejects wrong platform and altered declared toolchain
+  ---
+  duration_ms: 7.446292
+  type: 'test'
+  ...
+# Subtest: final stamp refuses inputs changed since the pre-build capture
+ok 51 - final stamp refuses inputs changed since the pre-build capture
+  ---
+  duration_ms: 6.39575
+  type: 'test'
+  ...
+# Subtest: formal release gate rejects a legacy-only stamp and accepts the complete current stamp
+ok 52 - formal release gate rejects a legacy-only stamp and accepts the complete current stamp
+  ---
+  duration_ms: 12.401458
+  type: 'test'
+  ...
+# Subtest: installed-toolchain inspection reads the actual executable, Creator version and release metadata
+ok 53 - installed-toolchain inspection reads the actual executable, Creator version and release metadata
+  ---
+  duration_ms: 4.715583
+  type: 'test'
+  ...
+# Subtest: build CLI stamps only the successfully packaged WeChat candidate after preparation
+ok 54 - build CLI stamps only the successfully packaged WeChat candidate after preparation
+  ---
+  duration_ms: 863.362875
+  type: 'test'
+  ...
+# Subtest: build CLI stamps web only after copying its loading image
+ok 55 - build CLI stamps web only after copying its loading image
+  ---
+  duration_ms: 625.880792
+  type: 'test'
+  ...
+# Subtest: failed build {"mode":"bad-bundle","reason":{}} leaves no old or new release stamp
+ok 56 - failed build {"mode":"bad-bundle","reason":{}} leaves no old or new release stamp
+  ---
+  duration_ms: 1133.6985
+  type: 'test'
+  ...
+# Subtest: failed build {"mode":"creator-failure","reason":{}} leaves no old or new release stamp
+ok 57 - failed build {"mode":"creator-failure","reason":{}} leaves no old or new release stamp
+  ---
+  duration_ms: 912.397541
+  type: 'test'
+  ...
+# Subtest: failed build {"mode":"source-change","reason":{}} leaves no old or new release stamp
+ok 58 - failed build {"mode":"source-change","reason":{}} leaves no old or new release stamp
+  ---
+  duration_ms: 929.029959
+  type: 'test'
+  ...
+# Subtest: failed build {"mode":"toolchain-change","reason":{}} leaves no old or new release stamp
+ok 59 - failed build {"mode":"toolchain-change","reason":{}} leaves no old or new release stamp
+  ---
+  duration_ms: 895.747667
+  type: 'test'
+  ...
+# Subtest: failed build {"reportFailure":true,"reason":{}} leaves no old or new release stamp
+ok 60 - failed build {"reportFailure":true,"reason":{}} leaves no old or new release stamp
+  ---
+  duration_ms: 623.233083
+  type: 'test'
+  ...
+# Subtest: failed build {"platform":"web-mobile","missingKeyart":true,"reason":{}} leaves no old or new release stamp
+ok 61 - failed build {"platform":"web-mobile","missingKeyart":true,"reason":{}} leaves no old or new release stamp
+  ---
+  duration_ms: 889.447083
+  type: 'test'
+  ...
+# Subtest: fingerprint ignores Creator-created nested empty directories
+ok 62 - fingerprint ignores Creator-created nested empty directories
+  ---
+  duration_ms: 20.132584
+  type: 'test'
+  ...
+# Subtest: optional roots retain presence checks while nested empty directories are ignored
+ok 63 - optional roots retain presence checks while nested empty directories are ignored
+  ---
+  duration_ms: 15.646709
+  type: 'test'
+  ...
+# Subtest: nested input file paths and content still invalidate the fingerprint
+ok 64 - nested input file paths and content still invalidate the fingerprint
+  ---
+  duration_ms: 15.0175
+  type: 'test'
+  ...
+# Subtest: empty symlinks retain identity and referenced content in the fingerprint
+ok 65 - empty symlinks retain identity and referenced content in the fingerprint
+  ---
+  duration_ms: 10.626542
+  type: 'test'
+  ...
+# Subtest: build CLI accepts a Creator-created directory before final stamp verification
+ok 66 - build CLI accepts a Creator-created directory before final stamp verification
+  ---
+  duration_ms: 1113.351458
+  type: 'test'
+  ...
+# Subtest: clipboard writes require consent and never read clipboard contents
+ok 67 - clipboard writes require consent and never read clipboard contents
+  ---
+  duration_ms: 0.82725
+  type: 'test'
+  ...
+# Subtest: privacy rejection and unsupported platforms leave clipboard untouched
+ok 68 - privacy rejection and unsupported platforms leave clipboard untouched
+  ---
+  duration_ms: 0.11375
+  type: 'test'
+  ...
+# Subtest: formal release cannot pass with tourist identity or unverified requirements
+ok 69 - formal release cannot pass with tourist identity or unverified requirements
+  ---
+  duration_ms: 0.334541
+  type: 'test'
+  ...
+# Subtest: advertising release requires a real placement and verified device integration
+ok 70 - advertising release requires a real placement and verified device integration
+  ---
+  duration_ms: 0.585583
+  type: 'test'
+  ...
+# Subtest: a wx-shaped test AppID is not a verified formal game account
+ok 71 - a wx-shaped test AppID is not a verified formal game account
+  ---
+  duration_ms: 0.235667
+  type: 'test'
+  ...
+# Subtest: submission permits parallel filing without bypassing privacy and age approval
+ok 72 - submission permits parallel filing without bypassing privacy and age approval
+  ---
+  duration_ms: 0.40875
+  type: 'test'
+  ...
+1..72
+# tests 72
+# suites 0
+# pass 72
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 8594.49475

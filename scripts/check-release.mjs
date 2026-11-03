@@ -1,7 +1,7 @@
 import fs from 'node:fs'
 import {resolve} from 'node:path'
 import {pathToFileURL} from 'node:url'
-import {projectRoot as root,filesBelow,digestSource} from './release-integrity.mjs'
+import {projectRoot,filesBelow,verifyBuildStamp} from './release-integrity.mjs'
 import {RELEASE_INFO} from '../js/config/releaseInfo.js'
 import {AD_CONFIG} from '../js/config/adConfig.js'
 export function configurationBlockers(config,ads=AD_CONFIG,stage='publication'){
@@ -18,7 +18,7 @@ export function configurationBlockers(config,ads=AD_CONFIG,stage='publication'){
  if(ads.adUnitIds?.interstitial)blockers.push('当前版本不支持插屏广告，请清空插屏广告位')
  return blockers
 }
-export function checkRelease(stage='publication'){
+export function checkRelease(stage='publication',{root=projectRoot,creator,toolchain}={}){
  const config=JSON.parse(fs.readFileSync(resolve(root,'release/settings.json'))),blockers=configurationBlockers(config,AD_CONFIG,stage),warnings=[]
  if(stage==='submission'&&!config.verification?.miitFilingNumber?.trim())warnings.push('小程序工信备案可与版本审核并行，但正式发布前必须完成')
  if(stage==='submission'&&!config.verification?.contentFilingApproved)warnings.push('小游戏内容备案仍待核验；另需按实际类目确认资质先后条件，文化互动类须先完成资质审核')
@@ -31,7 +31,7 @@ export function checkRelease(stage='publication'){
  if(!fs.existsSync(folder))blockers.push('缺少微信构建产物')
  else{
   const files=filesBelow(folder)
-  try{const stamp=JSON.parse(fs.readFileSync(resolve(folder,'release-build.json')));if(stamp.version!==config.version||stamp.appid!==config.appid||stamp.sourceDigest!==digestSource())blockers.push('构建产物已过期，需要重新构建')}catch{blockers.push('缺少构建版本与源码校验记录')}
+  try{const stamp=JSON.parse(fs.readFileSync(resolve(folder,'release-build.json')));verifyBuildStamp(stamp,{root,platform:'wechatgame',creator,toolchain})}catch(error){blockers.push('构建版本与源码校验失败：'+error.message)}
   try{const project=JSON.parse(fs.readFileSync(resolve(folder,'project.config.json')));if(project.appid!==config.appid)blockers.push('构建产物AppID与发布配置不一致')}catch{blockers.push('微信项目配置缺失')}
   for(const file of files){const size=fs.statSync(file).size;totalBytes+=size;if(!file.startsWith(resolve(folder,'subpackages')+'/'))mainBytes+=size}
   if(mainBytes>4*1024*1024||totalBytes>20*1024*1024)blockers.push('主包或总包超过项目设定预算')

@@ -1,0 +1,19 @@
+
+> rainy-mushroom-forest@3.8.8 cocos:build
+> node scripts/cocos/build.mjs web-mobile
+
+Prepared release configuration: 1.1.0-alpha.1 configured AppID; account type unverified
+Synced 68 current gameplay module(s)
+file:///Users/zhangnu/.codex/worktrees/technical-governance/rainy-mushroom/scripts/release-integrity.mjs:72
+  if(canonical(stamp[key])!==canonical(current[key]))throw Error('构建产物已过期，build inputs or toolchain changed ('+key+')，请重新构建')
+                                                           ^
+
+Error: 构建产物已过期，build inputs or toolchain changed (inputDigest)，请重新构建
+    at verifyBuildStamp (file:///Users/zhangnu/.codex/worktrees/technical-governance/rainy-mushroom/scripts/release-integrity.mjs:72:60)
+    at stampBuild (file:///Users/zhangnu/.codex/worktrees/technical-governance/rainy-mushroom/scripts/release-integrity.mjs:78:2)
+    at file:///Users/zhangnu/.codex/worktrees/technical-governance/rainy-mushroom/scripts/cocos/build.mjs:27:1
+    at ModuleJob.run (node:internal/modules/esm/module_job:343:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:665:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+
+Node.js v22.22.2
