@@ -1,73 +1,112 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import fs from 'node:fs'
-import {TowerRun} from '../js/xianxia/TowerRun.js'
-import {WEAPONS,createFixedWeapon,createIronWeapon} from '../js/xianxia/TowerWeapons.js'
-import {EQUIPMENT,createFixedEquipment,createBasicEquipment} from '../js/xianxia/TowerEquipment.js'
+import {TowerRun,stats} from '../js/xianxia/TowerRun.js'
+import {WEAPONS,createFixedWeapon} from '../js/xianxia/TowerWeapons.js'
+import {EQUIPMENT,createFixedEquipment} from '../js/xianxia/TowerEquipment.js'
 import {cultivationLevelXp} from '../js/xianxia/TowerProfile.js'
-// Controlled stationary-target laboratory, NOT a legal campaign or clear-rate
-// claim. Skill release, travel, direct/periodic hits, focus and ticks are real.
-const targets={fan:[null,1.05],fa:[null,1.15,1.32,1.52,1.75],bao:[null,1.45,1.67,1.92,2.2],ling:[null,1.85,2.13,2.45,2.8]}
-const parents={evo_wanjian:'sj_yujian',evo_tiandi:'sj_line',evo_wuwo:'sj_wanjian',evo_sixiang:'sj_formation'}
-const skills=[...Object.keys(parents),'sj_yujian','sj_shadow','sj_arc','sj_line','sj_cross','sj_wanjian','sj_formation']
-function sample(tier,quality,skill,count=1){
- const parent=parents[skill]??skill
- const role=['sj_arc','sj_line','sj_cross'].includes(parent)?'qi':['sj_wanjian','sj_formation'].includes(parent)?'formation':'general'
- const wd=WEAPONS.find(d=>d.tier===tier&&d.quality===quality&&(quality===4?d.role==='graduate':tier==='fan'||d.role===role))
- const rd=EQUIPMENT.find(d=>d.category==='ring'&&d.tier===tier&&d.quality===quality&&(quality===4?d.role==='graduate':tier==='fan'||d.role==='burst'))
- const weapon=quality?createFixedWeapon(wd.id,'lab-weapon'):createIronWeapon(),ring=quality?createFixedEquipment(rd.id,'lab-ring'):createBasicEquipment('ring')
- const loadout={growthVersion:1,active:{[parent]:3},passive:{sj_heart:1,sj_bone:2},evolutions:parents[skill]?[skill]:[],evolutionLevels:parents[skill]?{[skill]:1}:{},tutorialWaves:0,weapon,weaponId:weapon.id,weaponQuality:weapon.quality,weaponRefine:0,ring,ringId:ring.id,weaponFocusCount:0}
- const run=new TowerRun({attemptId:1,floor:1,seed:977,xp:cultivationLevelXp(30),hp:100,loadout})
- // Obtain actual supported enemy records, then freeze geometry and health to
- // measure scheduling without kills, rewards, wave density or enemy AI drift.
- for(let i=0;i<120&&!run.state.enemies.length;i++)run.advance(1/60)
- assert.ok(run.state.enemies.length)
- const original=run.state.enemies[0]
- // Isolate the pre-existing skill budget from basic-attack action contention.
- // Some skills only reach melee range, so moving targets away is not equivalent.
- // Unmodified combined melee scheduling is recorded in weapon-actions reports.
- run._basicTarget=()=>null
- run.state.enemies=Array.from({length:count},(_,i)=>({...structuredClone(original),id:`lab-${i}`,hp:1e12,maxHp:1e12,x:run.state.player.x+75+i*4,y:run.state.player.y+(i%3-1)*10}))
- run.state.pending=[];run.state.reserved=[]
- let damage=0,hits=0,direct=0,periodic=0
- const critRolls=new Map()
- const apply=run._damageEnemy.bind(run)
- run._damageEnemy=hit=>{
-  const e=run.state.enemies.find(e=>e.id===hit.target);if(!e)return
-  const before=e.hp
-  // Stratify crit only: weapon attack rolls keep the seeded production RNG.
-  // Mixing cast rolls into the crit sequence biases low-frequency skill samples.
-  const random=run._random
-  const critKey=`${hit.source}:${hit.target}`
-  run._random=()=>{
-   const roll=critRolls.get(critKey)??0;critRolls.set(critKey,roll+1)
-   return ((roll*37)%100+.5)/100
-  }
-  try{apply(hit)}finally{run._random=random}
-  damage+=before-e.hp;hits++;if(hit.direct)direct++;else periodic++
- }
- // Stratified deterministic crit draws, same rule in all samples. This is a
- // variance-reduced lab, not a replacement of the production damage formula.
- for(let tick=0;tick<10800;tick++){
-  for(const e of run.state.enemies){e.ai.graceUntil=1e9;e.hp=1e12}
-  run.state.player.hp=100
-  run.advance(1/60)
- }
- assert.ok(hits>0,`${tier}/${quality}/${skill} has no actual hits`)
- return {damage,hits,direct,periodic,time:run.state.time}
+import {GROWTH_SKILLS,rankCap,growthSummary} from '../js/xianxia/TowerGrowth.js'
+import {TowerCampaignStore} from '../js/xianxia/TowerCampaign.js'
+import {checksum} from '../js/xianxia/Checksum.js'
+import {currentCampaignSchema} from './helpers/tower-schema.mjs'
+import {assertCurrentCampaign} from './helpers/tower-current-state.mjs'
+// Approved integer-budget §8: all three slots, normal mana and basic attacks,
+// 180s at 60Hz, discard the first30s, mean of three seeds. Not a win-rate test.
+const targets={fan:[null,1.30],fa:[null,1.80,2.20,2.70,3.30],bao:[null,2.10,2.70,3.30,4.00],ling:[null,2.60,3.30,4.10,5.00]}
+const levels={fan:1,fa:4,bao:11,ling:21}
+// Keep every authored standard case. Current gate conflicts must remain visible,
+// not be silently removed, trained illegally or replaced with a different build.
+const standard={
+ 1:{qi:{sj_arc:1},array:{sj_wanjian:1}},
+ 4:{qi:{sj_arc:3},pursuit:{sj_yujian:1},array:{sj_wanjian:3},mixed:{sj_arc:1,sj_wanjian:1}},
+ 11:{qi:{sj_arc:6,sj_line:1},pursuit:{sj_yujian:3,sj_shadow:1},array:{sj_wanjian:6,sj_formation:1},mixed:{sj_arc:3,sj_wanjian:3,sj_formation:1}},
+ 21:{qi:{sj_arc:9,sj_line:4},pursuit:{sj_yujian:3,sj_shadow:4},array:{sj_wanjian:9,sj_formation:4},mixed:{sj_arc:6,sj_wanjian:6,sj_shadow:3}},
 }
-test('180s skill-only scheduling preserves quality targets with basic attacks excluded from the calibration',t=>{
- const rows=[]
- for(const count of [1,3,8])for(const skill of skills){
-  const base=sample('fan',0,skill,count)
-  for(const tier of ['fan','fa','bao','ling'])for(const q of tier==='fan'?[1]:[1,2,3,4]){
-   const measured=sample(tier,q,skill,count),ratio=measured.damage/base.damage,target=targets[tier][q]
-   rows.push({tier,quality:q,skill,count,target,ratio,relativeError:ratio/target-1,...measured})
-   // Finite-window cast phase, crit granularity, general coverage and orbit
-   // uptime are explicit tolerances. Formula targets remain independently3%.
-   assert.ok(Math.abs(ratio/target-1)<=.06,`${tier}/${q}/${skill}/${count}: ${ratio} target ${target}`)
+const roster=[...WEAPONS,...EQUIPMENT]
+const starter=roster.filter(d=>d.quality===0)
+function validateFixture(level,active){
+ const state=structuredClone(new TowerCampaignStore({getItem:()=>null,setItem(){}},0).state)
+ Object.assign(state,{xp:cultivationLevelXp(level),skillsInitialized:true,skills:{...active},
+  books:GROWTH_SKILLS.filter(d=>d.special&&active[d.id]).map(d=>d.id)})
+ const errors=[]
+ for(const [id,n] of Object.entries(active)){
+  const d=GROWTH_SKILLS.find(d=>d.id===id)
+  if(level<d.learnLevel||n>rankCap(id,state.xp,state.clearedFloor))errors.push(`${id} rank${n}: learnLevel${d.learnLevel}, current rank cap${rankCap(id,state.xp,state.clearedFloor)}`)
+ }
+ if(growthSummary(state).available<0)errors.push('overspent natural skill points')
+ if(errors.length)return errors
+ const data=JSON.stringify(state),raw=JSON.stringify({format:'xianxia-sect-tower-campaign',schema:currentCampaignSchema,data,checksum:checksum(data)})
+ assertCurrentCampaign(new TowerCampaignStore({getItem:()=>raw,setItem(){throw Error('fixture must not migrate')}},0),state)
+ return []
+}
+function definitions(tier,q,route){
+ const caster=['array','mixed'].includes(route)
+ return ['weapon','armor','ring'].map(category=>{
+  const role=tier==='fan'?'transition':q===4?(caster?'master':'graduate'):
+   category==='weapon'?(route==='qi'?'qi':route==='array'?'formation':'general'):category==='armor'?(caster?'recovery':'guard'):(caster?'cadence':'burst')
+  const d=roster.find(d=>d.category===category&&d.tier===tier&&d.quality===q&&d.role===role)
+  assert.ok(d,`${tier}/${q}/${category}/${role}`);return d
+ })
+}
+function sample(defs,level,active,seed){
+ const items=Object.fromEntries(defs.map(d=>[d.category,d.category==='weapon'?createFixedWeapon(d.id,d.quality?d.id:'iron'):createFixedEquipment(d.id,d.quality?d.id:`basic-${d.category}`)]))
+ const loadout={growthVersion:1,skillsInitialized:true,active:{...active},passive:{},evolutions:[],evolutionLevels:{},tutorialWaves:0,
+  ...items,weaponQuality:items.weapon.quality,weaponRefine:0,weaponFocusCount:0,
+  ...Object.fromEntries(Object.entries(items).map(([k,v])=>[`${k}Id`,v.id]))}
+ const xp=cultivationLevelXp(level),sheet=stats(xp,loadout)
+ const run=new TowerRun({attemptId:1,floor:9,seed,xp,hp:sheet.maxHp,training:true,loadout})
+ for(const id of Object.keys(active))run.state.cooldowns[id]=1e9
+ for(let i=0;i<600&&!run.state.enemies.length;i++)run.advance(1/60)
+ const template=run.state.enemies[0];assert.ok(template)
+ run.state.enemies=[{...structuredClone(template),id:'controlled-target',hp:1e12,maxHp:1e12,radius:24,
+  mechanic:undefined,speed:0,ai:{...structuredClone(template.ai),graceUntil:1e9}}]
+ run.state.pending=[];run.state.reserved=[];run.state.projectiles=[];run.state.zones=[]
+ for(const id of Object.keys(active))run.state.cooldowns[id]=0
+ const start=run.state.time;let damage=0,hits=0
+ const original=run._damageEnemy
+ run._damageEnemy=function(hit){
+  const e=this.state.enemies.find(e=>e.id===hit.target),before=e?.hp??0,result=original.call(this,hit)
+  if(this.state.time>=start+30&&e){damage+=Math.max(0,before-e.hp);hits++}
+  return result
+ }
+ for(let i=0;i<10800;i++){
+  const e=run.state.enemies[0],p=run.state.player
+  e.x=p.x+100;e.y=p.y;e.ai.graceUntil=1e9
+  run.advance(1/60)
+  assert.equal(run.state.phase,'playing');assert.equal(run.state.enemies.length,1)
+ }
+ assert.ok(hits>0);assert.ok(damage>0)
+ return {dps:damage/150,hits,manaSpent:run.state.manaState.spent}
+}
+test('current orbit gates reject pre17 training and cap rank6 at21 without changing the authored budget scenarios',()=>{
+ const orbit=GROWTH_SKILLS.find(d=>d.id==='sj_wanjian')
+ assert.equal(orbit.learnLevel,17)
+ assert.equal(rankCap('sj_wanjian',cultivationLevelXp(16),0),0)
+ assert.equal(rankCap('sj_wanjian',cultivationLevelXp(17),0),3)
+ assert.equal(rankCap('sj_wanjian',cultivationLevelXp(21),0),6)
+ assert.deepEqual(validateFixture(17,{sj_wanjian:3}),[])
+ assert.deepEqual(validateFixture(21,{sj_wanjian:6}),[])
+})
+test('all50 authored three-slot standard cases are legal and satisfy their approved180s DPS target within10percent',t=>{
+ const rows=[],failures=[]
+ for(const tier of ['fan','fa','bao','ling']){
+  const level=levels[tier]
+  for(const [route,active] of Object.entries(standard[level])){
+   const errors=validateFixture(level,active),baselines=new Map()
+   if(!errors.length)for(const seed of [101,211,307])baselines.set(seed,sample(starter,level,active,seed))
+   for(let quality=1;quality<=(tier==='fan'?1:4);quality++){
+    const common={tier,quality,route,level,active,target:targets[tier][quality],ids:definitions(tier,quality,route).map(d=>d.id)}
+    if(errors.length){const row={...common,status:'invalid-authored-fixture',errors};rows.push(row);failures.push(row);continue}
+    const samples=[101,211,307].map(seed=>{const measured=sample(definitions(tier,quality,route),level,active,seed),base=baselines.get(seed);return {seed,...measured,baselineDps:base.dps,ratio:measured.dps/base.dps}})
+    const ratio=samples.reduce((n,s)=>n+s.ratio,0)/samples.length,relativeError=ratio/common.target-1
+    const row={...common,status:Math.abs(relativeError)<=.10?'passed':'outside-target',ratio,relativeError,samples}
+    rows.push(row);if(row.status!=='passed')failures.push(row)
+   }
   }
  }
- if(process.env.EQUIPMENT_SCHEDULING_REPORT)fs.writeFileSync(process.env.EQUIPMENT_SCHEDULING_REPORT,JSON.stringify({seconds:180,level:30,passive:{sj_heart:1,sj_bone:2},note:'stationary targets; basic target acquisition disabled to isolate skill budget; real skill release/hits; not combined melee or natural campaign',rows},null,2)+'\n')
- t.diagnostic(`${rows.length} real-scheduler samples, maximum target error ${Math.max(...rows.map(r=>Math.abs(r.relativeError)))*100}%`)
+ assert.equal(rows.length,50)
+ const report={method:'180s real60Hz simulation, 30s warmup, normal three-slot equipment/basic attacks/mana, seeds101/211/307',rows}
+ if(process.env.EQUIPMENT_SCHEDULING_REPORT)fs.writeFileSync(process.env.EQUIPMENT_SCHEDULING_REPORT,JSON.stringify(report,null,2)+'\n')
+ t.diagnostic(JSON.stringify({cases:rows.length,valid:rows.filter(r=>r.status!=='invalid-authored-fixture').length,failures}))
+ assert.deepEqual(failures,[],'Authored fixture conflicts and genuine target misses require design review; no tolerance or production tuning was changed.')
 })

@@ -1,9 +1,10 @@
 import { currentCampaignSchema } from './helpers/tower-schema.mjs'
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { TowerCampaignStore, TOWER_CAMPAIGN_KEY } from '../js/xianxia/TowerCampaign.js'
+import { TowerCampaignStore, TOWER_CAMPAIGN_KEY, campaignMaxHp } from '../js/xianxia/TowerCampaign.js'
 import { rollEquipment, armorModifiers } from '../js/xianxia/TowerEquipment.js'
 import { TowerRun, validateTowerSnapshot } from '../js/xianxia/TowerRun.js'
+import { assertCurrentCampaign } from './helpers/tower-current-state.mjs'
 import { checksum } from '../js/xianxia/Checksum.js'
 
 // Exercise the Campaign trust boundary with real Run snapshots. Standalone
@@ -30,12 +31,13 @@ function fixture() {
   state.equipmentCounters['gear-2'] = 0
   state.loadouts[0].armorId = 'gear-1'
   state.loadouts[0].ringId = 'gear-2'
+  state.hp = campaignMaxHp(state)
   const data = JSON.stringify(state)
   records.set(TOWER_CAMPAIGN_KEY, JSON.stringify({
     format: 'xianxia-sect-tower-campaign', schema: currentCampaignSchema, data, checksum: checksum(data),
   }))
   const store = new TowerCampaignStore(disk, NOW)
-  assert.equal(store.readOnly, false, store.error)
+  assertCurrentCampaign(store,state)
   const entered = store.act({ type: 'startFloor', floor: 1, seed: 123 }, NOW)
   assert.equal(entered.ok, true, entered.reason)
   return { store, disk, records, writes, run: TowerRun.restore(entered.snapshot) }
@@ -62,31 +64,36 @@ function reject(f, snapshot, type = 'checkpoint') {
   assert.deepEqual(snapshot, input, 'rejection cannot rewrite its caller snapshot')
 }
 
-function incoming(run) {
-  // Only the incoming projectile is a fixture. Actual loss, delayed recovery,
-  // cooldown, effects and counters are produced by the normal combat tick.
-  run.state.projectiles.push({
-    id: 'history-test-hit', x: run.state.player.x, y: run.state.player.y,
-    vx: 0, vy: 0, radius: 10, damage: 10, hostile: true,
-    hitIds: [], expiresAt: run.state.time + 1,
-  })
-  run.advance(STEP)
-  assert.equal(run.state.armorState.triggerCount, 1)
-  assert.ok(run.state.armorState.pending)
+function advance(run, ticks) {
+  for(let i=0;i<ticks;i++){
+    for(const enemy of run.state.enemies)enemy.ai.graceUntil=99999
+    run.advance(STEP)
+  }
 }
-
+function incoming(run) {
+  // One real projectile loses less HP than a complete regeneration pulse.
+  // Unspent healing is not a bank that a later checkpoint may fabricate.
+  run.state.projectiles.push({
+    id:'history-test-hit',x:run.state.player.x,y:run.state.player.y,
+    vx:0,vy:0,radius:10,damage:1,hostile:true,
+    hitIds:[],expiresAt:run.state.time+1,
+  })
+  const before=run.state.player.hp
+  advance(run,1)
+  assert.ok(run.state.player.hp<before)
+  assert.equal(run.state.armorState.healedTotal,0)
+}
 function healedFixture() {
-  const f = fixture()
-  const entryArmor = copy(f.run.state.armorState)
+  const f=fixture(),entryArmor=copy(f.run.state.armorState)
   incoming(f.run)
-  f.run.advance(2.1)
-  f.run.pause()
-  const snapshot = f.run.snapshot()
-  close(snapshot.armorState.healedTotal, entryArmor.entryMaxHp * armorModifiers(f.run.state.loadout.armor).healFraction)
-  assert.equal(snapshot.armorState.pending, null)
-  assert.equal(snapshot.armorState.triggerCount, 1)
-  accept(f.store, snapshot)
-  return { ...f, snapshot, entryArmor }
+  const lost=f.run.state.player.maxHp-f.run.state.player.hp
+  advance(f.run,179);f.run.pause()
+  const snapshot=f.run.snapshot()
+  close(snapshot.armorState.healedTotal,lost)
+  close(snapshot.player.hp,snapshot.player.maxHp)
+  assert.ok(lost>0)
+  accept(f.store,snapshot)
+  return {...f,snapshot,entryArmor}
 }
 
 for (const type of ['checkpoint', 'finishFloor']) {
@@ -100,33 +107,30 @@ for (const type of ['checkpoint', 'finishFloor']) {
   })
 }
 
-test('a later tick cannot reset armor recovery total, trigger history or cooldown', () => {
-  const f = healedFixture()
-  f.run.resume(); f.run.advance(STEP); f.run.pause()
-  const later = f.run.snapshot()
-  assert.ok(later.ticks > f.snapshot.ticks)
-  for (const change of [
-    s => { s.armorState = copy(f.entryArmor) },
-    s => { s.armorState.healedTotal = 0 },
-    s => {
-      // Still a valid standalone one-trigger history, but older than the
-      // committed trigger at 1/60s and its corresponding 20s cooldown.
-      s.armorState.lastTriggerAt = 0
-      s.armorState.cooldownUntil = 20
-    },
-  ]) {
-    const forged = copy(later); change(forged)
-    reject(f, forged)
-  }
-  accept(f.store, later, 'checkpoint')
+test('a later tick cannot reset or fabricate regeneration without a new three-second pulse', () => {
+  const f=healedFixture()
+  f.run.resume();advance(f.run,1);f.run.pause()
+  const later=f.run.snapshot();assert.ok(later.ticks>f.snapshot.ticks)
+  for(const change of [
+    s=>{s.armorState=copy(f.entryArmor)},
+    s=>{s.armorState.healedTotal/=2},
+    s=>{s.armorState.healedTotal+=.1},
+  ]){const forged=copy(later);change(forged);reject(f,forged)}
+  accept(f.store,later)
 })
 
 for (const type of ['checkpoint', 'finishFloor']) {
-  test(`zero-time four-cast focus fabrication is rejected by ${type}`, () => {
+  test(`zero-time four-cast receipt fabrication is rejected by ${type}`, () => {
     const f = fixture(), forged = f.run.snapshot()
     assert.equal(forged.time, 0)
     assert.equal(forged.weaponState.casts.length, 0)
-    Object.assign(forged.weaponState, { effectiveCasts: 4, nextCastId: 5, focusCount: 4 })
+    const retired=copy(forged)
+    Object.assign(retired.weaponState,{effectiveCasts:4,nextCastId:5,focusCount:4})
+    assert.equal(validateTowerSnapshot(retired),false,'retired focus cannot be reintroduced')
+    const before=f.store.state,raw=new Map(f.records),writes=f.writes.length
+    assert.equal(f.store.act({type,snapshot:retired},NOW).ok,false)
+    assert.equal(f.store.state,before);assert.deepEqual(f.records,raw);assert.equal(f.writes.length,writes)
+    forged.weaponState.nextCastId = 5
     if (type === 'finishFloor') forged.phase = 'abandoned'
     reject(f, forged, type)
     assert.equal(f.store.state.equipmentCounters['gear-2'], 0)
@@ -140,47 +144,38 @@ test('one elapsed tick cannot hide four fabricated casts behind a later timestam
   assert.equal(forged.ticks, 1)
   assert.equal(Object.keys(forged.loadout.active).length, 1)
   assert.equal(forged.weaponState.casts.length, 0)
-  Object.assign(forged.weaponState, { effectiveCasts: 4, nextCastId: 5, focusCount: 4 })
+  forged.weaponState.nextCastId = 5
   reject(f, forged)
   accept(f.store, f.run.snapshot())
 })
 
-test('real ring progress cannot roll back after its projectiles have expired', () => {
-  const f = fixture()
-  for (let i = 0; i < 900 && f.run.state.weaponState.effectiveCasts === 0; i++) {
-    for (const e of f.run.state.enemies) {
-      e.x = f.run.state.player.x + 60; e.y = f.run.state.player.y
-      e.ai.graceUntil = 99999
-    }
+test('real cast receipt progress cannot roll back after its projectiles have expired', () => {
+  const f=fixture()
+  for(let i=0;i<900&&f.run.state.weaponState.nextCastId===1;i++){
+    for(const e of f.run.state.enemies){e.x=f.run.state.player.x+60;e.y=f.run.state.player.y;e.ai.graceUntil=99999}
     f.run.advance(STEP)
   }
-  assert.ok(f.run.state.weaponState.effectiveCasts > 0, 'must land a real cast')
-  // Stop new casts and allow the real projectile/receipt lifetime to finish.
-  for (const id of Object.keys(f.run.state.cooldowns)) f.run.state.cooldowns[id] = 99999
-  for (let i = 0; i < 300 && f.run.state.weaponState.casts.length; i++) {
-    for (const e of f.run.state.enemies) e.ai.graceUntil = 99999
+  assert.ok(f.run.state.weaponState.nextCastId>1,'must create a real cast receipt')
+  assert.equal(f.run.state.weaponState.effectiveCasts,0,'retired focus effects cannot charge')
+  for(const id of Object.keys(f.run.state.cooldowns))f.run.state.cooldowns[id]=99999
+  // Move supported enemies beyond basic reach so no new basic receipts start.
+  for(let i=0;i<300&&f.run.state.weaponState.casts.length;i++){
+    for(const e of f.run.state.enemies){e.x=f.run.state.player.x+500;e.y=f.run.state.player.y;e.ai.graceUntil=99999}
     f.run.advance(STEP)
   }
-  assert.equal(f.run.state.weaponState.casts.length, 0)
-  f.run.pause()
-  const committed = f.run.snapshot()
-  accept(f.store, committed)
-  f.run.resume(); f.run.advance(STEP); f.run.pause()
-  const later = f.run.snapshot()
-  for (const resetIds of [false, true]) {
-    const forged = copy(later)
-    forged.weaponState.effectiveCasts = 0
-    forged.weaponState.focusCount = forged.loadout.weaponFocusCount
-    if (resetIds) forged.weaponState.nextCastId = 1
-    reject(f, forged)
+  assert.equal(f.run.state.weaponState.casts.length,0)
+  f.run.pause();const committed=f.run.snapshot();accept(f.store,committed)
+  f.run.resume();advance(f.run,1);f.run.pause();const later=f.run.snapshot()
+  for(const nextCastId of [1,committed.weaponState.nextCastId-1]){
+    const forged=copy(later);forged.weaponState.nextCastId=nextCastId;reject(f,forged)
   }
-  accept(f.store, later)
+  accept(f.store,later)
 })
 
-test('normal pending-heal reload and repeated checkpoints do not duplicate recovery', () => {
+test('normal pre-pulse reload and repeated checkpoints do not duplicate regeneration', () => {
   const f = fixture()
   incoming(f.run); f.run.pause()
-  const pending = f.run.snapshot(), expected = pending.armorState.pending.amount
+  const pending = f.run.snapshot(), expected = pending.player.maxHp - pending.player.hp
   const hpBefore = pending.player.hp
   accept(f.store, pending)
   accept(f.store, copy(pending))
@@ -188,12 +183,11 @@ test('normal pending-heal reload and repeated checkpoints do not duplicate recov
   assert.equal(loaded.readOnly, false, loaded.error)
   assert.deepEqual(loaded.state.activeRun.snapshot, pending)
   const replay = TowerRun.restore(loaded.state.activeRun.snapshot)
-  replay.resume(); replay.advance(2.1); replay.pause()
+  replay.resume(); advance(replay,179); replay.pause()
   const healed = replay.snapshot()
   close(healed.player.hp - hpBefore, expected)
   close(healed.armorState.healedTotal, expected)
-  assert.equal(healed.armorState.triggerCount, 1)
-  assert.equal(healed.armorState.pending, null)
+  assert.equal(healed.ticks,180)
   accept(loaded, healed)
   accept(loaded, copy(healed))
   replay.resume(); replay.advance(STEP); replay.pause()

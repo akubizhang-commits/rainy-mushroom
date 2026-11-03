@@ -27,7 +27,7 @@ test('every open tier and quality has valid deterministic equipment without buyi
       }
     }
   }
-  assert.equal(WEAPONS.length, 35)
+  assert.equal(WEAPONS.length, 36)
   assert.equal(EQUIPMENT.length, 52)
   assert.equal(seen.size, 84)
 })

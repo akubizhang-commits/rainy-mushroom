@@ -1,3 +1,4 @@
+import {currentCampaignSchema} from './helpers/tower-schema.mjs';
 import test from 'node:test';import assert from 'node:assert/strict';
 import {TowerRun} from '../js/xianxia/TowerRun.js';
 import {createIronWeapon} from '../js/xianxia/TowerWeapons.js';
@@ -26,7 +27,7 @@ test('schema43 ring saves reset only this mode atomically; current saves reload 
  const disk=new Map([['other-game','keep']]);let writes=0;
  const storage={getItem:k=>disk.get(k)??null,setItem:(k,v)=>{writes++;disk.set(k,v)}};
  const fresh=new TowerCampaignStore(storage,0);assert.equal(fresh.act({type:'sync'},0).ok,true);
- const record=JSON.parse(disk.get(TOWER_CAMPAIGN_KEY));assert.equal(record.schema,58);record.schema=43;
+ const record=JSON.parse(disk.get(TOWER_CAMPAIGN_KEY));assert.equal(record.schema,currentCampaignSchema);record.schema=43;
  const old=JSON.stringify(record);disk.set(TOWER_CAMPAIGN_KEY,old);
  const failed=new TowerCampaignStore({...storage,setItem(){throw Error('disk full')}},0);
  assert.equal(failed.readOnly,true);assert.equal(failed.error,'save-failed');assert.equal(disk.get(TOWER_CAMPAIGN_KEY),old);

@@ -5,8 +5,8 @@ const clone=x=>JSON.parse(JSON.stringify(x))
 const close=(a,b)=>assert.ok(Math.abs(a-b)<1e-10,`${a} != ${b}`)
 const ordinary=WEAPONS.filter(d=>d.quality>0)
 const fixed=d=>createFixedWeapon(d.id,'test')
-test('35 frozen weapon identities and independent iron instances retain the API',()=>{
- assert.equal(WEAPONS.length,35);assert.equal(new Set(WEAPONS.map(w=>w.id)).size,35)
+test('36 frozen weapon identities and independent iron instances retain the API',()=>{
+ assert.equal(WEAPONS.length,36);assert.equal(new Set(WEAPONS.map(w=>w.id)).size,36)
  assert.ok(Object.isFrozen(WEAPONS));for(const d of WEAPONS)assert.ok(Object.isFrozen(d))
  const iron=createIronWeapon();assert.ok(validateWeapon(iron));assert.equal(weaponFlatAttack(iron),5)
  assert.equal(weaponSummary(iron).fixedAttack,5);assert.match(weaponName(iron),/铁剑/)
@@ -16,9 +16,9 @@ test('35 frozen weapon identities and independent iron instances retain the API'
 test('fixed weapons have universal type coverage and only their declared family specialization',()=>{
  for(const d of ordinary){
   const w=fixed(d);assert.ok(validateWeapon(w));assert.deepEqual(w,fixed(d))
-  assert.equal(w.affixes.filter(a=>a.type==='flow').length,['qi','formation'].includes(d.role)?1:0)
-  for(const a of w.affixes){assert.ok(['physical','magic','flow','attackSpeed','onHit','bleedConversion','bleed','element','critChance','critBonus'].includes(a.type));if(a.type==='flow')assert.equal(a.target,d.role)}
-  const m=weaponDamageModifiers(w,'sj_arc','physical');assert.ok(m.critChance>0&&m.critBonus>0);assert.equal(m.special,0);assert.equal(m.lifesteal,0)
+  assert.equal(w.affixes.filter(a=>a.type==='flow').length,['qi','formation'].includes(d.role)||['eq_sword_dingyue','eq_sword_chengming','eq_sword_kunwu'].includes(d.id)?1:0)
+  for(const a of w.affixes){assert.ok(['physical','magic','flow','attackSpeed','onHit','bleedConversion','bleed','element','skillLevel'].includes(a.type));if(a.type==='flow')assert.equal(a.target,({eq_sword_dingyue:'formation',eq_sword_chengming:'qi',eq_sword_kunwu:'formation'})[d.id]??d.role)}
+  const m=weaponDamageModifiers(w,'sj_arc','physical');assert.equal(m.critChance,0);assert.equal(m.critBonus,0);assert.equal(m.special,0);assert.equal(m.lifesteal,0)
  }
 })
 test('strict validator rejects removed affixes, duplicate slots, changed values and save shape',()=>{

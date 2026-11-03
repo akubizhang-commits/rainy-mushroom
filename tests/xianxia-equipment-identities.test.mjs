@@ -90,8 +90,8 @@ test('DOT ring boosts only converted budget and never grants a missing damage so
  const e=r.state.enemies[0];e.hp=e.maxHp=1e7;r._random=()=>.99
  const before=e.hp;r._damageEnemy({target:e.id,source:'sj_arc',damage:100,direct:true})
  const direct=100*outgoingDamageFactor(r.state.loadout,'sj_arc','physical',true)*.5
- // Taiheng boosts learned mark 4 -> 5 (20%); the ring adds 12 percentage points.
- assert.ok(Math.abs(e.qingpingDot.remaining/direct-1.32)<1e-8)
+ // Current mark rank 4 is +50%; Taiheng effective rank 5 is +60%, plus the ring's +12 percentage points (90-current-critical-hit-rules / skill overcap).
+ assert.ok(Math.abs(e.qingpingDot.remaining/direct-1.72)<1e-8)
  const t=make('eq_armor_chengxiao','eq_ring_weiming');delete t.state.loadout.passive.sj_mark;delete t.state.loadout.trainedSkills.passive.sj_mark
  for(let i=0;i<300&&!t.state.enemies.length;i++)t.advance(1/60)
  const enemy=t.state.enemies[0];enemy.hp=1e7;t._random=()=>.99;t._damageEnemy({target:enemy.id,source:'sj_arc',damage:100,direct:true})

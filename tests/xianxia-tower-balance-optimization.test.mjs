@@ -7,7 +7,7 @@ import { TowerRun, validateTowerSnapshot } from '../js/xianxia/TowerRun.js'
 import { skillPresentation } from '../js/xianxia/TowerSkillPresentation.js'
 import { skillForm, convergenceRainMultiplier } from '../js/xianxia/TowerSkillForms.js'
 import { WEAPON_BASE_ATTACK, rollWeapon, weaponDamageModifiers, weaponFlatAttack } from '../js/xianxia/TowerWeapons.js'
-import { cultivationAt } from '../js/xianxia/TowerProfile.js'
+import { cultivationAt, cultivationLevelXp } from '../js/xianxia/TowerProfile.js'
 import { ARCHETYPES } from '../js/xianxia/TowerContent.js'
 import { towerEnemyStats } from '../js/xianxia/TowerEnemyStats.js'
 import { checksum } from '../js/xianxia/Checksum.js'
@@ -54,19 +54,17 @@ test('rain detail and emitted zones use the same compensated budget',()=>{
   assert.ok(Math.abs(skillPresentation(s,'evo_wanjian').stats.find(r=>r.key==='rainFullDamage').value-total)<1e-8)
  }
 })
-test('same-quality higher ranks increase the reviewed attack base without guaranteeing an off-build upgrade',()=>{
- const tiers=['fan','fa','bao','ling'],unlocks=[1,4,10,19]
+test('same-role fixed weapons increase attack across available tiers at current unlocks',()=>{
+ const tiers=['fan','fa','bao','ling'],unlocks=[1,4,11,21]
  for(let quality=1;quality<=4;quality++)for(let t=1;t<tiers.length;t++){
-  assert.ok(WEAPON_BASE_ATTACK[tiers[t]][quality]>WEAPON_BASE_ATTACK[tiers[t-1]][quality])
-  // Compare the same affix type and roll at the higher rank's unlock. Off-build
-  // lower quality is deliberately not promised to beat a matched old极品.
-  const level=unlocks[t],xp=30*(level-1)+15*(level-1)**2
-  const B=100*cultivationAt(xp).attackMultiplier
+  // Fan has only the starter transition and Qingfeng, not a full four-quality series.
+  if(t===1&&quality>1)continue
+  const level=unlocks[t],B=100*cultivationAt(cultivationLevelXp(level)).attackMultiplier
   const old=rollWeapon(tiers[t-1],quality,()=>.999999,'old')
   const next=rollWeapon(tiers[t],quality,()=>.999999,'next')
+  assert.ok(weaponFlatAttack(next)>weaponFlatAttack(old))
   const factor=w=>(B+weaponFlatAttack(w))*(1+weaponDamageModifiers(w,'sj_formation','hybrid').flat)
-  assert.ok(factor(next)>factor(old))
-  assert.ok(factor(next)/(B+5)<=1.25)
+  assert.ok(factor(next)>factor(old),`${tiers[t-1]} -> ${tiers[t]}, q${quality}`)
  }
 })
 

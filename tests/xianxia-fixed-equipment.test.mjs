@@ -48,35 +48,27 @@ test('rolls sample every legal identity with one RNG call and never sample retir
   }
 })
 const skills = ['sj_yujian','sj_shadow','sj_arc','sj_line','sj_cross','sj_wanjian','sj_formation','evo_wanjian','evo_tiandi','evo_wuwo','evo_sixiang']
-const output = (d, skill, type='physical') => 1 + weapons.weaponDamageModifiers(create(d),skill,type).flat
-test('weapon families inherit evolutions once, general helps mixed loadouts and top quality is universal', () => {
-  assert.equal(typeof weapons.createFixedWeapon,'function')
-  for (const tier of ['fa','bao','ling']) {
-    for (const q of [1,2,3]) {
-      const pool=expected.filter(d=>d.category==='weapon'&&d.tier===tier&&d.quality===q)
-      const general=pool.find(d=>d.role==='general'), qi=pool.find(d=>d.role==='qi'), formation=pool.find(d=>d.role==='formation')
-      const ratio=output(qi,'sj_arc')/output(formation,'sj_arc')-1
-      assert.ok(ratio>=.02&&ratio<=.04)
-      const generalGap=output(qi,'sj_arc')/output(general,'sj_arc')-1
-      assert.ok(generalGap>=.01&&generalGap<=.02)
-      assert.equal(output(qi,'sj_line'),output(qi,'evo_tiandi'))
-      assert.equal(output(formation,'sj_wanjian'),output(formation,'evo_wuwo'))
-      const mix=d=>skills.reduce((n,s)=>n+output(d,s),0)
-      assert.ok(mix(general)>mix(qi)&&mix(general)>mix(formation))
+const output = (d, skill, type='physical') => 1 + weapons.weaponDamageModifiers(create(d),skill,type,'none').flat
+test('weapon families inherit evolutions once and reserve specialization from a shared damage budget', () => {
+  const flowRange={fa:[6,8],bao:[8,12],ling:[12,16]}
+  const total={fa:[[8,12],[14,20],[22,30],[30,40]],bao:[[20,28],[28,36],[36,46],[44,56]],ling:[[32,42],[42,54],[54,66],[66,80]]}
+  for(const d of expected.filter(d=>d.category==='weapon'&&d.quality&&d.tier!=='fan')){
+    const item=create(d),aff=Object.fromEntries(item.affixes.map(a=>[a.type,a.value]))
+    assert.equal(aff.physical,aff.magic,d.id)
+    const [lo,hi]=d.id==='eq_sword_zhaodan'?[12,24]:d.id==='eq_sword_taiheng'?[24,42]:total[d.tier][d.quality-1]
+    const allocated=aff.physical+(aff.flow??0)+(aff.element??0)
+    assert.ok(allocated>=lo&&allocated<=hi,`${d.id}: ${allocated} outside ${lo}..${hi}`)
+    if(aff.flow){
+      const [min,max]=flowRange[d.tier];assert.ok(aff.flow>=min&&aff.flow<=max)
+      const family=item.affixes.find(a=>a.type==='flow').target
+      const matched=family==='qi'?'sj_arc':'sj_formation',off='sj_yujian'
+      assert.ok(Math.abs(output(d,matched)-output(d,off)-aff.flow/100)<1e-10)
     }
-    const top=expected.filter(d=>d.category==='weapon'&&d.tier===tier&&d.quality===4)
-    for (const type of ['physical','magic','hybrid']) for (const skill of skills) {
-      const graduate=output(top.find(d=>d.role==='graduate'),skill,type), master=output(top.find(d=>d.role==='master'),skill,type)
-      const rd=equipment.EQUIPMENT.find(d=>d.category==='ring'&&d.tier===tier&&d.quality===4&&d.role==='graduate')
-      const U=equipment.ringDamageModifiers(create(rd)).skillDamage||0
-      assert.ok((master+U)/(graduate+U)-1>=.0049&&(master+U)/(graduate+U)-1<=.0051)
-      for (const high of expected.filter(d=>d.category==='weapon'&&d.tier===tier&&d.quality===3)) assert.ok(graduate>output(high,skill,type))
-    }
-    for(let q=2;q<=4;q++) for(const skill of skills) {
-      const next=expected.filter(d=>d.category==='weapon'&&d.tier===tier&&d.quality===q)
-      const prev=expected.filter(d=>d.category==='weapon'&&d.tier===tier&&d.quality===q-1)
-      assert.ok(Math.min(...next.map(d=>output(d,skill)))>=Math.max(...prev.map(d=>output(d,skill))))
-    }
+    for(const [base,evo] of [['sj_yujian','evo_wanjian'],['sj_line','evo_tiandi'],['sj_wanjian','evo_wuwo'],['sj_formation','evo_sixiang']])
+      for(const type of ['physical','magic','hybrid'])assert.equal(output(d,base,type),output(d,evo,type))
+    const hasLevels=['eq_sword_zhaodan','eq_sword_taiheng'].includes(d.id)
+    assert.equal(Boolean(aff.skillLevel),hasLevels,d.id)
+    if(hasLevels)assert.equal(aff.skillLevel,1)
   }
 })
 test('encyclopedia shows fixed stats, unique quality and explicit art gaps', async () => {
@@ -88,36 +80,28 @@ test('encyclopedia shows fixed stats, unique quality and explicit art gaps', asy
     assert.doesNotMatch(JSON.stringify(detail),/随机词条|属性范围|同一名称可有不同品质/)
     if(d.quality) assert.deepEqual(detail.effects,d.category==='weapon'?weapons.weaponDescription(create(d)):equipment.equipmentDescription(create(d)))
   }
-  for(const d of snapshot.entries.filter(d=>d.source==='proposed-new')) assert.equal(LIBRARY_ENTRIES.find(e=>e.id===d.id).icon,'')
-})
-test('fixed top ring and armor cover both roles and combined master gains stay under two percent', () => {
-  const pick=(tier,category,quality,role)=>expected.find(d=>d.tier===tier&&d.category===category&&d.quality===quality&&d.role===role)
-  // Expected direct-hit formula mirrors combat: native crit extra is outside
-  // weapon/bone coefficients. CDR counts casts; focus is amortized over five.
-  const damage=(w,r,p=.1,b=.05)=>{
-    const m=equipment.ringDamageModifiers(r)
-    return ((1+b)*(1+weapons.weaponDamageModifiers(w,'sj_arc','physical').flat+m.special/5)
-      +Math.min(1,p+m.critChance)*(.5+(1+b)*m.critBonus))/(1-equipment.ringCooldownReduction(r))
+  for(const d of snapshot.entries.filter(d=>d.source==='proposed-new')) {
+    const entry=LIBRARY_ENTRIES.find(e=>e.id===d.id)
+    // The original roster predates delivered art. A declared icon must exist.
+    if(entry.icon)assert.ok(fs.existsSync(new URL(`../cocos-pilot/assets/resources/${entry.icon}.png`,import.meta.url)),d.id)
+    else assert.equal(entry.icon,'')
   }
+})
+test('fixed top rings and armor preserve mutually exclusive burst, cadence, guard and caster roles', () => {
+  const pick=(tier,category,role)=>create(expected.find(d=>d.tier===tier&&d.category===category&&d.quality===4&&d.role===role))
   for(const tier of ['fa','bao','ling']) {
-    const wg=create(pick(tier,'weapon',4,'graduate')),wm=create(pick(tier,'weapon',4,'master'))
-    const rg=create(pick(tier,'ring',4,'graduate')),rm=create(pick(tier,'ring',4,'master'))
-    const gain=damage(wg,rm)/damage(wg,rg)-1
-    assert.ok(gain>0&&gain<=.01)
-    assert.ok(damage(wm,rm)/damage(wg,rg)-1<=.02)
-    for(const role of ['burst','cadence']) assert.ok(damage(wg,rg)>damage(wg,create(pick(tier,'ring',3,role))))
-    const ag=equipment.armorModifiers(create(pick(tier,'armor',4,'graduate'))),am=equipment.armorModifiers(create(pick(tier,'armor',4,'master')))
-    const burst=m=>(1+m.hpBonus)/(1-m.reduction)
-    assert.ok(burst(am)>burst(ag)&&burst(am)/burst(ag)-1<=.02)
-    assert.ok(am.healFraction/ag.healFraction-1<=.02)
-    for(const role of ['guard','recovery']) {
-      const high=equipment.armorModifiers(create(pick(tier,'armor',3,role)))
-      assert.ok(burst(ag)>burst(high));assert.ok(ag.healFraction>high.healFraction)
-    }
-    for(let q=2;q<=3;q++) {
-      const lower=equipment.armorModifiers(create(pick(tier,'armor',q-1,'guard')))
-      const higher=equipment.armorModifiers(create(pick(tier,'armor',q,'recovery')))
-      assert.ok(burst(higher)>burst(lower))
-    }
+    const burst=equipment.ringDamageModifiers(pick(tier,'ring','graduate'))
+    const cadence=equipment.ringDamageModifiers(pick(tier,'ring','master'))
+    assert.ok(burst.critChance>0&&burst.critBonus>0)
+    assert.equal(equipment.ringCooldownReduction(pick(tier,'ring','graduate')),0)
+    assert.equal(cadence.critChance,0);assert.equal(cadence.critBonus,0)
+    assert.ok(equipment.ringCooldownReduction(pick(tier,'ring','master'))>0)
+    const guard=equipment.armorModifiers(pick(tier,'armor','graduate'))
+    const caster=equipment.armorModifiers(pick(tier,'armor','master'))
+    assert.ok(guard.attackSpeed>0);assert.equal(guard.castSpeed,0)
+    assert.ok(caster.castSpeed>0);assert.equal(caster.attackSpeed,0)
+    assert.ok(guard.physicalDefense>caster.physicalDefense)
+    assert.equal(guard.hpBonus,0);assert.equal(caster.hpBonus,0)
+    assert.equal(guard.cooldownReduction,0);assert.equal(caster.cooldownReduction,0)
   }
 })

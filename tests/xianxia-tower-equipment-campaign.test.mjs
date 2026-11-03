@@ -52,7 +52,9 @@ function fixture(patch = {}) {
   }
   put(disk, state)
   const store = new TowerCampaignStore(disk, NOW)
-  assert.equal(store.readOnly, false, `schema11 fixture rejected: ${store.error}`)
+  assert.equal(store.readOnly, false, `current fixture rejected: ${store.error}`)
+  assert.deepEqual(store.state,state,'current fixture must be retained exactly')
+  assert.equal(store.migrationReport,null)
   assert.equal(disk.writes.length, 0)
   return { store, disk }
 }
@@ -109,7 +111,7 @@ function draw(store, category, tier = 'fan', quality=1) {
   return item
 }
 
-test('schema11 owns both basic items and ring-only counters, with isolated empty pool histories', () => {
+test('current schema owns both basic items and ring-only counters, with isolated empty pool histories', () => {
   const disk = memoryStorage(), store = new TowerCampaignStore(disk, NOW)
   assert.deepEqual(store.state.equipment, {
     'basic-armor': createBasicEquipment('armor'), 'basic-ring': createBasicEquipment('ring'),
@@ -131,11 +133,11 @@ test('schema11 owns both basic items and ring-only counters, with isolated empty
 })
 
 for (const category of categories) {
-  test(`${category} purchases cost15 stones/9 contribution, retain affixes and never auto-equip`, () => {
+  test(`${category} purchases cost24 stones and no contribution, retain affixes and never auto-equip`, () => {
     const { store, disk } = fixture()
     const before = clone(store.state), item = draw(store, category)
-    assert.equal(store.state.spiritStones, before.spiritStones - 15)
-    assert.equal(store.state.contribution, before.contribution - 9)
+    assert.equal(store.state.spiritStones, before.spiritStones - 24)
+    assert.equal(store.state.contribution, before.contribution)
     assert.deepEqual(store.state.loadouts, before.loadouts)
     assert.deepEqual(store.state.weapons, before.weapons)
     assert.equal(store.state.rng, before.rng)
@@ -160,11 +162,11 @@ for (const category of categories) {
       if(invalid!=='weapon')reject(high.store, high.disk, forgeAction(high.store,invalid))
       reject(high.store, high.disk, { type: 'equipEquipment', category: invalid, id: 'gear-1' })
     }
-    for (const patch of [{ spiritStones: 14 }, { contribution: 8 }]) {
+    for (const patch of [{ spiritStones: 0 }, { spiritStones: 23 }]) {
       const poor = fixture(patch)
       reject(poor.store, poor.disk, forgeAction(poor.store,category))
     }
-    const exact = fixture({ spiritStones: 15, contribution: 9 })
+    const exact = fixture({ spiritStones: 24, contribution: 0 })
     draw(exact.store, category)
     assert.equal(exact.store.state.spiritStones, 0)
     assert.equal(exact.store.state.contribution, 0)
@@ -228,8 +230,8 @@ for (const category of categories) {
     const { store, disk } = fixture({ ...clone(initial.store.state), equipmentRng: { armor: 1, ring: 1 } })
     const duplicate = draw(store, category)
     assert.deepEqual(duplicate, { ...first, id: 'gear-2' })
-    assert.equal(store.state.contribution, 282, 'two purchases cost18 contribution with no duplicate rebate')
-    assert.equal(store.state.spiritStones, 470)
+    assert.equal(store.state.contribution, 1000, 'purchases neither charge nor refund contribution')
+    assert.equal(store.state.spiritStones, 452)
     assert.deepEqual(store.state.equipment[first.id], first)
     assert.deepEqual(store.state.equipment[duplicate.id], { ...first, id: 'gear-2' })
     reject(store, disk, { type: 'refineEquipment', id: duplicate.id }, 'refinement-disabled')
@@ -420,7 +422,7 @@ test('running battle requires a pause for equipment changes and rejects forged s
   reload(disk, store.state)
 })
 
-test('per-ring counters survive swapping, entering, checkpointing, reloading and leaving a floor', () => {
+test('retired per-ring counters remain inert through swapping, real casts, checkpoints and floor settlement', () => {
   const patch = inventory('ring', 4, 2)
   patch.equipmentCounters = { 'basic-ring': 0, 'gear-1': 3, 'gear-2': 1 }
   const { store, disk } = fixture(patch)
@@ -440,7 +442,7 @@ test('per-ring counters survive swapping, entering, checkpointing, reloading and
   assert.equal(entered.snapshot.weaponState.focusCount, 3)
   const run = TowerRun.restore(entered.snapshot)
   // Actual casts against actual spawned enemies; no fabricated counter receipt.
-  for (let frame = 0; frame < 900 && run.state.weaponState.effectiveCasts === 0; frame++) {
+  for (let frame = 0; frame < 900 && run.state.weaponState.nextCastId === 1; frame++) {
     for (const enemy of run.state.enemies) {
       enemy.x = run.state.player.x + 60
       enemy.y = run.state.player.y
@@ -448,11 +450,12 @@ test('per-ring counters survive swapping, entering, checkpointing, reloading and
     }
     run.advance(1 / 30)
   }
-  assert.ok(run.state.weaponState.effectiveCasts > 0, 'fixture must land a real direct cast')
+  assert.ok(run.state.weaponState.nextCastId > 1, 'fixture must create a real cast receipt')
+  assert.equal(run.state.weaponState.effectiveCasts,0,'retired focus never charges')
   run.pause()
   const checkpoint = run.snapshot(), count = checkpoint.weaponState.focusCount
   assert.equal(validateTowerSnapshot(checkpoint), true)
-  assert.equal(count, (3 + checkpoint.weaponState.effectiveCasts) % 5)
+  assert.equal(count,3)
   disk.fail = true
   reject(store, disk, { type: 'checkpoint', snapshot: checkpoint }, 'save-failed')
   disk.fail = false
@@ -468,7 +471,7 @@ test('per-ring counters survive swapping, entering, checkpointing, reloading and
   assert.equal(resumed.state.equipmentCounters['gear-1'], count)
   const next = act(resumed, { type: 'startFloor', floor: 1, seed: 124 })
   assert.equal(next.snapshot.loadout.weaponFocusCount, count)
-  assert.equal(next.snapshot.weaponState.focusCount, count, 'reentering cannot reset the fifth-cast progress')
+  assert.equal(next.snapshot.weaponState.focusCount, count, 'reentering preserves the inert saved counter')
   reload(disk, resumed.state)
 })
 

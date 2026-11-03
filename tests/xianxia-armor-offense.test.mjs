@@ -1,3 +1,4 @@
+import {currentCampaignSchema} from './helpers/tower-schema.mjs'
 import {equipmentBaseAttributes} from '../js/xianxia/TowerEquipmentBases.js'
 import test from 'node:test'
 import assert from 'node:assert/strict'
@@ -20,36 +21,38 @@ const loadout=item=>({growthVersion:1,skillsInitialized:true,active:{},passive:{
   evolutionLevels:{},tutorialWaves:0,weapon:createIronWeapon(),weaponId:'iron',
   weaponQuality:0,weaponRefine:0,weaponFocusCount:0,armor:item,armorId:item.id})
 
-test('every same-quality armor pair trades survival for physical or magical primary emphasis, including top quality',()=>{
-  const points={fa:[3,5,7,9],bao:[8,12,16,20],ling:[20,28,36,44]}
-  for(const tier of Object.keys(points))for(let q=1;q<=4;q++){
+test('same-quality armor pairs retain their physical or magical emphasis within the integer design budgets',()=>{
+  // Approved v2 design §4.2/§5: fixed points replace old fractional HP/CDR.
+  const budgets={fa:[[12,18,30,39,4,4],[18,24,57,72,6,6],[30,36,90,114,8,8],[36,48,129,159,10,12]],
+    bao:[[30,36,69,87,10,12],[42,54,114,141,14,16],[60,72,165,201,18,20],[78,90,225,270,22,26]],
+    ling:[[60,72,150,183,24,28],[84,102,219,264,32,36],[114,132,300,354,40,44],[144,168,390,450,48,56]]}
+  const within=(v,lo,hi)=>assert.ok(v>=lo&&v<=hi,`${v} outside ${lo}..${hi}`)
+  for(const tier of Object.keys(budgets))for(let q=1;q<=4;q++){
     const physical=armor(tier,q),magic=armor(tier,q,true)
     const p=gear.armorModifiers(physical),m=gear.armorModifiers(magic)
-    near(p.strength,points[tier][q-1]*(q===1?1:q===3?.8:.9));near(p.intelligence,q===3?points[tier][q-1]*.1:0)
-    near(m.intelligence,points[tier][q-1]*(q===1?1:q===3?.8:.9));near(m.strength,q===3?points[tier][q-1]*.1:0)
+    assert.ok(p.strength>p.intelligence);assert.ok(m.intelligence>m.strength)
     assert.ok(p.attackSpeed>0&&m.castSpeed>0)
     assert.equal(p.castSpeed,0);assert.equal(m.attackSpeed,0)
-    assert.ok(p.physicalDefense>m.physicalDefense&&p.magicDefense===0&&m.magicDefense===0)
-    assert.ok(p.hpBonus>m.hpBonus&&p.healthRegen<m.healthRegen)
-    assert.equal(p.cooldownReduction,0)
-    assert.ok(m.cooldownReduction>0)
-    assert.match(gear.equipmentDescription(physical).join(' '),/力量 \+\d+.*普攻速度 \+/)
-    assert.match(gear.equipmentDescription(magic).join(' '),/智力 \+\d+.*施法速度 \+/)
+    assert.ok(p.physicalDefense>m.physicalDefense)
+    assert.equal(p.magicDefense,0);assert.equal(m.magicDefense,0)
     for(const item of [physical,magic]){
+      const b=baseOf(item),mod=gear.armorModifiers(item),[lo,hi,dlo,dhi,vlo,vhi]=budgets[tier][q-1]
+      within((b.strength??0)+(b.intelligence??0),lo,hi)
+      within(b.physicalDefense,dlo,dhi);within(b.vitality,vlo,vhi)
+      if(b.awareness)within((b.strength??0)+(b.intelligence??0),lo,Math.floor((lo+hi)/2))
+      for(const value of Object.values(b))assert.ok(Number.isInteger(value)&&value>0)
+      assert.equal(mod.hpBonus,0);assert.equal(mod.cooldownReduction,0)
       assert.ok(gear.validateEquipment(item))
       const bad=structuredClone(item);bad.affixes.push({type:'strength',value:999})
       assert.equal(gear.validateEquipment(bad),false)
     }
+    assert.match(gear.equipmentDescription(physical).join(' '),/力量 \+\d+.*普攻速度 \+/)
+    assert.match(gear.equipmentDescription(magic).join(' '),/智力 \+\d+.*施法速度 \+/)
     if(q>1)for(const caster of [false,true]){
-      const a=gear.armorModifiers(armor(tier,q-1,caster)),b=gear.armorModifiers(armor(tier,q,caster))
-      for(const key of ['hpBonus','physicalDefense','healthRegen'])
-        assert.ok(b[key]>a[key],`${tier}/${q}/${caster}/${key}`)
+      const a=baseOf(armor(tier,q-1,caster)),b=baseOf(armor(tier,q,caster))
+      assert.ok(b.vitality>=a.vitality);assert.ok(b.physicalDefense>a.physicalDefense)
     }
   }
-  // Actual sacrifice against the former ling-middle defensive budget.
-  const p=gear.armorModifiers(armor('ling',2)),m=gear.armorModifiers(armor('ling',2,true))
-  assert.ok(p.hpBonus<.1625&&m.hpBonus<.15)
-  assert.ok(p.physicalDefense<110.79&&m.magicDefense<103.85)
 })
 
 test('fixed primary attributes aggregate once after cultivation and disappear when armor is removed',()=>{
@@ -183,7 +186,7 @@ test('obsolete armor schema resets only the campaign key and a failed reset leav
     if(fail){assert.equal(reloaded.error,'save-failed');assert.equal(records.get(TOWER_CAMPAIGN_KEY),old)}
     else {
       assert.equal(reloaded.error,'');assert.equal(reloaded.migrationReport?.reset,true)
-      assert.equal(JSON.parse(records.get(TOWER_CAMPAIGN_KEY)).schema,58)
+      assert.equal(JSON.parse(records.get(TOWER_CAMPAIGN_KEY)).schema,currentCampaignSchema)
       assert.deepEqual(new TowerCampaignStore(disk,0).state,reloaded.state)
     }
   }

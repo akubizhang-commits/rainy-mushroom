@@ -55,6 +55,8 @@ function fixture(patch = {}) {
   put(disk, state)
   const store = new TowerCampaignStore(disk, NOW)
   assert.equal(store.readOnly, false, `current schema fixture rejected: ${store.error}`)
+  assert.deepEqual(store.state,state,'current fixture must be retained exactly')
+  assert.equal(store.migrationReport,null)
   assert.equal(disk.writes.length, 0, 'reading a current fixture must not reset it')
   return { disk, store }
 }
@@ -102,7 +104,7 @@ test('current schema starts with one immutable iron instance, zero counters and 
   assert.deepEqual(store.state.weaponCounters, { iron: 0 })
   assert.equal(store.state.weaponSequence, 0)
   assert.deepEqual(store.state.loadouts.map(row => row.weaponId), ['iron', 'iron', 'iron'])
-  assert.deepEqual([store.state.spiritStones, store.state.contribution, store.state.xp], [500, 300, 0])
+  assert.deepEqual([store.state.spiritStones, store.state.contribution, store.state.xp], [500, 1000, 0])
   assert.throws(() => { store.state.weapons.iron.locked = false }, TypeError)
   act(store, { type: 'sync' })
   const envelope = JSON.parse(disk.getItem(TOWER_CAMPAIGN_KEY))
@@ -144,8 +146,9 @@ test('failed obsolete-save reset stays read-only and preserves the original raw 
 })
 
 test('fan purchase charges its quote and creates a detached fixed serialized instance', () => {
-  const {store,disk}=fixture(),before=clone(store.state),action=forge(store)
+  const {store,disk}=fixture({contribution:0}),before=clone(store.state),action=forge(store)
   const quote=forgingQuote(before,action.id,1,'buy')
+  assert.equal(quote.spiritStones,24);assert.equal(quote.contribution,0)
   const result=act(store,action)
   assert.deepEqual(result.ids,['weapon-1'])
   assert.equal(store.state.spiritStones,before.spiritStones-quote.spiritStones)
@@ -172,8 +175,8 @@ test('ling forging opens exactly at cultivation level21; unsupported pools never
   for(const tier of ['di','tian','iron','',1])rejected(high.store,high.disk,forge(high.store,tier),'unknown-recipe')
 })
 
-for (const patch of [{ spiritStones: 0 }, { contribution: 0 }]) {
-  test(`forge rejects insufficient ${Object.keys(patch)[0]} before changing RNG or pity`, () => {
+for (const patch of [{ spiritStones: 0 }, { spiritStones: 23 }]) {
+  test(`forge rejects ${patch.spiritStones} stones below the24-stone price before changing RNG or pity`, () => {
     const { store, disk } = fixture({ ...patch, weaponPity: 19 })
     rejected(store, disk, forge(store))
   })
@@ -249,15 +252,15 @@ test('locking is removed and dismantling still rejects iron and every referenced
   rejected(store, disk, { type: 'dismantleWeapon', id: 'missing' })
 })
 
-for (const [quality, refund] of [[1, 2], [2, 4], [3, 8], [4, 16]]) {
-  test(`dismantling quality${quality} refunds exactly${refund} contribution, never the forge costs`, () => {
+for (const [quality, refund] of [[1, 9], [2, 96], [3, 288], [4, 832]]) {
+  test(`dismantling quality${quality} refunds exactly${refund} stones, without contribution or full cost recovery`, () => {
     const patch = ownedPatch({ tier:quality===1?'fan':'fa',quality,xp:225 })
     patch.weaponCounters['weapon-1'] = 3
     const { store, disk } = fixture(patch)
     const before = clone(store.state)
     act(store, { type: 'dismantleWeapon', id: 'weapon-1' })
-    assert.equal(store.state.contribution, before.contribution + refund)
-    assert.equal(store.state.spiritStones, before.spiritStones)
+    assert.equal(store.state.contribution, before.contribution)
+    assert.equal(store.state.spiritStones, before.spiritStones + refund)
     assert.equal(store.state.weapons['weapon-1'], undefined)
     assert.equal(store.state.weaponCounters['weapon-1'], undefined)
     assert.equal(store.state.weaponSequence, before.weaponSequence)

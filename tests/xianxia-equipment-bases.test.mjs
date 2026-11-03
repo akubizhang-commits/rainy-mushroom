@@ -29,14 +29,21 @@ test('all identities have slot-specific intrinsic defense and three distinct att
     assert.deepEqual(s.lines,[...s.baseLines,...s.ordinaryLines,...s.specialLines])
     assert.ok(!s.affixes.some(a=>['strength','intelligence','awareness','vitality'].includes(a.type)))
     if(d.category==='weapon'&&d.quality){
-      assert.match(s.ordinaryLines.join(' '),/附加伤害/)
+      const bleed=s.affixes.some(a=>a.type==='bleedConversion')
+      assert.equal(s.affixes.some(a=>a.type==='onHit'),!bleed,d.id)
+      if(bleed){
+        assert.match(s.specialLines.join(' '),/流血转化 50%/)
+        assert.match(s.specialLines.join(' '),/流血伤害/)
+        assert.doesNotMatch(s.ordinaryLines.join(' '),/附加伤害/)
+      }else assert.match(s.ordinaryLines.join(' '),/附加伤害/)
       assert.doesNotMatch(s.specialLines.join(' '),/附加伤害/)
-      assert.equal(s.specialLines.length,s.affixes.filter(a=>['flow','element'].includes(a.type)).length)
-      assert.ok(s.specialLines.every(line=>/流派伤害|元素.*伤害/.test(line)))
+      assert.equal(s.specialLines.length,s.affixes.filter(a=>['flow','element','bleed','bleedConversion','skillLevel'].includes(a.type)).length)
     }else if(d.category==='armor'&&d.quality){
       assert.match(s.specialLines.join(' '),/气血回复 .*\/3秒/)
-      assert.equal(s.specialLines.length,1)
+      assert.equal(s.specialLines.length,['eq_armor_wugou','eq_armor_chengxiao'].includes(d.id)?2:1)
       assert.doesNotMatch(s.ordinaryLines.join(' '),/气血回复/)
+    }else if(d.category==='ring'){
+      assert.equal(s.specialLines.length,['eq_ring_weiming','eq_ring_dingwei'].includes(d.id)?1:0)
     }else assert.equal(s.specialLines.length,0)
   }
 })

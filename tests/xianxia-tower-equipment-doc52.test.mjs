@@ -1,7 +1,7 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import {EQUIPMENT,createFixedEquipment,createBasicEquipment,rollEquipment,validateEquipment,ringDamageModifiers,ringCooldownReduction,armorModifiers,equipmentDescription,equipmentSummary} from '../js/xianxia/TowerEquipment.js'
-import {WEAPONS,createFixedWeapon,createIronWeapon,validateWeapon,weaponFlatAttack,weaponDamageModifiers,WEAPON_ATTACK_REFERENCE} from '../js/xianxia/TowerWeapons.js'
+import {WEAPONS,createFixedWeapon,createIronWeapon,validateWeapon,weaponFlatAttack,weaponDamageModifiers,weaponSummary,WEAPON_ATTACK_REFERENCE} from '../js/xianxia/TowerWeapons.js'
 import {equipmentTier} from '../js/xianxia/TowerEquipmentTiers.js'
 import {cultivationAt,cultivationLevelXp} from '../js/xianxia/TowerProfile.js'
 // Doc52 scheduling/units and validation contracts remain. Its random-slot and
@@ -13,13 +13,14 @@ const armorDefs=EQUIPMENT.filter(d=>d.category==='armor'&&d.quality)
 const ring=d=>createFixedEquipment(d.id,'ring-test')
 const weapon=d=>createFixedWeapon(d.id,d.quality?'weapon-test':'iron')
 const sources=[['sj_formation','hybrid'],['evo_sixiang','hybrid'],['sj_wanjian','hybrid'],['evo_wuwo','hybrid'],['sj_line','physical'],['evo_tiandi','physical'],['sj_yujian','physical'],['evo_wanjian','physical'],['sj_cross','physical'],['sj_shadow','physical']]
-test('fixed rings retain mandatory crit and CDR slots without retired focus and with exact fractional APIs',()=>{
+test('fixed rings choose either burst or cadence slots without retired focus and expose exact fractional APIs',()=>{
  for(const d of ringDefs){
-  const item=ring(d),types=item.affixes.map(a=>a.type)
-  assert.equal(item.refine,0);assert.equal(types.length,3+(d.tier==='fan'?0:1))
-  for(const type of ['critChance','critBonus','cooldownReduction'])assert.ok(types.includes(type))
-  assert.equal(types.includes('focus'),false)
-  close(ringCooldownReduction(item),item.affixes.find(a=>a.type==='cooldownReduction').value/100)
+  const item=ring(d),types=item.affixes.map(a=>a.type),burst=['transition','burst','graduate'].includes(d.role)
+  assert.equal(item.refine,0)
+  assert.ok(types.includes('skillDamage'))
+  assert.equal(types.includes('critChance'),burst);assert.equal(types.includes('critBonus'),burst)
+  assert.equal(types.includes('cooldownReduction'),!burst);assert.equal(types.includes('focus'),false)
+  close(ringCooldownReduction(item),(item.affixes.find(a=>a.type==='cooldownReduction')?.value??0)/100)
   assert.deepEqual(Object.keys(ringDamageModifiers(item)).sort(),['critBonus','critChance','skillDamage','special'])
   assert.deepEqual(JSON.parse(JSON.stringify(item)),item)
   const reversed=copy(item);reversed.affixes.reverse();assert.ok(validateEquipment(reversed))
@@ -48,17 +49,16 @@ test('strict ring validation rejects missing/duplicate slots, changed CDR, targe
    }
  }
 })
-test('all fixed rings preserve the conservative60% standalone offense envelope including precharged focus',()=>{
+test('all fixed rings preserve the conservative60% ordinary-coefficient envelope without base attributes',()=>{
  for(const d of ringDefs){const item=ring(d),m=ringDamageModifiers(item),cdr=ringCooldownReduction(item)
   assert.ok((1+(m.skillDamage||0)+.5*m.critChance+m.critBonus+m.special)/(1-cdr)<=1.60+1e-12,d.id)
  }
 })
-test('fixed attack references follow actual unlocks and calculations cannot mutate fixed weapon instances',()=>{
+test('fixed attack references follow actual unlocks and partial coefficient calculations cannot mutate instances',()=>{
  assert.ok(Object.isFrozen(WEAPON_ATTACK_REFERENCE))
- const bases={fan:[5,6],fa:[0,6,7,8,9],bao:[0,10,11,12,13],ling:[0,14,15,16,17]}
  for(const tier of ['fan','fa','bao','ling'])close(WEAPON_ATTACK_REFERENCE[tier],100*cultivationAt(cultivationLevelXp(equipmentTier(tier).minLevel)).attackMultiplier)
  for(const d of WEAPONS){const w=weapon(d),before=JSON.stringify(w)
-  close(weaponFlatAttack(w),bases[d.tier][d.quality])
+  close(weaponFlatAttack(w),weaponSummary(w).baseAttributes.physicalAttack)
   for(const base of [WEAPON_ATTACK_REFERENCE[d.tier],WEAPON_ATTACK_REFERENCE[d.tier]*3])for(const [skill,type]of sources){
    const flat=weaponDamageModifiers(w,skill,type).flat
    assert.ok((base+weaponFlatAttack(w))/(base+5)*(1+flat)<=2.9+1e-12)
@@ -69,59 +69,59 @@ test('fixed attack references follow actual unlocks and calculations cannot muta
  }
  close(weaponFlatAttack(createIronWeapon()),5)
 })
-test('all910 fixed weapon/ring identity pairs stay under6x with fixed points, CDR and evolved families',t=>{
+test('all936 fixed weapon/ring pairs retain a6x partial-coefficient screen, independent of the full-build budget',t=>{
  let checks=0,worst=1
  const rings=[createBasicEquipment('ring'),...ringDefs.map(ring)]
  for(const d of WEAPONS)for(const r of rings){
   const w=weapon(d),m=ringDamageModifiers(r),cdr=ringCooldownReduction(r)
   const B=Math.max(WEAPON_ATTACK_REFERENCE[d.tier],WEAPON_ATTACK_REFERENCE[r.tier])
-  for(const [skill,type]of sources)for(const p of [0,.11,.5,.97,1])for(const bone of [0,.135,.5])for(const focus of [0,.2,1]){
-   const native=.5/(1+bone),flat=weaponDamageModifiers(w,skill,type).flat,factor=(B+weaponFlatAttack(w))/(B+5)
-   const ratio=factor*(1+flat+(m.skillDamage||0)+Math.min(1,p+m.critChance)*(native+m.critBonus)+focus*m.special)/(1+p*native)/(1-cdr)
+  for(const [skill,type]of sources)for(const p of [0,.11,.5,.97,1])for(const bone of [0,.135,.5]){
+   const flat=weaponDamageModifiers(w,skill,type).flat,factor=(B+weaponFlatAttack(w))/(B+5)
+   const ratio=factor*((1+flat)*(1+(m.skillDamage||0))+bone)/(1+bone)*(1+Math.min(1,p+m.critChance)*(.5+m.critBonus))/(1+p*.5)/(1-cdr)
    assert.ok(ratio<=6+1e-10,`${d.id}/${r.definitionId}/${skill}: ${ratio}`)
-   assert.ok(factor*(1+flat+(m.skillDamage||0))/(1-cdr)<=6+1e-10)
+   assert.ok(factor*(1+flat)*(1+(m.skillDamage||0))/(1-cdr)<=6+1e-10)
    worst=Math.max(worst,ratio);checks++
   }
  }
  t.diagnostic(`${checks} combinations; maximum gain${((worst-1)*100).toFixed(6)}%`)
 })
-test('fixed armor requires its HP slot and retains bounded delayed recovery without fictitious full-health healing',()=>{
+test('fixed armor uses integer vitality and bounded three-second recovery without obsolete healing slots',()=>{
  const starter=armorModifiers(createBasicEquipment('armor'))
- assert.equal(starter.physicalDefense,1);assert.equal(starter.magicDefense,1)
- assert.equal(starter.hpBonus,0);assert.equal(starter.healFraction,0)
- assert.equal(starter.healCooldown,0);assert.equal(starter.healFloorCap,0)
+ assert.equal(starter.physicalDefense,1);assert.equal(starter.magicDefense,0)
+ assert.equal(starter.hpBonus,0);assert.equal(starter.healthRegen,0)
  for(const d of armorDefs){const item=createFixedEquipment(d.id,'armor-test'),m=armorModifiers(item)
-  assert.equal(m.healDelay,d.quality===4?2:3);assert.equal(m.healCooldown,20);assert.equal(m.healFloorCap,.1)
-  assert.ok(m.hpBonus<=.31&&m.reduction<=.17&&m.healFraction<=.01)
-  assert.ok((1+m.hpBonus)/(1-m.reduction)<1.58)
-  assert.ok((1+m.hpBonus)*(1+m.healFloorCap)/(1-m.reduction)<1.74)
-  for(const mutate of [a=>{a.affixes=a.affixes.filter(f=>f.type==='hpBonus'?false:true)},
-   a=>{a.affixes=a.affixes.filter(f=>f.type!=='healFraction')},a=>{a.affixes[0].value=10.1},
-   a=>{a.affixes[0].type='cooldownReduction'},a=>{a.affixes.push(copy(a.affixes[0]))}]){
+  assert.ok(m.healthRegen>=.2&&m.healthRegen<=.8)
+  assert.equal(m.hpBonus,0);assert.equal(m.cooldownReduction,0)
+  for(const obsolete of ['healFraction','healDelay','healCooldown','healFloorCap'])assert.equal(obsolete in m,false)
+  const base=equipmentSummary(item).baseAttributes
+  assert.ok(Number.isInteger(base.vitality)&&base.vitality>=2)
+  for(const mutate of [a=>{a.affixes=a.affixes.filter(f=>f.type!=='healthRegen')},
+   a=>{a.affixes[0].value+=.1},a=>{a.affixes[0].type='hpBonus'},a=>{a.affixes.push(copy(a.affixes[0]))}]){
     const invalid=copy(item);mutate(invalid);assert.equal(validateEquipment(invalid),false)
    }
-  assert.match(equipmentDescription(item).join(' '),/最大生命增加/)
-  assert.doesNotMatch(equipmentDescription(item).join(' '),/暴击|会心|吸血/)
+  assert.match(equipmentDescription(item).join(' '),/体力 \+\d+（气血 \+\d+）/)
+  assert.match(equipmentDescription(item).join(' '),/气血回复 \+[\d.]+%\/3秒/)
+  assert.doesNotMatch(equipmentDescription(item).join(' '),/暴击|会心|吸血|每层回复/)
  }
 })
 test('UI descriptions display both fixed crit and cooldown bonuses with correct units and detached summaries',()=>{
  for(const d of ringDefs){const item=ring(d),before=JSON.stringify(item),lines=equipmentDescription(item).join(' ')
-  assert.match(lines,/所有技能冷却时间 -/);assert.match(lines,/暴击伤害 \+/)
+  if(['transition','burst','graduate'].includes(d.role)){assert.match(lines,/暴击伤害 \+/);assert.doesNotMatch(lines,/所有技能冷却时间 -/)}
+  else {assert.match(lines,/所有技能冷却时间 -/);assert.doesNotMatch(lines,/暴击伤害 \+/)}
   const summary=equipmentSummary(item);close(summary.cooldownReduction,ringCooldownReduction(item))
   summary.affixes[0].value=999;summary.lines.push('changed');assert.equal(JSON.stringify(item),before)
  }
 })
-test('level-one and later legal fixed loadouts retain damage budgets as cultivation grows',()=>{
+test('level-one and later legal fixed items retain the partial coefficient screen as cultivation grows',()=>{
  let firstLevelCases=0
  for(let level=1;level<=30;level++){
   const base=100*cultivationAt(cultivationLevelXp(level)).attackMultiplier
-  for(const d of WEAPONS.filter(d=>d.quality&&equipmentTier(d.tier).minLevel<=level)){
+  for(const d of WEAPONS.filter(d=>d.quality&&(d.minLevel??equipmentTier(d.tier).minLevel)<=level)){
    const w=weapon(d),flat=Math.max(...sources.map(([skill,type])=>weaponDamageModifiers(w,skill,type).flat))
-   for(const rd of ringDefs.filter(d=>equipmentTier(d.tier).minLevel<=level)){
+   for(const rd of ringDefs.filter(d=>(d.minLevel??equipmentTier(d.tier).minLevel)<=level)){
     const r=ring(rd),m=ringDamageModifiers(r),cdr=ringCooldownReduction(r)
     for(const p of [0,.04,.11])for(const bone of [0,.135]){
-     const native=.5/(1+bone)
-     const ratio=(base+weaponFlatAttack(w))/(base+5)*(1+flat+(m.skillDamage||0)+Math.min(1,p+m.critChance)*(native+m.critBonus)+m.special)/(1+p*native)/(1-cdr)
+     const ratio=(base+weaponFlatAttack(w))/(base+5)*((1+flat)*(1+(m.skillDamage||0))+bone)/(1+bone)*(1+Math.min(1,p+m.critChance)*(.5+m.critBonus))/(1+p*.5)/(1-cdr)
      assert.ok(ratio<=6+1e-12);if(level===1)firstLevelCases++
     }
    }
