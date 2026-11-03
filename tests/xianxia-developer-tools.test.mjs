@@ -72,17 +72,20 @@ test('paused stage and supply changes survive resume and settlement without beco
 })
 
 
-test('stage rebase preserves equipped armor pending recovery and rejects stale writes',async()=>{
+test('stage rebase preserves equipped armor recovery ledger and rejects stale writes',async()=>{
  const {rollEquipment}=await import('../js/xianxia/TowerEquipment.js')
  const {store}=fixture(),state=structuredClone(store.state)
- const armor=rollEquipment('armor','fan',4,()=>.5,'test-armor')
+ const armor=rollEquipment('armor','fan',1,()=>.5,'test-armor')
  state.equipment[armor.id]=armor;state.loadouts[0].armorId=armor.id
  const run=new TowerRun({attemptId:1,floor:1,seed:123,hp:50,xp:0,loadout:combatLoadout(state)})
- run._scheduleArmorHeal(20)
- assert.ok(run.state.armorState.pending)
+ run.setPlaytestAssist(true)
+ for(let i=0;i<80;i++)run.advance(.05)
+ assert.ok(run.state.armorState.healedTotal>0)
+ const recovery=structuredClone(run.state.armorState)
  run.pause();assert.ok(validateTowerSnapshot(run.snapshot()))
  const hp=run.state.player.hp
  run.setDeveloperCultivation(225)
+ assert.deepEqual(run.state.armorState,recovery)
  assert.equal(run.state.player.hp,hp)
  assert.ok(validateTowerSnapshot(run.snapshot()))
  for(const type of ['playtestResources','playtestNextStage']){

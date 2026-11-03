@@ -24,10 +24,11 @@ function fixture(patch = {}) {
   if (patch.skills && !patch.skillsInitialized) patch = { ...patch, skills: { sj_arc: 1, ...patch.skills } }
   const disk = storage()
   const initial = new TowerProfileStore(disk, 0)
-  const state = { ...JSON.parse(JSON.stringify(initial.state)), ...patch }
+  const state = { ...JSON.parse(JSON.stringify(initial.state)), ...patch,
+    pills: { ...initial.state.pills, ...patch.pills } }
   const data = JSON.stringify(state)
   disk.records.set(TOWER_PROFILE_KEY, JSON.stringify({
-    format: 'xianxia-sect-tower-profile', schema: 1, data, checksum: checksum(data),
+    format: 'xianxia-sect-tower-profile', schema: 5, data, checksum: checksum(data),
   }))
   return { disk, store: new TowerProfileStore(disk, 0) }
 }
@@ -54,7 +55,9 @@ test('profile and medicine stay aligned with the approved generated economy', ()
   const { store } = fixture({ hp: spec.health_rules.death_return_hp })
   assert.deepEqual(store.state.skills, spec.starter.learned)
   assert.equal(store.state.cores, spec.starter.core_units)
-  assert.equal(store.state.contribution, spec.starter.contribution)
+  // This retained standalone Profile adapter predates the Campaign wallet; it
+  // retains its independent 300-credit contract and storage key.
+  assert.equal(store.state.contribution, 300)
   assert.equal(store.state.pills.huichun, spec.starter.supplies['回春丹'])
   const healed = store.act({ type: 'sync' }, MINUTE).hp - spec.health_rules.death_return_hp
   assert.equal(healed, 100 * spec.health_rules.out_of_combat_regen_max_hp_fraction_per_minute)
@@ -66,7 +69,8 @@ test('new mode starts once with its own resources and three healing pills', () =
   assert.equal(store.state.contribution, 300)
   assert.equal(store.state.cores, 20)
   assert.deepEqual(store.state.skills, { sj_yujian: 1 })
-  assert.deepEqual(store.state.pills, { huichun: 3, peiyuan: 0 })
+  assert.deepEqual(store.state.pills, Object.fromEntries(
+    Object.keys(CAMP_PILLS).map(id => [id, id === 'huichun' ? 3 : 0])))
   assert.equal(store.state.hp, 100)
   assert.equal(store.act({ type: 'buyPill', id: 'huichun', count: 1 }, 123).cost, 5)
   const reload = new TowerProfileStore(disk, 123)
@@ -76,20 +80,23 @@ test('new mode starts once with its own resources and three healing pills', () =
   assert.throws(() => { reload.state.pills.huichun = 99 }, TypeError)
 })
 
-test('cultivation boundaries retain 27 levels with separate compounded attack and HP growth', () => {
+test('cultivation boundaries retain 30 levels with separate compounded attack and HP growth', () => {
   assert.equal(cultivationAt(44).level, 1)
   assert.equal(cultivationAt(45).level, 2)
   assert.equal(cultivationAt(10919).level, 26)
-  assert.deepEqual(cultivationAt(10920), {
-    level: 27, realm: '金丹', maxHp: 1155.6801893620116,
-    attackMultiplier: 11.556801893620115, capped: true,
+  assert.equal(cultivationAt(10920).level, 27)
+  assert.equal(cultivationAt(10920).capped, false)
+  assert.deepEqual(cultivationAt(14400), {
+    level: 30, realm: '金丹', layer: 10, consummated: true, breakthroughReady: false,
+    xpStart: 13485, xpEnd: 14400, maxHp: 100 * 1.08 ** 27 * 1.35 ** 2,
+    attackMultiplier: 1.08 ** 27 * 1.35 ** 2, capped: true,
   })
-  for (const xp of [-1, 10921, NaN, Infinity, 1.5]) assert.throws(() => cultivationAt(xp))
+  for (const xp of [-1, 14401, NaN, Infinity, 1.5]) assert.throws(() => cultivationAt(xp))
 })
 
 test('offline camp healing is 1% max HP per minute, capped and persisted once', () => {
   const { store, disk } = fixture({ xp: TOWER_XP_CAP, hp: 1 })
-  const maxHp = 1155.6801893620116
+  const maxHp = 100 * 1.08 ** 27 * 1.35 ** 2
   assert.equal(store.act({ type: 'sync' }, MINUTE).hp, 1 + maxHp * .01)
   const reload = new TowerProfileStore(disk, MINUTE)
   assert.equal(reload.act({ type: 'sync' }, MINUTE).hp, 1 + maxHp * .01)
@@ -98,7 +105,7 @@ test('offline camp healing is 1% max HP per minute, capped and persisted once', 
 })
 
 test('high-realm medicine uses the new HP ceiling and preserves atomic save and reload behavior', () => {
-  const maxHp = 1155.6801893620116
+  const maxHp = 100 * 1.08 ** 27 * 1.35 ** 2
   const { store, disk } = fixture({ xp: TOWER_XP_CAP, hp: 100 })
   assert.equal(store.readOnly, false)
   disk.fail = true
@@ -171,9 +178,10 @@ test('battle rejects medicine purchase, usage and a second start, even after rel
   reject(reload, disk, { type: 'beginAttempt' }, 'in-tower', MINUTE)
 })
 
-test('medicine has only the two camp identities, contribution prices and clamped effects', () => {
+test('legacy profile medicine preserves healing, contribution prices and clamped effects', () => {
   const { store, disk } = fixture({ hp: 30 })
-  assert.deepEqual(Object.keys(CAMP_PILLS), ['huichun', 'peiyuan'])
+  assert.equal(CAMP_PILLS.huichun.price, 5)
+  assert.equal(CAMP_PILLS.peiyuan.price, 20)
   assert.equal(store.act({ type: 'usePill', id: 'huichun' }, 0).healed, 50)
   assert.equal(store.state.hp, 80)
   assert.equal(store.act({ type: 'usePill', id: 'huichun' }, 0).healed, 20)
@@ -189,10 +197,10 @@ test('medicine has only the two camp identities, contribution prices and clamped
 
 test('cultivation pill stops at 金丹圆满, does not bank overflow or consume at cap', () => {
   const { store, disk } = fixture({
-    xp: 10919, hp: 50, pills: { zhuji: 0, huichun: 3, peiyuan: 2 },
+    xp: 14399, hp: 50, pills: { zhuji: 0, huichun: 3, peiyuan: 2 },
   })
   assert.equal(store.act({ type: 'usePill', id: 'peiyuan' }, 0).gained, 1)
-  assert.equal(store.state.xp, 10920)
+  assert.equal(store.state.xp, 14400)
   assert.equal(store.state.hp, 50)
   assert.equal(store.state.pills.peiyuan, 1)
   reject(store, disk, { type: 'usePill', id: 'peiyuan' }, 'cultivation-capped')
@@ -267,7 +275,7 @@ test('corrupt, unknown-schema and unavailable saves cannot be overwritten', () =
 
 test('invalid checksummed state is rejected, not silently reset or repaired', () => {
   for (const patch of [
-    { hp: 0 }, { hp: 121 }, { xp: 10921 }, { contribution: -1 },
+    { hp: 0 }, { hp: 121 }, { xp: 14401 }, { contribution: -1 },
     { pills: { zhuji: 0, huichun: 1, peiyuan: 0, attack: 1 } },
     { activeAttempt: { id: 4, startedAt: 0 } },
   ]) {

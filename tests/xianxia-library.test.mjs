@@ -64,7 +64,7 @@ test('search and chapters are deterministic, detached, and do not expose unrelat
 test('medicine amounts, prices, cap, and non-consumption rules follow camp definitions', () => {
   const healing = libraryDetails('pill_huichun')
   assert.ok(healing.effects.some(text => text.includes(`${CAMP_PILLS.huichun.healShare * 100}%`)))
-  assert.ok(healing.source.includes(`${CAMP_PILLS.huichun.price}贡献`))
+  assert.ok(healing.source.includes(`${CAMP_PILLS.huichun.price}下品灵石`))
   assert.match(healing.conditions.join(' '), /满血.*不消耗/)
   assert.match(healing.conditions.join(' '), /塔内不可服用/)
   const training = libraryDetails('pill_peiyuan')
@@ -90,19 +90,30 @@ test('initial equipment has no realm prerequisite; all others show their actual 
 test('weapon descriptions show the unique fixed identity rather than random ranges', () => {
   for(const d of WEAPONS.filter(d=>d.quality)) assert.deepEqual(libraryDetails(d.id).effects,weaponDescription(createFixedWeapon(d.id,'library-test')))
 })
-test('ring descriptions show concise fixed crit and cooldown attributes', () => {
+test('ring descriptions preserve distinct burst and cadence attributes', () => {
   for(const d of EQUIPMENT.filter(d=>d.category==='ring'&&d.quality)) {
     const details=libraryDetails(d.id), text=details.effects.join(' ')
     assert.deepEqual(details.effects,equipmentDescription(createFixedEquipment(d.id,'library-test')))
-    assert.match(text,/暴击伤害 \+/);assert.match(text,/所有技能冷却时间 -/)
-    assert.doesNotMatch(text,/[：；]|不缩短|独立判定/)
+    if(['transition','burst','graduate'].includes(d.role)){
+      assert.match(text,/暴击伤害 \+/);assert.doesNotMatch(text,/所有技能冷却时间 -/)
+    } else {
+      assert.match(text,/所有技能冷却时间 -/);assert.doesNotMatch(text,/暴击伤害 \+/)
+    }
+    assert.doesNotMatch(text,/不缩短|独立判定/)
+    for(const line of details.effects)assert.doesNotMatch(line,/[：；]/)
   }
 })
-test('armor descriptions list defenses and periodic recovery without explanations', () => {
+test('armor descriptions list defenses and distinguish conditional periodic recovery', () => {
   for(const d of EQUIPMENT.filter(d=>d.category==='armor'&&d.quality)) {
     const details=libraryDetails(d.id), text=details.effects.join(' ')
     assert.deepEqual(details.effects,equipmentDescription(createFixedEquipment(d.id,'library-test')))
-    assert.match(text,/物理防御 \+/);assert.doesNotMatch(text,/法术防御 \+/);assert.match(text,/气血回复 \+[\d.]+%\/3秒/);assert.doesNotMatch(text,/[：；]/)
+    assert.match(text,/物理防御 \+/);assert.doesNotMatch(text,/法术防御 \+/);assert.match(text,/气血回复 \+[\d.]+%\/3秒/)
+    for(const line of details.effects){
+      if(d.id==='eq_armor_chengxiao'&&line.startsWith('连续4秒未受伤：'))
+        assert.match(line,/^连续4秒未受伤：每3秒气血回复额外 \+[\d.]+%（总回复上限2.5%）$/)
+      else assert.doesNotMatch(line,/[：；]/)
+    }
+    if(d.id==='eq_armor_chengxiao')assert.match(text,/连续4秒未受伤.*3秒.*总回复上限2.5%/)
   }
 })
 

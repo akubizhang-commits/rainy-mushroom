@@ -42,7 +42,7 @@ test('four grade-specific additive grants are exact, normalized and isolated fro
 })
 
 test('resource menu exposes one combined repeatable grant',()=>{
- assert.deepEqual(PLAYTEST_RESOURCE_ACTIONS,[{label:'+999灵石、贡献',action:{type:'playtestResources'}}])
+ assert.deepEqual(PLAYTEST_RESOURCE_ACTIONS,[{label:'+999灵石、点眷',action:{type:'playtestResources'}}])
  const f=setup(),before=f.store.state.spiritStones
  for(let i=1;i<=2;i++){
   assert.equal(f.store.act(PLAYTEST_RESOURCE_ACTIONS[0].action,0).ok,true)
@@ -109,11 +109,11 @@ test('camp max level follows official XP/SP and camp health semantics, with no f
  const f=fixture({xp:50,hp:12.5,skills:{sj_arc:2}}),before=f.store.state
  const result=f.store.act({type:'playtestMaxLevel'},0)
  assert.equal(result.ok,true);assert.equal(f.store.state.xp,TOWER_XP_CAP)
- assert.equal(cultivationAt(f.store.state.xp).level,27)
+ assert.equal(cultivationAt(f.store.state.xp).level,30)
  assert.equal(f.store.state.hp,before.hp)
  assert.deepEqual(f.store.state.skills,before.skills)
  assert.equal(f.store.state.clearedFloor,0);assert.equal(f.store.state.researchPurchases,0)
- assert.deepEqual(growthSummary(f.store.state),{total:30,spent:1,available:29,realm:30,firstClear:0,research:0,cap:38})
+ assert.deepEqual(growthSummary(f.store.state),{total:48,spent:1,available:47,realm:48,firstClear:0,research:0,cap:80})
  const capped=structuredClone(f.store.state)
  assert.equal(f.store.act({type:'playtestMaxLevel'},0).gained,0)
  assert.deepEqual(f.store.state,capped)
@@ -154,7 +154,7 @@ test('real first-clear rewards preserve elevated wallets and saturate safely at 
   assert.equal(run.state.phase,'won');assert.ok(validateTowerSnapshot(run.snapshot()))
   const result=f.store.act({type:'finishFloor',snapshot:run.snapshot()},0)
   assert.equal(result.ok,true);assert.equal(result.firstClear,true)
-  const credited=Math.min(run.state.earned.cores*10+FIRST_CLEAR_REWARDS[0].amount,PLAYTEST_STONE_CAP-initial)
+  const credited=Math.min(run.state.earned.cores*10,PLAYTEST_STONE_CAP-initial)
   assert.equal(f.store.state.spiritStones,initial+credited)
   assert.equal(result.earned.spiritStones,credited)
   assert.deepEqual(new TowerCampaignStore(f.adapter,0).state,f.store.state)
