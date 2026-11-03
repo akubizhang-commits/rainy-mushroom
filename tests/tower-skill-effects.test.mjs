@@ -16,6 +16,7 @@ class Graphics {
  fill(){this.calls.push(['fill',this.fillColor.a])}
  stroke(){this.calls.push(['stroke',this.strokeColor.a,this.lineWidth])}
 }
+const WeaponQualityArt=runInNewContext(`(()=>{${source('WeaponQualityArt')};return WeaponQualityArt})()`,{Color})
 function fixture(){
  const poses=[]
  const skillForm=(id,level,parent)=>({id,shape:'orbit',swords:id==='evo_wuwo'?(level===2?12:8):level>=10?8:level>=6?6:level>=3?5:4,
@@ -233,7 +234,7 @@ test('passive feedback only follows real hit and enemy wound states, no passive 
  art.draw(g,state,camera);assert.ok(g.calls.some(c=>c[0]==='line'));assert.equal(g.calls.filter(c=>c[0]==='circle').length,0)
 })
 test('all primary releases can trigger the existing character slash, with deterministic simultaneous priority',()=>{
- const Art=runInNewContext(`(()=>{${source('TowerCharacterArt')};return TowerCharacterArt})()`,{Color})
+ const Art=runInNewContext(`(()=>{${source('TowerCharacterArt')};return TowerCharacterArt})()`,{Color,WeaponQualityArt})
  for(const skill of ['sj_yujian','sj_arc','sj_cross','sj_line','sj_shadow','sj_formation','evo_wanjian','evo_tiandi','evo_sixiang']){
   const a=new Art();a.observeCast({skill,startedAt:1,releaseAt:1.2,dirX:-1,dirY:0})
   assert.ok(a.attack,skill);assert.equal(a.attack.face,-1)
@@ -244,7 +245,7 @@ test('all primary releases can trigger the existing character slash, with determ
 })
 
 test('sword-line and crescent continuation hits cannot restart the committed character action',()=>{
- const Art=runInNewContext(`(()=>{${source('TowerCharacterArt')};return TowerCharacterArt})()`,{Color})
+ const Art=runInNewContext(`(()=>{${source('TowerCharacterArt')};return TowerCharacterArt})()`,{Color,WeaponQualityArt})
  const a=new Art()
  const event=(skill,pulseIndex,time)=>({skill,pulseIndex,pulseCount:3,startedAt:time,releaseAt:time,dirX:1,dirY:0})
  a.observeCast(event('sj_line',2,.3))
@@ -267,7 +268,7 @@ test('sword-line and crescent continuation hits cannot restart the committed cha
 })
 
 test('saved body actions use their own release, recovery and locked attack facing',()=>{
- const Art=runInNewContext(`(()=>{${source('TowerCharacterArt')};return TowerCharacterArt})()`,{Color})
+ const Art=runInNewContext(`(()=>{${source('TowerCharacterArt')};return TowerCharacterArt})()`,{Color,WeaponQualityArt})
  const a=new Art()
  assert.equal(typeof a.syncAction,'function')
  a.syncAction({time:1.05,player:{faceX:-1},actions:{current:null,basic:{

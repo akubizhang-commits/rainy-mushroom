@@ -85,7 +85,7 @@ function fixture({ synchronous = false, throwLoad = false, throwTexture = false 
     icon.addChild(glyph)
     loader.attach(icon, glyph, id, learned)
     const badge = new Node(`技能等级-${id}`); icon.addChild(badge)
-    const clip = icon.children.find(node => node.name === `技能素材裁剪-${id}`)
+    const clip = icon.children.find(node => node.name === `功法素材裁剪-${id}`)
     return { icon, glyph, badge, clip, sprite: clip?.children[0].getComponent(Sprite) }
   }
   async function complete(index, error = null, image = new ImageAsset()) {

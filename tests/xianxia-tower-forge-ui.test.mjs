@@ -1,3 +1,5 @@
+import { mixedTopItems, mixedTierUnlocked } from '../js/xianxia/TowerMixedDraw.js'
+import { equipmentSkillBonus } from '../js/xianxia/TowerEquipmentSkillLevels.js'
 import * as forgingTools from '../js/xianxia/TowerForging.js'
 import * as forgingMaterials from '../js/xianxia/TowerForgeMaterials.js'
 import * as equipmentSources from '../js/xianxia/TowerEquipmentSources.js'
@@ -20,12 +22,12 @@ import * as content from '../js/xianxia/TowerContent.js'
 import * as profile from '../js/xianxia/TowerProfile.js'
 import * as loot from '../js/xianxia/TowerLoot.js'
 import * as economy from '../js/xianxia/TowerEconomy.js'
-import { stats as combatStats } from '../js/xianxia/TowerRun.js'
+import { stats as combatStats, characterCombatAttributes } from '../js/xianxia/TowerRun.js'
 import { checksum } from '../js/xianxia/Checksum.js'
 
 // Independent forge UI harness: real menu/business code, simulated Cocos scene graph.
 // Intentionally does not import or execute the shared host-tools test suite.
-const sources = Object.fromEntries(['TowerPreferences', 'TowerMenuChrome', 'TowerMonsterArt', 'TowerStoneArt', 'TowerSectScene', 'TowerSkillIcons', 'TowerSkillTreeCatalog', 'TowerSkillTreeLayout', 'TowerPlayerHud', 'TowerInventoryPanel', 'TowerMenu'].map(name => [name,
+const sources = Object.fromEntries(['TowerPreferences', 'TowerMenuChrome', 'TowerMonsterArt', 'TowerStoneArt', 'WeaponQualityArt', 'TowerCharacterArt', 'TowerSectScene', 'TowerSkillIcons', 'TowerSkillTreeCatalog', 'TowerSkillTreeLayout', 'TowerPlayerHud', 'TowerInventoryPanel', 'TowerMenu'].map(name => [name,
  stripTypeScriptTypes(readFileSync(new URL(`../cocos-pilot/assets/scripts/${name}.ts`, import.meta.url), 'utf8').replace(/^import .*$/gm, ''), {mode:'transform'}).replace(/^export /gm, '')]));
 class Node {
   static EventType = { TOUCH_START: 'start', TOUCH_MOVE: 'move', TOUCH_END: 'end', TOUCH_CANCEL: 'cancel' }
@@ -61,9 +63,9 @@ class Graphics {
   clear() { this.arcCalls.length = 0 }
   arc(...args) { if (this.recordArcs) this.arcCalls.push(args) }
   roundRect() {} rect() {} fill() {} stroke() {}
-  moveTo(x, y) { if (this.node?.name === '技能前置连线') this.pathPoint = { x, y } }
+  moveTo(x, y) { if (this.node?.name === '功法前置连线') this.pathPoint = { x, y } }
   lineTo(x, y) {
-    if (this.node?.name === '技能前置连线' && this.pathPoint) {
+    if (this.node?.name === '功法前置连线' && this.pathPoint) {
       this.segments.push({ from: this.pathPoint, to: { x, y }, color: this.strokeColor.r })
       this.pathPoint = { x, y }
     }
@@ -110,6 +112,9 @@ class SpriteFrame {
   isValid = true
   destroy() { this.isValid = false }
 }
+class JsonAsset { json = {} }
+class Rect { constructor(x,y,width,height) { Object.assign(this,{x,y,width,height}) } }
+class Size { constructor(width,height) { Object.assign(this,{width,height}) } }
 class Color { constructor(r, g, b, a) { Object.assign(this, { r, g, b, a }) } }
 class Vec2 { constructor(x, y) { Object.assign(this, { x, y }) } }
 class ScrollView {
@@ -137,8 +142,8 @@ class TowerLibraryPanelBoundary {
  destroy() { this.root.destroy(); }
 }
 
-const context = { ...forgingTools, ...forgingMaterials, ...equipmentSources, ...alchemyTools, ...tierTools, ...inventoryTools, ...weaponTools, ...equipmentTools, ...craftingTools, ...campaign, ...growth, ...content, ...profile, ...pillTools, ...loot, ...economy,
- sys:{localStorage:{getItem:()=>null,setItem(){}}}, skillPresentation, combatStats, Node, UITransform, Graphics, Label, LabelOutline: class {}, LabelShadow: class {}, Button, Sprite, SpriteFrame, ImageAsset, Texture2D, Color, Vec2, ScrollView, Mask, BlockInputEvents,
+const context = { mixedTopItems, mixedTierUnlocked, ...forgingTools, ...forgingMaterials, ...equipmentSources, ...alchemyTools, ...tierTools, ...inventoryTools, ...weaponTools, ...equipmentTools, ...craftingTools, ...campaign, ...growth, ...content, ...profile, ...pillTools, ...loot, ...economy,
+ sys:{localStorage:{getItem:()=>null,setItem(){}}}, skillPresentation, combatStats, characterCombatAttributes, equipmentSkillBonus, JsonAsset, Rect, Size, Node, UITransform, Graphics, Label, LabelOutline: class {}, LabelShadow: class {}, Button, Sprite, SpriteFrame, ImageAsset, Texture2D, Color, Vec2, ScrollView, Mask, BlockInputEvents,
  TowerLibraryPanel: TowerLibraryPanelBoundary,
  isValid: value => value?.isValid === true, resources: {load() {}} };
 for (const [key, result] of [
@@ -146,11 +151,13 @@ for (const [key, result] of [
  ['TowerMenuChrome','{drawMenuVeil,drawMenuClose,MENU_COLORS,ITEM_COLORS,BOOK_COLORS}'],
  ['TowerMonsterArt','{TowerMonsterArt}'],
  ['TowerStoneArt','{TowerStoneArt}'],
+ ['WeaponQualityArt','{WeaponQualityArt}'],
+ ['TowerCharacterArt','{TowerCharacterArt}'],
  ['TowerSectScene','{TowerSectScene}'],
  ['TowerSkillIcons','TowerSkillIcons'],
  ['TowerSkillTreeCatalog','{TREE_BRANCHES, COMMON_SKILL_IDS, FUTURE_SKILLS, DISPLAY_STAGES, COLUMN_INDEX, TREE_COLUMNS}'],
  ['TowerSkillTreeLayout','{layoutSkillTree}'],
- ['TowerPlayerHud','{createPlayerHud,drawPlayerHp,drawPlayerXp,drawHudPortrait,drawHudActionIcon,SETTINGS_ICON_SIZE}'],
+ ['TowerPlayerHud','{createPlayerHud,drawPlayerHp,drawPlayerMana,drawPlayerXp,drawHudPortrait,drawHudActionIcon,SETTINGS_ICON_SIZE}'],
  ['TowerInventoryPanel','{TowerInventoryPanel}']]) {
  const value = runInNewContext('(() => {'+sources[key]+';return '+result+'})()',context);
  if (key==='TowerSkillIcons') context.TowerSkillIcons=value; else Object.assign(context,value);
@@ -193,17 +200,22 @@ function inside(node, ancestor) {
 const rich={xp:profile.cultivationLevelXp(21),spiritStones:100000,contribution:100000,
  pills:Object.fromEntries(Object.keys(forgingMaterials.FORGE_MATERIALS).map(id=>[id,10000]))};
 function selectRecipe(menu,category,tier,quality=1){
- click(menu,{weapon:'武器',armor:'防具',ring:'戒指'}[category]);
- click(menu,['','下品','中品','上品','极品'][quality]);
  const recipe=forgingTools.forgingRecipe(`${category}:${tier}:q${quality}`);
- click(menu,recipe.name);return recipe;
+ if(menu.gearMode==='buy'){
+  click(menu,'分类-'+category);
+  click(menu,'商品卡片-'+recipe.id);
+ }else{
+  click(menu,'分类-'+tier);
+  click(menu,'配方卡片-'+recipe.id);
+ }
+ return recipe;
 }
 function action(store,category='weapon',count=1,tier='fan'){
  const sequence=store.state.forgeSequence+1;
  return{type:tier==='fan'?'buyGear':'craftGear',id:`${category}:${tier}:q1`,count,sequence,requestId:`test-${sequence}`};
 }
 function namesFor(recipe){return recipe.definitionIds.map(id=>{const item=forgingTools.createForgedGear(recipe.id,'preview',id);return recipe.category==='weapon'?weaponTools.weaponName(item):equipmentTools.equipmentName(item);});}
-function batch(menu,count=10){for(let i=1;i<count;i++)click(menu,'＋');}
+function batch(menu,count=10){for(let i=1;i<count;i++)click(menu,'增加数量');}
 for(const [width,height] of [[1280,720],[844,390]]){
  test(`forge hall only sells deterministic fan equipment ${width}x${height}`,()=>{
   const {menu,store,calls}=setup(width,height,rich),before=copy(store.state);click(menu,'炼器主殿');
@@ -221,24 +233,24 @@ for(const [width,height] of [[1280,720],[844,390]]){
  test(`crafting preview covers every formal quality pool without spending ${width}x${height}`,()=>{
   const {menu,store,calls}=setup(width,height,rich),before=copy(store.state);click(menu,'炼器炉');
   for(const category of ['weapon','armor','ring'])for(const quality of [1,2,3,4])for(const tier of ['fa','bao','ling']){
-   const r=selectRecipe(menu,category,tier,quality),contents=text(find(menu,'炼器配方详情'));
+   const r=selectRecipe(menu,category,tier,quality),contents=text(find(menu,'炼制详情'));
    assert.ok(contents.includes(r.definitionIds.length===3?'1/3':'1/2'));
    for(const name of namesFor(r))assert.ok(contents.includes(name),name);
    assert.ok(contents.includes('点击成品设心愿'));
-   assert.ok(find(menu,'炼器配方详情').getComponent(ScrollView).vertical);
+   assert.ok(find(menu,'炼制详情').getComponent(ScrollView).vertical);
   }
   assert.deepEqual(copy(store.state),before);assert.equal(calls.length,0);
  });
  test(`forge overlay controls and independent scroll panes stay in bounds ${width}x${height}`,()=>{
   const {menu}=setup(width,height,rich);click(menu,'炼器炉');selectRecipe(menu,'weapon','ling',4);
-  const panel=find(menu,'炼器工坊');inside(panel,menu.root);
-  for(const name of ['关闭炼器工坊','前往背包','武器','防具','戒指','下品','中品','上品','极品','−','＋','开始炼制','炼器配方列表','炼器配方详情'])inside(find(menu,name),panel);
+  const panel=find(menu,'炼器页');inside(panel,menu.root);
+  for(const name of ['关闭炼器工坊','前往背包','武器','防具','戒指','下品','中品','上品','极品','−','＋','开始炼制','配方列表','炼制详情'])inside(find(menu,name),panel);
   for(const name of ['开始炼制','关闭炼器工坊','极品'])assert.ok(find(menu,name).getComponent(UITransform).contentSize.height*width/1280>=44);
-  assert.notEqual(find(menu,'炼器配方列表').getComponent(ScrollView),find(menu,'炼器配方详情').getComponent(ScrollView));
+  assert.notEqual(find(menu,'配方列表').getComponent(ScrollView),find(menu,'炼制详情').getComponent(ScrollView));
  });
  test(`batch purchase debounces callback and reports only persisted awards ${width}x${height}`,()=>{
   const {menu,store,calls,data}=setup(width,height,rich);click(menu,'炼器主殿');selectRecipe(menu,'armor','fan');batch(menu);
-  const before=copy(store.state),callback=find(menu,'购买装备').events.get(Button.EventType.CLICK);callback();callback();
+  const before=copy(store.state),callback=find(menu,'确认购买').events.get(Button.EventType.CLICK);callback();callback();
   assert.equal(calls.length,1);assert.equal(calls[0].count,10);assert.equal(calls[0].type,'buyGear');
   assert.equal(store.state.spiritStones,before.spiritStones-150);assert.equal(store.state.contribution,before.contribution-90);
   const ids=store.state.forgeReceipts.at(-1).ids;assert.equal(new Set(ids).size,10);
@@ -250,10 +262,10 @@ for(const [width,height] of [[1280,720],[844,390]]){
   assert.deepEqual(copy(store.state),after);assert.equal(data.get(campaign.TOWER_CAMPAIGN_KEY),saved);assert.equal(calls.length,1);
  });
  test(`single purchase creates one award and inventory retains the same identity ${width}x${height}`,()=>{
-  const {menu,store,calls}=setup(width,height);click(menu,'炼器主殿');click(menu,'购买装备');
+  const {menu,store,calls}=setup(width,height);click(menu,'炼器主殿');selectRecipe(menu,'weapon','fan');click(menu,'确认购买');
   const receipt=store.state.forgeReceipts.at(-1),id=receipt.ids[0];assert.equal(receipt.ids.length,1);
   const item=store.state.weapons[id];assert.ok(text(menu.root).includes(weaponTools.weaponName(item)));
-  const before=copy(store.state);click(menu,'前往背包');find(menu,`背包物品-${id}`);
+  const before=copy(store.state);click(menu,'确认获得');click(menu,'关闭炼器工坊');click(menu,'背包');find(menu,`背包物品-${id}`);
   assert.deepEqual(copy(store.state),before);assert.equal(calls.length,1);
  });
  test(`forge details have no wish controls ${width}x${height}`,()=>{
@@ -272,7 +284,7 @@ for(const [width,height] of [[1280,720],[844,390]]){
 test('crafting lists only tiers the current realm can use',()=>{
  for(const level of [1,3,4,10,11,20,21,27]){
   const {menu,store,calls}=setup(844,390,{xp:profile.cultivationLevelXp(level)});click(menu,'炼器炉');
-  const before=copy(store.state),list=text(find(menu,'炼器配方列表'));
+  const before=copy(store.state),list=text(find(menu,'配方列表'));
   for(const tier of tierTools.OPEN_EQUIPMENT_TIERS){const r=forgingTools.forgingRecipe(`weapon:${tier}:q1`);assert.equal(list.includes(r.name),tierTools.canUseEquipmentTier(tier,level));}
   for(const q of ['中品','上品','极品'])assert.equal(find(menu,q).getComponent(Button).interactable,level>=4);
   assert.deepEqual(copy(store.state),before);assert.equal(calls.length,0);
@@ -312,11 +324,11 @@ test('armor and ring pools never cross category or quality during batch crafting
  }
 });
 test('disabled, closed, destroyed and stale-generation callbacks cannot purchase',()=>{
- const {menu,store,calls}=setup(844,390,{spiritStones:0,contribution:0});click(menu,'炼器主殿');
- const before=copy(store.state);find(menu,'购买装备').events.get(Button.EventType.CLICK)();assert.equal(calls.length,0);assert.deepEqual(copy(store.state),before);
- const f=setup();click(f.menu,'炼器主殿');const stale=find(f.menu,'购买装备').events.get(Button.EventType.CLICK);
- click(f.menu,'关闭炼器工坊');stale();assert.equal(f.calls.length,0);
- click(f.menu,'炼器主殿');const dead=find(f.menu,'购买装备').events.get(Button.EventType.CLICK);f.menu.destroy();dead();assert.equal(f.calls.length,0);
+ const {menu,store,calls}=setup(844,390,{spiritStones:0,contribution:0});click(menu,'炼器主殿');selectRecipe(menu,'weapon','fan');
+ const before=copy(store.state);find(menu,'确认购买').events.get(Button.EventType.CLICK)();assert.equal(calls.length,0);assert.deepEqual(copy(store.state),before);
+ const f=setup();click(f.menu,'炼器主殿');selectRecipe(f.menu,'weapon','fan');const stale=find(f.menu,'确认购买').events.get(Button.EventType.CLICK);
+ click(f.menu,'取消购买');click(f.menu,'关闭炼器工坊');stale();assert.equal(f.calls.length,0);
+ click(f.menu,'炼器主殿');selectRecipe(f.menu,'weapon','fan');const dead=find(f.menu,'确认购买').events.get(Button.EventType.CLICK);f.menu.destroy();dead();assert.equal(f.calls.length,0);
 });
 test('quality-four preview includes both graduates and never charges on view or presentation ticks',()=>{
  const {menu,store,calls}=setup(844,390,rich);click(menu,'炼器炉');const r=selectRecipe(menu,'weapon','ling',4),before=copy(store.state);
@@ -326,8 +338,8 @@ test('quality-four preview includes both graduates and never charges on view or 
 });
 test('close and revisit preserve state without retaining a pending submission',()=>{
  const {menu,store,calls}=setup();click(menu,'炼器主殿');const before=copy(store.state);
- const panel=find(menu,'炼器工坊'),close=find(menu,'关闭炼器工坊');inside(close,panel);assert.equal(text(close),'');
- click(menu,'关闭炼器工坊');assert.equal(all(menu.root).some(n=>n.name==='炼器工坊'),false);
+ const panel=find(menu,'武器装备购买页'),close=find(menu,'关闭炼器工坊');inside(close,panel);assert.equal(text(close),'');
+ click(menu,'关闭炼器工坊');assert.equal(all(menu.root).some(n=>n.name==='武器装备购买页'),false);
  click(menu,'炼器主殿');assert.equal(menu.gearCount,1);assert.equal(menu.gearRequest,null);
  assert.deepEqual(copy(store.state),before);assert.equal(calls.length,0);
 });
@@ -348,7 +360,7 @@ test('sect entries share cultivation state and keep tower separate from inherita
  click(menu,'宗门入口-凌霄剑峰');
  const inherited=text(menu.root);
  menu.render(store.state,'home');
- click(menu,'技能');
+ click(menu,'功法');
  assert.equal(text(menu.root),inherited);
  menu.render(store.state,'home');
  click(menu,'主峰建筑-洞府整备');
@@ -359,44 +371,51 @@ test('sect entries share cultivation state and keep tower separate from inherita
 });
 
 for (const [width,height] of [[1280,720],[844,390]]) {
- test(`danxia ${width}x${height}: main hall opens shop, purchase persists, close and revisit reset`,()=>{
+ test(`danxia ${width}x${height}: main hall opens shop, purchase persists, close and revisit reset`,async()=>{
   const {menu,store,calls,storage,data}=setup(width,height);
   menu.render(store.state,'pills');
   const initial=copy(store.state);
   find(menu,'sect-scene/danxia-courtyard');
   assert.equal(menu.scroll.node.active,false);
-  assert.equal(all(menu.root).some(n=>n.name==='丹药购买面板'),false);
+  assert.equal(all(menu.root).some(n=>n.name==='丹药购买页'),false);
   click(menu,'丹霞主殿');
-  const panel=find(menu,'丹药购买面板');
+  const panel=find(menu,'丹药购买页');
   inside(find(menu,'关闭丹药菜单'),panel);
   assert.deepEqual(copy(store.state),initial);
-  const card=find(menu,'丹药商品-huichun');
-  assert.equal(text(card).trim(), '回春丹\n5贡献');
-  click(menu,'丹药图标-huichun');
+  const card=find(menu,'商品卡片-huichun'),cardText=text(card).trim();
+  click(menu,'商品卡片-huichun');
   find(menu,'背包详情区');
   assert.equal(all(menu.root).some(n=>n.name==='物品操作区'),false);
-  assert.equal(all(menu.root).some(n=>n.name==='购买物品面板'),false);
-  click(menu,'关闭丹药详情');
-  click(menu,'丹药商品-huichun');
-  const buy=()=>find(menu,'购买');
+  const purchaseWasOpen=all(menu.root).some(n=>n.name==='购买物品弹窗');
+  click(menu,'取消购买');
+  click(menu,'商品卡片-huichun');
+  const buy=()=>find(menu,'确认购买');
   const first=buy(),stale=first.events.get(Button.EventType.CLICK);
-  inside(first,find(menu,'购买物品面板'));
+  inside(first,find(menu,'购买物品弹窗'));
   stale();stale();
   assert.equal(calls.length,1);
   assert.equal(store.state.pills.huichun,initial.pills.huichun+1);
-  assert.equal(store.state.contribution,initial.contribution-profile.CAMP_PILLS.huichun.price);
+  assert.equal(calls[0].type,'buyPill');
+  assert.equal(new campaign.TowerCampaignStore(storage,1800000000000).state.pills.huichun,store.state.pills.huichun);
+  const purchaseContribution=store.state.contribution;
   const before=copy(store.state),saved=data.get(campaign.TOWER_CAMPAIGN_KEY);
+  click(menu,'确认获得');click(menu,'商品卡片-huichun');
+  await new Promise(resolve=>setTimeout(resolve,710));
   storage.fail=true;buy().events.get(Button.EventType.CLICK)();
   assert.deepEqual(copy(store.state),before);
   assert.equal(data.get(campaign.TOWER_CAMPAIGN_KEY),saved);
   assert.match(text(menu.root),/保存失败/);
   storage.fail=false;
-  click(menu,'关闭购买物品');
+  click(menu,'取消购买');
   click(menu,'关闭丹药菜单');
-  assert.equal(all(menu.root).some(n=>n.name==='丹药购买面板'),false);
+  assert.equal(all(menu.root).some(n=>n.name==='丹药购买页'),false);
   click(menu,'丹霞主殿');
   menu.render(store.state,'hall');menu.render(store.state,'pills');
-  assert.equal(all(menu.root).some(n=>n.name==='丹药购买面板'),false);
+  assert.equal(all(menu.root).some(n=>n.name==='丹药购买页'),false);
+  // Preserve the former presentation/economy assertions after exercising the transaction.
+  assert.equal(cardText, '回春丹\n5贡献');
+  assert.equal(purchaseWasOpen,false);
+  assert.equal(purchaseContribution,initial.contribution-profile.CAMP_PILLS.huichun.price);
  });
 }
 
@@ -418,22 +437,22 @@ test('equipment quality retains tier hue and gives top quality a stronger frame'
 
 for(const [width,height] of [[1280,720],[844,390]])test(`pill quantity and zero balance ${width}`,()=>{
  const {menu,store}=setup(width,height,{contribution:27,pills:{ zhuji: 0,huichun:0,peiyuan:0}});
- menu.render(store.state,'pills');click(menu,'丹霞主殿');click(menu,'丹药图标-peiyuan');
- find(menu,'背包详情区');click(menu,'关闭丹药详情');click(menu,'丹药商品-huichun');
- assert.equal(find(menu,'−').getComponent(Button).interactable,false);
- assert.equal(all(find(menu,'−')).find(n=>n.getComponent(Label)).getComponent(Label).string,'−');
- click(menu,'+');assert.equal(menu.apothecaryQuantity,2);
- click(menu,'−');assert.equal(menu.apothecaryQuantity,1);
- click(menu,'最大');assert.equal(menu.apothecaryQuantity,5);
- const panel=find(menu,'购买物品面板');
- for(const name of ['−','+','最大','购买','关闭购买物品'])inside(find(menu,name),panel);
- assert.match(text(panel),/25贡献/);
- click(menu,'购买');assert.equal(store.state.contribution,2);assert.equal(store.state.pills.huichun,5);
- assert.equal(find(menu,'购买').getComponent(Button).interactable,false);
+ menu.render(store.state,'pills');click(menu,'丹霞主殿');click(menu,'商品卡片-peiyuan');
+ find(menu,'背包详情区');click(menu,'取消购买');click(menu,'商品卡片-huichun');
+ assert.equal(find(menu,'减少数量').getComponent(Button).interactable,false);
+ assert.equal(all(find(menu,'减少数量')).find(n=>n.getComponent(Label)).getComponent(Label).string,'−');
+ click(menu,'增加数量');assert.equal(menu.apothecaryQuantity,2);
+ click(menu,'减少数量');assert.equal(menu.apothecaryQuantity,1);
+ click(menu,'最大数量');const selectedQuantity=menu.apothecaryQuantity;
+ const panel=find(menu,'购买物品弹窗');
+ for(const name of ['减少数量','增加数量','最大数量','确认购买','关闭交易弹窗'])inside(find(menu,name),panel);
+ const quotedText=text(panel);
+ click(menu,'确认购买');assert.equal(selectedQuantity,5);assert.match(quotedText,/25贡献/);assert.equal(store.state.contribution,2);assert.equal(store.state.pills.huichun,5);
+ assert.equal(find(menu,'确认购买').getComponent(Button).interactable,false);
 });
 
 for (const [page, opener, backdrop, panelName, closeName] of [
- ['pills', '丹霞主殿', '丹药购买遮罩', '丹药购买面板', '关闭丹药菜单'],
+ ['pills', '丹霞主殿', '丹药购买遮罩', '丹药购买页', '关闭丹药菜单'],
 ]) test(`${page}: icon close and outside dismissal preserve state without closing on content taps`, () => {
  const {menu,store,calls}=setup(844,390);
  menu.render(store.state,page);click(menu,opener);

@@ -1,3 +1,4 @@
+import { equipmentSkillBonus } from '../js/xianxia/TowerEquipmentSkillLevels.js'
 import * as forgingTools from '../js/xianxia/TowerForging.js'
 import * as forgingMaterials from '../js/xianxia/TowerForgeMaterials.js'
 import * as equipmentSources from '../js/xianxia/TowerEquipmentSources.js'
@@ -21,12 +22,12 @@ import * as content from '../js/xianxia/TowerContent.js'
 import * as profile from '../js/xianxia/TowerProfile.js'
 import * as loot from '../js/xianxia/TowerLoot.js'
 import * as economy from '../js/xianxia/TowerEconomy.js'
-import { stats as combatStats } from '../js/xianxia/TowerRun.js'
+import { stats as combatStats, characterCombatAttributes } from '../js/xianxia/TowerRun.js'
 import { checksum } from '../js/xianxia/Checksum.js'
 
 // Independent inventory UI harness: real menu/business code, simulated Cocos scene graph.
 // Intentionally does not import or execute the shared host-tools test suite.
-const sources = Object.fromEntries(['TowerPreferences', 'TowerMenuChrome', 'TowerMonsterArt', 'TowerStoneArt', 'TowerSkillIcons', 'TowerSkillTreeCatalog', 'TowerSkillTreeLayout', 'TowerPlayerHud', 'TowerInventoryPanel', 'TowerMenu'].map(name => [name,
+const sources = Object.fromEntries(['TowerPreferences', 'TowerMenuChrome', 'TowerMonsterArt', 'TowerStoneArt', 'WeaponQualityArt', 'TowerCharacterArt', 'TowerSkillIcons', 'TowerSkillTreeCatalog', 'TowerSkillTreeLayout', 'TowerPlayerHud', 'TowerInventoryPanel', 'TowerMenu'].map(name => [name,
  stripTypeScriptTypes(readFileSync(new URL(`../cocos-pilot/assets/scripts/${name}.ts`, import.meta.url), 'utf8').replace(/^import .*$/gm, ''), {mode:'transform'}).replace(/^export /gm, '')]));
 class Node {
   static EventType = { TOUCH_START: 'start', TOUCH_MOVE: 'move', TOUCH_END: 'end', TOUCH_CANCEL: 'cancel' }
@@ -67,9 +68,9 @@ class Graphics {
   clear() { this.arcCalls.length = 0 }
   arc(...args) { if (this.recordArcs) this.arcCalls.push(args) }
   roundRect() {} rect() {} fill() {} stroke() {}
-  moveTo(x, y) { if (this.node?.name === '技能前置连线') this.pathPoint = { x, y } }
+  moveTo(x, y) { if (this.node?.name === '功法前置连线') this.pathPoint = { x, y } }
   lineTo(x, y) {
-    if (this.node?.name === '技能前置连线' && this.pathPoint) {
+    if (this.node?.name === '功法前置连线' && this.pathPoint) {
       this.segments.push({ from: this.pathPoint, to: { x, y }, color: this.strokeColor.r })
       this.pathPoint = { x, y }
     }
@@ -117,6 +118,9 @@ class SpriteFrame {
   isValid = true
   destroy() { this.isValid = false }
 }
+class JsonAsset { json = {} }
+class Rect { constructor(x,y,width,height) { Object.assign(this,{x,y,width,height}) } }
+class Size { constructor(width,height) { Object.assign(this,{width,height}) } }
 class Color { constructor(r, g, b, a) { Object.assign(this, { r, g, b, a }) } }
 class Vec2 { constructor(x, y) { Object.assign(this, { x, y }) } }
 class ScrollView {
@@ -147,7 +151,7 @@ class TowerLibraryPanelBoundary {
 }
 
 const context = { ...mixedTools, ...forgingTools, ...forgingMaterials, ...equipmentSources, ...alchemyTools, ...tierTools, ...inventoryTools, ...weaponTools, ...equipmentTools, ...craftingTools, ...campaign, ...growth, ...content, ...profile, ...pillTools, ...loot, ...economy,
- sys:{localStorage:{getItem:()=>null,setItem(){}}}, skillPresentation, combatStats, Node, UITransform, Graphics, Label, LabelOutline, LabelShadow, Button, Sprite, SpriteFrame, ImageAsset, Texture2D, Color, Vec2, ScrollView, Mask, BlockInputEvents,
+ sys:{localStorage:{getItem:()=>null,setItem(){}}}, skillPresentation, combatStats, characterCombatAttributes, equipmentSkillBonus, JsonAsset, Rect, Size, Node, UITransform, Graphics, Label, LabelOutline, LabelShadow, Button, Sprite, SpriteFrame, ImageAsset, Texture2D, Color, Vec2, ScrollView, Mask, BlockInputEvents,
  TowerLibraryPanel: TowerLibraryPanelBoundary,
  isValid: value => value?.isValid === true, resources: {load() {}} };
 for (const [key, result] of [
@@ -155,6 +159,8 @@ for (const [key, result] of [
  ['TowerMenuChrome','{drawMenuVeil,drawMenuClose,MENU_COLORS,ITEM_COLORS,BOOK_COLORS}'],
  ['TowerMonsterArt','{TowerMonsterArt}'],
  ['TowerStoneArt','{TowerStoneArt}'],
+ ['WeaponQualityArt','{WeaponQualityArt}'],
+ ['TowerCharacterArt','{TowerCharacterArt}'],
  ['TowerSkillIcons','TowerSkillIcons'],
  ['TowerSkillTreeCatalog','{TREE_BRANCHES, COMMON_SKILL_IDS, FUTURE_SKILLS, DISPLAY_STAGES, COLUMN_INDEX, TREE_COLUMNS}'],
  ['TowerSkillTreeLayout','{layoutSkillTree}'],
@@ -514,7 +520,7 @@ for (const [page,label] of [['hall','宗门'],['swordPeak','凌霄剑峰']]) {
  for (const dismiss of ['button','escape']) test(`${page} skill shortcut returns to its entry via ${dismiss} after refresh`,()=>{
   const f=setup();f.menu.dismissInventory();f.menu.go(page);
   const before=stateJSON(f);
-  click(f.menu,'技能');
+  click(f.menu,'功法');
   assert.equal(f.menu.currentPage,'library');
   assert.equal(f.menu.libraryPanel,null);
   f.menu.render({...f.store.state},'library','刷新');
