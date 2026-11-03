@@ -394,7 +394,8 @@ export class TowerView {
   if(assetScene!==this.assetScene){
    this.assetScene=assetScene;this.host.assetLoading?.beginTransition();
   }
-  for(const child of this.root.children)child.active=true;
+  // Cocos defers destruction until frame end; never reactivate a queued tree.
+  for(const child of this.root.children)if(isValid(child,true))child.active=true;
   this.ritual?.close();
   this.overlay?.destroy();this.overlay=null;
   this.battleHud?.dispose();this.battleHud=null;

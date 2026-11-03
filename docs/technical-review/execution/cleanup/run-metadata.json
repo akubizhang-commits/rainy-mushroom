@@ -1,0 +1,45 @@
+{
+  "createdAtUtc": "2026-11-03T18:53:55.493252+00:00",
+  "repository": "/Users/zhangnu/.codex/worktrees/technical-governance/rainy-mushroom",
+  "isolatedReplayDirectory": "/private/tmp/tower-deferred-cleanup-evidence-_pz98wd4/isolated-replay",
+  "nodeVersion": "v22.22.2",
+  "command": [
+    "node",
+    "--test",
+    "--test-name-pattern=same-frame reentry and pause never reactivate",
+    "tests/xianxia-tower-host-tools.test.mjs"
+  ],
+  "results": {
+    "red": {
+      "exitCode": 1,
+      "expectedExitCode": 1,
+      "log": "red-isolated-replay.log"
+    },
+    "green": {
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "log": "green-isolated-replay.log"
+    }
+  },
+  "sourceSha256": {
+    "cocos-pilot/assets/scripts/TowerView.ts": "37a99d723f932bf39f3f18c0aee09b550390371aa18882f596bdd4d92aaf9136",
+    "tests/xianxia-tower-host-tools.test.mjs": "5259d982b91bc0803ab0f0ec44eabea6283bcecdcc051ef3888a27dc5a6574da"
+  },
+  "fullHostRun": {
+    "tests": 186,
+    "pass": 183,
+    "fail": 3,
+    "sourceLog": "/private/tmp/tower-deferred-cleanup-host-tests.log",
+    "archive": "host-tests.log.gz",
+    "uncompressedBytes": 46276,
+    "uncompressedSha256": "619a3629749067aaff61077085f470f080445b6550dda53a288dbcf548af5a70",
+    "command": [
+      "node",
+      "--test",
+      "tests/xianxia-tower-host-tools.test.mjs"
+    ]
+  },
+  "browserRetest": "Pending root agent follow-up; not performed by this archive task.",
+  "gitHeadAtArchive": "ba56b19b5a0dfc2be9302f5c008e0a4d32f8bedb",
+  "evidenceNote": "Red/green are isolated replays captured for archival; first red/green execution remains in task tool output. Shared worktree source was not reverted."
+}

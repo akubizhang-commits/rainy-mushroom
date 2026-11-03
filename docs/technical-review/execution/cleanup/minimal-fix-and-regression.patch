@@ -1,0 +1,71 @@
+--- a/cocos-pilot/assets/scripts/TowerView.ts
++++ b/cocos-pilot/assets/scripts/TowerView.ts
+@@ -402,7 +402,8 @@
+   if(assetScene!==this.assetScene){
+    this.assetScene=assetScene;this.host.assetLoading?.beginTransition();
+   }
+-  for(const child of this.root.children)child.active=true;
++  // Cocos defers destruction until frame end; never reactivate a queued tree.
++  for(const child of this.root.children)if(isValid(child,true))child.active=true;
+   this.ritual?.close();
+   this.overlay?.destroy();this.overlay=null;
+   this.battleHud?.dispose();this.battleHud=null;
+--- a/tests/xianxia-tower-host-tools.test.mjs
++++ b/tests/xianxia-tower-host-tools.test.mjs
+@@ -397,7 +397,7 @@
+     Node, UITransform, UIOpacity, Graphics, Label, LabelOutline, LabelShadow, Button, Sprite, SpriteFrame, ImageAsset, Texture2D,
+     Color, Vec2, Rect, Size, JsonAsset, ScrollView, Mask, BlockInputEvents, EditBox, TowerPlatform,
+     TowerLibraryPanel: TowerLibraryPanelBoundary,
+-    isValid: value => value?.isValid === true,
++    isValid: (value, strict = false) => value?.isValid === true && (!strict || !value.toDestroy),
+     resources: icons.resources,
+     HEX_CENTER, HEX_VERTICES, TOWER_PILLARS, PILLAR_ART, PILLAR_FOOTPRINT,
+     view, ResolutionPolicy,
+@@ -3783,3 +3783,47 @@
+  const storage=disk();seed(storage);const {game,browser}=launch(t,storage,{buildProfile:'qa',query:''});
+  assert.equal(game.store.allowPlaytestTools,true);assert.equal(browser.__towerTest,undefined);
+ });
++
++test('same-frame reentry and pause never reactivate a settlement queued for destruction', t => {
++ const storage=disk();seed(storage);
++ const {game}=launch(t,storage,{assisted:false});
++ game.enterFloor(1);game.withdraw();
++ const settlement=game.overlay,oldTree=descendants(settlement);
++ assert.ok(oldTree.some(node=>node.name==='结算收获列表'&&node.getComponent(ScrollView)));
++
++ // Cocos keeps a destroyed node attached and ordinarily valid until frame end.
++ // Model that boundary only for this old overlay; other tests keep immediate cleanup.
++ const destroyImmediately=settlement.destroy;
++ let active=settlement.active,reactivations=0;
++ Object.defineProperty(settlement,'active',{
++  configurable:true,
++  get(){return active},
++  set(value){if(value&&this.toDestroy)reactivations++;active=value},
++ });
++ settlement.destroy=function(){
++  if(this.toDestroy)return false;
++  this.toDestroy=true;this.active=false;return true;
++ };
++ try{
++  game.enterFloor(1);
++  assert.equal(settlement.toDestroy,true);
++  assert.equal(settlement.isValid,true,'ordinary validity stays true until frame end');
++  assert.equal(settlement.parent,game.root,'queued destruction has not detached the old tree');
++  assert.equal(settlement.active,false);
++  const live=new Node('live child awaiting landscape restoration');
++  live.active=false;game.root.addChild(live);
++
++  game.pause();
++  assert.equal(live.active,true,'valid hidden root children still resume');
++  assert.equal(reactivations,0,'a second render must not reenable queued ScrollView components');
++  assert.equal(settlement.active,false);
++  assert.equal(game.run.state.phase,'paused');
++  assert.equal(game.overlay.name,'暂停菜单');
++ }finally{
++  settlement.destroy=destroyImmediately;
++  settlement.destroy();
++ }
++ assert.ok(oldTree.every(node=>!node.isValid),'frame-end cleanup releases the complete old tree');
++ assert.equal(game.root.children.includes(settlement),false);
++ assert.equal(game.overlay.isValid,true,'the replacement pause menu remains usable');
++});
