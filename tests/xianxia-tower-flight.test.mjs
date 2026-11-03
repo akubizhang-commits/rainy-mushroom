@@ -1,3 +1,4 @@
+import { assertCurrentCampaign, assertActionSucceeds } from './helpers/tower-current-state.mjs'
 import { currentCampaignSchema } from './helpers/tower-schema.mjs'
 import test from 'node:test'
 import assert from 'node:assert/strict'
@@ -11,7 +12,7 @@ import { skillPresentation } from '../js/xianxia/TowerSkillPresentation.js'
 
 const clone = value => JSON.parse(JSON.stringify(value))
 const close = (a, b) => assert.ok(Math.abs(a - b) < 1e-9, `${a} != ${b}`)
-function fixture(patch = {}) {
+function fixture(patch = {}, valid = true) {
   if (patch.skills && !patch.skillsInitialized) patch = { ...patch, skills: { sj_arc: 1, ...patch.skills } }
   const disk = { raw: null, fail: false, writes: 0,
     getItem(key) { assert.equal(key, TOWER_CAMPAIGN_KEY); return this.raw },
@@ -24,10 +25,13 @@ function fixture(patch = {}) {
   const fresh = new TowerCampaignStore(disk, 0)
   const data = JSON.stringify({ ...fresh.state, xp: cultivationLevelXp(11), ...patch })
   disk.raw = JSON.stringify({ format: 'xianxia-sect-tower-campaign', schema: currentCampaignSchema, data, checksum: checksum(data) })
-  return { disk, store: new TowerCampaignStore(disk, 0) }
+  const store = new TowerCampaignStore(disk, 0)
+  if (valid) assertCurrentCampaign(store, JSON.parse(data))
+  return { disk, store }
 }
 function reject(store, disk, action, reason) {
   const before = store.state, raw = disk.raw, writes = disk.writes
+  if (reason === 'save-failed') assertActionSucceeds(store.state, action, 0)
   assert.deepEqual(store.act(action, 0), { ok: false, reason })
   assert.strictEqual(store.state, before)
   assert.equal(disk.raw, raw)
@@ -95,9 +99,9 @@ test('flight is a one-rank foundation passive costing one SP without a book, flo
   assert.equal(SKILLS.some(s => s.id === 'sj_flight'), false, 'historical five-rank catalog is not retroactively extended')
   const { store } = fixture()
   assert.deepEqual(skillRequirement(store.state, 'sj_flight'), { ok: true, nextLevel: 1, cost: 1, bookCost: 0 })
-  assert.equal(skillRequirement({ ...store.state, xp: (cultivationLevelXp(11) - 1) }, 'sj_flight').reason, 'stage-locked')
-  assert.equal(rankCap('sj_flight', (cultivationLevelXp(11) - 1)), 0)
-  assert.equal(rankCap('sj_flight', cultivationLevelXp(11)), 1)
+  assert.equal(skillRequirement({ ...store.state, xp: 1800 }, 'sj_flight').reason, 'stage-locked')
+  assert.equal(rankCap('sj_flight', 1800), 0)
+  assert.equal(rankCap('sj_flight', 1801), 1)
   assert.equal(rankCap('sj_flight', 10920, 9), 1)
 })
 
@@ -142,15 +146,15 @@ test('flight preview and learned panel expose the same speed and slow resistance
   assert.equal(learned.maxed, true)
 })
 
-test('flight rejects forged low-level or excess ranks and retains passive first-learning camp restriction', () => {
+test('flight rejects forged low-level or excess ranks and requires a saved pause for learning in battle', () => {
   for (const patch of [
-    { xp: (cultivationLevelXp(11) - 1), skills: { sj_yujian: 1, sj_flight: 1 } },
+    { xp: 1800, skills: { sj_yujian: 1, sj_flight: 1 } },
     { skills: { sj_yujian: 1, sj_flight: 2 } },
     { skills: { sj_yujian: 1, sj_flight: 1 }, books: ['sj_flight'] },
-  ]) assert.equal(fixture(patch).store.error, 'corrupt')
-  const locked = fixture({ xp: (cultivationLevelXp(11) - 1) })
+  ]) assert.equal(fixture(patch, false).store.error, 'corrupt')
+  const locked = fixture({ xp: 1800 })
   reject(locked.store, locked.disk, { type: 'learnSkill', id: 'sj_flight' }, 'stage-locked')
-  const poor = fixture({ tutorialWaves: 3, skills: { ...giftSkills(3), sj_yujian: 3, sj_arc: 7, sj_wanjian: 7, sj_spirit: 1 } })
+  const poor = fixture({ tutorialWaves: 3, skills: { ...giftSkills(3), sj_yujian: 7, sj_arc: 10, sj_spirit: 1 } })
   assert.equal(poor.store.readOnly, false)
   assert.equal(growthSummary(poor.store.state).available, 0)
   reject(poor.store, poor.disk, { type: 'learnSkill', id: 'sj_flight' }, 'insufficient-points')

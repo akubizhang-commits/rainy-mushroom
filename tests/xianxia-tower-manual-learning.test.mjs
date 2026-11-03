@@ -1,3 +1,4 @@
+import { assertCurrentCampaign, assertActionSucceeds } from './helpers/tower-current-state.mjs'
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import {TowerCampaignStore,combatLoadout} from '../js/xianxia/TowerCampaign.js'
@@ -12,10 +13,11 @@ test('new character has only rank-one arc; no milestone changes starter gifts',(
  for(let floor=1;floor<=9;floor++)assert.equal(tutorialProgress(0,floor,[1,8,20]),0)
  assert.equal(growthSummary(store.state).available,0)
 })
-test('first two floor rewards are points, atomic and not granted again on replay',()=>{
+test('first floor grants four points; the second grants stones, atomically and without replay rewards',()=>{
  const storage=disk(),store=new TowerCampaignStore(storage,0)
  for(const floor of [1,1,2]){
   const previousCleared=store.state.clearedFloor
+  const points=growthSummary(store.state).firstClear
   const start=store.act({type:'startFloor',floor,seed:123},0)
   assert.equal(start.ok,true,start.reason)
   const run=TowerRun.restore(start.snapshot);run.setPlaytestAssist(true)
@@ -27,17 +29,22 @@ test('first two floor rewards are points, atomic and not granted again on replay
   assert.equal(run.state.phase,'won')
   assert.equal(validateTowerSnapshot(run.snapshot()),true)
   const before=store.state,raw=storage.raw
+  assertActionSucceeds(store.state,{type:'finishFloor',snapshot:run.snapshot()},0)
   storage.fail=true
   assert.equal(store.act({type:'finishFloor',snapshot:run.snapshot()},0).reason,'save-failed')
   assert.equal(store.state,before);assert.equal(storage.raw,raw)
   storage.fail=false
-  assert.equal(store.act({type:'finishFloor',snapshot:run.snapshot()},0).ok,true)
+  const settled=store.act({type:'finishFloor',snapshot:run.snapshot()},0)
+  assert.equal(settled.ok,true)
+  assert.equal(settled.firstClear,floor>previousCleared)
+  assert.equal(settled.earned.spiritStones,run.snapshot().earned.cores*10+(floor===2?100:0))
   assert.deepEqual(store.state.skills,{sj_arc:1})
-  assert.equal(growthSummary(store.state).firstClear,Math.max(previousCleared,floor))
+  assert.equal(growthSummary(store.state).firstClear,4)
+  assert.equal(growthSummary(store.state).firstClear-points,previousCleared===0?4:0)
   const after=store.state
-  assert.equal(store.act({type:'finishFloor',snapshot:run.snapshot()},0).ok,false)
+  assert.deepEqual(store.act({type:'finishFloor',snapshot:run.snapshot()},0),{ok:false,reason:'wrong-attempt'})
   assert.equal(store.state,after)
-  assert.deepEqual(new TowerCampaignStore(storage,0).state,store.state)
+  assertCurrentCampaign(new TowerCampaignStore(storage,0),store.state)
  }
 })
 test('initialization converts only the initial arc and never grants another point',()=>{
@@ -48,6 +55,6 @@ test('initialization converts only the initial arc and never grants another poin
  assert.equal(store.act({type:'respecSkills'},0).ok,true)
  assert.equal(growthSummary(store.state).available,1)
  assert.equal(store.act({type:'learnSkill',id:'sj_yujian'},0).reason,'stage-locked')
- assert.equal(store.act({type:'learnSkill',id:'sj_wanjian'},0).ok,true)
- assert.deepEqual(store.state.skills,{sj_wanjian:1})
+ assert.equal(store.act({type:'learnSkill',id:'sj_bone'},0).ok,true)
+ assert.deepEqual(store.state.skills,{sj_bone:1})
 })

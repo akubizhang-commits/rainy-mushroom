@@ -2,7 +2,7 @@ import test from 'node:test'
 import assert from 'node:assert/strict'
 import { TowerCampaignStore, combatLoadout } from '../js/xianxia/TowerCampaign.js'
 import { TowerRun, stats } from '../js/xianxia/TowerRun.js'
-import { rollWeapon } from '../js/xianxia/TowerWeapons.js'
+import { createFixedWeapon } from '../js/xianxia/TowerWeapons.js'
 import { cultivationAt } from '../js/xianxia/TowerProfile.js'
 import { FLOORS, FLOOR01, ARCHETYPES } from '../js/xianxia/TowerContent.js'
 import { towerEnemyStats } from '../js/xianxia/TowerEnemyStats.js'
@@ -25,13 +25,13 @@ function shots(rank, targets=2, weapon=null) {
     source:'sj_yujian',direct:true,castContext:shot.castContext})
   return run.state.enemies.map(e=>10000-e.hp)
 }
-test('fan equipment adds bounded damage without promising a kill-count breakpoint',()=>{
+test('current fan equipment adds its fixed attack and strength exactly once',()=>{
   const state=fresh(), bare=fresh();bare.loadouts[0].weaponId=''
-  const weapon=rollWeapon('fan',4,()=>.999999,'test-fan')
+  const weapon=createFixedWeapon('eq_sword_suwen','test-fan')
   state.weapons[weapon.id]=weapon;state.loadouts[0].weaponId=weapon.id
   const equipped=stats(0,combatLoadout(state)).attack
-  assert.ok(equipped>105)
-  assert.ok(equipped/105<=1.06)
+  // Integer-equipment v2 specifies 16 fixed attack and 3 strength for Suwen.
+  assert.equal(equipped,100+16+3)
   assert.equal(stats(0,combatLoadout(bare)).attack,100)
   assert.equal(stats(0,combatLoadout(fresh())).attack,105)
 })
@@ -57,10 +57,10 @@ test('nominal full-clear XP remains deterministic with the Foundation barrier at
   assert.equal(cumulative,10920)
 })
 test('special skills share the realm gate regardless of previous choices or floor progress',()=>{
-  const state=fresh();state.xp=1485;state.clearedFloor=0
+  const state=fresh();state.xp=1801;state.clearedFloor=0
   for(const id of ['sj_line','sj_shadow','sj_formation']){
     assert.equal(skillRequirement(state,id).ok,true)
-    assert.equal(skillPresentation(state,id).nextRequirement.characterLevel,10)
+    assert.equal(skillPresentation(state,id).nextRequirement.characterLevel,11)
     state.skills[id]=1;state.books.push(id)
   }
 })

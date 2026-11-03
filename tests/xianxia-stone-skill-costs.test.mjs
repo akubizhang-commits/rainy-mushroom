@@ -71,7 +71,7 @@ test('research uses four-point bundles with unchanged prices and floor unlocks',
   ])
 })
 
-test('stones cannot bypass teaching, stages, ranks, prerequisites, floors or SP', () => {
+test('stones cannot bypass stages, ranks, evolution parents or SP', () => {
   const rich = { spiritStones: 1000000 }
   const cases = [
     [state({ ...rich, xp: 0, skills: { sj_yujian: 1 }, tutorialWaves: 0 }), 'sj_arc', undefined],
@@ -80,7 +80,7 @@ test('stones cannot bypass teaching, stages, ranks, prerequisites, floors or SP'
     [state(rich), 'evo_wanjian', 'parent-required'],
     [state({ ...rich, clearedFloor: 0, researchPurchases: 0, skills: { ...giftSkills(3), sj_arc: 2 } }), 'sj_line', undefined],
     [state({ ...rich, xp: 45, clearedFloor: 0, researchPurchases: 0,
-      skills: { ...giftSkills(3), sj_arc: 2 } }), 'sj_yujian', 'stage-locked'],
+      skills: { ...giftSkills(3), sj_arc: 2 } }), 'sj_yujian', 'insufficient-points'],
   ]
   for (const [s, id, reason] of cases) assert.equal(skillRequirement(s, id).reason, reason)
 })

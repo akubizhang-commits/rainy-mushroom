@@ -283,9 +283,8 @@ function valid(state, allowPlaytestTools = false) {
       || !Object.entries(state.evolutionRanks).every(([id, level]) => {
         if (!own(growthEvolutionById, id) || !integer(level, 3) || level < 1 || !state.books.includes(id)) return false
         const before = { ...state, evolutionRanks: { ...state.evolutionRanks, [id]: level - 1 } }
-        // A new learning schedule must not invalidate previously legal ranks.
-        // Keep realm and point-budget checks.
-        return skillRequirement(before, id, { ignoreStage: true }).ok
+        // Current saves must meet the same learning gates as new investments.
+        return skillRequirement(before, id).ok
       })
       || growthSummary(state).available < 0
       || !object(state.weapons) || !own(state.weapons, 'iron') || Object.keys(state.weapons).length > EQUIPMENT_CAPACITY

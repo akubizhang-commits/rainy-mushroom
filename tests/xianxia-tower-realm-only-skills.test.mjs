@@ -1,3 +1,4 @@
+import { assertCurrentCampaign, assertActionSucceeds } from './helpers/tower-current-state.mjs'
 import { currentCampaignSchema } from './helpers/tower-schema.mjs'
 import test from 'node:test'
 import assert from 'node:assert/strict'
@@ -6,14 +7,14 @@ import { GROWTH_SKILLS, GROWTH_EVOLUTIONS, skillRequirement, decreaseSkillQuote,
 import { skillPresentation } from '../js/xianxia/TowerSkillPresentation.js'
 import { TowerRun, validateTowerSnapshot } from '../js/xianxia/TowerRun.js'
 import { checksum } from '../js/xianxia/Checksum.js'
-const xpAt = n => 30*(n-1)+15*(n-1)**2
-function fixture(level=27) {
+import { cultivationLevelXp as xpAt } from '../js/xianxia/TowerProfile.js'
+function fixture(level=30) {
  const disk={raw:null,getItem(){return this.raw},setItem(k,v){assert.equal(k,TOWER_CAMPAIGN_KEY);if(this.fail)throw Error('disk full');this.raw=v}}
  const state=structuredClone(new TowerCampaignStore(disk,0).state)
  state.xp=xpAt(level);state.spiritStones=10000
  const data=JSON.stringify(state)
  disk.raw=JSON.stringify({format:'xianxia-sect-tower-campaign',schema:currentCampaignSchema,data,checksum:checksum(data)})
- const store=new TowerCampaignStore(disk,0);assert.equal(store.readOnly,false)
+ const store=assertCurrentCampaign(new TowerCampaignStore(disk,0),state)
  return {store,disk}
 }
 test('all skills can be learned and fully upgraded with zero cleared floors',()=>{
@@ -38,11 +39,18 @@ test('all skills can be learned and fully upgraded with zero cleared floors',()=
   assert.equal(new TowerCampaignStore(disk,0).readOnly,false,row.id)
  }
 })
-test('learning and rank caps are constant within each realm phase',()=>{
- for(const row of [...GROWTH_SKILLS,...GROWTH_EVOLUTIONS]) for(let level=1;level<=25;level+=3){
-  const caps=[0,1,2].map(offset=>rankCap(row.id,xpAt(level+offset),0))
-  assert.equal(new Set(caps).size,1,`${row.id} phase ${level}`)
+test('rank caps stay constant inside phases except the authored level-two and level-thirty gates',()=>{
+ const phases=[[1,3],[4,6],[7,10],[11,13],[14,16],[17,20],[21,23],[24,26],[27,30]]
+ for(const row of [...GROWTH_SKILLS,...GROWTH_EVOLUTIONS]) for(const [start,end] of phases){
+  const from=row.id==='sj_yujian'&&start===1?2:start
+  const to=row.id==='evo_sixiang'&&end===30?29:end
+  const caps=Array.from({length:to-from+1},(_,i)=>rankCap(row.id,xpAt(from+i),0))
+  assert.equal(new Set(caps).size,1,`${row.id} phase ${start}`)
  }
+ assert.equal(rankCap('sj_yujian',44),0)
+ assert.equal(rankCap('sj_yujian',45),3)
+ assert.equal(rankCap('evo_sixiang',13484),1)
+ assert.equal(rankCap('evo_sixiang',13485),2)
 })
 test('advanced skills retain actual parent rank across casts and partial refunds',()=>{
  for(const row of GROWTH_EVOLUTIONS){
@@ -67,7 +75,8 @@ test('basic skills can be purchased before teaching and still respect resources 
  const {store}=fixture(2)
  assert.equal(store.act({type:'learnSkill',id:'sj_arc'},0).ok,true)
  assert.equal(skillRequirement(store.state,'sj_line').reason,'stage-locked')
- assert.equal(skillRequirement(store.state,'sj_wanjian').reason,'insufficient-points')
+ assert.equal(skillRequirement(store.state,'sj_wanjian').reason,'stage-locked')
+ assert.equal(skillRequirement(store.state,'sj_yujian').reason,'insufficient-points')
 })
 
 test('paused book purchases debit atomically and remain debited through checkpoints and settlement',()=>{
@@ -76,6 +85,7 @@ test('paused book purchases debit atomically and remain debited through checkpoi
  let run=TowerRun.restore(start.snapshot);run.pause()
  assert.equal(store.act({type:'checkpoint',snapshot:run.snapshot()},0).ok,true)
  const before=store.state,raw=disk.raw
+ assertActionSucceeds(store.state,{type:'learnSkill',id:'sj_line'},0)
  disk.fail=true
  assert.equal(store.act({type:'learnSkill',id:'sj_line'},0).reason,'save-failed')
  assert.equal(store.state,before);assert.equal(disk.raw,raw)

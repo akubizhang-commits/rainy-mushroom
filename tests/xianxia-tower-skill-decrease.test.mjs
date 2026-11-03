@@ -1,3 +1,4 @@
+import { assertCurrentCampaign, assertActionSucceeds } from './helpers/tower-current-state.mjs'
 import { currentCampaignSchema } from './helpers/tower-schema.mjs'
 import test from 'node:test'
 import assert from 'node:assert/strict'
@@ -34,12 +35,13 @@ function fixture(patch = {}) {
   if (patch.skills && !patch.skillsInitialized) patch = { ...patch, skills: { sj_arc: 1, ...patch.skills } }
   const disk = storage()
   const initial = new TowerCampaignStore(disk, 0)
-  put(disk, {
-    ...clone(initial.state), xp: 10920, clearedFloor: 9, tutorialWaves: 3,
+  const expected = {
+    ...clone(initial.state), xp: 14400, clearedFloor: 9, tutorialWaves: 3,
     researchPurchases: 3, skills: { ...gifts }, ...patch,
-  })
+  }
+  put(disk, expected)
   const store = new TowerCampaignStore(disk, 0)
-  assert.equal(store.readOnly, false, store.error)
+  assertCurrentCampaign(store, expected)
   return { store, disk }
 }
 
@@ -50,6 +52,7 @@ function quote(state, id) {
 
 function rejected(store, disk, action, reason) {
   const before = store.state, raw = disk.raw, writes = disk.writes
+  if (reason === 'save-failed') assertActionSucceeds(store.state, action, 600000)
   assert.deepEqual(store.act(action, 600000), { ok: false, reason })
   assert.strictEqual(store.state, before, 'failed actions publish no state, including passive healing')
   assert.equal(disk.raw, raw)
@@ -187,7 +190,7 @@ test('refunding parent ranks lowers inherited evolution strength without removin
 test('direct evolution decrease refunds only its rank and preserves another evolution and legacy presets', () => {
   const { store, disk } = fixture({
     skills: { ...gifts, sj_yujian: 8, sj_heart: 3, sj_wanjian: 6, sj_bone: 4 },
-    books: ['evo_wanjian', 'evo_wuwo', 'sj_bone'],
+    books: ['evo_wanjian', 'evo_wuwo'],
     evolutionRanks: { evo_wanjian: 2, evo_wuwo: 1 }, evolutions: ['evo_wanjian', 'evo_wuwo'],
     selectedLoadout: 1,
     loadouts: [
@@ -304,13 +307,13 @@ test('read-only and unreadable storage cannot publish a decrease', () => {
 test('insufficient learning cannot mutate state and a zero-available-point build can refund and reinvest', () => {
   const { store, disk } = fixture({
     xp: 45, clearedFloor: 0, researchPurchases: 0, hp: 1,
-    skills: { sj_arc:1, sj_wanjian: 1 }, spiritStones: 0,
+    skills: { sj_arc:1, sj_yujian: 1 }, spiritStones: 0,
   })
   assert.equal(Growth.growthSummary(store.state).available, 0)
   rejected(store, disk, { type: 'learnSkill', id: 'sj_arc' }, 'insufficient-points')
-  committed(store, disk, 'sj_wanjian', 1, [{ id: 'sj_wanjian', from: 1, to: 0 }])
+  committed(store, disk, 'sj_yujian', 1, [{ id: 'sj_yujian', from: 1, to: 0 }])
   assert.equal(store.act({ type: 'learnSkill', id: 'sj_arc' }, 0).ok, true)
-  rejected(store, disk, { type: 'learnSkill', id: 'sj_wanjian' }, 'insufficient-points')
+  rejected(store, disk, { type: 'learnSkill', id: 'sj_yujian' }, 'insufficient-points')
   assert.equal(new TowerCampaignStore(disk, 0).state.skills.sj_arc, 2)
 })
 
@@ -327,7 +330,7 @@ test('the existing validator still rejects zero ranks and orphaned evolutions on
   }
 })
 
-test('schema11 reload accepts optional typed stone loot and rejects inconsistent totals or extra fields', () => {
+test('current schema reload accepts optional typed stone loot and rejects inconsistent totals or extra fields', () => {
   const value = 2 * STONE_VALUES[0] + 3 * STONE_VALUES[1] + STONE_VALUES[3]
   const lastResult = {
     outcome: 'won', floor: 3, firstClear: true,
@@ -360,10 +363,14 @@ function campaignWithLoot(loot) {
   assert.equal(store.act({ type: 'startFloor', floor: 1, seed: 12 }, 0).ok, true)
   const state = clone(store.state)
   if (loot) state.activeRun.snapshot.loot = loot
-  else delete state.activeRun.snapshot.loot
+  else {
+    delete state.activeRun.snapshot.loot
+    delete state.activeRun.snapshot.pickups // Pickup receipts require a graded-loot contract.
+  }
   put(disk, state)
   const reload = new TowerCampaignStore(disk, 0)
-  assert.equal(reload.readOnly, false, reload.error)
+  assertCurrentCampaign(reload, state)
+  assertActionSucceeds(reload.state, { type: 'checkpoint', snapshot: state.activeRun.snapshot }, 0)
   return { store: reload, disk }
 }
 
@@ -376,7 +383,7 @@ test('checkpoint rejects introducing, removing or reseeding the attempt loot con
     const { store, disk } = campaignWithLoot(before)
     const snapshot = clone(store.state.activeRun.snapshot)
     if (after) snapshot.loot = after
-    else delete snapshot.loot
+    else { delete snapshot.loot; delete snapshot.pickups }
     assert.equal(validateTowerSnapshot(snapshot), true, 'each empty attempt is independently valid')
     rejected(store, disk, { type: 'checkpoint', snapshot }, 'invalid-snapshot')
   }
@@ -426,7 +433,9 @@ test('typed settlement counts actual kills and excludes boss-clear and first-cle
   assert.ok(result.stoneLoot.count > 0)
   assert.equal(result.stoneLoot.value,
     snapshot.killLedger.reduce((sum, kill) => sum + CORE_RANK_VALUES[kill.coreRank] * 10, 0))
-  assert.equal(result.earned.spiritStones - result.stoneLoot.value, 200, 'floor3 boss-clear 100 plus first-clear stones 100')
+  assert.equal(result.earned.spiritStones - result.stoneLoot.value, 100,
+    'floor3 boss-clear stones remain; its first-clear award is 1000 contribution')
+  assert.equal(result.earned.contribution, 1000)
   assert.equal(store.state.spiritStones, result.earned.spiritStones)
   assert.deepEqual(new TowerCampaignStore(disk, 0).state.lastResult.stoneLoot, result.stoneLoot)
   rejected(store, disk, { type: 'finishFloor', snapshot }, 'wrong-attempt')
