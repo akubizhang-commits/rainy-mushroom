@@ -32,11 +32,17 @@ export class PinePilot extends Component{
   const smoke=sys.isBrowser&&new URLSearchParams(window.location.search).get('smoke')==='1';
   if(smoke){const data=new Map();this.progressStorage={getItem:(k:string)=>data.get(k)??null,setItem:(k:string,v:string)=>data.set(k,v)};}
   this.assetQueue=beginTowerResources();
-  this.assetLoading=new TowerLoadingScreen(this.canvas,this.assetQueue);
+  this.assetLoading=new TowerLoadingScreen(this.canvas,this.assetQueue,this.browserRestart());
   this.survivor=new TowerView(this);
   director.once(Director.EVENT_AFTER_DRAW,this.revealCanvas);
   view.on('canvas-resize',this.resize,this);
   if(sys.isBrowser){window.addEventListener('resize',this.browserResize);this.browserResize();}
+ }
+ /** A full page restart also releases allocations that failed before ownership registration. */
+ private browserRestart(): (()=>void)|undefined {
+  if(sys.isBrowser&&typeof window!=='undefined'&&typeof window.location?.reload==='function')
+   return ()=>window.location.reload();
+  return undefined;
  }
  private measureSafeArea(){try{const api=(globalThis as any).wx,info=api?.getWindowInfo?.()||api?.getSystemInfoSync?.(),capsule=api?.getMenuButtonBoundingClientRect?.();if(info){const scale=view.getVisibleSize().width/info.windowWidth;this.safeTop=Math.max(22,(capsule?.bottom+8||info.safeArea?.top||24)*scale);this.safeBottom=Math.max(16,(info.windowHeight-(info.safeArea?.bottom||info.windowHeight))*scale+10)}}catch{}}
  update(dt:number){

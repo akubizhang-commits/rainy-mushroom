@@ -12,7 +12,7 @@ function harness(){
  }
  const queue=new ctx.TowerAssetQueue((path,type,done)=>jobs.push({path,done}));
  const screen=Object.create(ctx.TowerLoadingScreen.prototype);
- Object.assign(screen,{queue,root:{active:true,parent:{children:[{}]},setSiblingIndex(){}},retry:{active:false},caption:{string:''},quietFrames:0,state:queue.state,drawProgress(){},resize(){}});
+ Object.assign(screen,{queue,root:{active:true,parent:{children:[{}]},setSiblingIndex(){}},retry:{active:false},retryCaption:{string:''},caption:{string:''},quietFrames:0,state:queue.state,drawProgress(){},resize(){}});
  queue.onChange=s=>screen.changed(s);
  const host=new ctx.PinePilot();host.assetLoading=screen;
  let time=0,resets=0;host.survivor={prepareAssets(){resets++},update(dt){time+=dt}};
@@ -62,4 +62,48 @@ test('drop preload requests material, heal and XP art without creating world obj
  for(const path of ['stone_low','stone_top','drop_heal','resource_xp_essence','pill_forge_xuantie','pill_huichuncao'])assert.ok(requests.includes(`tower-stones/${path}`),path);
  const count=requests.length;art.preloadDrops();assert.equal(requests.length,count);
  assert.equal(art.bindings.size,0);
+});
+
+
+test('binding failure keeps the screen visible and explains unsafe retries',()=>{
+ const h=harness();let calls=0;
+ h.queue.load('unsafe-ui',h.type,()=>{calls++;throw Error('partial node');});h.finish(h.jobs[0]);
+ h.host.update(.1);h.host.update(.1);
+ assert.equal(h.screen.blocked,true);assert.equal(h.screen.retry.active,false);
+ assert.match(h.screen.caption.string,/关闭游戏后重新打开/);
+ h.queue.retryFailed();assert.equal(calls,1);assert.equal(h.time,0);
+});
+test('retryable binding failure stays covered until recovery and two preparation frames',()=>{
+ const h=harness();let fail=true;
+ h.queue.load('safe-ui',h.type,()=>{if(fail)throw Error('transient upload');},{retryable:true});h.finish(h.jobs[0]);
+ assert.equal(h.screen.retry.active,true);h.host.update(.1);assert.equal(h.screen.blocked,true);
+ fail=false;h.queue.retryFailed();h.host.update(.1);assert.equal(h.screen.blocked,true);
+ h.host.update(.1);assert.equal(h.screen.blocked,false);assert.equal(h.jobs.length,1);
+});
+
+
+test('unsafe binding exposes full restart and debounces repeated clicks',()=>{
+ const h=harness();let restarted=0;h.screen.restart=()=>{restarted++};
+ h.queue.load('unsafe-ui',h.type,()=>{throw Error('partial node');});h.finish(h.jobs[0]);
+ assert.equal(h.screen.retry.active,true);assert.equal(h.screen.retryCaption.string,'重新进入');
+ h.screen.retryLoading();h.screen.retryLoading();assert.equal(restarted,1);
+ h.queue.load('late-ui',h.type,()=>{});h.finish(h.jobs[1]);
+ assert.equal(h.screen.retry.active,false);assert.equal(h.screen.caption.string,'正在重新进入…');
+});
+test('full restart is offered only when a browser reload capability exists',()=>{
+ let reloads=0;
+ const context={_decorator:{},Component:class{},sys:{isBrowser:true},window:{location:{reload(){reloads++}}}};
+ const src=readFileSync(new URL('../cocos-pilot/assets/scripts/PinePilot.ts',import.meta.url),'utf8').replace(/^import .*$/gm,'').replace(/^@ccclass.*$/gm,'');
+ runInNewContext(stripTypeScriptTypes(src,{mode:'transform'}).replace(/^export /gm,'')+'\nglobalThis.Host=PinePilot',context);
+ const host=new context.Host();host.browserRestart()();assert.equal(reloads,1);
+ context.sys.isBrowser=false;assert.equal(host.browserRestart(),undefined);
+ context.sys.isBrowser=true;context.window.location={};assert.equal(host.browserRestart(),undefined);
+ delete context.window;assert.equal(host.browserRestart(),undefined);
+});
+test('a rejected full restart removes the ineffective button and explains manual recovery',()=>{
+ const h=harness();h.screen.restart=()=>{throw Error('reload disabled')};
+ h.queue.load('unsafe-ui',h.type,()=>{throw Error('partial node');});h.finish(h.jobs[0]);
+ h.screen.retryLoading();assert.equal(h.screen.retry.active,false);
+ assert.match(h.screen.caption.string,/关闭游戏后重新打开/);
+ h.screen.retryLoading();assert.equal(h.jobs.length,1);
 });

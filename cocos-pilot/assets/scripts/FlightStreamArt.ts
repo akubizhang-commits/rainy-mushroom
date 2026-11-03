@@ -11,10 +11,10 @@ export class FlightStreamArt {
   if(this.requested||this.dead)return;this.requested=true;
   resources.load('tower-skill-fx/flight-stream-v3',ImageAsset,(error,image)=>{
    if(this.dead||error||!image)return;
-   image.addRef();this.image=image;const texture=new Texture2D();texture.image=image;this.texture=texture;
+   image.addRef();this.image=image;const texture=this.texture=new Texture2D();texture.image=image;
    texture.setFilters(Texture2D.Filter.LINEAR,Texture2D.Filter.LINEAR);
-   for(let i=0;i<32;i++){const frame=new SpriteFrame();frame.texture=texture;frame.rect=new Rect(i%8*512,Math.floor(i/8)*288,512,288);this.frames.push(frame)}
-  });
+   for(let i=0;i<32;i++){const frame=new SpriteFrame();this.frames.push(frame);frame.texture=texture;frame.rect=new Rect(i%8*512,Math.floor(i/8)*288,512,288)}
+  },{rollback:()=>this.releaseArt()});
  }
  syncTower(parent:Node,s:any,camera:{x:number;y:number}){
   if(this.dead||!isValid(parent,true))return;
@@ -35,5 +35,6 @@ export class FlightStreamArt {
  }
  get ready(){return this.frames.length===32}
  clearBindings(){if(this.projection&&isValid(this.projection,true))this.projection.destroy();this.projection=null;this.pose=null;this.node=null;this.sprite=null;this.model.reset()}
- destroy(){this.dead=true;this.clearBindings();for(const f of this.frames)f.destroy();this.frames=[];this.texture?.destroy();this.texture=null;this.image?.decRef();this.image=null}
+ private releaseArt(){for(const f of this.frames)f.destroy();this.frames=[];this.texture?.destroy();this.texture=null;this.image?.decRef();this.image=null}
+ destroy(){this.dead=true;this.clearBindings();this.releaseArt()}
 }

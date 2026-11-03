@@ -11,15 +11,17 @@ export class TowerLoadingScreen {
  private texture:Texture2D|null=null;
  private frame:SpriteFrame|null=null;
  private dead=false;
+ private restarting=false;
  private title:Label;
  private tagline:Label;
  private caption:Label;
  private progress:Graphics;
  private progressWidth=280;
  private retry:Node;
+ private retryCaption:Label;
  private quietFrames=0;
  private size='';
- private state:LoadingState={pending:0,failed:0,completed:0,total:0};
+ private state:LoadingState={pending:0,failed:0,completed:0,total:0,restartRequired:0};
  get blocked(){return this.root.active;}
  get presentationReady(){return !!this.frame||this.state.failed>0;}
  beginTransition(){
@@ -28,7 +30,7 @@ export class TowerLoadingScreen {
   this.quietFrames=0;this.root.active=true;
   this.root.setSiblingIndex(this.root.parent!.children.length-1);
  }
- constructor(parent:Node,private queue:TowerAssetQueue){
+ constructor(parent:Node,private queue:TowerAssetQueue,private restart?:()=>void){
   this.root=this.node('游戏加载界面',parent,1280,720);
   this.root.addComponent(BlockInputEvents);
   this.background=this.root.addComponent(Graphics);
@@ -46,12 +48,15 @@ export class TowerLoadingScreen {
   this.retry=this.node('重新加载',this.root,180,48);this.retry.setPosition(0,-202);
   const button=this.retry.addComponent(Graphics);button.fillColor=new Color('#32594D');
   button.roundRect(-90,-24,180,48,8);button.fill();
-  this.label('重新加载',this.retry,0,0,22,'#EFE7D2');
+  this.retryCaption=this.label('重新加载',this.retry,0,0,22,'#EFE7D2');
   this.retry.addComponent(Button);
-  this.retry.on(Button.EventType.CLICK,()=>queue.retryFailed());
+  this.retry.on(Button.EventType.CLICK,()=>this.retryLoading());
   this.retry.active=false;
   queue.onChange=state=>this.changed(state);
   this.resize();this.changed(queue.state);
+  this.loadArtwork();
+ }
+ private loadArtwork(){
   resources.load('loading/keyart',ImageAsset,(error,image)=>{
    if(this.dead||error||!image)return;
    image.addRef();this.image=image;
@@ -59,7 +64,7 @@ export class TowerLoadingScreen {
    this.texture.setFilters(Texture2D.Filter.LINEAR,Texture2D.Filter.LINEAR);
    this.frame=new SpriteFrame();this.frame.texture=this.texture;this.artwork.spriteFrame=this.frame;
    this.title.color=new Color('#203E38');this.tagline.color=new Color('#304D44');
-  });
+  },{rollback:()=>this.releaseArtwork()});
  }
  private node(name:string,parent:Node,w:number,h:number){
   const n=new Node(name);n.layer=parent.layer;parent.addChild(n);
@@ -71,13 +76,25 @@ export class TowerLoadingScreen {
   label.fontFamily='serif';label.color=new Color(color);label.horizontalAlign=Label.HorizontalAlign.CENTER;
   label.verticalAlign=Label.VerticalAlign.CENTER;return label;
  }
+ private retryLoading(){
+  if(this.dead||this.restarting)return;
+  if(this.state.restartRequired){
+   if(!this.restart)return;
+   this.restarting=true;this.retry.active=false;this.caption.string='正在重新进入…';
+   try{this.restart();}
+   catch{this.restart=undefined;this.restarting=false;this.caption.string='请关闭游戏后重新打开';}
+  }else this.queue.retryFailed();
+ }
  private changed(state:LoadingState){
   this.state=state;
+  if(this.restarting)return;
   if(state.pending||state.failed){
    this.quietFrames=0;this.root.active=true;this.root.setSiblingIndex(this.root.parent!.children.length-1);
   }
-  this.retry.active=state.failed>0;
-  this.caption.string=state.failed?'画面未能载入，请检查网络后重试':
+  this.retry.active=state.failed>0&&(!state.restartRequired||!!this.restart);
+  this.retryCaption.string=state.restartRequired?'重新进入':'重新加载';
+  this.caption.string=state.restartRequired?(this.restart?'画面初始化失败，请重新进入游戏':'画面初始化失败，请关闭游戏后重新打开'):
+   state.failed?'画面未能载入，请重试':
    state.pending?`正在准备画面 · ${state.completed} / ${state.total}`:'山门已就绪';
   this.drawProgress();
  }
@@ -121,5 +138,9 @@ export class TowerLoadingScreen {
    this.root.active=false;this.queue.endBlocking();
   }
  }
- destroy(){this.dead=true;this.queue.onChange=null;this.root.destroy();this.frame?.destroy();this.texture?.destroy();this.image?.decRef();}
+ private releaseArtwork(){
+  if(this.artwork.spriteFrame===this.frame)this.artwork.spriteFrame=null;
+  this.frame?.destroy();this.frame=null;this.texture?.destroy();this.texture=null;this.image?.decRef();this.image=null;
+ }
+ destroy(){this.dead=true;this.queue.onChange=null;this.releaseArtwork();this.root.destroy();}
 }
