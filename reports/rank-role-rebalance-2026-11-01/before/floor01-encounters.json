@@ -1,0 +1,2328 @@
+{
+  "status": "approved_doc52_fixed_floor_scaling",
+  "version": 1,
+  "floor": 1,
+  "name": "獠牙石坪",
+  "source_files": [
+    "tower-design.json",
+    "rank-attributes.json",
+    "wave-rewards-v2.csv"
+  ],
+  "arena": {
+    "x_min": -912,
+    "x_max": 978,
+    "y_min": -1140,
+    "y_max": 1020,
+    "y_up": true,
+    "player_start": {
+      "x": 33,
+      "y": -60
+    },
+    "player_radius": 18,
+    "player_speed": 220,
+    "solid_obstacles": [],
+    "portals": [
+      {
+        "id": "N",
+        "name": "北",
+        "x": 33,
+        "y": 870,
+        "candidates": [
+          {
+            "x": 33,
+            "y": 870
+          },
+          {
+            "x": -59,
+            "y": 870
+          },
+          {
+            "x": 125,
+            "y": 870
+          },
+          {
+            "x": 33,
+            "y": 778
+          },
+          {
+            "x": 33,
+            "y": 962
+          },
+          {
+            "x": -59,
+            "y": 778
+          },
+          {
+            "x": 125,
+            "y": 962
+          },
+          {
+            "x": -59,
+            "y": 962
+          },
+          {
+            "x": 125,
+            "y": 778
+          }
+        ]
+      },
+      {
+        "id": "NE",
+        "name": "东北",
+        "x": 695,
+        "y": 660,
+        "candidates": [
+          {
+            "x": 695,
+            "y": 660
+          },
+          {
+            "x": 603,
+            "y": 660
+          },
+          {
+            "x": 787,
+            "y": 660
+          },
+          {
+            "x": 695,
+            "y": 568
+          },
+          {
+            "x": 695,
+            "y": 752
+          },
+          {
+            "x": 603,
+            "y": 568
+          },
+          {
+            "x": 787,
+            "y": 752
+          },
+          {
+            "x": 603,
+            "y": 752
+          },
+          {
+            "x": 787,
+            "y": 568
+          }
+        ]
+      },
+      {
+        "id": "E",
+        "name": "东",
+        "x": 828,
+        "y": -60,
+        "candidates": [
+          {
+            "x": 828,
+            "y": -60
+          },
+          {
+            "x": 736,
+            "y": -60
+          },
+          {
+            "x": 920,
+            "y": -60
+          },
+          {
+            "x": 828,
+            "y": -152
+          },
+          {
+            "x": 828,
+            "y": 32
+          },
+          {
+            "x": 736,
+            "y": -152
+          },
+          {
+            "x": 920,
+            "y": 32
+          },
+          {
+            "x": 736,
+            "y": 32
+          },
+          {
+            "x": 920,
+            "y": -152
+          }
+        ]
+      },
+      {
+        "id": "SE",
+        "name": "东南",
+        "x": 695,
+        "y": -780,
+        "candidates": [
+          {
+            "x": 695,
+            "y": -780
+          },
+          {
+            "x": 603,
+            "y": -780
+          },
+          {
+            "x": 787,
+            "y": -780
+          },
+          {
+            "x": 695,
+            "y": -872
+          },
+          {
+            "x": 695,
+            "y": -688
+          },
+          {
+            "x": 603,
+            "y": -872
+          },
+          {
+            "x": 787,
+            "y": -688
+          },
+          {
+            "x": 603,
+            "y": -688
+          },
+          {
+            "x": 787,
+            "y": -872
+          }
+        ]
+      },
+      {
+        "id": "S",
+        "name": "南",
+        "x": 33,
+        "y": -990,
+        "candidates": [
+          {
+            "x": 33,
+            "y": -990
+          },
+          {
+            "x": -59,
+            "y": -990
+          },
+          {
+            "x": 125,
+            "y": -990
+          },
+          {
+            "x": 33,
+            "y": -1082
+          },
+          {
+            "x": 33,
+            "y": -898
+          },
+          {
+            "x": -59,
+            "y": -1082
+          },
+          {
+            "x": 125,
+            "y": -898
+          },
+          {
+            "x": -59,
+            "y": -898
+          },
+          {
+            "x": 125,
+            "y": -1082
+          }
+        ]
+      },
+      {
+        "id": "SW",
+        "name": "西南",
+        "x": -629,
+        "y": -780,
+        "candidates": [
+          {
+            "x": -629,
+            "y": -780
+          },
+          {
+            "x": -721,
+            "y": -780
+          },
+          {
+            "x": -537,
+            "y": -780
+          },
+          {
+            "x": -629,
+            "y": -872
+          },
+          {
+            "x": -629,
+            "y": -688
+          },
+          {
+            "x": -721,
+            "y": -872
+          },
+          {
+            "x": -537,
+            "y": -688
+          },
+          {
+            "x": -721,
+            "y": -688
+          },
+          {
+            "x": -537,
+            "y": -872
+          }
+        ]
+      },
+      {
+        "id": "W",
+        "name": "西",
+        "x": -762,
+        "y": -60,
+        "candidates": [
+          {
+            "x": -762,
+            "y": -60
+          },
+          {
+            "x": -854,
+            "y": -60
+          },
+          {
+            "x": -670,
+            "y": -60
+          },
+          {
+            "x": -762,
+            "y": -152
+          },
+          {
+            "x": -762,
+            "y": 32
+          },
+          {
+            "x": -854,
+            "y": -152
+          },
+          {
+            "x": -670,
+            "y": 32
+          },
+          {
+            "x": -854,
+            "y": 32
+          },
+          {
+            "x": -670,
+            "y": -152
+          }
+        ]
+      },
+      {
+        "id": "NW",
+        "name": "西北",
+        "x": -629,
+        "y": 660,
+        "candidates": [
+          {
+            "x": -629,
+            "y": 660
+          },
+          {
+            "x": -721,
+            "y": 660
+          },
+          {
+            "x": -537,
+            "y": 660
+          },
+          {
+            "x": -629,
+            "y": 568
+          },
+          {
+            "x": -629,
+            "y": 752
+          },
+          {
+            "x": -721,
+            "y": 568
+          },
+          {
+            "x": -537,
+            "y": 752
+          },
+          {
+            "x": -721,
+            "y": 752
+          },
+          {
+            "x": -537,
+            "y": 568
+          }
+        ]
+      }
+    ],
+    "landmarks": [
+      {
+        "name": "北阵碑",
+        "x": 33,
+        "y": 1120
+      },
+      {
+        "name": "西断柱",
+        "x": -1040,
+        "y": -60
+      },
+      {
+        "name": "东断柱",
+        "x": 1110,
+        "y": -60
+      },
+      {
+        "name": "南阵门",
+        "x": 33,
+        "y": -1240
+      }
+    ]
+  },
+  "spawn_rules": {
+    "min_player_distance": 280,
+    "min_center_spacing": 92,
+    "body_gap": 16,
+    "cap": 24,
+    "queue_order": "trigger_then_at_then_batch_then_unit",
+    "reservation_counts_toward_cap": true,
+    "freeze_location_at_warning": true,
+    "spawn_grace_s": 0.8,
+    "post_spawn_damage_requires_new_attack": true,
+    "no_valid_location": "keep_pending_and_retry_with_full_warning",
+    "relocation_stall_s": 6,
+    "relocation_hard_timeout_s": 15
+  },
+  "enemies": {
+    "boar_normal": {
+      "id": "boar_normal",
+      "name": "铁鬃妖猪",
+      "role": "normal",
+      "rank": 1,
+      "hp": 50,
+      "damage": 6,
+      "move_speed": 154,
+      "family_hp_factor": 1,
+      "body_radius": 26,
+      "floor_hp_factor": 1.15,
+      "floor_speed_factor": 0.9
+    },
+    "wolf_normal": {
+      "id": "wolf_normal",
+      "name": "青风妖狼",
+      "role": "normal",
+      "rank": 1,
+      "hp": 35,
+      "damage": 6,
+      "move_speed": 231,
+      "family_hp_factor": 0.7,
+      "body_radius": 22,
+      "floor_hp_factor": 0.9,
+      "floor_speed_factor": 1
+    },
+    "spider_normal": {
+      "id": "spider_normal",
+      "name": "墨纹妖蛛",
+      "role": "normal",
+      "rank": 1,
+      "hp": 32,
+      "damage": 6,
+      "move_speed": 143,
+      "family_hp_factor": 0.65,
+      "body_radius": 24,
+      "floor_hp_factor": 1,
+      "floor_speed_factor": 1
+    },
+    "boar_elite": {
+      "id": "boar_elite",
+      "name": "赤牙獠猪",
+      "role": "elite",
+      "rank": 2,
+      "hp": 280,
+      "damage": 12,
+      "move_speed": 154,
+      "family_hp_factor": 1,
+      "body_radius": 34,
+      "floor_hp_factor": 1.15,
+      "floor_speed_factor": 0.9
+    },
+    "wolf_elite": {
+      "id": "wolf_elite",
+      "name": "霜背头狼",
+      "role": "elite",
+      "rank": 2,
+      "hp": 196,
+      "damage": 12,
+      "move_speed": 231,
+      "family_hp_factor": 0.7,
+      "body_radius": 30,
+      "floor_hp_factor": 0.9,
+      "floor_speed_factor": 1
+    },
+    "spider_elite": {
+      "id": "spider_elite",
+      "name": "赤腹毒蛛",
+      "role": "elite",
+      "rank": 2,
+      "hp": 182,
+      "damage": 12,
+      "move_speed": 143,
+      "family_hp_factor": 0.65,
+      "body_radius": 34,
+      "floor_hp_factor": 1,
+      "floor_speed_factor": 1
+    },
+    "boar_boss": {
+      "id": "boar_boss",
+      "name": "裂岩獠王",
+      "role": "boss",
+      "rank": 3,
+      "hp": 3800,
+      "damage": 20,
+      "move_speed": 154,
+      "family_hp_factor": 1,
+      "body_radius": 42,
+      "floor_hp_factor": 1.15,
+      "floor_speed_factor": 0.9
+    }
+  },
+  "waves": [
+    {
+      "id": "tower-f01-w01",
+      "wave": 1,
+      "name": "初识獠牙",
+      "kind": "normal",
+      "formation": "单侧",
+      "reserved_portals": [
+        "E",
+        "SE"
+      ],
+      "lesson": "横移绕过厚肩，站到猪群侧面。",
+      "concurrent_cap": 24,
+      "planned_required": 10,
+      "fast_forward_empty": true,
+      "batches": [
+        {
+          "id": "f01w01b01",
+          "trigger": "wave_start",
+          "at_s": 0,
+          "portal": "W",
+          "archetype": "boar_normal",
+          "count": 5,
+          "warning_s": 0.9,
+          "emit_step_s": 0.22,
+          "unit_ids": [
+            "f01w01b01u01",
+            "f01w01b01u02",
+            "f01w01b01u03",
+            "f01w01b01u04",
+            "f01w01b01u05"
+          ]
+        },
+        {
+          "id": "f01w01b02",
+          "trigger": "wave_start",
+          "at_s": 4,
+          "portal": "W",
+          "archetype": "boar_normal",
+          "count": 5,
+          "warning_s": 0.9,
+          "emit_step_s": 0.22,
+          "unit_ids": [
+            "f01w01b02u01",
+            "f01w01b02u02",
+            "f01w01b02u03",
+            "f01w01b02u04",
+            "f01w01b02u05"
+          ]
+        }
+      ],
+      "reward_budget": {
+        "cultivation": 10,
+        "core_units": 0,
+        "contribution": 2
+      }
+    },
+    {
+      "id": "tower-f01-w02",
+      "wave": 2,
+      "name": "青风追迹",
+      "kind": "normal",
+      "formation": "斜翼",
+      "reserved_portals": [
+        "S",
+        "SW"
+      ],
+      "lesson": "狼追得更快，先引成一线再转向。",
+      "concurrent_cap": 24,
+      "planned_required": 12,
+      "fast_forward_empty": true,
+      "batches": [
+        {
+          "id": "f01w02b01",
+          "trigger": "wave_start",
+          "at_s": 0,
+          "portal": "N",
+          "archetype": "wolf_normal",
+          "count": 6,
+          "warning_s": 0.9,
+          "emit_step_s": 0.22,
+          "unit_ids": [
+            "f01w02b01u01",
+            "f01w02b01u02",
+            "f01w02b01u03",
+            "f01w02b01u04",
+            "f01w02b01u05",
+            "f01w02b01u06"
+          ]
+        },
+        {
+          "id": "f01w02b02",
+          "trigger": "wave_start",
+          "at_s": 4,
+          "portal": "NE",
+          "archetype": "wolf_normal",
+          "count": 6,
+          "warning_s": 0.9,
+          "emit_step_s": 0.22,
+          "unit_ids": [
+            "f01w02b02u01",
+            "f01w02b02u02",
+            "f01w02b02u03",
+            "f01w02b02u04",
+            "f01w02b02u05",
+            "f01w02b02u06"
+          ]
+        }
+      ],
+      "reward_budget": {
+        "cultivation": 12,
+        "core_units": 1,
+        "contribution": 2
+      }
+    },
+    {
+      "id": "tower-f01-w03",
+      "wave": 3,
+      "name": "八足近身",
+      "kind": "normal",
+      "formation": "单侧",
+      "reserved_portals": [
+        "W",
+        "NW"
+      ],
+      "lesson": "辨认低矮的蛛群与抬足前摇；本层没有蛛网。",
+      "concurrent_cap": 24,
+      "planned_required": 14,
+      "fast_forward_empty": true,
+      "batches": [
+        {
+          "id": "f01w03b01",
+          "trigger": "wave_start",
+          "at_s": 0,
+          "portal": "E",
+          "archetype": "spider_normal",
+          "count": 7,
+          "warning_s": 0.9,
+          "emit_step_s": 0.22,
+          "unit_ids": [
+            "f01w03b01u01",
+            "f01w03b01u02",
+            "f01w03b01u03",
+            "f01w03b01u04",
+            "f01w03b01u05",
+            "f01w03b01u06",
+            "f01w03b01u07"
+          ]
+        },
+        {
+          "id": "f01w03b02",
+          "trigger": "wave_start",
+          "at_s": 4,
+          "portal": "SE",
+          "archetype": "spider_normal",
+          "count": 7,
+          "warning_s": 0.9,
+          "emit_step_s": 0.22,
+          "unit_ids": [
+            "f01w03b02u01",
+            "f01w03b02u02",
+            "f01w03b02u03",
+            "f01w03b02u04",
+            "f01w03b02u05",
+            "f01w03b02u06",
+            "f01w03b02u07"
+          ]
+        }
+      ],
+      "reward_budget": {
+        "cultivation": 14,
+        "core_units": 0,
+        "contribution": 2
+      }
+    },
+    {
+      "id": "tower-f01-w04",
+      "wave": 4,
+      "name": "猪狼合围",
+      "kind": "normal",
+      "formation": "错向",
+      "reserved_portals": [
+        "S",
+        "SE"
+      ],
+      "lesson": "猪挡路、狼从侧面追；不要贴着猪群折返。",
+      "concurrent_cap": 24,
+      "planned_required": 16,
+      "fast_forward_empty": true,
+      "batches": [
+        {
+          "id": "f01w04b01",
+          "trigger": "wave_start",
+          "at_s": 0,
+          "portal": "W",
+          "archetype": "boar_normal",
+          "count": 5,
+          "warning_s": 0.9,
+          "emit_step_s": 0.22,
+          "unit_ids": [
+            "f01w04b01u01",
+            "f01w04b01u02",
+            "f01w04b01u03",
+            "f01w04b01u04",
+            "f01w04b01u05"
+          ]
+        },
+        {
+          "id": "f01w04b02",
+          "trigger": "wave_start",
+          "at_s": 3,
+          "portal": "N",
+          "archetype": "wolf_normal",
+          "count": 7,
+          "warning_s": 0.9,
+          "emit_step_s": 0.22,
+          "unit_ids": [
+            "f01w04b02u01",
+            "f01w04b02u02",
+            "f01w04b02u03",
+            "f01w04b02u04",
+            "f01w04b02u05",
+            "f01w04b02u06",
+            "f01w04b02u07"
+          ]
+        },
+        {
+          "id": "f01w04b03",
+          "trigger": "wave_start",
+          "at_s": 6,
+          "portal": "W",
+          "archetype": "boar_normal",
+          "count": 4,
+          "warning_s": 0.9,
+          "emit_step_s": 0.22,
+          "unit_ids": [
+            "f01w04b03u01",
+            "f01w04b03u02",
+            "f01w04b03u03",
+            "f01w04b03u04"
+          ]
+        }
+      ],
+      "reward_budget": {
+        "cultivation": 16,
+        "core_units": 1,
+        "contribution": 2
+      }
+    },
+    {
+      "id": "tower-f01-w05",
+      "wave": 5,
+      "name": "赤牙试锋",
+      "kind": "elite",
+      "formation": "精英单列",
+      "reserved_portals": [
+        "S",
+        "SE"
+      ],
+      "lesson": "先看到赤牙刨地，再横移躲开第一次冲撞。",
+      "concurrent_cap": 24,
+      "planned_required": 11,
+      "fast_forward_empty": false,
+      "batches": [
+        {
+          "id": "f01w05b01",
+          "trigger": "wave_start",
+          "at_s": 0,
+          "portal": "N",
+          "archetype": "boar_elite",
+          "count": 1,
+          "warning_s": 1.2,
+          "emit_step_s": 0.22,
+          "unit_ids": [
+            "f01w05b01u01"
+          ]
+        },
+        {
+          "id": "f01w05b02",
+          "trigger": "wave_start",
+          "at_s": 2,
+          "portal": "W",
+          "archetype": "boar_normal",
+          "count": 3,
+          "warning_s": 0.9,
+          "emit_step_s": 0.22,
+          "unit_ids": [
+            "f01w05b02u01",
+            "f01w05b02u02",
+            "f01w05b02u03"
+          ]
+        },
+        {
+          "id": "f01w05b03",
+          "trigger": "wave_start",
+          "at_s": 6,
+          "portal": "E",
+          "archetype": "spider_normal",
+          "count": 4,
+          "warning_s": 0.9,
+          "emit_step_s": 0.22,
+          "unit_ids": [
+            "f01w05b03u01",
+            "f01w05b03u02",
+            "f01w05b03u03",
+            "f01w05b03u04"
+          ]
+        },
+        {
+          "id": "f01w05b04",
+          "trigger": "wave_start",
+          "at_s": 8,
+          "portal": "SW",
+          "archetype": "boar_normal",
+          "count": 3,
+          "warning_s": 0.9,
+          "emit_step_s": 0.22,
+          "unit_ids": [
+            "f01w05b04u01",
+            "f01w05b04u02",
+            "f01w05b04u03"
+          ]
+        }
+      ],
+      "reward_budget": {
+        "cultivation": 20,
+        "core_units": 6,
+        "contribution": 7
+      }
+    },
+    {
+      "id": "tower-f01-w06",
+      "wave": 6,
+      "name": "换边而行",
+      "kind": "normal",
+      "formation": "交替双侧",
+      "reserved_portals": [
+        "N",
+        "NE"
+      ],
+      "lesson": "来敌从两侧交替，留意下一批方向再换位。",
+      "concurrent_cap": 24,
+      "planned_required": 16,
+      "fast_forward_empty": true,
+      "batches": [
+        {
+          "id": "f01w06b01",
+          "trigger": "wave_start",
+          "at_s": 0,
+          "portal": "W",
+          "archetype": "boar_normal",
+          "count": 5,
+          "warning_s": 0.9,
+          "emit_step_s": 0.22,
+          "unit_ids": [
+            "f01w06b01u01",
+            "f01w06b01u02",
+            "f01w06b01u03",
+            "f01w06b01u04",
+            "f01w06b01u05"
+          ]
+        },
+        {
+          "id": "f01w06b02",
+          "trigger": "wave_start",
+          "at_s": 3,
+          "portal": "E",
+          "archetype": "wolf_normal",
+          "count": 4,
+          "warning_s": 0.9,
+          "emit_step_s": 0.22,
+          "unit_ids": [
+            "f01w06b02u01",
+            "f01w06b02u02",
+            "f01w06b02u03",
+            "f01w06b02u04"
+          ]
+        },
+        {
+          "id": "f01w06b03",
+          "trigger": "wave_start",
+          "at_s": 6,
+          "portal": "SW",
+          "archetype": "boar_normal",
+          "count": 4,
+          "warning_s": 0.9,
+          "emit_step_s": 0.22,
+          "unit_ids": [
+            "f01w06b03u01",
+            "f01w06b03u02",
+            "f01w06b03u03",
+            "f01w06b03u04"
+          ]
+        },
+        {
+          "id": "f01w06b04",
+          "trigger": "wave_start",
+          "at_s": 9,
+          "portal": "SE",
+          "archetype": "wolf_normal",
+          "count": 3,
+          "warning_s": 0.9,
+          "emit_step_s": 0.22,
+          "unit_ids": [
+            "f01w06b04u01",
+            "f01w06b04u02",
+            "f01w06b04u03"
+          ]
+        }
+      ],
+      "reward_budget": {
+        "cultivation": 16,
+        "core_units": 0,
+        "contribution": 2
+      }
+    },
+    {
+      "id": "tower-f01-w07",
+      "wave": 7,
+      "name": "绕开蛛丛",
+      "kind": "normal",
+      "formation": "折角",
+      "reserved_portals": [
+        "S",
+        "SW"
+      ],
+      "lesson": "沿空侧绕过慢速蛛群，避免退到猪面前。",
+      "concurrent_cap": 24,
+      "planned_required": 18,
+      "fast_forward_empty": true,
+      "batches": [
+        {
+          "id": "f01w07b01",
+          "trigger": "wave_start",
+          "at_s": 0,
+          "portal": "E",
+          "archetype": "boar_normal",
+          "count": 5,
+          "warning_s": 0.9,
+          "emit_step_s": 0.22,
+          "unit_ids": [
+            "f01w07b01u01",
+            "f01w07b01u02",
+            "f01w07b01u03",
+            "f01w07b01u04",
+            "f01w07b01u05"
+          ]
+        },
+        {
+          "id": "f01w07b02",
+          "trigger": "wave_start",
+          "at_s": 3,
+          "portal": "N",
+          "archetype": "spider_normal",
+          "count": 4,
+          "warning_s": 0.9,
+          "emit_step_s": 0.22,
+          "unit_ids": [
+            "f01w07b02u01",
+            "f01w07b02u02",
+            "f01w07b02u03",
+            "f01w07b02u04"
+          ]
+        },
+        {
+          "id": "f01w07b03",
+          "trigger": "wave_start",
+          "at_s": 6,
+          "portal": "E",
+          "archetype": "boar_normal",
+          "count": 5,
+          "warning_s": 0.9,
+          "emit_step_s": 0.22,
+          "unit_ids": [
+            "f01w07b03u01",
+            "f01w07b03u02",
+            "f01w07b03u03",
+            "f01w07b03u04",
+            "f01w07b03u05"
+          ]
+        },
+        {
+          "id": "f01w07b04",
+          "trigger": "wave_start",
+          "at_s": 9,
+          "portal": "NW",
+          "archetype": "spider_normal",
+          "count": 4,
+          "warning_s": 0.9,
+          "emit_step_s": 0.22,
+          "unit_ids": [
+            "f01w07b04u01",
+            "f01w07b04u02",
+            "f01w07b04u03",
+            "f01w07b04u04"
+          ]
+        }
+      ],
+      "reward_budget": {
+        "cultivation": 18,
+        "core_units": 1,
+        "contribution": 2
+      }
+    },
+    {
+      "id": "tower-f01-w08",
+      "wave": 8,
+      "name": "双翼压迫",
+      "kind": "normal",
+      "formation": "交替双侧",
+      "reserved_portals": [
+        "S",
+        "N"
+      ],
+      "lesson": "两翼先后进入，朝尚未形成夹击的一端移动。",
+      "concurrent_cap": 24,
+      "planned_required": 20,
+      "fast_forward_empty": true,
+      "batches": [
+        {
+          "id": "f01w08b01",
+          "trigger": "wave_start",
+          "at_s": 0,
+          "portal": "W",
+          "archetype": "boar_normal",
+          "count": 6,
+          "warning_s": 0.9,
+          "emit_step_s": 0.22,
+          "unit_ids": [
+            "f01w08b01u01",
+            "f01w08b01u02",
+            "f01w08b01u03",
+            "f01w08b01u04",
+            "f01w08b01u05",
+            "f01w08b01u06"
+          ]
+        },
+        {
+          "id": "f01w08b02",
+          "trigger": "wave_start",
+          "at_s": 2,
+          "portal": "E",
+          "archetype": "wolf_normal",
+          "count": 4,
+          "warning_s": 0.9,
+          "emit_step_s": 0.22,
+          "unit_ids": [
+            "f01w08b02u01",
+            "f01w08b02u02",
+            "f01w08b02u03",
+            "f01w08b02u04"
+          ]
+        },
+        {
+          "id": "f01w08b03",
+          "trigger": "wave_start",
+          "at_s": 6,
+          "portal": "NW",
+          "archetype": "boar_normal",
+          "count": 6,
+          "warning_s": 0.9,
+          "emit_step_s": 0.22,
+          "unit_ids": [
+            "f01w08b03u01",
+            "f01w08b03u02",
+            "f01w08b03u03",
+            "f01w08b03u04",
+            "f01w08b03u05",
+            "f01w08b03u06"
+          ]
+        },
+        {
+          "id": "f01w08b04",
+          "trigger": "wave_start",
+          "at_s": 8,
+          "portal": "SE",
+          "archetype": "wolf_normal",
+          "count": 4,
+          "warning_s": 0.9,
+          "emit_step_s": 0.22,
+          "unit_ids": [
+            "f01w08b04u01",
+            "f01w08b04u02",
+            "f01w08b04u03",
+            "f01w08b04u04"
+          ]
+        }
+      ],
+      "reward_budget": {
+        "cultivation": 20,
+        "core_units": 1,
+        "contribution": 2
+      }
+    },
+    {
+      "id": "tower-f01-w09",
+      "wave": 9,
+      "name": "开口留南",
+      "kind": "normal",
+      "formation": "三向留口",
+      "reserved_portals": [
+        "S",
+        "SW"
+      ],
+      "lesson": "北侧形成压力，南边不出新怪，但不是无敌区。",
+      "concurrent_cap": 24,
+      "planned_required": 22,
+      "fast_forward_empty": true,
+      "batches": [
+        {
+          "id": "f01w09b01",
+          "trigger": "wave_start",
+          "at_s": 0,
+          "portal": "NW",
+          "archetype": "boar_normal",
+          "count": 7,
+          "warning_s": 0.9,
+          "emit_step_s": 0.22,
+          "unit_ids": [
+            "f01w09b01u01",
+            "f01w09b01u02",
+            "f01w09b01u03",
+            "f01w09b01u04",
+            "f01w09b01u05",
+            "f01w09b01u06",
+            "f01w09b01u07"
+          ]
+        },
+        {
+          "id": "f01w09b02",
+          "trigger": "wave_start",
+          "at_s": 2,
+          "portal": "NE",
+          "archetype": "spider_normal",
+          "count": 5,
+          "warning_s": 0.9,
+          "emit_step_s": 0.22,
+          "unit_ids": [
+            "f01w09b02u01",
+            "f01w09b02u02",
+            "f01w09b02u03",
+            "f01w09b02u04",
+            "f01w09b02u05"
+          ]
+        },
+        {
+          "id": "f01w09b03",
+          "trigger": "wave_start",
+          "at_s": 6,
+          "portal": "W",
+          "archetype": "boar_normal",
+          "count": 6,
+          "warning_s": 0.9,
+          "emit_step_s": 0.22,
+          "unit_ids": [
+            "f01w09b03u01",
+            "f01w09b03u02",
+            "f01w09b03u03",
+            "f01w09b03u04",
+            "f01w09b03u05",
+            "f01w09b03u06"
+          ]
+        },
+        {
+          "id": "f01w09b04",
+          "trigger": "wave_start",
+          "at_s": 8,
+          "portal": "E",
+          "archetype": "spider_normal",
+          "count": 4,
+          "warning_s": 0.9,
+          "emit_step_s": 0.22,
+          "unit_ids": [
+            "f01w09b04u01",
+            "f01w09b04u02",
+            "f01w09b04u03",
+            "f01w09b04u04"
+          ]
+        }
+      ],
+      "reward_budget": {
+        "cultivation": 22,
+        "core_units": 1,
+        "contribution": 2
+      }
+    },
+    {
+      "id": "tower-f01-w10",
+      "wave": 10,
+      "name": "霜背接力",
+      "kind": "elite",
+      "formation": "精英错峰",
+      "reserved_portals": [
+        "S",
+        "SW"
+      ],
+      "lesson": "两只头狼隔8秒警示入场；扑击资格轮转。",
+      "concurrent_cap": 24,
+      "planned_required": 14,
+      "fast_forward_empty": false,
+      "batches": [
+        {
+          "id": "f01w10b01",
+          "trigger": "wave_start",
+          "at_s": 0,
+          "portal": "N",
+          "archetype": "wolf_elite",
+          "count": 1,
+          "warning_s": 1.2,
+          "emit_step_s": 0.22,
+          "unit_ids": [
+            "f01w10b01u01"
+          ]
+        },
+        {
+          "id": "f01w10b02",
+          "trigger": "wave_start",
+          "at_s": 2,
+          "portal": "W",
+          "archetype": "boar_normal",
+          "count": 4,
+          "warning_s": 0.9,
+          "emit_step_s": 0.22,
+          "unit_ids": [
+            "f01w10b02u01",
+            "f01w10b02u02",
+            "f01w10b02u03",
+            "f01w10b02u04"
+          ]
+        },
+        {
+          "id": "f01w10b03",
+          "trigger": "wave_start",
+          "at_s": 4,
+          "portal": "E",
+          "archetype": "wolf_normal",
+          "count": 5,
+          "warning_s": 0.9,
+          "emit_step_s": 0.22,
+          "unit_ids": [
+            "f01w10b03u01",
+            "f01w10b03u02",
+            "f01w10b03u03",
+            "f01w10b03u04",
+            "f01w10b03u05"
+          ]
+        },
+        {
+          "id": "f01w10b04",
+          "trigger": "wave_start",
+          "at_s": 8,
+          "portal": "NE",
+          "archetype": "wolf_elite",
+          "count": 1,
+          "warning_s": 1.2,
+          "emit_step_s": 0.22,
+          "unit_ids": [
+            "f01w10b04u01"
+          ]
+        },
+        {
+          "id": "f01w10b05",
+          "trigger": "wave_start",
+          "at_s": 10,
+          "portal": "NW",
+          "archetype": "boar_normal",
+          "count": 3,
+          "warning_s": 0.9,
+          "emit_step_s": 0.22,
+          "unit_ids": [
+            "f01w10b05u01",
+            "f01w10b05u02",
+            "f01w10b05u03"
+          ]
+        }
+      ],
+      "reward_budget": {
+        "cultivation": 32,
+        "core_units": 11,
+        "contribution": 7
+      }
+    },
+    {
+      "id": "tower-f01-w11",
+      "wave": 11,
+      "name": "三族初阵",
+      "kind": "normal",
+      "formation": "三向留口",
+      "reserved_portals": [
+        "S",
+        "SE"
+      ],
+      "lesson": "猪占路、蛛收口、狼追身；先引出一条可走的线。",
+      "concurrent_cap": 24,
+      "planned_required": 20,
+      "fast_forward_empty": true,
+      "batches": [
+        {
+          "id": "f01w11b01",
+          "trigger": "wave_start",
+          "at_s": 0,
+          "portal": "W",
+          "archetype": "boar_normal",
+          "count": 5,
+          "warning_s": 0.9,
+          "emit_step_s": 0.22,
+          "unit_ids": [
+            "f01w11b01u01",
+            "f01w11b01u02",
+            "f01w11b01u03",
+            "f01w11b01u04",
+            "f01w11b01u05"
+          ]
+        },
+        {
+          "id": "f01w11b02",
+          "trigger": "wave_start",
+          "at_s": 2,
+          "portal": "N",
+          "archetype": "spider_normal",
+          "count": 6,
+          "warning_s": 0.9,
+          "emit_step_s": 0.22,
+          "unit_ids": [
+            "f01w11b02u01",
+            "f01w11b02u02",
+            "f01w11b02u03",
+            "f01w11b02u04",
+            "f01w11b02u05",
+            "f01w11b02u06"
+          ]
+        },
+        {
+          "id": "f01w11b03",
+          "trigger": "wave_start",
+          "at_s": 5,
+          "portal": "NE",
+          "archetype": "wolf_normal",
+          "count": 4,
+          "warning_s": 0.9,
+          "emit_step_s": 0.22,
+          "unit_ids": [
+            "f01w11b03u01",
+            "f01w11b03u02",
+            "f01w11b03u03",
+            "f01w11b03u04"
+          ]
+        },
+        {
+          "id": "f01w11b04",
+          "trigger": "wave_start",
+          "at_s": 8,
+          "portal": "NW",
+          "archetype": "boar_normal",
+          "count": 5,
+          "warning_s": 0.9,
+          "emit_step_s": 0.22,
+          "unit_ids": [
+            "f01w11b04u01",
+            "f01w11b04u02",
+            "f01w11b04u03",
+            "f01w11b04u04",
+            "f01w11b04u05"
+          ]
+        }
+      ],
+      "reward_budget": {
+        "cultivation": 20,
+        "core_units": 1,
+        "contribution": 2
+      }
+    },
+    {
+      "id": "tower-f01-w12",
+      "wave": 12,
+      "name": "空侧轮转",
+      "kind": "normal",
+      "formation": "折角",
+      "reserved_portals": [
+        "W",
+        "SW"
+      ],
+      "lesson": "空侧换到西面，不照搬上一波的退路。",
+      "concurrent_cap": 24,
+      "planned_required": 22,
+      "fast_forward_empty": true,
+      "batches": [
+        {
+          "id": "f01w12b01",
+          "trigger": "wave_start",
+          "at_s": 0,
+          "portal": "N",
+          "archetype": "boar_normal",
+          "count": 6,
+          "warning_s": 0.9,
+          "emit_step_s": 0.22,
+          "unit_ids": [
+            "f01w12b01u01",
+            "f01w12b01u02",
+            "f01w12b01u03",
+            "f01w12b01u04",
+            "f01w12b01u05",
+            "f01w12b01u06"
+          ]
+        },
+        {
+          "id": "f01w12b02",
+          "trigger": "wave_start",
+          "at_s": 3,
+          "portal": "E",
+          "archetype": "wolf_normal",
+          "count": 6,
+          "warning_s": 0.9,
+          "emit_step_s": 0.22,
+          "unit_ids": [
+            "f01w12b02u01",
+            "f01w12b02u02",
+            "f01w12b02u03",
+            "f01w12b02u04",
+            "f01w12b02u05",
+            "f01w12b02u06"
+          ]
+        },
+        {
+          "id": "f01w12b03",
+          "trigger": "wave_start",
+          "at_s": 6,
+          "portal": "SE",
+          "archetype": "spider_normal",
+          "count": 5,
+          "warning_s": 0.9,
+          "emit_step_s": 0.22,
+          "unit_ids": [
+            "f01w12b03u01",
+            "f01w12b03u02",
+            "f01w12b03u03",
+            "f01w12b03u04",
+            "f01w12b03u05"
+          ]
+        },
+        {
+          "id": "f01w12b04",
+          "trigger": "wave_start",
+          "at_s": 9,
+          "portal": "NE",
+          "archetype": "boar_normal",
+          "count": 5,
+          "warning_s": 0.9,
+          "emit_step_s": 0.22,
+          "unit_ids": [
+            "f01w12b04u01",
+            "f01w12b04u02",
+            "f01w12b04u03",
+            "f01w12b04u04",
+            "f01w12b04u05"
+          ]
+        }
+      ],
+      "reward_budget": {
+        "cultivation": 22,
+        "core_units": 1,
+        "contribution": 2
+      }
+    },
+    {
+      "id": "tower-f01-w13",
+      "wave": 13,
+      "name": "引线破阵",
+      "kind": "normal",
+      "formation": "纵向接力",
+      "reserved_portals": [
+        "W",
+        "NW"
+      ],
+      "lesson": "南北错峰，观察侧面出口；直线技能可打穿队列。",
+      "concurrent_cap": 24,
+      "planned_required": 24,
+      "fast_forward_empty": true,
+      "batches": [
+        {
+          "id": "f01w13b01",
+          "trigger": "wave_start",
+          "at_s": 0,
+          "portal": "N",
+          "archetype": "boar_normal",
+          "count": 6,
+          "warning_s": 0.9,
+          "emit_step_s": 0.22,
+          "unit_ids": [
+            "f01w13b01u01",
+            "f01w13b01u02",
+            "f01w13b01u03",
+            "f01w13b01u04",
+            "f01w13b01u05",
+            "f01w13b01u06"
+          ]
+        },
+        {
+          "id": "f01w13b02",
+          "trigger": "wave_start",
+          "at_s": 2,
+          "portal": "S",
+          "archetype": "spider_normal",
+          "count": 7,
+          "warning_s": 0.9,
+          "emit_step_s": 0.22,
+          "unit_ids": [
+            "f01w13b02u01",
+            "f01w13b02u02",
+            "f01w13b02u03",
+            "f01w13b02u04",
+            "f01w13b02u05",
+            "f01w13b02u06",
+            "f01w13b02u07"
+          ]
+        },
+        {
+          "id": "f01w13b03",
+          "trigger": "wave_start",
+          "at_s": 6,
+          "portal": "SE",
+          "archetype": "wolf_normal",
+          "count": 5,
+          "warning_s": 0.9,
+          "emit_step_s": 0.22,
+          "unit_ids": [
+            "f01w13b03u01",
+            "f01w13b03u02",
+            "f01w13b03u03",
+            "f01w13b03u04",
+            "f01w13b03u05"
+          ]
+        },
+        {
+          "id": "f01w13b04",
+          "trigger": "wave_start",
+          "at_s": 9,
+          "portal": "NE",
+          "archetype": "boar_normal",
+          "count": 6,
+          "warning_s": 0.9,
+          "emit_step_s": 0.22,
+          "unit_ids": [
+            "f01w13b04u01",
+            "f01w13b04u02",
+            "f01w13b04u03",
+            "f01w13b04u04",
+            "f01w13b04u05",
+            "f01w13b04u06"
+          ]
+        }
+      ],
+      "reward_budget": {
+        "cultivation": 24,
+        "core_units": 1,
+        "contribution": 2
+      }
+    },
+    {
+      "id": "tower-f01-w14",
+      "wave": 14,
+      "name": "回旋石坪",
+      "kind": "normal",
+      "formation": "交替双侧",
+      "reserved_portals": [
+        "N",
+        "NW"
+      ],
+      "lesson": "较大总量分四批，避免一口气填满全场。",
+      "concurrent_cap": 24,
+      "planned_required": 26,
+      "fast_forward_empty": true,
+      "batches": [
+        {
+          "id": "f01w14b01",
+          "trigger": "wave_start",
+          "at_s": 0,
+          "portal": "W",
+          "archetype": "boar_normal",
+          "count": 7,
+          "warning_s": 0.9,
+          "emit_step_s": 0.22,
+          "unit_ids": [
+            "f01w14b01u01",
+            "f01w14b01u02",
+            "f01w14b01u03",
+            "f01w14b01u04",
+            "f01w14b01u05",
+            "f01w14b01u06",
+            "f01w14b01u07"
+          ]
+        },
+        {
+          "id": "f01w14b02",
+          "trigger": "wave_start",
+          "at_s": 3,
+          "portal": "E",
+          "archetype": "wolf_normal",
+          "count": 7,
+          "warning_s": 0.9,
+          "emit_step_s": 0.22,
+          "unit_ids": [
+            "f01w14b02u01",
+            "f01w14b02u02",
+            "f01w14b02u03",
+            "f01w14b02u04",
+            "f01w14b02u05",
+            "f01w14b02u06",
+            "f01w14b02u07"
+          ]
+        },
+        {
+          "id": "f01w14b03",
+          "trigger": "wave_start",
+          "at_s": 6,
+          "portal": "SE",
+          "archetype": "spider_normal",
+          "count": 6,
+          "warning_s": 0.9,
+          "emit_step_s": 0.22,
+          "unit_ids": [
+            "f01w14b03u01",
+            "f01w14b03u02",
+            "f01w14b03u03",
+            "f01w14b03u04",
+            "f01w14b03u05",
+            "f01w14b03u06"
+          ]
+        },
+        {
+          "id": "f01w14b04",
+          "trigger": "wave_start",
+          "at_s": 10,
+          "portal": "SW",
+          "archetype": "boar_normal",
+          "count": 6,
+          "warning_s": 0.9,
+          "emit_step_s": 0.22,
+          "unit_ids": [
+            "f01w14b04u01",
+            "f01w14b04u02",
+            "f01w14b04u03",
+            "f01w14b04u04",
+            "f01w14b04u05",
+            "f01w14b04u06"
+          ]
+        }
+      ],
+      "reward_budget": {
+        "cultivation": 26,
+        "core_units": 2,
+        "contribution": 2
+      }
+    },
+    {
+      "id": "tower-f01-w15",
+      "wave": 15,
+      "name": "赤腹守隘",
+      "kind": "elite",
+      "formation": "精英错峰",
+      "reserved_portals": [
+        "E",
+        "NE"
+      ],
+      "lesson": "两只精英蛛近身抬足攻击；仍无毒网，不新增机制。",
+      "concurrent_cap": 24,
+      "planned_required": 16,
+      "fast_forward_empty": false,
+      "batches": [
+        {
+          "id": "f01w15b01",
+          "trigger": "wave_start",
+          "at_s": 0,
+          "portal": "W",
+          "archetype": "spider_elite",
+          "count": 1,
+          "warning_s": 1.2,
+          "emit_step_s": 0.22,
+          "unit_ids": [
+            "f01w15b01u01"
+          ]
+        },
+        {
+          "id": "f01w15b02",
+          "trigger": "wave_start",
+          "at_s": 2,
+          "portal": "N",
+          "archetype": "boar_normal",
+          "count": 4,
+          "warning_s": 0.9,
+          "emit_step_s": 0.22,
+          "unit_ids": [
+            "f01w15b02u01",
+            "f01w15b02u02",
+            "f01w15b02u03",
+            "f01w15b02u04"
+          ]
+        },
+        {
+          "id": "f01w15b03",
+          "trigger": "wave_start",
+          "at_s": 4,
+          "portal": "SW",
+          "archetype": "spider_normal",
+          "count": 4,
+          "warning_s": 0.9,
+          "emit_step_s": 0.22,
+          "unit_ids": [
+            "f01w15b03u01",
+            "f01w15b03u02",
+            "f01w15b03u03",
+            "f01w15b03u04"
+          ]
+        },
+        {
+          "id": "f01w15b04",
+          "trigger": "wave_start",
+          "at_s": 8,
+          "portal": "S",
+          "archetype": "spider_elite",
+          "count": 1,
+          "warning_s": 1.2,
+          "emit_step_s": 0.22,
+          "unit_ids": [
+            "f01w15b04u01"
+          ]
+        },
+        {
+          "id": "f01w15b05",
+          "trigger": "wave_start",
+          "at_s": 10,
+          "portal": "NW",
+          "archetype": "wolf_normal",
+          "count": 3,
+          "warning_s": 0.9,
+          "emit_step_s": 0.22,
+          "unit_ids": [
+            "f01w15b05u01",
+            "f01w15b05u02",
+            "f01w15b05u03"
+          ]
+        },
+        {
+          "id": "f01w15b06",
+          "trigger": "wave_start",
+          "at_s": 12,
+          "portal": "W",
+          "archetype": "boar_normal",
+          "count": 3,
+          "warning_s": 0.9,
+          "emit_step_s": 0.22,
+          "unit_ids": [
+            "f01w15b06u01",
+            "f01w15b06u02",
+            "f01w15b06u03"
+          ]
+        }
+      ],
+      "reward_budget": {
+        "cultivation": 34,
+        "core_units": 10,
+        "contribution": 7
+      }
+    },
+    {
+      "id": "tower-f01-w16",
+      "wave": 16,
+      "name": "乘隙反击",
+      "kind": "normal",
+      "formation": "单侧接力",
+      "reserved_portals": [
+        "E",
+        "SE"
+      ],
+      "lesson": "集中来敌适合区域技能，保留从侧面转出的空间。",
+      "concurrent_cap": 24,
+      "planned_required": 24,
+      "fast_forward_empty": true,
+      "batches": [
+        {
+          "id": "f01w16b01",
+          "trigger": "wave_start",
+          "at_s": 0,
+          "portal": "W",
+          "archetype": "boar_normal",
+          "count": 6,
+          "warning_s": 0.9,
+          "emit_step_s": 0.22,
+          "unit_ids": [
+            "f01w16b01u01",
+            "f01w16b01u02",
+            "f01w16b01u03",
+            "f01w16b01u04",
+            "f01w16b01u05",
+            "f01w16b01u06"
+          ]
+        },
+        {
+          "id": "f01w16b02",
+          "trigger": "wave_start",
+          "at_s": 3,
+          "portal": "NW",
+          "archetype": "wolf_normal",
+          "count": 7,
+          "warning_s": 0.9,
+          "emit_step_s": 0.22,
+          "unit_ids": [
+            "f01w16b02u01",
+            "f01w16b02u02",
+            "f01w16b02u03",
+            "f01w16b02u04",
+            "f01w16b02u05",
+            "f01w16b02u06",
+            "f01w16b02u07"
+          ]
+        },
+        {
+          "id": "f01w16b03",
+          "trigger": "wave_start",
+          "at_s": 6,
+          "portal": "SW",
+          "archetype": "spider_normal",
+          "count": 5,
+          "warning_s": 0.9,
+          "emit_step_s": 0.22,
+          "unit_ids": [
+            "f01w16b03u01",
+            "f01w16b03u02",
+            "f01w16b03u03",
+            "f01w16b03u04",
+            "f01w16b03u05"
+          ]
+        },
+        {
+          "id": "f01w16b04",
+          "trigger": "wave_start",
+          "at_s": 9,
+          "portal": "W",
+          "archetype": "boar_normal",
+          "count": 6,
+          "warning_s": 0.9,
+          "emit_step_s": 0.22,
+          "unit_ids": [
+            "f01w16b04u01",
+            "f01w16b04u02",
+            "f01w16b04u03",
+            "f01w16b04u04",
+            "f01w16b04u05",
+            "f01w16b04u06"
+          ]
+        }
+      ],
+      "reward_budget": {
+        "cultivation": 24,
+        "core_units": 2,
+        "contribution": 2
+      }
+    },
+    {
+      "id": "tower-f01-w17",
+      "wave": 17,
+      "name": "三路来敌",
+      "kind": "normal",
+      "formation": "三向留口",
+      "reserved_portals": [
+        "N",
+        "NE"
+      ],
+      "lesson": "敌群从其余方向进入，先转去空侧再应对追击。",
+      "concurrent_cap": 24,
+      "planned_required": 26,
+      "fast_forward_empty": true,
+      "batches": [
+        {
+          "id": "f01w17b01",
+          "trigger": "wave_start",
+          "at_s": 0,
+          "portal": "S",
+          "archetype": "boar_normal",
+          "count": 7,
+          "warning_s": 0.9,
+          "emit_step_s": 0.22,
+          "unit_ids": [
+            "f01w17b01u01",
+            "f01w17b01u02",
+            "f01w17b01u03",
+            "f01w17b01u04",
+            "f01w17b01u05",
+            "f01w17b01u06",
+            "f01w17b01u07"
+          ]
+        },
+        {
+          "id": "f01w17b02",
+          "trigger": "wave_start",
+          "at_s": 3,
+          "portal": "W",
+          "archetype": "spider_normal",
+          "count": 7,
+          "warning_s": 0.9,
+          "emit_step_s": 0.22,
+          "unit_ids": [
+            "f01w17b02u01",
+            "f01w17b02u02",
+            "f01w17b02u03",
+            "f01w17b02u04",
+            "f01w17b02u05",
+            "f01w17b02u06",
+            "f01w17b02u07"
+          ]
+        },
+        {
+          "id": "f01w17b03",
+          "trigger": "wave_start",
+          "at_s": 6,
+          "portal": "E",
+          "archetype": "wolf_normal",
+          "count": 6,
+          "warning_s": 0.9,
+          "emit_step_s": 0.22,
+          "unit_ids": [
+            "f01w17b03u01",
+            "f01w17b03u02",
+            "f01w17b03u03",
+            "f01w17b03u04",
+            "f01w17b03u05",
+            "f01w17b03u06"
+          ]
+        },
+        {
+          "id": "f01w17b04",
+          "trigger": "wave_start",
+          "at_s": 10,
+          "portal": "SW",
+          "archetype": "boar_normal",
+          "count": 6,
+          "warning_s": 0.9,
+          "emit_step_s": 0.22,
+          "unit_ids": [
+            "f01w17b04u01",
+            "f01w17b04u02",
+            "f01w17b04u03",
+            "f01w17b04u04",
+            "f01w17b04u05",
+            "f01w17b04u06"
+          ]
+        }
+      ],
+      "reward_budget": {
+        "cultivation": 26,
+        "core_units": 1,
+        "contribution": 2
+      }
+    },
+    {
+      "id": "tower-f01-w18",
+      "wave": 18,
+      "name": "疾缓相间",
+      "kind": "normal",
+      "formation": "斜翼",
+      "reserved_portals": [
+        "S",
+        "SE"
+      ],
+      "lesson": "狼先迫近，猪随后堵路；绕蛛走，不硬挤重叠群。",
+      "concurrent_cap": 24,
+      "planned_required": 28,
+      "fast_forward_empty": true,
+      "batches": [
+        {
+          "id": "f01w18b01",
+          "trigger": "wave_start",
+          "at_s": 0,
+          "portal": "NE",
+          "archetype": "wolf_normal",
+          "count": 4,
+          "warning_s": 0.9,
+          "emit_step_s": 0.22,
+          "unit_ids": [
+            "f01w18b01u01",
+            "f01w18b01u02",
+            "f01w18b01u03",
+            "f01w18b01u04"
+          ]
+        },
+        {
+          "id": "f01w18b02",
+          "trigger": "wave_start",
+          "at_s": 2,
+          "portal": "W",
+          "archetype": "boar_normal",
+          "count": 7,
+          "warning_s": 0.9,
+          "emit_step_s": 0.22,
+          "unit_ids": [
+            "f01w18b02u01",
+            "f01w18b02u02",
+            "f01w18b02u03",
+            "f01w18b02u04",
+            "f01w18b02u05",
+            "f01w18b02u06",
+            "f01w18b02u07"
+          ]
+        },
+        {
+          "id": "f01w18b03",
+          "trigger": "wave_start",
+          "at_s": 5,
+          "portal": "N",
+          "archetype": "spider_normal",
+          "count": 6,
+          "warning_s": 0.9,
+          "emit_step_s": 0.22,
+          "unit_ids": [
+            "f01w18b03u01",
+            "f01w18b03u02",
+            "f01w18b03u03",
+            "f01w18b03u04",
+            "f01w18b03u05",
+            "f01w18b03u06"
+          ]
+        },
+        {
+          "id": "f01w18b04",
+          "trigger": "wave_start",
+          "at_s": 8,
+          "portal": "NW",
+          "archetype": "boar_normal",
+          "count": 7,
+          "warning_s": 0.9,
+          "emit_step_s": 0.22,
+          "unit_ids": [
+            "f01w18b04u01",
+            "f01w18b04u02",
+            "f01w18b04u03",
+            "f01w18b04u04",
+            "f01w18b04u05",
+            "f01w18b04u06",
+            "f01w18b04u07"
+          ]
+        },
+        {
+          "id": "f01w18b05",
+          "trigger": "wave_start",
+          "at_s": 11,
+          "portal": "E",
+          "archetype": "wolf_normal",
+          "count": 4,
+          "warning_s": 0.9,
+          "emit_step_s": 0.22,
+          "unit_ids": [
+            "f01w18b05u01",
+            "f01w18b05u02",
+            "f01w18b05u03",
+            "f01w18b05u04"
+          ]
+        }
+      ],
+      "reward_budget": {
+        "cultivation": 28,
+        "core_units": 1,
+        "contribution": 2
+      }
+    },
+    {
+      "id": "tower-f01-w19",
+      "wave": 19,
+      "name": "阵前合练",
+      "kind": "normal",
+      "formation": "三向留口",
+      "reserved_portals": [
+        "W",
+        "SW"
+      ],
+      "lesson": "复习三族混编，30只总量仍受24只同屏上限约束。",
+      "concurrent_cap": 24,
+      "planned_required": 30,
+      "fast_forward_empty": true,
+      "batches": [
+        {
+          "id": "f01w19b01",
+          "trigger": "wave_start",
+          "at_s": 0,
+          "portal": "N",
+          "archetype": "boar_normal",
+          "count": 7,
+          "warning_s": 0.9,
+          "emit_step_s": 0.22,
+          "unit_ids": [
+            "f01w19b01u01",
+            "f01w19b01u02",
+            "f01w19b01u03",
+            "f01w19b01u04",
+            "f01w19b01u05",
+            "f01w19b01u06",
+            "f01w19b01u07"
+          ]
+        },
+        {
+          "id": "f01w19b02",
+          "trigger": "wave_start",
+          "at_s": 2,
+          "portal": "E",
+          "archetype": "spider_normal",
+          "count": 5,
+          "warning_s": 0.9,
+          "emit_step_s": 0.22,
+          "unit_ids": [
+            "f01w19b02u01",
+            "f01w19b02u02",
+            "f01w19b02u03",
+            "f01w19b02u04",
+            "f01w19b02u05"
+          ]
+        },
+        {
+          "id": "f01w19b03",
+          "trigger": "wave_start",
+          "at_s": 5,
+          "portal": "SE",
+          "archetype": "wolf_normal",
+          "count": 6,
+          "warning_s": 0.9,
+          "emit_step_s": 0.22,
+          "unit_ids": [
+            "f01w19b03u01",
+            "f01w19b03u02",
+            "f01w19b03u03",
+            "f01w19b03u04",
+            "f01w19b03u05",
+            "f01w19b03u06"
+          ]
+        },
+        {
+          "id": "f01w19b04",
+          "trigger": "wave_start",
+          "at_s": 8,
+          "portal": "NE",
+          "archetype": "boar_normal",
+          "count": 4,
+          "warning_s": 0.9,
+          "emit_step_s": 0.22,
+          "unit_ids": [
+            "f01w19b04u01",
+            "f01w19b04u02",
+            "f01w19b04u03",
+            "f01w19b04u04"
+          ]
+        },
+        {
+          "id": "f01w19b05",
+          "trigger": "wave_start",
+          "at_s": 11,
+          "portal": "S",
+          "archetype": "spider_normal",
+          "count": 4,
+          "warning_s": 0.9,
+          "emit_step_s": 0.22,
+          "unit_ids": [
+            "f01w19b05u01",
+            "f01w19b05u02",
+            "f01w19b05u03",
+            "f01w19b05u04"
+          ]
+        },
+        {
+          "id": "f01w19b06",
+          "trigger": "wave_start",
+          "at_s": 14,
+          "portal": "E",
+          "archetype": "boar_normal",
+          "count": 4,
+          "warning_s": 0.9,
+          "emit_step_s": 0.22,
+          "unit_ids": [
+            "f01w19b06u01",
+            "f01w19b06u02",
+            "f01w19b06u03",
+            "f01w19b06u04"
+          ]
+        }
+      ],
+      "reward_budget": {
+        "cultivation": 30,
+        "core_units": 2,
+        "contribution": 2
+      }
+    },
+    {
+      "id": "tower-f01-w20",
+      "wave": 20,
+      "name": "裂岩獠王",
+      "kind": "boss",
+      "formation": "首领留口",
+      "reserved_portals": [
+        "S",
+        "SW"
+      ],
+      "lesson": "先躲直冲与拱击；半血二连冲每段重新警示，清尽余妖才过层。",
+      "concurrent_cap": 24,
+      "planned_required": 9,
+      "fast_forward_empty": false,
+      "batches": [
+        {
+          "id": "f01w20b01",
+          "trigger": "wave_start",
+          "at_s": 0,
+          "portal": "N",
+          "archetype": "boar_boss",
+          "count": 1,
+          "warning_s": 1.2,
+          "emit_step_s": 0.22,
+          "unit_ids": [
+            "f01w20b01u01"
+          ]
+        },
+        {
+          "id": "f01w20b02",
+          "trigger": "wave_start",
+          "at_s": 0,
+          "portal": "W",
+          "archetype": "boar_normal",
+          "count": 2,
+          "warning_s": 0.9,
+          "emit_step_s": 0.22,
+          "unit_ids": [
+            "f01w20b02u01",
+            "f01w20b02u02"
+          ]
+        },
+        {
+          "id": "f01w20b03",
+          "trigger": "wave_start",
+          "at_s": 0,
+          "portal": "E",
+          "archetype": "wolf_normal",
+          "count": 1,
+          "warning_s": 0.9,
+          "emit_step_s": 0.22,
+          "unit_ids": [
+            "f01w20b03u01"
+          ]
+        },
+        {
+          "id": "f01w20b04",
+          "trigger": "wave_start",
+          "at_s": 0,
+          "portal": "NE",
+          "archetype": "spider_normal",
+          "count": 1,
+          "warning_s": 0.9,
+          "emit_step_s": 0.22,
+          "unit_ids": [
+            "f01w20b04u01"
+          ]
+        },
+        {
+          "id": "f01w20b05",
+          "trigger": "boss_half_hp_or_death",
+          "at_s": 0,
+          "portal": "NW",
+          "archetype": "boar_normal",
+          "count": 2,
+          "warning_s": 0.9,
+          "emit_step_s": 0.22,
+          "unit_ids": [
+            "f01w20b05u01",
+            "f01w20b05u02"
+          ]
+        },
+        {
+          "id": "f01w20b06",
+          "trigger": "boss_half_hp_or_death",
+          "at_s": 0,
+          "portal": "E",
+          "archetype": "wolf_normal",
+          "count": 1,
+          "warning_s": 0.9,
+          "emit_step_s": 0.22,
+          "unit_ids": [
+            "f01w20b06u01"
+          ]
+        },
+        {
+          "id": "f01w20b07",
+          "trigger": "boss_half_hp_or_death",
+          "at_s": 0,
+          "portal": "NE",
+          "archetype": "spider_normal",
+          "count": 1,
+          "warning_s": 0.9,
+          "emit_step_s": 0.22,
+          "unit_ids": [
+            "f01w20b07u01"
+          ]
+        }
+      ],
+      "reward_budget": {
+        "cultivation": 38,
+        "core_units": 20,
+        "contribution": 47
+      }
+    }
+  ],
+  "floor_stat_scale": {
+    "version": 4,
+    "reference_level": 3,
+    "normal_hp": 150,
+    "elite_hp": 3500,
+    "boss_hp": 16000,
+    "normal_damage": 4.664,
+    "elite_damage": 7.932,
+    "boss_damage": 9.332,
+    "boss_heavy_damage": 14.928,
+    "early_normal_through_wave": 4,
+    "early_normal_hp_multiplier": 1,
+    "early_elite_through_wave": 5,
+    "early_elite_hp_multiplier": 0.3457142857142857
+  },
+  "stat_resolution": "Enemy hp/damage/move_speed are shared legacy reference stats. Resolve once through floor_stat_scale and floor_hp_factor/floor_speed_factor, as for floors2-9."
+}

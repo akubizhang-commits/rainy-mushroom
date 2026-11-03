@@ -1,0 +1,11 @@
+import { FIXED_EQUIPMENT } from './TowerEquipmentFixed.js'
+import { EQUIPMENT_ROSTER } from './TowerEquipmentRoster.js'
+// Catalog-only source. The descriptor fallback serves historical neutral tables.
+export function weaponBasePoints(definition) {
+  const d=definition.id?definition:EQUIPMENT_ROSTER.find(d=>d.category==='weapon'&&d.tier===definition.tier&&d.quality===definition.quality&&d.role===definition.role)
+    ??EQUIPMENT_ROSTER.find(d=>d.category==='weapon'&&d.tier===definition.tier&&d.quality===definition.quality)
+  if(!d&&!definition.id&&definition.quality===0)return {physical:5,magic:5}
+  const base=FIXED_EQUIPMENT[d?.id]?.base
+  if(!base||base.physicalAttack===undefined)throw new RangeError('Unknown weapon definition')
+  return {physical:base.physicalAttack,magic:base.magicAttack}
+}

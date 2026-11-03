@@ -1,0 +1,346 @@
+# 角色信息面板验收 · 2026-11-02
+
+## 实现
+- 左上第一行显示剑修与完整境界，第二行显示当前阶段经验；保留进度条。
+- 左下复用 inventory-body 全身像，等比显示，突破就绪时保留突破入口。
+- 右侧基础属性统一为名称左对齐、数值右对齐；当前气血移入属性列表。右侧独立滚动。
+- 继续共用 combatLoadout → TowerRun.stats / characterCombatAttributes，未改战斗平衡公式或重复叠加装备。
+
+## 验证
+- Cocos web-mobile 构建通过。
+- 844×390、1280×720、1024×768 浏览器验收通过，见 ui.json 和 character-*.png。
+- 武器动作、物法伤害、防具防御专项：22/22 通过，见 combat-tests.log。
+- 初次扩展专项：31/36 通过；5 个失败在 UI 改动前已出现，涉及旧属性冷却期望及武器伤害公式期望。
+- 全量测试：1845 项，1515 通过、330 失败，未达到全绿。完整输出见 full-tests.log。此轮未修改这些业务逻辑与测试，未将全量失败归为已修复。
+
+## 全量失败项目
+- not ok 240 - cross rank caps follow its four authored realm gates, including the exact XP boundaries
+- not ok 241 - cross quotes enforce current stage, next-rank realm and exact costs
+- not ok 242 - cross purchase and downgrade are atomic and survive reload without double spending
+- not ok 243 - campaign rejects cross ranks above each realm gate even when points are sufficient
+- not ok 244 - cross receives its own qi weapon affix and the qi flow bonus with readable names
+- not ok 245 - cross detail requirements show the next realm at ranks zero, three, six and nine
+- not ok 246 - crescent and cross text follows actual form changes rather than the former shared stages
+- not ok 340 - shop prices and foundation purchase gate; materials cannot be purchased
+- not ok 370 - equipped passives and rolled gear aggregate with combat damage bases and multiplicative defense
+- not ok 373 - each stage press advances one named minor realm and grants natural skill points
+- not ok 376 - stage rebase preserves equipped armor pending recovery and rejects stale writes
+- not ok 440 - live kill delta merges material quantities without replaying restored ledger
+- not ok 442 - clearing battle feedback discards all pending material notices
+- not ok 472 - bot leaves recorded sweep and charge warnings without reversing into the hit
+- not ok 524 - before first clear, stock confirmation and owned pills cannot bypass the opening gate
+- not ok 525 - first clear and reload unlock purchase, crafting and use with the same six-dose limit
+- not ok 526 - passives use realm-scaled costs and preserve all terminal effects
+- not ok 655 - same-quality higher ranks increase the reviewed attack base without guaranteeing an off-build upgrade
+- not ok 713 - camp pill crossing a level from 44 XP keeps existing HP and natural regeneration
+- not ok 714 - camp pill crossing a level from 1484 XP keeps existing HP and natural regeneration
+- not ok 715 - camp pill crossing a level from 5399 XP keeps existing HP and natural regeneration
+- not ok 728 - a real 80-point build spends its exact budget and repeated respec cannot mint points or spirit stones
+- not ok 729 - weapon-only presets retain three choices and cannot switch learned skills off
+- not ok 733 - schema1 resets all old progression once and preserves subsequent schema11 spending
+- not ok 736 - schema2 resets all old progression once and preserves subsequent schema11 spending
+- not ok 739 - schema3 resets all old progression once and preserves subsequent schema11 spending
+- not ok 742 - schema4 resets all old progression once and preserves subsequent schema11 spending
+- not ok 745 - schema5 resets all old progression once and preserves subsequent schema11 spending
+- not ok 748 - schema6 resets all old progression once and preserves subsequent schema11 spending
+- not ok 751 - schema7 resets all old progression once and preserves subsequent schema11 spending
+- not ok 754 - schema8 resets all old progression once and preserves subsequent schema11 spending
+- not ok 757 - schema9 resets all old progression once and preserves subsequent schema11 spending
+- not ok 760 - schema10 resets all old progression once and preserves subsequent schema11 spending
+- not ok 763 - schema11 resets all old progression once and preserves subsequent schema11 spending
+- not ok 766 - schema12 resets all old progression once and preserves subsequent schema11 spending
+- not ok 769 - schema13 resets all old progression once and preserves subsequent schema11 spending
+- not ok 780 - fresh campaign is isolated, immutable and grants starter gifts only once
+- not ok 787 - only two camp pills exist, heal/XP clamp and full effects never consume inventory
+- not ok 788 - offline rest is saved once, rejects backwards-clock farming and cannot bank full-health time
+- not ok 789 - bad actions, funds, counts and capacities never publish a partial transaction
+- not ok 790 - every camp action publishes only after persistence, including RNG, selection and tutorial
+- not ok 795 - checksummed but invalid permanent state cannot bypass ownership, caps or skill locks
+- not ok 802 - failed checkpoints and settlements retain one retryable complete transaction
+- not ok 808 - optional settlement grade summaries survive reload, reject corruption and preserve old summaries
+- not ok 815 - both pills are rejected without inventory or save changes while playing
+- not ok 816 - both pills are rejected without inventory or save changes while paused
+- not ok 817 - both pills are rejected without inventory or save changes while reloaded
+- not ok 818 - repeat clears and repeated settlement cannot replenish used cultivation allowance
+- not ok 820 - white tiger has an independent resource used by both tower and battle views
+- not ok 823 - xuan weapon equip gate at level 19
+- not ok 938 - flight is a one-rank level-ten passive costing three SP without a book, floor or prerequisite
+- not ok 939 - flight purchase, reload, downgrade and full respec spend and refund exactly three SP
+- not ok 940 - flight rejects forged low-level or excess ranks and retains passive first-learning camp restriction
+- not ok 947 - forge hall only sells deterministic fan equipment 1280x720
+- not ok 948 - crafting preview covers every formal quality pool without spending 1280x720
+- not ok 949 - forge overlay controls and independent scroll panes stay in bounds 1280x720
+- not ok 950 - batch purchase debounces callback and reports only persisted awards 1280x720
+- not ok 951 - single purchase creates one award and inventory retains the same identity 1280x720
+- not ok 952 - forge details have no wish controls 1280x720
+- not ok 953 - forge hall only sells deterministic fan equipment 844x390
+- not ok 954 - crafting preview covers every formal quality pool without spending 844x390
+- not ok 955 - forge overlay controls and independent scroll panes stay in bounds 844x390
+- not ok 956 - batch purchase debounces callback and reports only persisted awards 844x390
+- not ok 957 - single purchase creates one award and inventory retains the same identity 844x390
+- not ok 958 - forge details have no wish controls 844x390
+- not ok 959 - crafting lists only tiers the current realm can use
+- not ok 960 - failed batch save retries with the same receipt and exactly one resource deduction
+- not ok 963 - disabled, closed, destroyed and stale-generation callbacks cannot purchase
+- not ok 964 - quality-four preview includes both graduates and never charges on view or presentation ticks
+- not ok 965 - close and revisit preserve state without retaining a pending submission
+- not ok 966 - sect entries share cultivation state and keep tower separate from inheritance peaks
+- not ok 967 - danxia 1280x720: main hall opens shop, purchase persists, close and revisit reset
+- not ok 968 - danxia 844x390: main hall opens shop, purchase persists, close and revisit reset
+- not ok 970 - pill quantity and zero balance 1280
+- not ok 971 - pill quantity and zero balance 844
+- not ok 972 - pills: icon close and outside dismissal preserve state without closing on content taps
+- not ok 973 - fan equipment adds bounded damage without promising a kill-count breakpoint
+- not ok 976 - special skills share the realm gate regardless of previous choices or floor progress
+- not ok 982 - explicit playtest bonus extends available SP without changing natural sources or rank gates
+- not ok 984 - realm rewards include the approved breakthrough books without repeat grants
+- not ok 985 - nine first clears and three gated research purchases extend the 48 realm points
+- not ok 988 - all fully invested nodes cost 343 after teaching, and an overspend remains visible
+- not ok 989 - invalid point sources and ranks cannot silently manufacture or erase investment
+- not ok 995 - all four evolutions have independent realm gates and approved costs
+- not ok 996 - 御剑追击 can be acquired one rank at a time within 80 points with all prerequisites
+- not ok 997 - 剑气贯穿 can be acquired one rank at a time within 80 points with all prerequisites
+- not ok 998 - 剑阵控场 can be acquired one rank at a time within 80 points with all prerequisites
+- not ok 999 - 48-point realm-only pursuit build keeps its evolution without any research purchase
+- not ok 1004 - monster art caches all nine families, bounds ID nodes, faces without hopping, and releases once
+- not ok 1005 - monster missing/malformed resources and unsupported beasts retain fallback with no retry storm
+- not ok 1006 - monster late completion after clearing or destruction cannot mutate stale actors
+- not ok 1007 - monster synchronous resource success and exceptions are cached without unbalanced refs
+- not ok 1008 - returning to camp before monster resources arrive cannot resurrect the battle
+- not ok 1009 - real battle layers artwork below warnings and foreground, preserves state, and clears it on camp
+- not ok 1010 - requested playtest stays read-only and never writes the ordinary save when the initial copy fails
+- not ok 1011 - same-mode retry can recover a failed isolated copy without touching ordinary progress
+- not ok 1012 - ordinary progress becomes writable only after an explicit switch from the failed playtest
+- not ok 1013 - successful sync re-enables current-page buttons and clamps obsolete scroll (ordinary)
+- not ok 1014 - successful sync re-enables current-page buttons and clamps obsolete scroll (playtest)
+- not ok 1015 - playtest identity survives partial healing, full-HP redraw, and local skill-detail navigation
+- not ok 1016 - skill page hides battle vitals and keeps rank hints below icons
+- not ok 1017 - host resets obsolete schema3 exactly once (successful save)
+- not ok 1018 - host resets obsolete schema3 exactly once (save failure stays read-only)
+- not ok 1019 - economy v2 hides the wallet on hall and skills but shows it in relevant pages
+- not ok 1020 - weapon draw rejects insufficient spiritStones without any state or save change
+- not ok 1021 - weapon draw rejects insufficient contribution without any state or save change
+- not ok 1022 - weapon draw atomically pays 100 stones and contribution and preserves the rolled instance
+- not ok 1023 - skill pane uses shared weapon damage once after equipping an affix instance
+- not ok 1024 - first special skill book costs 200 stones atomically and subsequent ranks do not rebuy it
+- not ok 1025 - three research purchases cost 800/1600/2400 stones and failed saves grant no points
+- not ok 1026 - manual healing works after sync recovery and a failed pill save consumes neither HP nor inventory
+- not ok 1027 - actual tool buttons preserve paused snapshots and HP, and preferences do not publish on save failure
+- not ok 1028 - a failed pause checkpoint blocks switching until the real retry button commits it
+- not ok 1029 - paused and withdrawn loot displays only the 0 credited spirit stones near the wallet cap
+- not ok 1030 - paused and withdrawn loot displays only the 1 credited spirit stones near the wallet cap
+- not ok 1031 - paused and withdrawn loot displays only the 10 credited spirit stones near the wallet cap
+- not ok 1032 - capped floor-three first-clear popup excludes skill points from stone overflow
+- not ok 1033 - host refund preview and committed cascade show concrete skill names and ranks without undefined fields
+- not ok 1034 - skill arrow follows purchase eligibility: realm cap with spare points
+- not ok 1035 - skill arrow follows purchase eligibility: no points below cap
+- not ok 1036 - skill arrow follows purchase eligibility: stage locked
+- not ok 1037 - skill arrow follows purchase eligibility: no tutorial gate
+- not ok 1038 - skill arrow follows purchase eligibility: no prerequisite gate
+- not ok 1039 - skill arrow follows purchase eligibility: unlocked first rank
+- not ok 1040 - skill arrow follows purchase eligibility: current rank can grow
+- not ok 1041 - skill arrow follows purchase eligibility: absolute maximum
+- not ok 1042 - skill arrow disappears at the realm cap after purchase and returns after refund
+- not ok 1043 - dependency connections remain stable across learning and refund without mutating saved state
+- not ok 1044 - async skill artwork preserves all 16 click targets, clipping, badges and camp transactions (844x390)
+- not ok 1045 - async skill artwork preserves all 16 click targets, clipping, badges and camp transactions (1024x600)
+- not ok 1046 - one failed skill image leaves its glyph and camp controls usable alongside loaded artwork
+- not ok 1047 - destroying the real host releases loaded icon art and safely ignores pending completions
+- not ok 1048 - compact skill labels show passive mastery over loaded art and right-aligned points (1280x720)
+- not ok 1049 - physical type, flow and level are separate nonoverlapping tags (1280x720)
+- not ok 1050 - independent skills have no dependency arrows (1280x720)
+- not ok 1051 - realm blocks group all 26 skills with five-slot rows and no label column (1280x720)
+- not ok 1052 - nine-stage UI keeps compact nodes and fixed footer targets (1280x720)
+- not ok 1053 - compact skill labels show passive mastery over loaded art and right-aligned points (844x390)
+- not ok 1054 - physical type, flow and level are separate nonoverlapping tags (844x390)
+- not ok 1055 - independent skills have no dependency arrows (844x390)
+- not ok 1056 - realm blocks group all 26 skills with five-slot rows and no label column (844x390)
+- not ok 1057 - nine-stage UI keeps compact nodes and fixed footer targets (844x390)
+- not ok 1058 - compact skill labels show passive mastery over loaded art and right-aligned points (1024x600)
+- not ok 1059 - physical type, flow and level are separate nonoverlapping tags (1024x600)
+- not ok 1060 - independent skills have no dependency arrows (1024x600)
+- not ok 1061 - realm blocks group all 26 skills with five-slot rows and no label column (1024x600)
+- not ok 1062 - nine-stage UI keeps compact nodes and fixed footer targets (1024x600)
+- not ok 1063 - nine-stage UI plus/minus retain selection and vertical scroll in the viewport-wide tree (1280x720)
+- not ok 1064 - nine-stage UI plus/minus retain selection and vertical scroll in the viewport-wide tree (844x390)
+- not ok 1065 - nine-stage UI plus/minus retain selection and vertical scroll in the viewport-wide tree (1024x600)
+- not ok 1066 - skill footer is stationary through commits, failures, read-only and selection (844x390)
+- not ok 1067 - skill footer displays actual unlearned and maximum ranks (844x390)
+- not ok 1068 - skill footer is stationary through commits, failures, read-only and selection (1024x600)
+- not ok 1069 - skill footer displays actual unlearned and maximum ranks (1024x600)
+- not ok 1070 - skill form, next-rank and future motion details fit the independent scroll (1280x720)
+- not ok 1071 - skill form, next-rank and future motion details fit the independent scroll (844x390)
+- not ok 1072 - nine-stage UI shows locked learning without writes below the starting phase
+- not ok 1073 - nine-stage UI failed learning keeps scroll and assets, shows a fixed error, and retries once
+- not ok 1074 - nine-stage UI evo_wanjian first-rank condition matches its stage without changing higher-rank gates
+- not ok 1075 - nine-stage UI evo_tiandi first-rank condition matches its stage without changing higher-rank gates
+- not ok 1076 - nine-stage UI evo_wuwo first-rank condition matches its stage without changing higher-rank gates
+- not ok 1077 - nine-stage UI evo_sixiang first-rank condition matches its stage without changing higher-rank gates
+- not ok 1078 - paused tower skills show only plus, keep its hit area, and commit a legal upgrade (844x390)
+- not ok 1079 - paused tower skills show only plus, keep its hit area, and commit a legal upgrade (1024x600)
+- not ok 1080 - host decreaseSkill is rejected outside the camp library (hall)
+- not ok 1081 - host decreaseSkill is rejected outside the camp library (tower)
+- not ok 1082 - host decreaseSkill is rejected outside the camp library (battle)
+- not ok 1083 - host decreaseSkill is rejected outside the camp library (skills)
+- not ok 1084 - host decreaseSkill remains allowed in the camp library and preserves books
+- not ok 1085 - host respecSkills is rejected outside the camp library (hall)
+- not ok 1086 - host respecSkills is rejected outside the camp library (tower)
+- not ok 1087 - host respecSkills is rejected outside the camp library (battle)
+- not ok 1088 - host respecSkills is rejected outside the camp library (skills)
+- not ok 1089 - host respecSkills remains allowed in the camp library and preserves books
+- not ok 1090 - portrait launch gates camp UI and updates until a landscape frame is available
+- not ok 1091 - portrait gate preserves the playing run and requires manual continue
+- not ok 1092 - portrait gate preserves the paused run and requires manual continue
+- not ok 1093 - fixed bottom-left joystick keeps its origin, applies a deadzone, and clamps actual Run movement
+- not ok 1094 - joystick end clears movement and a later touch reuses the fixed origin
+- not ok 1095 - joystick cancel clears movement and a later touch reuses the fixed origin
+- not ok 1096 - secondary touches cannot steal, redirect or release the active joystick touch
+- not ok 1097 - right-side field touches cannot relocate or start the fixed joystick
+- not ok 1098 - 暂停 resets a held stick, ignores late touch events, and resumes without movement
+- not ok 1099 - 技能 resets a held stick, ignores late touch events, and resumes without movement
+- not ok 1100 - landscape resize releases a held stick and places its replacement at the new bottom-left
+- not ok 1101 - landscape 1280×720 pause and tool targets fit in two columns and keep real tool actions
+- not ok 1102 - landscape 844×390 pause and tool targets fit in two columns and keep real tool actions
+- not ok 1103 - extreme 1920×280 letterboxes combat and tools, then restores fixed-width without losing state
+- not ok 1104 - extreme 3840×1080 letterboxes combat and tools, then restores fixed-width without losing state
+- not ok 1105 - real host up sector arc matches the locked 140-degree Run warning and actual hit direction
+- not ok 1106 - real host down sector arc matches the locked 140-degree Run warning and actual hit direction
+- not ok 1107 - real host left sector arc matches the locked 140-degree Run warning and actual hit direction
+- not ok 1108 - real host right sector arc matches the locked 140-degree Run warning and actual hit direction
+- not ok 1109 - lightweight HUD stays fixed and keeps safe targets at 1280×720
+- not ok 1110 - lightweight HUD stays fixed and keeps safe targets at 1024×600
+- not ok 1111 - lightweight HUD stays fixed and keeps safe targets at 844×390
+- not ok 1112 - lightweight HUD stays fixed and keeps safe targets at 1920×280
+- not ok 1113 - paper battle HUD HP ratio stays readable and skill points remain actionable
+- not ok 1114 - only the attacked monster appears in the centered health panel
+- not ok 1115 - queued notices display in order, keep simulation-time durations through pause, then disappear
+- not ok 1116 - passive skills do not imply damaging aura rings and rendering remains read-only
+- not ok 1117 - playtest point grant is real, repeatable to 999, and reset requires confirmation
+- not ok 1118 - normal mode cannot execute experience reset or skill grant
+- not ok 1119 - failed playtest reset retains paused run and earned skills
+- not ok 1120 - one-click top-grade grants are repeatable and preserve ordinary saves
+- not ok 1121 - camp level button reaches 27 with natural SP and no extra healing
+- not ok 1122 - in-tower level button gives a short exit hint; resource grants keep the run paused and intact
+- not ok 1123 - resource write failures show errors without publishing grants
+- not ok 1124 - full stone balance rejects the grant without changing the save
+- not ok 1125 - tools checkpoint a locally paused restored run before enabling resource actions
+- not ok 1126 - normal mode cannot invoke resource or level actions through tool methods
+- not ok 1127 - grouped tool menus fit 1280x720 without overlapping labels or buttons
+- not ok 1128 - grouped tool menus fit 844x390 without overlapping labels or buttons
+- not ok 1129 - grouped tool menus fit 1920x280 without overlapping labels or buttons
+- not ok 1130 - flight is a one-rank shared passive with real purchase, reload and refund
+- not ok 1131 - actual kill starts a minor level animation only once
+- not ok 1132 - actual kill starts a major level animation only once
+- not ok 1133 - avatar opens a bounded character overlay with actual attributes and read-only dismissal
+- not ok 1134 - character overlay follows camp healing and closes when leaving the hall
+- not ok 1135 - paper HUD loads the existing character art, disposes assets and rejects stale callbacks
+- not ok 1136 - paper HUD resource failure preserves readable stats in hall and combat
+- not ok 1137 - paper battle HP and realm label stay outside the avatar and realm text updates live
+- not ok 1138 - skill page keeps reset compact and moves research below the skill viewport
+- not ok 1139 - character atlas preserves feet, independent sword, movement modes and paused redraws
+- not ok 1140 - character slash follows a real short windup across a 3x frame and cannot cause damage
+- not ok 1141 - one level 1 sword-line volley completes one character action without rewinding on its 1 hits
+- not ok 1142 - one level 6 sword-line volley completes one character action without rewinding on its 2 hits
+- not ok 1143 - one level 10 sword-line volley completes one character action without rewinding on its 3 hits
+- not ok 1144 - character flight keeps its flying sword through idle and real skill attacks
+- not ok 1145 - invalid character atlas falls back and late resource callbacks cannot resurrect a destroyed host
+- not ok 1146 - character reads revised JSON geometry and all 35 frames across atlas rows
+- not ok 1147 - separate blade keeps a full-width shaft over the repaired source path
+- not ok 1148 - real character PNG, manifest and import metadata satisfy the running atlas contract
+- not ok 1149 - cast notifications are immutable, unsaved and independent of cooldown arithmetic
+- not ok 1150 - tower entry focuses next uncleared floor, locks future floors and enters only the selection
+- not ok 1151 - tower entry completed campaign selects ninth floor and readonly disables entry
+- not ok 1152 - tower entry artwork reuses requests and late loads cannot revive abandoned page
+- not ok 1153 - tower cards scroll with complete boss artwork and separate text (1280x720)
+- not ok 1154 - tower cards scroll with complete boss artwork and separate text (844x390)
+- not ok 1155 - falcon and ape floor cards request matching artwork without obsolete boss portraits
+- not ok 1156 - falcon battle art loads the full sprite and reuses its resource cache
+- not ok 1157 - stone battle art maps converted denominations rather than monster ranks and leaves rewards untouched
+- not ok 1158 - wallet grade icons pair with quantities and release bindings on redraw
+- not ok 1159 - approved resource icons render beside existing counters and XP feedback without altering values
+- not ok 1160 - book requirements use stone art without wallet balances and owned books retain book art
+- not ok 1161 - each pill shares its own art across apothecary, inventory cell and details without consuming pills
+- not ok 1162 - heal drop art preserves proximity pickup, one-time recovery and sprite cleanup
+- not ok 1163 - backpack art preserves menu and battle hit targets, fallback and inventory navigation
+- not ok 1164 - skill button art preserves menu and battle hit targets, fallback and skill navigation
+- not ok 1165 - settings art preserves menu settings and map-card pause actions
+- not ok 1166 - tower environment loads once, stays world anchored and cleans cancelled and completed mist
+- not ok 1167 - pillar occludes player and monsters behind it but actors in front cover the pillar
+- not ok 1168 - stone drops render bounded denomination piles without floating text or reward mutations
+- not ok 1169 - currency HUD hides only leading zero top grades and closes gaps as balances change
+- not ok 1170 - map card owns floor title and device status while battle center only shows waves
+- not ok 1171 - initialization confirmation stays visible and clears every skill (1280)
+- not ok 1172 - initialization confirmation stays visible and clears every skill (844)
+- not ok 1173 - single-save tools expose only direct actions and cycle speed without a submenu
+- not ok 1174 - single-save tool writes are atomic and close returns to paused battle
+- not ok 1175 - monster mechanics remain above every friendly effect and reuse world labels during paused redraws
+- not ok 1176 - paper experience ring resets on level-up and hides at cap in hall and combat
+- not ok 1177 - target health stays transparent and immediately below top resources 720
+- not ok 1178 - target health stays transparent and immediately below top resources 600
+- not ok 1179 - battle experience surrounds the portrait without a bottom bar
+- not ok 1180 - target role uses a silver elite or gold demon-king title and clears on a normal target
+- not ok 1181 - developer progress controls persist grants and reset a paused run (1280)
+- not ok 1182 - developer progress controls persist grants and reset a paused run (844)
+- not ok 1183 - ten-layer character panel shows full XP and pending breakthrough (1280)
+- not ok 1184 - ten-layer character panel shows full XP and pending breakthrough (844)
+- not ok 1185 - ten-layer golden core distinguishes tenth layer from full consummation
+- not ok 1301 - first two floor rewards are points, atomic and not granted again on replay
+- not ok 1346 - camp max level follows official XP/SP and camp health semantics, with no fake clear or research
+- not ok 1353 - real first-clear rewards preserve elevated wallets and saturate safely at the trial cap
+- not ok 1361 - reset clears a developed camp profile without touching ordinary records or tool preferences
+- not ok 1362 - reset clears a developed playing profile without touching ordinary records or tool preferences
+- not ok 1363 - reset clears a developed paused profile without touching ordinary records or tool preferences
+- not ok 1377 - new mode starts once with its own resources and three healing pills
+- not ok 1378 - cultivation boundaries retain 27 levels with separate compounded attack and HP growth
+- not ok 1379 - offline camp healing is 1% max HP per minute, capped and persisted once
+- not ok 1380 - high-realm medicine uses the new HP ceiling and preserves atomic save and reload behavior
+- not ok 1386 - medicine has only the two camp identities, contribution prices and clamped effects
+- not ok 1387 - cultivation pill stops at 金丹圆满, does not bank overflow or consume at cap
+- not ok 1389 - inventory capacity is all-or-nothing
+- not ok 1393 - invalid checksummed state is rejected, not silently reset or repaired
+- not ok 1412 - learning and rank caps are constant within each realm phase
+- not ok 1461 - real kill XP 1484→1485 at 10 HP heals only newly crossed levels
+- not ok 1462 - real kill XP 5399→5400 at 10 HP heals only newly crossed levels
+- not ok 1465 - real kill XP 10920→10920 at 10 HP heals only newly crossed levels
+- not ok 1467 - level healing uses the equipped player’s actual post-level max HP
+- not ok 1470 - full floor rewards and restoring a victory never add healing without a new level
+- not ok 1476 - new active damage at ranks 1 and 10 stays a per-cast total rather than multiplying decorative swords or eyes
+- not ok 1481 - all nine growth floors preserve 180 waves, 4770 deaths and bounded grade sums across live JSON replay
+- not ok 1486 - all nine full combat floors pay exact authored grades inside both count and value bounds
+- not ok 1487 - forward, reverse and interleaved kill order use the same wave/local-ID plan on floors one and nine
+- not ok 1490 - core visuals are already credited at the kill, persist through reload and never credit on touch or expiry
+- not ok 1491 - UI snapshot core summary reports denomination value separately from item count and rank sum
+- not ok 1492 - partial kills, retreat and death retain only actual drops and never receive a full-floor minimum
+- not ok 1493 - corrupt loot identity, grades, monetary totals and core visuals are rejected on validation and restore
+- not ok 1495 - training performs actual kills and resets while every grade, wallet award and core visual stays empty
+- not ok 1502 - constructor preserves fractional HP, bounds growth/equipment, and copies loadout
+- not ok 1509 - legacy loot: all 180 authored waves and 4770 deaths retain the old reward totals
+- not ok 1647 - next requirements follow rank caps, stage and evolution rank not first unlock
+- not ok 1650 - active snapshot supplies live XP and frozen equipment, without mutating it
+- not ok 1655 - retained investments still display the learning-stage floor on their next rank
+- not ok 1661 - dependency hints omit former special/passive gates and retain exact evolution parent ranks
+- not ok 1663 - nine immutable stages cover all 27 character levels and exactly the 7/7/4 skill allocation
+- not ok 1671 - sj_line first learning and further investment obey its Lv10 stage boundary
+- not ok 1672 - sj_shadow first learning and further investment obey its Lv10 stage boundary
+- not ok 1673 - sj_formation first learning and further investment obey its Lv10 stage boundary
+- not ok 1674 - sj_flight first learning and further investment obey its Lv10 stage boundary
+- not ok 1675 - sj_mark first learning and further investment obey its Lv13 stage boundary
+- not ok 1676 - sj_bone first learning and further investment obey its Lv13 stage boundary
+- not ok 1677 - sj_gate first learning and further investment obey its Lv16 stage boundary
+- not ok 1678 - evo_wanjian first learning and further investment obey its Lv19 stage boundary
+- not ok 1679 - evo_tiandi first learning and further investment obey its Lv22 stage boundary
+- not ok 1680 - evo_wuwo first learning and further investment obey its Lv22 stage boundary
+- not ok 1681 - evo_sixiang first learning and further investment obey its Lv25 stage boundary
+- not ok 1683 - actual authored nine-floor XP reaches each scheduled stage without moving the XP or SP caps
+- not ok 1684 - book action cannot bypass the stage; at unlock its book is charged once
+- not ok 1685 - book action cannot bypass the stage; at unlock its book is charged zero
+- not ok 1687 - evo_tiandi held at old Lv19 stays valid through reload, downgrade and battle despite its later new-learning stage
+- not ok 1688 - evo_wuwo held at old Lv19 stays valid through reload, downgrade and battle despite its later new-learning stage
+- not ok 1689 - evo_sixiang held at old Lv19 stays valid through reload, downgrade and battle despite its later new-learning stage
+- not ok 1690 - retained-evolution compatibility keeps the pre-existing realm, book, parent and SP validation
+- not ok 1692 - class rank caps follow new growth and evolution rank two retains its original gates
+- not ok 1713 - armor HP joins medicine, camp restoration and snapshots; swapping cannot heal
+- not ok 1753 - weapon flat and ring crit/focus use additive shares while preserving the original bone/crit baseline
+- not ok 1754 - focus belongs to the ring, shares a counter across skills and ignores whiffs, zero hits and corpses
+- not ok 1755 - zone aliases apply one skill family across damage types and continuous damage excludes ring effects
+- not ok 1757 - all legal weapon/ring grade combinations stay within the shared total budget using actual combat hits

@@ -1,0 +1,32 @@
+'use strict';
+const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),{createServer}=require('node:http');
+const {chromium}=require('/Users/zhangnu/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright');
+const root=path.resolve(__dirname,'..'),out=path.join(root,'docs/xianxia/reports/tower-pillar-contact');
+(async()=>{fs.mkdirSync(out,{recursive:true});const errors=[];
+const server=createServer((req,res)=>{const file=path.resolve(root,'.'+decodeURIComponent(new URL(req.url,'http://local').pathname));if(!file.startsWith(root+path.sep)){res.writeHead(403).end();return}fs.readFile(file,(e,d)=>{if(e){res.writeHead(404).end();return}res.setHeader('Content-Type',({'.html':'text/html','.js':'text/javascript','.json':'application/json','.png':'image/png','.css':'text/css','.wasm':'application/wasm'})[path.extname(file)]||'application/octet-stream');res.end(d)})});
+await new Promise(r=>server.listen(0,'127.0.0.1',r));let browser;const layouts=[];
+try{browser=await chromium.launch({headless:true,channel:'chrome'});
+for(const viewport of [{width:1280,height:720},{width:844,height:390}]){
+ const context=await browser.newContext({viewport}),page=await context.newPage();page.on('pageerror',e=>errors.push(e.message));
+ await page.goto(`http://127.0.0.1:${server.address().port}/cocos-pilot/build/web-mobile/index.html?ruleset=xianxia&tower=1&smoke=1`);
+ await page.waitForFunction(()=>window.__towerTest?.host?.menu);
+ await page.evaluate(()=>{const h=window.__towerTest.host;h.enterTraining();h.run.pause();const s=h.run.state;s.arenaVersion=1;s.player.x=33;s.player.y=390;
+  s.enemies=[{id:'qa-wolf',family:'wolf',hp:100,maxHp:100,radius:24,rank:1,role:'normal',x:78,y:390,ai:{mode:'approach'}}];s.reserved=[];s.pending=[];h.draw();});
+ await page.waitForFunction(()=>{const h=window.__towerTest.host;return h.environmentArt.loaded.size>=2&&h.characterArt.root&&h.monsterArt.actors.get('qa-wolf')});
+ await page.evaluate(()=>window.__towerTest.host.draw());
+ const depth=await page.evaluate(()=>{const h=window.__towerTest.host,n=h.monsterLayer.children;return {player:n.indexOf(h.characterLayer),pillar:n.indexOf(h.environmentArt.nodes.get('north')),monster:n.indexOf(h.monsterArt.actors.get('qa-wolf').node)}});
+ assert.ok(depth.player<depth.pillar&&depth.monster<depth.pillar);
+ await page.screenshot({path:path.join(out,`behind-${viewport.width}.png`)});
+ await page.evaluate(()=>{const h=window.__towerTest.host;h.run.state.player.y=230;h.run.state.enemies[0].y=220;h.draw()});
+ const front=await page.evaluate(()=>{const h=window.__towerTest.host,n=h.monsterLayer.children;return {player:n.indexOf(h.characterLayer),pillar:n.indexOf(h.environmentArt.nodes.get('north')),monster:n.indexOf(h.monsterArt.actors.get('qa-wolf').node)}});
+ assert.ok(front.player>front.pillar&&front.monster>front.pillar);
+ await page.screenshot({path:path.join(out,`front-${viewport.width}.png`)});
+ const contact=await page.evaluate(()=>{const h=window.__towerTest.host,s=h.run.state;s.enemies=[];s.reserved=[];s.pending=[{retryAt:1e9}];s.player.x=33;s.player.y=120;h.run.resume();h.run.setInput(0,1);for(let i=0;i<120;i++){const old=s.player.y;h.run.advance(1/60);if(s.player.y-old<s.player.moveSpeed/60-.1)break;}h.run.pause();h.draw();return {x:s.player.x,y:s.player.y,foot:h.characterArt.root.position.y,camera:h.camera.y}});
+ assert.ok(contact.y>240&&contact.y<255,JSON.stringify(contact));assert.ok(Math.abs(contact.foot-(contact.y-contact.camera))<1e-6);
+ await page.screenshot({path:path.join(out,`contact-${viewport.width}.png`)});
+ const passage=await page.evaluate(()=>{const h=window.__towerTest.host,s=h.run.state;s.enemies=[];s.reserved=[];s.pending=[{retryAt:1e9}];s.player.x=-87;s.player.y=244;h.run.resume();h.run.setInput(1,0);for(let i=0;i<60;i++)h.run.advance(1/60);h.run.pause();h.draw();return {x:s.player.x,y:s.player.y}});
+ assert.ok(passage.x>130&&Math.abs(passage.y-244)<1e-6,JSON.stringify(passage));
+ layouts.push({viewport,depth,front,contact,passage});await context.close();
+}
+assert.deepEqual(errors,[]);fs.writeFileSync(path.join(out,'report.json'),JSON.stringify({status:'PASS',layouts,errors},null,2));console.log('PASS: behind/front ordering, ground anchor, south contact and empty-ground passage in two landscape sizes');
+}finally{await browser?.close();server.close()}})().catch(e=>{console.error(e);process.exitCode=1});

@@ -1,0 +1,2744 @@
+{
+  "version": "1.4",
+  "status": "design-only-not-runtime",
+  "units": {
+    "H": 44,
+    "V": 56
+  },
+  "levels": [
+    {
+      "id": "forest-01",
+      "name": "苔间起步",
+      "regions": [
+        "A",
+        "B",
+        "C",
+        "X",
+        "Y",
+        "D",
+        "E",
+        "F"
+      ],
+      "edges": [
+        [
+          "A",
+          "B"
+        ],
+        [
+          "B",
+          "C"
+        ],
+        [
+          "C",
+          "D"
+        ],
+        [
+          "C",
+          "X"
+        ],
+        [
+          "X",
+          "D"
+        ],
+        [
+          "C",
+          "Y"
+        ],
+        [
+          "Y",
+          "D"
+        ],
+        [
+          "D",
+          "E"
+        ],
+        [
+          "E",
+          "F"
+        ]
+      ],
+      "zoneDescription": "outside：全部区域",
+      "restAtC": false,
+      "groups": {
+        "gA": [
+          "A",
+          "B"
+        ],
+        "gB": [
+          "C",
+          "X",
+          "Y",
+          "D",
+          "E",
+          "F"
+        ]
+      },
+      "checkpoints": [
+        {
+          "id": "forest-01:CP0",
+          "region": "A",
+          "supportId": "forest-01:surface-A",
+          "rank": 0,
+          "recoveryGroup": "gA"
+        },
+        {
+          "id": "forest-01:CP1",
+          "region": "B",
+          "supportId": "forest-01:surface-B",
+          "rank": 10,
+          "recoveryGroup": "gA"
+        },
+        {
+          "id": "forest-01:CP2",
+          "region": "C",
+          "supportId": "forest-01:surface-C",
+          "rank": 20,
+          "recoveryGroup": "gB"
+        },
+        {
+          "id": "forest-01:CP3",
+          "region": "D",
+          "supportId": "forest-01:surface-D",
+          "rank": 30,
+          "recoveryGroup": "gB"
+        }
+      ],
+      "rewards": {
+        "main": {
+          "grantId": "forest-01:main",
+          "coins": 20,
+          "region": "F"
+        },
+        "explore": {
+          "grantId": "forest-01:explore",
+          "coins": 10,
+          "alternatives": [
+            "X",
+            "Y"
+          ]
+        },
+        "unique": [
+          "forest-01:note-X",
+          "forest-01:keepsake-Y"
+        ]
+      },
+      "mainRoute": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F"
+      ],
+      "observationRoute": [
+        "A",
+        "B",
+        "C",
+        "X",
+        "D",
+        "E",
+        "F"
+      ],
+      "skillRoute": [
+        "A",
+        "B",
+        "C",
+        "Y",
+        "D",
+        "E",
+        "F"
+      ],
+      "regionZones": {
+        "A": [
+          "outside"
+        ],
+        "B": [
+          "outside"
+        ],
+        "C": [
+          "outside"
+        ],
+        "X": [
+          "outside"
+        ],
+        "Y": [
+          "outside"
+        ],
+        "D": [
+          "outside"
+        ],
+        "E": [
+          "outside"
+        ],
+        "F": [
+          "outside"
+        ]
+      },
+      "supports": [
+        {
+          "id": "forest-01:surface-A",
+          "region": "A",
+          "zone": "outside",
+          "fixed": true
+        },
+        {
+          "id": "forest-01:surface-B",
+          "region": "B",
+          "zone": "outside",
+          "fixed": true
+        },
+        {
+          "id": "forest-01:surface-C",
+          "region": "C",
+          "zone": "outside",
+          "fixed": true
+        },
+        {
+          "id": "forest-01:surface-X",
+          "region": "X",
+          "zone": "outside",
+          "fixed": true
+        },
+        {
+          "id": "forest-01:surface-Y",
+          "region": "Y",
+          "zone": "outside",
+          "fixed": true
+        },
+        {
+          "id": "forest-01:surface-D",
+          "region": "D",
+          "zone": "outside",
+          "fixed": true
+        },
+        {
+          "id": "forest-01:surface-E",
+          "region": "E",
+          "zone": "outside",
+          "fixed": true
+        },
+        {
+          "id": "forest-01:surface-F",
+          "region": "F",
+          "zone": "outside",
+          "fixed": true
+        }
+      ],
+      "portalPairs": [],
+      "rests": [
+        {
+          "id": "forest-01:R0",
+          "region": "A",
+          "checkpointId": "forest-01:CP0",
+          "deathGroups": [
+            "gA",
+            "gB"
+          ]
+        }
+      ],
+      "toolsRequired": [],
+      "optionalToolCatalogueOpens": null
+    },
+    {
+      "id": "forest-02",
+      "name": "孢子轻跳",
+      "regions": [
+        "A",
+        "B",
+        "C",
+        "X",
+        "Y",
+        "D",
+        "E",
+        "F"
+      ],
+      "edges": [
+        [
+          "A",
+          "B"
+        ],
+        [
+          "B",
+          "C"
+        ],
+        [
+          "C",
+          "D"
+        ],
+        [
+          "C",
+          "X"
+        ],
+        [
+          "X",
+          "D"
+        ],
+        [
+          "C",
+          "Y"
+        ],
+        [
+          "Y",
+          "D"
+        ],
+        [
+          "D",
+          "E"
+        ],
+        [
+          "E",
+          "F"
+        ]
+      ],
+      "zoneDescription": "outside：A/B/C/D/E/F/Y；tree：X内壁回路，C入口↔X入口、X侧孔↔D远岸",
+      "restAtC": false,
+      "groups": {
+        "gA": [
+          "A",
+          "B"
+        ],
+        "gB": [
+          "C",
+          "X",
+          "Y",
+          "D",
+          "E",
+          "F"
+        ]
+      },
+      "checkpoints": [
+        {
+          "id": "forest-02:CP0",
+          "region": "A",
+          "supportId": "forest-02:surface-A",
+          "rank": 0,
+          "recoveryGroup": "gA"
+        },
+        {
+          "id": "forest-02:CP1",
+          "region": "B",
+          "supportId": "forest-02:surface-B",
+          "rank": 10,
+          "recoveryGroup": "gA"
+        },
+        {
+          "id": "forest-02:CP2",
+          "region": "C",
+          "supportId": "forest-02:surface-C",
+          "rank": 20,
+          "recoveryGroup": "gB"
+        },
+        {
+          "id": "forest-02:CP3",
+          "region": "D",
+          "supportId": "forest-02:surface-D",
+          "rank": 30,
+          "recoveryGroup": "gB"
+        }
+      ],
+      "rewards": {
+        "main": {
+          "grantId": "forest-02:main",
+          "coins": 20,
+          "region": "F"
+        },
+        "explore": {
+          "grantId": "forest-02:explore",
+          "coins": 10,
+          "alternatives": [
+            "X",
+            "Y"
+          ]
+        },
+        "unique": [
+          "forest-02:note-X",
+          "forest-02:keepsake-Y"
+        ],
+        "special": {
+          "grantId": "tool:lamp:first",
+          "alternatives": [
+            "X",
+            "F"
+          ],
+          "coins": 0
+        }
+      },
+      "mainRoute": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F"
+      ],
+      "observationRoute": [
+        "A",
+        "B",
+        "C",
+        "X",
+        "D",
+        "E",
+        "F"
+      ],
+      "skillRoute": [
+        "A",
+        "B",
+        "C",
+        "Y",
+        "D",
+        "E",
+        "F"
+      ],
+      "regionZones": {
+        "A": [
+          "outside"
+        ],
+        "B": [
+          "outside"
+        ],
+        "C": [
+          "outside"
+        ],
+        "X": [
+          "tree"
+        ],
+        "Y": [
+          "outside"
+        ],
+        "D": [
+          "outside"
+        ],
+        "E": [
+          "outside"
+        ],
+        "F": [
+          "outside"
+        ]
+      },
+      "supports": [
+        {
+          "id": "forest-02:surface-A",
+          "region": "A",
+          "zone": "outside",
+          "fixed": true
+        },
+        {
+          "id": "forest-02:surface-B",
+          "region": "B",
+          "zone": "outside",
+          "fixed": true
+        },
+        {
+          "id": "forest-02:surface-C",
+          "region": "C",
+          "zone": "outside",
+          "fixed": true
+        },
+        {
+          "id": "forest-02:surface-X",
+          "region": "X",
+          "zone": "tree",
+          "fixed": true
+        },
+        {
+          "id": "forest-02:surface-Y",
+          "region": "Y",
+          "zone": "outside",
+          "fixed": true
+        },
+        {
+          "id": "forest-02:surface-D",
+          "region": "D",
+          "zone": "outside",
+          "fixed": true
+        },
+        {
+          "id": "forest-02:surface-E",
+          "region": "E",
+          "zone": "outside",
+          "fixed": true
+        },
+        {
+          "id": "forest-02:surface-F",
+          "region": "F",
+          "zone": "outside",
+          "fixed": true
+        },
+        {
+          "id": "forest-02:portal-entry-0-support",
+          "region": "C",
+          "zone": "outside",
+          "fixed": true
+        },
+        {
+          "id": "forest-02:portal-entry-1-support",
+          "region": "X",
+          "zone": "tree",
+          "fixed": true
+        },
+        {
+          "id": "forest-02:portal-exit-0-support",
+          "region": "X",
+          "zone": "tree",
+          "fixed": true
+        },
+        {
+          "id": "forest-02:portal-exit-1-support",
+          "region": "D",
+          "zone": "outside",
+          "fixed": true
+        }
+      ],
+      "portalPairs": [
+        {
+          "id": "forest-02:pair-entry",
+          "bidirectional": true,
+          "ends": [
+            {
+              "id": "forest-02:portal-entry-0",
+              "region": "C",
+              "zone": "outside",
+              "arrivalSupportId": "forest-02:portal-entry-0-support"
+            },
+            {
+              "id": "forest-02:portal-entry-1",
+              "region": "X",
+              "zone": "tree",
+              "arrivalSupportId": "forest-02:portal-entry-1-support"
+            }
+          ]
+        },
+        {
+          "id": "forest-02:pair-exit",
+          "bidirectional": true,
+          "ends": [
+            {
+              "id": "forest-02:portal-exit-0",
+              "region": "X",
+              "zone": "tree",
+              "arrivalSupportId": "forest-02:portal-exit-0-support"
+            },
+            {
+              "id": "forest-02:portal-exit-1",
+              "region": "D",
+              "zone": "outside",
+              "arrivalSupportId": "forest-02:portal-exit-1-support"
+            }
+          ]
+        }
+      ],
+      "rests": [
+        {
+          "id": "forest-02:R0",
+          "region": "A",
+          "checkpointId": "forest-02:CP0",
+          "deathGroups": [
+            "gA",
+            "gB"
+          ]
+        }
+      ],
+      "toolsRequired": [],
+      "optionalToolCatalogueOpens": null
+    },
+    {
+      "id": "forest-03",
+      "name": "借一阵风",
+      "regions": [
+        "A",
+        "B",
+        "C",
+        "X",
+        "Y",
+        "D",
+        "E",
+        "F"
+      ],
+      "edges": [
+        [
+          "A",
+          "B"
+        ],
+        [
+          "B",
+          "C"
+        ],
+        [
+          "C",
+          "D"
+        ],
+        [
+          "C",
+          "X"
+        ],
+        [
+          "X",
+          "D"
+        ],
+        [
+          "C",
+          "Y"
+        ],
+        [
+          "Y",
+          "D"
+        ],
+        [
+          "D",
+          "E"
+        ],
+        [
+          "E",
+          "F"
+        ]
+      ],
+      "zoneDescription": "outside：地面、风井、X凹岸、Y低枝冠全部连续，不能按镜头高度拆区",
+      "restAtC": true,
+      "groups": {
+        "gA": [
+          "A",
+          "B"
+        ],
+        "gB": [
+          "C",
+          "X",
+          "Y",
+          "D",
+          "E",
+          "F"
+        ]
+      },
+      "checkpoints": [
+        {
+          "id": "forest-03:CP0",
+          "region": "A",
+          "supportId": "forest-03:surface-A",
+          "rank": 0,
+          "recoveryGroup": "gA"
+        },
+        {
+          "id": "forest-03:CP1",
+          "region": "B",
+          "supportId": "forest-03:surface-B",
+          "rank": 10,
+          "recoveryGroup": "gA"
+        },
+        {
+          "id": "forest-03:CP2",
+          "region": "C",
+          "supportId": "forest-03:surface-C",
+          "rank": 20,
+          "recoveryGroup": "gB"
+        },
+        {
+          "id": "forest-03:CP3",
+          "region": "D",
+          "supportId": "forest-03:surface-D",
+          "rank": 30,
+          "recoveryGroup": "gB"
+        }
+      ],
+      "rewards": {
+        "main": {
+          "grantId": "forest-03:main",
+          "coins": 20,
+          "region": "F"
+        },
+        "explore": {
+          "grantId": "forest-03:explore",
+          "coins": 10,
+          "alternatives": [
+            "X",
+            "Y"
+          ]
+        },
+        "unique": [
+          "forest-03:note-X",
+          "forest-03:keepsake-Y"
+        ]
+      },
+      "mainRoute": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F"
+      ],
+      "observationRoute": [
+        "A",
+        "B",
+        "C",
+        "X",
+        "D",
+        "E",
+        "F"
+      ],
+      "skillRoute": [
+        "A",
+        "B",
+        "C",
+        "Y",
+        "D",
+        "E",
+        "F"
+      ],
+      "regionZones": {
+        "A": [
+          "outside"
+        ],
+        "B": [
+          "outside"
+        ],
+        "C": [
+          "outside"
+        ],
+        "X": [
+          "outside"
+        ],
+        "Y": [
+          "outside"
+        ],
+        "D": [
+          "outside"
+        ],
+        "E": [
+          "outside"
+        ],
+        "F": [
+          "outside"
+        ]
+      },
+      "supports": [
+        {
+          "id": "forest-03:surface-A",
+          "region": "A",
+          "zone": "outside",
+          "fixed": true
+        },
+        {
+          "id": "forest-03:surface-B",
+          "region": "B",
+          "zone": "outside",
+          "fixed": true
+        },
+        {
+          "id": "forest-03:surface-C",
+          "region": "C",
+          "zone": "outside",
+          "fixed": true
+        },
+        {
+          "id": "forest-03:surface-X",
+          "region": "X",
+          "zone": "outside",
+          "fixed": true
+        },
+        {
+          "id": "forest-03:surface-Y",
+          "region": "Y",
+          "zone": "outside",
+          "fixed": true
+        },
+        {
+          "id": "forest-03:surface-D",
+          "region": "D",
+          "zone": "outside",
+          "fixed": true
+        },
+        {
+          "id": "forest-03:surface-E",
+          "region": "E",
+          "zone": "outside",
+          "fixed": true
+        },
+        {
+          "id": "forest-03:surface-F",
+          "region": "F",
+          "zone": "outside",
+          "fixed": true
+        }
+      ],
+      "portalPairs": [],
+      "rests": [
+        {
+          "id": "forest-03:R0",
+          "region": "A",
+          "checkpointId": "forest-03:CP0",
+          "deathGroups": [
+            "gA",
+            "gB"
+          ]
+        },
+        {
+          "id": "forest-03:R1",
+          "region": "C",
+          "checkpointId": "forest-03:CP2",
+          "deathGroups": [
+            "gB"
+          ]
+        }
+      ],
+      "toolsRequired": [],
+      "optionalToolCatalogueOpens": "tracer"
+    },
+    {
+      "id": "forest-04",
+      "name": "压弯小径",
+      "regions": [
+        "A",
+        "B",
+        "C",
+        "X",
+        "Y",
+        "D",
+        "E",
+        "F"
+      ],
+      "edges": [
+        [
+          "A",
+          "B"
+        ],
+        [
+          "B",
+          "C"
+        ],
+        [
+          "C",
+          "D"
+        ],
+        [
+          "C",
+          "X"
+        ],
+        [
+          "X",
+          "D"
+        ],
+        [
+          "C",
+          "Y"
+        ],
+        [
+          "Y",
+          "D"
+        ],
+        [
+          "D",
+          "E"
+        ],
+        [
+          "E",
+          "F"
+        ]
+      ],
+      "zoneDescription": "outside：A/B/C/D/E/F/Y；burrow：X，C土口↔X入口、X采光井出口↔D",
+      "restAtC": true,
+      "groups": {
+        "gA": [
+          "A",
+          "B"
+        ],
+        "gB": [
+          "C",
+          "X",
+          "Y",
+          "D",
+          "E",
+          "F"
+        ]
+      },
+      "checkpoints": [
+        {
+          "id": "forest-04:CP0",
+          "region": "A",
+          "supportId": "forest-04:surface-A",
+          "rank": 0,
+          "recoveryGroup": "gA"
+        },
+        {
+          "id": "forest-04:CP1",
+          "region": "B",
+          "supportId": "forest-04:surface-B",
+          "rank": 10,
+          "recoveryGroup": "gA"
+        },
+        {
+          "id": "forest-04:CP2",
+          "region": "C",
+          "supportId": "forest-04:surface-C",
+          "rank": 20,
+          "recoveryGroup": "gB"
+        },
+        {
+          "id": "forest-04:CP3",
+          "region": "D",
+          "supportId": "forest-04:surface-D",
+          "rank": 30,
+          "recoveryGroup": "gB"
+        }
+      ],
+      "rewards": {
+        "main": {
+          "grantId": "forest-04:main",
+          "coins": 20,
+          "region": "F"
+        },
+        "explore": {
+          "grantId": "forest-04:explore",
+          "coins": 10,
+          "alternatives": [
+            "X",
+            "Y"
+          ]
+        },
+        "unique": [
+          "forest-04:note-X",
+          "forest-04:keepsake-Y"
+        ]
+      },
+      "mainRoute": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F"
+      ],
+      "observationRoute": [
+        "A",
+        "B",
+        "C",
+        "X",
+        "D",
+        "E",
+        "F"
+      ],
+      "skillRoute": [
+        "A",
+        "B",
+        "C",
+        "Y",
+        "D",
+        "E",
+        "F"
+      ],
+      "regionZones": {
+        "A": [
+          "outside"
+        ],
+        "B": [
+          "outside"
+        ],
+        "C": [
+          "outside"
+        ],
+        "X": [
+          "burrow"
+        ],
+        "Y": [
+          "outside"
+        ],
+        "D": [
+          "outside"
+        ],
+        "E": [
+          "outside"
+        ],
+        "F": [
+          "outside"
+        ]
+      },
+      "supports": [
+        {
+          "id": "forest-04:surface-A",
+          "region": "A",
+          "zone": "outside",
+          "fixed": true
+        },
+        {
+          "id": "forest-04:surface-B",
+          "region": "B",
+          "zone": "outside",
+          "fixed": true
+        },
+        {
+          "id": "forest-04:surface-C",
+          "region": "C",
+          "zone": "outside",
+          "fixed": true
+        },
+        {
+          "id": "forest-04:surface-X",
+          "region": "X",
+          "zone": "burrow",
+          "fixed": true
+        },
+        {
+          "id": "forest-04:surface-Y",
+          "region": "Y",
+          "zone": "outside",
+          "fixed": true
+        },
+        {
+          "id": "forest-04:surface-D",
+          "region": "D",
+          "zone": "outside",
+          "fixed": true
+        },
+        {
+          "id": "forest-04:surface-E",
+          "region": "E",
+          "zone": "outside",
+          "fixed": true
+        },
+        {
+          "id": "forest-04:surface-F",
+          "region": "F",
+          "zone": "outside",
+          "fixed": true
+        },
+        {
+          "id": "forest-04:portal-entry-0-support",
+          "region": "C",
+          "zone": "outside",
+          "fixed": true
+        },
+        {
+          "id": "forest-04:portal-entry-1-support",
+          "region": "X",
+          "zone": "burrow",
+          "fixed": true
+        },
+        {
+          "id": "forest-04:portal-exit-0-support",
+          "region": "X",
+          "zone": "burrow",
+          "fixed": true
+        },
+        {
+          "id": "forest-04:portal-exit-1-support",
+          "region": "D",
+          "zone": "outside",
+          "fixed": true
+        }
+      ],
+      "portalPairs": [
+        {
+          "id": "forest-04:pair-entry",
+          "bidirectional": true,
+          "ends": [
+            {
+              "id": "forest-04:portal-entry-0",
+              "region": "C",
+              "zone": "outside",
+              "arrivalSupportId": "forest-04:portal-entry-0-support"
+            },
+            {
+              "id": "forest-04:portal-entry-1",
+              "region": "X",
+              "zone": "burrow",
+              "arrivalSupportId": "forest-04:portal-entry-1-support"
+            }
+          ]
+        },
+        {
+          "id": "forest-04:pair-exit",
+          "bidirectional": true,
+          "ends": [
+            {
+              "id": "forest-04:portal-exit-0",
+              "region": "X",
+              "zone": "burrow",
+              "arrivalSupportId": "forest-04:portal-exit-0-support"
+            },
+            {
+              "id": "forest-04:portal-exit-1",
+              "region": "D",
+              "zone": "outside",
+              "arrivalSupportId": "forest-04:portal-exit-1-support"
+            }
+          ]
+        }
+      ],
+      "rests": [
+        {
+          "id": "forest-04:R0",
+          "region": "A",
+          "checkpointId": "forest-04:CP0",
+          "deathGroups": [
+            "gA",
+            "gB"
+          ]
+        },
+        {
+          "id": "forest-04:R1",
+          "region": "C",
+          "checkpointId": "forest-04:CP2",
+          "deathGroups": [
+            "gB"
+          ]
+        }
+      ],
+      "toolsRequired": [],
+      "optionalToolCatalogueOpens": null
+    },
+    {
+      "id": "forest-05",
+      "name": "石头的用处",
+      "regions": [
+        "A",
+        "B",
+        "C",
+        "X",
+        "Y",
+        "D",
+        "E",
+        "F"
+      ],
+      "edges": [
+        [
+          "A",
+          "B"
+        ],
+        [
+          "B",
+          "C"
+        ],
+        [
+          "C",
+          "D"
+        ],
+        [
+          "C",
+          "X"
+        ],
+        [
+          "X",
+          "D"
+        ],
+        [
+          "C",
+          "Y"
+        ],
+        [
+          "Y",
+          "D"
+        ],
+        [
+          "D",
+          "E"
+        ],
+        [
+          "E",
+          "F"
+        ]
+      ],
+      "zoneDescription": "outside：全部连续区域",
+      "restAtC": true,
+      "groups": {
+        "gA": [
+          "A",
+          "B"
+        ],
+        "gB": [
+          "C",
+          "X",
+          "Y",
+          "D",
+          "E",
+          "F"
+        ]
+      },
+      "checkpoints": [
+        {
+          "id": "forest-05:CP0",
+          "region": "A",
+          "supportId": "forest-05:surface-A",
+          "rank": 0,
+          "recoveryGroup": "gA"
+        },
+        {
+          "id": "forest-05:CP1",
+          "region": "B",
+          "supportId": "forest-05:surface-B",
+          "rank": 10,
+          "recoveryGroup": "gA"
+        },
+        {
+          "id": "forest-05:CP2",
+          "region": "C",
+          "supportId": "forest-05:surface-C",
+          "rank": 20,
+          "recoveryGroup": "gB"
+        },
+        {
+          "id": "forest-05:CP3",
+          "region": "D",
+          "supportId": "forest-05:surface-D",
+          "rank": 30,
+          "recoveryGroup": "gB"
+        }
+      ],
+      "rewards": {
+        "main": {
+          "grantId": "forest-05:main",
+          "coins": 20,
+          "region": "F"
+        },
+        "explore": {
+          "grantId": "forest-05:explore",
+          "coins": 10,
+          "alternatives": [
+            "X",
+            "Y"
+          ]
+        },
+        "unique": [
+          "forest-05:note-X",
+          "forest-05:keepsake-Y"
+        ]
+      },
+      "mainRoute": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F"
+      ],
+      "observationRoute": [
+        "A",
+        "B",
+        "C",
+        "X",
+        "D",
+        "E",
+        "F"
+      ],
+      "skillRoute": [
+        "A",
+        "B",
+        "C",
+        "Y",
+        "D",
+        "E",
+        "F"
+      ],
+      "regionZones": {
+        "A": [
+          "outside"
+        ],
+        "B": [
+          "outside"
+        ],
+        "C": [
+          "outside"
+        ],
+        "X": [
+          "outside"
+        ],
+        "Y": [
+          "outside"
+        ],
+        "D": [
+          "outside"
+        ],
+        "E": [
+          "outside"
+        ],
+        "F": [
+          "outside"
+        ]
+      },
+      "supports": [
+        {
+          "id": "forest-05:surface-A",
+          "region": "A",
+          "zone": "outside",
+          "fixed": true
+        },
+        {
+          "id": "forest-05:surface-B",
+          "region": "B",
+          "zone": "outside",
+          "fixed": true
+        },
+        {
+          "id": "forest-05:surface-C",
+          "region": "C",
+          "zone": "outside",
+          "fixed": true
+        },
+        {
+          "id": "forest-05:surface-X",
+          "region": "X",
+          "zone": "outside",
+          "fixed": true
+        },
+        {
+          "id": "forest-05:surface-Y",
+          "region": "Y",
+          "zone": "outside",
+          "fixed": true
+        },
+        {
+          "id": "forest-05:surface-D",
+          "region": "D",
+          "zone": "outside",
+          "fixed": true
+        },
+        {
+          "id": "forest-05:surface-E",
+          "region": "E",
+          "zone": "outside",
+          "fixed": true
+        },
+        {
+          "id": "forest-05:surface-F",
+          "region": "F",
+          "zone": "outside",
+          "fixed": true
+        }
+      ],
+      "portalPairs": [],
+      "rests": [
+        {
+          "id": "forest-05:R0",
+          "region": "A",
+          "checkpointId": "forest-05:CP0",
+          "deathGroups": [
+            "gA",
+            "gB"
+          ]
+        },
+        {
+          "id": "forest-05:R1",
+          "region": "C",
+          "checkpointId": "forest-05:CP2",
+          "deathGroups": [
+            "gB"
+          ]
+        }
+      ],
+      "toolsRequired": [],
+      "optionalToolCatalogueOpens": "lure"
+    },
+    {
+      "id": "forest-06",
+      "name": "叶片的重量",
+      "regions": [
+        "A",
+        "B",
+        "C",
+        "X",
+        "Y",
+        "D",
+        "E",
+        "F"
+      ],
+      "edges": [
+        [
+          "A",
+          "B"
+        ],
+        [
+          "B",
+          "C"
+        ],
+        [
+          "C",
+          "D"
+        ],
+        [
+          "C",
+          "X"
+        ],
+        [
+          "X",
+          "D"
+        ],
+        [
+          "C",
+          "Y"
+        ],
+        [
+          "Y",
+          "D"
+        ],
+        [
+          "D",
+          "E"
+        ],
+        [
+          "E",
+          "F"
+        ]
+      ],
+      "zoneDescription": "outside：A入口/F出井；burrow：B/C/D/E/X/Y，A↔B门槛、E↔F高侧口",
+      "restAtC": true,
+      "groups": {
+        "gA": [
+          "A",
+          "B"
+        ],
+        "gB": [
+          "C",
+          "X",
+          "Y",
+          "D",
+          "E",
+          "F"
+        ]
+      },
+      "checkpoints": [
+        {
+          "id": "forest-06:CP0",
+          "region": "A",
+          "supportId": "forest-06:surface-A",
+          "rank": 0,
+          "recoveryGroup": "gA"
+        },
+        {
+          "id": "forest-06:CP1",
+          "region": "B",
+          "supportId": "forest-06:surface-B",
+          "rank": 10,
+          "recoveryGroup": "gA"
+        },
+        {
+          "id": "forest-06:CP2",
+          "region": "C",
+          "supportId": "forest-06:surface-C",
+          "rank": 20,
+          "recoveryGroup": "gB"
+        },
+        {
+          "id": "forest-06:CP3",
+          "region": "D",
+          "supportId": "forest-06:surface-D",
+          "rank": 30,
+          "recoveryGroup": "gB"
+        }
+      ],
+      "rewards": {
+        "main": {
+          "grantId": "forest-06:main",
+          "coins": 20,
+          "region": "F"
+        },
+        "explore": {
+          "grantId": "forest-06:explore",
+          "coins": 10,
+          "alternatives": [
+            "X",
+            "Y"
+          ]
+        },
+        "unique": [
+          "forest-06:note-X",
+          "forest-06:keepsake-Y"
+        ]
+      },
+      "mainRoute": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F"
+      ],
+      "observationRoute": [
+        "A",
+        "B",
+        "C",
+        "X",
+        "D",
+        "E",
+        "F"
+      ],
+      "skillRoute": [
+        "A",
+        "B",
+        "C",
+        "Y",
+        "D",
+        "E",
+        "F"
+      ],
+      "regionZones": {
+        "A": [
+          "outside"
+        ],
+        "B": [
+          "burrow"
+        ],
+        "C": [
+          "burrow"
+        ],
+        "X": [
+          "burrow"
+        ],
+        "Y": [
+          "burrow"
+        ],
+        "D": [
+          "burrow"
+        ],
+        "E": [
+          "burrow"
+        ],
+        "F": [
+          "outside"
+        ]
+      },
+      "supports": [
+        {
+          "id": "forest-06:surface-A",
+          "region": "A",
+          "zone": "outside",
+          "fixed": true
+        },
+        {
+          "id": "forest-06:surface-B",
+          "region": "B",
+          "zone": "burrow",
+          "fixed": true
+        },
+        {
+          "id": "forest-06:surface-C",
+          "region": "C",
+          "zone": "burrow",
+          "fixed": true
+        },
+        {
+          "id": "forest-06:surface-X",
+          "region": "X",
+          "zone": "burrow",
+          "fixed": true
+        },
+        {
+          "id": "forest-06:surface-Y",
+          "region": "Y",
+          "zone": "burrow",
+          "fixed": true
+        },
+        {
+          "id": "forest-06:surface-D",
+          "region": "D",
+          "zone": "burrow",
+          "fixed": true
+        },
+        {
+          "id": "forest-06:surface-E",
+          "region": "E",
+          "zone": "burrow",
+          "fixed": true
+        },
+        {
+          "id": "forest-06:surface-F",
+          "region": "F",
+          "zone": "outside",
+          "fixed": true
+        },
+        {
+          "id": "forest-06:portal-entry-0-support",
+          "region": "A",
+          "zone": "outside",
+          "fixed": true
+        },
+        {
+          "id": "forest-06:portal-entry-1-support",
+          "region": "B",
+          "zone": "burrow",
+          "fixed": true
+        },
+        {
+          "id": "forest-06:portal-exit-0-support",
+          "region": "E",
+          "zone": "burrow",
+          "fixed": true
+        },
+        {
+          "id": "forest-06:portal-exit-1-support",
+          "region": "F",
+          "zone": "outside",
+          "fixed": true
+        }
+      ],
+      "portalPairs": [
+        {
+          "id": "forest-06:pair-entry",
+          "bidirectional": true,
+          "ends": [
+            {
+              "id": "forest-06:portal-entry-0",
+              "region": "A",
+              "zone": "outside",
+              "arrivalSupportId": "forest-06:portal-entry-0-support"
+            },
+            {
+              "id": "forest-06:portal-entry-1",
+              "region": "B",
+              "zone": "burrow",
+              "arrivalSupportId": "forest-06:portal-entry-1-support"
+            }
+          ]
+        },
+        {
+          "id": "forest-06:pair-exit",
+          "bidirectional": true,
+          "ends": [
+            {
+              "id": "forest-06:portal-exit-0",
+              "region": "E",
+              "zone": "burrow",
+              "arrivalSupportId": "forest-06:portal-exit-0-support"
+            },
+            {
+              "id": "forest-06:portal-exit-1",
+              "region": "F",
+              "zone": "outside",
+              "arrivalSupportId": "forest-06:portal-exit-1-support"
+            }
+          ]
+        }
+      ],
+      "rests": [
+        {
+          "id": "forest-06:R0",
+          "region": "A",
+          "checkpointId": "forest-06:CP0",
+          "deathGroups": [
+            "gA",
+            "gB"
+          ]
+        },
+        {
+          "id": "forest-06:R1",
+          "region": "C",
+          "checkpointId": "forest-06:CP2",
+          "deathGroups": [
+            "gB"
+          ]
+        }
+      ],
+      "toolsRequired": [],
+      "optionalToolCatalogueOpens": null
+    },
+    {
+      "id": "forest-07",
+      "name": "浅水渡口",
+      "regions": [
+        "A",
+        "B",
+        "C",
+        "X",
+        "Y",
+        "D",
+        "E",
+        "F"
+      ],
+      "edges": [
+        [
+          "A",
+          "B"
+        ],
+        [
+          "B",
+          "C"
+        ],
+        [
+          "C",
+          "D"
+        ],
+        [
+          "C",
+          "X"
+        ],
+        [
+          "X",
+          "D"
+        ],
+        [
+          "C",
+          "Y"
+        ],
+        [
+          "Y",
+          "D"
+        ],
+        [
+          "D",
+          "E"
+        ],
+        [
+          "E",
+          "F"
+        ]
+      ],
+      "zoneDescription": "outside：全部连续水岸与树皮",
+      "restAtC": false,
+      "groups": {
+        "gA": [
+          "A",
+          "B"
+        ],
+        "gB": [
+          "C",
+          "X",
+          "Y",
+          "D",
+          "E",
+          "F"
+        ]
+      },
+      "checkpoints": [
+        {
+          "id": "forest-07:CP0",
+          "region": "A",
+          "supportId": "forest-07:surface-A",
+          "rank": 0,
+          "recoveryGroup": "gA"
+        },
+        {
+          "id": "forest-07:CP1",
+          "region": "B",
+          "supportId": "forest-07:surface-B",
+          "rank": 10,
+          "recoveryGroup": "gA"
+        },
+        {
+          "id": "forest-07:CP2",
+          "region": "C",
+          "supportId": "forest-07:surface-C",
+          "rank": 20,
+          "recoveryGroup": "gB"
+        },
+        {
+          "id": "forest-07:CP3",
+          "region": "D",
+          "supportId": "forest-07:surface-D",
+          "rank": 30,
+          "recoveryGroup": "gB"
+        }
+      ],
+      "rewards": {
+        "main": {
+          "grantId": "forest-07:main",
+          "coins": 20,
+          "region": "F"
+        },
+        "explore": {
+          "grantId": "forest-07:explore",
+          "coins": 10,
+          "alternatives": [
+            "X",
+            "Y"
+          ]
+        },
+        "unique": [
+          "forest-07:note-X",
+          "forest-07:keepsake-Y"
+        ]
+      },
+      "mainRoute": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F"
+      ],
+      "observationRoute": [
+        "A",
+        "B",
+        "C",
+        "X",
+        "D",
+        "E",
+        "F"
+      ],
+      "skillRoute": [
+        "A",
+        "B",
+        "C",
+        "Y",
+        "D",
+        "E",
+        "F"
+      ],
+      "regionZones": {
+        "A": [
+          "outside"
+        ],
+        "B": [
+          "outside"
+        ],
+        "C": [
+          "outside"
+        ],
+        "X": [
+          "outside"
+        ],
+        "Y": [
+          "outside"
+        ],
+        "D": [
+          "outside"
+        ],
+        "E": [
+          "outside"
+        ],
+        "F": [
+          "outside"
+        ]
+      },
+      "supports": [
+        {
+          "id": "forest-07:surface-A",
+          "region": "A",
+          "zone": "outside",
+          "fixed": true
+        },
+        {
+          "id": "forest-07:surface-B",
+          "region": "B",
+          "zone": "outside",
+          "fixed": true
+        },
+        {
+          "id": "forest-07:surface-C",
+          "region": "C",
+          "zone": "outside",
+          "fixed": true
+        },
+        {
+          "id": "forest-07:surface-X",
+          "region": "X",
+          "zone": "outside",
+          "fixed": true
+        },
+        {
+          "id": "forest-07:surface-Y",
+          "region": "Y",
+          "zone": "outside",
+          "fixed": true
+        },
+        {
+          "id": "forest-07:surface-D",
+          "region": "D",
+          "zone": "outside",
+          "fixed": true
+        },
+        {
+          "id": "forest-07:surface-E",
+          "region": "E",
+          "zone": "outside",
+          "fixed": true
+        },
+        {
+          "id": "forest-07:surface-F",
+          "region": "F",
+          "zone": "outside",
+          "fixed": true
+        }
+      ],
+      "portalPairs": [],
+      "rests": [
+        {
+          "id": "forest-07:R0",
+          "region": "A",
+          "checkpointId": "forest-07:CP0",
+          "deathGroups": [
+            "gA",
+            "gB"
+          ]
+        }
+      ],
+      "toolsRequired": [],
+      "optionalToolCatalogueOpens": null
+    },
+    {
+      "id": "forest-08",
+      "name": "顺流上岸",
+      "regions": [
+        "A",
+        "B",
+        "C",
+        "X",
+        "Y",
+        "D",
+        "E",
+        "F"
+      ],
+      "edges": [
+        [
+          "A",
+          "B"
+        ],
+        [
+          "B",
+          "C"
+        ],
+        [
+          "C",
+          "D"
+        ],
+        [
+          "C",
+          "X"
+        ],
+        [
+          "X",
+          "D"
+        ],
+        [
+          "C",
+          "Y"
+        ],
+        [
+          "Y",
+          "D"
+        ],
+        [
+          "D",
+          "E"
+        ],
+        [
+          "E",
+          "F"
+        ]
+      ],
+      "zoneDescription": "outside：所有连续漂流/升降/侧风/高枝/地面落台同区",
+      "restAtC": true,
+      "groups": {
+        "gA": [
+          "A",
+          "B"
+        ],
+        "gB": [
+          "C",
+          "X",
+          "Y",
+          "D",
+          "E",
+          "F"
+        ]
+      },
+      "checkpoints": [
+        {
+          "id": "forest-08:CP0",
+          "region": "A",
+          "supportId": "forest-08:surface-A",
+          "rank": 0,
+          "recoveryGroup": "gA"
+        },
+        {
+          "id": "forest-08:CP1",
+          "region": "B",
+          "supportId": "forest-08:surface-B",
+          "rank": 10,
+          "recoveryGroup": "gA"
+        },
+        {
+          "id": "forest-08:CP2",
+          "region": "C",
+          "supportId": "forest-08:surface-C",
+          "rank": 20,
+          "recoveryGroup": "gB"
+        },
+        {
+          "id": "forest-08:CP3",
+          "region": "D",
+          "supportId": "forest-08:surface-D",
+          "rank": 30,
+          "recoveryGroup": "gB"
+        }
+      ],
+      "rewards": {
+        "main": {
+          "grantId": "forest-08:main",
+          "coins": 20,
+          "region": "F"
+        },
+        "explore": {
+          "grantId": "forest-08:explore",
+          "coins": 10,
+          "alternatives": [
+            "X",
+            "Y"
+          ]
+        },
+        "unique": [
+          "forest-08:note-X",
+          "forest-08:keepsake-Y"
+        ]
+      },
+      "mainRoute": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F"
+      ],
+      "observationRoute": [
+        "A",
+        "B",
+        "C",
+        "X",
+        "D",
+        "E",
+        "F"
+      ],
+      "skillRoute": [
+        "A",
+        "B",
+        "C",
+        "Y",
+        "D",
+        "E",
+        "F"
+      ],
+      "regionZones": {
+        "A": [
+          "outside"
+        ],
+        "B": [
+          "outside"
+        ],
+        "C": [
+          "outside"
+        ],
+        "X": [
+          "outside"
+        ],
+        "Y": [
+          "outside"
+        ],
+        "D": [
+          "outside"
+        ],
+        "E": [
+          "outside"
+        ],
+        "F": [
+          "outside"
+        ]
+      },
+      "supports": [
+        {
+          "id": "forest-08:surface-A",
+          "region": "A",
+          "zone": "outside",
+          "fixed": true
+        },
+        {
+          "id": "forest-08:surface-B",
+          "region": "B",
+          "zone": "outside",
+          "fixed": true
+        },
+        {
+          "id": "forest-08:surface-C",
+          "region": "C",
+          "zone": "outside",
+          "fixed": true
+        },
+        {
+          "id": "forest-08:surface-X",
+          "region": "X",
+          "zone": "outside",
+          "fixed": true
+        },
+        {
+          "id": "forest-08:surface-Y",
+          "region": "Y",
+          "zone": "outside",
+          "fixed": true
+        },
+        {
+          "id": "forest-08:surface-D",
+          "region": "D",
+          "zone": "outside",
+          "fixed": true
+        },
+        {
+          "id": "forest-08:surface-E",
+          "region": "E",
+          "zone": "outside",
+          "fixed": true
+        },
+        {
+          "id": "forest-08:surface-F",
+          "region": "F",
+          "zone": "outside",
+          "fixed": true
+        }
+      ],
+      "portalPairs": [],
+      "rests": [
+        {
+          "id": "forest-08:R0",
+          "region": "A",
+          "checkpointId": "forest-08:CP0",
+          "deathGroups": [
+            "gA",
+            "gB"
+          ]
+        },
+        {
+          "id": "forest-08:R1",
+          "region": "C",
+          "checkpointId": "forest-08:CP2",
+          "deathGroups": [
+            "gB"
+          ]
+        }
+      ],
+      "toolsRequired": [],
+      "optionalToolCatalogueOpens": "grip"
+    },
+    {
+      "id": "forest-09",
+      "name": "甲虫的领地",
+      "regions": [
+        "A",
+        "B",
+        "C",
+        "X",
+        "Y",
+        "D",
+        "E",
+        "F"
+      ],
+      "edges": [
+        [
+          "A",
+          "B"
+        ],
+        [
+          "B",
+          "C"
+        ],
+        [
+          "C",
+          "D"
+        ],
+        [
+          "C",
+          "X"
+        ],
+        [
+          "X",
+          "D"
+        ],
+        [
+          "C",
+          "Y"
+        ],
+        [
+          "Y",
+          "D"
+        ],
+        [
+          "D",
+          "E"
+        ],
+        [
+          "E",
+          "F"
+        ]
+      ],
+      "zoneDescription": "outside：根壳前后通路均有实际深度区分但连续碰撞",
+      "restAtC": true,
+      "groups": {
+        "gA": [
+          "A",
+          "B"
+        ],
+        "gB": [
+          "C",
+          "X",
+          "Y",
+          "D",
+          "E",
+          "F"
+        ]
+      },
+      "checkpoints": [
+        {
+          "id": "forest-09:CP0",
+          "region": "A",
+          "supportId": "forest-09:surface-A",
+          "rank": 0,
+          "recoveryGroup": "gA"
+        },
+        {
+          "id": "forest-09:CP1",
+          "region": "B",
+          "supportId": "forest-09:surface-B",
+          "rank": 10,
+          "recoveryGroup": "gA"
+        },
+        {
+          "id": "forest-09:CP2",
+          "region": "C",
+          "supportId": "forest-09:surface-C",
+          "rank": 20,
+          "recoveryGroup": "gB"
+        },
+        {
+          "id": "forest-09:CP3",
+          "region": "D",
+          "supportId": "forest-09:surface-D",
+          "rank": 30,
+          "recoveryGroup": "gB"
+        }
+      ],
+      "rewards": {
+        "main": {
+          "grantId": "forest-09:main",
+          "coins": 20,
+          "region": "F"
+        },
+        "explore": {
+          "grantId": "forest-09:explore",
+          "coins": 10,
+          "alternatives": [
+            "X",
+            "Y"
+          ]
+        },
+        "unique": [
+          "forest-09:note-X",
+          "forest-09:keepsake-Y"
+        ]
+      },
+      "mainRoute": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F"
+      ],
+      "observationRoute": [
+        "A",
+        "B",
+        "C",
+        "X",
+        "D",
+        "E",
+        "F"
+      ],
+      "skillRoute": [
+        "A",
+        "B",
+        "C",
+        "Y",
+        "D",
+        "E",
+        "F"
+      ],
+      "regionZones": {
+        "A": [
+          "outside"
+        ],
+        "B": [
+          "outside"
+        ],
+        "C": [
+          "outside"
+        ],
+        "X": [
+          "outside"
+        ],
+        "Y": [
+          "outside"
+        ],
+        "D": [
+          "outside"
+        ],
+        "E": [
+          "outside"
+        ],
+        "F": [
+          "outside"
+        ]
+      },
+      "supports": [
+        {
+          "id": "forest-09:surface-A",
+          "region": "A",
+          "zone": "outside",
+          "fixed": true
+        },
+        {
+          "id": "forest-09:surface-B",
+          "region": "B",
+          "zone": "outside",
+          "fixed": true
+        },
+        {
+          "id": "forest-09:surface-C",
+          "region": "C",
+          "zone": "outside",
+          "fixed": true
+        },
+        {
+          "id": "forest-09:surface-X",
+          "region": "X",
+          "zone": "outside",
+          "fixed": true
+        },
+        {
+          "id": "forest-09:surface-Y",
+          "region": "Y",
+          "zone": "outside",
+          "fixed": true
+        },
+        {
+          "id": "forest-09:surface-D",
+          "region": "D",
+          "zone": "outside",
+          "fixed": true
+        },
+        {
+          "id": "forest-09:surface-E",
+          "region": "E",
+          "zone": "outside",
+          "fixed": true
+        },
+        {
+          "id": "forest-09:surface-F",
+          "region": "F",
+          "zone": "outside",
+          "fixed": true
+        }
+      ],
+      "portalPairs": [],
+      "rests": [
+        {
+          "id": "forest-09:R0",
+          "region": "A",
+          "checkpointId": "forest-09:CP0",
+          "deathGroups": [
+            "gA",
+            "gB"
+          ]
+        },
+        {
+          "id": "forest-09:R1",
+          "region": "C",
+          "checkpointId": "forest-09:CP2",
+          "deathGroups": [
+            "gB"
+          ]
+        }
+      ],
+      "toolsRequired": [],
+      "optionalToolCatalogueOpens": null
+    },
+    {
+      "id": "forest-10",
+      "name": "回家的光",
+      "regions": [
+        "A",
+        "B",
+        "C",
+        "X",
+        "Y",
+        "D",
+        "E",
+        "F"
+      ],
+      "edges": [
+        [
+          "A",
+          "B"
+        ],
+        [
+          "B",
+          "C"
+        ],
+        [
+          "C",
+          "D"
+        ],
+        [
+          "C",
+          "X"
+        ],
+        [
+          "X",
+          "D"
+        ],
+        [
+          "C",
+          "Y"
+        ],
+        [
+          "Y",
+          "D"
+        ],
+        [
+          "D",
+          "E"
+        ],
+        [
+          "E",
+          "F"
+        ]
+      ],
+      "zoneDescription": "outside：A/B/C/D/E/F/Y高枝；tree：Y内壁连接；burrow：X地下回路；所有洞口成对",
+      "restAtC": true,
+      "groups": {
+        "gA": [
+          "A",
+          "B"
+        ],
+        "gB": [
+          "C",
+          "X",
+          "Y",
+          "D",
+          "E",
+          "F"
+        ]
+      },
+      "checkpoints": [
+        {
+          "id": "forest-10:CP0",
+          "region": "A",
+          "supportId": "forest-10:surface-A",
+          "rank": 0,
+          "recoveryGroup": "gA"
+        },
+        {
+          "id": "forest-10:CP1",
+          "region": "B",
+          "supportId": "forest-10:surface-B",
+          "rank": 10,
+          "recoveryGroup": "gA"
+        },
+        {
+          "id": "forest-10:CP2",
+          "region": "C",
+          "supportId": "forest-10:surface-C",
+          "rank": 20,
+          "recoveryGroup": "gB"
+        },
+        {
+          "id": "forest-10:CP3",
+          "region": "D",
+          "supportId": "forest-10:surface-D",
+          "rank": 30,
+          "recoveryGroup": "gB"
+        }
+      ],
+      "rewards": {
+        "main": {
+          "grantId": "forest-10:main",
+          "coins": 20,
+          "region": "F"
+        },
+        "explore": {
+          "grantId": "forest-10:explore",
+          "coins": 10,
+          "alternatives": [
+            "X",
+            "Y"
+          ]
+        },
+        "unique": [
+          "forest-10:note-X",
+          "forest-10:keepsake-Y"
+        ],
+        "special": {
+          "grantId": "journey:first-ten",
+          "alternatives": [
+            "F"
+          ],
+          "coins": 0
+        }
+      },
+      "mainRoute": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F"
+      ],
+      "observationRoute": [
+        "A",
+        "B",
+        "C",
+        "X",
+        "D",
+        "E",
+        "F"
+      ],
+      "skillRoute": [
+        "A",
+        "B",
+        "C",
+        "Y",
+        "D",
+        "E",
+        "F"
+      ],
+      "regionZones": {
+        "A": [
+          "outside"
+        ],
+        "B": [
+          "outside"
+        ],
+        "C": [
+          "outside"
+        ],
+        "X": [
+          "burrow"
+        ],
+        "Y": [
+          "tree",
+          "outside"
+        ],
+        "D": [
+          "outside"
+        ],
+        "E": [
+          "outside"
+        ],
+        "F": [
+          "outside"
+        ]
+      },
+      "supports": [
+        {
+          "id": "forest-10:surface-A",
+          "region": "A",
+          "zone": "outside",
+          "fixed": true
+        },
+        {
+          "id": "forest-10:surface-B",
+          "region": "B",
+          "zone": "outside",
+          "fixed": true
+        },
+        {
+          "id": "forest-10:surface-C",
+          "region": "C",
+          "zone": "outside",
+          "fixed": true
+        },
+        {
+          "id": "forest-10:surface-X",
+          "region": "X",
+          "zone": "burrow",
+          "fixed": true
+        },
+        {
+          "id": "forest-10:surface-Y",
+          "region": "Y",
+          "zone": "tree",
+          "fixed": true
+        },
+        {
+          "id": "forest-10:surface-D",
+          "region": "D",
+          "zone": "outside",
+          "fixed": true
+        },
+        {
+          "id": "forest-10:surface-E",
+          "region": "E",
+          "zone": "outside",
+          "fixed": true
+        },
+        {
+          "id": "forest-10:surface-F",
+          "region": "F",
+          "zone": "outside",
+          "fixed": true
+        },
+        {
+          "id": "forest-10:portal-burrow-in-0-support",
+          "region": "C",
+          "zone": "outside",
+          "fixed": true
+        },
+        {
+          "id": "forest-10:portal-burrow-in-1-support",
+          "region": "X",
+          "zone": "burrow",
+          "fixed": true
+        },
+        {
+          "id": "forest-10:portal-burrow-out-0-support",
+          "region": "X",
+          "zone": "burrow",
+          "fixed": true
+        },
+        {
+          "id": "forest-10:portal-burrow-out-1-support",
+          "region": "D",
+          "zone": "outside",
+          "fixed": true
+        },
+        {
+          "id": "forest-10:portal-tree-in-0-support",
+          "region": "C",
+          "zone": "outside",
+          "fixed": true
+        },
+        {
+          "id": "forest-10:portal-tree-in-1-support",
+          "region": "Y",
+          "zone": "tree",
+          "fixed": true
+        },
+        {
+          "id": "forest-10:portal-tree-out-0-support",
+          "region": "Y",
+          "zone": "tree",
+          "fixed": true
+        },
+        {
+          "id": "forest-10:portal-tree-out-1-support",
+          "region": "Y",
+          "zone": "outside",
+          "fixed": true
+        }
+      ],
+      "portalPairs": [
+        {
+          "id": "forest-10:pair-burrow-in",
+          "bidirectional": true,
+          "ends": [
+            {
+              "id": "forest-10:portal-burrow-in-0",
+              "region": "C",
+              "zone": "outside",
+              "arrivalSupportId": "forest-10:portal-burrow-in-0-support"
+            },
+            {
+              "id": "forest-10:portal-burrow-in-1",
+              "region": "X",
+              "zone": "burrow",
+              "arrivalSupportId": "forest-10:portal-burrow-in-1-support"
+            }
+          ]
+        },
+        {
+          "id": "forest-10:pair-burrow-out",
+          "bidirectional": true,
+          "ends": [
+            {
+              "id": "forest-10:portal-burrow-out-0",
+              "region": "X",
+              "zone": "burrow",
+              "arrivalSupportId": "forest-10:portal-burrow-out-0-support"
+            },
+            {
+              "id": "forest-10:portal-burrow-out-1",
+              "region": "D",
+              "zone": "outside",
+              "arrivalSupportId": "forest-10:portal-burrow-out-1-support"
+            }
+          ]
+        },
+        {
+          "id": "forest-10:pair-tree-in",
+          "bidirectional": true,
+          "ends": [
+            {
+              "id": "forest-10:portal-tree-in-0",
+              "region": "C",
+              "zone": "outside",
+              "arrivalSupportId": "forest-10:portal-tree-in-0-support"
+            },
+            {
+              "id": "forest-10:portal-tree-in-1",
+              "region": "Y",
+              "zone": "tree",
+              "arrivalSupportId": "forest-10:portal-tree-in-1-support"
+            }
+          ]
+        },
+        {
+          "id": "forest-10:pair-tree-out",
+          "bidirectional": true,
+          "ends": [
+            {
+              "id": "forest-10:portal-tree-out-0",
+              "region": "Y",
+              "zone": "tree",
+              "arrivalSupportId": "forest-10:portal-tree-out-0-support"
+            },
+            {
+              "id": "forest-10:portal-tree-out-1",
+              "region": "Y",
+              "zone": "outside",
+              "arrivalSupportId": "forest-10:portal-tree-out-1-support"
+            }
+          ]
+        }
+      ],
+      "rests": [
+        {
+          "id": "forest-10:R0",
+          "region": "A",
+          "checkpointId": "forest-10:CP0",
+          "deathGroups": [
+            "gA",
+            "gB"
+          ]
+        },
+        {
+          "id": "forest-10:R1",
+          "region": "C",
+          "checkpointId": "forest-10:CP2",
+          "deathGroups": [
+            "gB"
+          ]
+        }
+      ],
+      "toolsRequired": [],
+      "optionalToolCatalogueOpens": null
+    }
+  ],
+  "economy": {
+    "mainPerLevel": 20,
+    "explorePerLevel": 10,
+    "tools": [
+      {
+        "id": "tracer",
+        "price": 40,
+        "opensBeforeLevel": 3
+      },
+      {
+        "id": "lure",
+        "price": 60,
+        "opensBeforeLevel": 5
+      },
+      {
+        "id": "grip",
+        "price": 80,
+        "opensBeforeLevel": 8
+      }
+    ],
+    "cosmeticPrices": [
+      20,
+      40,
+      60
+    ],
+    "currencySources": "first-grant-only",
+    "optionalToolSlots": 1
+  }
+}

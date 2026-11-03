@@ -1,0 +1,47 @@
+import { EQUIPMENT_ROSTER } from './TowerEquipmentRoster.js'
+import { cultivationAt, cultivationLevelXp } from './TowerProfile.js'
+// Equipment rank is independent of rolled quality. Future ranks are metadata,
+// never legal generation targets until their content and cultivation are ready.
+const rows = [
+  ['fan', '凡器', '白', '#E4E6E3', 1, '炼气初期', true],
+  ['fa', '法器', '绿', '#329867', 4, '炼气中期', true],
+  ['bao', '宝器', '蓝', '#358DCA', 11, '筑基初期', true],
+  ['ling', '灵器', '紫', '#A376C7', 21, '金丹初期', true],
+  ['fabao', '法宝', '橙', '#DB893B', null, '元婴', false],
+  ['lingbao', '灵宝', '红', '#CD5655', null, '化神', false],
+  ['xian', '仙器', '金', '#D5AF42', null, '炼虚', false],
+  ['shen', '神器', '彩／幻金', '#EAD394', null, '大乘', false],
+]
+export const EQUIPMENT_TIERS = Object.freeze(rows.map(([id, name, colorName, color, minLevel, realm, available], index) =>
+  Object.freeze({ id, name, colorName, color, minLevel, realm, available, order: index,
+    referenceAttack: available ? 100 * cultivationAt(cultivationLevelXp(minLevel)).attackMultiplier : null })))
+export const OPEN_EQUIPMENT_TIERS = Object.freeze(EQUIPMENT_TIERS.filter(t => t.available).map(t => t.id))
+const tiers = new Map(EQUIPMENT_TIERS.map(t => [t.id, t]))
+export function equipmentTier(id) { return tiers.get(id) || null }
+export function canUseEquipmentTier(id, level) {
+  const tier = equipmentTier(id)
+  return !!tier?.available && Number.isInteger(level) && level >= tier.minLevel
+}
+export function equipmentTierRequirement(id) {
+  const tier = equipmentTier(id)
+  return tier ? `${tier.realm.replace(/(炼气|筑基|金丹)(初期|中期|后期|大圆满)/,'$1·$2')}${tier.available ? '' : ' · 暂未开放'}` : '未知品阶'
+}
+export function isStarterEquipment(item) {
+  return item?.quality === 0 && ['eq_sword_iron', 'eq_armor_basic', 'eq_ring_basic'].includes(item.definitionId)
+}
+// Reserved identities, not additional power tiers. No source issues these tags yet.
+export const EQUIPMENT_TAGS = Object.freeze([
+  Object.freeze({ id: 'natal', name: '本命法宝', available: false }),
+  Object.freeze({ id: 'ancient', name: '古宝', available: false }),
+  Object.freeze({ id: 'replica', name: '仿灵宝', available: false }),
+  Object.freeze({ id: 'heavenly', name: '玄天宝', available: false }),
+])
+
+const identityLevels = new Map(EQUIPMENT_ROSTER.map(d => [d.id, d.minLevel || equipmentTier(d.tier).minLevel]))
+export function canUseEquipment(item, level) {
+  return !!item && canUseEquipmentTier(item.tier, level) && level >= (identityLevels.get(item.definitionId) ?? equipmentTier(item.tier).minLevel)
+}
+export function equipmentRequirement(item) {
+  const minLevel = identityLevels.get(item?.definitionId)
+  return item?.tier === 'fan' && minLevel > 1 ? `炼气·${minLevel === 2 ? '二' : minLevel}层` : equipmentTierRequirement(item?.tier)
+}

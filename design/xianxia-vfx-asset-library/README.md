@@ -1,0 +1,905 @@
+# 仙侠技能特效素材库
+
+## 小境界晋升 · 重制光束与散布光点已验收接入（2026-11-03）
+
+用户确认第四次调整并要求接入。已核对正式`TowerView.drawLevelEffects`使用散布、错时汇聚的光点，配合`TowerLevelBeamArt`程序光束；上一轮预览即来自此正式游戏流程，无需复制另一套实现。当前版本已验收，沿用已通过的10项相关测试、Web构建和3种横屏回归结果。微信真机尚未验收。以下保留各次制作历史。
+
+第四次调整：按用户要求将围绕角色的晋升光点打散。每次事件使用固定种子的独立角度、远近、高度、延迟及汇聚时长；各点分批加速内聚并消失，去除整圈同步收缩与随后整圈外扩的光点轨迹，保留光柱及脚底光环。10项相关测试、Web构建、3种横屏流程检查通过。新版截图与动图见`reports/minor-level-scattered-motes-2026-11-03/`，此前各版记录保留；0 CU。
+
+第三版重制：用户否定第二版“摇晃感”，要求移除该光柱素材。小境界现已完全停止加载`beam.png`，改为程序绘制的固定竖直柱芯、向上光流与少量绕轴光点，不扭曲贴图、不左右摆动。384×768动态画布、30Hz、沿用1.2秒时长；筑基原光柱未改。第二版源码归档`design/xianxia-minor-beam-rebuild-2026-11-03/rejected-v2/`，所有原素材及动图保留。新版15项相关测试、3种横屏检查、Web构建通过，包含动画变化、暂停冻结、减弱动态及到期隐藏；视觉效果待用户验收。证据与动图见`reports/minor-level-beam-rebuild-2026-11-03/`，首轮偏细试配留在`reports/minor-level-beam-rebuild-thin-2026-11-03/`。无新增付费素材，0 CU。
+
+第二版按用户“贴图感、希望旋转”的反馈加入动态流动：保持柱身竖直与脚底锚点，原图光丝分条连续扭动，两股螺旋细带绕轴上升，亮点向上流动。复用原图，不生成新素材。动态纹理按模拟时间30Hz更新，暂停不上传；减弱动态保留静态纹理。15项相关测试和3种横屏真实流程检查通过，包含纹理随时间变化、暂停冻结、减弱动态静止及到期隐藏。Web构建首次子进程异常终止，重试成功。第二版证据与动图位于`reports/minor-level-beam-flow-2026-11-03/`，第一版截图保留；微信真机待验收，0 CU。
+
+按用户要求，正式战斗中的小境界晋升增加已验收的`tower-breakthrough/beam.png`。`TowerLevelBeamArt`直接复用纹理，0.16秒从脚下冲起，0.58秒后渐退，沿用1.2秒晋升总时长。光柱位于角色和攻击预警下方，跟随角色；只由实际升级事件触发，使用战斗模拟时间，暂停时冻结，到期隐藏。减弱动态设置取消纵向冲起并降低亮度。原有晋升文字、光点与环保留，不复制大境界仪式。
+
+Web构建及15项相关回归测试通过；844×390、1280×720、960×360真实游戏检查通过，包含升级触发、战斗继续、暂停冻结和到期消退。截图与浏览器记录见`reports/minor-level-beam-2026-11-03/`，脚本`scripts/verify-minor-level-beam.cjs`。微信真机尚未验收。无新增素材、无Scenario调用，0 CU。
+
+## 金丹突破 · 第四版已正式接入（2026-11-03）
+
+用户确认第四版后已接入正式金丹突破：金色光点汇入丹田，不透明米粒丹体长大后收缩至49px设计尺寸，成功保留金丹；失败只消散聚气。36项单元测试、9帧像素对照及3种横屏真实流程回归通过，Web构建通过。微信真机未验收，之前全项目包体超限仍待处理。人物仍为静态盘坐，本轮0 CU，原图及历次版本全部保留。证据见`reports/jindan-integration-2026-11-03/`。以下为历史预演记录。
+
+第四版将聚气光流、光点、蓄力光晕和金丹统一到同一丹田中心；新版`jindan-preview-v4.mp4`，其余已调整表现不变，历史版本保留。
+
+第三版将丹体固定到双拇指交点上方，移除丹体透明度淡入，米粒起就显示完整丹体；大小变化和金色吸入光点保留。新版`jindan-preview-v3.mp4`，第二版完整归档，尚未接入游戏。
+
+第二版按用户反馈改为米粒光点慢慢长大、收缩凝实，最终丹体直径减半；吸入光点统一金色。11种画面检查通过，第一版完整保留，正式游戏未改。新版`jindan-preview-v2.mp4`待用户验收。
+
+用户金色云纹球体母图已归档、去黑底并保留实体丹体；复用盘坐人物、道基、聚气光点与厚波带，制作4.5秒“聚灵凝丹—丹轮展开—金丹稳定”独立预演。8种检查画面、3种窗口尺寸及暂停/重播通过；尚未接入正式金丹流程，成功分支预演待用户验收，失败分支未制作。筑基已确认版本未改。0 CU，原图及初版试配保留。见[金丹制作目录](../xianxia-jindan-breakthrough-2026-11-03/README.md)。
+
+## 24项怪物技能覆盖审计（2026-11-03）
+
+[覆盖表](../xianxia-monster-coverage-2026-11-03/README.md)逐项区分素材接入、角色状态与待补表现。下一步优先M12地面毒区复用M11瘴气；不要把已验收毒液飞弹算作M12地面效果。本轮仅审计，无新构建或运行验收。
+
+## M17风刃封侧复用青蓝长条（2026-11-03）
+
+复用既有一线天图集首帧，0 CU。两条风刃约束于原胶囊内，保留完整预警；67项测试、构建及双横屏6组通过。M17仍仅技能库/测试夹具使用。见[验收记录](../xianxia-monster-windblade-2026-11-03/README.md)。
+
+## M07裂地重踏复用尘浪（2026-11-03）
+
+共享M15尘浪纹理，0 CU。原整圆伤害提示保留，0.2秒内增加包含于判定的装饰尘环。68项测试、构建、正式熊Boss双横屏6组通过。见[验收记录](../xianxia-monster-stomp-2026-11-03/README.md)。M17青蓝长条仍为候选，未接入。
+
+## M18狱锁柱复用M20石塔（2026-11-03）
+
+直接共享已验收pillar.png，0 CU，无新增纹理。75项测试、构建、双横屏6组、锁柱击破与锁链同步解除、暂停及清理通过。M18未配置正式怪物，仅技能库接入与夹具验收。见[验收记录](../xianxia-monster-lock-2026-11-03/README.md)。
+
+## M04护甲结晶复用（2026-11-03）
+
+凝灵晶透明母版复用为512px战斗机关，0 CU。第六层熊Boss原M04接入；74项测试、构建、双横屏召出/首颗保留80%减伤/第二颗解除减伤与暴露/暂停/清理通过。见[验收记录](../xianxia-monster-crystal-2026-11-03/README.md)。下一步审计M18锁柱复用机关柱。
+
+## 筑基突破 · 道基与光柱分层预演（2026-11-03）
+
+第四版已获用户确认并接入正式筑基代码。35项单元测试、7帧原分辨率像素对照及3种横屏真实流程回归通过，Web构建通过。微信编译完成但全项目包体约124.9MiB超过20MiB预算，未通过分包检查，真机未验收。人物仍为静态盘坐。金丹已开始[独立丹体母图与编排制作](../xianxia-jindan-breakthrough-2026-11-03/README.md)，静态图由用户制作，0 CU。
+
+用户认可第三版聚气后，第四版仅增加分批加速吸入丹田的青白光点；当前预演`breakthrough-preview-v4.mp4`，此前版本保留。爆发起75帧继续与已确认版本完全相同，0 CU，尚未接入正式游戏。
+
+用户已确认第二版光柱和冲击环。第三版仅优化聚气的错落内收、丹田积蓄及末段收紧，视频为`breakthrough-preview-v3.mp4`；爆发起75帧与第二版逐字节相同，确认效果未改。聚气第三版待用户验收。
+
+第二版已按用户反馈加大贯穿顶部的光柱、重做连续内收聚气流、加厚淡金扩散波带；第一版完整归档，新版视频使用`breakthrough-preview-v2.mp4`。仍为静态人物的本地合成预演，未接入正式游戏、0 CU。
+
+保留用户两张道基及光柱原图，选择第二张道基，与已验收盘坐母图本地合成4.5秒横屏预演。完成去黑底、派生人物去品红、聚气／爆发／退光编排及暂停重播检查。角色仍为静态，非游戏实录，未接入正式游戏；此前Scenario呼吸动画额度阻断未解决，本轮未调用生成、0 CU。见[素材、动态预演与检查记录](../xianxia-breakthrough-composite-2026-11-03/README.md)。
+
+> 2026-11-03 名称更新：`sj_line`「长虹贯日」正式更名为「剑破虚空」。下方历史制作记录及 `changhong` 素材路径保留原名，对应同一技能。
+
+> 同日用户确认其余8项更名：剑气斩→弦月斩；纵横剑气→剑啸八方；剑影分光→分光连斩；碧落斩→蚀骨剑意；剑气爆裂→剑罡爆裂；不灭剑体→护体剑罡；无我剑境→周天剑域；天地一剑→一剑开天。技能ID及历史素材路径不变。图标更新按[逐张制作队列](../xianxia-skill-icon-refresh-2026-11-03/README.md)推进。
+
+## 剑破虚空新技能图标已接入（2026-11-03）
+
+用户提供冰蓝长剑与黑色虚空裂口图，完整保留主体并留出圆形裁剪安全边距，导出256px运行图。88/64px圆形检查与双横屏技能页加载检查通过。原图和旧劈山图标均保留，无新增生成费用。[图标记录](../xianxia-skill-icon-refresh-2026-11-03/README.md)。
+
+## M03汲灵回生已有灵核复用（2026-11-03）
+
+复用core_ling/master.png导出512px战斗机关；原图及透明母版保留，0 CU。正式第五层蛇Boss接入，72项测试、构建及双横屏真实召出/回血/击破中断/暂停/清理通过。见[验收记录](../xianxia-monster-core-2026-11-03/README.md)。下一步优先审计M04已有矿晶。
+
+## 筑基突破 · 盘坐母图已整理，动画受额度阻断（2026-11-03）
+
+用户已验收盘坐母图并授权继续。完成本地去品红、发丝边缘去色、1536画布安全留白及浅深背景检查；原图保留。4秒无特效调息动画已报价20CU，提交被Scenario团队免费额度50/50拒绝，没有创建任务、没有生成费用，不能写成动画已完成。输入已归档上传，完整请求与记录见[制作目录](../xianxia-breakthrough-seated-2026-11-03/README.md)。
+
+## 技能库狱锁禁锢M18已接入（2026-11-03）
+
+用户铁链去绿并适配270度环带，原110/82半径与90度出口保持。71项测试、构建与双横屏含真实击破锁柱解除检查通过，无新增费用，原图保留。M18未配置正式怪物，仅夹具验证。[记录与下一步复用安排](../xianxia-monster-chain-2026-11-03/README.md)。下一步先复用既有M03灵核，不重复要求新母图。
+
+## 技能库连环落石M14已接入（2026-11-03）
+
+用户岩石本地去绿并导出512透明图，三轮各按原预警/激活时钟下落触地淡出。72项测试、构建与双横屏18组检查通过；无新增费用，原图和失败截图保留。M14未配置正式怪物，仅夹具验证。[记录](../xianxia-monster-falling-rock-2026-11-03/README.md)。下一母图：[技能库M18锁链](../xianxia-monster-chain-2026-11-03/static-prompt.md)。
+
+## 六门避劫M19安全地印已接入（2026-11-03）
+
+用户晶环去品红后限制在原安全半径内，512透明图，预警与生效期间两处共用，原安全标识/判定保持。第8/9层Boss双横屏、69项测试和构建通过，无新增费用，原图及首轮截图保留。[记录](../xianxia-monster-safe-seal-2026-11-03/README.md)。下一为未配置正式怪物的技能库[M14落石母图](../xianxia-monster-falling-rock-2026-11-03/static-prompt.md)。
+
+## 破阵机关柱M20已接入（2026-11-03）
+
+用户晶核石柱本地去绿，512透明图、角色深度层与脚底锚定，替换机关目标占位。68项测试、构建与双横屏真实召柱/冲锋撞柱/破甲及清理通过；原图和首轮截图保留，无新增费用。[记录](../xianxia-monster-pillar-2026-11-03/README.md)。下一母图：[M19安全门地印](../xianxia-monster-safe-seal-2026-11-03/static-prompt.md)。
+
+## 环形震波M15已接入（2026-11-03）
+
+用户尘浪母图去绿后按真实环形波带重映射，第八层牛魔王保留原半径、宽度与安全缺口。69项测试、Cocos构建与双横屏实景检查通过，无新增费用，原图及首轮失败截图保留。[记录](../xianxia-monster-shockwave-2026-11-03/README.md)。下一母图：[M20破阵机关柱](../xianxia-monster-pillar-2026-11-03/static-prompt.md)。
+
+## 摆首妖息M16已接入（2026-11-03）
+
+用户喷息母图本地去品红并适配90度圆扇形，512×768透明纹理随实际技能方向扫动。69项测试、构建与双横屏真实第五层蟒王检查通过，费用0CU，原图及中间文件保留。见[验收记录](../xianxia-monster-breath-2026-11-03/README.md)。下一用户母图：[M15环形震波](../xianxia-monster-shockwave-2026-11-03/static-prompt.md)，保留安全缺口。
+
+
+## 落雷点名M13美术已接入（2026-11-03）
+
+用户雷柱去绿幕后导出384×1024透明图，按原技能激活和到期显示/淡出。67项测试、构建和双横屏生命周期检查通过。M13当前未配置到正式怪物，本次仅在夹具挂载验证，未改技能表。费用0CU，原图与处理中间文件保留。见[验收记录](../xianxia-monster-lightning-2026-11-03/README.md)。下一张：[M16摆首妖息](../xianxia-monster-breath-2026-11-03/static-prompt.md)。
+
+
+## 长虹贯日 · 缩小开口与蓝光剑身版已正式接入（2026-11-03）
+
+用户确认“接入吧”。正式版保留蓝色剑身描边、出屏飞行、细痕先行，最大开口154、0.5秒开始张开，随后合拢并于1.82秒结束。源码和两张纹理与获批预览一致，当前Web构建参数已核对，接入复核33项测试通过。历史素材和录像全部保留，新增费用0。此批准覆盖下方相关版本的待审核状态。[接入记录](../xianxia-changhong-compact-rift-2026-11-03/integration/approval.json)。
+
+## 纵横剑气 · 外放交错版已正式接入（2026-11-03）
+
+用户确认“接入吧”。正式版采用六道外放交错布局与红色0.42不透明度系数。正式渲染入口、运行参数、构建布局及原素材哈希已核对，接入复核30项测试通过，沿用双横屏12组实战记录。此批准覆盖该版本待审核状态；历史版本保留，无新增费用。[接入记录](../xianxia-cross-interwoven-2026-11-03/integration/approval.json)。
+
+## 长虹贯日 · 缩小开口并提前张开（2026-11-03）
+
+最大开口从220缩至154（减少30%），张开从0.8秒提前至0.5秒；保留细痕、蓝色剑身描边与合拢消散。33项相关测试、Cocos构建及双横屏16组实战检查通过，视觉待用户审核。旧版保留，新增费用0。[原速预览与验证](../xianxia-changhong-compact-rift-2026-11-03/README.md)。
+
+## 噬灵妖卵M22已接入（2026-11-03）
+
+用户绿幕卵囊图本地去底，以512×512透明图替换几何占位，保留原血条、脚底位置与深度排序。65项测试、Cocos构建、双横屏产卵/暂停/击破/孵化检查通过，费用0CU。见[验收记录](../xianxia-monster-egg-2026-11-03/README.md)。M03灵核已有可复用锻造灵核原图；下一用户制图为[M13落雷雷柱](../xianxia-monster-lightning-2026-11-03/static-prompt.md)。
+
+
+## 纵横剑气 · 外放交错与更透明红色（2026-11-03）
+
+按用户参考图反馈，收近六道中心，弧面与外移方向错开，以横斜和陡斜弧面交错；缩短出场间隔，中段六道同时可见。红色不透明度系数从0.70降至0.42。30项测试、Cocos构建及双横屏12组实战检查通过，视觉待用户审核；原图、旧版和首轮实战均保留，新增费用0。[原速预览与记录](../xianxia-cross-interwoven-2026-11-03/README.md)。
+
+## 长虹贯日 · 细痕先行与剑身蓝色描边（2026-11-03）
+
+按用户反馈，飞行期间只留下细裂痕，飞剑出屏后才张开，随后合拢为细线并消失；总视觉时长1.82秒。复用白金剑图生成青蓝轮廓光和柔和外溢光，原剑身大小不变。33项相关测试、Cocos构建及双横屏16组实战检查通过，视觉待用户审核。原图、旧版本和录像保留，新增Scenario费用0。[原速预览及验证](../xianxia-changhong-trace-glow-2026-11-03/README.md)。
+
+## 纵横剑气 · 由内向外绽放（2026-11-03）
+
+按用户反馈，六道月牙改为32%尺寸起势，逐步放大外移、开口朝内，短拖光同步外移，角色中心保持空隙。沿用原素材与伤害规则，30项测试、Cocos构建及双横屏12组实战通过。视觉待审核，旧版保留，新增费用0。[原速预览及记录](../xianxia-cross-bloom-2026-11-03/README.md)。
+
+## 纵横剑气 · 参考图交错布局（2026-11-03）
+
+六道月牙改为胸口周围上下错层、独立朝向交叉，细光同步。复用原素材，大小、颜色、透明度、节奏与伤害保持；30项测试、Cocos构建及双横屏12组实战检查通过，视觉待用户审核。旧版与参考图保留，新增费用0。[预览与记录](../xianxia-cross-layout-2026-11-03/README.md)。
+
+## 长虹贯日 · 中线开合裂缝（2026-11-03）
+
+按用户要求，蓝白裂缝从中间细线向两侧张开，短暂停留后收回同一中线，最后细线淡去。保留参考纹理、飞剑出屏、尾随长度和原伤害规则。33项相关测试、Cocos Web构建及双横屏16组实战检查通过，视觉待用户审核。原版和历次素材全部保留，新增Scenario费用0。[原速预览与验证](../xianxia-changhong-open-close-2026-11-03/README.md)。
+
+## 寒瘴泥沼M11已接入（2026-11-03）
+
+复用用户品红底泥浆图，512×512透明纹理接入独立地面层。保留原预警与判定，生效后替换红填充、保留细边界，末尾淡出。74项测试、Cocos构建、双横屏真实M11和生命周期检查通过，原图/中间文件保留，费用0CU。见[验收记录](../xianxia-monster-miasma-2026-11-03/README.md)。下一母图：[M22噬灵妖卵](../xianxia-monster-egg-2026-11-03/static-prompt.md)。
+
+
+## 长虹贯日 · 用户参考图蓝白裂缝（2026-11-03）
+
+用户否定上一版紫色折线，要求参考所附蓝白裂口。直接整理用户原图，保留不透明黑色空洞、青白撕裂边与透明蓝色辉光，完整尖头轮廓沿飞剑展开到屏幕外，取消原程序三角碎片。32项相关测试、Cocos构建及双横屏16组实战检查通过，视觉待用户审核。旧版、参考原图和两轮中间检查保留，新增Scenario费用0。[原速预览与素材记录](../xianxia-changhong-reference-rift-2026-11-03/README.md)。
+
+## 蛇、蝎毒液弹体已接入（2026-11-03）
+
+用户品红底绿色液滴通过验收，本地去底后512×256透明纹理接入hostile poison，显示48×24，按真实速度方向旋转。71项测试、Cocos构建及蛇/蝎双向双横屏发射、暂停、清理检查通过。原图与中间文件保留，新增费用0CU。不增加持续中毒或落地毒池。见[验收记录](../xianxia-monster-poison-2026-11-03/README.md)。下一母图为已有M11技能的[寒瘴泥沼地面素材](../xianxia-monster-miasma-2026-11-03/static-prompt.md)。
+
+
+## 长虹贯日 · 出屏飞剑与增强空间裂缝（2026-11-03）
+
+按用户要求，白金飞剑保持实色飞出屏幕后消失，空间裂缝共用屏外终点，扩大裂口并增加分叉、碎片和边缘光。原伤害射程与命中规则保持不变。专项9项、施法21项、Web构建及双横屏16组实战检查通过；通用特效合跑另有3项被角色测试夹具缺少`WeaponQualityArt`阻断，详情如实记录。复用原素材，零新增Scenario费用，旧版与录像保留，视觉待用户审核。[原速预览与验证记录](../xianxia-changhong-offscreen-2026-11-03/README.md)。
+
+## 妖蝠音波已接入（2026-11-03）
+
+复用用户紫白三弧母图，本地去绿幕与压缩杂色，512×512透明纹理接入hostile sonic弹体。整体随实际速度朝向，52×52显示，不改伤害、碰撞或弹道。原图/中间图保留，70项测试、Cocos构建与双横屏真实发射、暂停、清理通过，新增费用0CU。见[验收记录](../xianxia-monster-sonic-2026-11-03/README.md)。下一母图为[蛇/蝎毒液弹体](../xianxia-monster-poison-2026-11-03/static-prompt.md)，使用品红背景。
+
+
+## 妖隼飞羽已接入；蛛网红圈已移除（2026-11-03）
+
+用户提供灰黑/暗红单根飞羽母图，去绿底后以512×160透明图接入现有hostile feather弹体，随速度方向旋转，保留原伤害与碰撞。用户同时要求移除M10蛛网红色圆周和填充，已完成，保留文字提示与原判定。69项测试、Cocos构建及双横屏飞羽/蛛网检查通过，源图和旧截图保留，新增Scenario费用0。见[飞羽记录](../xianxia-monster-feather-2026-11-03/README.md)。下一母图：[妖蝠音波](../xianxia-monster-sonic-2026-11-03/static-prompt.md)。
+
+## 怪物M10缚足蛛网 · 用户母图已验收接入（2026-11-03）
+
+复用用户提供的1254px绿底蛛网，去底、补边后导出512px RGBA。现有M10预警末段飞向原锁定位置，原生效时机展开并淡出；保留原预警范围，不增加飞行碰撞或改变伤害/定身。属于母图实时变换，未生成网丝逐帧动画。61项测试、Cocos构建及双横屏实景检查通过，原图和全部中间图保留，新增费用0CU。详见[验收与记录](../xianxia-spider-web-2026-11-03/README.md)。下一静态缺口：妖隼飞羽弹体。
+
+## 无我剑境 · 双倍飞行速度版已正式接入（2026-11-02）
+
+用户确认“可以，先接入”。当前正式效果为双倍飞行速度、每剑独立变速、增强曲线拖尾及脚下冰蓝光环，剑身刃光保持移除。运动与渲染源码和获批录像一致，Cocos生成模块速度系数为2.6；102项相关测试复核通过，22份既有索引文件完整保留。此批准覆盖下方该版本的待确认状态。[接入记录](../xianxia-wuwo-double-speed-2026-11-02/integration/approval.json)。
+
+## 无我剑境 · 飞行速度翻倍（2026-11-02）
+
+按用户要求，一级和二级运动速度系数从1.3改为2.6，保留独立快慢节奏、曲线拖尾和脚下光环。102项相关测试、Web构建和双横屏浏览器检查通过，运行时参数已验证；旧版与原速录像均保留。[录像及记录](../xianxia-wuwo-double-speed-2026-11-02/README.md)。
+
+## 无我剑境 · 增强曲线拖尾可见性（2026-11-02）
+
+针对拖尾几乎不可见的反馈，将发射位置移到剑尾，留痕延长至约0.65–0.9秒，增强冰蓝外层和浅色亮芯；保持独立变速、脚下光环，不恢复剑身刃光。102项相关测试、Web构建及双横屏浏览器检查通过，原速预览待用户确认。历史版本保留，无新增费用。[录像及记录](../xianxia-wuwo-visible-trails-2026-11-02/README.md)。
+
+## 无我剑境 · 移除刃光、保留曲线拖尾（2026-11-02）
+
+用户不满意飞剑刃光，要求先移除并保留曲线拖尾。运行时已停止刃光加载和显示，曲线拖尾、独立变速及脚下冰蓝光环保持原样；原纹理与历次版本全部保留。101项相关测试、Web构建、双横屏及生命周期/资源重试检查通过，原速效果待用户查看。无新增费用。[录像及记录](../xianxia-wuwo-trails-only-2026-11-02/README.md)。
+
+## 无我剑境 · 变速游剑、冰蓝地环与刃光预览（2026-11-02）
+
+按用户方案，每剑独立平滑变速，脚下复用剑心通明冰蓝光环，飞剑增加窄条冰蓝刃光与随速度伸长的曲线拖尾。保留8/12剑、范围、伤害倍率与共享命中间隔；运动与碰撞同步。113项相关测试及Web构建通过，两种横屏共五段原速录像、生命周期与资源重试检查完成，最终视觉待用户审核。首轮图集显示问题与旧验证脚本失败均保留记录，无生成或上传费用。[原速预览与记录](../xianxia-wuwo-ice-flow-2026-11-02/README.md)。
+
+## 纵横剑气 · 红色透明度调整已正式接入（2026-11-02）
+
+用户确认“可以，接入吧”。正式版红色剑气不透明度为调整前70%，蓝色和其他参数不变。运行代码与获批预览一致，32项渲染测试复核通过，已保留构建及双横屏12组实战记录。此批准覆盖下方红色透明度试调的待确认状态；原版保留，无新增费用。[接入记录](../xianxia-cross-red-alpha-2026-11-02/integration/approval.json)。
+
+## 纵横剑气 · 红色透明度试调（2026-11-02）
+
+两道红色月牙不透明度降至原来的70%，蓝色及其他参数不变。32项渲染测试、构建和双横屏12组实战检查通过，待视觉确认；上一正式版保留，无新增费用。[预览与记录](../xianxia-cross-red-alpha-2026-11-02/README.md)。
+
+## 纵横剑气 · 周身错时月牙内收版已正式接入（2026-11-02）
+
+用户确认“可以，接入吧”。正式版采用最终70%尺寸、周身不规则错时轨迹与再次内收20单位的效果。运行代码与获批预览一致，冰蓝/红色素材哈希一致，接入复核140项测试通过，已留存双横屏12组实战证据。此批准覆盖下方历次“待视觉验收”状态；所有历史素材、预览和记录保留，无新增费用。[接入记录](../xianxia-cross-inward2-2026-11-02/integration/approval.json)。
+
+## 纵横剑气 · 再次内收20单位（2026-11-02）
+
+月牙中心统一再向角色收近20单位，保持大小、错时轨迹和伤害规则。140项测试、构建及双横屏12组实战检查通过，待视觉验收，无新增费用。[录像与记录](../xianxia-cross-inward2-2026-11-02/README.md)。
+
+## 天地一剑 · 下劈残影版已批准并正式接入（2026-11-02）
+
+用户确认“可以，接入吧”。正式战斗启用柔和剑尖刃光、八阶段下劈轨迹残影及渐隐扫光；源码、素材与获批预览一致。本轮123项相关测试通过，沿用双横屏18组实机验证和已通过的Web构建；既有46份索引文件接入前核查通过，无新增生成费用。[接入验收记录](../xianxia-tiandi-sweep-2026-11-02/integration/approval.json)。
+
+## 天地一剑 · 下劈轨迹残影与柔和剑尖（2026-11-02）
+
+按用户反馈，改用既有圆缓冰蓝纹理；八个剑身刃光残影停留在下劈经过的角度，连接渐隐扫光，落地后各自原位消散。保留实体剑、地面剑气和原伤害，不修改万剑归宗。123项相关测试、最终Web构建及双横屏18组实机检查通过，最终视觉待用户审核。两轮源码与实录及原包裹光版本保留，无新增生成或上传费用。[原速录像与记录](../xianxia-tiandi-sweep-2026-11-02/README.md)。
+
+## 纵横剑气 · 释放位置内收（2026-11-02）
+
+保持70%尺寸和错时轨迹，将月牙中心向内收约24–43单位。140项测试、构建及双横屏12组实战检查通过，待视觉验收，无新增费用。[预览与记录](../xianxia-cross-inward-2026-11-02/README.md)。
+
+## 剑气斩 · 冰蓝近身与三种斩击正式接入（2026-11-02）
+
+用户确认“挺好，接入吧”。正式战斗使用获批近身图与斜劈、横扫、下劈三连，运行图与预览逐字节一致；飞行碰撞、地形和缺图回退同步，保留伤害、间隔及真实挥剑。69项专项、Cocos构建、双横屏10组实机及真实404回退检查通过；全量1510通过/330失败及已有失败证据如实记录。没有新增内部能量动画、生成或上传费用，旧素材与失败录像保留。[接入与原速实录](../xianxia-sword-qi-three-cuts-2026-11-02/integration/README.md)。
+
+## 天地一剑 · 冰蓝下劈剑光预览（2026-11-02）
+
+按用户冰蓝能量弧参考，复用既有透明尖锋剑芒，为巨剑增加贴刃蓝光和两层短促下劈残影；保留实体剑、地面剑气及原伤害机制。122项相关测试、Cocos Web构建及双横屏18组实机检查通过，最终视觉待用户审核。原图、旧源码、失败启动日志和原始录像保留，无新增生成或上传费用。[原速预览与记录](../xianxia-tiandi-ice-cleave-2026-11-02/README.md)。
+
+## 纵横剑气 · 月牙缩至70%（2026-11-02）
+
+月牙宽高缩为上版70%，保留释放位置、轨迹与错时节奏。140项测试、构建及双横屏12组实战检查通过，待视觉验收，无新增费用。[预览及记录](../xianxia-cross-scale70-2026-11-02/README.md)。
+
+## 纵横剑气 · 再放大一倍并收近（2026-11-02）
+
+月牙宽高各为上一版2倍，改用居中锚点收近凹口，保留周身错时释放；伤害规则未改。139项测试、构建及双横屏12组实战检查通过，透明像素边界核查和录像已归档，待视觉验收。无新增费用。[预览与记录](../xianxia-cross-large-2026-11-02/README.md)。
+
+## 万剑归宗 · 冰蓝剑芒尖锋版已验收（2026-11-02）
+
+用户已确认接入。按用户反馈将圆润前端压窄为锐角尖锋，保留尾光和火焰纹理；使用新v2贴图，v1与原图完整保留。7项相关测试、Web构建、双横屏4组检查通过，无新增费用。[对比、实录与记录](../xianxia-wanjian-sharp-aura-2026-11-02/README.md)。
+
+## 剑气斩 · 冰蓝三种斩击轮廓试装（2026-11-02）
+
+用户已认可近身一道。飞行前两道复用母图派生为斜劈、横扫，第三道与近身保持原图。双横屏左右三连及近身6组检查通过，真实挥剑、三飞行物和三次命中保留。仍为单帧轮廓试装，内部动画及新轮廓碰撞未完成，未正式接入。无新增费用，原稿与失败记录保留。[对照与原速录像](../xianxia-sword-qi-three-cuts-2026-11-02/README.md)。
+
+## 纵横剑气 · 周身1.5倍月牙（2026-11-02）
+
+按360度伤害恢复周身视觉，月牙宽高为前版1.5倍，保留错时、曲线和施放间微小变化，完整画布避开身体。139项测试、构建与双横屏12组实战检查通过，待视觉验收。无新增费用，历次版本保留。[预览与记录](../xianxia-cross-surround-2026-11-02/README.md)。
+
+## 万剑归宗 · 冰蓝剑芒（2026-11-02）
+
+复用用户提供的冰蓝能量弧，去黑底后整理为透明剑芒，包裹24/32道飞剑并随飞行增强；金白合剑保留，附蓝色外焰。92项针对性测试、Web构建及双横屏4组检查通过；宿主测试另有FlightSwordArt依赖缺失，未声称全量通过。原图、旧版本、处理脚本和实录保留，无新增费用。[原速录像与记录](../xianxia-wanjian-blue-aura-2026-11-02/README.md)。
+
+## 纵横剑气 · 正面错落交叉（2026-11-02）
+
+六道月牙改为朝施放正面错时出现，沿不同曲线交叉，蓝红穿插；完整旋转画布避开身体，每次施放略有变化。沿用冰蓝/红色素材与原战斗判定。139项测试、构建及双横屏12组实战检查通过，待视觉验收；无新增费用。[录像及记录](../xianxia-cross-front-2026-11-02/README.md)。
+
+## 纵横剑气 · 冰蓝月牙外放调整（2026-11-02）
+
+按用户新图本地去黑底，蓝色保留冰蓝原色、红色对应改色。六道月牙从角色身体外侧朝外移动，直线光束与碎光同步避身；战斗数值不变。139项测试、构建、双横屏12组实战检查通过，待视觉验收。原图及历次版本保留，无新增费用。[视频及处理记录](../xianxia-cross-outward-2026-11-02/README.md)。
+
+## 纵横剑气 · 角色周围交错爆发预览（2026-11-02）
+
+用户选择改为自身周围交错爆发。开发版使用六道蓝白剑光、四道蓝弧和两道红色辅光，约0.9秒消散；半径按等级180/220/270，最多6目标，每次同敌只受伤一次。复用既有弧刃并本地重着色，无新增费用，原版及第一次尝试保留。138项相关测试、Cocos构建和双横屏12组实战检查通过，待视觉验收。[原速预览与记录](../xianxia-cross-reference-2026-11-02/README.md)。
+
+## 两仪剑阵 · 错落剑雨已验收版（2026-11-02）
+
+用户已确认接入。普通5把剑以40毫秒间隔错落下落；满级收尾7把悬停120毫秒后齐落。保留纯黑/纯白随机剑身、底座慢转、原落点和伤害。113项相关测试、Web构建及双横屏4组实测通过，前版素材和首次未录完记录保留，无新增费用。[原速录像与记录](../xianxia-liangyi-staggered-2026-11-02/README.md)。
+
+## 四象剑阵 · 错落剑雨已验收版（2026-11-02）
+
+用户已确认接入。普通轮次20把剑分5批、间隔40毫秒，四阵印交错下落并轻微变化落点；收尾28把悬停120毫秒后同步落下。保留慢速阵纹与中心驻剑，伤害数值和攻击节奏不变。112项相关测试、Web构建、双横屏4组检查通过，旧版32个索引文件完整保留，无新增费用。[原速录像与记录](../xianxia-sixiang-staggered-2026-11-02/README.md)。
+
+## 四象剑阵 · 密集剑雨与慢速阵纹（2026-11-02）
+
+普通轮次20把、收尾28把，均匀覆盖四阵印内外区域；灵兽图纹各自24秒顺时针一圈，中心驻剑固定朝下。剑雨仍按所在阵印配色，战斗数值不变。111项相关测试、Web构建及双横屏4组检查通过，旧版31个索引文件完整保留，无新增费用。[原速录像与记录](../xianxia-sixiang-rain-rotation-2026-11-02/README.md)。
+
+## 长虹贯日加长射程与空间裂隙版已批准并正式接入（2026-11-02）
+
+用户确认“可以了，请接入”。正式版保留凝实白金剑身、移除脚下剑气、450至640射程及延伸到剑尖的空间裂隙；剑消失后裂隙再保留0.5秒。源码和素材与获批预览一致，121项相关测试复核通过，沿用双横屏16组实录。旧素材与历次版本保留。[批准记录](../xianxia-changhong-range-2026-11-02/integration/approval.json)。
+
+## 长虹贯日 · 射程加长与裂缝延时（2026-11-02）
+
+按用户要求将实际射程由一级360／满级510提高到450／640，各级同步递增；飞剑与碰撞共用裁短终点。裂缝延伸到剑尖，剑在0.72秒消失，裂缝在1.22秒结束。天地一剑射程保持。121项相关测试、Web构建和双横屏16组实战检查通过，素材未改动、无新增费用。[原速实录与记录](../xianxia-changhong-range-2026-11-02/README.md)。
+
+## 四象剑阵 · 相交阵印与中心驻剑（2026-11-02）
+
+按用户反馈移除方形外框，四圆放大相交且整体宽高与原外框相同；四柄驻阵剑剑尖朝下插在各自阵印中心。剑雨按落点最近的阵印选择剑身及尾迹颜色，下落/命中保持一致。原战斗范围和7/9次攻击不变。109项专项、Web构建、双横屏4组检查通过，最终视觉待用户查看。原素材和全部前版保留，无新增生成费用。[原速录像与记录](../xianxia-sixiang-overlap-2026-11-02/README.md)。
+
+## 长虹贯日 · 凝实剑身、移除地面剑气、空间裂隙（2026-11-02）
+
+按用户反馈改用既有高清剑体，保留白金切面与清晰轮廓；停止旧地面剑气加载及fallback，胸前飞剑经过后展开空间窄缝、亮边与剥落碎片。伤害规则不变，35项测试、Web构建及双横屏16组实战检查通过。原速效果待用户反馈，原图与两轮预览全部保留，无新增生成费用。[实录与来源](../xianxia-changhong-rift-2026-11-02/README.md)。
+
+## 四象剑阵 · 四灵阵印版（2026-11-02）
+
+用户提供四灵母图，助手验收拆分后接入上朱雀、右白虎、下玄武、左青龙四阵印。纹样正向，外圈缓转，四色连流和对应属性落剑随原脉冲轮转，末击四象合鸣；原菱形范围、7/9击及战斗机制不变。108项专项、Web构建和双横屏4组实机检查通过，最终观感待用户查看。原图、切片、旧版源码和全部录像保留；本地派生，无模型生成或上传费用。[原速录像与制作记录](../xianxia-sixiang-spirits-2026-11-02/README.md)。
+
+## 剑气斩 · 金青多形与真实挥剑预览（2026-11-02）
+
+用户不满意金白合成预演的静帧人物、第一道轮廓及颜色。新版使用真实游戏动作，第一道去掉兜底回钩，三道改为浅金锋面与青碧内缘/拖光。浏览器临时替换绘制，尚未正式接入新形状碰撞或资源引用。双横屏六场景确认实际挥剑多帧及三种轮廓，提供原速与半速录像。无模型生成/上传/费用，原版及两次录制全部保留。[游戏内预览与说明](../xianxia-jinqing-multislash-preview-2026-11-02/README.md)。
+
+## 剑气斩 · 金白多形连斩动态预演（2026-11-02）
+
+按用户新动画参考制作斜斩、横扫、上挑三种独立轮廓，快速依次显形并短暂重叠。提供原速场景合成与半速放大预览，尚未接入游戏或获最终视觉批准。复用旧刃光，本地重映射和调色，无生成/上传/费用。初版尾光截断稿与改为整体淡出的第二版、各帧和来源均保留。[动画与制作记录](../xianxia-gold-multislash-preview-2026-11-02/README.md)。
+
+## 长虹贯日 · 日光剑身与延长消散（2026-11-02）
+
+按用户要求将巨剑改为暖白刃芯、淡金柔光；保留0.22秒贯穿，剑身停留并渐隐至0.72秒，剑气余光延长到0.85秒。复用原素材独立派生，无生成费用。41项测试、Web构建和双横屏16组实战检查通过，原速预览待用户反馈；旧版、原图与失败尝试保留。[实录与制作记录](../xianxia-changhong-sunlight-2026-11-02/README.md)。
+
+## 两仪剑阵 · 底座慢转与随机黑白落剑（2026-11-02）
+
+按用户要求，黑白底座及双阵眼顺时针20秒一圈；落剑改用复用原剑形派生的纯黑、纯白剑体，每把按稳定视觉哈希随机选择，整个下落过程不变色。原范围、落点、伤害和次数不变。107项专项、最终Web构建与双横屏4组实机验证通过，最终观感待用户查看。旧版及失败录像全部保留，无生成或上传费用。[原速实录与接入记录](../xianxia-liangyi-rotation-2026-11-02/README.md)。
+
+## 剑气斩 · 220°大开口月牙（2026-11-02）
+
+后续用户反馈此版“弧形太圆了”，尚未通过最终视觉审核。已另做[不等曲率轮廓草案](../xianxia-crescent-freecurve-2026-11-02/README.md)供确认，草案未接入，220°版及全部源文件保留。
+
+按用户选定方向，4级后飞行月牙及7级后三连改为220°弧形，保留140°缺口、冰蓝白色和尖端。复用原图本地重映射，使用独立 `sword-qi-crescent-220-v2.png`；回勾刃面、扫掠、地形与回退轮廓同步，纵横剑气和近身扇斩未改。56项专项、Cocos构建及双横屏16场景通过，8段实机录像保留；全量328项失败如实记录，未做全部基线归因。无生成/上传/费用，原图与两次加工版本均保留。用户已批准制作方向，最终画面供用户回看。[实机预览与完整记录](../xianxia-crescent-220-2026-11-02/README.md)。
+
+## 两仪剑阵 · 黑白云气阵面（2026-11-02）
+
+用户提供并修正黑白阴阳母图，助手验收后按既定授权接入。保留黑白云纹与双鱼眼，本地去绿底、轻微周期云纹流动、双阵眼随真实脉冲交替亮起；原落剑与伤害机制不变，四象仍用旧素材。105项专项、Cocos Web构建及两种横屏4组实机检查通过，最终观感待用户查看。原图、双黑眼初稿、旧源码与全部实录保留，无生成、上传或新增费用。[原速预览与接入记录](../xianxia-liangyi-monochrome-2026-11-02/README.md)。
+
+## 周天剑阵腰部定位修复（2026-11-02）
+
+按用户截图反馈，周天剑阵剑体、短尾和几何替代绘制改为跟随实时腰部锚点，保留现有素材和战斗规则。44项测试、Web构建及双横屏8组渲染检查通过。无生成费用，旧源码与检查记录保留。[修复记录](../xianxia-zhoutian-waist-2026-11-02/README.md)。
+
+## 飞行剑气挥剑修复（2026-11-02）
+
+修复御剑飞行强制站姿导致剑气不挥剑。复用原挥剑动作，派生14帧稳定踏剑版本；剑阵、飞剑继续结诀。53项专项测试及20个Web渲染场景通过，无新增Scenario费用，原素材保留。[修复与验收记录](../xianxia-sword-seal-cast-2026-11-01/flight-qi-fix/README.md)。
+
+## 剑修结诀施法动作（2026-11-02）
+
+复用用户验收母图，新增右向与真实左向结诀视频各25 CU，共50 CU。原图、原片及36帧透明图集全部保留；飞剑和剑阵切换结诀，剑气保留原挥剑，原装备剑仍独立绘制。Web预览及动作回归检查见[接入记录](../xianxia-sword-seal-cast-2026-11-01/README.md)。Scenario集合保存母图与原片；派生图集回传被自动审批拒绝，保留本地版本。
+
+## 御剑飞行稳定踏剑版已批准并正式接入（2026-11-01）
+
+用户确认“可以，请接入吧”。正式战斗保留流泉剑原画、双脚稳定踏剑、同步悬停和左右朝向；尾流关闭，四个被动光环继续停用。7项测试复核通过，沿用获批双横屏实录，全部原素材及旧版本保留。[接入验收记录](../xianxia-flight-stance-2026-11-01/integration/approval.json)。
+
+## 御剑飞行当前状态：稳定踏剑、左右朝向、尾流停用（2026-11-01）
+
+按用户要求，保留流泉剑原画，剑随角色左右朝向，上下移动不额外旋转；角色改用现有图集双脚落稳帧，施法时也保持踏剑，身体与剑同步轻微起伏。尾流停止加载和显示，全部原图、动态图集与旧实现保留。四个被动光环仍停用。此状态覆盖下文历史接入记录。[新版实录与记录](../xianxia-flight-stance-2026-11-01/README.md)。
+
+## 当前状态：四个被动光环停用，保留供领域技能复用（2026-11-01）
+
+用户明确停用剑心通明、不灭剑体、剑骨、凝神诀四个光环的加载与显示，保留被动机制和御剑飞行。原图、图集、各版源码与预览均保留，不删除；后续优先作为领域类技能候选素材。此状态覆盖下文历史“已接入”记录。[停用与保留校验](../xianxia-passive-rings-retired-2026-11-01/README.md)。
+
+## 御剑飞行 · 守山剑原画替换（2026-11-01）
+
+用户要求从武器库选择简洁美观的剑作为母图。选用守山剑高清master，旋转、透明裁剪后直接接入，保留原画旧金属与护手纹理；无需生成，现有宽口流光不变。旧程序剑和各次试验保留。[选图与制作记录](../xianxia-flight-library-2026-11-01/README.md)。
+
+## 御剑飞行 · 宽口尾流与古朴飞剑（2026-11-01）
+
+按用户反馈移除汇聚针尖，改为宽口柔和两侧流光；飞剑采用灰青旧钢、暗铜护手、缠柄和细磨痕，剑身略微加宽。复用原图本地派生v3，原图和全部旧版保留，无模型费用。4项测试、构建及双横屏四方向检查通过，待视觉复核。[实录与细节](../xianxia-flight-aged-2026-11-01/README.md)。
+
+## 御剑飞行 · 方向统一与流光波动（2026-11-01）
+
+按用户反馈取消固定左端发射点：飞剑与尾流共同转向，剑尖领先、柄尾在后，上下采用缩短的俯视投影。复用原图制作32帧1.6秒空间波动与流动高光，保留原图和历次图集/源码/实录，无生成费用。4项测试、构建及双横屏四方向验证通过，待用户视觉复核。[新版实录及制作记录](../xianxia-flight-direction-2026-11-01/README.md)。
+
+## 御剑飞行 · 剑尾发射点修正（2026-11-01）
+
+按用户穿模反馈，将尾流从角色中心后移到固定横向飞剑左尾端，并对齐原画亮头锚点。原素材、旧版源码和实录保留；无生成费用。4项测试、Web构建与双横屏四方向检查通过。[修正实录与记录](../xianxia-flight-tail-fix-2026-11-01/README.md)。
+
+## 御剑飞行 · 冰蓝幻灵尾流通过并接入（2026-11-01）
+
+用户提供定向冰蓝流光原图，验收后自动接入。保留脚下飞剑，增加本地32帧流光、真实移动拉长、方向平滑跟随和停步收尾；暂停冻结，死亡与退出清理。9项相关测试、Web构建、双横屏单独及多被动同屏检查通过。原图、图集、旧源码、全部检查尝试与实录保留；无新增生成费用。[验收与实录](../xianxia-flight-2026-11-01/README.md)。
+
+## 凝神诀 · 青玉灵珠环通过并接入（2026-11-01）
+
+用户提供“翡翠星环幻境”母图，透明边缘与缩小检查通过，按授权自动接入。保留灵珠与青绿能量纱，本地32帧四秒向内流光，真实拾取治疗物时0.65秒提亮并收拢后恢复。14项相关测试、Web构建、双横屏四环同屏及生命周期验证通过。原图、图集、源码备份、截图和原速实录保留，无新增生成费用。[验收与原速预览](../xianxia-ningshen-2026-11-01/README.md)。
+
+## 剑骨 · 银紫双弧通过并接入（2026-11-01）
+
+用户提供银紫双弧原图，透明边缘和缩小检查通过，按授权自动接入。保留原画刃芯与飘带，本地32帧四秒流光，实际移动带短光丝、停步0.24秒内消散。与蓝金两环同屏检查通过；9项测试及双横屏实时位移、暂停、死亡和退场验证通过。原图、源码备份、全部调试录像和最终原速预览保留；无新增生成费用。[验收与原速预览](../xianxia-jiangu-2026-11-01/README.md)。
+
+## 不灭剑体 · 金焰护身环通过并接入（2026-11-01）
+
+用户提供金色能量环，母图与透明边缘、缩小检查通过，按既有授权直接接入。保留明亮护纹、后侧淡剑影和金焰；本地制作32帧四秒缓流，真实受伤短亮0.65秒，金环位于冰蓝剑心通明环外侧。6项测试、Web构建、双横屏真实扣血反馈与生命周期检查通过。原图、图集、源码备份、验证截图和录像均保留，无新增生成或上传费用。[验收、原速预览与来源记录](../xianxia-bumie-2026-11-01/README.md)。
+
+## 剑心通明 · 原图批准并接入（2026-11-01）
+
+用户选择旧版冰蓝能量环，保留其装饰与烟焰；简化新图单独归档。已用本地后期制作16帧透明流光图集并接入，四秒循环、暴击短亮0.65秒。7项测试、Web构建及双横屏生命周期检查通过；原速浏览器录像保留，闪亮由验证场景注入事件展示。无新增生成调用或费用。[原图、备选图与接入记录](../xianxia-jianxin-2026-11-01/README.md)。
+
+## 御剑术 · 胸部基线肩旁剑群验收（2026-10-31）
+
+用户确认接入：双肩左右各五个固定剑位，错落收拢，最下方飞剑与胸部同高；按十个剑位循环补剑并原位发射。复用现有飞剑素材，未调用生成服务。运行时布局见 `js/xianxia/TowerYujian.js`，验收截图及记录见 [胸部基线版本](../xianxia-yujian-chest-height-2026-10-31/README.md)。此前翼形和较低剑群预览全部保留。
+
+## 剑心通明 · 用户母图第一版验收（2026-10-31）
+
+用户提供冰霜魔法能量环原图，已原字节归档。2026-10-31助手曾建议简化；2026-11-01用户明确认可原图，并指出修订图不如旧图炫酷，已改为采用原图制作剑心通明动画，保留原有装饰及烟焰。此前审核意见仅保留为历史记录。未调用生成服务，原图生成费用未知。[验收记录与缩小示意](../xianxia-jianxin-review-2026-10-31/attempt-01/README.md)。
+
+用户于 2026-10-30 明确要求：**后续先查素材库，未经明确要求不删旧素材。此前不满意的动画也全部保留，供其他技能复用。** 每次生成有费用；“未适配当前技能”只描述当时的审核结论，不代表素材没有价值。
+
+制作下一份特效时，先检查本索引及现有 Scenario 资产。可直接使用、重剪，或从现有关键帧制作时优先复用。确需新生成时，记录已有素材不适配的原因和报价，再按用户明确的新制作要求执行。原片、审核片、图集、序列帧保持原路径；复用输出写入新版本路径并记录来源。未经用户明确要求，不删除、移动或覆盖旧素材。
+
+既有资产已完成盘点；一线天 v2 与天地一剑审核版均使用旧原片做本地后期，没有发起新的模型生成。完整路径、SHA-256、文件字节数、已知 Scenario ID、状态与证据均在[manifest.json](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-vfx-asset-library/manifest.json)及其引用的目录索引中。未知 ID 或费用使用 `null`，不推测为零。
+
+## 可直接回看的动画与图集
+
+| 素材 | 当前状态 | 当时未采用或替换的原因 | 可复用方向 |
+|---|---|---|---|
+| [早期 Scenario 剑气斩原片](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-sword-arc-2026-10-30/source/scenario-approved.mp4) | 旧 Survivor 的现用源素材 | 中段接近闭环，不符合现行 Tower 的前方 90° 月刃契约 | 环形爆发、旋转剑气、剑阵脉冲候选；开口片段可继续选用 |
+| [剑气斩 v2：文字生成原片](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-sword-arc-v2-2026-10-30/source/scenario-v1.mp4) | 备选可复用 | 旋转闭环，未作为本版剑气斩原样接入 | 环形冲击或回旋效果候选；刃光、细丝与消散片段 |
+| [剑气斩 v2：首尾帧约束原片](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-sword-arc-v2-2026-10-30/source/scenario-v2.mp4) | 备选可复用；第 0 帧已实际复用 | 首帧正确，中段仍闭环 | 第 0 帧用于开口月刃；中段供其他有圆形范围的技能选片 |
+| [剑气斩 v2：批准修订审核片](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-sword-arc-v2-2026-10-30/review/sword-qi-corrected-preview.mp4) | 当前 Tower 批准母版 | 已通过本轮用户审核 | 当前近身弧斩；后续同类月刃的质感与收势参考 |
+| [旧 Survivor 图集](/Users/zhangnu/WeChatProjects/rainy-mushroom/cocos-pilot/assets/resources/tower-skill-fx/sword-arc.png) | 当前 Survivor 使用 | 旧布局、闭环片段不适配新 Tower 契约 | 保留 legacy 运行时；其他效果在新文件中派生 |
+| [当前 Tower v2 图集](/Users/zhangnu/WeChatProjects/rainy-mushroom/cocos-pilot/assets/resources/tower-skill-fx/sword-arc-v2.png) | 当前 Tower 使用 | 16 帧、单击 0.25 秒；按实际半径映射 | 当前剑气斩；同类轮廓可独立派生 |
+| [天地一剑正式图集](/Users/zhangnu/WeChatProjects/rainy-mushroom/cocos-pilot/assets/resources/tower-skill-fx/sword-tiandi-v1.png) | 已按用户批准接入 Tower | 16帧、0.75秒视觉窗口，每目标单次命中；图集与第三版审核源字节一致 | 当前天地一剑宽锋重斩；其他技能按范围另行派生 |
+| [程序风刃 v3 录像](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-windblade-v3/windblade.webm) | 历史备选 | 多层风刃后来被单残月方案替代 | 风系扇扫、多层风刃的动势参考 |
+| [程序残月 v4 录像](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-crescent-v4/crescent.webm) | 历史备选 | 后续增加柔光层次；没有将它记为全盘否定 | 单月刃轮廓、快速显形与收势参考 |
+| [程序残月柔光 v5 录像](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-crescent-v5/crescent.webm) | 历史备选 | 当时用户认可细残月并要求增加层次；后来更换素材路线 | 刃口流光、内缘消散及减少闪烁的方案参考 |
+| [一线天：历史 Scenario 审核原片](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-vfx-asset-library/source/yixiantian-2026-10-30-asset_EiryPFybxa4us2A1dp29At74.mp4) | 已从既有资产找回；备选可复用 | 起点爆发较大、白锋长时间驻留，首尾仍亮；尚未按新窄线单贯契约验收 | 优先拆出直线白芯、沿轴青焰重剪；发射闪光、枪芒拖尾或宽锋爆发可供其他技能选用 |
+
+这些复用方向是选片建议，尚未代表某个新技能已经验收。程序录像包含受控放大与重复播放，只适合回看动势；它们不是新的 Scenario 原片，也不是可以直接接入的透明图集。接触表和游戏截图同样不会被标为动画图集。
+
+## 一线天 v2 · 旧素材派生
+
+2026-10-30 按新 prompt 复用旧一线天第12至35帧的白芯与青焰，移除起点大爆发和箭头，逐列归正后重新编排亮点、细丝及消隐。第二版通过几何和独立视觉复核，以下保留当时的审核记录。用户随后要求延长消散并直接接入，现已完成，最新接入状态见下节。此次没有新增生成费用。
+
+| 文件 | 状态与用途 |
+|---|---|
+| [第二版单次贯穿审核片](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-yixiantian-v2-2026-10-30/attempt-02/yixiantian-single-preview.mp4) | 2秒、24fps、48帧；单次亮锋后消隐，1秒后为空黑 |
+| [第二版一／二／三贯合成节奏片](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-yixiantian-v2-2026-10-30/attempt-02/yixiantian-cadence-stone.mp4) | 青石背景、实际宽度28与长度360/450/510，间隔0.16秒；明确为合成预览，非游戏运行录像 |
+| [第二版主击透明图](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-yixiantian-v2-2026-10-30/attempt-02/impact-rgba.png) | 起点与终点固定的细长单贯参考 |
+| [第二版透明候选图集](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-yixiantian-v2-2026-10-30/attempt-02/yixiantian-candidate-atlas.png) | 4096×512、16格；此为原审核候选，后续已按原字节复制接入，不能把16帧当作16次打击 |
+| [第一版单次贯穿](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-yixiantian-v2-2026-10-30/attempt-01/yixiantian-single-preview.mp4) | 起点偏硬切的早期版本；保留供局部选片，第一版节奏片生成阶段因字体缺失未完成 |
+| [第一版候选图集](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-yixiantian-v2-2026-10-30/attempt-01/yixiantian-candidate-atlas.png) | 同样完整保留，不替换第二版 |
+
+两次尝试均保留48张透明帧、48张黑底帧、24张原片选帧及加工脚本快照。第二版另保留240张合成中间帧，使用[目录哈希索引](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-yixiantian-v2-2026-10-30/attempt-02/cadence-frame-index.json)记录，不重复复制。四份第二版主要成品已追加到原“一线天 · 动画审核 · 2026-10-30”集合；原视频仍在，当时集合共5件；加入下述延尾主审片后现为6件。[Scenario归档凭据](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-yixiantian-v2-2026-10-30/attempt-02/scenario-provenance.json)记录实际资产ID、源关系、上传验证与本地哈希。
+
+## 一线天 v2 · 延长消散并接入
+
+用户于2026-10-30授权延长消散后直接接入。当前版本的视觉寿命从0.25秒延至0.33秒，前0.05秒的亮锋速度保持不变，后续0.20秒消散素材用0.28秒播放。战斗效果仍为0.25秒，命中次数和0.16秒连贯间隔不变。透明图集直接复制原版，像素与SHA-256完全一致；本轮模型任务0、新增生成费用0。
+
+| 文件 | 状态与用途 |
+|---|---|
+| [延长消散主审片](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-yixiantian-v2-2026-10-30/attempt-03-long-tail/yixiantian-long-tail-preview.mp4) | 2秒24fps放慢审片；已追加原Scenario集合，资产 `asset_3E8evfN44tNDBckzfBeJiZe3` |
+| [0.25秒/0.33秒消散比较片](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-yixiantian-v2-2026-10-30/attempt-03-long-tail/yixiantian-tail-comparison.mp4) | 4秒60fps本地合成对比，非游戏实录；自动审批拒绝附属比较片外传，因此仅本地保留，未重试上传 |
+| [已接入图集](/Users/zhangnu/WeChatProjects/rainy-mushroom/cocos-pilot/assets/resources/tower-skill-fx/sword-line-v1.png) | 4096×512、16格；复用既有 `asset_4YzyrST5PiMgbQpz3NwiVZgk`，没有重复上传或改写旧资产元数据 |
+| [新播放契约](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-yixiantian-v2-2026-10-30/attempt-03-long-tail/runtime-contract.json) | 记录锚点、范围映射及0.33秒播放曲线 |
+| [本轮归档凭据](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-yixiantian-v2-2026-10-30/attempt-03-long-tail/scenario-provenance.json) | 上传结果、来源、哈希、费用与保留记录；原集合共6件 |
+
+本轮新增48张完整透明帧和8张验证静帧，并保留加工脚本快照。首次导出因整数帧精度断言中断的 `attempt-03-long-tail-incomplete-01` 也完整保留现存内容：1张帧、脚本和契约，明确记作1/48帧的不完整尝试。
+
+[Cocos实景验证](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-yixiantian-v2-2026-10-30/integration/browser.json)覆盖16个真实引擎夹具、两种横屏及资源404回退，最终独立复跑均通过；中途并发导致的夹具等待超时另存为测试过程记录，不计为生产缺陷。[测试对照](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-yixiantian-v2-2026-10-30/integration/tests.json)为1833项中1792项通过、41项失败，失败名称与基线相同，新增9项通过。
+
+[用户三贯预览](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-yixiantian-v2-2026-10-30/integration/runtime-three-hit-preview.mp4)为原实时录像1.8至5.2秒的正常速度选段，3.4秒展示两轮Lv10三贯，已避开开头加载占位画面。最终[真实引擎实时录像](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-yixiantian-v2-2026-10-30/integration/runtime-demo-realtime.mp4)由生产 `update(dt)` 驱动，原始WebM同时保留；`diagnostic-frame-step.webm` 是逐帧调试录像，不能当作实时表现。40张实景截图、4份录像和6份验证文档已写入[本地QA目录索引](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-yixiantian-v2-2026-10-30/integration/local-media-index.json)，均未上传Scenario。
+
+## 一线天人物动作修复 · 本地验证归档
+
+用户指出上一版实录中的挥剑反复抽动。本轮定位到第二、第三贯通知重复启动身体动作，导致第9帧倒退到第8帧；现已修复为首贯启动一次完整挥剑，后两贯继续独立播放剑气，身体自然收势。原人物图集、剑气图集、0.33秒消散窗口及战斗规则均保留。
+
+- [修复后原速实录](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-yixiantian-action-fix-2026-10-30/after/character-fixed-realtime.mp4)：1280×720、约4.77秒，生产更新循环驱动；原始WebM同时保留。
+- [同轮三贯前后姿势对比](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-yixiantian-action-fix-2026-10-30/after/before-after-character-poses.png)与[修复说明](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-yixiantian-action-fix-2026-10-30/README.md)：保留原问题诊断、修复前后时间轴及红绿测试日志。
+- [本地QA目录索引](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-yixiantian-action-fix-2026-10-30/local-media-index.json)：113张诊断/验证图片、2份录像、11份文档。修复后时间轴PASS；1837项测试中1796通过、41项原失败，新增4项通过，失败名称未变。
+
+此前770个媒体文件及旧目录索引的哈希均保持不变。上节录像作为动作修复前的历史版本继续保留；本轮仅本地追加，模型调用0、生成费用0CU、云端上传0。
+
+## 天地一剑 · 宽锋重斩审核包
+
+2026-10-30 复用旧一线天原片第12～35帧、横向约320～1020的白芯与青焰，重新编排宽实长刃、流光、收窄和裂光闭合。该轮最终候选为 `attempt-03`：独立美术检查通过，真实Cocos浏览器预演通过18项战斗夹具与2项退出清理，以待审候选交付，后续延尾及正式接入见下文。该轮预演只在浏览器会话临时加载候选，不修改生产源码、资源或构建。
+
+| 文件 | 状态与用途 |
+|---|---|
+| [单次慢放审核片](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-tiandi-v1-2026-10-30/attempt-03/tiandi-single-preview.mp4) | 2秒、24fps；首帧主击，1.25秒起全黑；黑底视频本身不带alpha |
+| [两阶游戏内原速预演](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-tiandi-v1-2026-10-30/rehearsal/attempt-03/tiandi-ranks-realtime-review.mp4) | 两阶各一次蓄势、命中和收势；4.733秒、30fps；原始WebM及单段MP4一并保留 |
+| [两阶青石底合成片](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-tiandi-v1-2026-10-30/attempt-03/tiandi-two-ranks-stone.mp4) | 按670×80与770×112比较两阶；合成示意，非游戏录像 |
+| [候选透明图集](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-tiandi-v1-2026-10-30/attempt-03/tiandi-candidate-atlas.png) | 4096×768，4×4共16帧；候选视觉窗口0.5秒，每次仍只结算一击 |
+| [同尺度轮廓对比](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-tiandi-v1-2026-10-30/attempt-03/lineage-board.png) | 剑气斩月刃、一线天窄锋、天地一剑两阶宽锋并列 |
+| [完整本地包索引](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-tiandi-v1-2026-10-30/local-media-index.json) | 414张图片、11份视频及23份文档/脚本/日志，448个文件逐一记录哈希 |
+
+`attempt-01` 的硬轮廓、机械切面版和 `attempt-02` 的亮条叠加版完整保留。每版均有48张透明帧、48张黑底帧、24张源选帧及制作脚本快照；预演的服务启动失败和夹具失败记录也保留。此次新增425个媒体文件，原885个媒体及3个旧目录索引的字节和SHA-256全部未变。
+
+本轮模型调用0，新增生成费用0CU。Scenario已创建空集合 `col_F9hrvpPjNqr4dvKcGmG4yFMj`，主审核片上传请求被自动审批拒绝，未取得upload ID、未上传文件、未新增云端资产，也未绕过或重试；成品完整保存在本地。[来源与归档凭据](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-tiandi-v1-2026-10-30/scenario-provenance.json)记录具体状态，不能把该空集合当作已归档的线上成品。
+
+## 天地一剑 · 消散延长审核版
+
+2026-10-30，用户认可上一版效果并希望消散更慢。新增 `attempt-04-long-tail`，沿用第三版透明图集的原始字节，将视觉播放窗口从 **0.50秒延至0.75秒**；最初0.0625秒保持原速，其后0.4375秒素材用0.6875秒播放。0.45秒蓄势、人物挥剑和每目标单次命中保持原样。用户随后批准正式接入，结果见下节；本节保留审核期记录。
+
+| 文件 | 状态与用途 |
+|---|---|
+| [延长消散慢放审核片](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-tiandi-v1-2026-10-30/attempt-04-long-tail/tiandi-long-tail-preview.mp4) | 2秒、24fps；使用原有2.5倍慢放比例，另存48张RGBA帧 |
+| [原速前后对比](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-tiandi-v1-2026-10-30/attempt-04-long-tail/tiandi-tail-comparison.mp4) | 4秒、60fps；同图集、同出手时刻的青石背景合成示意 |
+| [两阶游戏原速预演](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-tiandi-v1-2026-10-30/attempt-04-long-tail/rehearsal/attempt-02/tiandi-tail-ranks-realtime-review.mp4) | 有效成品：1280×720、30fps、139帧、4.633秒；保留两段原始WebM |
+| [独立美术与时序检查](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-tiandi-v1-2026-10-30/attempt-04-long-tail/independent-review.json) | 源图集哈希不变；前4张慢放帧逐像素一致，可见光总量单调下降，末尾全透明 |
+| [Cocos预演检查](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-tiandi-v1-2026-10-30/attempt-04-long-tail/rehearsal/attempt-02/browser.json) | 18项场景夹具及2项清理检查通过；人物采样与原版一致，生产源码和资源未改动 |
+| [新增独立包索引](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-tiandi-v1-2026-10-30/attempt-04-long-tail/local-media-index.json) | 77张图片、10份视频和18份文档/脚本/日志，105个文件逐一记录哈希 |
+
+启动失败的记录、首次字幕导出导致的两帧短片及其诊断图均保留，并在[预演说明](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-tiandi-v1-2026-10-30/attempt-04-long-tail/rehearsal/README.md)标明无效，不能用于效果审核。新增87个媒体文件；原1310个媒体、43份已索引文档和4份旧目录索引均验证字节与SHA-256不变。本轮模型调用0、新增生成费用0CU、云端上传0。
+
+## 天地一剑 · 正式接入
+
+2026-10-30，用户明确批准接入消散延长版。正式 `SwordTiandiArt` 使用上述0.75秒时序，资源 `sword-tiandi-v1.png` 原样复制第三版图集，4096×768、4×4共16格，SHA-256仍为 `f5744f08482319e788e7b262d6614284528cc41176cb3ecf22c8d066ae3232e2`。尾光独立于0.25秒战斗效果记录，每目标仍只命中一次，人物动作保持原速。
+
+| 文件 | 状态与用途 |
+|---|---|
+| [两阶正式游戏原速录像](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-tiandi-v1-2026-10-30/integration/browser-attempt-02/tiandi-production-ranks-realtime.mp4) | 第二轮已验证构建：1280×720、30fps、141帧、4.7秒；实际生产渲染器，未临时注入候选 |
+| [正式接入说明](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-tiandi-v1-2026-10-30/integration/README.md) | 播放、几何、代码接线、清理与回退契约 |
+| [第二轮浏览器验证](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-tiandi-v1-2026-10-30/integration/browser-attempt-02/browser.json) | 两种横屏、18项场景、2项资源检查、生命周期及真实404回退通过 |
+| [测试对照](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-tiandi-v1-2026-10-30/integration/tests.json)与[构建记录](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-tiandi-v1-2026-10-30/integration/build-summary.json) | 正式构建通过；当轮1854项测试中1813通过，41项失败与基线相同，新增9项通过 |
+| [接入验证包索引](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-tiandi-v1-2026-10-30/integration/local-media-index.json) | 两轮均保留：48张图片、10份录像、26份文档/脚本/日志，共84个文件逐项记录哈希 |
+
+记录中的测试、录像与哈希对应各自验证时的构建。共享工作区后续出现了其他业务源码和构建更新，本归档不把这些后续版本视为已验证；具体边界保存在[后续变更记录](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-tiandi-v1-2026-10-30/integration/post-validation-workspace-change.json)。第一轮检查、两轮原始WebM、构建启动失败日志与红绿测试记录均保留。
+
+本轮新增1张正式运行时图集和58个验证媒体文件。原1397个媒体、58份不含索引的已索引文档/脚本以及5份旧目录索引全部验证字节与SHA-256不变，旧审核包文件未改写。模型调用0、新增生成费用0CU、云端上传0。
+
+## 剑气斩 · 飞行月牙形态预演
+
+2026-10-30，按用户提出的1／4／7级变化，复用批准的月牙RGBA素材制作三行合成预演：1–3级一次近斩，4–6级单发飞射，7–10级暂拟三发连射。三个阶段使用同一月牙轮廓；飞行1.10秒抵达示意战场边界，结束消散0.36秒。七级三发为制作建议；本包尚未接入游戏，人物、碰撞、伤害和升级界面仍待随新机制验证。
+
+| 文件 | 用途 |
+|---|---|
+| [三阶段原速预演](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-sword-arc-flight-2026-10-30/attempt-01/sword-arc-flight-form-preview.mp4) | 1440×810、60fps、6.4秒、两轮；占位人物和假人合成示意，非游戏实录 |
+| [三行关键姿态图](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-sword-arc-flight-2026-10-30/attempt-01/contact/preview.png) | 各行取不同时间，比较近斩、单发和三发轮廓 |
+| [可复用单月牙RGBA](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-sword-arc-flight-2026-10-30/attempt-01/components/body-approved-frame006-rgba.png) | 已批准第006帧的裁切候选，160×512；尚非生产图集 |
+| [完整中英文prompt](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-skill-review-2026-10-30/NEXT_VFX_PROMPT_JIANQIZHAN_FLIGHT.md) | 稳定飞行主体、结束规则、单发复用与接入约束 |
+| [技能说明同步稿](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-sword-arc-flight-2026-10-30/SKILL_COPY.md) | 当前等级描述及3→4／6→7级提示，待与机制同批接入 |
+| [本地包索引](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-sword-arc-flight-2026-10-30/local-media-index.json) | 3张图片、1份视频、13份文档/脚本，共17个文件逐项记录哈希 |
+
+原1456个媒体、84份其他文件及6份旧索引全部重新校验，保持原字节与SHA-256。新输出在独立目录保留，包含制作脚本、源哈希、参数、测量及解码抽帧检查。新增模型调用0、生成费用0CU、上传0。大型十字另作独立技能候选，本轮未制作或接入。
+
+## 可继续加工的来源
+
+- [可用月刃第 0 帧](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-sword-arc-v2-2026-10-30/review/usable-blade-frame.png)：取自首尾帧约束原片，已经复用于批准修订片。
+- [开口轮廓参考图](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-sword-arc-v2-2026-10-30/source/open-arc-geometry-guide.png)：本地几何参考，已知 Scenario ID 记录在索引中。
+- 修订版保留 49 张透明 RGBA 帧及对应 49 张黑底帧；早期原片另保留 49 张审核提取帧。逐文件哈希均已入库。
+- 首版、约束版、修订版的接触表和历史实景截图共 16 张，供后续回看、选帧和比较；原路径不变。
+- [修订加工脚本](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-sword-arc-v2-2026-10-30/prepare_review.py)与[运行时导出脚本](/Users/zhangnu/WeChatProjects/rainy-mushroom/scripts/art/prepare_sword_arc_v2.py)保留制作来源。复用时先另定输出路径，避免脚本默认输出覆盖已有审核媒体。
+
+修订审核片使用 Scenario 刃光加本地动作、流光和消散编排。它是已有素材复用的实际例子，没有把局部可用原片当作废弃文件删除。黑底 MP4 没有 alpha；透明序列另存，接入时按目标技能真实范围和单次打击节奏处理。
+
+## 盘点与缺项
+
+现有逐项主索引包含 **13份视频、4张运行时图集、2张候选图集、32张参考/审核静帧、436张序列帧，共487个媒体文件**。另有240张合成中间帧、201张实景/动作诊断图片及16份引擎验证录像按目录索引保留，合计944个媒体文件。天地一剑原审核包通过 `assetPackageIndices` 单独收录425个媒体文件，消散延长版另增87个；飞行月牙形态预演另增4个，**全库合计1460个媒体文件**；文档、脚本和日志另计。此前1456个媒体、84份其他文件和6份旧目录索引全部保持原字节和原SHA-256；新增版本写在独立目录。主索引路径均存在，原10组序列完整，另1组是明确保留的1/48帧中断尝试；天地一剑三版的9组源帧/透明帧/黑底帧及48张延尾RGBA帧均完整，没有移动、删除或覆盖任何原媒体。
+
+一线天原片 `asset_EiryPFybxa4us2A1dp29At74` 已从现有 Scenario 资产下载，1280×704、24fps、73 帧、约 3.04 秒，2,185,704 字节；本地文件与远端原始字节数及元数据一致。剑气斩集合内的 5 项资产（4 视频、1 几何图）均有本地对应，已知的剑气斩与一线天原片无缺项。检索过程及远程元数据保存在[定位记录](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-vfx-asset-library/source/scenario-preservation-provenance-2026-10-30.json)；Scenario 搜索结果不完整时已用资产列表和集合列表补核。旧版空黑末帧 `asset_DuT6gFKtD9StuDQraxLy9LRH` 保留为已知远程参考，未推测其本地文件哈希；它不是缺失的原动画视频。
+
+费用只收录明确记录：剑气斩 v2 两次原片各实际 10 CU，一线天历史任务实际 15 CU（只读 job 元数据确认），合计已知 **35 CU**；其他历史金额未知，不据此声称免费。修订片、关键帧和图集不会重复累计源视频费用。一线天 v2 两次本地派生、延长消散接入版本及归档，以及天地一剑三版本地派生、消散延长版、正式接入和验证均没有新增模型生成费用。
+
+制作依据：[一线天 · 基础单贯 prompt](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-skill-review-2026-10-30/NEXT_VFX_PROMPT_YIXIANTIAN.md)、[天地一剑 · 宽锋重斩 prompt](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-skill-review-2026-10-30/NEXT_VFX_PROMPT_TIANDIYIJIAN.md)。后续制作仍先对照本库选片；“大光柱、爆发、冲击环”类旧稿可能更适合上位技能，但须按各自范围与打击次数单独审核。
+
+
+<!-- sword-qi-2026-10-30-cocos-integration -->
+## 剑气斩飞行月牙与纵横剑气 · 正式接入
+
+2026-10-30，按用户批准的形态接入游戏。剑气斩1–3级近身月牙、4–6级单发飞射、7–10级三发连射；纵横剑气1–3级近身十字、4–6级飞行十字、7–10级放大至1.5倍且每次释放仍为一发。飞行结束后停止位移并消散0.36秒。月牙复制已批准RGBA组件，十字复用既有线刃本地合成；旧预演章节与旧索引保留其归档时的历史状态。
+
+**技能已接入，最新全量测试受并行改动影响未通过。** 当前技能专项131项、131项通过；最新工作区全量1928项中1798项通过、130项失败（相对初轮比较有85个新增失败记录）。初轮无新增失败的对照和最新失败明细均独立保留，不能据初轮或专项结果宣称当前全量通过。浏览器验收针对记录中的固定构建，实际源码变化标记与构建指纹一并保存。
+
+
+- [正式接入说明](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-sword-qi-integration-2026-10-30/README.md)、[实机验证](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-sword-qi-integration-2026-10-30/qa/browser-attempt-08/browser.json)、[测试对照](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-sword-qi-integration-2026-10-30/verification/tests.json)和[构建记录](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-sword-qi-integration-2026-10-30/verification/build-summary.json)记录已验收范围与具体源码/构建哈希。
+- [本轮包索引](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-sword-qi-integration-2026-10-30/local-media-index.json)保存112张图片、58份视频和134份文档、脚本、日志，共304个文件；含全部失败尝试与被Git忽略的日志。另将2张运行时精灵独立列入主索引。
+- [保全审计](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-sword-qi-integration-2026-10-30/preservation-check.json)及本轮归档前后复核确认：此前1460个媒体、97份其他已索引文件和7份旧索引的原路径、字节及SHA-256均不变。旧记录全部保留，本轮索引自身的SHA-256由全局manifest记录。
+
+本次追加后全库共 **1632个媒体文件**。新增模型调用0、新增生成费用0CU、云端上传0；历史已知费用仍为35CU，不重复累计旧原片。
+
+
+<!-- sword-qi-curved-2026-10-30-cocos-revision -->
+## 剑气胸口锚点与交叉月牙 · 修订接入
+
+2026-10-30，飞行剑气按正式人物素材胸口抬升64设计单位；悬浮高度按每发释放时刻固定，方向旋转不改变竖直抬升，地面战斗坐标保持原语义。纵横剑气改为两道交叉月牙，弧形刃面交会处只命中一次；名称、等级阶段和攻击次数保持本轮既定设计。
+
+原 `sword-qi-cross-v1.png` 直十字及其旧记录完整保留，作为历史版本供其他技能复用。本次以独立的 `sword-qi-cross-v2.png` 替代纵横剑气当前显示，复用旧月牙本地旋转合成；旧章节与旧条目不回写。
+
+本次专项与最终实景验收通过；工作区全量测试仍有已记录失败，详情保留在验证汇总的 workspaceValidation 中，不能把封包成功解释为全量测试通过。
+
+- [修订说明](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-sword-qi-curved-2026-10-30/README.md)、[验证汇总](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-sword-qi-curved-2026-10-30/verification-summary.json)及[最终实景验收](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-sword-qi-curved-2026-10-30/qa/final-smoke-attempt-02/browser.json)记录验收范围和构建指纹。
+- [新包索引](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-sword-qi-curved-2026-10-30/local-media-index.json)收录191张图片、32份视频及192份文档、脚本、日志，共415个文件；失败尝试全部保留。另将1张新cross-v2运行时精灵追加到主索引。
+- [保留核验](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-sword-qi-curved-2026-10-30/preservation-before.json)及封包前后复核确认：此前1632个媒体、231份其他文件和8份旧目录索引的原路径、字节数与SHA-256均不变。
+
+本次追加后全库共 **1856个媒体文件**。新增模型调用0、新增生成费用0CU、云端上传0；历史已知费用仍为35CU。
+
+
+2026-10-30 最新评审：纵横剑气 C 版双月牙同向预演，待用户审核；生产仍保留旧版，剑气斩已核验接入；本轮复用素材费用 0 CU，全部旧版及新候选保留。审核包 `design/xianxia-cross-forward-2026-10-30/local-media-index.json`；剑气斩接入核验 `design/xianxia-cross-forward-2026-10-30/approved-crescent/receipt.json`。
+
+
+<!-- cross-forward-2026-10-30-v3-integration -->
+## 纵横剑气 · 同向双月牙 v3 正式接入
+
+2026-10-30，纵横剑气 C 版同向双月牙已接入 v3；新锚点、命中轮廓与显示同步，验证范围见接入汇总。用户批准的 C 版 PNG 按原字节接入，旧 v1、v2、A/B/C 候选和原片全部保留。
+
+[接入说明](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-cross-forward-integration-2026-10-30/README.md)、[验证汇总](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-cross-forward-integration-2026-10-30/verification-summary.json)和[素材收据](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-cross-forward-integration-2026-10-30/assets/runtime-receipt.json)记录本次范围。此前2380个文件、10份旧索引已重新核验，保持原哈希。
+
+本次包内84个文件（50个媒体），包外另追加1张运行时 PNG 与1份 meta（计其他文件）。全库现有1972个媒体。新增生成费用0 CU、上传0；旧章节保留历史状态。
+
+
+2026-10-30 最新评审：环剑诀实体飞剑巡游外观预演，待用户审核；原生产技能保持现状；候选 `B`。本轮复用既有本地剑体，模型生成 0 次、生成费用 0 CU、云端上传 0 次；未知历史来源不登记为 Scenario 付费资产。全部旧版与本轮候选保留，审核包 `design/xianxia-orbit-v1-2026-10-30/local-media-index.json`。
+
+
+<!-- orbit-2026-10-30-v1-integration -->
+## 环剑诀 · 青白实体飞剑 v1 正式接入
+
+2026-10-30，环剑诀青白实体飞剑已接入；径向朝外巡游与短淡弧尾，验证范围见接入汇总。批准的 B 版 PNG 按原字节接入；原色 A、青白 B、最初剑体和所有旧特效版本保留。
+
+[接入说明](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-orbit-integration-2026-10-30/README.md)、[验证汇总](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-orbit-integration-2026-10-30/verification-summary.json)和[素材收据](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-orbit-integration-2026-10-30/assets/runtime-preparation.json)记录本次范围。此前2578个文件、12份旧索引已逐一核验，保持原哈希。
+
+本次包内89个文件（46个媒体）；包外另追加1张运行时 PNG 与1份 meta。全库现有2092个媒体。新增生成费用0 CU、上传0；源素材历史Scenario ID与费用未知，旧章节保留其归档时状态。
+
+
+<!-- liangyi-2026-10-30-v1-review -->
+## 两仪剑阵 · 阴阳双剑阵眼审核包
+
+2026-10-30，两仪剑阵固定真圆、阴阳双剑阵眼预演；单眼交替，第10级第7跳合鸣，等待用户审核。固定落点、两处阵眼和实际脉冲由预演编排；旧环只提取表面流纹，不作为旋转斩击。
+
+复用此前10 CU的 `asset_dak8zaRYK5mYw7T5ohuGjAud` 原片及环剑批准剑体。本轮模型生成0次、生成费用0 CU、云端上传0次；剑体未知历史Scenario ID和费用继续为null，不重复累计旧原片费用。
+
+[审核说明](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-liangyi-v1-2026-10-30/README.md)、[验证汇总](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-liangyi-v1-2026-10-30/verification-summary.json)和[美术合同](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-liangyi-v1-2026-10-30/art/contract.json)记录本轮范围。此前2669个文件、13份旧索引重新核验通过，保持原哈希；本轮包内127个文件，其中84个媒体。全部源文件、原色与新候选保留。
+
+
+<!-- liangyi-2026-10-30-v2-review -->
+## 两仪剑阵 · 色彩与打击感 v2 审核包
+
+2026-10-30，两仪剑阵 v2 色彩与落剑打击感修订预演；等待用户审核，v1不满意版本全部封存保留。用户反馈第一版太淡、剑雨缺乏打击感；第一版原图、原视频、合同与索引保持封存。
+
+本版沿用第一版环纹和青白/淡青剑体的原字节，色彩与落剑冲击由新预演编排加强。本轮模型生成0次、生成费用0 CU、云端上传0次；历史10 CU原片不重复计费，剑体未知历史Scenario ID和费用继续记为null。
+
+[审核说明](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-liangyi-v2-2026-10-30/README.md)、[验证汇总](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-liangyi-v2-2026-10-30/verification-summary.json)和[来源记录](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-liangyi-v2-2026-10-30/source/provenance.json)记录本轮范围。此前2796个文件、14份旧索引重新核验通过，保持原哈希；本轮包内85个文件，其中52个媒体。全部旧候选继续保留。
+
+
+<!-- liangyi-2026-10-30-v3-review -->
+## 两仪剑阵 · 范围扩大 v3 审核包
+
+2026-10-30，两仪剑阵 v3 范围扩大预演；半径为v2的1.2倍，等待用户审核，v1/v2全部封存保留。本轮按用户要求加大剑阵范围；v1/v2原图、原视频、合同与索引保持封存。
+
+本版仅复制v2环纹和青白/淡青剑体的原字节及文档快照，预演半径扩大为1.2倍；未接入生产。本轮模型生成0次、生成费用0 CU、云端上传0次；历史10 CU原片不重复计费，剑体未知历史Scenario ID和费用继续记为null。
+
+[审核说明](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-liangyi-v3-2026-10-30/README.md)、[验证汇总](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-liangyi-v3-2026-10-30/verification-summary.json)和[来源记录](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-liangyi-v3-2026-10-30/source/provenance.json)记录本轮范围。此前2881个文件、15份旧索引重新核验通过，保持原哈希；本轮包内74个文件，其中46个媒体。全部旧候选继续保留。
+
+
+<!-- liangyi-2026-10-30-v3-integration -->
+## 两仪剑阵 · 扩大版 v3 正式接入
+
+2026-10-30，两仪剑阵 v3 扩大版已接入；半径为旧版1.2倍，双剑阵眼与落剑效果沿用批准版本。三张批准的 PNG 按原字节接入；v1/v2/v3审核包、原视频和所有旧候选保持封存。
+
+[接入说明](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-liangyi-integration-2026-10-30/README.md)、[验证汇总](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-liangyi-integration-2026-10-30/verification-summary.json)和[素材收据](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-liangyi-integration-2026-10-30/assets/runtime-preparation.json)记录本次范围。此前2955个文件、16份旧索引逐一核验，保持原哈希。
+
+新包索引含110个文件（含1份包外目录meta，其中45个媒体）；另追加3张运行时 PNG 及各自的3份image meta，每个路径只计一次。全库现有2322个媒体。本次新增费用0 CU、上传0；历史环纹10 CU不重复累计，剑体未知历史费用仍为null。旧章节保留归档时状态，已接入状态记录于本节。
+
+
+<!-- sixiang-2026-10-30-v1-review -->
+## 四象剑阵 · 扩大进化范围 v1 审核包
+
+2026-10-30，四象剑阵 v1 扩大进化范围预演；四眼菱形剑阵，等待用户审核，全部两仪版本封存保留。本轮按用户要求制作更大范围的四象进化版；原图、原视频、两仪合同与索引保持封存。
+
+本版复用两仪v3环纹和青白/淡青剑体原字节，新增四眼菱形范围与节拍编排；未接入生产。本轮模型生成0次、生成费用0 CU、云端上传0次；历史10 CU原片不重复计费，剑体未知历史Scenario ID和费用继续记为null。
+
+[审核说明](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-sixiang-v1-2026-10-30/README.md)、[验证汇总](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-sixiang-v1-2026-10-30/verification-summary.json)和[来源记录](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-sixiang-v1-2026-10-30/source/provenance.json)记录本轮范围。此前3071个文件、17份旧索引重新核验通过，保持原哈希；本轮包内97个文件，其中53个媒体。全部旧候选继续保留。
+
+
+<!-- sixiang-2026-10-30-v1-integration -->
+## 四象剑阵 · 扩大进化版正式接入
+
+2026-10-30，四象剑阵扩大进化版已接入；四眼菱形范围与7/9击沿用批准预演，共用既有三张纹理。旧四象审核包保持原有reviewOnly状态，正式接入结果另记于本节。
+
+[接入说明](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-sixiang-integration-2026-10-30/README.md)、[验证汇总](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-sixiang-integration-2026-10-30/verification-summary.json)和[来源记录](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-sixiang-integration-2026-10-30/source/provenance.json)记录本次范围。生产代码及meta的定稿副本保存在[包内快照](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-sixiang-integration-2026-10-30/source/runtime-final/receipt.json)；生产路径本身不作为永久不可变素材入库。
+
+此前3168个文件、18份旧索引逐一核验，保持原哈希。本轮只追加新包97个文件，其中43个媒体；共用的3张runtime PNG与3份image meta已在旧库中，不再重复计数。
+
+模型调用0、生成费用0 CU、云端上传0。历史环纹原片10 CU不重复累计；剑体未知原始Scenario ID与费用仍记为null，全部源片、候选与审核版本继续保留。
+
+
+## 无我剑境 · 两阶同屏预演 v1
+
+用户已确认制作方向，动画待美术审核，尚未接入生产。一阶8剑、二阶12剑；复用既有剑体与环纹，展示随身内圈流纹及局部命中示意。这是10秒本地合成预演，不是游戏实录；0.6秒命中按示意编排。
+
+[预演与当前技能进度](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-wuwo-v1-2026-10-30/README.md)；[完整索引](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-wuwo-v1-2026-10-30/local-media-index.json)。旧库3265个文件及19份索引再次核验通过。本轮新增20个文件，其中8个媒体；模型调用0、费用0 CU、上传0。全部旧版本保持原字节。
+
+### 无我剑境 v1 用户审核结果：不通过
+
+用户反馈与环剑诀过于相似，对当前预演不满意，并要求先核对无我剑境技能描述。v1不接入，原视频、静帧、脚本、来源记录与包索引全部封存保留。当前机制是环剑诀进化：新增内圈近身覆盖、扩大巡游范围、二阶增至12剑，内外圈共享每敌0.6秒命中间隔。后续重做需突出“进入剑境即可受到内圈剑意攻击”的可见反馈；新的美术方向或机制变更尚未获用户确认。本条覆盖前节“待审核”的当前状态，不回写旧审核包。
+
+
+## 无我剑境 v2 · 腰部多轨迹预演
+
+按用户要求调整为腰部中心、横向多轨迹游剑，预演基准范围增加25%；各剑独立速度、半径、高度和相位，内圈补局部剑意斩击。本版待美术审核，未接入生产；旧v1不满意版本完整保留。
+
+[新版动画与制作说明](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-wuwo-v2-2026-10-30/README.md)；[核验汇总](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-wuwo-v2-2026-10-30/verification-summary.json)；[文件索引](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-wuwo-v2-2026-10-30/local-media-index.json)。
+
+原库3285个文件及20份索引重新核验通过。新增26文件，其中13媒体。720帧预演几何与视频完整解码通过；非生产战斗验证。模型调用0、费用0 CU、上传0，历史费用不重复计入。
+
+
+## 御剑术 · 双翼藏锋与弧线追敌 v1
+
+20秒横屏本地合成美术预演，待用户审核，尚未接入生产。十剑双翼悬停、正面引剑、分弧追敌、长拖尾与四道残影。本版采用一敌一剑、多余飞剑悬停的制作假设。每级一剑及凝神诀分段前置已记录于设计，尚未修改成长代码。
+
+[主审片](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-yujian-v1-2026-10-31/preview/yujian-twin-wings-v1-polished.mp4)、[排布对照](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-yujian-v1-2026-10-31/preview/rank-layouts-polished.png)、[说明](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-yujian-v1-2026-10-31/README.md)、[验证](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-yujian-v1-2026-10-31/verification-summary.json)、[完整索引](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-yujian-v1-2026-10-31/local-media-index.json)。
+
+复用既有批准剑体和角色，模型调用0、新增费用0 CU、上传0。旧库3311个文件及21份索引核验通过。第一遍残影偏淡的预演、旧关键帧和脚本也全部保留。历史Scenario来源ID及费用未知的项目仍记为null。
+
+
+## 御剑术 v2 · 游剑换位
+
+用户满意v1出击、追踪、拖尾与残影，要求重做固定双翼悬停。v2为30秒横屏美术预演，待用户审核，尚未接入游戏。两种肩外错落与短暂双翼轮换，每剑沿微弧错峰移位，位置和转角连续。攻击表现沿用v1；成长、神识前置仍为待接入设计。
+
+[主审片](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-yujian-v2-2026-10-31/preview/yujian-changing-hover-v2.mp4)、[排布对照](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-yujian-v2-2026-10-31/preview/formation-layouts.png)、[说明](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-yujian-v2-2026-10-31/README.md)、[验证](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-yujian-v2-2026-10-31/verification-summary.json)、[完整索引](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-yujian-v2-2026-10-31/local-media-index.json)。
+
+复用既有批准剑体和角色，模型调用0、新增费用0 CU、上传0。旧库3342个文件及22份索引核验通过。v1两份原视频、全部旧关键帧和脚本保持原字节。历史Scenario来源ID及费用未知的项目仍记为null。
+
+
+## 无我剑境 V2 · 用户批准后提速30%正式接入
+
+用户已批准腰部中心、横向多轨迹V2，并要求提速后接入。当前生产使用8/12剑、180/210轨迹基准半径及120/150近身范围，飞剑速度×1.3。旧V1否决稿与V2预演保持原哈希，旧章节的待审核状态仅代表归档当时；当前状态以本节为准。
+
+[接入说明与实录](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-wuwo-integration-2026-10-30/README.md)；[验证汇总](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-wuwo-integration-2026-10-30/verification-summary.json)；[封存索引](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-wuwo-integration-2026-10-30/local-media-index.json)。
+
+追加前3367文件、23索引全部核验通过，保留其他会话并行新增的包。本轮新增104文件，12媒体，模型调用0、费用0 CU、上传0。107项专项、Cocos构建和两份浏览器验收通过；全量210项原有失败及类型诊断保留如实记录。可变生产源码及派生资源的定稿副本保存在本包内。
+
+
+## 御剑术 v3 · 随身转锋
+
+按用户要求使待命剑尖和人物左右朝向保持一致，转身时0.32秒平滑转锋。肩外位置沿用v2轮换，不镜像交换；快速反向从当前角度继续转。已出击飞剑锁定发射朝向，人物转身不改变其追敌轨迹。30秒横屏美术预演，待用户审核，尚未接入游戏；成长、神识前置仍为待接入设计。
+
+[主审片](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-yujian-v3-2026-10-31/preview/yujian-facing-turn-v3.mp4)、[朝向对照](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-yujian-v3-2026-10-31/preview/facing-layouts.png)、[说明](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-yujian-v3-2026-10-31/README.md)、[验证](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-yujian-v3-2026-10-31/verification-summary.json)、[完整索引](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-yujian-v3-2026-10-31/local-media-index.json)。
+
+复用既有批准剑体和角色，模型调用0、新增费用0 CU、上传0。旧库3367个文件及23份索引核验通过。v1/v2原视频、全部旧关键帧和脚本保持原字节。历史Scenario来源ID及费用未知的项目仍记为null。
+
+
+## 剑影分光 V1 · 固定落点分影连斩预演
+
+20秒1280×720/60fps美术预演，依次展示L1/L3/L6/L10的1/2/3/4道剑影，及目标离开原落点后的四斩落空。冷紫凝影、青白主锋、短剑痕消散。当前待用户审核，未接入生产。
+
+[动画及方案](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-shadow-v1-2026-10-30/README.md)；[核验汇总](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-shadow-v1-2026-10-30/verification-summary.json)；[文件索引](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-shadow-v1-2026-10-30/local-media-index.json)。
+
+原库3497个文件及25份索引重新核验通过；新增34文件，其中19媒体。模型调用0、费用0 CU、上传0。既有剑体、角色、狼与地板原字节复用；全部历史源片、预演与索引继续保留。
+
+
+<!-- yujian-v3-integration-2026-10-31 -->
+## 御剑术 v3 正式接入
+
+已接入1–10柄飞剑、肩侧平滑轮换、随角色转向、正面汇聚与弧线寻敌、拖尾残影及凝神诀门槛。复用既有orbit-sword-v1纹理，无新生成、上传或费用。此前3497个文件与25份索引保持原哈希。
+
+[接入与验证说明](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-yujian-integration-2026-10-31/README.md)；[验证汇总](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-yujian-integration-2026-10-31/verification-summary.json)。旧素材与审核包均保留原状态。
+
+
+## 剑影分光 V1 · 用户批准后正式接入
+
+2026-10-31，用户已批准并要求接入。当前生产版沿用冷紫凝影、青白主锋、1/2/3/4道定点连斩和消散剑痕；地面剑印保留至末斩后0.5秒，命中闪光仅来自真实正伤害。原V1审核包保持封存，当前状态以本节为准。
+
+[接入说明及实录](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-shadow-integration-2026-10-31/README.md)；[验证汇总](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-shadow-integration-2026-10-31/verification-summary.json)；[封存索引](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-shadow-integration-2026-10-31/local-media-index.json)。
+
+追加前3628文件、27份旧索引全部原哈希通过。本轮新增146文件、53媒体。90项专项、Cocos构建、两种横屏与真实404回退验收通过；全量原有136项失败和39条类型诊断无新增。模型调用0、费用0 CU、上传0；所有原图、原片及失败录制继续保留。
+
+## 一线天巨剑前飞 · 2026-10-31
+
+按用户要求直接接入：复用已批准的 `orbit-sword-v1.png`，每贯一把放大实体剑沿白色剑气向前飞行，0.22秒抵达本次裁短后的终点、0.30秒消隐，白色剑气维持0.33秒尾迹。未改变伤害、连贯次数或人物动作；原图集与剑体图像保持原字节，模型生成0、云端上传0、新增费用0。
+
+[本轮记录与预览](../xianxia-yixiantian-giant-2026-10-31/README.md)含原速三贯录像、两种横屏截图及来源哈希。定向测试10/10、真实Cocos施放16/16、Web构建通过；全量测试2016通过/136失败，失败明细与未经基线归因的限制均保存在该记录中。首次时间段选取偏后的预览及完整原始录像也保留。
+
+
+## 剑影分光 · 打击感优化并接入（2026-10-31）
+
+按用户“优化后直接接入”执行。复用原青白剑体，掠过时间105ms→75ms并改为先快后慢；正伤害触发定向短闪、碎芒及0.18秒渲染后挫，最后一斩更强。战斗伤害、范围、0.65秒延时与0.16秒间隔保持原样。
+
+[实录及说明](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-shadow-impact-2026-10-31/README.md)；[验证汇总](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-shadow-impact-2026-10-31/verification-summary.json)；[封存索引](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-shadow-impact-2026-10-31/local-media-index.json)。
+
+追加前3774文件、28份旧索引全部原哈希通过；新增93文件、35媒体。95项专项、独立评审、Cocos构建、双横屏、真实404回退、正伤害与落空反馈验收通过。全量原有136项失败、39条类型诊断无新增。模型调用0、费用0 CU、上传0；历次素材全部保留。
+
+## 一线天巨剑第二版 · 胸前单剑（2026-10-31）
+
+用户不满意上一版贴地、每贯重复前飞的巨剑。本轮修订为角色胸前高度、整轮只首贯飞一剑；下方白色剑气的位置、素材与连贯效果保持原样。增加短促蓄势、快速前冲和仅由首贯正伤害触发的定向短闪/碎芒。
+
+[原速预览与验证说明](../xianxia-yixiantian-giant-v2-2026-10-31/README.md)。定向测试12/12、双横屏16组真实施放、Web构建通过；全量2018通过/136失败，与上轮同名失败一致，无新增。模型生成0、上传0、费用0；上一版24项源素材和输出哈希保持不变，旧录像和修改前源码继续保留。
+
+### 胸前单剑版本已批准并正式接入
+
+2026-10-31 用户确认“效果可以，请接入吧”。正式 Tower 运行时已核对为上述第二版：胸前只飞一剑，下方原剑气保持不变，保留前冲与命中碎芒。当前源码与审片源码逐字节一致，胸部锚点调用已在正式战斗绘制中启用；本轮复跑12项专项全部通过，沿用此前通过的Web构建和16组实机验证。未重新生成素材或覆盖审片文件。批准记录、运行时哈希和保留检查见 [integration/approval.json](../xianxia-yixiantian-giant-v2-2026-10-31/integration/approval.json)。全量仍存在此前同名136项失败，未标记为全通过。
+
+
+## 剑影分光 · 光影增强并接入（2026-10-31）
+
+按用户反馈提亮偏暗的光效并直接接入。青白主剑、浅紫残影和冰蓝白心柔光均提亮，凝剑透明度及剑痕可见性增强；复用原图生成独立新图集sword-shadow-luminous-v1，原sword-shadow-v1及历史源片保持不变。
+
+[实录及说明](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-shadow-light-2026-10-31/README.md)；[验证汇总](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-shadow-light-2026-10-31/verification-summary.json)；[封存索引](/Users/zhangnu/WeChatProjects/rainy-mushroom/design/xianxia-shadow-light-2026-10-31/local-media-index.json)。
+
+追加前3867文件、29份旧索引全部原哈希通过；新增82文件、31媒体。95项专项、Cocos构建、四档实录、双横屏、404回退及落空反馈通过。本轮未重跑全量与独立类型检查，未做真机性能认证。模型调用0、费用0 CU、上传0。
+
+## 天地一剑 · 胸前凝剑与下劈（2026-10-31）
+
+按用户“胸前一臂距离为原点，凝聚与伤害范围相应的巨剑，从上劈向地面”的要求完成本地实现和预览。复用原青白实体剑与天地一剑图集，增加蓄势显形、单次向下重劈、落地短暂停留、冲击线/碎芒及正伤害触发的衰减震屏。原下方剑气、伤害规则保持不变；此轮视觉效果等待用户查看。
+
+[两阶原速实录与说明](../xianxia-tiandi-cleave-2026-10-31/README.md)。22项专项、18组双横屏真实施放及Cocos构建通过；全量132项失败及与此前日志的差异按实记录。旧天地一剑643个索引文件哈希保持不变。模型调用0、费用0、上传0，旧素材和失败尝试继续保留。
+
+## 天地一剑 · 前移与清晰长刃第二版（2026-10-31）
+
+按反馈将剑和剑气起点前移约一个身位，复用高清凝霜剑原图，缩短剑柄、收窄护手并保持举起/下劈全程等比。独立新素材 `tiandi-solid-sword-v2.png`；原素材及历次预览保留。模型调用0、上传0、费用0。22项专项、Cocos Web构建、双横屏18组验证通过；视觉待用户查看。[原速录像与制作记录](../xianxia-tiandi-cleave-v2-2026-10-31/README.md)。
+
+## 三张技能图标补齐 · 2026-10-31
+
+用户提供纵横剑气、凝神诀、御剑飞行原图，全部验收并接入。原始半透明PNG保留，运行时统一宣纸底、留白和256px导出。无新增模型费用。9项图标测试、Web构建及打包哈希通过；界面宿主既有109项失败无新增。详见 [原图、预览与接入记录](../xianxia-skill-icons-2026-10-31/integration/README.md)。
+
+### 天地一剑第二版已批准并正式接入
+
+2026-10-31 用户确认“效果不错，请接入吧”。正式战斗使用前移一个身位、高清长刃、全程等比的第二版，保留单次下劈与命中反馈。运行时源码、素材与审片版本一致，原始素材哈希核对通过；本轮22项专项通过。详见 [接入记录](../xianxia-tiandi-cleave-v2-2026-10-31/integration/approval.json)。
+
+## 十个已接入技能 · 分级命中反馈优化（2026-10-31）
+
+按用户确认的 game-feel review 顺序完成并接入：御剑、月牙/双月牙、环剑、无我、两仪/四象、一线天、天地一剑、剑影分光。增加局部正伤害反馈与身体响应，跨技能按目标合并、上限24；一线天取消新版事件的重复延迟碎芒。主动画素材不变，原有35份运行时素材/meta哈希保持；旧实现与对照录像均保留。171项专项、逐帧战斗对照、双横屏40组及混战/移动/落空检查通过；全量失败如实记录。无生成、上传和费用。
+
+[原速实录、逐项调整与验证说明](../xianxia-game-feel-upgrade-2026-10-31/README.md)；[检查汇总](../xianxia-game-feel-upgrade-2026-10-31/verification.json)。
+
+## 万剑归宗 · 第一版预览（2026-10-31）
+
+复用已批准的高清长剑，六/八剑逐次汇聚、末击长剑贯穿及局部命中反馈。模型调用0、上传0、费用0；原始素材和中间记录保留。32项专项、3项生命周期、Web构建及双横屏4组验证通过，待用户视觉审核。[原速预览与验证记录](../xianxia-wanjian-convergence-2026-10-31/README.md)。
+
+## 万剑归宗 · 双层剑阵第二版预览（2026-10-31）
+
+按用户反馈增强独立辨识度：24/32道双层剑影、分簇归心、金白长剑合一贯穿，施法期间淡出御剑待机剑。复用原图并本地派生金色版，原图及第一版保留；模型调用0、上传0、费用0。30项专项、3项生命周期、Web构建、双横屏4组检查通过，待用户视觉审核。[原速录像与记录](../xianxia-wanjian-convergence-v2-2026-10-31/README.md)。
+
+### 万剑归宗第二版已批准并正式接入
+
+2026-10-31 用户确认“接入吧”。正式战斗启用24/32剑影双层剑阵、分簇归心及金白长剑贯穿；核心源码和素材与审片版本一致，接入时30项专项通过。源素材、第一版和第二版记录均保留。[接入验收](../xianxia-wanjian-convergence-v2-2026-10-31/integration/approval.json)。
+
+## 剑意余震 · 击杀余震第一版预览（2026-10-31）
+
+中心剑痕、双层冲击环、放射裂纹与碎芒，跟随真实击杀余震事件；视觉尾光0.45秒，伤害与范围不变。基于既有渲染系统制作，无生成、上传和费用；旧实现保留。20项表现、3项生命周期、Web构建及双横屏4组实战验证通过，待用户视觉审核。[原速录像及记录](../xianxia-sword-aftershock-2026-10-31/README.md)。
+
+## 剑气爆裂 · 四层引爆机制与动画重做（2026-10-31）
+
+用户要求从技能设定重做原剑意余震，并批准“四剑内刺、白金爆心、碎刃炸散”。成长模式sj_gate改名剑气爆裂：四次不同直接攻击引爆，旧版击杀预算停用；含新技能说明、保存校验、局部命中顿挫、近距轻震屏和合成爆裂音效。复用已批准剑素材，生成/上传/费用均0，旧版保留。115项专项、3项生命周期及双横屏4组通过；7项掉落测试在旧战斗源码亦失败，未声称全量通过。待视觉审核。[原速录像、音效及机制说明](../xianxia-sword-burst-2026-10-31/README.md)。
+
+## 剑气爆裂 · 单次起手四剑连刺第二版（2026-10-31）
+
+按反馈改为一次直接命中触发，四剑以0.08秒间隔自动依次内刺，0.42秒爆裂。增加交叉长芒、双色锯齿爆心、切割弧和24片分速碎刃；触发间隔暂定4秒，伤害仍只结算一次。复用既有原图和音效，无生成/上传/费用。115项专项、3项生命周期、Web构建、双横屏4组通过。保留第一版及修改前源码，待视觉审核。[新版原速录像与记录](../xianxia-sword-burst-v2-2026-10-31/README.md)。
+
+### 剑气爆裂第二版已批准并正式接入
+
+2026-10-31 用户确认“可以吧，请接入”。正式战斗使用单次触发、四剑依次快速内刺和白金爆裂的第二版，沿用审片时4秒触发间隔。核心源码、长剑原图和音效与审片版本哈希一致，接入时23项专项复核通过。原素材及历次版本保留。[接入记录](../xianxia-sword-burst-v2-2026-10-31/integration/approval.json)。
+
+## 青萍剑意 · 剑痕持续伤害第一版预览（2026-10-31）
+
+复用现有Graphics特效层制作三道青碧剑痕、短促命中亮光与细碎灵芒，贴随受击敌人，持续伤害结束后消散。修正首轮被怪物遮挡的问题，最终使用前景层；伤害机制未改变。无生成、上传和费用，原版源码与首轮录像保留。48项相关测试、3项生命周期、Web构建和双横屏4组通过，待用户视觉审核。[原速预览与记录](../xianxia-qingping-mark-2026-10-31/README.md)。
+
+## 青萍剑意 · 单剑留痕第二版预览（2026-10-31）
+
+按用户认可方案制作：0.48秒青碧斜切，单道长剑痕，最后0.6秒淡出；现有目标血条下增加同形减益图标与实际持续时间进度环。移除持续粒子，保留原伤害规则。单怪物一次命中演示。50项相关、3项生命周期、Web构建、双横屏4组通过。无生成/上传/费用，旧版保留，待视觉审核。[原速视频与记录](../xianxia-qingping-mark-v2-2026-10-31/README.md)。
+
+## 青萍剑意 · 头顶大剑第三版预览（2026-10-31）
+
+按反馈放大剑刃至148像素，增加护手与窄柄，从角色头顶上方朝目标斜下45度落剑；单道剑痕，血条下图标改为红色血滴。51项相关、3项生命周期、Web构建和双横屏4组通过。无新增生成/上传/费用，前两版保留，待视觉审核。[原速录像与记录](../xianxia-qingping-mark-v3-2026-10-31/README.md)。
+
+## 青萍剑意 · 锐刃与透明底血滴第四版（2026-10-31）
+
+保留第三版大小和动作，消除方头光带，改为收尖柔光、长收锋刃面、细柄和弯叶护手；去掉血滴背景圆盘。52项相关、3项生命周期、Web构建、双横屏4组通过，待视觉审核。无生成/上传/费用，前三版保留。[原速预览与记录](../xianxia-qingping-mark-v4-2026-10-31/README.md)。
+
+## 青萍剑意 · 打击感与接触时序优化预览（2026-10-31）
+
+按用户批准的game-feel方案，落剑0.48秒后才应用两秒剑痕预算和血滴状态；首个真实持续伤害触发局部亮光、短碎芒及身体响应，大剑末段加速和接触停留。新增本地合成破风/切割音效，实际播放事件各一次。142项相关测试、Web构建及双横屏4组通过；旧版与源素材保留，付费生成0。带音预览为按实机触发时点混合运行时音效，待视觉审核。[原速录像与记录](../xianxia-qingping-feel-2026-10-31/README.md)。
+
+### 青萍剑意打击感优化版已批准并正式接入
+
+2026-10-31 用户确认“通过，请接入”。正式版使用头顶锐刃斜落、接触顿挫、单道剑痕、透明底血滴及破风/切割音效；落剑时开始两秒剑痕伤害。11个运行时代码及音效文件与审片版一致，接入时64项专项复核通过。原素材及全部历次版本保留。[接入验收记录](../xianxia-qingping-feel-2026-10-31/integration/approval.json)。
+
+
+## 碧落斩 · 数值兑现调整与新图标（2026-10-31）
+
+青萍剑意已更名为碧落斩。用户选择落实伤害评审P1：首批预算落剑时兑现60%，其余40%随后两秒；持续命中仅补充尾伤，避免重复怪物减伤/易伤，总倍率仍4%/6%/10%/15%。用户提供青绿幻刃原图，经圆形裁剪及88/64/48px检查通过后接入技能图标。原图、旧图标和制作记录保留；无生成费用。[接入与验证记录](../xianxia-biluo-2026-10-31/README.md)。
+
+## 剑气爆裂 · 四剑爆心图标正式接入（2026-10-31）
+
+用户提供《四剑汇聚的魔法星爆.png》，验收后授权直接接入。以184px主体画面居中导出256px技能图标，保留圆形裁剪安全留白，替换旧石门图标；原始图片、旧图标与meta备份均保留。9项图标加载测试、Cocos Web构建及打包PNG哈希检查通过，无新增生成或上传费用。[接入记录](../xianxia-burst-icon-2026-10-31/README.md)。
+
+## 两仪慢转与随机黑白落剑版已批准并正式接入
+
+2026-11-02，用户确认“确认效果，请接入”。当前正式版为20秒一圈的黑白底座、同步双阵眼及随机纯黑/纯白落剑。代码与剑素材和获批预览快照一致，13项两仪专项复核通过；既有107项测试、双横屏4组实机记录与全部历史素材保留。此状态覆盖此前待审核描述。[接入验收记录](../xianxia-liangyi-rotation-2026-11-02/integration/approval.json)。
+
+## 剑气斩 · 单轮廓金青锐刃预览（2026-11-02）
+
+去掉前两种造型，保留上一版最后一道rising轮廓，减弱雾光与叠影，改为深青刃身、金色过渡和象牙白刃缘。提供真实角色挥剑的1级近身/4级飞行原速录像；双横屏4组验证通过。仅临时渲染预览，未正式接入；7级三连数量待用户澄清，碰撞轮廓尚未同步。无生成/上传/费用，旧版全部保留。[预览及记录](../xianxia-jinqing-sharp-preview-2026-11-02/README.md)。
+
+### 金青锐刃预览：已补录原三连
+
+用户明确保留原三连、修改扁平第二道。三道现统一最后一道上挑轮廓，新增左右方向双横屏4组实机录像，验证3飞行物/3次命中与真实挥剑；原速和半速视频见上述预览目录。此说明覆盖此前“7级三连数量待澄清”状态，仍待视觉审核，未正式接入。
+
+## 剑气斩 · 三版配色研究（2026-11-02）
+
+用户仍不满意金青锐刃色调。保留上挑轮廓，提供金刃青尾、青白刃细金边、古金翠青三个候选，只作配色比较，待选择后动态检查。未改运行资源及三连机制，无生成/上传/费用。[配色比较与记录](../xianxia-sword-qi-palettes-2026-11-02/README.md)。
+
+## 剑气斩 · 青白刃配色第二版（2026-11-02）
+
+沿用户较认可的B配色细化：窄青白刃口、淡金外锋、半透明蓝青刃身，减少大块过曝白面。保持上挑轮廓与三连，双横屏左右4组实机预览通过，仍待视觉审核、未正式接入。无生成/上传/费用。[对比及预览](../xianxia-sword-qi-cyan-v2-2026-11-02/README.md)。
+
+## 剑气斩 · 参考图亮青与冰蓝光丝版（2026-11-02）
+
+依据新参考提供亮青/冰蓝两个预览，去金边，加入非均匀刃面光丝。近身与三连双横屏共8组检查通过，保留原始参考及失败尝试。仍待视觉审核，未正式接入；无生成/上传/费用。[对比与实机预览](../xianxia-sword-qi-reference-v3-2026-11-02/README.md)。
+
+## 剑气斩 · 冰蓝絮状残留第四版（2026-11-02）
+
+按用户反馈去掉线状纹理，采用中段略厚、两端细的刃口，不规则内侧侵蚀与半透明能量残留；12帧循环变化。低级近身/高级三连双横屏4组检查通过，仍待视觉审核、未正式接入。全部源素材和硬残留尝试保留，无生成/上传/费用。[对比与预览](../xianxia-sword-qi-floccus-v4-2026-11-02/README.md)。
+
+### 冰蓝絮状残留第四版：用户否定，重置美术制作方向
+
+用户明确指出与参考完全不像。第四版保留为失败尝试，不得作为已批准资源接入。主要偏差是实体感过强、内侧圆钝孤立斑块；目标为附着于亮刃并向内后方拉长撕散的半透明絮片。已保存用户原参考、右上单道剑气局部放大及母图制图prompt；按静态出图约定，先验收新母图再制作动画。[参考与制作说明](../xianxia-sword-qi-reference-reset-2026-11-02/ART_PROMPT.md)。
+
+## 剑气斩 · 用户提供冰蓝幻刃能量弧母图（2026-11-02）
+
+收到1254px黑底母图，原图按字节归档。保留其撕裂薄层与亮刃，去黑底、补留白，并完成石地背景与128/192/256px检查。真实近身/三连双横屏4组试装通过。仅单帧母图试装，尚无新的内部消散动画、未正式接入、用户尚未批准效果。无生成/上传/费用。[原图、透明母图及试装](../xianxia-sword-qi-user-master-2026-11-02/README.md)。
+
+## 剑啸八方 · 用户确认旋风刃印图标（2026-11-03）
+
+用户确认保留《冰霜与赤焰的旋风刃印.png》的原构图和配色。完整原图缩小至256px，已替换sj_cross技能图标；88/64px圆形预览已检查，原图与旧运行图均保留，无付费生成。[接入记录](../xianxia-skill-icon-refresh-2026-11-03/jianxiao-review-v1/README.md)。
+
+## 蚀骨剑意 · 翡翠剑痕图标接入（2026-11-03）
+
+用户提供《翡翠能量斜裂痕.png》，已完成256px与88/64px圆形预览验收并替换sj_mark技能图标。完整原画缩至220px后居中，原图、旧图和处理脚本均保留，无付费生成。未重新构建游戏。[接入记录](../xianxia-skill-icon-refresh-2026-11-03/shigu/README.md)。

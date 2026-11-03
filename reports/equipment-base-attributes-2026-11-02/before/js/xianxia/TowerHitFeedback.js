@@ -1,0 +1,72 @@
+import { shadowHitFeedback } from './TowerShadow.js'
+
+// Visual-only tiers. No timers, RNG, world-coordinate writes or combat control.
+export const HIT_PROFILES = Object.freeze({
+  evo_wanjian: { shape: 'stab', strength: .85, duration: .16 },
+  sj_mark: { shape: 'stab', strength: 1.15, duration: .15 },
+  sj_gate: { shape: 'cleave', strength: 1.55, duration: .21 },
+  sj_yujian: { shape: 'stab', strength: .95, duration: .15 },
+  sj_arc: { shape: 'slash', strength: 1, duration: .15 },
+  sj_cross: { shape: 'cross', strength: 1.2, duration: .16 },
+  sj_wanjian: { shape: 'graze', strength: .55, duration: .11 },
+  evo_wuwo: { shape: 'graze', strength: .72, duration: .12 },
+  sj_formation: { shape: 'rain', strength: .65, duration: .14 },
+  evo_sixiang: { shape: 'rain', strength: .8, duration: .16 },
+  sj_line: { shape: 'stab', strength: 1.05, duration: .15 },
+  evo_tiandi: { shape: 'cleave', strength: 1.4, duration: .18 },
+  sj_shadow: { shape: 'shadow', strength: 1, duration: .18 },
+})
+const skillOf = hit => hit.impact?.skill ?? (hit.source === 'shadow' ? 'sj_shadow' : hit.source)
+const started = hit => hit?.startedAt ?? hit?.expiresAt - .25
+export function skillHitFeedback(hit, time, onset = started(hit)) {
+  if (!hit || hit.kind !== 'hit' || hit.hostile || hit.targetId == null ||
+    !Number.isFinite(hit.damage) || hit.damage <= 0 || ![time,hit.x,hit.y,onset].every(Number.isFinite)) return null
+  const skill = skillOf(hit), profile = HIT_PROFILES[skill]
+  if (!profile) return null
+  const age = time - onset
+  if (age < 0 || age >= profile.duration) return null
+  const meta = hit.impact ?? hit.shadowImpact
+  if (!meta) return null // Unattributed legacy hits retain the original fallback.
+  const length = Math.hypot(meta.dirX,meta.dirY)
+  if (!Number.isFinite(length) || length < 1e-8 ||
+    !Number.isInteger(meta.pulseIndex) || !Number.isInteger(meta.pulseCount) ||
+    meta.pulseIndex < 1 || meta.pulseIndex > meta.pulseCount) return null
+  const terminal = meta.pulseCount > 1 && meta.pulseIndex === meta.pulseCount
+  let strength = profile.strength * (hit.critical ? 1.15 : 1)
+  if (terminal && ['sj_formation','evo_sixiang','sj_shadow','evo_wanjian'].includes(skill)) strength *= skill==='sj_shadow'?1.4:1.35
+  strength = Math.min(1.6,strength)
+  let dx = meta.dirX/length, dy = meta.dirY/length
+  if (profile.shape === 'rain' || (profile.shape === 'cleave' && skill!=='sj_gate')) { dx=0; dy=-1 }
+  const t=age/profile.duration,fade=(1-t)**1.6
+  // Fast compression followed by a small damped return. Never stacks transforms.
+  const recoil = (t<.17 ? .7+.3*t/.17 : ((1-t)/.83)**2) * strength
+  const rebound = t>.55 ? Math.sin((t-.55)/.45*Math.PI)*.13*strength : 0
+  let x=dx*4*(recoil-rebound),y=dy*4*(recoil-rebound)
+  let scaleX=1+(.035*Math.abs(dy)-.065*Math.abs(dx))*recoil
+  let scaleY=1+(.035*Math.abs(dx)-.065*Math.abs(dy))*recoil
+  // Keep the approved shadow recoil as the baseline, including its final slash.
+  if(skill==='sj_shadow'){
+    const pose=shadowHitFeedback({...hit,source:'shadow',startedAt:onset,shadowImpact:meta},time)
+    if(pose){x=pose.x;y=pose.y;scaleX=pose.scaleX;scaleY=pose.scaleY}
+  }
+  const lift=skill==='sj_shadow'?37:Math.max(20,Math.min(88,(hit.targetRadius||18)*1.25))
+  return {hit,skill,shape:profile.shape,age,fade,strength,terminal,dx,dy,x,y,scaleX,scaleY,lift}
+}
+
+/** One local response per target. Hits arriving within 80ms share an onset;
+ * the strongest wins, so a volley cannot restart the body's recoil each frame.
+ * The input receipts and their ordering remain untouched. */
+export function collectHitFeedback(effects,time) {
+  if(!Number.isFinite(time))return []
+  const ordered=(effects||[]).filter(h=>h && skillHitFeedback(h,started(h)) && started(h)<=time)
+    .slice().sort((a,b)=>started(a)-started(b)||String(a.id).localeCompare(String(b.id)))
+  const groups=new Map()
+  for(const hit of ordered){
+    const at=started(hit),key=hit.targetId,old=groups.get(key)
+    const pose=skillHitFeedback(hit,at)
+    if(!old || at-old.onset>=.08){groups.set(key,{hit,onset:at,weight:pose.strength})}
+    else if(pose.strength>old.weight){old.hit=hit;old.weight=pose.strength}
+  }
+  return Array.from(groups.values()).map(g=>skillHitFeedback(g.hit,time,g.onset)).filter(Boolean)
+    .sort((a,b)=>b.strength-a.strength||String(a.hit.targetId).localeCompare(String(b.hit.targetId))).slice(0,24)
+}

@@ -1,0 +1,61 @@
+id,name,level,price,requires_clear,effects,rule
+sj_yujian,御剑术,1,20,0,"{""damage"": 1, ""cooldown"": 1.0, ""reach"": 360, ""swords"": 1, ""target_cap"": 1, ""single_dps_factor"": 1.0, ""hit_assumption"": 0.7}",每轮总伤害平分给飞剑；少目标可集中，单剑不贯穿，同一剑不重复命中
+sj_yujian,御剑术,2,30,0,"{""damage"": 1.08, ""cooldown"": 1.0, ""reach"": 380, ""swords"": 1, ""target_cap"": 1, ""single_dps_factor"": 1.0, ""hit_assumption"": 0.7}",每轮总伤害平分给飞剑；少目标可集中，单剑不贯穿，同一剑不重复命中
+sj_yujian,御剑术,3,50,1,"{""damage"": 1.16, ""cooldown"": 1.0, ""reach"": 400, ""swords"": 2, ""target_cap"": 2, ""single_dps_factor"": 1.0, ""hit_assumption"": 0.7}",每轮总伤害平分给飞剑；少目标可集中，单剑不贯穿，同一剑不重复命中
+sj_yujian,御剑术,4,80,3,"{""damage"": 1.24, ""cooldown"": 1.0, ""reach"": 420, ""swords"": 2, ""target_cap"": 2, ""single_dps_factor"": 1.0, ""hit_assumption"": 0.7}",每轮总伤害平分给飞剑；少目标可集中，单剑不贯穿，同一剑不重复命中
+sj_yujian,御剑术,5,120,5,"{""damage"": 1.32, ""cooldown"": 1.0, ""reach"": 440, ""swords"": 3, ""target_cap"": 3, ""single_dps_factor"": 1.0, ""hit_assumption"": 0.7}",每轮总伤害平分给飞剑；少目标可集中，单剑不贯穿，同一剑不重复命中
+sj_arc,弦月斩,1,20,0,"{""damage"": 0.9, ""cooldown"": 2.5, ""radius"": 140, ""angle"": 90, ""target_cap"": 6, ""single_dps_factor"": 0.4, ""hit_assumption"": 0.45}",固定90度扇区，同目标每次只命中一次
+sj_arc,弦月斩,2,30,0,"{""damage"": 1, ""cooldown"": 2.5, ""radius"": 150, ""angle"": 90, ""target_cap"": 6, ""single_dps_factor"": 0.4, ""hit_assumption"": 0.45}",固定90度扇区，同目标每次只命中一次
+sj_arc,弦月斩,3,50,1,"{""damage"": 1.1, ""cooldown"": 2.5, ""radius"": 160, ""angle"": 90, ""target_cap"": 6, ""single_dps_factor"": 0.4, ""hit_assumption"": 0.45}",固定90度扇区，同目标每次只命中一次
+sj_arc,弦月斩,4,80,3,"{""damage"": 1.2, ""cooldown"": 2.5, ""radius"": 175, ""angle"": 90, ""target_cap"": 6, ""single_dps_factor"": 0.4, ""hit_assumption"": 0.45}",固定90度扇区，同目标每次只命中一次
+sj_arc,弦月斩,5,120,5,"{""damage"": 1.3, ""cooldown"": 2.5, ""radius"": 190, ""angle"": 90, ""target_cap"": 6, ""single_dps_factor"": 0.4, ""hit_assumption"": 0.45}",固定90度扇区，同目标每次只命中一次
+sj_wanjian,万剑诀,1,20,0,"{""damage"": 0.2, ""hit_interval"": 0.6, ""radius"": 90, ""swords"": 4, ""target_cap"": 6, ""single_dps_factor"": 1.6666666666666667, ""hit_assumption"": 0.6}",所有环绕剑对同一目标共享0.6秒命中间隔，不按剑数乘伤害
+sj_wanjian,万剑诀,2,30,0,"{""damage"": 0.22, ""hit_interval"": 0.6, ""radius"": 95, ""swords"": 4, ""target_cap"": 6, ""single_dps_factor"": 1.6666666666666667, ""hit_assumption"": 0.6}",所有环绕剑对同一目标共享0.6秒命中间隔，不按剑数乘伤害
+sj_wanjian,万剑诀,3,50,1,"{""damage"": 0.24, ""hit_interval"": 0.6, ""radius"": 100, ""swords"": 5, ""target_cap"": 6, ""single_dps_factor"": 1.6666666666666667, ""hit_assumption"": 0.6}",所有环绕剑对同一目标共享0.6秒命中间隔，不按剑数乘伤害
+sj_wanjian,万剑诀,4,80,3,"{""damage"": 0.26, ""hit_interval"": 0.6, ""radius"": 105, ""swords"": 5, ""target_cap"": 6, ""single_dps_factor"": 1.6666666666666667, ""hit_assumption"": 0.6}",所有环绕剑对同一目标共享0.6秒命中间隔，不按剑数乘伤害
+sj_wanjian,万剑诀,5,120,5,"{""damage"": 0.28, ""hit_interval"": 0.6, ""radius"": 110, ""swords"": 6, ""target_cap"": 6, ""single_dps_factor"": 1.6666666666666667, ""hit_assumption"": 0.6}",所有环绕剑对同一目标共享0.6秒命中间隔，不按剑数乘伤害
+sj_line,剑破虚空,1,20,1,"{""damage"": 1.25, ""cooldown"": 4, ""reach"": 360, ""width"": 28, ""target_cap"": 3, ""single_dps_factor"": 0.25, ""hit_assumption"": 0.65}",直线单次贯穿，同目标只命中一次；每目标使用表中伤害
+sj_line,剑破虚空,2,30,1,"{""damage"": 1.35, ""cooldown"": 4, ""reach"": 390, ""width"": 28, ""target_cap"": 3, ""single_dps_factor"": 0.25, ""hit_assumption"": 0.65}",直线单次贯穿，同目标只命中一次；每目标使用表中伤害
+sj_line,剑破虚空,3,50,1,"{""damage"": 1.45, ""cooldown"": 4, ""reach"": 420, ""width"": 28, ""target_cap"": 4, ""single_dps_factor"": 0.25, ""hit_assumption"": 0.65}",直线单次贯穿，同目标只命中一次；每目标使用表中伤害
+sj_line,剑破虚空,4,80,3,"{""damage"": 1.55, ""cooldown"": 4, ""reach"": 450, ""width"": 28, ""target_cap"": 4, ""single_dps_factor"": 0.25, ""hit_assumption"": 0.65}",直线单次贯穿，同目标只命中一次；每目标使用表中伤害
+sj_line,剑破虚空,5,120,5,"{""damage"": 1.65, ""cooldown"": 4, ""reach"": 480, ""width"": 28, ""target_cap"": 5, ""single_dps_factor"": 0.25, ""hit_assumption"": 0.65}",直线单次贯穿，同目标只命中一次；每目标使用表中伤害
+sj_shadow,分光连斩,1,20,1,"{""damage"": 1.1, ""cooldown"": 4, ""delay"": 0.65, ""radius"": 80, ""target_cap"": 6, ""single_dps_factor"": 0.25, ""hit_assumption"": 0.5}",固定位置延迟爆发，一次一印，同目标同印只结算一次
+sj_shadow,分光连斩,2,30,1,"{""damage"": 1.2, ""cooldown"": 4, ""delay"": 0.65, ""radius"": 90, ""target_cap"": 6, ""single_dps_factor"": 0.25, ""hit_assumption"": 0.5}",固定位置延迟爆发，一次一印，同目标同印只结算一次
+sj_shadow,分光连斩,3,50,1,"{""damage"": 1.3, ""cooldown"": 4, ""delay"": 0.65, ""radius"": 100, ""target_cap"": 6, ""single_dps_factor"": 0.25, ""hit_assumption"": 0.5}",固定位置延迟爆发，一次一印，同目标同印只结算一次
+sj_shadow,分光连斩,4,80,3,"{""damage"": 1.4, ""cooldown"": 4, ""delay"": 0.65, ""radius"": 110, ""target_cap"": 6, ""single_dps_factor"": 0.25, ""hit_assumption"": 0.5}",固定位置延迟爆发，一次一印，同目标同印只结算一次
+sj_shadow,分光连斩,5,120,5,"{""damage"": 1.5, ""cooldown"": 4, ""delay"": 0.65, ""radius"": 120, ""target_cap"": 6, ""single_dps_factor"": 0.25, ""hit_assumption"": 0.5}",固定位置延迟爆发，一次一印，同目标同印只结算一次
+sj_formation,两仪剑阵,1,20,2,"{""damage"": 0.14, ""cooldown"": 8, ""duration"": 3, ""hit_interval"": 0.5, ""ticks"": 6, ""radius"": 110, ""target_cap"": 8, ""single_dps_factor"": 0.75, ""hit_assumption"": 0.55}",生成后0.5秒首次伤害，共6跳；多个阵眼共享同目标账本
+sj_formation,两仪剑阵,2,30,2,"{""damage"": 0.155, ""cooldown"": 8, ""duration"": 3, ""hit_interval"": 0.5, ""ticks"": 6, ""radius"": 120, ""target_cap"": 8, ""single_dps_factor"": 0.75, ""hit_assumption"": 0.55}",生成后0.5秒首次伤害，共6跳；多个阵眼共享同目标账本
+sj_formation,两仪剑阵,3,50,2,"{""damage"": 0.17, ""cooldown"": 8, ""duration"": 3, ""hit_interval"": 0.5, ""ticks"": 6, ""radius"": 130, ""target_cap"": 8, ""single_dps_factor"": 0.75, ""hit_assumption"": 0.55}",生成后0.5秒首次伤害，共6跳；多个阵眼共享同目标账本
+sj_formation,两仪剑阵,4,80,3,"{""damage"": 0.185, ""cooldown"": 8, ""duration"": 3, ""hit_interval"": 0.5, ""ticks"": 6, ""radius"": 140, ""target_cap"": 8, ""single_dps_factor"": 0.75, ""hit_assumption"": 0.55}",生成后0.5秒首次伤害，共6跳；多个阵眼共享同目标账本
+sj_formation,两仪剑阵,5,120,5,"{""damage"": 0.2, ""cooldown"": 8, ""duration"": 3, ""hit_interval"": 0.5, ""ticks"": 6, ""radius"": 150, ""target_cap"": 8, ""single_dps_factor"": 0.75, ""hit_assumption"": 0.55}",生成后0.5秒首次伤害，共6跳；多个阵眼共享同目标账本
+sj_heart,剑心通明,1,10,0,"{""crit_chance"": 0.02, ""crit_bonus"": 0.5}",暴击额外伤害仅按不含心法增益的直伤计算；不暴击持续伤害和触发伤害
+sj_heart,剑心通明,2,20,0,"{""crit_chance"": 0.03, ""crit_bonus"": 0.5}",暴击额外伤害仅按不含心法增益的直伤计算；不暴击持续伤害和触发伤害
+sj_heart,剑心通明,3,35,1,"{""crit_chance"": 0.04, ""crit_bonus"": 0.5}",暴击额外伤害仅按不含心法增益的直伤计算；不暴击持续伤害和触发伤害
+sj_heart,剑心通明,4,55,3,"{""crit_chance"": 0.05, ""crit_bonus"": 0.5}",暴击额外伤害仅按不含心法增益的直伤计算；不暴击持续伤害和触发伤害
+sj_heart,剑心通明,5,80,5,"{""crit_chance"": 0.06, ""crit_bonus"": 0.5}",暴击额外伤害仅按不含心法增益的直伤计算；不暴击持续伤害和触发伤害
+sj_mark,青萍剑意,1,10,1,"{""wound_share"": 0.02, ""duration"": 2}",有效直伤的对应比例转为两秒剑痕；新命中将预算并入剩余伤害，不复制旧预算；最多4%直伤
+sj_mark,青萍剑意,2,20,1,"{""wound_share"": 0.025, ""duration"": 2}",有效直伤的对应比例转为两秒剑痕；新命中将预算并入剩余伤害，不复制旧预算；最多4%直伤
+sj_mark,青萍剑意,3,35,1,"{""wound_share"": 0.03, ""duration"": 2}",有效直伤的对应比例转为两秒剑痕；新命中将预算并入剩余伤害，不复制旧预算；最多4%直伤
+sj_mark,青萍剑意,4,55,3,"{""wound_share"": 0.035, ""duration"": 2}",有效直伤的对应比例转为两秒剑痕；新命中将预算并入剩余伤害，不复制旧预算；最多4%直伤
+sj_mark,青萍剑意,5,80,5,"{""wound_share"": 0.04, ""duration"": 2}",有效直伤的对应比例转为两秒剑痕；新命中将预算并入剩余伤害，不复制旧预算；最多4%直伤
+sj_bone,剑骨,1,10,1,"{""damage_bonus"": 0.01, ""speed_bonus"": 0.01}",增伤相加，不再叠加冷却缩减
+sj_bone,剑骨,2,20,1,"{""damage_bonus"": 0.015, ""speed_bonus"": 0.02}",增伤相加，不再叠加冷却缩减
+sj_bone,剑骨,3,35,1,"{""damage_bonus"": 0.02, ""speed_bonus"": 0.03}",增伤相加，不再叠加冷却缩减
+sj_bone,剑骨,4,55,3,"{""damage_bonus"": 0.025, ""speed_bonus"": 0.04}",增伤相加，不再叠加冷却缩减
+sj_bone,剑骨,5,80,5,"{""damage_bonus"": 0.03, ""speed_bonus"": 0.05}",增伤相加，不再叠加冷却缩减
+sj_gate,剑开天门,1,10,2,"{""proc_damage"": 0.08, ""radius"": 60, ""share"": 0.01, ""icd"": 3, ""target_cap"": 4}",有效直伤按share积累爆发预算，初始0、保留10秒；击杀时最多花已有预算，多个受击目标分摊，不递归
+sj_gate,剑开天门,2,20,2,"{""proc_damage"": 0.1, ""radius"": 70, ""share"": 0.0125, ""icd"": 3, ""target_cap"": 4}",有效直伤按share积累爆发预算，初始0、保留10秒；击杀时最多花已有预算，多个受击目标分摊，不递归
+sj_gate,剑开天门,3,35,2,"{""proc_damage"": 0.12, ""radius"": 80, ""share"": 0.015, ""icd"": 3, ""target_cap"": 4}",有效直伤按share积累爆发预算，初始0、保留10秒；击杀时最多花已有预算，多个受击目标分摊，不递归
+sj_gate,剑开天门,4,55,3,"{""proc_damage"": 0.14, ""radius"": 90, ""share"": 0.0175, ""icd"": 3, ""target_cap"": 4}",有效直伤按share积累爆发预算，初始0、保留10秒；击杀时最多花已有预算，多个受击目标分摊，不递归
+sj_gate,剑开天门,5,80,5,"{""proc_damage"": 0.16, ""radius"": 100, ""share"": 0.02, ""icd"": 3, ""target_cap"": 4}",有效直伤按share积累爆发预算，初始0、保留10秒；击杀时最多花已有预算，多个受击目标分摊，不递归
+vajra,护体剑罡,1,10,0,"{""reduction"": 0.02}",常驻减伤相加，全部局外/心法常驻减伤合计上限10%
+vajra,护体剑罡,2,20,0,"{""reduction"": 0.03}",常驻减伤相加，全部局外/心法常驻减伤合计上限10%
+vajra,护体剑罡,3,35,1,"{""reduction"": 0.04}",常驻减伤相加，全部局外/心法常驻减伤合计上限10%
+vajra,护体剑罡,4,55,3,"{""reduction"": 0.05}",常驻减伤相加，全部局外/心法常驻减伤合计上限10%
+vajra,护体剑罡,5,80,5,"{""reduction"": 0.06}",常驻减伤相加，全部局外/心法常驻减伤合计上限10%
+magnet,聚灵阵,1,10,0,"{""pickup_bonus"": 0.08}",只扩大拾取半径，不增加掉落数量或修为价值
+magnet,聚灵阵,2,20,0,"{""pickup_bonus"": 0.12}",只扩大拾取半径，不增加掉落数量或修为价值
+magnet,聚灵阵,3,35,1,"{""pickup_bonus"": 0.16}",只扩大拾取半径，不增加掉落数量或修为价值
+magnet,聚灵阵,4,55,3,"{""pickup_bonus"": 0.2}",只扩大拾取半径，不增加掉落数量或修为价值
+magnet,聚灵阵,5,80,5,"{""pickup_bonus"": 0.24}",只扩大拾取半径，不增加掉落数量或修为价值

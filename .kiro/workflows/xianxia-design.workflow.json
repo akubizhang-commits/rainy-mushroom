@@ -1,0 +1,53 @@
+{
+  "name": "xianxia-design",
+  "description": "修仙改版设计阶段：回填用户决策，UI/UX 与数据结构/架构并行设计，跨角色评审，项目经理出改造计划。只写文档，不改代码（Sprint 3 工作流仍在改代码）。",
+  "inputs": {},
+  "steps": [
+    {
+      "type": "step",
+      "id": "record-decisions",
+      "agent": "wf-design",
+      "prompt": "你是【游戏策划】，用中文工作。仓库 /Users/zhangnu/WeChatProjects/rainy-mushroom。本步只改 docs/xianxia/00-gdd-summary.md，不改任何代码、数据、其它文档，不做 git 操作（另一个工作流正在改代码）。\n\n用户已对 docs/xianxia/00-gdd-summary.md §9.5 全部“按推荐”拍板（2026-10）：\n1. 名称采用方案 A“世界观衔接”：保留《雨后菌语》，世界观为雨后山林灵菌吐纳灵气、浊气侵染灵兽；灵气光点做成菌孢灵光；局外为“菌谷洞府”；内容介绍写“雨后菌谷修仙割草”。\n2. 一局结构方案 A：5:00 妖兽统领 + 7:00 妖兽王，10 分钟双兽王留作后续长局。\n3. 元婴为击败兽王的胜利演出“凝婴”，化神/渡劫留给局外与后续章节。\n4. 破境时生命回满。\n另外：Sprint 3（进化、露水叶片/孢子罗盘、拾取物、精英）继续跑完，修仙改造在其合入后进行。\n\n把这些写成 §9.5 的“已决”记录（标注日期与“用户拍板”），并把正文里所有与方案 A 世界观相关的描述统一：一句话卖点、§5.1 妖兽设定、§9.1 表格标注已选 A、§9.2 合规表述，让“雨后 + 灵菌 + 修仙”自洽（例如灵气即菌孢灵光、局外洞府在菌谷）。版本号改为 v0.2。保持其余数值与规则不变。汇报改了哪些段落。",
+      "captureOutput": true
+    },
+    {
+      "type": "parallel",
+      "id": "design-docs",
+      "joinPolicy": "all",
+      "branches": [
+        {
+          "type": "step",
+          "id": "uiux",
+          "agent": "wf-design",
+          "prompt": "你是【UI/UX 设计师】，用中文工作。仓库 /Users/zhangnu/WeChatProjects/rainy-mushroom。只写文档 docs/xianxia/01-ui-ux.md，不改代码、不做 git 操作。\n\n先读 docs/xianxia/00-gdd-summary.md（修仙改版 GDD，已拍板名称方案 A：雨后菌谷修仙）、docs/survivor/02-ui-ux.md（现有竖屏 720×1280 FIXED_WIDTH、安全区、胶囊下方暂停、热区 ≥88u、色盲友好、单图集合批、DrawCall ≤25 等规范）、cocos-pilot/assets/scripts/SurvivorHud.ts、SurvivorView.ts，了解现有 HUD 实现。\n\n写竖屏修仙版的 UI/UX 设计，结论和线框描述优先，保持精炼：\n1. 美术风格与色板：东方修仙 + 雨后菌谷，可读性优先；剑修、妖兽各阶、灵气光点、敌方瘴气弹、功法特效之间在密集场面下靠形状+颜色区分，色盲友好。\n2. 操作布局：浮动摇杆位置与规则（沿用现有：下 2/3 区域、上 1/3 屏蔽、第一触点），说明为什么单指全自动、不设技能按钮（万剑归宗自动释放）。\n3. HUD 布局：顶部境界与层数显示（如“筑基·三层”）+ 经验条、计时、净化数；功法栏 4 格、御剑术职业被动 1 格、心法法宝 4 格的图标排列位置；丹药 Buff 剩余时间显示；Boss 血条；所有位置避开刘海/胶囊/底部手势条。给出每个元素的坐标区域（设计单位）。\n4. 伤害数字：用户希望有“爆数”感，但现有设计为性能不显示伤害数字。给出折中方案：例如只显示暴击/大招/对精英与 Boss 的伤害、同屏上限、合并与淡出规则、对象池与合批方式，以及设置里可关闭；说明对 DrawCall 与节点数的预算影响。\n5. 关键页面与交互：营地（菌谷洞府）、三选一卡（功法/心法法宝/丹药/进化卡的卡面区分）、破境演出（1.2 秒，演出期间与出卡的时序、防误触）、凝婴胜利演出、结算页、暂停页。\n6. 反馈与无障碍：受击、拾取、破境、万剑归宗预警的视觉与震动；减弱闪烁与关闭震动开关下的降级表现。\n7. 素材清单：每项标注复用现有/改色改形/新做，尺寸与图集分组，先用几何占位的范围。",
+          "artifacts": { "uiux": "/Users/zhangnu/WeChatProjects/rainy-mushroom/docs/xianxia/01-ui-ux.md" },
+          "captureOutput": true
+        },
+        {
+          "type": "step",
+          "id": "architecture",
+          "agent": "wf-design",
+          "prompt": "你是【架构师】，用中文工作。仓库 /Users/zhangnu/WeChatProjects/rainy-mushroom。只写文档 docs/xianxia/02-data-architecture.md，不改代码、不做 git 操作。\n\n先读 docs/xianxia/00-gdd-summary.md（尤其 §4、§6、§7、§8）、docs/survivor/03-architecture.md，以及现有 js/survivor/ 全部逻辑（SurvivorRun、Progression、Stats、Weapons、Spawner、Pool、SpatialGrid、data/*.js、data/validate.js）与 tests/。注意 Sprint 3 正在给这些模块加进化、新被动和拾取物，设计要能在它合入后叠加。\n\n用户原需求提到 JSON/ScriptableObject 配置与 C# 对象池代码；本项目对应的是 Cocos Creator 3.8.8 + 引擎无关 JS 逻辑层（冻结 JSON 字面量数据模块），不换引擎。写：\n1. 数据结构设计：给出完整字段定义与示例（剑修全部条目填真实数值，取自 00 GDD）的 data/realms.js（境界属性表）、data/classes.js（职业）、功法表（weapons.js 扩展：系数口径、进化）、心法法宝表（passives.js 扩展：金刚诀）、丹药表（新 data/pills.js）、妖兽表（enemies.js 改名改数据）、波次表（waves.js 增 K(m)/D(m) 字段）。写明每个字段类型、单位、validate 校验规则。\n2. 核心逻辑：境界计算（等级→境界/层、破境检测、多层队列）、职业数据化（逻辑只读 classes 数据，不写职业 if 分支）、丹药计时（逻辑时间、刷新不叠加）、K/D 补偿在 Stats 中的位置、万剑归宗的视口矩形查询（复用 SpatialGrid）、伤害 ×10 刻度迁移。给出 JS 伪代码。\n3. 对象池与自动索敌：说明现有 Pool.js（定长预分配、交换删除）和 SpatialGrid + 最近敌人索敌如何支撑同屏 200 妖兽，引用现有 bench 结果（运行 `npm run survivor:bench` 取真实数字，若失败如实说明），新增实体（飞剑、剑气、伤害数字）的池容量与渲染节点预算。\n4. 迁移策略：从 survivor 到修仙的改名与数据迁移（id 映射、存档 key 是否保留、strings 与合规词表、回放金标准与 balance 基线如何重建），以及如何保证确定性与现有测试不全盘失效（建议分阶段：先数据改名、再加境界、再加新逻辑）。\n5. 性能与包体预算、技术风险。",
+          "artifacts": { "architecture": "/Users/zhangnu/WeChatProjects/rainy-mushroom/docs/xianxia/02-data-architecture.md" },
+          "captureOutput": true
+        }
+      ]
+    },
+    {
+      "type": "step",
+      "id": "review",
+      "agent": "wf-design-reviewer",
+      "prompt": "用中文审阅 /Users/zhangnu/WeChatProjects/rainy-mushroom/docs/xianxia/ 下 00-gdd-summary.md、01-ui-ux.md、02-data-architecture.md，作为跨角色评审。只写报告 docs/xianxia/03-design-review.md，不改其它文件、不做 git 操作。\n\n重点：三份文档之间的矛盾（栏位数量、卡类型、境界显示、伤害数字与性能预算、实体上限 ≤200 与池容量、DrawCall ≤25）；数值是否能从现有 js/survivor/data 与平衡报告推出（抽查 00 §4 逐层表与公式是否自洽、§5.2 速率是否等于现有 waves 数值）；与 Sprint 3 正在开发的进化/新被动/拾取物是否冲突；名称方案 A 的世界观是否在三份文档里一致；合规（无血腥、不宣传封建迷信、不编造平台政策数值）；需求歧义导致开发无法开工的点。按 HIGH/MEDIUM/LOW 列出问题与建议改法，并给出裁决（APPROVED / CHANGES_REQUESTED）。",
+      "artifacts": { "review": "/Users/zhangnu/WeChatProjects/rainy-mushroom/docs/xianxia/03-design-review.md" },
+      "captureOutput": true
+    },
+    {
+      "type": "step",
+      "id": "pm-plan",
+      "agent": "wf-planner",
+      "prompt": "你是【项目经理】，用中文工作。仓库 /Users/zhangnu/WeChatProjects/rainy-mushroom。只改 docs/xianxia/ 下的文档，不改代码、不做 git 操作。\n\n读 docs/xianxia/00–03 全部文档，以及 docs/survivor/09-sprint-3-backlog.md、docs/survivor/00-project-plan.md。对 03-design-review.md 中每个 HIGH/MEDIUM，直接修订对应文档或给出裁决并记录理由（若 00 的数值被修改，同步 02 的示例数据）。\n\n然后写 docs/xianxia/04-migration-plan.md：修仙改版的分阶段改造计划，前提是 Sprint 3 第一批合入后才开工。建议阶段：X1 数据改名与刻度迁移（survivor→修仙 id/文案/×10，玩法与平衡不变，测试与 balance 结果应与改名前等价）；X2 境界与破境 + K/D 补偿 + 职业数据化；X3 御剑术、万剑归宗、金刚诀、丹药；X4 表现层（HUD 境界显示、破境/凝婴演出、伤害数字折中方案、几何占位美术改色改形）；X5 平衡复核（600 局，口径：新手 30–60%、熟练 ≤80%、通关中位 6–9 分钟、12:00 后仍在场 0、通关局构筑 ≥27）与冒烟。每项含编号、角色、描述、依赖、验收标准、预估、涉及文件；每阶段结束都要求 npm test 全绿与构建成功；X1 结束和 X5 结束各设一个用户检查点。末尾列出仍需用户拍板的事项（若无则写“无”）。保持精炼。",
+      "artifacts": { "plan": "/Users/zhangnu/WeChatProjects/rainy-mushroom/docs/xianxia/04-migration-plan.md" },
+      "captureOutput": true
+    }
+  ]
+}

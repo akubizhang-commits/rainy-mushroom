@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="zh-CN">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>雨后菌语 · 修仙交互线框</title>
+<link rel="icon" href="data:,">
+<style>
+:root{font-family:system-ui,-apple-system,sans-serif;color:#eaf0e9;background:#101e20;color-scheme:dark}*{box-sizing:border-box}body{margin:0}main{max-width:1080px;margin:auto;padding:36px 24px;display:grid;grid-template-columns:1fr 360px;gap:52px}h1{font-family:serif;font-size:38px;letter-spacing:4px;line-height:1.35;margin:16px 0}p{color:#afc0b9;line-height:1.8}small{color:#a6b7b0}.tag{font-size:12px;color:#d9ba79;letter-spacing:3px}nav{display:flex;gap:8px;flex-wrap:wrap;margin:28px 0}button{font:inherit;cursor:pointer;border:1px solid #547168;border-radius:12px;color:#eaf0e9;background:#253c36;padding:12px 16px;min-height:44px}button:hover,button[aria-pressed=true]{border-color:#e0bf7b;background:#435444}button:focus-visible{outline:3px solid #e0bf7b;outline-offset:3px}button:disabled{opacity:.45;cursor:wait}.notes{border-top:1px solid #40594e;margin-top:24px;padding-top:16px;line-height:1.8;color:#b6c6be}.phone{position:relative;aspect-ratio:9/16;border:1px solid #6b8375;border-radius:28px;overflow:hidden;background:radial-gradient(ellipse at 45% 20%,#496951,#273f35 58%,#1b302d);box-shadow:0 24px 80px #0006}.hud{position:absolute;inset:18px 16px auto;display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:12px}.realm{font-size:14px;font-weight:650}.timer{font-variant-numeric:tabular-nums;font-size:13px}.pause{padding:8px 12px;min-width:44px}.bar{height:5px;background:#152d2a;border-radius:6px;grid-column:1/-1;overflow:hidden}.bar i{display:block;height:100%;background:#90cab1;width:62%}.hp{grid-column:1/-1;color:#ffb6a5;font-size:13px}.stage{position:absolute;inset:125px 0 80px}.placeholder{position:absolute;top:42%;left:40%;width:72px;height:72px;border:1px dashed #bdd5ce;border-radius:50%;display:grid;place-content:center;font-size:11px;color:#c4d6cf;text-align:center;line-height:1.6}.orb{position:absolute;width:10px;height:10px;border:1px solid #84d9b6;transform:rotate(45deg);background:#71bd9955}.hint{position:absolute;bottom:28px;left:20px;right:20px;text-align:center;color:#b5cbc1;font-size:12px}.veil{position:absolute;inset:0;background:#112725de;display:flex;align-items:center;justify-content:center;padding:22px}.sheet{width:100%;text-align:center}.sheet h2{font:28px serif;letter-spacing:4px;margin:0 0 14px}.sheet p{font-size:13px;margin:8px 0 20px}.card{display:block;width:100%;text-align:left;margin:10px 0;background:#e5e6d7;color:#263b34;border:2px solid #b1b7a0;padding:15px;min-height:96px}.card strong{display:block;font-size:17px;margin:7px 0}.card small{color:#546554;font-size:12px}.pill{font-size:11px;letter-spacing:2px;color:#8a672b}.primary{background:#d7bc81;color:#263b34;border-color:#d7bc81;min-width:180px;margin:12px 0}.stack button{display:block;width:100%;margin-top:10px}.pulse{margin:24px auto;border:1px solid #ddc182;border-radius:50%;width:100px;height:100px;display:grid;place-items:center;font-size:38px;color:#ead59c;box-shadow:0 0 50px #eed09226}.bottomline{font-size:11px;color:#91aaa0;margin-top:18px}.counter{color:#e0bf7b}.success{color:#d4c28d}.status{min-height:48px;color:#d4c28d;font-size:13px}
+@media(max-width:760px){main{grid-template-columns:1fr;padding:24px 18px;gap:22px}.phone{width:min(100%,360px);justify-self:center}h1{font-size:29px}nav{margin:18px 0}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto}}
+</style>
+<main>
+<section>
+<div class="tag">雨后菌语 / 设计审阅 01</div>
+<h1>御剑入林<br>一局，三次蜕变。</h1>
+<p>这是一份可点击的界面线框，用来验信息层级、选卡和破境流程。它不是游戏；场景、角色和音效没有在此制作。</p>
+<nav aria-label="查看界面状态">
+<button data-state="camp">菌谷洞府</button><button data-state="battle">战斗</button><button data-state="cards">三选一</button><button data-state="breakthrough">破境</button><button data-state="pause">暂停</button><button data-state="result">凝婴归府</button>
+</nav>
+<div id="notes" class="notes"></div>
+<p id="status" class="status" role="status" aria-live="polite"></p>
+<small>基准 720 × 1280；右侧按 50% 展示。示例数值仅供排版。<br>构筑与净化数放入暂停层，不再挤占战斗顶部。</small>
+</section>
+<section class="phone" aria-label="竖屏交互线框">
+<div class="hud"><span class="realm" id="realm">练气 · 九层</span><span class="timer">02:28</span><button class="pause" data-state="pause" aria-label="暂停">Ⅱ</button><div class="bar"><i></i></div><span class="hp">生命　96 / 124</span></div>
+<div class="stage" aria-hidden="true"><div class="placeholder">剑修<br>美术占位</div><i class="orb" style="top:28%;left:30%"></i><i class="orb" style="top:53%;left:68%"></i><i class="orb" style="top:73%;left:22%"></i></div>
+<div class="hint">按住下方拖动移动 · 功法自动施放</div>
+<div id="overlay"></div>
+</section>
+</main>
+<script>
+const notes={
+camp:'洞府入口优先开始游戏。道基与设置放在局外；加载失败、资源重试等状态见01-ui-ux.md。',
+battle:'常驻信息仅保留生命、境界与经验、时间、暂停。首领与丹药状态按需出现；角色位置没有被常驻构筑栏遮住。',
+cards:'每张卡说明“是什么、这次增加什么”。出卡后0.4秒才允许选择，示例只改变线框状态，不实际加成。',
+breakthrough:'1.2秒破境演出期间屏蔽选卡，随后显示三选一，再锁定0.4秒。真实游戏战斗时间冻结；回满和无敌由逻辑层在选卡后结算。',
+pause:'构筑、净化数和设置集中到暂停层。真实游戏切后台也进入暂停，返回后由玩家明确继续。',
+result:'凝婴是胜利高潮，不开启第四档战斗属性。真实游戏仍需完成归府光点驻留，然后结算一次。此页展示完成后的结果。'
+};
+let version=0,state='camp',realm='练气 · 九层',breaking=false;
+const overlay=document.querySelector('#overlay');
+function shell(html){overlay.innerHTML='<div class="veil"><div class="sheet">'+html+'</div></div>'}
+function show(next){
+const token=++version;state=next;document.querySelector('#notes').textContent=notes[next];document.querySelector('#status').textContent='';
+document.querySelectorAll('nav button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.state===next)));
+document.querySelector('#realm').textContent=realm;overlay.innerHTML='';
+if(next==='camp')shell('<div class="tag">雨霁，灵光初醒</div><h2 style="margin-top:18px">菌谷洞府</h2><p>剑修 · 从练气一层开始<br>灵气化修为，飞剑镇浊雾。</p><button class="primary" data-state="battle">出山</button><div class="bottomline">道基与设置的完整界面见设计文档</div>');
+if(next==='cards'){
+shell('<div class="tag">选择一项成长</div><h2 style="margin-top:10px">'+(breaking?'筑基 · 一层':'练气 · 三层')+'</h2><p>三张卡中选择一张</p><button disabled class="card" data-pick="飞剑"><span class="pill">功法 · 升级</span><strong>飞剑　Ⅱ → Ⅲ</strong><small>每把飞剑的基础伤害系数 100% → 150%</small></button><button disabled class="card" data-pick="御剑术"><span class="pill">职业 · 独立栏位</span><strong>御剑术　Ⅰ → Ⅱ</strong><small>飞剑穿透 +1，不占心法栏</small></button><button disabled class="card" data-pick="玄冰诀"><span class="pill">新功法 · 占 1 格</span><strong>玄冰诀</strong><small>周身冰环持续攻击，并减缓附近妖兽</small></button><div class="bottomline" id="lock">请稍候…</div>');
+setTimeout(()=>{if(token!==version)return;overlay.querySelectorAll('[data-pick]').forEach(b=>b.disabled=false);document.querySelector('#lock').textContent='选定后继续战斗'},400);
+}
+if(next==='breakthrough'){
+breaking=true;shell('<div class="tag">九层圆满 · 灵光聚合</div><div class="pulse">境</div><h2>破境 · 筑基</h2><p>凝神片刻，即将选择功法</p><div class="bottomline">短演出期间战斗暂停</div>');
+setTimeout(()=>{if(token===version)show('cards')},1200);
+}
+if(next==='pause')shell('<h2>凝神小憩</h2><p>练气九层 · 净化 186<br>功法：飞剑 / 玄冰诀<br>御剑术：二级 · 心法：清心诀一级</p><div class="stack"><button class="primary" data-state="battle">继续入林</button><button id="reduce">减弱动态：关</button><button data-state="camp">返回洞府（线框）</button></div>');
+if(next==='result')shell('<div class="tag">妖雾散尽</div><div class="pulse">婴</div><h2>已凝元婴</h2><p>本次修行　<span class="counter">08:14</span><br>所得灵石　<span class="counter">+24</span></p><button class="primary" data-state="camp">回菌谷洞府</button><div class="bottomline">排版示例，不写入真实存档</div>');
+}
+document.addEventListener('click',e=>{
+const b=e.target.closest('button');if(!b)return;
+if(b.dataset.state){if(b.dataset.state!=='cards')breaking=false;show(b.dataset.state)}
+if(b.dataset.pick){const name=b.dataset.pick;if(breaking){realm='筑基 · 一层';breaking=false}show('battle');document.querySelector('#status').textContent='线框已选择「'+name+'」。真实加成由游戏逻辑实现。'}
+if(b.id==='reduce'){b.textContent=b.textContent.endsWith('关')?'减弱动态：开':'减弱动态：关';b.setAttribute('aria-pressed',String(b.textContent.endsWith('开')))}
+});
+show('camp');
+</script>
+</html>

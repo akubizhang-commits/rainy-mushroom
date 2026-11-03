@@ -1,0 +1,495 @@
+# 全量测试失败对照
+
+基线失败 142 项；本轮失败 161 项，其中 22 项基线未同名失败。名称变化不能单独确定缺陷归属。当前工作区存在并行编辑，完整堆栈见 full-tests.log。
+
+## 本轮失败
+
+- **removed gameplay cannot reenter the build**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/survivor-host.test.mjs:16:1`
+  - 'player-hud,player-hud.meta,sect-scene,sect-scene.meta,tower-character,tower-character.meta,tower-entry,tower-entry.meta,tower-environment,tower-environment.meta,tower-equipment,tower-equipment.meta,tower-monsters,tower-monsters-motion,tower-monsters-motion.meta,tower-monsters.meta,tower-skill-fx,tower-skill-fx.meta,tower-skill-icons,tower-skill-icons.meta,tower-stones,tower-stones.meta'
+- **hover independent: equipment colors reach reused projectile sprites without changing rider**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/survivor-hover-independent.test.mjs:87:1`
+  - 'SwordArcArt is not defined'
+- **hover independent: unknown presentation IDs reset gold tint to default**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/survivor-hover-independent.test.mjs:121:1`
+  - 'SwordArcArt is not defined'
+- **hover independent: ImageAsset failure retains visible legacy player**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/survivor-hover-independent.test.mjs:139:3`
+  - 'SwordArcArt is not defined'
+- **hover independent: JsonAsset failure retains visible legacy player**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/survivor-hover-independent.test.mjs:139:3`
+  - 'SwordArcArt is not defined'
+- **hover independent: malformed failure retains visible legacy player**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/survivor-hover-independent.test.mjs:139:3`
+  - 'SwordArcArt is not defined'
+- **hover independent: dimensions failure retains visible legacy player**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/survivor-hover-independent.test.mjs:139:3`
+  - 'SwordArcArt is not defined'
+- **hover independent: available from start, movement overrides input, freeze and reset**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/survivor-hover-independent.test.mjs:166:1`
+  - 'SwordArcArt is not defined'
+- **hover independent: damage tint, accessibility and terminal alpha remain intact**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/survivor-hover-independent.test.mjs:214:1`
+  - 'SwordArcArt is not defined'
+- **hover independent: delayed load after destroy never revives view or retains assets**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/survivor-hover-independent.test.mjs:234:1`
+  - 'SwordArcArt is not defined'
+- **hover independent: rendering real short runs leaves all logic and RNG unchanged**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/survivor-hover-independent.test.mjs:251:1`
+  - 'SwordArcArt is not defined'
+- **independent host: ImageAsset failure falls back to visible legacy player**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/survivor-side-walk-host-independent.test.mjs:92:3`
+  - 'SwordArcArt is not defined'
+- **independent host: JsonAsset failure falls back to visible legacy player**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/survivor-side-walk-host-independent.test.mjs:92:3`
+  - 'SwordArcArt is not defined'
+- **independent host: malformed failure falls back to visible legacy player**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/survivor-side-walk-host-independent.test.mjs:92:3`
+  - 'SwordArcArt is not defined'
+- **independent host: actual movement, frozen states, idle and new-run reset are wired to the controller**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/survivor-side-walk-host-independent.test.mjs:123:1`
+  - 'SwordArcArt is not defined'
+- **independent host: destruction while character resources are pending never revives the view**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/survivor-side-walk-host-independent.test.mjs:166:1`
+  - 'SwordArcArt is not defined'
+- **independent host: hover uses the existing invulnerability and terminal alpha without multiplication**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/survivor-side-walk-host-independent.test.mjs:185:1`
+  - 'SwordArcArt is not defined'
+- **View routes all S3 events and ground renders below hostile zones and enemies**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/survivor-sword-s3-visual.test.mjs:109:1`
+  - |-
+- **flight purchase, reload, downgrade and full respec spend and refund exactly two SP**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-flight.test.mjs:60:1`
+  - |-
+- **forge categories and tiers switch without spending and default from realm**（基线未同名失败，需继续定位）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-forge-ui.test.mjs:167:1`
+  - |-
+- **forge shows four current tiers and four locked future previews**（基线未同名失败，需继续定位）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-forge-ui.test.mjs:182:1`
+  - |-
+- **forge overlay with category and tier selection 1280x720**（基线未同名失败，需继续定位）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-forge-ui.test.mjs:231:2`
+  - |-
+- **forge overlay with category and tier selection 844x390**（基线未同名失败，需继续定位）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-forge-ui.test.mjs:231:2`
+  - |-
+- **batch draw failures preserve complete state and can retry**（基线未同名失败，需继续定位）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-forge-ui.test.mjs:253:1`
+  - |-
+- **disabled and stale forge actions cannot draw**（基线未同名失败，需继续定位）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-forge-ui.test.mjs:297:1`
+  - |-
+- **danxia 1280x720: main hall opens shop, purchase persists, close and revisit reset**（基线未同名失败，需继续定位）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-forge-ui.test.mjs:308:2`
+  - |-
+- **danxia 844x390: main hall opens shop, purchase persists, close and revisit reset**（基线未同名失败，需继续定位）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-forge-ui.test.mjs:308:2`
+  - |-
+- **forge reveal and summary preserve awards 1280**（基线未同名失败，需继续定位）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-forge-ui.test.mjs:349:52`
+  - |-
+- **forge reveal and summary preserve awards 844**（基线未同名失败，需继续定位）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-forge-ui.test.mjs:349:52`
+  - |-
+- **single reveal completes without a phantom second award and stops effects on close**（基线未同名失败，需继续定位）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-forge-ui.test.mjs:365:1`
+  - |-
+- **reveals mark only top-quality rewards with gold and never roll during effects**（基线未同名失败，需继续定位）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-forge-ui.test.mjs:373:1`
+  - |-
+- **summary cards settle in order and effects release their nodes when leaving**（基线未同名失败，需继续定位）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-forge-ui.test.mjs:387:1`
+  - |-
+- **all ten reveals finish at the overview without an eleventh draw**（基线未同名失败，需继续定位）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-forge-ui.test.mjs:399:1`
+  - |-
+- **repeat forging uses the original pool and discounted batch price atomically**（基线未同名失败，需继续定位）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-forge-ui.test.mjs:411:1`
+  - |-
+- **single result contains art and name with one icon-priced repeat action**（基线未同名失败，需继续定位）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-forge-ui.test.mjs:423:1`
+  - |-
+- **settlement uses backpack cell and icon geometry 1280**（基线未同名失败，需继续定位）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-forge-ui.test.mjs:431:52`
+  - |-
+- **settlement uses backpack cell and icon geometry 844**（基线未同名失败，需继续定位）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-forge-ui.test.mjs:431:52`
+  - |-
+- **forge: icon close and outside dismissal preserve state without closing on content taps**（基线未同名失败，需继续定位）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-forge-ui.test.mjs:468:4`
+  - |-
+- **pills: icon close and outside dismissal preserve state without closing on content taps**（基线未同名失败，需继续定位）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-forge-ui.test.mjs:468:4`
+  - |-
+- **pill quantity and zero balance 1280**（基线未同名失败，需继续定位）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-forge-ui.test.mjs:486:52`
+  - |-
+- **pill quantity and zero balance 844**（基线未同名失败，需继续定位）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-forge-ui.test.mjs:486:52`
+  - |-
+- **requested playtest stays read-only and never writes the ordinary save when the initial copy fails**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:564:1`
+  - |-
+- **same-mode retry can recover a failed isolated copy without touching ordinary progress**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:583:1`
+  - |-
+- **ordinary progress becomes writable only after an explicit switch from the failed playtest**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:609:1`
+  - |-
+- **successful sync re-enables current-page buttons and clamps obsolete scroll (ordinary)**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:626:3`
+  - |-
+- **successful sync re-enables current-page buttons and clamps obsolete scroll (playtest)**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:626:3`
+  - |-
+- **playtest identity survives partial healing, full-HP redraw, and local skill-detail navigation**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:656:1`
+  - |-
+- **skill page hides battle vitals and keeps rank hints below icons**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:675:1`
+  - |-
+- **economy v2 hides the wallet on hall and skills but shows it in relevant pages**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:741:1`
+  - |-
+- **weapon draw rejects insufficient spiritStones without any state or save change**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:761:3`
+  - |-
+- **weapon draw rejects insufficient contribution without any state or save change**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:761:3`
+  - |-
+- **weapon draw atomically pays 100 stones and contribution and preserves the rolled instance**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:782:1`
+  - |-
+- **skill pane uses shared weapon damage once after equipping an affix instance**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:824:1`
+  - |-
+- **first special skill book costs 200 stones atomically and subsequent ranks do not rebuy it**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:844:1`
+  - |-
+- **three research purchases cost 800/1600/2400 stones and failed saves grant no points**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:873:1`
+  - |-
+- **manual healing works after sync recovery and a failed pill save consumes neither HP nor inventory**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:900:1`
+  - |-
+- **actual tool buttons preserve paused snapshots and HP, and preferences do not publish on save failure**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:923:1`
+  - |-
+- **a failed pause checkpoint blocks switching until the real retry button commits it**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:959:1`
+  - |-
+- **paused and withdrawn loot displays only the 0 credited spirit stones near the wallet cap**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1003:3`
+  - |-
+- **paused and withdrawn loot displays only the 1 credited spirit stones near the wallet cap**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1003:3`
+  - |-
+- **paused and withdrawn loot displays only the 10 credited spirit stones near the wallet cap**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1003:3`
+  - |-
+- **capped floor-three first-clear popup excludes skill points from stone overflow**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1041:1`
+  - |-
+- **skill arrow follows purchase eligibility: realm cap with spare points**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1168:3`
+  - |-
+- **skill arrow follows purchase eligibility: no points below cap**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1168:3`
+  - |-
+- **skill arrow follows purchase eligibility: stage locked**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1168:3`
+  - |-
+- **skill arrow follows purchase eligibility: no tutorial gate**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1168:3`
+  - |-
+- **skill arrow follows purchase eligibility: no prerequisite gate**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1168:3`
+  - |-
+- **skill arrow follows purchase eligibility: unlocked first rank**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1168:3`
+  - |-
+- **skill arrow follows purchase eligibility: current rank can grow**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1168:3`
+  - |-
+- **skill arrow follows purchase eligibility: absolute maximum**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1168:3`
+  - |-
+- **skill arrow disappears at the realm cap after purchase and returns after refund**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1209:1`
+  - |-
+- **dependency connections remain stable across learning and refund without mutating saved state**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1228:1`
+  - |-
+- **async skill artwork preserves all 16 click targets, clipping, badges and camp transactions (844x390)**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1348:3`
+  - |-
+- **async skill artwork preserves all 16 click targets, clipping, badges and camp transactions (1024x600)**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1348:3`
+  - |-
+- **one failed skill image leaves its glyph and camp controls usable alongside loaded artwork**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1406:1`
+  - |-
+- **destroying the real host releases loaded icon art and safely ignores pending completions**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1431:1`
+  - |-
+- **compact skill labels show passive mastery over loaded art and right-aligned points (1280x720)**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1464:3`
+  - |-
+- **physical type, flow and level are separate nonoverlapping tags (1280x720)**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1521:3`
+  - |-
+- **independent skills have no dependency arrows (1280x720)**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1555:3`
+  - |-
+- **realm blocks group all 26 skills with five-slot rows and no label column (1280x720)**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1572:3`
+  - |-
+- **nine-stage UI keeps compact nodes and fixed footer targets (1280x720)**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1630:3`
+  - |-
+- **compact skill labels show passive mastery over loaded art and right-aligned points (844x390)**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1464:3`
+  - |-
+- **physical type, flow and level are separate nonoverlapping tags (844x390)**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1521:3`
+  - |-
+- **independent skills have no dependency arrows (844x390)**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1555:3`
+  - |-
+- **realm blocks group all 26 skills with five-slot rows and no label column (844x390)**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1572:3`
+  - |-
+- **nine-stage UI keeps compact nodes and fixed footer targets (844x390)**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1630:3`
+  - |-
+- **compact skill labels show passive mastery over loaded art and right-aligned points (1024x600)**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1464:3`
+  - |-
+- **physical type, flow and level are separate nonoverlapping tags (1024x600)**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1521:3`
+  - |-
+- **independent skills have no dependency arrows (1024x600)**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1555:3`
+  - |-
+- **realm blocks group all 26 skills with five-slot rows and no label column (1024x600)**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1572:3`
+  - |-
+- **nine-stage UI keeps compact nodes and fixed footer targets (1024x600)**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1630:3`
+  - |-
+- **nine-stage UI plus/minus retain selection and vertical scroll in the viewport-wide tree (1280x720)**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1662:3`
+  - |-
+- **nine-stage UI plus/minus retain selection and vertical scroll in the viewport-wide tree (844x390)**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1662:3`
+  - |-
+- **nine-stage UI plus/minus retain selection and vertical scroll in the viewport-wide tree (1024x600)**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1662:3`
+  - |-
+- **skill footer is stationary through commits, failures, read-only and selection (844x390)**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1702:3`
+  - |-
+- **skill footer displays actual unlearned and maximum ranks (844x390)**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1757:3`
+  - |-
+- **skill footer is stationary through commits, failures, read-only and selection (1024x600)**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1702:3`
+  - |-
+- **skill footer displays actual unlearned and maximum ranks (1024x600)**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1757:3`
+  - |-
+- **skill form, next-rank and future motion details fit the independent scroll (1280x720)**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1783:2`
+  - |-
+- **skill form, next-rank and future motion details fit the independent scroll (844x390)**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1783:2`
+  - |-
+- **nine-stage UI shows locked learning without writes below the starting phase**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1822:1`
+  - |-
+- **nine-stage UI failed learning keeps scroll and assets, shows a fixed error, and retries once**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1846:1`
+  - |-
+- **nine-stage UI evo_wanjian first-rank condition matches its stage without changing higher-rank gates**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1877:3`
+  - |-
+- **nine-stage UI evo_tiandi first-rank condition matches its stage without changing higher-rank gates**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1877:3`
+  - |-
+- **nine-stage UI evo_wuwo first-rank condition matches its stage without changing higher-rank gates**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1877:3`
+  - |-
+- **nine-stage UI evo_sixiang first-rank condition matches its stage without changing higher-rank gates**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1877:3`
+  - |-
+- **paused tower skills show only plus, keep its hit area, and commit a legal upgrade (844x390)**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1909:3`
+  - |-
+- **paused tower skills show only plus, keep its hit area, and commit a legal upgrade (1024x600)**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1909:3`
+  - |-
+- **host decreaseSkill is rejected outside the camp library (hall)**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1966:5`
+  - |-
+- **host decreaseSkill is rejected outside the camp library (tower)**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1966:5`
+  - |-
+- **host decreaseSkill is rejected outside the camp library (battle)**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1966:5`
+  - |-
+- **host decreaseSkill is rejected outside the camp library (skills)**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1966:5`
+  - |-
+- **host decreaseSkill remains allowed in the camp library and preserves books**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1989:3`
+  - |-
+- **host respecSkills is rejected outside the camp library (hall)**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1966:5`
+  - |-
+- **host respecSkills is rejected outside the camp library (tower)**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1966:5`
+  - |-
+- **host respecSkills is rejected outside the camp library (battle)**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1966:5`
+  - |-
+- **host respecSkills is rejected outside the camp library (skills)**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1966:5`
+  - |-
+- **host respecSkills remains allowed in the camp library and preserves books**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1989:3`
+  - |-
+- **landscape 1280×720 pause and tool targets fit in two columns and keep real tool actions**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:2322:3`
+  - |-
+- **landscape 844×390 pause and tool targets fit in two columns and keep real tool actions**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:2322:3`
+  - |-
+- **extreme 1920×280 letterboxes combat and tools, then restores fixed-width without losing state**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:2355:3`
+  - |-
+- **extreme 3840×1080 letterboxes combat and tools, then restores fixed-width without losing state**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:2355:3`
+  - |-
+- **playtest point grant is real, repeatable to 999, and reset requires confirmation**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:2710:1`
+  - |-
+- **failed playtest reset retains paused run and earned skills**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:2746:1`
+  - |-
+- **one-click top-grade grants are repeatable and preserve ordinary saves**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:2759:1`
+  - |-
+- **camp level button reaches 27 with natural SP and no extra healing**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:2779:1`
+  - |-
+- **in-tower level button gives a short exit hint; resource grants keep the run paused and intact**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:2794:1`
+  - |-
+- **resource write failures show errors without publishing grants**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:2813:1`
+  - |-
+- **full stone balance rejects the grant without changing the save**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:2830:1`
+  - "Cannot read properties of null (reading 'data')"
+- **tools checkpoint a locally paused restored run before enabling resource actions**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:2850:1`
+  - |-
+- **normal mode cannot invoke resource or level actions through tool methods**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:2868:1`
+  - 'game.showPlaytestResources is not a function'
+- **grouped tool menus fit 1280x720 without overlapping labels or buttons**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:2881:3`
+  - |-
+- **grouped tool menus fit 844x390 without overlapping labels or buttons**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:2881:3`
+  - |-
+- **grouped tool menus fit 1920x280 without overlapping labels or buttons**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:2881:3`
+  - |-
+- **tower entry artwork reuses requests and late loads cannot revive abandoned page**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:3390:1`
+  - |-
+- **stone battle art maps converted denominations rather than monster ranks and leaves rewards untouched**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:3456:1`
+  - |-
+- **wallet grade icons pair with quantities and release bindings on redraw**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:3475:1`
+  - |-
+- **approved resource icons render beside existing counters and XP feedback without altering values**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:3491:1`
+  - |-
+- **each pill shares its own art across apothecary, inventory cell and details without consuming pills**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:3530:1`
+  - |-
+- **backpack art preserves menu and battle hit targets, fallback and inventory navigation**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:3576:1`
+  - |-
+- **filters can clear empty results, sorting is stable and all navigation retains named peaks/presets**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:323:1`
+  - |-
+- **pill shop 844x390: buy without healing, then consume from inventory**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:424:54`
+  - |-
+- **pill shop 1280x720: buy without healing, then consume from inventory**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:424:54`
+  - |-
+- **boar uses three real one-shot phase clips, freezes by simulation time and never derives damage**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-monster-animation.test.mjs:80:1`
+  - 'setTowerDepth is not defined'
+- **only boars with explicit simulation state request motion; all legacy/static families remain compatible**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-monster-animation.test.mjs:102:1`
+  - 'setTowerDepth is not defined'
+- **missing or invalid motion falls back to static without leaking images or retry storms**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-monster-animation.test.mjs:112:1`
+  - 'setTowerDepth is not defined'
+- **async completion after clear does not create nodes; completion after destroy retains no resources**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-monster-animation.test.mjs:123:1`
+  - 'setTowerDepth is not defined'
+- **actor removal and recycled IDs do not retain phase clocks or sprite bindings**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-monster-animation.test.mjs:134:1`
+  - 'setTowerDepth is not defined'
+- **all nine hex floors can reach every authored wave with safe, finite spawns and unchanged IDs**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-run-arena.test.mjs:218:1`
+  - |-
+- **real Run falcon_elite: shot has authored damage, final range, warning and recovery CD**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-run-attacks.test.mjs:88:3`
+  - '7:falcon_elite'
+- **real Run centipede_elite: sweep has authored damage, final range, warning and recovery CD**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-run-attacks.test.mjs:88:3`
+  - '6:centipede_elite'
+- **real Run snake_boss: shot has authored damage, final range, warning and recovery CD**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-run-attacks.test.mjs:88:3`
+  - '5:snake_boss'
+- **falcon_elite advances, retreats and holds its distance band during cooldown**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-run-attacks.test.mjs:157:3`
+  - '7:falcon_elite'
+- **element windup, flight and per-kind cooldown survive pause, JSON restore and batched ticks**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-run-attacks.test.mjs:207:1`
+  - '7:falcon_elite'
+- **all nine full combat floors pay exact authored grades inside both count and value bounds**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-run-loot.test.mjs:66:1`
+  - |-
+- **forward, reverse and interleaved kill order use the same wave/local-ID plan on floors one and nine**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-run-loot.test.mjs:117:1`
+  - |-
+- **core visuals are already credited at the kill, persist through reload and never credit on touch or expiry**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-run-loot.test.mjs:197:1`
+  - 'floor 9, wave 5, kills 116'
+- **UI snapshot core summary reports denomination value separately from item count and rank sum**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-run-loot.test.mjs:217:1`
+  - 'floor 9, wave 5, kills 116'
+- **partial kills, retreat and death retain only actual drops and never receive a full-floor minimum**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-run-loot.test.mjs:243:1`
+  - |-
+- **corrupt loot identity, grades, monetary totals and core visuals are rejected on validation and restore**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-run-loot.test.mjs:278:1`
+  - 'floor 9, wave 5, kills 116'
+- **training performs actual kills and resets while every grade, wallet award and core visual stays empty**（基线已失败）
+  - `/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-run-loot.test.mjs:359:1`
+  - |-
+
+## 基线失败、本轮未同名失败
+
+- wallet 410: exact denomination quantities share one bounded row
+- wallet 0: exact denomination quantities share one bounded row
+- wallet 19999999999: exact denomination quantities share one bounded row

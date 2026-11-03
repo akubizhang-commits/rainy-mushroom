@@ -1,5 +1,7 @@
 # Cocos 迁移交付记录
 
+> 文档状态（2026-09-21）：历史设计/记录。不作为本轮新增地图或角色/奖励规则来源。 当前基线见[设计文档索引](design/design-document-index.md)。
+
 2026-09-14，完整游戏迁移到本机 Cocos Creator 3.8.8。工程与构建说明见 `../cocos-pilot/README.md`。
 
 ## 交付范围

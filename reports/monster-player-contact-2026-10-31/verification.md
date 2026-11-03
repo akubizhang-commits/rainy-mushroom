@@ -1,0 +1,173 @@
+# 怪物与玩家站位修复
+
+- 玩家移动被活着的怪物阻挡；怪物移动后分离，完全同点时有确定性退让，受场地及柱子约束。
+- 妖猪 Boss 按显示体型留站位空间，狂暴再扩大 20%；技能伤害半径不变。
+- 冲锋保留扫掠命中及预警终点；冲锋过程中允许攻击动画接触，命中和收招后恢复站位间距。
+- 相关回归 68/68 通过，Cocos Web 构建成功。
+- 在实际 Cocos 渲染器中以重合初始位置验证普通狼、妖猪 Boss、狂暴妖猪，1280×720 与 844×390 截图见本目录。狂暴图片为测试状态，不代表重新验收完整狂暴生命周期。
+- 全量 1478 项：1316 通过、162 失败。修改前运行及 HUD 专项对照复现剩余失败；未把全量结果称作通过。详情见日志。
+
+## 全量未通过项
+
+- sj_arc: visual polish preserves every combat tick, damage, RNG and input movement
+- sj_cross: visual polish preserves every combat tick, damage, RNG and input movement
+- sj_wanjian: visual polish preserves every combat tick, damage, RNG and input movement
+- evo_wuwo: visual polish preserves every combat tick, damage, RNG and input movement
+- sj_line: visual polish preserves every combat tick, damage, RNG and input movement
+- evo_tiandi: visual polish preserves every combat tick, damage, RNG and input movement
+- sj_shadow: visual polish preserves every combat tick, damage, RNG and input movement
+- equipped passives and rolled gear aggregate with combat damage bases and multiplicative defense
+- passives cost one point per compressed rank and preserve all terminal effects
+- forge categories and tiers switch without spending and default from realm
+- forge shows four current tiers and four locked future previews
+- sect entries share cultivation state and keep tower separate from inheritance peaks
+- forge overlay with category and tier selection 1280x720
+- forge overlay with category and tier selection 844x390
+- batch draw failures preserve complete state and can retry
+- disabled and stale forge actions cannot draw
+- danxia 1280x720: main hall opens shop, purchase persists, close and revisit reset
+- danxia 844x390: main hall opens shop, purchase persists, close and revisit reset
+- forge reveal and summary preserve awards 1280
+- forge reveal and summary preserve awards 844
+- single reveal completes without a phantom second award and stops effects on close
+- reveals mark only top-quality rewards with gold and never roll during effects
+- summary cards settle in order and effects release their nodes when leaving
+- all ten reveals finish at the overview without an eleventh draw
+- repeat forging uses the original pool and discounted batch price atomically
+- single result contains art and name with one icon-priced repeat action
+- settlement uses backpack cell and icon geometry 1280
+- settlement uses backpack cell and icon geometry 844
+- forge: icon close and outside dismissal preserve state without closing on content taps
+- pills: icon close and outside dismissal preserve state without closing on content taps
+- pill quantity and zero balance 1280
+- pill quantity and zero balance 844
+- requested playtest stays read-only and never writes the ordinary save when the initial copy fails
+- same-mode retry can recover a failed isolated copy without touching ordinary progress
+- ordinary progress becomes writable only after an explicit switch from the failed playtest
+- successful sync re-enables current-page buttons and clamps obsolete scroll (ordinary)
+- successful sync re-enables current-page buttons and clamps obsolete scroll (playtest)
+- playtest identity survives partial healing, full-HP redraw, and local skill-detail navigation
+- skill page hides battle vitals and keeps rank hints below icons
+- economy v2 hides the wallet on hall and skills but shows it in relevant pages
+- weapon draw rejects insufficient spiritStones without any state or save change
+- weapon draw rejects insufficient contribution without any state or save change
+- weapon draw atomically pays 100 stones and contribution and preserves the rolled instance
+- skill pane uses shared weapon damage once after equipping an affix instance
+- first special skill book costs 200 stones atomically and subsequent ranks do not rebuy it
+- three research purchases cost 800/1600/2400 stones and failed saves grant no points
+- manual healing works after sync recovery and a failed pill save consumes neither HP nor inventory
+- actual tool buttons preserve paused snapshots and HP, and preferences do not publish on save failure
+- a failed pause checkpoint blocks switching until the real retry button commits it
+- paused and withdrawn loot displays only the 0 credited spirit stones near the wallet cap
+- paused and withdrawn loot displays only the 1 credited spirit stones near the wallet cap
+- paused and withdrawn loot displays only the 10 credited spirit stones near the wallet cap
+- capped floor-three first-clear popup excludes skill points from stone overflow
+- skill arrow follows purchase eligibility: realm cap with spare points
+- skill arrow follows purchase eligibility: no points below cap
+- skill arrow follows purchase eligibility: stage locked
+- skill arrow follows purchase eligibility: no tutorial gate
+- skill arrow follows purchase eligibility: no prerequisite gate
+- skill arrow follows purchase eligibility: unlocked first rank
+- skill arrow follows purchase eligibility: current rank can grow
+- skill arrow follows purchase eligibility: absolute maximum
+- skill arrow disappears at the realm cap after purchase and returns after refund
+- dependency connections remain stable across learning and refund without mutating saved state
+- async skill artwork preserves all 16 click targets, clipping, badges and camp transactions (844x390)
+- async skill artwork preserves all 16 click targets, clipping, badges and camp transactions (1024x600)
+- one failed skill image leaves its glyph and camp controls usable alongside loaded artwork
+- destroying the real host releases loaded icon art and safely ignores pending completions
+- compact skill labels show passive mastery over loaded art and right-aligned points (1280x720)
+- physical type, flow and level are separate nonoverlapping tags (1280x720)
+- independent skills have no dependency arrows (1280x720)
+- realm blocks group all 26 skills with five-slot rows and no label column (1280x720)
+- nine-stage UI keeps compact nodes and fixed footer targets (1280x720)
+- compact skill labels show passive mastery over loaded art and right-aligned points (844x390)
+- physical type, flow and level are separate nonoverlapping tags (844x390)
+- independent skills have no dependency arrows (844x390)
+- realm blocks group all 26 skills with five-slot rows and no label column (844x390)
+- nine-stage UI keeps compact nodes and fixed footer targets (844x390)
+- compact skill labels show passive mastery over loaded art and right-aligned points (1024x600)
+- physical type, flow and level are separate nonoverlapping tags (1024x600)
+- independent skills have no dependency arrows (1024x600)
+- realm blocks group all 26 skills with five-slot rows and no label column (1024x600)
+- nine-stage UI keeps compact nodes and fixed footer targets (1024x600)
+- nine-stage UI plus/minus retain selection and vertical scroll in the viewport-wide tree (1280x720)
+- nine-stage UI plus/minus retain selection and vertical scroll in the viewport-wide tree (844x390)
+- nine-stage UI plus/minus retain selection and vertical scroll in the viewport-wide tree (1024x600)
+- skill footer is stationary through commits, failures, read-only and selection (844x390)
+- skill footer displays actual unlearned and maximum ranks (844x390)
+- skill footer is stationary through commits, failures, read-only and selection (1024x600)
+- skill footer displays actual unlearned and maximum ranks (1024x600)
+- skill form, next-rank and future motion details fit the independent scroll (1280x720)
+- skill form, next-rank and future motion details fit the independent scroll (844x390)
+- nine-stage UI shows locked learning without writes below the starting phase
+- nine-stage UI failed learning keeps scroll and assets, shows a fixed error, and retries once
+- nine-stage UI evo_wanjian first-rank condition matches its stage without changing higher-rank gates
+- nine-stage UI evo_tiandi first-rank condition matches its stage without changing higher-rank gates
+- nine-stage UI evo_wuwo first-rank condition matches its stage without changing higher-rank gates
+- nine-stage UI evo_sixiang first-rank condition matches its stage without changing higher-rank gates
+- paused tower skills show only plus, keep its hit area, and commit a legal upgrade (844x390)
+- paused tower skills show only plus, keep its hit area, and commit a legal upgrade (1024x600)
+- host decreaseSkill is rejected outside the camp library (hall)
+- host decreaseSkill is rejected outside the camp library (tower)
+- host decreaseSkill is rejected outside the camp library (battle)
+- host decreaseSkill is rejected outside the camp library (skills)
+- host decreaseSkill remains allowed in the camp library and preserves books
+- host respecSkills is rejected outside the camp library (hall)
+- host respecSkills is rejected outside the camp library (tower)
+- host respecSkills is rejected outside the camp library (battle)
+- host respecSkills is rejected outside the camp library (skills)
+- host respecSkills remains allowed in the camp library and preserves books
+- landscape 1280×720 pause and tool targets fit in two columns and keep real tool actions
+- landscape 844×390 pause and tool targets fit in two columns and keep real tool actions
+- extreme 1920×280 letterboxes combat and tools, then restores fixed-width without losing state
+- extreme 3840×1080 letterboxes combat and tools, then restores fixed-width without losing state
+- lightweight HUD stays fixed and keeps safe targets at 1280×720
+- lightweight HUD stays fixed and keeps safe targets at 1024×600
+- lightweight HUD stays fixed and keeps safe targets at 844×390
+- lightweight HUD stays fixed and keeps safe targets at 1920×280
+- passive skills do not imply damaging aura rings and rendering remains read-only
+- playtest point grant is real, repeatable to 999, and reset requires confirmation
+- failed playtest reset retains paused run and earned skills
+- one-click top-grade grants are repeatable and preserve ordinary saves
+- camp level button reaches 27 with natural SP and no extra healing
+- in-tower level button gives a short exit hint; resource grants keep the run paused and intact
+- resource write failures show errors without publishing grants
+- full stone balance rejects the grant without changing the save
+- tools checkpoint a locally paused restored run before enabling resource actions
+- normal mode cannot invoke resource or level actions through tool methods
+- grouped tool menus fit 1280x720 without overlapping labels or buttons
+- grouped tool menus fit 844x390 without overlapping labels or buttons
+- grouped tool menus fit 1920x280 without overlapping labels or buttons
+- character slash follows a real short windup across a 3x frame and cannot cause damage
+- tower entry artwork reuses requests and late loads cannot revive abandoned page
+- falcon and ape floor cards request matching artwork without obsolete boss portraits
+- stone battle art maps converted denominations rather than monster ranks and leaves rewards untouched
+- wallet grade icons pair with quantities and release bindings on redraw
+- approved resource icons render beside existing counters and XP feedback without altering values
+- each pill shares its own art across apothecary, inventory cell and details without consuming pills
+- backpack art preserves menu and battle hit targets, fallback and inventory navigation
+- target health stays transparent and immediately below top resources 720
+- target health stays transparent and immediately below top resources 600
+- playtestSpiritStones/0 is atomic on storage failure and stale writes
+- playtestSpiritStones/1 is atomic on storage failure and stale writes
+- playtestSpiritStones/2 is atomic on storage failure and stale writes
+- playtestSpiritStones/3 is atomic on storage failure and stale writes
+- playtestContribution/ is atomic on storage failure and stale writes
+- playtestMaxLevel/ is atomic on storage failure and stale writes
+- assisted campaign seeds once and cannot mutate ordinary progression
+- playtest storage retains campaign stale-write and disk-failure protections
+- set remaining SP is exact, spendable, idempotent and reloadable without changing normal saves
+- 999 bonus SP cannot bypass the level-one or level-two active rank caps
+- reset replaces the whole experience profile and clears active run, receipts and bonus
+- paused SP grants preserve the entire active snapshot and never enter the combat loadout
+- normal stores reject bonus-bearing records and normal overspends remain corrupt
+- playtestReset preserves atomicity on write/read failure and rejects stale stores
+- playtestSkillPoints preserves atomicity on write/read failure and rejects stale stores
+- all nine full combat floors pay exact authored grades inside both count and value bounds
+- forward, reverse and interleaved kill order use the same wave/local-ID plan on floors one and nine
+- core visuals are already credited at the kill, persist through reload and never credit on touch or expiry
+- UI snapshot core summary reports denomination value separately from item count and rank sum
+- partial kills, retreat and death retain only actual drops and never receive a full-floor minimum
+- corrupt loot identity, grades, monetary totals and core visuals are rejected on validation and restore
+- training performs actual kills and resets while every grade, wallet award and core visual stays empty

@@ -1,0 +1,72 @@
+// Economy v2. Wallet amounts are integer lower-grade spirit stones.
+// Combat's validated v1 `cores` receipts remain opaque reward units solely for
+// replay/save compatibility; they are not demon cores or a spendable wallet.
+import { CORE_RANK_VALUES } from './TowerLoot.js'
+
+export const STONE_DRAW_COST = 100
+export const STONE_STARTER = 500
+export const STONE_CAP = 20_000_000_000
+export const STONE_VALUES = Object.freeze([1, 100, 10_000, 1_000_000])
+export const STONE_NAMES = Object.freeze(['下品', '中品', '上品', '极品'])
+
+// Point vouchers are finite campaign rewards, never repeatable combat income.
+export const DIANJUAN_DRAW_COST = 100
+export const DIANJUAN_STARTER = 10 * DIANJUAN_DRAW_COST
+export const DIANJUAN_CAMPAIGN_TOTAL = 3000
+export const FIRST_CLEAR_REWARDS = Object.freeze([
+  { kind: 'skillPoints', name: '功法点', quantity: 4, amount: 4 },
+  { kind: 'spiritStones', name: '下品灵石', quantity: 100, amount: 100, grade: 0 },
+  { kind: 'contribution', name: '点眷', quantity: 1000, amount: 1000 },
+  { kind: 'skillPoints', name: '功法点', quantity: 7, amount: 7 },
+  { kind: 'spiritStones', name: '中品灵石', quantity: 3, amount: 300, grade: 1 },
+  { kind: 'contribution', name: '点眷', quantity: 1000, amount: 1000 },
+  { kind: 'skillPoints', name: '功法点', quantity: 9, amount: 9 },
+  { kind: 'spiritStones', name: '中品灵石', quantity: 4, amount: 400, grade: 1 },
+  { kind: 'contribution', name: '点眷', quantity: 1000, amount: 1000 },
+].map(Object.freeze))
+
+const uint = value => {
+  if (!Number.isSafeInteger(value) || value < 0) throw new RangeError('Invalid spirit stone amount')
+  return value
+}
+export function legacyRewardToStones(units) {
+  return uint(uint(units) * 10)
+}
+export function splitSpiritStones(amount) {
+  let remaining = uint(amount)
+  const counts = [0, 0, 0, 0]
+  for (let i = 3; i >= 0; i--) {
+    counts[i] = Math.floor(remaining / STONE_VALUES[i])
+    remaining %= STONE_VALUES[i]
+  }
+  return counts
+}
+export function formatSpiritStones(amount) {
+  const counts = splitSpiritStones(amount)
+  return [3, 2, 1, 0].filter(i => counts[i]).map(i => `${counts[i]}${STONE_NAMES[i]}`).join(' ') || '0下品'
+}
+export function stoneLootFromLegacy(loot) {
+  if (!loot) return null
+  const byGrade = [0, 0, 0, 0]
+  // Denominate each receipt independently: the summary describes the dropped
+  // bundles, while the wallet may subsequently consolidate/change denominations.
+  loot.byRank.forEach((count, index) => {
+    const unit = splitSpiritStones(legacyRewardToStones(CORE_RANK_VALUES[index + 1]))
+    unit.forEach((value, grade) => { byGrade[grade] += value * uint(count) })
+  })
+  return { byGrade, count: byGrade.reduce((a, b) => a + b, 0),
+    value: byGrade.reduce((a, b, i) => a + b * STONE_VALUES[i], 0) }
+}
+export function spiritStoneLootSummary(snapshot) {
+  if (!snapshot?.loot) return null
+  const byRank = Array(7).fill(0)
+  for (const kill of snapshot.killLedger) if (kill.coreRank > 0) byRank[kill.coreRank - 1]++
+  return stoneLootFromLegacy({ byRank })
+}
+// Base cultivation weight, independent of the random spirit-stone roll.
+// Authored tower units use TowerCultivationRewards to apply the floor budget.
+export function demonEssenceXp(rank, role) {
+  const quantity = { normal: 1, elite: 5, boss: 10 }[role]
+  if (!Number.isInteger(rank) || rank < 1 || rank > 9 || !quantity) throw new RangeError('Invalid demon essence')
+  return rank * quantity
+}

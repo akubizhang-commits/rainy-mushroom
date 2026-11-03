@@ -17,16 +17,16 @@ function assertPackaged(root,expected){
  assert.deepEqual(settings.assets.subpackages,expected);assert.deepEqual(game.subpackages.map(entry=>entry.name),expected);assert.deepEqual(Object.keys(report.subpackageBytes),expected);assert.ok(report.mainBytes<report.mainLimitBytes)
  for(const entry of game.subpackages){assert.ok(existsSync(join(root,entry.root,'config.json')));assert.equal(readFileSync(join(root,entry.root,'game.js'),'utf8'),"require('./index.js');\n");assert.ok(!existsSync(join(root,'assets',entry.name)))}
 }
-test('WeChat packaging relocates the survivor build: internal, main and the survivor bundle',()=>{
- withBuild([...FIXED,'survivor'],root=>assertPackaged(root,[...FIXED,'survivor']))
+test('WeChat packaging relocates the resources build: internal, main and the resources bundle',()=>{
+ withBuild([...FIXED,'resources'],root=>assertPackaged(root,[...FIXED,'resources']))
 })
-test('optional bundles (resources, survivor) are appended only when built',()=>{
- withBuild([...FIXED,'resources','survivor'],root=>assertPackaged(root,[...FIXED,'resources','survivor']))
- withBuild(FIXED,root=>{assert.ok(!existsSync(join(root,'assets/survivor')));assertPackaged(root,FIXED)})
+test('optional bundles (resources) are appended only when built',()=>{
+ withBuild([...FIXED,'resources'],root=>assertPackaged(root,[...FIXED,'resources']))
+ withBuild(FIXED,root=>{assert.ok(!existsSync(join(root,'assets/resources')));assertPackaged(root,FIXED)})
 })
 test('WeChat packaging still requires every fixed bundle',()=>{
  withBuild(['internal'],root=>assert.throws(()=>packageWechat(root),/Missing built bundle main/))
 })
-test('WeChat packaging keeps the 4 MiB per-subpackage budget for survivor',()=>{
- withBuild([...FIXED,'survivor'],root=>assert.throws(()=>packageWechat(root),/exceeds project budget/),{survivor:4*1024*1024+1})
+test('WeChat packaging keeps the 4 MiB per-subpackage budget for resources',()=>{
+ withBuild([...FIXED,'resources'],root=>assert.throws(()=>packageWechat(root),/exceeds project budget/),{resources:4*1024*1024+1})
 })

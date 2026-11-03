@@ -1,0 +1,519 @@
+{
+  "schema_version": 1,
+  "status": "approved_doc64_mechanics_calibration",
+  "id": "boar_boss",
+  "name": "裂岩獠王",
+  "rank": 3,
+  "hp": 18400,
+  "damage": 9.332,
+  "move_speed": 138.6,
+  "body_radius": 42,
+  "floor": 1,
+  "wave": 20,
+  "sources": [
+    "tower-design.json",
+    "floor01-encounters.json",
+    "rank-attributes.json",
+    "../02-tower-and-waves.md",
+    "../08-beast-bestiary.md",
+    "../11-economy-v2.md",
+    "../13-rank-calibration.md",
+    "../15-floor01-encounter-design.md",
+    "../16-boar-boss-design.md"
+  ],
+  "units": {
+    "distance": "world_units",
+    "time": "simulation_seconds",
+    "angle": "degrees_counterclockwise_from_positive_x",
+    "y_axis": "up",
+    "target_lock_s": "elapsed_since_each_segment_windup_start",
+    "width": "full_attack_width_before_player_radius_expansion",
+    "range": "charge_center_travel_or_gore_sector_radius",
+    "active_s": "maximum_duration_clipped_by_boundary_or_cancellation",
+    "damage": "final_authored_base_damage_no_extra_attack_rank_wave_time_multiplier"
+  },
+  "player_reference": {
+    "hp": 116.64,
+    "move_speed": 220,
+    "body_radius": 18,
+    "assumed_reaction_delay_s": 0.2,
+    "escape_safety_margin": 8
+  },
+  "arena": {
+    "id": "courtyard-v1",
+    "bounds": {
+      "xmin": -912,
+      "xmax": 978,
+      "ymin": -1140,
+      "ymax": 1020
+    },
+    "player_start": {
+      "x": 33,
+      "y": -60
+    },
+    "boss_start": {
+      "x": 33,
+      "y": 870
+    },
+    "boss_start_policy": "preferred_N_portal_candidate_not_forced_use_floor01_batch_safe_selection_if_occupied",
+    "player_center_bounds": {
+      "xmin": -894,
+      "xmax": 960,
+      "ymin": -1122,
+      "ymax": 1002
+    },
+    "boss_center_bounds": {
+      "xmin": -870,
+      "xmax": 936,
+      "ymin": -1098,
+      "ymax": 978
+    },
+    "internal_collision_obstacles": [],
+    "actor_bodies_block_player_movement": false,
+    "passive_contact_damage": 0,
+    "note": "本首层设计的身体半径用于受击、攻击与边界；怪物不构成硬阻挡，不挤推玩家。正式运行时尚未接入这些规则。"
+  },
+  "scheduler": {
+    "scope": "all_floor01_normal_elite_boss_attacks_including_contact_bites",
+    "concurrent_entity_cap": 24,
+    "entity_cap_rule": "alive+reserved<=24",
+    "danger_budget": 2,
+    "cost_by_role": {
+      "normal": 1,
+      "elite": 2,
+      "boss": 2
+    },
+    "reserve_from": "windup_start",
+    "release_at": "entire_action_recovery_end",
+    "phase2_charge_holds_reservation_between_segments": true,
+    "minimum_new_windup_gap_s": 0.25,
+    "ordinary_minimum_windup_s": 0.6,
+    "queue_order": [
+      "continuously_eligible_since_ascending",
+      "spawn_instance_id_ascending"
+    ],
+    "head_of_line_waits_for_full_budget": true,
+    "drop_request_when_ineligible": true,
+    "unscheduled_behavior": "approach_or_reposition_without_damage_or_body_blocking",
+    "player_hp_loss_blocks_new_windups_s": 0.6,
+    "phase_transition_blocks_new_windups": true,
+    "offscreen_actions_may_not_bypass_budget": true
+  },
+  "visibility": {
+    "effective_view": "current_camera_unoccluded_playfield_rectangle_in_world_units",
+    "body_edge_margin_screen_px": 8,
+    "before_and_during_windup": "boss_and_player_disks_fully_visible_inside_effective_view_with_margin",
+    "telegraph_required_continuously": true,
+    "at_lock_require_one_escape_probe": true,
+    "escape_probe_player_disk_stays_in_arena_and_effective_view": true,
+    "visible_telegraph": "render_actual_attack_shape_clipped_to_arena_and_effective_view",
+    "clipped_path_end": "continuation_mark_not_a_false_closed_safe_end",
+    "offscreen_boss": "approach_at_authored_move_speed_no_attack_no_remote_windup",
+    "offscreen_direction_hint": "optional_information_only_never_counts_as_attack_warning",
+    "visibility_loss_during_windup": "cancel",
+    "visibility_loss_during_active": "stop_future_damage_and_motion_then_recover",
+    "camera_change_during_locked_windup": "recheck_frozen_escape_probes_cancel_if_all_invalid",
+    "reentry": "new_full_windup_after_cooldown_no_resume",
+    "preview_without_camera": "show_geometry_only_mark_visibility_unverified"
+  },
+  "attacks": [
+    {
+      "id": "charge",
+      "name": "裂岩直冲",
+      "shape": "capsule",
+      "windup_s": 1.05,
+      "active_s": 0.45,
+      "recovery_s": 0.9,
+      "cooldown_s": 5,
+      "range": 324,
+      "width": 84,
+      "damage": 14.928,
+      "target_lock_s": 0.25,
+      "dash_speed": 720,
+      "select_distance_min": 180,
+      "select_distance_max": 300,
+      "danger_cost": 2,
+      "windup_move_speed": 0,
+      "recovery_move_speed": 0,
+      "tracking": "rotate_toward_current_player_until_lock_then_freeze_origin_direction_endpoint",
+      "path_length": "min(range,ray_distance_to_boss_center_bounds)",
+      "minimum_clipped_path_length": 120,
+      "hit_test": "relative_swept_disk_radius_42_against_player_disk_radius_18_during_active_only",
+      "telegraph_is_future_path_not_instant_full_path_damage": true,
+      "stop_on_player_hit": false,
+      "damage_repeats_per_segment": 1,
+      "escape_probe_distance": 68,
+      "escape_probe_directions": [
+        "left_perpendicular_to_locked_heading",
+        "right_perpendicular_to_locked_heading"
+      ],
+      "boundary_recovery_s": 1.2,
+      "boundary_ends_remaining_combo": true,
+      "on_boundary": "stop_at_first_contact_no_bounce_no_splash_no_extra_damage",
+      "phase2": {
+        "segments": 2,
+        "snapshot_segment_count_at_action_start": true,
+        "each_segment_repeats_full_windup": true,
+        "each_segment_reacquires_target": true,
+        "each_segment_rechecks_visibility_escape_and_minimum_path": true,
+        "second_segment_uses_selection_distance_gate": false,
+        "second_segment_minimum_target_distance": 60,
+        "second_segment_distance_check_at": [
+          "second_windup_start",
+          "second_target_lock"
+        ],
+        "between_segments_recovery_s": 0.9,
+        "final_recovery_s": 1.2,
+        "cooldown_starts_after_final_or_aborted_recovery": true,
+        "shared_cooldown_with_phase1": true,
+        "distinct_segment_attack_instance_ids": true,
+        "maximum_damage_if_both_segments_hit": 29.856,
+        "nominal_total_duration_s": 5.1,
+        "note": "第二段不是自动折返命中；在当前落点重新预警1.05秒，第0.25秒锁定。若距离小于60、视野或逃离条件失败，放弃第二段并做0.6秒取消收招。"
+      },
+      "damage_class": "heavy"
+    },
+    {
+      "id": "gore",
+      "name": "獠牙拱击",
+      "shape": "sector",
+      "windup_s": 1.25,
+      "active_s": 0.18,
+      "recovery_s": 0.8,
+      "cooldown_s": 2.4,
+      "range": 132,
+      "radius": 132,
+      "angle_deg": 100,
+      "damage": 9.332,
+      "target_lock_s": 0.15,
+      "select_distance_min": 0,
+      "select_distance_max": 150,
+      "danger_cost": 2,
+      "windup_move_speed": 0,
+      "active_move_speed": 0,
+      "recovery_move_speed": 0,
+      "tracking": "rotate_toward_current_player_until_lock_then_freeze_center_and_heading",
+      "zero_distance_heading": "last_nonzero_facing",
+      "hit_test": "player_disk_intersects_fixed_filled_sector_including_arc_and_radial_edges",
+      "damage_repeats_per_segment": 1,
+      "escape_probe_distance": 158,
+      "escape_probe_directions": [
+        "away_from_boss",
+        "left_perpendicular_to_locked_heading",
+        "right_perpendicular_to_locked_heading"
+      ],
+      "knockback": 0,
+      "phase2": {
+        "segments": 1,
+        "unchanged": true,
+        "maximum_damage_if_both_segments_hit": 18.664
+      },
+      "damage_note": "沿用13号稿小招规则，20×0.6=12已经写入damage；读取时不能再乘0.6。",
+      "damage_class": "light"
+    }
+  ],
+  "selection": {
+    "distance_metric": "boss_center_to_player_center",
+    "priority": [
+      "gore_if_distance_at_most_150_and_ready",
+      "charge_if_distance_180_to_300_and_ready"
+    ],
+    "distance_150_to_180": "approach_until_gore_eligible",
+    "beyond_300_or_offscreen": "approach_at_154",
+    "inside_150_but_gore_on_cooldown": "idle_or_reposition_without_contact_damage",
+    "on_entry_cooldowns_s": {
+      "charge": 0,
+      "gore": 0
+    },
+    "initial_facing": "toward_player",
+    "per_action_clock": "simulation_time_pauses_with_game",
+    "cooldown_start": "last_recovery_end_including_cancel_control_or_boundary_recovery",
+    "failed_preflight_before_first_windup": "no_cooldown_no_damage_no_budget_reservation",
+    "cooldown_during_other_actions": true,
+    "phase_change_resets_cooldowns": false,
+    "movement_while_waiting_for_budget": "approach_or_idle_no_damage",
+    "phase2_invalid_second_segment": "abort_remaining_segment_no_wait_no_conversion_to_gore"
+  },
+  "phases": [
+    {
+      "id": "entry",
+      "duration_s": 1.2,
+      "starts_at": "boss_actual_materialization",
+      "spawn_warning_counts_toward_entry": false,
+      "overlaps_spawn_grace_s": 0.8,
+      "boss_can_receive_damage": true,
+      "boss_moves": false,
+      "new_enemy_windups_allowed": false,
+      "existing_actions": "continue_no_retroactive_cancel",
+      "ends_early_if_boss_dies": true,
+      "next": "phase1_or_pending_phase2_if_alive"
+    },
+    {
+      "id": "phase1",
+      "hp_above": 1900,
+      "charge_segments": 1,
+      "gore_segments": 1
+    },
+    {
+      "id": "phase2_transition",
+      "trigger": "first_hp_at_most_1900_while_alive",
+      "trigger_once": true,
+      "duration_s": 1.2,
+      "interrupt_windup": true,
+      "allow_current_active_and_recovery_to_finish": true,
+      "wait_for_all_existing_actions_to_release_budget": true,
+      "block_new_requests_from_threshold_crossing": true,
+      "boss_can_receive_damage": true,
+      "boss_moves": false,
+      "invulnerable": false,
+      "healing": 0,
+      "damage": 0,
+      "note": "转场计时从既有动作全部结束、获得2点预算时开始；转场结束才采用双冲，不追补当前第一阶段动作。"
+    },
+    {
+      "id": "phase2",
+      "hp_at_most": 1900,
+      "charge_segments": 2,
+      "gore_segments": 1,
+      "hp_damage_and_normal_speed_unchanged": true
+    }
+  ],
+  "cancellation": {
+    "ordinary_damage_interrupts": false,
+    "existing_hard_control_interrupts_windup_active_and_remaining_combo": true,
+    "add_new_control_or_stagger_system": false,
+    "cancel_recovery_s": 0.6,
+    "control_recovery_rule": "max(0.6,remaining_current_recovery,remaining_existing_control)",
+    "simultaneous_end_condition_priority": [
+      "death",
+      "boundary_recovery_at_least_1.2s",
+      "other_cancellation"
+    ],
+    "living_cancel_consumes_full_used_attack_cooldown": true,
+    "death": "remove_future_hit_tests_windups_remaining_segments_and_budget_immediately",
+    "death_undoes_already_collected_same_tick_contacts": false,
+    "death_does_not_cancel_required_support_batches": true,
+    "pause": "freeze_all_timers_and_state_no_cancel_no_wall_clock_catchup"
+  },
+  "damage_resolution": {
+    "attack_instance_id": "wave_instance/unit_id/action_sequence/segment_index",
+    "unit_id_source": "floor01_encounters_batch_unit_ids",
+    "prefixed_spawn_instance_rule": "reuse_wave_instance_prefix_once",
+    "dedup_key": "attack_instance_id/player_id",
+    "maximum_contacts_per_key": 1,
+    "consume_key_even_if_protected_or_fully_blocked": true,
+    "player_global_damage_protection_s": 0.6,
+    "protection_starts": "actual_player_hp_loss",
+    "same_tick_candidate_choice": [
+      "highest_post_mitigation_damage",
+      "attack_instance_id_ascending"
+    ],
+    "at_most_one_enemy_hp_damage_event_per_player_per_tick": true,
+    "no_passive_contact_or_additional_tusk_hit": true,
+    "extra_attack_damage_multiplier": 1,
+    "boss_recovery_incoming_damage_multiplier": 1,
+    "on_player_hp_loss": "no_new_enemy_windups_for_0.6s_existing_actions_continue_without_resetting_dedup",
+    "tick_order": [
+      "advance_existing_motion_and_collect_contacts_from_actors_alive_at_tick_start",
+      "deduplicate_and_apply_player_and_enemy_damage_as_one_batch",
+      "latch_half_hp_or_death_support_release_once",
+      "resolve_deaths_and_cancel_future_attacks",
+      "if_player_dead_mark_wave_failed_before_clear_check",
+      "otherwise_advance_required_spawns_phase_and_attack_requests",
+      "check_full_clear_and_submit_rewards_once"
+    ]
+  },
+  "support": {
+    "wave_id": "tower-f01-w20",
+    "planned_required": 9,
+    "boss_count": 1,
+    "total": 8,
+    "composition": {
+      "boar_normal": 4,
+      "wolf_normal": 2,
+      "spider_normal": 2
+    },
+    "elite_count": 0,
+    "spawn_contract_source": "floor01-encounters.json",
+    "boss_spawn": {
+      "encounter_batch_id": "f01w20b01",
+      "unit_id": "f01w20b01u01",
+      "preferred_portal": "N",
+      "warning_s": 1.2,
+      "entry_s": 1.2,
+      "entry_starts_at": "actual_materialization",
+      "spawn_grace_s": 0.8,
+      "entry_overlaps_spawn_grace": true
+    },
+    "batches": [
+      {
+        "id": "opening",
+        "id_role": "support_group_not_a_new_spawn_batch",
+        "encounter_batch_ids": [
+          "f01w20b02",
+          "f01w20b03",
+          "f01w20b04"
+        ],
+        "trigger": "wave_start",
+        "count": 4,
+        "composition": {
+          "boar_normal": 2,
+          "wolf_normal": 1,
+          "spider_normal": 1
+        }
+      },
+      {
+        "id": "half_or_death",
+        "id_role": "support_group_not_a_new_spawn_batch",
+        "encounter_batch_ids": [
+          "f01w20b05",
+          "f01w20b06",
+          "f01w20b07"
+        ],
+        "trigger": "first_boss_hp_at_most_1900_or_boss_death",
+        "count": 4,
+        "composition": {
+          "boar_normal": 2,
+          "wolf_normal": 1,
+          "spider_normal": 1
+        }
+      }
+    ],
+    "register_all_instances_as_pending_at_wave_start": true,
+    "pending_includes_dormant_unreleased_batch": true,
+    "ledger_states": [
+      "pending",
+      "reserved",
+      "alive",
+      "killed"
+    ],
+    "ledger_invariant": "planned_required=pending+reserved+alive+killed",
+    "entity_cap_rule": "alive+reserved<=24",
+    "reservation_transitions": {
+      "pending_to_reserved": "valid_slot_and_capacity_then_begin_full_warning",
+      "reserved_to_alive": "actual_materialization_after_warning_and_safety_recheck",
+      "reserved_to_pending": "invalid_position_release_reservation_retry_with_same_unit_id",
+      "alive_to_killed": "real_death_only"
+    },
+    "batch_release_idempotency_key": "wave_instance/encounter_batch_id",
+    "spawn_instance_id": "unit_id_from_floor01_encounters_batch_unit_ids",
+    "optional_spawn_instance_prefix": "wave_instance/unit_id",
+    "spawn_warning_s": 0.9,
+    "spawn_emit_step_s": 0.22,
+    "spawn_emit_index_base": 0,
+    "spawn_emit_step_scope": "each_encounter_batch_not_the_aggregate_support_group",
+    "spawn_warning_starts_at": "successful_reservation",
+    "materialize_not_before": "max(batch_trigger_time+at_s+warning_s+unit_index*emit_step_s,reserved_at+warning_s)",
+    "spawn_positions_owner": "floor01_encounters_wave20_batches_and_arena_portals",
+    "spawn_reserved_portals": [
+      "S",
+      "SW"
+    ],
+    "spawn_minimum_center_distance_from_player": 280,
+    "spawn_minimum_center_spacing": 92,
+    "spawn_body_gap": 16,
+    "spawn_distance_rule": "player_distance>=280;distance_to_alive_or_reserved>=max(92,r1+r2+16)",
+    "spawn_safe_at_warning_and_materialization": true,
+    "changed_spawn_position_restarts_full_warning": true,
+    "new_actor_attack_delay_s": 0.8,
+    "new_actor_attack_delay_starts_at": "actual_materialization",
+    "new_actor_can_receive_damage_during_delay": true,
+    "spawn_markers_deal_damage": false,
+    "spawn_markers_consume_attack_budget": false,
+    "spawn_markers_consume_entity_capacity": true,
+    "invalid_or_full_capacity": "keep_pending_retry_no_discard_no_kill_credit",
+    "boss_dies_first": "finish_all_required_spawns_and_kills_while_player_alive",
+    "player_dies": "stop_failed_wave_no_forced_spawns_no_clear_rewards",
+    "infinite_summoning": false,
+    "stuck_reorientation_after_s": 6,
+    "stuck_safe_relocation_after_s": 15,
+    "stuck_timer_excludes": [
+      "intentional_windup",
+      "intentional_recovery"
+    ],
+    "relocation_retains": [
+      "unit_id",
+      "hp",
+      "released_support_state"
+    ],
+    "first_floor_spiders": {
+      "archetypes": [
+        "spider_normal",
+        "spider_elite"
+      ],
+      "allowed": [
+        "crawl",
+        "telegraphed_melee_bite"
+      ],
+      "forbidden": [
+        "web",
+        "poison",
+        "damage_over_time",
+        "projectile",
+        "bullet_pattern",
+        "slow_field"
+      ]
+    }
+  },
+  "clear": {
+    "all_required": [
+      "player_alive",
+      "pending_equals_0",
+      "reserved_equals_0",
+      "alive_equals_0",
+      "killed_equals_9",
+      "all_referenced_support_encounter_batches_released",
+      "no_unregistered_required_spawn_tasks"
+    ],
+    "boss_death_alone_is_clear": false,
+    "same_tick_player_and_last_enemy_death": "wave_failed",
+    "rewards": "existing_economy_v2_only_commit_after_full_wave_clear",
+    "earlier_committed_wave_rewards_survive_failure": true,
+    "save_failure": "freeze_pending_settlement_retry_same_commit_key",
+    "offscreen_or_stuck_enemy": "retain_ledger_safely_reposition_never_count_as_killed"
+  },
+  "preview": {
+    "purpose": "shape_and_timing_review_only_not_formal_gameplay",
+    "attack_demo_origin": {
+      "x": 33,
+      "y": 260
+    },
+    "attack_demo_origin_is_spawn_position": false,
+    "attack_definitions": [
+      "charge",
+      "gore"
+    ],
+    "phase2_uses": "charge.phase2_with_same_base_segment_parameters",
+    "states": {
+      "windup_tracking": "dashed_outline_and_facing_arrow_shape_rotates",
+      "windup_locked": "solid_outline_and_lock_tick_shape_frozen",
+      "active_charge": "moving_body_disk_and_current_tick_sweep_future_route_faint",
+      "active_gore": "fixed_filled_sector",
+      "recovery": "gray_body_no_harmful_area",
+      "phase_transition": "body_only_no_damage_shape"
+    },
+    "do_not_show": [
+      "whole_charge_capsule_dealing_damage_simultaneously",
+      "phantom_second_charge_without_warning",
+      "web_poison_or_shockwave"
+    ],
+    "labels": [
+      "design_preview",
+      "segment_number",
+      "simulation_time",
+      "visibility_unverified_if_no_camera"
+    ]
+  },
+  "verification": {
+    "claim_limit": "JSON_structure_source_values_and_static_geometry_only",
+    "report": "../../../../design/tower-floor01-2026-10-27/verification.json",
+    "report_path_base": "this_json_directory",
+    "report_owner": "main_thread",
+    "report_requirement": "main_thread_generates_or_reruns_report_for_current_source_versions",
+    "runtime_integrated": false,
+    "human_balance_passed": false,
+    "device_visibility_passed": false
+  },
+  "stats_resolved": true,
+  "stat_resolution": "hp/move_speed and attack.damage are final floor1 values; do not scale again. Runtime archetype spawning separately resolves the same floor baseline."
+}

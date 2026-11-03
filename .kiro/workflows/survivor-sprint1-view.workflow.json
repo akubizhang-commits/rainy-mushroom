@@ -1,0 +1,57 @@
+{
+  "name": "survivor-sprint1-view-impl",
+  "description": "Sprint 1 实现阶段第二批：Cocos 表现层 T7-T14。前端开发实现分包/占位美术/视图/入口，后端做存档逻辑，运营+测试做文案与补测，测试工程师提测复盘。不碰 git 破坏性操作、不删旧玩法、默认入口仍为 PackView。",
+  "inputs": {},
+  "steps": [
+    {
+      "type": "step",
+      "id": "t7-bundle",
+      "agent": "wf-coder",
+      "prompt": "你是【前端开发】，用中文汇报。仓库 /Users/zhangnu/WeChatProjects/rainy-mushroom，微信小游戏 + Cocos 3.8.8，分支 rainy-library（用户裁决直接在此分支开发，不新建分支/不 stash）。唯一依据是 docs/survivor/ 文档。严禁 git 破坏性操作（不 reset/clean/checkout 丢弃、不删旧玩法代码），默认入口保持 PackView 不变。\n\n做 **T7 · survivor 分包目录 + package-wechat 名单探测式改造**。读 docs/survivor/03-architecture.md §7.5、07-sprint-1-backlog.md 的 T7。新建 Asset Bundle 目录 cocos-pilot/assets/survivor/（meta isBundle:true, bundleName:survivor），放占位图集与地面贴图占位资源。把 scripts/cocos/package-wechat.mjs 的分包名单从硬编码 ['internal','main','resources'] 改为固定三个 + 当 assets/survivor/config.json 存在时才追加 'survivor'（缺失不报错）。\n\n必须运行 `node --test tests/cocos-package.test.mjs` 两种情形通过（有/无 survivor 分包），每分包 ≤ 4 MiB 检查保持。若 `npm run cocos:build:wechat` 在本环境缺少 Cocos CLI/工具链无法执行，不要伪造结果——如实报告该命令的真实输出或阻塞原因，并把可在本环境跑的测试结果贴全。未通过或无法验证的部分要在汇报里明确标注。",
+      "captureOutput": true
+    },
+    {
+      "type": "step",
+      "id": "t11-save-meta",
+      "agent": "wf-coder",
+      "prompt": "你是【后端开发】，用中文汇报。做 **T11 · SurvivorSave + Meta 存档/结算逻辑（仅逻辑，不接 UI）**。读 docs/survivor/03-architecture.md §5、00 §8 裁决 D3/D13、07-sprint1 的 T11。严禁 git 破坏性操作、不删旧玩法。\n\n在 js/survivor/ 完善 SurvivorSave.js（注入接口只用 {getItem,setItem}；信封 schema 1，data 含 settings 三项 sound/vibration/reduceFlash；读取流程含缺失/损坏→备份/双损坏→.corrupt 覆盖写/更新版本→locked；sanitize 清洗）与 Meta.js（露晶结算公式 01 §13.1、bonuses 换算、购买/重置纯函数）。注意这两个文件在 T2 阶段可能已是占位，需补成完整实现。\n\n写 tests/survivor-save.test.mjs、tests/survivor-meta.test.mjs：覆盖 新档/迁移夹具/损坏→备份/双损坏→.corrupt+新档/更新版本→locked/setItem 失败/清洗；露晶公式对 01 §13.1 两个示例（24、132）相等、购买与全额退还；内存 Map 注入只实现 getItem/setItem（不依赖 removeItem）。\n\n必须运行 `node --test tests/survivor-save.test.mjs tests/survivor-meta.test.mjs` 全绿 + `npm run cocos:sync` 成功。贴结果。未通过不得标完成。",
+      "captureOutput": true
+    },
+    {
+      "type": "step",
+      "id": "t12-strings-compliance",
+      "agent": "wf-coder",
+      "prompt": "你是【运营(出文案)+测试(写扫描)】，用中文汇报。做 **T12 · S1 面向玩家文案与合规扫描用例**。读 docs/survivor/05-operations.md §3、01-gdd.md §2、04-test-plan.md §7.1、07-sprint1 的 T12。严禁 git 破坏性操作、不删旧玩法。\n\n按 05 §3、01 §2 为 S1 界面（HUD、三选一卡、结算页“净化数/被浊雾笼罩”、新手首条提示）补齐/校订 js/survivor/data/strings.js 的中文文案，统一“净化/驱散/撤离”口径。写 tests/survivor-compliance.test.mjs 扫描 strings.js：无 {吃,食用,采食,美味}×{蘑菇,菌} 组合、无 {击杀,消灭,屠杀,死亡,血,尸}；结算用“净化数”、失败用“被浊雾笼罩”。\n\n必须运行 `node --test tests/survivor-compliance.test.mjs` 全绿 + `npm run cocos:sync` 成功。贴结果。未通过不得标完成。",
+      "captureOutput": true
+    },
+    {
+      "type": "step",
+      "id": "t8-t9-view",
+      "agent": "wf-coder",
+      "prompt": "你是【前端开发】，用中文汇报。做 **T8 占位美术规格 + T9 Cocos 表现层核心**，这是让游戏真正能画出来、能操作的关键。读 docs/survivor/02-ui-ux.md §1.2-§1.3/§5/§8/§9、03-architecture.md §6（全部）、01-gdd.md §4、07-sprint1 的 T8/T9。严禁 git 破坏性操作、不删旧玩法，默认入口保持 PackView。\n\nT8：按 02 固定 S1 几何占位的颜色/形状/尺寸/层级（小旅人、gnat 三点深灰、beetle 灰褐椭圆、孢子弹暖白椭圆+拖尾、孢子经验青绿菱形、摇杆底座半径60/头28、HUD 经验条/计时/净化数/暂停按钮在胶囊下方），同类对象共用一张纹理以便合批。\n\nT9：按 03 §6 用 TypeScript 实现 cocos-pilot/assets/scripts/ 下 SurvivorView.ts（设 720×1280 FIXED_WIDTH、loadBundle('survivor')、每帧 setInput→advance→drainEvents→同步→按 state 开关模态框、销毁恢复 375×812）、SurvivorBattleArt.ts（分层节点池、视口剔除、几何占位绘制、受击闪白、净化光点）、SurvivorInput.ts（第一触点、上1/3屏蔽、调 Joystick）、SurvivorHud.ts（经验条/计时/净化数/暂停按钮/升级三选一卡）、SurvivorPlatform.ts（wx 生命周期、取 windowInfo+capsule 调 SafeArea、EVENT_HIDE 暂停）。战斗层所有动态 Sprite 来自单图集。调用逻辑层时用 shared/js/survivor 同步副本。\n\nTS 类型错误要尽量消除。能跑的验证必须跑：`npm run cocos:sync`、`npm run cocos:build`（web-mobile）。若 Cocos 构建在本环境缺工具链无法执行，不要伪造——如实报告命令真实输出/阻塞原因。贴所有结果，明确标注哪些已验证、哪些需真机。",
+      "captureOutput": true
+    },
+    {
+      "type": "step",
+      "id": "t10-entry-smoke",
+      "agent": "wf-coder",
+      "prompt": "你是【前端开发】，用中文汇报。做 **T10 · PinePilot 入口接入 survivor 分支 + 冒烟脚本**。读 docs/survivor/03-architecture.md §2.2、07-sprint1 的 T10。严禁 git 破坏性操作、不删旧玩法。\n\n按 03 §2.2 在 cocos-pilot/assets/scripts/PinePilot.ts 新增 survivor:SurvivorView|null 字段，在 update/resize/onDestroy 并列调用；进入条件为浏览器 URL 含 survivor 或微信端启动参数 survivor，判断写在现有 ['forest','audit',...] 分支之前；**默认入口仍为 PackView（M3 前不改）**，保持 tests/library-sync.test.mjs 的默认入口断言成立。实现 SurvivorSmoke.ts（?survivor&smoke=1 跑 30 秒 + 快进到满屏再跑 10 秒）。\n\n能跑的验证必须跑：`npm run cocos:sync`、`npm run cocos:test`（含 library-sync 默认入口断言不被破坏）。若 `npm run cocos:build:wechat` / 浏览器冒烟在本环境无法执行，如实报告阻塞原因，不要伪造。贴结果并标注需真机验证的项。",
+      "captureOutput": true
+    },
+    {
+      "type": "step",
+      "id": "t13-testplan",
+      "agent": "wf-coder",
+      "prompt": "你是【测试工程师】，用中文汇报。做 **T13 · 补齐 04 测试计划 §3-§9**。读 docs/survivor/04-test-plan.md 现状与 §1、06-design-review.md H1、07-sprint1 的 T13。只改 docs/survivor/04-test-plan.md，不动代码，严禁 git 破坏性操作。\n\n在现有锚点 A/B/C 基础上补齐 §3（测试环境与数据夹具）、§4（S1 范围按模块用例清单，覆盖已实现的 pool/grid/data/stats/weapons/spawner/progression/run/determinism/joystick/safearea/save/meta/compliance）、§5.3/§5.4（机型档位与安全区手测流程）、§6（package-report 阈值 M1/M3）、§7 其余兼容项、§8 完整缺陷分级、§9 各 Sprint 验收门槛。确保 §3-§9 正文完整、无 <!-- PART2 --> 悬空引用，§7.1 合规规则与 01/02/03 一致，§9 S1 门槛与 07 §1 验收口径一致。汇报说明补齐了哪些节、是否闭合 06 H1。",
+      "captureOutput": true
+    },
+    {
+      "type": "step",
+      "id": "t14-signoff",
+      "agent": "wf-coder",
+      "prompt": "你是【测试工程师(出报告)+项目经理(复盘)】，用中文汇报。做 **T14 · Sprint 1 提测、测试报告与复盘**。读 docs/survivor/04-test-plan.md、07-sprint1 §1 验收口径、00 §5/§6。严禁 git 破坏性操作、不删旧玩法、不改实现代码（只能补测试与写报告）。\n\n按 04 §2 尽力全量执行并如实记录：`npm test`（统计 pass/fail，确认旧测试失败数不超过 forest-cleanup 基线、survivor-* 全绿）、`npm run survivor:test`、`npm run cocos:sync`。对 `npm run cocos:build:wechat`、浏览器冒烟、开发者工具 200 敌人帧率与色盲截图这些需要 Cocos 工具链/真机/GUI 的项，若本环境无法执行则明确标为“待真机验证”，列出需用户在微信开发者工具执行的具体步骤，不要伪造数据。\n\n在 docs/survivor/reports/ 写 sprint-1-test-report.md：各任务 T7-T13 验收结论、完整 npm test 统计、已验证项 vs 待真机项清单、缺陷分级清单、给用户的真机验证步骤。项目经理视角在报告末尾写 Sprint 1 复盘：完成度、S2 建议范围、是否可执行 T15（删除旧玩法）。结论要诚实区分“已自动验证通过”与“需用户真机确认”。",
+      "artifacts": { "report": "/Users/zhangnu/WeChatProjects/rainy-mushroom/docs/survivor/reports/sprint-1-test-report.md" },
+      "captureOutput": true
+    }
+  ]
+}

@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>平衡审阅 · 自动对局，不是玩家数据</title>
+<style>
+:root{--ink:#223139;--muted:#53656d;--line:#d9e1e4;--paper:#fff;--ground:#f2f5f6;--a:#285fa5;--b:#187057;--bad:#963739;--good:#216442}
+*{box-sizing:border-box}body{margin:0;background:var(--ground);color:var(--ink);font:16px/1.6 "PingFang SC","Microsoft YaHei",system-ui,sans-serif;font-variant-numeric:tabular-nums}
+main{max-width:1100px;margin:auto;padding:32px 24px 64px}h1,h2,h3,p{margin:0}h1{font-size:30px;line-height:1.45;font-weight:650}h2{font-size:21px;line-height:1.5}h3{font-size:17px}
+p+p{margin-top:8px}header>p{max-width:850px;margin-top:14px}.muted,.help{color:var(--muted)}.help{font-size:14px}.notice{border-left:4px solid #8b9ca5;padding:10px 16px;background:#fff;margin:20px 0}
+section{background:var(--paper);border:1px solid var(--line);border-radius:8px;margin-top:24px;padding:22px}section>p{margin-top:8px}.section-head{display:flex;justify-content:space-between;gap:16px;align-items:baseline;flex-wrap:wrap;margin-bottom:16px}
+button,select,input{font:inherit;color:inherit}button,select,input[type=search]{min-height:44px;border:1px solid #aab9c0;border-radius:5px;background:#fff;padding:7px 12px}button{cursor:pointer}button:hover{background:#eaf0f3}button:disabled{cursor:default;opacity:.5}a{color:var(--a);text-underline-offset:3px}a:hover{text-decoration-thickness:2px}
+:focus-visible{outline:3px solid #ba6a13;outline-offset:3px}button[aria-pressed=true]{background:#253c47;border-color:#253c47;color:white}.toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.source-grid,.goals{display:grid;grid-template-columns:1fr 1fr;gap:22px}.source{padding-left:12px;border-left:4px solid var(--a);min-width:0}.source.b{border-color:var(--b)}.source p{margin-top:4px}.source a{overflow-wrap:anywhere}
+.badge{display:inline-block;font-size:14px;padding:2px 9px;border-radius:4px;white-space:nowrap;background:#edf1f3;color:var(--muted)}.badge.fail{background:#f8e9e9;color:var(--bad)}.badge.pass{background:#e6f1eb;color:var(--good)}.badge.a{background:#e9eff8;color:var(--a)}.badge.b{background:#e5f2ec;color:var(--b)}
+.gate-summary{margin:16px 0 0;padding-top:12px;border-top:1px solid var(--line)}.goal{min-width:0}.goal>p{margin:6px 0 18px}.bar-row{margin:15px 0}.bar-top{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:6px}.bar-top strong{margin-left:auto}.track{height:22px;background:#edf1f3;position:relative;border-radius:3px;overflow:hidden}.target{position:absolute;height:100%;background:#d3e3d8;border-left:2px solid #667c6d;border-right:2px solid #667c6d}.fill{position:absolute;left:0;top:6px;height:10px;background:var(--a);min-width:0}.fill.b{background:var(--b)}.axis{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-top:3px}
+.filter-bar{margin-top:24px;padding:16px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}.filter-bar p{margin:8px 0 0}.legend{display:flex;gap:20px;flex-wrap:wrap;font-size:14px}.swatch{display:inline-block;width:14px;height:10px;background:var(--a);margin-right:6px}.swatch.b{background:var(--b)}
+.scroll{overflow:auto;max-width:100%}table{border-collapse:collapse;width:100%;font-size:15px;text-align:left}th,td{padding:13px 12px;border-bottom:1px solid var(--line);vertical-align:top}th{font-weight:600;background:#f4f7f8}th:first-child,td:first-child{padding-left:4px}table tr:last-child td{border-bottom:0}.metrics th:first-child{width:36%}.metrics td{width:32%}.metric-number{font-size:21px;font-weight:600}.cell-note{display:block;color:var(--muted);font-size:13px}.mini{height:5px;width:100%;min-width:95px;background:#eaf0f3;margin-top:6px}.mini i{display:block;height:100%;background:var(--a)}.mini i.b{background:var(--b)}.delta{white-space:nowrap}.strategies{min-width:640px}.strategies th:first-child{min-width:160px}.strategies button{font-size:14px;white-space:nowrap}
+.run-filters{display:grid;grid-template-columns:1fr 1fr 1.4fr 1fr;gap:12px;margin:16px 0}.run-filters label{font-size:14px;font-weight:600}.run-filters select,.run-filters input{display:block;width:100%;margin-top:5px;font-weight:400;min-width:0}.run-list{display:grid;gap:8px;margin-top:12px}.run-row{width:100%;display:grid;grid-template-columns:1.25fr 1fr 1.4fr .8fr;gap:12px;text-align:left;padding:14px;align-items:center}.run-row span{min-width:0;overflow-wrap:anywhere}.run-row small{display:block;color:var(--muted);font-size:13px}.run-row strong{font-weight:600}.run-flags{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}.pagination{display:flex;gap:12px;align-items:center;justify-content:flex-end;margin-top:16px}.empty{padding:24px;background:#f6f8f9;color:var(--muted)}
+details{margin-top:18px}summary{cursor:pointer;min-height:44px;padding:8px 0;font-weight:600}details p,details li{max-width:880px}.methods li+li{margin-top:8px}.integrity{color:var(--bad);white-space:pre-line}.source-note{white-space:pre-wrap;font-size:14px;overflow-wrap:anywhere}
+dialog{border:1px solid var(--line);border-radius:10px;padding:0;width:min(860px,calc(100% - 24px));max-height:92vh;max-height:92dvh;color:var(--ink);background:#fff}dialog::backdrop{background:#182c3cb3}.dialog-head{position:sticky;top:0;z-index:2;background:#fff;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:16px;padding:16px 22px}.dialog-head h2{font-size:20px;overflow-wrap:anywhere}.dialog-body{padding:20px 22px}.detail-meta{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:0 0 20px}.detail-meta div{min-width:0}dt{font-size:13px;color:var(--muted)}dd{margin:3px 0 0;overflow-wrap:anywhere}.build-list{display:flex;gap:8px;flex-wrap:wrap;padding:0;list-style:none}.build-list li{border:1px solid var(--line);border-radius:4px;padding:6px 10px}.build-list small{display:block;color:var(--muted)}.choice-table{min-width:570px}.choice-table td{font-size:14px}.choice-table th{position:static}.raw-id{font-size:12px;color:var(--muted);overflow-wrap:anywhere}.dialog-body h3{margin:20px 0 6px}
+footer{padding-top:20px;color:var(--muted);font-size:14px}[hidden]{display:none!important}
+@media(max-width:700px){main{padding:22px 14px 40px}h1{font-size:24px}section{padding:16px}.source-grid,.goals{grid-template-columns:1fr;gap:24px}.goal+.goal{padding-top:20px;border-top:1px solid var(--line)}.run-filters{grid-template-columns:1fr 1fr}.run-row{grid-template-columns:1fr 1fr;gap:10px}.detail-meta{grid-template-columns:1fr 1fr}.dialog-head,.dialog-body{padding:14px}.metrics th,.metrics td{padding-right:8px;font-size:14px}.metric-number{font-size:18px}.notice{padding:10px 12px}.pagination{justify-content:space-between;gap:6px}.toolbar>button{flex-grow:1}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<main>
+<header>
+  <h1>平衡审阅：自动对局，不是玩家数据</h1>
+  <div class="notice"><strong>本页保留敌弹时序修复前的基线。</strong>修复后的1200局回归与逐局影响见 <a href="../../reports/bubble-recycle-2026-10-26/report.md">最新回归报告</a>；下方数据不随新代码自动更新。</div>
+  <p>对照经典与修仙规则，检查通关率、战斗时长和异常局。这里展示固定脚本策略的模拟结果，不代表真实新手或熟练玩家的体验。</p>
+  <div class="notice"><strong>复跑不算独立样本。</strong>同一 seed 在不同策略、不同版本之间重复使用；重新加载也不会增加样本量。测试全过只证明对应工程检查通过，不能替代平衡验收。</div>
+</header>
+<section aria-labelledby="source-title">
+  <div class="section-head"><h2 id="source-title">首轮 A/B 数据</h2><button id="reload" type="button">重新读取报告</button></div>
+  <div class="source-grid" id="sources"></div>
+  <p class="help">本页固定展示首轮 A/B 各 600 局。额外批次、复跑及 B 版留出集报告另列，不合并进本页的样本量、统计或门槛判定。</p>
+  <p id="load-status" role="status" aria-live="polite">正在读取两份详细报告，首次加载约 35 MB…</p>
+  <p id="pair-status" class="help"></p>
+  <p id="integrity" class="integrity" role="alert"></p>
+</section>
+<div id="analysis" hidden>
+  <div class="filter-bar">
+    <div class="toolbar" role="group" aria-label="筛选走位">
+      <strong>走位</strong>
+      <button type="button" data-move="all" aria-pressed="true">全部走位</button>
+      <button type="button" data-move="flee" aria-pressed="false">保守逃跑 · flee</button>
+      <button type="button" data-move="spore" aria-pressed="false">追逐灵光 · spore</button>
+    </div>
+    <p class="help">筛选联动下方门槛、时长、策略和逐局列表。flee / spore 是脚本走位标签，不是玩家分组。</p>
+  </div>
+  <section aria-labelledby="goals-title">
+    <div class="section-head"><h2 id="goals-title">通关率门槛</h2><div class="legend"><span><i class="swatch"></i>A 经典</span><span><i class="swatch b"></i>B 修仙</span></div></div>
+    <p class="help">条形长度表示通关率，浅绿色区间表示目标。按未四舍五入的比例判定；区间边界包含在内。</p>
+    <div id="goals" class="goals"></div>
+    <p class="gate-summary" id="gate-summary"></p>
+  </section>
+  <section aria-labelledby="metrics-title">
+    <div class="section-head"><h2 id="metrics-title">时长与结局</h2><span class="help" id="scope"></span></div>
+    <div class="scroll" tabindex="0" role="region" aria-label="时长和结局对照表">
+      <table class="metrics"><thead><tr><th scope="col">指标</th><th scope="col">A 经典</th><th scope="col">B 修仙</th></tr></thead><tbody id="metrics"></tbody></table>
+    </div>
+    <p class="help">Boss 耗时只统计记录了出场、击败时刻的局，不能代表未击败 Boss 的局。胜利时长只统计胜局。合并中位数由逐局数值重算，不取各策略中位数的平均。</p>
+  </section>
+  <section aria-labelledby="strategy-title">
+    <div class="section-head"><h2 id="strategy-title">选卡策略对比</h2><span class="help">变化 = 修仙 − 经典（百分点）</span></div>
+    <div class="scroll" tabindex="0" role="region" aria-label="选卡策略对照表，可横向滚动">
+      <table class="strategies"><thead><tr><th scope="col">策略</th><th scope="col">A 经典通关</th><th scope="col">B 修仙通关</th><th scope="col">变化</th><th scope="col">明细</th></tr></thead><tbody id="strategies"></tbody></table>
+    </div>
+    <p class="help">优先策略是选卡偏好，不代表始终持有该武器。全部走位下的合并比例不套用单一通关率目标；百分点上升也不自动代表更平衡。</p>
+  </section>
+  <section id="runs-section" aria-labelledby="runs-title">
+    <div class="section-head"><h2 id="runs-title">逐局复核</h2><span class="help">点击一局查看 seed、选卡过程与构筑</span></div>
+    <p class="help">默认异常定义：整局时长严格大于 720 秒，或报告结局为 timeout。没有预设 Boss 时长阈值，不把较短或较长的 Boss 战自动判成缺陷。</p>
+    <div class="run-filters">
+      <label>复核范围<select id="run-kind"><option value="anomaly">异常局：长局 / 超时</option><option value="lost">全部败局</option><option value="all">全部对局</option></select></label>
+      <label>版本<select id="run-version"><option value="all">两版</option><option value="A">A 经典</option><option value="B">B 修仙</option></select></label>
+      <label>选卡策略<select id="run-pick"><option value="all">全部策略</option></select></label>
+      <label>查找 seed<input type="search" id="run-seed" placeholder="例如 balance-15" autocomplete="off"></label>
+    </div>
+    <p id="run-count" class="help" role="status" aria-live="polite"></p>
+    <div id="run-list" class="run-list"></div>
+    <div class="pagination"><button type="button" id="prev">上一页</button><span id="page" class="help"></span><button type="button" id="next">下一页</button></div>
+  </section>
+  <section aria-labelledby="methods-title">
+    <h2 id="methods-title">统计口径与边界</h2>
+    <ul class="methods">
+      <li>通关率 = won 局数 ÷ 该筛选下全部有效局数；败局、超时均留在分母。flee 目标为 30%–60%，spore 目标为 ≤80%。本页只判这两个指定门槛，不据此宣布整套平衡验收完成。</li>
+      <li>Boss 击败耗时 = bossDefeatSec − bossSpawnSec，缺少任一时刻的局不进入其中位数。胜利时长取胜局的 survivalSec；界面分钟数四舍五入到秒，判定使用原始数值。</li>
+      <li>&gt;720 秒和超时是两个不同指标，可以重叠。超时以 outcome=timeout 为准，不用显示时长反推。计数为 0 也完整显示；无胜局或无 Boss 击败记录时显示“无样本”，不当作 0 秒。</li>
+      <li>对局身份由版本内的 seed + move + pick 组成。重复身份只保留第一条并显式警告；报告汇总与明细不符时标记“数据待核对”，不展示达标结论。中位数、比例均从载入的明细计算。</li>
+      <li>两版只读取首轮各一份报告。额外批次、复跑及 B 版留出集报告另列；不汇入本页，不把策略复用、配对版本或重新读取当成新的独立样本。本页不代表留出集验证结果，也不推断真实玩家通过率。</li>
+    </ul>
+    <details><summary>查看数据路径与报告原始备注</summary><div id="source-notes"></div><p class="help">备注按报告原文保留，可能包含生成器的阶段性说明。本页以实际载入的 A/B 明细计算，不据此声称完成留出集验证。</p></details>
+  </section>
+</div>
+<footer>只读审阅页。不会修改运行逻辑、原始报告或存档。</footer>
+</main>
+<dialog id="detail" aria-labelledby="detail-title">
+  <div class="dialog-head"><h2 id="detail-title">对局详情</h2><button type="button" id="close-detail" aria-label="关闭对局详情">关闭</button></div>
+  <div class="dialog-body" id="detail-body"></div>
+</dialog>
+<script>
+'use strict';
+const SOURCES=[
+ {id:'A',name:'A 经典',ruleset:'survivor',path:'../../../reports/full-balance-2026-10-26/A-classic-1.json'},
+ {id:'B',name:'B 修仙',ruleset:'xianxia',path:'../../../reports/full-balance-2026-10-26/B-xianxia-1.json'}
+];
+const NAMES={
+ spore_shot:['孢子弹','飞剑'],umbrella_blades:['菌伞旋刃','绕身剑阵'],dew_ring:['露珠环','玄冰诀'],raindrop:['雨滴坠击','天雷诀'],leaf_boomerang:['落叶回旋镖','惊鸿剑气'],wanjian:['万剑归宗','万剑归宗'],
+ might:['晨光菌丝','破军心法'],cooldown:['湿润苔衣','清心诀'],area:['宽檐菌帽','乾坤袖'],regen:['露水叶片','长青诀'],speed:['蕨叶轻靴','疾风步'],magnet:['孢子罗盘','聚灵阵'],vajra:['金刚诀','金刚诀'],yujian:['御剑术','御剑术'],
+ pill_power:['爆灵丹','爆灵丹'],pill_wind:['疾风丹','疾风丹'],pill_body:['金身丹','金身丹'],heal_dew:['回血补给','回血补给'],shiny_spore:['货币补给','货币补给']
+};
+const state={reports:[],move:'all',page:0,filtered:[],picks:[]};
+const $=id=>document.getElementById(id);
+function el(tag,text,cls){const n=document.createElement(tag);if(text!=null)n.textContent=String(text);if(cls)n.className=cls;return n}
+function add(parent,...children){parent.append(...children);return parent}
+function badge(text,cls=''){return el('span',text,'badge '+cls)}
+function finite(n){return typeof n==='number'&&Number.isFinite(n)}
+function median(values){if(!values.length)return null;const a=[...values].sort((x,y)=>x-y),m=Math.floor(a.length/2);return a.length%2?a[m]:(a[m-1]+a[m])/2}
+function duration(s){if(!finite(s))return '无样本';const n=Math.round(s);return Math.floor(n/60)+':'+String(n%60).padStart(2,'0')}
+function seconds(s){return finite(s)?s.toFixed(1)+' 秒':'无样本'}
+function percent(n,d){return d?(100*n/d).toFixed(1)+'%':'无样本'}
+function moveName(move){return {all:'全部走位',flee:'保守逃跑 · flee',spore:'追逐灵光 · spore'}[move]||move}
+function itemName(id,version){if(typeof id!=='string')return '未记录';if(id.startsWith('evo:'))return itemName(id.slice(4),version)+'（进化）';return NAMES[id]?.[version==='B'?1:0]||id}
+function pickName(pick){if(pick==='random')return '随机选卡';const id=String(pick).replace(/^prefer:/,'');return '优先 '+(NAMES[id]?Array.from(new Set(NAMES[id])).join(' / '):id)}
+function identity(r){return JSON.stringify([r.seed,r.move,r.pick])}
+function bossTime(r){return finite(r.bossDefeatSec)&&finite(r.bossSpawnSec)&&r.bossDefeatSec>=r.bossSpawnSec?r.bossDefeatSec-r.bossSpawnSec:null}
+function stats(rows){
+ const wins=rows.filter(r=>r.outcome==='won'),boss=rows.map(bossTime).filter(finite);
+ return {n:rows.length,won:wins.length,lost:rows.filter(r=>r.outcome==='lost').length,timeout:rows.filter(r=>r.outcome==='timeout').length,past720:rows.filter(r=>r.survivalSec>720).length,wonMedian:median(wins.map(r=>r.survivalSec)),bossMedian:median(boss),bossN:boss.length};
+}
+function gate(s,move){if(!s.n)return null;return move==='flee'?s.won/s.n>=.3&&s.won/s.n<=.6:s.won/s.n<=.8}
+function rowsFor(report,move=state.move){return report?.rows.filter(r=>move==='all'||r.move===move)||[]}
+function normalize(data,source){
+ if(!data||!Array.isArray(data.runs)||!data.runs.length)throw Error('缺少非空 runs 明细');
+ if(data.ruleset!==source.ruleset)throw Error('规则集与文件预期不符');
+ const seen=new Set(),rows=[],issues=[];let duplicates=0;
+ for(const r of data.runs){
+  if(!r||typeof r.seed!=='string'||!['flee','spore'].includes(r.move)||typeof r.pick!=='string'||!finite(r.survivalSec)||r.survivalSec<0||!['won','lost','timeout'].includes(r.outcome))throw Error('明细有缺失或非法字段，已停止统计');
+  const key=identity(r);if(seen.has(key)){duplicates++;continue}seen.add(key);rows.push({...r,version:source.id,key});
+ }
+ if(duplicates)issues.push('发现 '+duplicates+' 条重复身份，已去重；须核对原始数据');
+ if(data.total?.n!==rows.length)issues.push('total.n 与有效明细局数不符');
+ const s=stats(rows);for(const key of ['won','lost','timeout'])if(data.total?.[key]!==s[key])issues.push('汇总 '+key+' 与明细不符');
+ if(rows.length!==600)issues.push('本轮预期 600 局，实际 '+rows.length+' 局');
+ if(!Array.isArray(data.configs)||!data.configs.length)issues.push('缺少策略汇总');
+ for(const cfg of data.configs||[]){const rs=rows.filter(r=>r.move===cfg.move&&r.pick===cfg.pick);if(cfg.summary?.n!==rs.length||cfg.summary?.won!==stats(rs).won)issues.push('策略汇总不符：'+cfg.move+' / '+cfg.pick)}
+ return {...source,data,rows,issues,map:new Map(rows.map(r=>[r.key,r]))};
+}
+function report(id){return state.reports.find(r=>r.id===id)}
+function listPicks(){return Array.from(new Set(state.reports.flatMap(r=>r.rows.map(x=>x.pick))))}
+async function load(){
+ $('reload').disabled=true;$('analysis').hidden=true;$('load-status').textContent='正在读取两份详细报告，首次加载约 35 MB…';$('integrity').textContent='';$('pair-status').textContent='';$('sources').replaceChildren();
+ for(const s of SOURCES){const box=el('div',null,'source '+s.id.toLowerCase());add(box,el('h3',s.name),el('p','等待报告…','help'));$('sources').append(box)}
+ const results=await Promise.allSettled(SOURCES.map(async s=>{const response=await fetch(s.path,{cache:'no-store'});if(!response.ok)throw Error('HTTP '+response.status);return normalize(await response.json(),s)}));
+ state.reports=[];$('sources').replaceChildren();$('source-notes').replaceChildren();
+ results.forEach((result,i)=>{
+  const s=SOURCES[i],box=el('div',null,'source '+s.id.toLowerCase());box.append(el('h3',s.name));
+  const link=el('a','原始 JSON');link.href=s.path;link.target='_blank';link.rel='noopener';box.append(link);
+  if(result.status==='fulfilled'){
+   const r=result.value;state.reports.push(r);const seeds=new Set(r.rows.map(x=>x.seed)).size;
+   add(box,el('p',r.rows.length+' 局 · '+seeds+' 个 seed · '+r.data.configs.length+' 组走位/选卡组合'),badge(r.issues.length?'数据待核对':'明细与计数一致',r.issues.length?'fail':'pass'));
+   const note=el('div');add(note,el('h3',r.name),el('p',r.path,'raw-id'),el('p','单局模拟上限：'+seconds(r.data.opts?.maxSec),'help'),el('p',r.data.note||'无内置备注。','source-note'));$('source-notes').append(note);
+  }else add(box,badge('读取失败','fail'),el('p',result.reason.message+'。确认文件可由当前静态服务访问后重试。','help'));
+  $('sources').append(box);
+ });
+ $('reload').disabled=false;$('load-status').textContent=state.reports.length===2?'两份报告已读取，统计基于逐局明细。':state.reports.length?'仅载入一版；缺失版显示“未载入”，不补零、不判达标。':'没有可用报告。请通过静态服务打开本页并检查数据路径。';
+ const issues=state.reports.flatMap(r=>r.issues.map(x=>r.name+'：'+x));$('integrity').textContent=issues.join('\n');
+ const a=report('A'),b=report('B');if(a&&b){const paired=a.rows.filter(r=>b.map.has(r.key)).length;$('pair-status').textContent='同 seed / move / pick 配对：'+paired+' 组。两版各自计数，不将配对或复跑累加为独立样本。'}
+ state.picks=listPicks();const selected=$('run-pick').value;$('run-pick').replaceChildren(new Option('全部策略','all'));for(const pick of state.picks)$('run-pick').append(new Option(pickName(pick),pick));if(state.picks.includes(selected))$('run-pick').value=selected;
+ state.page=0;$('analysis').hidden=!state.reports.length;render();
+}
+function renderGoals(){
+ $('goals').replaceChildren();const moves=state.move==='all'?['flee','spore']:[state.move];
+ for(const move of moves){
+  const box=el('div',null,'goal');add(box,el('h3',moveName(move)),el('p',move==='flee'?'目标 30%–60%':'目标 ≤80%','help'));
+  for(const src of SOURCES){
+   const r=report(src.id),s=stats(rowsFor(r,move)),row=el('div',null,'bar-row'),top=el('div',null,'bar-top');
+   const ok=r&&!r.issues.length?gate(s,move):null;
+   add(top,el('span',src.name),badge(!r?'未载入':ok===null?'数据待核对':ok?'通过':'未通过',ok===null?'':ok?'pass':'fail'),el('strong',r?percent(s.won,s.n):'—'));row.append(top);
+   const track=el('div',null,'track'),target=el('span',null,'target'),fill=el('span',null,'fill '+src.id.toLowerCase());
+   target.style.left=move==='flee'?'30%':'0%';target.style.width=move==='flee'?'30%':'80%';fill.style.width=(s.n?100*s.won/s.n:0)+'%';add(track,target,fill);track.setAttribute('aria-hidden','true');
+   add(row,track,el('p',r?s.won+' / '+s.n+' 局通关':'等待报告','help'));box.append(row);
+  }
+  add(box,add(el('div',null,'axis'),el('span','0%'),el('span','100%')));$('goals').append(box);
+ }
+ const texts=SOURCES.map(src=>{const r=report(src.id);if(!r)return src.name+'：未载入';if(r.issues.length)return src.name+'：数据待核对';const passed=['flee','spore'].filter(m=>gate(stats(rowsFor(r,m)),m)===true).length;return src.name+'：完整两项门槛 '+passed+'/2 通过'+(passed===2?'':'，通关率门槛未通过')});
+ $('gate-summary').textContent=texts.join('；')+'。这不是整体平衡验收结论。';
+}
+function renderMetrics(){
+ $('scope').textContent=moveName(state.move);$('metrics').replaceChildren();
+ const data=SOURCES.map(s=>report(s.id)?stats(rowsFor(report(s.id))):null);
+ const specs=[
+  ['对局数',s=>[String(s.n),'当前筛选的有效明细']],
+  ['通关率',s=>[percent(s.won,s.n),s.won+' 胜 / '+s.lost+' 败 / '+s.timeout+' 超时']],
+  ['胜利时长中位',s=>[duration(s.wonMedian),s.won+' 个胜局']],
+  ['Boss 击败耗时中位',s=>[seconds(s.bossMedian),s.bossN+' 局有完整击败记录']],
+  ['整局 >720 秒',s=>[s.past720+' 局',percent(s.past720,s.n)+' · 阈值严格大于']],
+  ['超时',s=>[s.timeout+' 局',percent(s.timeout,s.n)+' · outcome=timeout']]
+ ];
+ for(const [label,format] of specs){const tr=el('tr');const th=el('th',label);th.scope='row';tr.append(th);for(const s of data){const td=el('td');const [value,note]=s?format(s):['未载入',''];add(td,el('span',value,'metric-number'),el('span',note,'cell-note'));tr.append(td)}$('metrics').append(tr)}
+}
+function renderStrategies(){
+ $('strategies').replaceChildren();
+ for(const pick of state.picks){
+  const tr=el('tr');add(tr,add(el('td'),el('strong',pickName(pick)),el('span',pick,'raw-id cell-note')));
+  const totals=SOURCES.map(src=>{const r=report(src.id);return r?stats(rowsFor(r).filter(x=>x.pick===pick)):null});
+  totals.forEach((s,i)=>{const td=el('td');if(s){add(td,el('strong',percent(s.won,s.n)),el('span',s.won+'/'+s.n+' 局','cell-note'));const bar=el('div',null,'mini'),fill=el('i',null,i?'b':'');fill.style.width=(s.n?s.won/s.n*100:0)+'%';add(td,add(bar,fill));if(state.move!=='all'){const r=report(SOURCES[i].id),ok=r.issues.length?null:gate(s,state.move);td.append(badge(ok===null?'待核对':ok?'通过':'未通过',ok===null?'':ok?'pass':'fail'))}}else td.textContent='未载入';tr.append(td)});
+  const [a,b]=totals,delta=a?.n&&b?.n?(b.won/b.n-a.won/a.n)*100:null;
+  tr.append(el('td',delta===null?'—':(delta>0?'+':'')+delta.toFixed(1),'delta'));
+  const button=el('button','查看对局');button.type='button';button.addEventListener('click',()=>{$('run-pick').value=pick;$('run-kind').value='all';state.page=0;renderRuns();$('runs-section').scrollIntoView({block:'start'});$('run-kind').focus({preventScroll:true})});tr.append(add(el('td'),button));$('strategies').append(tr);
+ }
+}
+function renderRuns(){
+ const kind=$('run-kind').value,version=$('run-version').value,pick=$('run-pick').value,seed=$('run-seed').value.trim().toLowerCase();
+ state.filtered=state.reports.flatMap(r=>rowsFor(r)).filter(r=>(version==='all'||r.version===version)&&(pick==='all'||r.pick===pick)&&(!seed||r.seed.toLowerCase().includes(seed))&&(kind==='all'||(kind==='lost'?r.outcome==='lost':r.survivalSec>720||r.outcome==='timeout'))).sort((a,b)=>(b.outcome==='timeout')-(a.outcome==='timeout')||b.survivalSec-a.survivalSec||a.key.localeCompare(b.key));
+ const pages=Math.max(1,Math.ceil(state.filtered.length/20));state.page=Math.min(state.page,pages-1);$('run-list').replaceChildren();
+ $('run-count').textContent='符合筛选：'+state.filtered.length+' 局；'+moveName(state.move)+'。按超时优先、整局时长从长到短排列。';
+ for(const r of state.filtered.slice(state.page*20,state.page*20+20)){
+  const button=el('button',null,'run-row');button.type='button';button.setAttribute('aria-label',r.version+' '+r.seed+' '+r.move+' '+r.pick+'，查看对局详情');
+  const first=el('span');add(first,badge(r.version==='A'?'A 经典':'B 修仙',r.version.toLowerCase()),el('strong',r.seed),el('small',moveName(r.move)));
+  const second=el('span');add(second,el('strong',({won:'胜利',lost:'失败',timeout:'超时'})[r.outcome]),el('small','整局 '+duration(r.survivalSec)));
+  const third=el('span');add(third,el('span',pickName(r.pick)),el('small','Boss '+seconds(bossTime(r))));
+  const flags=el('span',null,'run-flags');if(r.survivalSec>720)flags.append(badge('>720 秒','fail'));if(r.outcome==='timeout')flags.append(badge('超时','fail'));if(!flags.children.length)flags.append(el('small','查看详情'));
+  add(button,first,second,third,flags);button.addEventListener('click',()=>showDetail(r));$('run-list').append(button);
+ }
+ if(!state.filtered.length)$('run-list').append(el('p','当前筛选没有对局。可以切换走位、版本或复核范围。','empty'));
+ $('page').textContent=(state.page+1)+' / '+pages+' 页 · 每页 20 局';$('prev').disabled=state.page===0;$('next').disabled=state.page>=pages-1;
+}
+function render(){if(!state.reports.length)return;renderGoals();renderMetrics();renderStrategies();renderRuns()}
+function showDetail(r){
+ const dialog=$('detail'),body=$('detail-body');body.replaceChildren();$('detail-title').textContent=(r.version==='A'?'A 经典':'B 修仙')+' / '+r.seed;
+ const meta=el('dl',null,'detail-meta');
+ const fields=[['走位',moveName(r.move)],['选卡策略（pick）',r.pick],['结局',({won:'胜利',lost:'失败',timeout:'超时'})[r.outcome]],['整局时长',duration(r.survivalSec)+' / '+seconds(r.survivalSec)],['Boss 出场',duration(r.bossSpawnSec)],['Boss 击败耗时',seconds(bossTime(r))],[r.version==='B'?'累计升级等级':'记录等级',r.level??'未记录'],['致死来源',r.killer||'无记录'],['本局身份',r.seed+' / '+r.move+' / '+r.pick]];
+ for(const [k,v] of fields){const item=add(el('div'),el('dt',k),el('dd',v));if(k==='累计升级等级')item.append(el('dd','27级后境界属性封顶，仍可继续选卡','help'));meta.append(item)}body.append(meta);
+ const counterpart=report(r.version==='A'?'B':'A')?.map.get(r.key),pair=el('button',counterpart?'查看另一版同 seed / move / pick':'另一版没有同配置记录');pair.type='button';pair.disabled=!counterpart;pair.addEventListener('click',()=>showDetail(counterpart));body.append(pair);
+ const summary=r.detailed?.finalSummary||{};
+ for(const [label,items] of [['最终武器',r.weapons],['最终被动',r.passives],['职业被动',summary.classPassive?[summary.classPassive]:[]]]){
+  body.append(el('h3',label));const list=el('ul',null,'build-list');for(const item of items||[]){const li=el('li',itemName(item.id,r.version)+' Lv'+item.level+(item.evolved?' · 已进化':''));li.append(el('small',item.id));list.append(li)}body.append(list.children.length?list:el('p','未记录 / 不适用','help'));
+ }
+ if(summary.pills){body.append(el('h3','丹药服用次数'));body.append(el('p',summary.pills.map(p=>itemName(p.id,r.version)+' '+p.count+' 次').join(' · ')))}
+ const details=el('details'),choices=r.detailed?.choices;
+ add(details,el('summary','选卡过程（'+(choices?.length??r.picks?.length??0)+' 次）'));
+ if(Array.isArray(choices)&&choices.length){
+  const table=el('table',null,'choice-table'),head=el('thead'),hr=el('tr');for(const title of ['时刻','等级','选择','当次候选'])hr.append(el('th',title));head.append(hr);table.append(head);
+  const tbody=el('tbody');for(const c of choices){const tr=el('tr');add(tr,el('td',duration(c.t)),el('td',c.appliedLevel??c.level??'—'),add(el('td'),el('strong',itemName(c.picked,r.version)),el('div',c.picked,'raw-id')),el('td',(c.offer||[]).map(o=>itemName(o.id,r.version)+(o.kind==='evolve'?'（进化）':'')+(finite(o.level)?' Lv'+o.level:'')).join(' / ')));tbody.append(tr)}table.append(tbody);const wrapper=el('div',null,'scroll');wrapper.tabIndex=0;wrapper.setAttribute('aria-label','逐次选卡过程，可横向滚动');details.append(add(wrapper,table));
+ }else{const list=el('ol');for(const text of r.picks||[])list.append(el('li',text));details.append(list.children.length?list:el('p','报告未记录选卡过程。','help'))}
+ body.append(details);body.append(el('p','配对对照用于定位差异；同 seed 跨版本的随机调用和成长路径可能分岔，不据单局差异推断因果。','help'));
+ if(!dialog.open)dialog.showModal();else dialog.scrollTop=0;
+}
+$('reload').addEventListener('click',load);
+for(const button of document.querySelectorAll('[data-move]'))button.addEventListener('click',()=>{state.move=button.dataset.move;state.page=0;for(const b of document.querySelectorAll('[data-move]'))b.setAttribute('aria-pressed',String(b===button));render()});
+for(const id of ['run-kind','run-version','run-pick'])$(id).addEventListener('change',()=>{state.page=0;renderRuns()});
+$('run-seed').addEventListener('input',()=>{state.page=0;renderRuns()});
+$('prev').addEventListener('click',()=>{state.page--;renderRuns()});$('next').addEventListener('click',()=>{state.page++;renderRuns()});
+$('close-detail').addEventListener('click',()=>$('detail').close());
+load().catch(error=>{$('reload').disabled=false;$('load-status').textContent='页面未能完成读取：'+error.message+'。请重试。'});
+</script>
+</body>
+</html>

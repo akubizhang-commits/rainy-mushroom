@@ -1,0 +1,163 @@
+import { clipHexRay } from './TowerArena.js'
+import { TOWER_PILLARS, PILLAR_FOOTPRINT } from './TowerObstacles.js'
+
+// Coordinates are relative to the leading edge. The renderer and collision
+// share this geometry; a broad bounding rectangle is never a damage region.
+const cache = new Map()
+const crescentTipBack = .7 * (1 - Math.SQRT1_2)
+const crescentPoint = i => {
+  const theta = -Math.PI / 4 + i * Math.PI / 24
+  return { x: .7 * (Math.cos(theta) - 1), y: .5 * Math.sin(theta) / Math.SQRT1_2 }
+}
+// Bright outer blade traced from the approved 1254px user painting.
+// Source pixel coordinates, before 64px padding; the render anchor is
+// (1224,625) and one gameplay width spans 980 source pixels.
+// Interior translucent wisps do not turn the hollow into a filled hitbox.
+const iceBladePixels = [[528,200],[842,240],[930,280],[976,320],
+  [1078,360],[1109,400],[1136,440],[1165,480],[1189,520],
+  [1205,560],[1215,600],[1217,640],[1213,680],[1211,720],
+  [1184,760],[1153,800],[1118,840],[1072,880],[1019,920],
+  [942,960],[844,1000],[698,1040],[373,1080]]
+function iceBladePoint(pixel, pulseIndex) {
+  const x=(pixel[0]-1224)/980, y=(625-pixel[1])/980
+  // Same affine projections as the approved PNGs, expressed in world Y-up.
+  return pulseIndex===2 ? {x,y:y*.48}
+    : pulseIndex===3 ? {x,y} : {x:x*.84+y*.52,y:y*.82}
+}
+// Approved C projection: both crescent fronts point along +X, with opposite
+// transverse shears creating the crossing while all four tips trail behind.
+const crossScaleX = 1.4, crossScaleY = .85, crossShear = .42
+const crossFront = Math.max(...Array.from({ length: 13 }, (_, i) => {
+  const p = crescentPoint(i)
+  return p.x * crossScaleX + p.y * crossShear
+}))
+const crossDepth = (crossFront + crossScaleX * crescentTipBack + crossShear / 2) / crossScaleY
+
+// Exact longitudinal extent of the same polyline used for collision and art.
+export function swordQiDepth(kind, width, pulseIndex=1) {
+  return kind==='cross' ? width*crossDepth
+    : -Math.min(...iceBladePixels.map(pixel=>iceBladePoint(pixel,pulseIndex).x))*width
+}
+
+// Keep the intersection 90 units ahead instead of moving it away on upgrades.
+// Its distance from the leading edge follows the approved artwork projection.
+export function swordQiReleaseOffset(form) {
+  return form.bladeKind === 'cross'
+    ? crossFront * form.width / crossScaleY + 90
+    : Math.min(form.radius, 48)
+}
+
+// Character artwork is anchored at the feet. Lift the whole projected blade
+// straight up before its direction rotates; ground collision stays unchanged.
+export const SWORD_QI_CHEST_HEIGHT = 64
+export function swordQiVisualLift(item) {
+  return SWORD_QI_CHEST_HEIGHT + (item?.castContext?.loadout?.passive?.sj_flight > 0
+    ? 18 + 2 * Math.sin((Number.isFinite(item.startedAt) ? item.startedAt : 0) * 3) : 0)
+}
+
+export function swordQiSegments(kind, width, pulseIndex=1) {
+  const key = `${kind}:${width}:${kind==='crescent'?pulseIndex:0}`
+  if (cache.has(key)) return cache.get(key)
+  let segments
+  if (kind === 'cross') {
+    segments = [-1, 1].flatMap(sign => {
+      const point = i => {
+        const p = crescentPoint(i)
+        return { x: (p.x * crossScaleX + sign * p.y * crossShear - crossFront) * width / crossScaleY,
+          y: p.y * width }
+      }
+      return Array.from({ length: 12 }, (_, i) => ({ a: point(i), b: point(i + 1) }))
+    })
+  } else if (kind === 'crescent') {
+    const point = i => {
+      const p = iceBladePoint(iceBladePixels[i],pulseIndex)
+      return { x: width * p.x, y: width * p.y }
+    }
+    segments = Array.from({ length: iceBladePixels.length-1 }, (_, i) => ({ a: point(i), b: point(i + 1) }))
+  } else throw new RangeError(`Unknown sword qi kind: ${kind}`)
+  for (const s of segments) { Object.freeze(s.a); Object.freeze(s.b); Object.freeze(s) }
+  Object.freeze(segments); cache.set(key, segments)
+  return segments
+}
+
+function segmentDistance(x, y, a, b) {
+  const dx = b.x - a.x, dy = b.y - a.y
+  const t = Math.max(0, Math.min(1, ((x-a.x)*dx + (y-a.y)*dy) / (dx*dx+dy*dy || 1)))
+  return Math.hypot(x-a.x-t*dx, y-a.y-t*dy)
+}
+
+/** Continuous translation of the actual blade, including its thickness. */
+export function swordQiHits(kind, width, thickness, from, to, dx, dy, target, pulseIndex=1) {
+  const x = (target.x-from.x)*dx + (target.y-from.y)*dy
+  const y = -(target.x-from.x)*dy + (target.y-from.y)*dx
+  const travel = (to.x-from.x)*dx + (to.y-from.y)*dy
+  const r = target.radius + thickness / 2
+  for (const { a, b } of swordQiSegments(kind, width,pulseIndex)) {
+    if (Math.abs(travel) < 1e-9) {
+      if (segmentDistance(x,y,a,b) <= r) return true
+      continue
+    }
+    const points = [a,b,{x:b.x+travel,y:b.y},{x:a.x+travel,y:a.y}]
+    let sign = 0, inside = true
+    for (let i=0;i<4;i++) {
+      const p=points[i], q=points[(i+1)%4]
+      if (segmentDistance(x,y,p,q) <= r) return true
+      const cross=(q.x-p.x)*(y-p.y)-(q.y-p.y)*(x-p.x)
+      if (Math.abs(cross)<1e-9) continue
+      if(sign && sign!==Math.sign(cross)) inside=false
+      sign=Math.sign(cross)
+    }
+    if (inside && Math.abs((b.y-a.y)*travel)>1e-9) return true
+  }
+  return false
+}
+
+const rect = { xmin:-912, xmax:978, ymin:-1140, ymax:1020 }
+const world = (p, origin, dx, dy) => ({
+  x:origin.x+p.x*dx-p.y*dy, y:origin.y+p.x*dy+p.y*dx,
+})
+const pillarAxes = PILLAR_FOOTPRINT.map((p,i) => {
+  const q=PILLAR_FOOTPRINT[(i+1)%PILLAR_FOOTPRINT.length]
+  const length=Math.hypot(q.x-p.x,q.y-p.y)
+  return { x:(p.y-q.y)/length, y:(q.x-p.x)/length }
+})
+
+// Continuous separating axes for a translated thick segment and a convex
+// pillar. The small bevel at corners is conservative, like actor collision.
+function pillarLimit(a,b,dx,dy,limit,radius,pillar) {
+  const len=Math.hypot(b.x-a.x,b.y-a.y)
+  const axes=[...pillarAxes,{x:(a.y-b.y)/len,y:(b.x-a.x)/len}]
+  let enter=0, exit=limit
+  for(const n of axes) {
+    const pa=(a.x-pillar.x)*n.x+(a.y-pillar.y)*n.y
+    const pb=(b.x-pillar.x)*n.x+(b.y-pillar.y)*n.y
+    const lo=Math.min(pa,pb)-radius, hi=Math.max(pa,pb)+radius
+    let min=Infinity,max=-Infinity
+    for(const p of PILLAR_FOOTPRINT) {const v=p.x*n.x+p.y*n.y;min=Math.min(min,v);max=Math.max(max,v)}
+    const speed=dx*n.x+dy*n.y
+    if(Math.abs(speed)<1e-12) {if(hi<min-1e-9||lo>max+1e-9)return limit;continue}
+    const t0=(min-hi)/speed,t1=(max-lo)/speed
+    enter=Math.max(enter,Math.min(t0,t1));exit=Math.min(exit,Math.max(t0,t1))
+    if(enter>exit+1e-9)return limit
+  }
+  return exit>1e-9 && enter<=limit ? Math.max(0,enter) : limit
+}
+
+/** Distance until any part of the blade meets actual terrain, not the camera. */
+export function swordQiTravelLimit(kind,width,thickness,origin,dx,dy,range,arenaVersion,pulseIndex=1) {
+  let limit=range
+  const radius=thickness/2
+  for(const segment of swordQiSegments(kind,width,pulseIndex)) {
+    const a=world(segment.a,origin,dx,dy), b=world(segment.b,origin,dx,dy)
+    for(const p of [a,b]) {
+      if(arenaVersion===1) limit=Math.min(limit,clipHexRay(p,dx,dy,limit,radius))
+      else {
+        if(p.x<rect.xmin+radius||p.x>rect.xmax-radius||p.y<rect.ymin+radius||p.y>rect.ymax-radius)return 0
+        if(Math.abs(dx)>1e-12)limit=Math.min(limit,((dx>0?rect.xmax-radius:rect.xmin+radius)-p.x)/dx)
+        if(Math.abs(dy)>1e-12)limit=Math.min(limit,((dy>0?rect.ymax-radius:rect.ymin+radius)-p.y)/dy)
+      }
+    }
+    if(arenaVersion===1)for(const pillar of TOWER_PILLARS)limit=Math.min(limit,pillarLimit(a,b,dx,dy,limit,radius,pillar))
+  }
+  return Math.max(0,limit)
+}

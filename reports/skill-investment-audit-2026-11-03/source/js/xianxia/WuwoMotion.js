@@ -1,0 +1,36 @@
+// Approved V2 multi-plane motion (+Y up). World contacts and their projected
+// drawing share phase/radius; perspective and waist lift never shrink world reach.
+function point(form, time, index) {
+  const seed = (index * .61803398875) % 1
+  const phase = index * Math.PI * 2 / form.swords + .24 * Math.sin(index * 2.3)
+  const speed = (.62 + .43 * ((index * .38196601125 + .13) % 1))
+    * (index % 4 === 2 ? -1 : 1) * form.motionSpeed
+  const depth = .28 + .19 * ((index * .73 + .2) % 1)
+  const height = 24 * Math.sin(index * 2.12)
+  const tilt = .055 * Math.sin(index * 1.71)
+  // Integrate a positive, independent speed wave analytically. Replays and
+  // collision samples use the same path without mutable phase accumulators.
+  const frequency = Math.PI * 2 / (2.7 + 2.2 * seed)
+  const offset = index * 2.399963
+  const speedFactor = 1 + .60 * Math.sin(time * frequency + offset)
+  const angle = speed * (time + .60 / frequency *
+    (Math.cos(offset) - Math.cos(time * frequency + offset))) + phase
+  const radius = form.radius * (.69 + .29 * seed + .025 * Math.sin(time * .48 + index))
+  const x = radius * Math.cos(angle), z = radius * Math.sin(angle)
+  return { x, y: -z * depth + height - tilt * x - 4 * Math.sin(time * .7 + index),
+    depthY: -z, angle, depth, speedFactor }
+}
+
+export function wuwoSwordPose(form, time, index) {
+  const p = point(form, time, index)
+  const a = point(form, time - .001, index), b = point(form, time + .001, index)
+  const angle = Math.atan2(b.y - a.y, b.x - a.x)
+  const length = form.bladeLength * (.48 + .52 * Math.hypot(Math.sin(p.angle), p.depth * Math.cos(p.angle)))
+  const dx = Math.cos(angle) * length / 2, dy = Math.sin(angle) * length / 2
+  const worldAngle = Math.atan2(b.depthY - a.depthY, b.x - a.x)
+  const worldDX = Math.cos(worldAngle) * form.bladeLength / 2
+  const worldDY = Math.sin(worldAngle) * form.bladeLength / 2
+  return { x: p.x, y: p.y, depthY: p.depthY, angle, length, speedFactor:p.speedFactor,
+    baseX: p.x - dx, baseY: p.y - dy, tipX: p.x + dx, tipY: p.y + dy,
+    collision: {baseX:p.x-worldDX,baseY:p.depthY-worldDY,tipX:p.x+worldDX,tipY:p.depthY+worldDY} }
+}

@@ -1,0 +1,11 @@
+import {MicroForestState,surfaceY} from '../../../js/microforest/MicroForestState.js';
+import {ADVENTURE_LEVELS} from '../../../js/microforest/ForestAdventureCampaign.js';
+import {HeroMotion} from '../../../js/microforest/HeroMotion.js';
+const make=()=>new MicroForestState(ADVENTURE_LEVELS[0]);
+const findings={};
+let s=make(),m=new HeroMotion();m.update(s);s.tick(1/60,{move:1});findings.right=m.update(s,1/60).pose;s.tick(1/60,{move:-1});findings.left=m.update(s,1/60).pose;
+s=make();s.journey.hit('ground contact',false);findings.groundInjury=new HeroMotion().update(s).pose;
+s=make();s.grounded=false;s.journey.hit('air contact',false);m=new HeroMotion();findings.airInjury=[m.update(s).pose];s.tick(.1);findings.airInjury.push(m.update(s,.1).pose);
+s=make();const branch=s.terrain.find(p=>p.a<=3225&&p.b>=3225&&!p.solid);s.journey.place({x:3225,y:surfaceY(branch,3225)+15});s.grounded=false;s.vy=-180;m=new HeroMotion();for(let i=0;i<120&&!s.finished;i++){s.tick(1/120);m.update(s,1/120);}findings.finishLanding={finished:s.finished,landing:s.landing,pose:m.update(s).pose};for(let i=0;i<120;i++){s.tick(1/60);m.update(s,1/60);}findings.finishAfterTwoSeconds={landing:s.landing,pose:m.update(s).pose};
+s=make();s.finished=true;s.pushHeld=true;findings.finishWhileHoldingPush=new HeroMotion().update(s).pose;
+console.log(JSON.stringify(findings,null,2));

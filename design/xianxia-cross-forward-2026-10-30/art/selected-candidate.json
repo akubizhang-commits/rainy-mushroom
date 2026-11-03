@@ -1,0 +1,206 @@
+{
+  "schemaVersion": 1,
+  "selectedCandidate": "c",
+  "selectionScope": "Selected by the development team for user preview, not production integration approval.",
+  "status": "待用户审核；尚未接入新碰撞或生产资源",
+  "technique": "Retained source crescent, premultiplied-alpha bicubic affine projection and source-over composition.",
+  "modelGenerationCalls": 0,
+  "generationCostCU": 0,
+  "cloudUploads": 0,
+  "parameters": {
+    "sx": 1.4,
+    "sy": 0.85,
+    "shear": 0.42,
+    "screenCrossingAngleDegreesAtMiddle": 52.58958014116771,
+    "formula": "u=.7*(cos(theta)-1), v=.5*sin(theta)/sin(pi/4); x=sx*u+sign*shear*v; y=sy*v",
+    "forwardBasisVectors": [
+      [
+        1.4,
+        0
+      ],
+      [
+        1.4,
+        0
+      ]
+    ],
+    "sameForwardDirection": true,
+    "tipsBehindMiddle": true,
+    "tipCoordinatesRelativeToMiddle": [
+      [
+        -0.07703535443718337,
+        -0.425
+      ],
+      [
+        -0.4970353544371834,
+        -0.425
+      ],
+      [
+        -0.4970353544371834,
+        0.425
+      ],
+      [
+        -0.07703535443718337,
+        0.425
+      ]
+    ]
+  },
+  "source": {
+    "path": "cocos-pilot/assets/resources/tower-skill-fx/sword-qi-crescent-v1.png",
+    "sha256": "48deef02cb8e6f9a6c0bde45561615990becd00fdba335970bc3087e33af7b89",
+    "pivotPx": [
+      119,
+      256
+    ],
+    "referenceSpanPx": 474
+  },
+  "retainedPrevious": {
+    "path": "cocos-pilot/assets/resources/tower-skill-fx/sword-qi-cross-v2.png",
+    "sha256": "21ae2f4769b8b356f417f911b7fcc7145fb5570c6a67f4b47eb2e9c077df5f36"
+  },
+  "retainedCandidates": [
+    "a",
+    "b",
+    "c"
+  ],
+  "selectedFullResolution": {
+    "path": "design/xianxia-cross-forward-2026-10-30/art/forward-c.png",
+    "sha256": "4fa95b55192af2844ef29f9e2ac9ee8c697df1017c6293a4ca7010f5fe92c8fd",
+    "bytes": 142815
+  },
+  "selectedIndependentParts": [
+    {
+      "path": "design/xianxia-cross-forward-2026-10-30/art/forward-c-upper.png",
+      "sha256": "d90cc858452654123b75a1a7f2144adaef9142399a351d629d02f693c3c5982c",
+      "bytes": 87031,
+      "sign": -1,
+      "inversePngAffine": [
+        0.7142857142857143,
+        -0.35294117647058826,
+        -95.47058823529412,
+        0,
+        1.1764705882352942,
+        -195.76470588235293
+      ],
+      "alphaBounds": [
+        257,
+        182,
+        546,
+        586
+      ]
+    },
+    {
+      "path": "design/xianxia-cross-forward-2026-10-30/art/forward-c-lower.png",
+      "sha256": "a839aca893aa5ab18dc556cfdb1da3e4ca385a95650edfdabc3112699371eabd",
+      "bytes": 87213,
+      "sign": 1,
+      "inversePngAffine": [
+        0.7142857142857143,
+        0.35294117647058826,
+        -366.52941176470586,
+        0,
+        1.1764705882352942,
+        -195.76470588235293
+      ],
+      "alphaBounds": [
+        257,
+        182,
+        545,
+        586
+      ]
+    }
+  ],
+  "selectedCompatibilityPreview": {
+    "path": "design/xianxia-cross-forward-2026-10-30/art/forward-c-preview-512.png",
+    "sha256": "bcbdc0f0567cf76598a050a1f5b4236294f5f31717f3a8680f249e5f26f2c779",
+    "bytes": 180582,
+    "size": [
+      512,
+      512
+    ],
+    "anchor": [
+      0.7555981975459283,
+      0.5
+    ],
+    "span": 472.60467427781646,
+    "whiteMiddlePx": [
+      362.69524770664714,
+      256
+    ],
+    "alphaBounds": [
+      89,
+      19,
+      432,
+      493
+    ],
+    "note": "For resource-only frozen preview. Production geometry and art are unchanged."
+  },
+  "geometryOverlay": {
+    "path": "design/xianxia-cross-forward-2026-10-30/art/forward-c-geometry.png",
+    "sha256": "00bc774111bec639bbaf1975964e091c119a733b221be664359a8afbc6508ad4",
+    "bytes": 105792
+  },
+  "comparison": {
+    "path": "design/xianxia-cross-forward-2026-10-30/art/forward-candidates-comparison.png",
+    "sha256": "b421f30c9940a404f4af3333b795217ad9181c32cb4aa4bd65c2a2ef8a5f0c18",
+    "bytes": 222016
+  },
+  "contract": {
+    "path": "design/xianxia-cross-forward-2026-10-30/art/forward-candidates.json",
+    "sha256": "fe168e7f3e496c2f244b51aad40959cba07ebc26367c5e1bb9ba7ed08f87644e"
+  },
+  "previewAlignment": {
+    "oldV2WhiteMiddlePx": [
+      288.0,
+      256.0
+    ],
+    "oldV2PivotEvidence": "design/xianxia-sword-qi-curved-2026-10-30/art/prepare_curved_cross.py: DESTINATION_PIVOT = (288.0, 256.0)",
+    "sharedFrontAnchorPx": [
+      386.8662771435153,
+      256.0
+    ],
+    "sharedFrontAnchorNormalized": [
+      0.7555981975459283,
+      0.5
+    ],
+    "sharedReferenceSpanPx": 472.60467427781646,
+    "newWhiteMiddlePx": [
+      362.69524770664714,
+      256
+    ],
+    "newMinusOldWhiteMiddlePx": [
+      74.69524770664714,
+      0.0
+    ],
+    "displayScaleFormula": "skillTransverseSpan / 472.60467427781646",
+    "nodeOffsetFormula": "newNodePosition = oldNodePosition - forwardUnitVector * 74.69524770664714 * displayScale",
+    "offsetUnitsPerTransverseSpan": 0.15805016702551317,
+    "coordinates": "Apply in the same coordinate system as forwardUnitVector and skillTransverseSpan; do not also change anchor or apply the correction twice.",
+    "scope": "Visual-only frozen preview. The old v2 collision remains; do not claim the new curve collision is integrated."
+  },
+  "verification": {
+    "allRecordedHashesMatch": true,
+    "sourceAndPreviousUnchanged": true,
+    "allFourTipsBehindMiddle": true,
+    "forwardAxesBothPositiveX": true,
+    "transparentCanvasBorders": true,
+    "transparentArtFilesChecked": [
+      "design/xianxia-cross-forward-2026-10-30/art/forward-a-upper.png",
+      "design/xianxia-cross-forward-2026-10-30/art/forward-a-lower.png",
+      "design/xianxia-cross-forward-2026-10-30/art/forward-a.png",
+      "design/xianxia-cross-forward-2026-10-30/art/forward-a-preview-512.png",
+      "design/xianxia-cross-forward-2026-10-30/art/forward-b-upper.png",
+      "design/xianxia-cross-forward-2026-10-30/art/forward-b-lower.png",
+      "design/xianxia-cross-forward-2026-10-30/art/forward-b.png",
+      "design/xianxia-cross-forward-2026-10-30/art/forward-b-preview-512.png",
+      "design/xianxia-cross-forward-2026-10-30/art/forward-c-upper.png",
+      "design/xianxia-cross-forward-2026-10-30/art/forward-c-lower.png",
+      "design/xianxia-cross-forward-2026-10-30/art/forward-c.png",
+      "design/xianxia-cross-forward-2026-10-30/art/forward-c-preview-512.png"
+    ]
+  },
+  "notesZh": [
+    "C 版同时保留交叉辨识与两个朝前的月牙凸面。",
+    "本地二维仿射加工，模型制作费用为 0；独立月牙、三版候选、旧版与源文件全部保留。",
+    "本记录只选择用于审核的美术候选；生产接入与碰撞轮廓仍待后续批准及验证。"
+  ]
+}

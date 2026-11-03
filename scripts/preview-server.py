@@ -26,5 +26,5 @@ if __name__ == '__main__':
                 raise
     else:
         raise RuntimeError('本地预览端口 8767–8776 均被占用')
-    print(f'游戏预览：http://127.0.0.1:{port}/scripts/survivor-preview.html', flush=True)
+    print(f'游戏预览：http://127.0.0.1:{port}/cocos-pilot/build/web-mobile/', flush=True)
     server.serve_forever()

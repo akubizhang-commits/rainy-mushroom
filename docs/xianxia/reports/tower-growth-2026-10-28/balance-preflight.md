@@ -1,0 +1,50 @@
+# 新成长真实战斗 QA（2026-10-28）
+
+**自动策略实战与事务验证，不是人体/真人平衡验收。**
+
+状态：dependency-not-ready。种子：1、7、43；单次模拟上限 1800s；九层最多 40 次尝试。
+
+## 自然养成
+
+新档起步；回宗通过 store.act 消费经卷、研习、丹药及强化。战中每80模拟秒暂停保存，按门槛投入已自然得到的点。30点路线只花境界来源对应预算，首通点保留且不兑换研习点。未改HP、怪物、经验掉落或战斗规则；不跳波。
+
+| 路线 | 种子 | 通至 | 尝试 | 战斗秒数 | 最终XP | 已花/总SP |
+|---|---:|---:|---:|---:|---:|---:|
+
+## 首层教学实测
+
+| 路线/种子 | 第1波秒数/自动功法数 | 第3波秒数/自动功法数 |
+|---|---|---|
+
+## 九层同XP同装备对照（容量/战斗 fixtures）
+
+显式构造金丹圆满、通九层及教学完成状态，绝不称为自然养成；经卷和技能等级仍以真实act购买。三36点均兑换3点；30点留下3个首通点不花。所有对照使用同HP、同XP、素问剑品质1/强化4，种子配对。
+
+| 路线 | 种子 | 结果 | 完整波数 | 秒数 | 有效伤害 | 全程DPS | 受到伤害 |
+|---|---:|---|---:|---:|---:|---:|---:|
+
+## 复现、限制与反馈
+
+- 命令：`node scripts/verify-tower-growth-balance.mjs`。可选 `--seeds=1,7,43 --max-attempts=40 --max-seconds=1800 --mode=all|natural|fixtures --suffix=-name`。后缀必须为字母数字短横线。
+- `--repeat-check` 对首个fixture再次运行并比对完整战斗快照和消费台账哈希；重复不混入样本成功率。
+- steer 原样复用旧 journey 的绕行、趋近与24方向危险探测。新helper按1/60秒引擎步长观测，以减少跨步伤害事件遗漏。策略有预知场上危险和零反应延迟优势，不能外推真人。
+- 有效伤害由去重 hit 特效累加，DPS包含行走/刷怪/等待时间，不是技能面板DPS；引擎若在同tick清除特效可能低估。失败局伤害和耗时不可冒充完整清层时间。
+- 三36点fixture已通9层才能获得最后的额外点，不能当作首次通9层的前置证明。30点fixture亦不是自然完成证明。
+- 自然种子与fixture种子分开记录；不挑成功种子、不强改数值。每次胜利必须核对实际完整波数至少20。
+- 仅写本balance脚本及报告；旧journey报告保持不动。
+
+重复性检查："未运行"。
+
+源码运行期间稳定：尚未完成。
+
+问题/依赖：AssertionError [ERR_ASSERTION]: DEPENDENCY_NOT_READY: TowerRun growth API
++ actual - expected
+
++ 'undefined'
+- 'function'
+
+    at runtime (file:///Users/zhangnu/WeChatProjects/rainy-mushroom/scripts/verify-tower-growth-balance.mjs:153:10)
+    at async main (file:///Users/zhangnu/WeChatProjects/rainy-mushroom/scripts/verify-tower-growth-balance.mjs:377:14)
+    at async file:///Users/zhangnu/WeChatProjects/rainy-mushroom/scripts/verify-tower-growth-balance.mjs:404:87
+
+主线程 / Gauss：自然推进停层、40次预算耗尽及fixture差异均应据实复核。本环境对子任务祖先的消息发送被工具拒绝，报告作为交接依据；不擅改硬规则。

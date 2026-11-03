@@ -1,0 +1,70 @@
+{
+  "name": "survivor-virtual-team-design",
+  "description": "虚拟团队第一阶段：项目经理、策划、UI/UX、架构、测试、运营产出割草类生存游戏的设计与 Sprint 1 任务清单。只写文档，不改代码。",
+  "inputs": {},
+  "steps": [
+    {
+      "type": "step",
+      "id": "pm-kickoff",
+      "agent": "wf-planner",
+      "prompt": "你是本项目的【项目经理】。用中文工作。\n\n## 项目背景（所有角色共享）\n- 仓库：/Users/zhangnu/WeChatProjects/rainy-mushroom，微信小游戏，引擎 Cocos Creator 3.8.8（cocos-pilot/ 目录），根目录 package.json 有 npm test / cocos:build:wechat 等脚本。README.md 可能已过时，最近提交是一个 packing 玩法（library/），工作区有大量未提交改动。\n- 账号名称已被微信锁定无法修改（推测为《雨后菌语》，文档中统一写作“雨后菌语（以账号登记名为准）”），新玩法必须与“雨后、蘑菇、森林”主题对得上。\n- 用户已确定新玩法：雨后森林幸存者——类《吸血鬼幸存者》的割草生存：小旅人在雨后森林被虫群围攻，自动攻击，拾取孢子升级，三选一技能，一局约 5–10 分钟。\n- 约束：不得有血腥画面；不得出现“采食野生菌”的求生/回血机制（避免被理解为鼓励吃野生菌）；需符合微信小游戏包体限制（分包）与内容审核；后续要更新「游戏内容介绍」。\n- 团队角色：项目经理、游戏策划、UI/UX、架构师、前后端开发、测试工程师、游戏运营。\n- 本阶段【只写文档，严禁修改任何代码、资源或 git 状态】。所有产出放在 /Users/zhangnu/WeChatProjects/rainy-mushroom/docs/survivor/。\n\n## 你的任务\n先快速调研仓库现状（cocos-pilot 结构、可复用的角色/美术/工具脚本、测试方式），然后写 /Users/zhangnu/WeChatProjects/rainy-mushroom/docs/survivor/00-project-plan.md，包含：项目目标与 MVP 范围（做什么/明确不做什么）、各角色职责与交付物、里程碑（M0 设计、M1 可玩原型、M2 内容与数值、M3 提审准备）、风险清单（含工作区未提交改动、旧玩法代码的处理建议）、协作规则（每个 Sprint 的 设计→开发→测试→复盘 流程）。保持精炼，不超过约 150 行。",
+      "artifacts": { "plan": "/Users/zhangnu/WeChatProjects/rainy-mushroom/docs/survivor/00-project-plan.md" }
+    },
+    {
+      "type": "step",
+      "id": "designer-gdd",
+      "agent": "wf-design",
+      "prompt": "你是本项目的【游戏策划】。用中文工作。只写文档，严禁修改代码、资源或 git 状态。\n\n先阅读项目计划 /Users/zhangnu/WeChatProjects/rainy-mushroom/docs/survivor/00-project-plan.md（其中有项目背景与约束）。\n\n写 /Users/zhangnu/WeChatProjects/rainy-mushroom/docs/survivor/01-gdd.md（游戏设计文档），包含：一句话卖点；核心循环（移动→自动攻击→拾取孢子→升级三选一→Boss/撤离）；操作方式（单指虚拟摇杆，竖屏）；角色属性；MVP 武器 4–6 种与被动 4–6 种（全部用雨/蘑菇/森林意象，如孢子弹、雨伞旋刃、露珠环）及升级与进化规则；敌人 5–6 种 + 1 个 Boss（虫子/蜗牛/蘑菇精灵等，非血腥，被击败化为光点）；波次曲线（按分钟表）；局外成长（货币、永久强化）；失败与胜利条件；数值初稿表（伤害、血量、经验曲线公式）；明确不做的内容。禁止任何“吃蘑菇回血”机制，回血用露水/阳光等意象。MVP 要能在 2–3 个 Sprint 内做完，控制范围。",
+      "artifacts": { "gdd": "/Users/zhangnu/WeChatProjects/rainy-mushroom/docs/survivor/01-gdd.md" }
+    },
+    {
+      "type": "parallel",
+      "id": "role-designs",
+      "joinPolicy": "all",
+      "branches": [
+        {
+          "type": "step",
+          "id": "uiux-design",
+          "agent": "wf-design",
+          "prompt": "你是本项目的【UI/UX 设计师】。用中文工作。只写文档，严禁修改代码、资源或 git 状态。\n\n阅读 /Users/zhangnu/WeChatProjects/rainy-mushroom/docs/survivor/00-project-plan.md 与 01-gdd.md，并查看仓库已有美术方向（docs/forest-art-direction.md、design/、cocos-pilot/assets/resources/ 下现有图集）以判断可复用素材。\n\n写 /Users/zhangnu/WeChatProjects/rainy-mushroom/docs/survivor/02-ui-ux.md：美术风格与色板（雨后森林、可读性优先，敌人/子弹/拾取物在密集场面下要能区分）；竖屏布局与安全区（刘海、底部手势条）；页面流程（启动→主菜单→局内 HUD→升级三选一→暂停→结算→局外强化）并为每页给出线框描述；摇杆交互、触控热区（不小于 44pt 等效）、反馈（受击、升级、拾取）；无障碍（色盲友好的形状区分、可关闭震动/闪屏）；素材清单（每项标注：复用现有/新做/占位，尺寸与图集分组），并说明 MVP 可用几何占位先行。",
+          "artifacts": { "uiux": "/Users/zhangnu/WeChatProjects/rainy-mushroom/docs/survivor/02-ui-ux.md" }
+        },
+        {
+          "type": "step",
+          "id": "architect-design",
+          "agent": "wf-design",
+          "prompt": "你是本项目的【架构师】。用中文工作。只写文档，严禁修改代码、资源或 git 状态。\n\n阅读 /Users/zhangnu/WeChatProjects/rainy-mushroom/docs/survivor/00-project-plan.md 与 01-gdd.md，并深入调研现有代码：cocos-pilot/（Cocos 3.8.8 工程、构建脚本 scripts/cocos/）、js/ 下与引擎无关的逻辑层模式、tests/ 的测试方式（node --test）、docs/engine-architecture.md、docs/architecture/。\n\n写 /Users/zhangnu/WeChatProjects/rainy-mushroom/docs/survivor/03-architecture.md：沿用“引擎无关的纯逻辑层 + Cocos 表现层”分层，使核心战斗可用 node --test 测试；模块划分与目录（如 js/survivor/ 与 cocos-pilot/assets/scripts/Survivor*.ts）及与现有 sync 脚本的衔接；固定步长模拟、实体管理、对象池、空间网格做碰撞以支撑数百个敌人和子弹；数据驱动配置（武器/敌人/波次 JSON）；存档（wx 本地存储，带版本号迁移）；后端方案评估（MVP 建议纯前端，后续排行榜/云存档用微信云开发，给出接口草案与防作弊注意事项）；性能预算（中低端安卓 60/30fps 目标、DrawCall、同屏实体上限、包体与分包方案）；旧玩法代码的处理（隔离而非删除，删除需用户确认）；关键技术风险。",
+          "artifacts": { "architecture": "/Users/zhangnu/WeChatProjects/rainy-mushroom/docs/survivor/03-architecture.md" }
+        },
+        {
+          "type": "step",
+          "id": "ops-plan",
+          "agent": "wf-design",
+          "prompt": "你是本项目的【游戏运营】。用中文工作。只写文档，严禁修改代码、资源或 git 状态。\n\n阅读 /Users/zhangnu/WeChatProjects/rainy-mushroom/docs/survivor/00-project-plan.md 与 01-gdd.md。\n\n写 /Users/zhangnu/WeChatProjects/rainy-mushroom/docs/survivor/05-operations.md：目标用户画像；与同类割草小游戏的差异化定位；「游戏内容介绍」文案草稿（需与玩法和账号名“雨后菌语”主题一致）；提审与合规清单（适龄提示、防沉迷/实名相关要求需以微信官方最新规则为准并标注待核实、隐私协议、无血腥）；核心指标与埋点方案（次留/7留、单局时长、关卡流失点、升级选择分布），埋点事件表；冷启动与分享裂变设计（分享卡片、好友排行榜——依赖架构的后端方案）；变现路线（激励视频复活/双倍奖励为主，MVP 不做内购，说明原因与资质影响）；上线后 4 周的版本节奏与活动规划。凡是涉及政策和平台规则的内容，明确标注“需以官方文档核实”，不要编造具体数值。",
+          "artifacts": { "operations": "/Users/zhangnu/WeChatProjects/rainy-mushroom/docs/survivor/05-operations.md" }
+        }
+      ]
+    },
+    {
+      "type": "step",
+      "id": "qa-plan",
+      "agent": "wf-design",
+      "prompt": "你是本项目的【测试工程师】。用中文工作。只写文档，严禁修改代码、资源或 git 状态。\n\n阅读 /Users/zhangnu/WeChatProjects/rainy-mushroom/docs/survivor/ 下 00、01、02、03 文档，以及仓库 tests/ 现有测试风格与 package.json 脚本。\n\n写 /Users/zhangnu/WeChatProjects/rainy-mushroom/docs/survivor/04-test-plan.md：测试策略分层（纯逻辑单元测试 node --test、确定性模拟回放测试——固定随机种子跑完整一局断言结果、自动化 bot 平衡测试、Cocos 构建冒烟、真机手测）；功能测试用例清单（按 GDD 模块，含边界：同时升级多级、暂停中切后台、存档损坏）；性能测试方案（同屏实体压力场景、帧时间与内存指标、目标机型档位、通过阈值与 03 的预算一致）；包体检查；兼容性（iOS/Android 微信、刘海屏）；合规检查项（无血腥、无采食暗示、文案）；缺陷分级与每个 Sprint 的验收门槛（Definition of Done）。",
+      "artifacts": { "test_plan": "/Users/zhangnu/WeChatProjects/rainy-mushroom/docs/survivor/04-test-plan.md" }
+    },
+    {
+      "type": "step",
+      "id": "design-review",
+      "agent": "wf-design-reviewer",
+      "prompt": "用中文审阅 /Users/zhangnu/WeChatProjects/rainy-mushroom/docs/survivor/ 下 00–05 全部文档，作为跨角色设计评审。重点：文档间是否矛盾（如 GDD 的实体数量与架构性能预算、UI 素材与包体、运营埋点与架构是否支持）；MVP 范围是否可在 2–3 个 Sprint 完成；是否违反约束（血腥、采食野生菌暗示、编造平台政策数值）；需求是否有歧义导致开发无法开工。只写报告，不修改代码。将报告写入 /Users/zhangnu/WeChatProjects/rainy-mushroom/docs/survivor/06-design-review.md，按 HIGH/MEDIUM/LOW 列出问题与建议改法。",
+      "artifacts": { "review": "/Users/zhangnu/WeChatProjects/rainy-mushroom/docs/survivor/06-design-review.md" }
+    },
+    {
+      "type": "step",
+      "id": "pm-sprint1",
+      "agent": "wf-planner",
+      "prompt": "你是【项目经理】。用中文工作。只写文档，严禁修改代码、资源或 git 状态。\n\n阅读 /Users/zhangnu/WeChatProjects/rainy-mushroom/docs/survivor/ 下 00–06 全部文档。对 06-design-review.md 中每个 HIGH/MEDIUM 问题，直接修订对应文档（只改 docs/survivor/ 下的文件）或给出明确裁决并记录理由。\n\n然后写 /Users/zhangnu/WeChatProjects/rainy-mushroom/docs/survivor/07-sprint-1-backlog.md：Sprint 1 目标为“可玩竖切原型”（几何占位美术，1 种武器、2 种敌人、升级三选一、计时胜利/死亡结算，逻辑层有单测）。任务表每项包含：编号、负责角色（前端开发/后端开发/UI/测试/策划/运营）、描述、依赖、验收标准、预估（S/M/L）、涉及文件路径。按依赖顺序排列，第一项必须是“确认工作区未提交改动的处理方式（需用户决定）”。最后附一份给用户的决策清单（需要用户拍板的问题，如账号登记名、旧玩法代码去留）。",
+      "artifacts": { "backlog": "/Users/zhangnu/WeChatProjects/rainy-mushroom/docs/survivor/07-sprint-1-backlog.md" }
+    }
+  ]
+}

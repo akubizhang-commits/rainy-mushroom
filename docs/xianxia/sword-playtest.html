@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="zh-CN">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="icon" href="data:,">
+<title>剑修 · 固定种子试玩</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#edf0e8;color:#203e33;font:16px/1.7 system-ui,sans-serif}
+main{max-width:1200px;margin:auto;padding:24px}h1{font-size:30px;line-height:1.3;margin:8px 0 16px}
+.layout{display:grid;grid-template-columns:minmax(300px,440px) 1fr;gap:28px;align-items:start}
+iframe{display:block;width:100%;aspect-ratio:720/1560;border:0;border-radius:16px;background:#182e29}
+.panel{background:#fff;padding:22px;border-radius:16px;margin-bottom:16px}.muted{color:#5c7067}.badge{color:#855414}
+button,select{font:inherit;min-height:46px;padding:8px 14px;border:1px solid #8fa398;border-radius:8px;background:#fff;color:#203e33}
+button{cursor:pointer}button.primary{background:#265943;color:white;border-color:#265943}button:disabled{opacity:.45;cursor:default}
+.actions{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}dl{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}dd{margin:0;text-align:right;font-weight:600}
+textarea{font:inherit;width:100%;min-height:90px;padding:10px;border:1px solid #8fa398;border-radius:8px}a{color:#285f48}small{font-size:14px}
+.scroll{overflow:auto}table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:8px;border-bottom:1px solid #d5dfd5;white-space:nowrap}
+#status{min-height:28px}summary{cursor:pointer;font-weight:600}
+@media(max-width:760px){main{padding:14px}.layout{display:flex;flex-direction:column}.game{width:100%;max-width:440px;align-self:center}.info{width:100%}h1{font-size:25px}}
+</style>
+<main>
+<small class="muted">古宗庭院 / 筑基成长观察 / 固定种子 0</small>
+<h1>亲自试一局，再判断卡在哪里</h1>
+<p>从零开始，自由选卡。先选择路线并载入，再点击游戏内“出山修行”。攻击自动释放；在游戏内用 WASD、方向键或触摸摇杆移动。</p>
+<div class="actions">
+<label>目标路线 <select id="route"><option value="line">一线天 → 天地一剑</option><option value="formation">两仪 → 四象剑阵</option></select></label>
+<button id="load" class="primary">载入试玩</button><button id="export" disabled>导出本次记录</button><button id="recover">恢复当前暂存</button><button id="previous">导出上一局</button>
+</div>
+<p id="status" role="status">尚未开始。人类体验结论待实际试玩。</p>
+<div class="layout">
+<div class="game"><iframe id="game" title="剑修固定种子试玩" allow="autoplay" tabindex="0"></iframe></div>
+<div class="info">
+<section class="panel"><h2>这一局观察什么</h2>
+<ol><li>10级前：移动、躲避和选卡是否清楚？</li><li>10级后：目标功法什么时候出现？拿到后是否感觉更有用？</li><li>结束时：能否说清楚被什么击中、为何没能成型？</li></ol>
+<p class="muted">目标路线不会强制发牌。不需要照抄机器人选卡，也不要为了完成测试刻意送死。切换到页面按钮会暂停游戏，返回后按游戏内“继续”。</p>
+<label for="notes">你的观察（随记录导出）</label><textarea id="notes" placeholder="例如：卡片看不懂、看不到敌弹、升级后没有变强……"></textarea>
+</section>
+<section class="panel"><h2>本次记录</h2><p id="empty">等待游戏内开始一局。每次重开都会创建新编号。</p>
+<dl><dt>游戏时间</dt><dd id="time">—</dd><dt>角色等级</dt><dd id="level">—</dd><dt>已选卡片</dt><dd id="choices">—</dd><dt>状态</dt><dd id="state">—</dd></dl>
+<p id="identity" class="muted"></p><p class="badge" id="integrity"></p>
+<small>记录每5秒暂存在本机浏览器，不写入正式游戏存档，不上传服务器。暂存保留当前局和上一局；重要记录请导出。</small></section>
+<details class="panel"><summary>查看旧地图机器人历史记录</summary>
+<p>当前地图为古宗庭院：封界内战斗，边缘淡青线标示活动范围。固定初始种子、720×1560逻辑视野、零局外加成。旧绿色地图的记录仅作历史参考，不与新地图直接比较。机器人每步读取世界状态，能力与人类不同；操作和选卡不同后，遇敌与后续卡片也会不同。</p>
+<div id="baseline" class="scroll">参照加载中…</div><p id="comparison"></p>
+</details>
+<p><a href="32-sword-fixed-playtest.md">测试方法与重放说明</a> · <a href="sword-supply-review.html">上一轮供给实验</a></p>
+</div></div>
+</main>
+<script type="module">
+const $=id=>document.getElementById(id),key='xianxia.playtest.v1.latest',previousKey='xianxia.playtest.v1.previous';let activeRoute=null,latest=null,wantsExport=false,baseline=null,channel=null,observedId=null;
+const states={playing:'进行中',levelup:'正在选卡',paused:'已暂停',lost:'已结束（失败或主动退出）',won:'通关',cleansing:'净化中',extract:'撤离中'};
+function download(record){
+ const data={...record,observation:$('notes').value,exportedAt:new Date().toISOString(),
+  display:{iframeWidth:$('game').clientWidth,iframeHeight:$('game').clientHeight,pixelRatio:devicePixelRatio}};
+ const url=URL.createObjectURL(new Blob([JSON.stringify(data)],{type:'application/json'})),a=document.createElement('a');
+ a.href=url;a.download=`sword-playtest-${record.config.route}-${record.id}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+function render(r){
+ $('empty').textContent='操作记录已开始';$('time').textContent=`${r.final.time.toFixed(1)} 秒`;
+ $('level').textContent=r.final.level;$('choices').textContent=r.choices.length;$('state').textContent=r.final.abandoned?'主动退出':states[r.final.state]||r.final.state;
+ $('identity').textContent=`编号 ${r.id} · ${r.config.route==='line'?'贯穿':'剑阵'} · 种子0`;
+ $('integrity').textContent=r.complete?'记录完整；“进行中/暂停”导出属于未完成样本。':'记录超出容量，不可用于完整重放。';
+ $('export').disabled=false;
+ if(baseline)$('comparison').textContent=r.sourceFingerprint===baseline.sourceFingerprint&&r.config.arena===baseline.routes?.[r.config.route]?.config?.arena?'运行源码与地图均与机器人参照一致。':'地图或源码版本不同；以下历史记录不用于本局对比。';
+}
+$('load').onclick=()=>{
+ if(latest&&!['won','lost'].includes(latest.final.state)&&!confirm('将开始新一局，当前记录移到“上一局”。这里只保留最近两局，重要记录请先导出。继续吗？'))return;
+ activeRoute=$('route').value;latest=null;wantsExport=false;$('export').disabled=true;channel=crypto.randomUUID();
+ $('game').src=`../../cocos-pilot/build/web-mobile/index.html?ruleset=xianxia&playtest=1&route=${activeRoute}&channel=${channel}`;
+ $('status').textContent='正在载入。资源就绪后，请在游戏内点击“出山修行”。';
+};
+window.addEventListener('message',e=>{
+ if(e.origin!==location.origin||e.source!==$('game').contentWindow||e.data?.type!=='sword-playtest-record'||e.data.channel!==channel)return;
+ const r=e.data.record;
+ if(r?.format!=='sword-playtest-v1'||r.config?.route!==activeRoute||!Array.isArray(r.operations)||!r.final)return;
+ if(observedId!==r.id){
+  try{const prior=latest?{...latest,observation:$('notes').value}:JSON.parse(localStorage.getItem(key));if(prior&&prior.id!==r.id)localStorage.setItem(previousKey,JSON.stringify(prior))}catch{}
+  $('notes').value='';observedId=r.id;
+ }
+ latest=r;render(r);$('status').textContent='记录更新。实际试玩尚未由分析人员复核。';
+ try{localStorage.setItem(key,JSON.stringify({...r,observation:$('notes').value}))}
+ catch{$('status').textContent='本机暂存失败，请及时导出记录。'}
+ if(wantsExport){wantsExport=false;download(r)}
+});
+$('export').onclick=()=>{wantsExport=true;$('game').contentWindow.postMessage({type:'sword-playtest-request'},location.origin)};
+$('notes').oninput=()=>{if(latest)try{localStorage.setItem(key,JSON.stringify({...latest,observation:$('notes').value}))}catch{$('status').textContent='笔记暂存失败，请导出保存。'}};
+function recover(storageKey){
+ try{const r=JSON.parse(localStorage.getItem(storageKey));if(!r)throw Error();const note=$('notes').value;$('notes').value=r.observation||'';download(r);$('notes').value=note}
+ catch{$('status').textContent='没有可恢复的暂存记录。'}
+}
+$('recover').onclick=()=>recover(key);$('previous').onclick=()=>recover(previousKey);
+fetch('reports/sword-playtest-2026-10-27/baseline.json').then(r=>{if(!r.ok)throw Error();return r.json()}).then(data=>{
+ baseline=data;const table=document.createElement('table');table.innerHTML='<tr><th>路线</th><th>存活</th><th>等级</th></tr>';
+ for(const route of ['line','formation']){const r=data.routes[route],row=table.insertRow();for(const value of [route==='line'?'贯穿':'剑阵',`${r.final.time.toFixed(1)}秒`,r.final.level])row.insertCell().textContent=value}
+ $('baseline').replaceChildren(table);
+}).catch(()=>$('baseline').textContent='参照加载失败，请检查本地服务。');
+</script>
+</html>

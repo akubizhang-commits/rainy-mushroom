@@ -1,0 +1,8 @@
+import { EQUIPMENT_ROSTER } from './TowerEquipmentRoster.js'
+const definitions = new Map(EQUIPMENT_ROSTER.map(d => [d.id, d]))
+export function equipmentSource(id) {
+  const d = definitions.get(id)
+  return !d ? null : d.quality === 0 ? 'starter' : d.tier === 'fan' ? 'shopOnly' : 'qualityPool'
+}
+export function sourceQualities(id) { const d = definitions.get(id); return d ? [d.quality] : [] }
+export function equipmentSourceLabel(id) { return ({ qualityPool:'同品质炼制／机缘抽奖', shopOnly:'仅限购买', starter:'初始赠送' })[equipmentSource(id)] || '未知来源' }

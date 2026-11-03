@@ -1,0 +1,6067 @@
+{
+  "status": "approved_doc52_fixed_floor_scaling",
+  "catalog": "beast-catalog.json",
+  "economy": "economy-v2.json",
+  "attributes": "rank-attributes.json",
+  "floors": [
+    {
+      "floor": 1,
+      "name": "獠牙石坪",
+      "main_family": "boar",
+      "boss_name": "裂岩獠王",
+      "boss_id": "boar_boss",
+      "boss_rank": 3,
+      "concurrent_cap": 24,
+      "unlock": "initial",
+      "normal_family_pool": [
+        "boar",
+        "wolf",
+        "spider"
+      ],
+      "waves": [
+        {
+          "id": "tower-f01-w01",
+          "wave": 1,
+          "kind": "normal",
+          "normal": {
+            "boar": 10
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 10,
+          "planned_required": 10,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "boar_normal_r1",
+              "rank": 1,
+              "count": 10
+            }
+          ]
+        },
+        {
+          "id": "tower-f01-w02",
+          "wave": 2,
+          "kind": "normal",
+          "normal": {
+            "wolf": 12
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 12,
+          "planned_required": 12,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "wolf_normal_r1",
+              "rank": 1,
+              "count": 12
+            }
+          ]
+        },
+        {
+          "id": "tower-f01-w03",
+          "wave": 3,
+          "kind": "normal",
+          "normal": {
+            "spider": 14
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 14,
+          "planned_required": 14,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "spider_normal_r1",
+              "rank": 1,
+              "count": 14
+            }
+          ]
+        },
+        {
+          "id": "tower-f01-w04",
+          "wave": 4,
+          "kind": "normal",
+          "normal": {
+            "boar": 9,
+            "wolf": 7
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 16,
+          "planned_required": 16,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "boar_normal_r1",
+              "rank": 1,
+              "count": 9
+            },
+            {
+              "archetype": "wolf_normal_r1",
+              "rank": 1,
+              "count": 7
+            }
+          ]
+        },
+        {
+          "id": "tower-f01-w05",
+          "wave": 5,
+          "kind": "elite",
+          "normal": {
+            "boar": 6,
+            "spider": 4
+          },
+          "elite": {
+            "boar": 1
+          },
+          "boss_count": 0,
+          "normal_count": 10,
+          "planned_required": 11,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "boar_normal_r1",
+              "rank": 1,
+              "count": 6
+            },
+            {
+              "archetype": "spider_normal_r1",
+              "rank": 1,
+              "count": 4
+            },
+            {
+              "archetype": "boar_elite_f1_w5_n1",
+              "rank": 2,
+              "count": 1
+            }
+          ]
+        },
+        {
+          "id": "tower-f01-w06",
+          "wave": 6,
+          "kind": "normal",
+          "normal": {
+            "boar": 9,
+            "wolf": 7
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 16,
+          "planned_required": 16,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "boar_normal_r1",
+              "rank": 1,
+              "count": 9
+            },
+            {
+              "archetype": "wolf_normal_r1",
+              "rank": 1,
+              "count": 7
+            }
+          ]
+        },
+        {
+          "id": "tower-f01-w07",
+          "wave": 7,
+          "kind": "normal",
+          "normal": {
+            "boar": 10,
+            "spider": 8
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 18,
+          "planned_required": 18,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "boar_normal_r1",
+              "rank": 1,
+              "count": 10
+            },
+            {
+              "archetype": "spider_normal_r1",
+              "rank": 1,
+              "count": 8
+            }
+          ]
+        },
+        {
+          "id": "tower-f01-w08",
+          "wave": 8,
+          "kind": "normal",
+          "normal": {
+            "boar": 12,
+            "wolf": 8
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 20,
+          "planned_required": 20,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "boar_normal_r1",
+              "rank": 1,
+              "count": 12
+            },
+            {
+              "archetype": "wolf_normal_r1",
+              "rank": 1,
+              "count": 8
+            }
+          ]
+        },
+        {
+          "id": "tower-f01-w09",
+          "wave": 9,
+          "kind": "normal",
+          "normal": {
+            "boar": 13,
+            "spider": 9
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 22,
+          "planned_required": 22,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "boar_normal_r1",
+              "rank": 1,
+              "count": 13
+            },
+            {
+              "archetype": "spider_normal_r1",
+              "rank": 1,
+              "count": 9
+            }
+          ]
+        },
+        {
+          "id": "tower-f01-w10",
+          "wave": 10,
+          "kind": "elite",
+          "normal": {
+            "boar": 7,
+            "wolf": 5
+          },
+          "elite": {
+            "wolf": 2
+          },
+          "boss_count": 0,
+          "normal_count": 12,
+          "planned_required": 14,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "boar_normal_r1",
+              "rank": 1,
+              "count": 7
+            },
+            {
+              "archetype": "wolf_normal_r1",
+              "rank": 1,
+              "count": 5
+            },
+            {
+              "archetype": "wolf_elite_f1_w10_n2",
+              "rank": 2,
+              "count": 1
+            },
+            {
+              "archetype": "wolf_elite_f1_w10_n3",
+              "rank": 2,
+              "count": 1
+            }
+          ]
+        },
+        {
+          "id": "tower-f01-w11",
+          "wave": 11,
+          "kind": "normal",
+          "normal": {
+            "boar": 10,
+            "spider": 6,
+            "wolf": 4
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 20,
+          "planned_required": 20,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "boar_normal_r1",
+              "rank": 1,
+              "count": 10
+            },
+            {
+              "archetype": "spider_normal_r1",
+              "rank": 1,
+              "count": 6
+            },
+            {
+              "archetype": "wolf_normal_r1",
+              "rank": 1,
+              "count": 4
+            }
+          ]
+        },
+        {
+          "id": "tower-f01-w12",
+          "wave": 12,
+          "kind": "normal",
+          "normal": {
+            "boar": 11,
+            "wolf": 6,
+            "spider": 5
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 22,
+          "planned_required": 22,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "boar_normal_r1",
+              "rank": 1,
+              "count": 11
+            },
+            {
+              "archetype": "wolf_normal_r1",
+              "rank": 1,
+              "count": 6
+            },
+            {
+              "archetype": "spider_normal_r1",
+              "rank": 1,
+              "count": 5
+            }
+          ]
+        },
+        {
+          "id": "tower-f01-w13",
+          "wave": 13,
+          "kind": "normal",
+          "normal": {
+            "boar": 12,
+            "spider": 7,
+            "wolf": 5
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 24,
+          "planned_required": 24,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "boar_normal_r1",
+              "rank": 1,
+              "count": 12
+            },
+            {
+              "archetype": "spider_normal_r1",
+              "rank": 1,
+              "count": 7
+            },
+            {
+              "archetype": "wolf_normal_r1",
+              "rank": 1,
+              "count": 5
+            }
+          ]
+        },
+        {
+          "id": "tower-f01-w14",
+          "wave": 14,
+          "kind": "normal",
+          "normal": {
+            "boar": 13,
+            "wolf": 7,
+            "spider": 6
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 26,
+          "planned_required": 26,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "boar_normal_r1",
+              "rank": 1,
+              "count": 13
+            },
+            {
+              "archetype": "wolf_normal_r1",
+              "rank": 1,
+              "count": 7
+            },
+            {
+              "archetype": "spider_normal_r1",
+              "rank": 1,
+              "count": 6
+            }
+          ]
+        },
+        {
+          "id": "tower-f01-w15",
+          "wave": 15,
+          "kind": "elite",
+          "normal": {
+            "boar": 7,
+            "spider": 4,
+            "wolf": 3
+          },
+          "elite": {
+            "spider": 2
+          },
+          "boss_count": 0,
+          "normal_count": 14,
+          "planned_required": 16,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "boar_normal_r1",
+              "rank": 1,
+              "count": 7
+            },
+            {
+              "archetype": "spider_normal_r1",
+              "rank": 1,
+              "count": 4
+            },
+            {
+              "archetype": "wolf_normal_r1",
+              "rank": 1,
+              "count": 3
+            },
+            {
+              "archetype": "spider_elite_f1_w15_n4",
+              "rank": 2,
+              "count": 1
+            },
+            {
+              "archetype": "spider_elite_f1_w15_n5",
+              "rank": 2,
+              "count": 1
+            }
+          ]
+        },
+        {
+          "id": "tower-f01-w16",
+          "wave": 16,
+          "kind": "normal",
+          "normal": {
+            "boar": 12,
+            "wolf": 7,
+            "spider": 5
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 24,
+          "planned_required": 24,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "boar_normal_r1",
+              "rank": 1,
+              "count": 12
+            },
+            {
+              "archetype": "wolf_normal_r1",
+              "rank": 1,
+              "count": 7
+            },
+            {
+              "archetype": "spider_normal_r1",
+              "rank": 1,
+              "count": 5
+            }
+          ]
+        },
+        {
+          "id": "tower-f01-w17",
+          "wave": 17,
+          "kind": "normal",
+          "normal": {
+            "boar": 13,
+            "spider": 7,
+            "wolf": 6
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 26,
+          "planned_required": 26,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "boar_normal_r1",
+              "rank": 1,
+              "count": 13
+            },
+            {
+              "archetype": "spider_normal_r1",
+              "rank": 1,
+              "count": 7
+            },
+            {
+              "archetype": "wolf_normal_r1",
+              "rank": 1,
+              "count": 6
+            }
+          ]
+        },
+        {
+          "id": "tower-f01-w18",
+          "wave": 18,
+          "kind": "normal",
+          "normal": {
+            "boar": 14,
+            "wolf": 8,
+            "spider": 6
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 28,
+          "planned_required": 28,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "boar_normal_r1",
+              "rank": 1,
+              "count": 14
+            },
+            {
+              "archetype": "wolf_normal_r1",
+              "rank": 1,
+              "count": 8
+            },
+            {
+              "archetype": "spider_normal_r1",
+              "rank": 1,
+              "count": 6
+            }
+          ]
+        },
+        {
+          "id": "tower-f01-w19",
+          "wave": 19,
+          "kind": "normal",
+          "normal": {
+            "boar": 15,
+            "spider": 9,
+            "wolf": 6
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 30,
+          "planned_required": 30,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "boar_normal_r1",
+              "rank": 1,
+              "count": 15
+            },
+            {
+              "archetype": "spider_normal_r1",
+              "rank": 1,
+              "count": 9
+            },
+            {
+              "archetype": "wolf_normal_r1",
+              "rank": 1,
+              "count": 6
+            }
+          ]
+        },
+        {
+          "id": "tower-f01-w20",
+          "wave": 20,
+          "kind": "boss",
+          "normal": {
+            "boar": 4,
+            "wolf": 2,
+            "spider": 2
+          },
+          "elite": {},
+          "boss_count": 1,
+          "normal_count": 8,
+          "planned_required": 9,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [
+            {
+              "trigger": "start",
+              "count": 4
+            },
+            {
+              "trigger": "boss_half_hp_or_death",
+              "count": 4
+            }
+          ],
+          "enemy_groups": [
+            {
+              "archetype": "boar_normal_r1",
+              "rank": 1,
+              "count": 4
+            },
+            {
+              "archetype": "wolf_normal_r1",
+              "rank": 1,
+              "count": 2
+            },
+            {
+              "archetype": "spider_normal_r1",
+              "rank": 1,
+              "count": 2
+            },
+            {
+              "archetype": "boar_boss",
+              "rank": 3,
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "floor_stat_scale": {
+        "version": 4,
+        "reference_level": 3,
+        "normal_hp": 150,
+        "elite_hp": 3500,
+        "boss_hp": 16000,
+        "normal_damage": 4.664,
+        "elite_damage": 7.932,
+        "boss_damage": 9.332,
+        "boss_heavy_damage": 14.928,
+        "early_normal_through_wave": 4,
+        "early_normal_hp_multiplier": 1,
+        "rank_role_version": 1,
+        "boss_budget_revision": "rank-role-middle-gear-v1"
+      },
+      "cultivation_xp_budget": 180,
+      "roster_revision": "rank-role-v1",
+      "stat_scale_rule": "普通/精英共享物种与品阶基础，精英气血2.5倍、普攻1.15倍；Boss独立遭遇预算。"
+    },
+    {
+      "floor": 2,
+      "name": "啸月竹林",
+      "main_family": "wolf",
+      "boss_name": "啸月狼王",
+      "boss_id": "wolf_boss",
+      "boss_rank": 3,
+      "concurrent_cap": 28,
+      "unlock": "clear-floor-1",
+      "normal_family_pool": [
+        "wolf",
+        "boar",
+        "bat"
+      ],
+      "waves": [
+        {
+          "id": "tower-f02-w01",
+          "wave": 1,
+          "kind": "normal",
+          "normal": {
+            "wolf": 12
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 12,
+          "planned_required": 12,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "wolf_normal_r1",
+              "rank": 1,
+              "count": 12
+            }
+          ]
+        },
+        {
+          "id": "tower-f02-w02",
+          "wave": 2,
+          "kind": "normal",
+          "normal": {
+            "bat": 14
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 14,
+          "planned_required": 14,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "bat_normal_r1",
+              "rank": 1,
+              "count": 14
+            }
+          ]
+        },
+        {
+          "id": "tower-f02-w03",
+          "wave": 3,
+          "kind": "normal",
+          "normal": {
+            "boar": 16
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 16,
+          "planned_required": 16,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "boar_normal_r1",
+              "rank": 1,
+              "count": 16
+            }
+          ]
+        },
+        {
+          "id": "tower-f02-w04",
+          "wave": 4,
+          "kind": "normal",
+          "normal": {
+            "wolf": 10,
+            "bat": 8
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 18,
+          "planned_required": 18,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "wolf_normal_r1",
+              "rank": 1,
+              "count": 10
+            },
+            {
+              "archetype": "bat_normal_r1",
+              "rank": 1,
+              "count": 8
+            }
+          ]
+        },
+        {
+          "id": "tower-f02-w05",
+          "wave": 5,
+          "kind": "elite",
+          "normal": {
+            "wolf": 7,
+            "boar": 5
+          },
+          "elite": {
+            "wolf": 1
+          },
+          "boss_count": 0,
+          "normal_count": 12,
+          "planned_required": 13,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "wolf_normal_r1",
+              "rank": 1,
+              "count": 7
+            },
+            {
+              "archetype": "boar_normal_r1",
+              "rank": 1,
+              "count": 5
+            },
+            {
+              "archetype": "wolf_elite_f2_w5_n1",
+              "rank": 2,
+              "count": 1
+            }
+          ]
+        },
+        {
+          "id": "tower-f02-w06",
+          "wave": 6,
+          "kind": "normal",
+          "normal": {
+            "wolf": 10,
+            "boar": 8
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 18,
+          "planned_required": 18,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "wolf_normal_r1",
+              "rank": 1,
+              "count": 10
+            },
+            {
+              "archetype": "boar_normal_r1",
+              "rank": 1,
+              "count": 8
+            }
+          ]
+        },
+        {
+          "id": "tower-f02-w07",
+          "wave": 7,
+          "kind": "normal",
+          "normal": {
+            "wolf": 12,
+            "bat": 8
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 20,
+          "planned_required": 20,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "wolf_normal_r1",
+              "rank": 1,
+              "count": 12
+            },
+            {
+              "archetype": "bat_normal_r1",
+              "rank": 1,
+              "count": 8
+            }
+          ]
+        },
+        {
+          "id": "tower-f02-w08",
+          "wave": 8,
+          "kind": "normal",
+          "normal": {
+            "wolf": 13,
+            "boar": 9
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 22,
+          "planned_required": 22,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "wolf_normal_r1",
+              "rank": 1,
+              "count": 13
+            },
+            {
+              "archetype": "boar_normal_r1",
+              "rank": 1,
+              "count": 9
+            }
+          ]
+        },
+        {
+          "id": "tower-f02-w09",
+          "wave": 9,
+          "kind": "normal",
+          "normal": {
+            "wolf": 14,
+            "boar": 10
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 24,
+          "planned_required": 24,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "wolf_normal_r1",
+              "rank": 1,
+              "count": 14
+            },
+            {
+              "archetype": "boar_normal_r1",
+              "rank": 1,
+              "count": 10
+            }
+          ]
+        },
+        {
+          "id": "tower-f02-w10",
+          "wave": 10,
+          "kind": "elite",
+          "normal": {
+            "wolf": 8,
+            "bat": 6
+          },
+          "elite": {
+            "bat": 2
+          },
+          "boss_count": 0,
+          "normal_count": 14,
+          "planned_required": 16,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "wolf_normal_r1",
+              "rank": 1,
+              "count": 8
+            },
+            {
+              "archetype": "bat_normal_r1",
+              "rank": 1,
+              "count": 6
+            },
+            {
+              "archetype": "bat_elite_f2_w10_n2",
+              "rank": 2,
+              "count": 1
+            },
+            {
+              "archetype": "bat_elite_f2_w10_n3",
+              "rank": 2,
+              "count": 1
+            }
+          ]
+        },
+        {
+          "id": "tower-f02-w11",
+          "wave": 11,
+          "kind": "normal",
+          "normal": {
+            "wolf": 11,
+            "boar": 11
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 22,
+          "planned_required": 22,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "wolf_normal_r1",
+              "rank": 1,
+              "count": 11
+            },
+            {
+              "archetype": "boar_normal_r1",
+              "rank": 1,
+              "count": 6
+            },
+            {
+              "archetype": "boar_normal_r1",
+              "rank": 1,
+              "count": 5
+            }
+          ]
+        },
+        {
+          "id": "tower-f02-w12",
+          "wave": 12,
+          "kind": "normal",
+          "normal": {
+            "wolf": 12,
+            "boar": 7,
+            "bat": 5
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 24,
+          "planned_required": 24,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "wolf_normal_r1",
+              "rank": 1,
+              "count": 12
+            },
+            {
+              "archetype": "boar_normal_r1",
+              "rank": 1,
+              "count": 7
+            },
+            {
+              "archetype": "bat_normal_r1",
+              "rank": 1,
+              "count": 5
+            }
+          ]
+        },
+        {
+          "id": "tower-f02-w13",
+          "wave": 13,
+          "kind": "normal",
+          "normal": {
+            "wolf": 13,
+            "bat": 7,
+            "boar": 6
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 26,
+          "planned_required": 26,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "wolf_normal_r1",
+              "rank": 1,
+              "count": 13
+            },
+            {
+              "archetype": "bat_normal_r1",
+              "rank": 1,
+              "count": 7
+            },
+            {
+              "archetype": "boar_normal_r1",
+              "rank": 1,
+              "count": 6
+            }
+          ]
+        },
+        {
+          "id": "tower-f02-w14",
+          "wave": 14,
+          "kind": "normal",
+          "normal": {
+            "wolf": 14,
+            "boar": 14
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 28,
+          "planned_required": 28,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "wolf_normal_r1",
+              "rank": 1,
+              "count": 14
+            },
+            {
+              "archetype": "boar_normal_r1",
+              "rank": 1,
+              "count": 8
+            },
+            {
+              "archetype": "boar_normal_r1",
+              "rank": 1,
+              "count": 6
+            }
+          ]
+        },
+        {
+          "id": "tower-f02-w15",
+          "wave": 15,
+          "kind": "elite",
+          "normal": {
+            "wolf": 8,
+            "boar": 4,
+            "bat": 4
+          },
+          "elite": {
+            "boar": 2
+          },
+          "boss_count": 0,
+          "normal_count": 16,
+          "planned_required": 18,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "wolf_normal_r1",
+              "rank": 1,
+              "count": 8
+            },
+            {
+              "archetype": "boar_normal_r1",
+              "rank": 1,
+              "count": 4
+            },
+            {
+              "archetype": "bat_normal_r1",
+              "rank": 1,
+              "count": 4
+            },
+            {
+              "archetype": "boar_elite_f2_w15_n4",
+              "rank": 3,
+              "count": 1
+            },
+            {
+              "archetype": "boar_elite_f2_w15_n5",
+              "rank": 3,
+              "count": 1
+            }
+          ]
+        },
+        {
+          "id": "tower-f02-w16",
+          "wave": 16,
+          "kind": "normal",
+          "normal": {
+            "wolf": 13,
+            "bat": 7,
+            "boar": 6
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 26,
+          "planned_required": 26,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "wolf_normal_r1",
+              "rank": 1,
+              "count": 13
+            },
+            {
+              "archetype": "bat_normal_r1",
+              "rank": 1,
+              "count": 1
+            },
+            {
+              "archetype": "bat_normal_r2",
+              "rank": 2,
+              "count": 6
+            },
+            {
+              "archetype": "boar_normal_r2",
+              "rank": 2,
+              "count": 6
+            }
+          ]
+        },
+        {
+          "id": "tower-f02-w17",
+          "wave": 17,
+          "kind": "normal",
+          "normal": {
+            "wolf": 14,
+            "boar": 14
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 28,
+          "planned_required": 28,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "wolf_normal_r2",
+              "rank": 2,
+              "count": 14
+            },
+            {
+              "archetype": "boar_normal_r2",
+              "rank": 2,
+              "count": 8
+            },
+            {
+              "archetype": "boar_normal_r2",
+              "rank": 2,
+              "count": 6
+            }
+          ]
+        },
+        {
+          "id": "tower-f02-w18",
+          "wave": 18,
+          "kind": "normal",
+          "normal": {
+            "wolf": 15,
+            "boar": 9,
+            "bat": 6
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 30,
+          "planned_required": 30,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "wolf_normal_r2",
+              "rank": 2,
+              "count": 15
+            },
+            {
+              "archetype": "boar_normal_r2",
+              "rank": 2,
+              "count": 9
+            },
+            {
+              "archetype": "bat_normal_r2",
+              "rank": 2,
+              "count": 6
+            }
+          ]
+        },
+        {
+          "id": "tower-f02-w19",
+          "wave": 19,
+          "kind": "normal",
+          "normal": {
+            "wolf": 16,
+            "bat": 9,
+            "boar": 7
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 32,
+          "planned_required": 32,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "wolf_normal_r2",
+              "rank": 2,
+              "count": 16
+            },
+            {
+              "archetype": "bat_normal_r2",
+              "rank": 2,
+              "count": 9
+            },
+            {
+              "archetype": "boar_normal_r2",
+              "rank": 2,
+              "count": 7
+            }
+          ]
+        },
+        {
+          "id": "tower-f02-w20",
+          "wave": 20,
+          "kind": "boss",
+          "normal": {
+            "wolf": 4,
+            "boar": 4
+          },
+          "elite": {},
+          "boss_count": 1,
+          "normal_count": 8,
+          "planned_required": 9,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [
+            {
+              "trigger": "start",
+              "count": 4
+            },
+            {
+              "trigger": "boss_half_hp_or_death",
+              "count": 4
+            }
+          ],
+          "enemy_groups": [
+            {
+              "archetype": "wolf_normal_r2",
+              "rank": 2,
+              "count": 4
+            },
+            {
+              "archetype": "boar_normal_r2",
+              "rank": 2,
+              "count": 2
+            },
+            {
+              "archetype": "boar_normal_r2",
+              "rank": 2,
+              "count": 2
+            },
+            {
+              "archetype": "wolf_boss",
+              "rank": 3,
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "floor_stat_scale": {
+        "version": 4,
+        "reference_level": 6,
+        "normal_hp": 230,
+        "elite_hp": 10400,
+        "boss_hp": 60500,
+        "normal_damage": 8.0795,
+        "elite_damage": 13.739,
+        "boss_damage": 16.1645,
+        "boss_heavy_damage": 25.861,
+        "early_normal_through_wave": 4,
+        "early_normal_hp_multiplier": 1,
+        "rank_role_version": 1,
+        "boss_budget_revision": "rank-role-middle-gear-v1"
+      },
+      "cultivation_xp_budget": 450,
+      "roster_revision": "rank-role-v1",
+      "stat_scale_rule": "普通/精英共享物种与品阶基础，精英气血2.5倍、普攻1.15倍；Boss独立遭遇预算。"
+    },
+    {
+      "floor": 3,
+      "name": "盘丝溶洞",
+      "main_family": "spider",
+      "boss_name": "盘丝蛛后",
+      "boss_id": "spider_boss",
+      "boss_rank": 4,
+      "concurrent_cap": 32,
+      "unlock": "clear-floor-2",
+      "normal_family_pool": [
+        "spider",
+        "bat",
+        "wolf"
+      ],
+      "waves": [
+        {
+          "id": "tower-f03-w01",
+          "wave": 1,
+          "kind": "normal",
+          "normal": {
+            "spider": 14
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 14,
+          "planned_required": 14,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "spider_normal_r1",
+              "rank": 1,
+              "count": 14
+            }
+          ]
+        },
+        {
+          "id": "tower-f03-w02",
+          "wave": 2,
+          "kind": "normal",
+          "normal": {
+            "bat": 16
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 16,
+          "planned_required": 16,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "bat_normal_r1",
+              "rank": 1,
+              "count": 16
+            }
+          ]
+        },
+        {
+          "id": "tower-f03-w03",
+          "wave": 3,
+          "kind": "normal",
+          "normal": {
+            "wolf": 18
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 18,
+          "planned_required": 18,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "wolf_normal_r1",
+              "rank": 1,
+              "count": 18
+            }
+          ]
+        },
+        {
+          "id": "tower-f03-w04",
+          "wave": 4,
+          "kind": "normal",
+          "normal": {
+            "spider": 12,
+            "bat": 8
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 20,
+          "planned_required": 20,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "spider_normal_r1",
+              "rank": 1,
+              "count": 12
+            },
+            {
+              "archetype": "bat_normal_r1",
+              "rank": 1,
+              "count": 8
+            }
+          ]
+        },
+        {
+          "id": "tower-f03-w05",
+          "wave": 5,
+          "kind": "elite",
+          "normal": {
+            "spider": 8,
+            "wolf": 6
+          },
+          "elite": {
+            "spider": 1
+          },
+          "boss_count": 0,
+          "normal_count": 14,
+          "planned_required": 15,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "spider_normal_r1",
+              "rank": 1,
+              "count": 8
+            },
+            {
+              "archetype": "wolf_normal_r1",
+              "rank": 1,
+              "count": 6
+            },
+            {
+              "archetype": "spider_elite_f3_w5_n1",
+              "rank": 3,
+              "count": 1
+            }
+          ]
+        },
+        {
+          "id": "tower-f03-w06",
+          "wave": 6,
+          "kind": "normal",
+          "normal": {
+            "spider": 12,
+            "bat": 8
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 20,
+          "planned_required": 20,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "spider_normal_r1",
+              "rank": 1,
+              "count": 12
+            },
+            {
+              "archetype": "bat_normal_r1",
+              "rank": 1,
+              "count": 8
+            }
+          ]
+        },
+        {
+          "id": "tower-f03-w07",
+          "wave": 7,
+          "kind": "normal",
+          "normal": {
+            "spider": 13,
+            "bat": 9
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 22,
+          "planned_required": 22,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "spider_normal_r1",
+              "rank": 1,
+              "count": 13
+            },
+            {
+              "archetype": "bat_normal_r1",
+              "rank": 1,
+              "count": 9
+            }
+          ]
+        },
+        {
+          "id": "tower-f03-w08",
+          "wave": 8,
+          "kind": "normal",
+          "normal": {
+            "spider": 14,
+            "wolf": 10
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 24,
+          "planned_required": 24,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "spider_normal_r1",
+              "rank": 1,
+              "count": 14
+            },
+            {
+              "archetype": "wolf_normal_r1",
+              "rank": 1,
+              "count": 10
+            }
+          ]
+        },
+        {
+          "id": "tower-f03-w09",
+          "wave": 9,
+          "kind": "normal",
+          "normal": {
+            "spider": 15,
+            "bat": 11
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 26,
+          "planned_required": 26,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "spider_normal_r1",
+              "rank": 1,
+              "count": 15
+            },
+            {
+              "archetype": "bat_normal_r1",
+              "rank": 1,
+              "count": 11
+            }
+          ]
+        },
+        {
+          "id": "tower-f03-w10",
+          "wave": 10,
+          "kind": "elite",
+          "normal": {
+            "spider": 9,
+            "bat": 7
+          },
+          "elite": {
+            "bat": 2
+          },
+          "boss_count": 0,
+          "normal_count": 16,
+          "planned_required": 18,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "spider_normal_r1",
+              "rank": 1,
+              "count": 9
+            },
+            {
+              "archetype": "bat_normal_r1",
+              "rank": 1,
+              "count": 7
+            },
+            {
+              "archetype": "bat_elite_f3_w10_n2",
+              "rank": 3,
+              "count": 1
+            },
+            {
+              "archetype": "bat_elite_f3_w10_n3",
+              "rank": 3,
+              "count": 1
+            }
+          ]
+        },
+        {
+          "id": "tower-f03-w11",
+          "wave": 11,
+          "kind": "normal",
+          "normal": {
+            "spider": 12,
+            "wolf": 7,
+            "bat": 5
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 24,
+          "planned_required": 24,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "spider_normal_r1",
+              "rank": 1,
+              "count": 12
+            },
+            {
+              "archetype": "wolf_normal_r1",
+              "rank": 1,
+              "count": 7
+            },
+            {
+              "archetype": "bat_normal_r1",
+              "rank": 1,
+              "count": 5
+            }
+          ]
+        },
+        {
+          "id": "tower-f03-w12",
+          "wave": 12,
+          "kind": "normal",
+          "normal": {
+            "spider": 13,
+            "bat": 13
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 26,
+          "planned_required": 26,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "spider_normal_r1",
+              "rank": 1,
+              "count": 10
+            },
+            {
+              "archetype": "spider_normal_r2",
+              "rank": 2,
+              "count": 3
+            },
+            {
+              "archetype": "bat_normal_r2",
+              "rank": 2,
+              "count": 7
+            },
+            {
+              "archetype": "bat_normal_r2",
+              "rank": 2,
+              "count": 6
+            }
+          ]
+        },
+        {
+          "id": "tower-f03-w13",
+          "wave": 13,
+          "kind": "normal",
+          "normal": {
+            "spider": 14,
+            "bat": 8,
+            "wolf": 6
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 28,
+          "planned_required": 28,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "spider_normal_r2",
+              "rank": 2,
+              "count": 14
+            },
+            {
+              "archetype": "bat_normal_r2",
+              "rank": 2,
+              "count": 8
+            },
+            {
+              "archetype": "wolf_normal_r2",
+              "rank": 2,
+              "count": 6
+            }
+          ]
+        },
+        {
+          "id": "tower-f03-w14",
+          "wave": 14,
+          "kind": "normal",
+          "normal": {
+            "spider": 15,
+            "wolf": 9,
+            "bat": 6
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 30,
+          "planned_required": 30,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "spider_normal_r2",
+              "rank": 2,
+              "count": 15
+            },
+            {
+              "archetype": "wolf_normal_r2",
+              "rank": 2,
+              "count": 9
+            },
+            {
+              "archetype": "bat_normal_r2",
+              "rank": 2,
+              "count": 6
+            }
+          ]
+        },
+        {
+          "id": "tower-f03-w15",
+          "wave": 15,
+          "kind": "elite",
+          "normal": {
+            "spider": 9,
+            "bat": 9
+          },
+          "elite": {
+            "bat": 2
+          },
+          "boss_count": 0,
+          "normal_count": 18,
+          "planned_required": 20,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "spider_normal_r2",
+              "rank": 2,
+              "count": 9
+            },
+            {
+              "archetype": "bat_normal_r2",
+              "rank": 2,
+              "count": 5
+            },
+            {
+              "archetype": "bat_normal_r2",
+              "rank": 2,
+              "count": 4
+            },
+            {
+              "archetype": "bat_elite_f3_w15_n4",
+              "rank": 3,
+              "count": 1
+            },
+            {
+              "archetype": "bat_elite_f3_w15_n5",
+              "rank": 3,
+              "count": 1
+            }
+          ]
+        },
+        {
+          "id": "tower-f03-w16",
+          "wave": 16,
+          "kind": "normal",
+          "normal": {
+            "spider": 14,
+            "bat": 8,
+            "wolf": 6
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 28,
+          "planned_required": 28,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "spider_normal_r2",
+              "rank": 2,
+              "count": 14
+            },
+            {
+              "archetype": "bat_normal_r2",
+              "rank": 2,
+              "count": 8
+            },
+            {
+              "archetype": "wolf_normal_r2",
+              "rank": 2,
+              "count": 6
+            }
+          ]
+        },
+        {
+          "id": "tower-f03-w17",
+          "wave": 17,
+          "kind": "normal",
+          "normal": {
+            "spider": 15,
+            "wolf": 9,
+            "bat": 6
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 30,
+          "planned_required": 30,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "spider_normal_r2",
+              "rank": 2,
+              "count": 15
+            },
+            {
+              "archetype": "wolf_normal_r2",
+              "rank": 2,
+              "count": 9
+            },
+            {
+              "archetype": "bat_normal_r2",
+              "rank": 2,
+              "count": 6
+            }
+          ]
+        },
+        {
+          "id": "tower-f03-w18",
+          "wave": 18,
+          "kind": "normal",
+          "normal": {
+            "spider": 16,
+            "bat": 16
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 32,
+          "planned_required": 32,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "spider_normal_r2",
+              "rank": 2,
+              "count": 16
+            },
+            {
+              "archetype": "bat_normal_r2",
+              "rank": 2,
+              "count": 9
+            },
+            {
+              "archetype": "bat_normal_r2",
+              "rank": 2,
+              "count": 7
+            }
+          ]
+        },
+        {
+          "id": "tower-f03-w19",
+          "wave": 19,
+          "kind": "normal",
+          "normal": {
+            "spider": 17,
+            "bat": 10,
+            "wolf": 7
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 34,
+          "planned_required": 34,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "spider_normal_r2",
+              "rank": 2,
+              "count": 17
+            },
+            {
+              "archetype": "bat_normal_r2",
+              "rank": 2,
+              "count": 10
+            },
+            {
+              "archetype": "wolf_normal_r2",
+              "rank": 2,
+              "count": 7
+            }
+          ]
+        },
+        {
+          "id": "tower-f03-w20",
+          "wave": 20,
+          "kind": "boss",
+          "normal": {
+            "spider": 4,
+            "wolf": 2,
+            "bat": 2
+          },
+          "elite": {},
+          "boss_count": 1,
+          "normal_count": 8,
+          "planned_required": 9,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [
+            {
+              "trigger": "start",
+              "count": 4
+            },
+            {
+              "trigger": "boss_half_hp_or_death",
+              "count": 4
+            }
+          ],
+          "enemy_groups": [
+            {
+              "archetype": "spider_normal_r2",
+              "rank": 2,
+              "count": 4
+            },
+            {
+              "archetype": "wolf_normal_r2",
+              "rank": 2,
+              "count": 2
+            },
+            {
+              "archetype": "bat_normal_r2",
+              "rank": 2,
+              "count": 2
+            },
+            {
+              "archetype": "spider_boss",
+              "rank": 4,
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "floor_stat_scale": {
+        "version": 4,
+        "reference_level": 9,
+        "normal_hp": 340,
+        "elite_hp": 20400,
+        "boss_hp": 79200,
+        "normal_damage": 10.1805,
+        "elite_damage": 17.3085,
+        "boss_damage": 20.361,
+        "boss_heavy_damage": 32.5765,
+        "early_normal_through_wave": 4,
+        "early_normal_hp_multiplier": 1,
+        "rank_role_version": 1,
+        "boss_budget_revision": "rank-role-middle-gear-v1"
+      },
+      "cultivation_xp_budget": 720,
+      "roster_revision": "rank-role-v1",
+      "stat_scale_rule": "普通/精英共享物种与品阶基础，精英气血2.5倍、普攻1.15倍；Boss独立遭遇预算。"
+    },
+    {
+      "floor": 4,
+      "name": "伏潭石涧",
+      "main_family": "crocodile",
+      "boss_name": "伏潭鳄王",
+      "boss_id": "crocodile_boss",
+      "boss_rank": 4,
+      "concurrent_cap": 36,
+      "unlock": "clear-floor-3",
+      "normal_family_pool": [
+        "crocodile",
+        "boar",
+        "bat"
+      ],
+      "waves": [
+        {
+          "id": "tower-f04-w01",
+          "wave": 1,
+          "kind": "normal",
+          "normal": {
+            "crocodile": 6,
+            "boar": 10
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 16,
+          "planned_required": 16,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "crocodile_normal_r2",
+              "rank": 2,
+              "count": 6
+            },
+            {
+              "archetype": "boar_normal_r2",
+              "rank": 2,
+              "count": 10
+            }
+          ]
+        },
+        {
+          "id": "tower-f04-w02",
+          "wave": 2,
+          "kind": "normal",
+          "normal": {
+            "crocodile": 7,
+            "boar": 11
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 18,
+          "planned_required": 18,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "crocodile_normal_r2",
+              "rank": 2,
+              "count": 7
+            },
+            {
+              "archetype": "boar_normal_r2",
+              "rank": 2,
+              "count": 11
+            }
+          ]
+        },
+        {
+          "id": "tower-f04-w03",
+          "wave": 3,
+          "kind": "normal",
+          "normal": {
+            "boar": 20
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 20,
+          "planned_required": 20,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "boar_normal_r2",
+              "rank": 2,
+              "count": 20
+            }
+          ]
+        },
+        {
+          "id": "tower-f04-w04",
+          "wave": 4,
+          "kind": "normal",
+          "normal": {
+            "crocodile": 8,
+            "boar": 14
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 22,
+          "planned_required": 22,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "crocodile_normal_r2",
+              "rank": 2,
+              "count": 8
+            },
+            {
+              "archetype": "boar_normal_r2",
+              "rank": 2,
+              "count": 14
+            }
+          ]
+        },
+        {
+          "id": "tower-f04-w05",
+          "wave": 5,
+          "kind": "elite",
+          "normal": {
+            "crocodile": 6,
+            "boar": 10
+          },
+          "elite": {
+            "crocodile": 1
+          },
+          "boss_count": 0,
+          "normal_count": 16,
+          "planned_required": 17,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "crocodile_normal_r2",
+              "rank": 2,
+              "count": 6
+            },
+            {
+              "archetype": "boar_normal_r2",
+              "rank": 2,
+              "count": 10
+            },
+            {
+              "archetype": "crocodile_elite_f4_w5_n1",
+              "rank": 3,
+              "count": 1
+            }
+          ]
+        },
+        {
+          "id": "tower-f04-w06",
+          "wave": 6,
+          "kind": "normal",
+          "normal": {
+            "crocodile": 8,
+            "boar": 14
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 22,
+          "planned_required": 22,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "crocodile_normal_r2",
+              "rank": 2,
+              "count": 8
+            },
+            {
+              "archetype": "boar_normal_r2",
+              "rank": 2,
+              "count": 14
+            }
+          ]
+        },
+        {
+          "id": "tower-f04-w07",
+          "wave": 7,
+          "kind": "normal",
+          "normal": {
+            "crocodile": 9,
+            "bat": 15
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 24,
+          "planned_required": 24,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "crocodile_normal_r2",
+              "rank": 2,
+              "count": 9
+            },
+            {
+              "archetype": "bat_normal_r2",
+              "rank": 2,
+              "count": 15
+            }
+          ]
+        },
+        {
+          "id": "tower-f04-w08",
+          "wave": 8,
+          "kind": "normal",
+          "normal": {
+            "crocodile": 10,
+            "boar": 16
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 26,
+          "planned_required": 26,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "crocodile_normal_r2",
+              "rank": 2,
+              "count": 10
+            },
+            {
+              "archetype": "boar_normal_r2",
+              "rank": 2,
+              "count": 16
+            }
+          ]
+        },
+        {
+          "id": "tower-f04-w09",
+          "wave": 9,
+          "kind": "normal",
+          "normal": {
+            "crocodile": 11,
+            "boar": 17
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 28,
+          "planned_required": 28,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "crocodile_normal_r2",
+              "rank": 2,
+              "count": 11
+            },
+            {
+              "archetype": "boar_normal_r2",
+              "rank": 2,
+              "count": 17
+            }
+          ]
+        },
+        {
+          "id": "tower-f04-w10",
+          "wave": 10,
+          "kind": "elite",
+          "normal": {
+            "crocodile": 7,
+            "boar": 11
+          },
+          "elite": {
+            "crocodile": 2
+          },
+          "boss_count": 0,
+          "normal_count": 18,
+          "planned_required": 20,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "crocodile_normal_r2",
+              "rank": 2,
+              "count": 7
+            },
+            {
+              "archetype": "boar_normal_r2",
+              "rank": 2,
+              "count": 11
+            },
+            {
+              "archetype": "crocodile_elite_f4_w10_n2",
+              "rank": 3,
+              "count": 1
+            },
+            {
+              "archetype": "crocodile_elite_f4_w10_n3",
+              "rank": 3,
+              "count": 1
+            }
+          ]
+        },
+        {
+          "id": "tower-f04-w11",
+          "wave": 11,
+          "kind": "normal",
+          "normal": {
+            "crocodile": 10,
+            "bat": 16
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 26,
+          "planned_required": 26,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "crocodile_normal_r2",
+              "rank": 2,
+              "count": 4
+            },
+            {
+              "archetype": "bat_normal_r2",
+              "rank": 2,
+              "count": 16
+            },
+            {
+              "archetype": "crocodile_normal_r2",
+              "rank": 2,
+              "count": 6
+            }
+          ]
+        },
+        {
+          "id": "tower-f04-w12",
+          "wave": 12,
+          "kind": "normal",
+          "normal": {
+            "crocodile": 11,
+            "boar": 17
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 28,
+          "planned_required": 28,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "crocodile_normal_r2",
+              "rank": 2,
+              "count": 3
+            },
+            {
+              "archetype": "crocodile_normal_r2",
+              "rank": 2,
+              "count": 8
+            },
+            {
+              "archetype": "boar_normal_r2",
+              "rank": 2,
+              "count": 17
+            }
+          ]
+        },
+        {
+          "id": "tower-f04-w13",
+          "wave": 13,
+          "kind": "normal",
+          "normal": {
+            "crocodile": 12,
+            "boar": 18
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 30,
+          "planned_required": 30,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "crocodile_normal_r2",
+              "rank": 2,
+              "count": 12
+            },
+            {
+              "archetype": "boar_normal_r2",
+              "rank": 2,
+              "count": 12
+            },
+            {
+              "archetype": "boar_normal_r2",
+              "rank": 2,
+              "count": 6
+            }
+          ]
+        },
+        {
+          "id": "tower-f04-w14",
+          "wave": 14,
+          "kind": "normal",
+          "normal": {
+            "crocodile": 12,
+            "boar": 13,
+            "bat": 7
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 32,
+          "planned_required": 32,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "crocodile_normal_r2",
+              "rank": 2,
+              "count": 12
+            },
+            {
+              "archetype": "boar_normal_r2",
+              "rank": 2,
+              "count": 13
+            },
+            {
+              "archetype": "bat_normal_r2",
+              "rank": 2,
+              "count": 7
+            }
+          ]
+        },
+        {
+          "id": "tower-f04-w15",
+          "wave": 15,
+          "kind": "elite",
+          "normal": {
+            "crocodile": 8,
+            "bat": 12
+          },
+          "elite": {
+            "bat": 2
+          },
+          "boss_count": 0,
+          "normal_count": 20,
+          "planned_required": 22,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "crocodile_normal_r2",
+              "rank": 2,
+              "count": 4
+            },
+            {
+              "archetype": "bat_normal_r2",
+              "rank": 2,
+              "count": 12
+            },
+            {
+              "archetype": "crocodile_normal_r2",
+              "rank": 2,
+              "count": 4
+            },
+            {
+              "archetype": "bat_elite_f4_w15_n4",
+              "rank": 4,
+              "count": 1
+            },
+            {
+              "archetype": "bat_elite_f4_w15_n5",
+              "rank": 4,
+              "count": 1
+            }
+          ]
+        },
+        {
+          "id": "tower-f04-w16",
+          "wave": 16,
+          "kind": "normal",
+          "normal": {
+            "crocodile": 12,
+            "boar": 18
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 30,
+          "planned_required": 30,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "crocodile_normal_r2",
+              "rank": 2,
+              "count": 3
+            },
+            {
+              "archetype": "crocodile_normal_r2",
+              "rank": 2,
+              "count": 9
+            },
+            {
+              "archetype": "boar_normal_r2",
+              "rank": 2,
+              "count": 18
+            }
+          ]
+        },
+        {
+          "id": "tower-f04-w17",
+          "wave": 17,
+          "kind": "normal",
+          "normal": {
+            "crocodile": 12,
+            "boar": 20
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 32,
+          "planned_required": 32,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "crocodile_normal_r2",
+              "rank": 2,
+              "count": 12
+            },
+            {
+              "archetype": "boar_normal_r2",
+              "rank": 2,
+              "count": 13
+            },
+            {
+              "archetype": "boar_normal_r2",
+              "rank": 2,
+              "count": 7
+            }
+          ]
+        },
+        {
+          "id": "tower-f04-w18",
+          "wave": 18,
+          "kind": "normal",
+          "normal": {
+            "crocodile": 13,
+            "boar": 14,
+            "bat": 7
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 34,
+          "planned_required": 34,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "crocodile_normal_r2",
+              "rank": 2,
+              "count": 13
+            },
+            {
+              "archetype": "boar_normal_r2",
+              "rank": 2,
+              "count": 14
+            },
+            {
+              "archetype": "bat_normal_r2",
+              "rank": 2,
+              "count": 7
+            }
+          ]
+        },
+        {
+          "id": "tower-f04-w19",
+          "wave": 19,
+          "kind": "normal",
+          "normal": {
+            "crocodile": 14,
+            "bat": 22
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 36,
+          "planned_required": 36,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "crocodile_normal_r2",
+              "rank": 2,
+              "count": 6
+            },
+            {
+              "archetype": "bat_normal_r2",
+              "rank": 2,
+              "count": 22
+            },
+            {
+              "archetype": "crocodile_normal_r2",
+              "rank": 2,
+              "count": 8
+            }
+          ]
+        },
+        {
+          "id": "tower-f04-w20",
+          "wave": 20,
+          "kind": "boss",
+          "normal": {
+            "crocodile": 3,
+            "boar": 5
+          },
+          "elite": {},
+          "boss_count": 1,
+          "normal_count": 8,
+          "planned_required": 9,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [
+            {
+              "trigger": "start",
+              "count": 4
+            },
+            {
+              "trigger": "boss_half_hp_or_death",
+              "count": 4
+            }
+          ],
+          "enemy_groups": [
+            {
+              "archetype": "crocodile_normal_r2",
+              "rank": 2,
+              "count": 1
+            },
+            {
+              "archetype": "crocodile_normal_r2",
+              "rank": 2,
+              "count": 1
+            },
+            {
+              "archetype": "boar_normal_r2",
+              "rank": 2,
+              "count": 2
+            },
+            {
+              "archetype": "crocodile_normal_r2",
+              "rank": 2,
+              "count": 1
+            },
+            {
+              "archetype": "boar_normal_r2",
+              "rank": 2,
+              "count": 3
+            },
+            {
+              "archetype": "crocodile_boss",
+              "rank": 4,
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "floor_stat_scale": {
+        "version": 4,
+        "reference_level": 12,
+        "normal_hp": 600,
+        "elite_hp": 41400,
+        "boss_hp": 271700,
+        "normal_damage": 13.1175,
+        "elite_damage": 22.2975,
+        "boss_damage": 26.2305,
+        "boss_heavy_damage": 41.9715,
+        "early_normal_through_wave": 5,
+        "early_normal_hp_multiplier": 0.7,
+        "rank_role_version": 1,
+        "boss_budget_revision": "rank-role-middle-gear-v1"
+      },
+      "cultivation_xp_budget": 950,
+      "roster_revision": "rank-role-v1",
+      "stat_scale_rule": "普通/精英共享物种与品阶基础，精英气血2.5倍、普攻1.15倍；Boss独立遭遇预算。"
+    },
+    {
+      "floor": 5,
+      "name": "赤鳞湿泽",
+      "main_family": "snake",
+      "boss_name": "赤鳞蟒王",
+      "boss_id": "snake_boss",
+      "boss_rank": 5,
+      "concurrent_cap": 40,
+      "unlock": "clear-floor-4",
+      "normal_family_pool": [
+        "snake",
+        "crocodile",
+        "spider"
+      ],
+      "waves": [
+        {
+          "id": "tower-f05-w01",
+          "wave": 1,
+          "kind": "normal",
+          "normal": {
+            "snake": 18
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 18,
+          "planned_required": 18,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "snake_normal_r2",
+              "rank": 2,
+              "count": 18
+            }
+          ]
+        },
+        {
+          "id": "tower-f05-w02",
+          "wave": 2,
+          "kind": "normal",
+          "normal": {
+            "crocodile": 8,
+            "snake": 12
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 20,
+          "planned_required": 20,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "crocodile_normal_r2",
+              "rank": 2,
+              "count": 8
+            },
+            {
+              "archetype": "snake_normal_r2",
+              "rank": 2,
+              "count": 12
+            }
+          ]
+        },
+        {
+          "id": "tower-f05-w03",
+          "wave": 3,
+          "kind": "normal",
+          "normal": {
+            "spider": 22
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 22,
+          "planned_required": 22,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "spider_normal_r2",
+              "rank": 2,
+              "count": 22
+            }
+          ]
+        },
+        {
+          "id": "tower-f05-w04",
+          "wave": 4,
+          "kind": "normal",
+          "normal": {
+            "snake": 15,
+            "crocodile": 9
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 24,
+          "planned_required": 24,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "snake_normal_r2",
+              "rank": 2,
+              "count": 15
+            },
+            {
+              "archetype": "crocodile_normal_r2",
+              "rank": 2,
+              "count": 9
+            }
+          ]
+        },
+        {
+          "id": "tower-f05-w05",
+          "wave": 5,
+          "kind": "elite",
+          "normal": {
+            "snake": 10,
+            "spider": 8
+          },
+          "elite": {
+            "snake": 1
+          },
+          "boss_count": 0,
+          "normal_count": 18,
+          "planned_required": 19,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "snake_normal_r2",
+              "rank": 2,
+              "count": 10
+            },
+            {
+              "archetype": "spider_normal_r2",
+              "rank": 2,
+              "count": 8
+            },
+            {
+              "archetype": "snake_elite_f5_w5_n1",
+              "rank": 4,
+              "count": 1
+            }
+          ]
+        },
+        {
+          "id": "tower-f05-w06",
+          "wave": 6,
+          "kind": "normal",
+          "normal": {
+            "snake": 14,
+            "spider": 10
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 24,
+          "planned_required": 24,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "snake_normal_r2",
+              "rank": 2,
+              "count": 14
+            },
+            {
+              "archetype": "spider_normal_r2",
+              "rank": 2,
+              "count": 10
+            }
+          ]
+        },
+        {
+          "id": "tower-f05-w07",
+          "wave": 7,
+          "kind": "normal",
+          "normal": {
+            "snake": 16,
+            "crocodile": 10
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 26,
+          "planned_required": 26,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "snake_normal_r2",
+              "rank": 2,
+              "count": 16
+            },
+            {
+              "archetype": "crocodile_normal_r2",
+              "rank": 2,
+              "count": 10
+            }
+          ]
+        },
+        {
+          "id": "tower-f05-w08",
+          "wave": 8,
+          "kind": "normal",
+          "normal": {
+            "snake": 16,
+            "spider": 12
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 28,
+          "planned_required": 28,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "snake_normal_r2",
+              "rank": 2,
+              "count": 16
+            },
+            {
+              "archetype": "spider_normal_r2",
+              "rank": 2,
+              "count": 12
+            }
+          ]
+        },
+        {
+          "id": "tower-f05-w09",
+          "wave": 9,
+          "kind": "normal",
+          "normal": {
+            "snake": 18,
+            "spider": 12
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 30,
+          "planned_required": 30,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "snake_normal_r2",
+              "rank": 2,
+              "count": 18
+            },
+            {
+              "archetype": "spider_normal_r2",
+              "rank": 2,
+              "count": 12
+            }
+          ]
+        },
+        {
+          "id": "tower-f05-w10",
+          "wave": 10,
+          "kind": "elite",
+          "normal": {
+            "snake": 12,
+            "crocodile": 8
+          },
+          "elite": {
+            "crocodile": 2
+          },
+          "boss_count": 0,
+          "normal_count": 20,
+          "planned_required": 22,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "snake_normal_r2",
+              "rank": 2,
+              "count": 12
+            },
+            {
+              "archetype": "crocodile_normal_r2",
+              "rank": 2,
+              "count": 8
+            },
+            {
+              "archetype": "crocodile_elite_f5_w10_n2",
+              "rank": 4,
+              "count": 1
+            },
+            {
+              "archetype": "crocodile_elite_f5_w10_n3",
+              "rank": 4,
+              "count": 1
+            }
+          ]
+        },
+        {
+          "id": "tower-f05-w11",
+          "wave": 11,
+          "kind": "normal",
+          "normal": {
+            "snake": 14,
+            "spider": 14
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 28,
+          "planned_required": 28,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "snake_normal_r2",
+              "rank": 2,
+              "count": 14
+            },
+            {
+              "archetype": "spider_normal_r2",
+              "rank": 2,
+              "count": 8
+            },
+            {
+              "archetype": "spider_normal_r2",
+              "rank": 2,
+              "count": 6
+            }
+          ]
+        },
+        {
+          "id": "tower-f05-w12",
+          "wave": 12,
+          "kind": "normal",
+          "normal": {
+            "snake": 15,
+            "spider": 9,
+            "crocodile": 6
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 30,
+          "planned_required": 30,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "snake_normal_r2",
+              "rank": 2,
+              "count": 4
+            },
+            {
+              "archetype": "snake_normal_r3",
+              "rank": 3,
+              "count": 11
+            },
+            {
+              "archetype": "spider_normal_r3",
+              "rank": 3,
+              "count": 9
+            },
+            {
+              "archetype": "crocodile_normal_r3",
+              "rank": 3,
+              "count": 6
+            }
+          ]
+        },
+        {
+          "id": "tower-f05-w13",
+          "wave": 13,
+          "kind": "normal",
+          "normal": {
+            "snake": 16,
+            "crocodile": 9,
+            "spider": 7
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 32,
+          "planned_required": 32,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "snake_normal_r3",
+              "rank": 3,
+              "count": 16
+            },
+            {
+              "archetype": "crocodile_normal_r3",
+              "rank": 3,
+              "count": 9
+            },
+            {
+              "archetype": "spider_normal_r3",
+              "rank": 3,
+              "count": 7
+            }
+          ]
+        },
+        {
+          "id": "tower-f05-w14",
+          "wave": 14,
+          "kind": "normal",
+          "normal": {
+            "snake": 17,
+            "spider": 17
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 34,
+          "planned_required": 34,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "snake_normal_r3",
+              "rank": 3,
+              "count": 17
+            },
+            {
+              "archetype": "spider_normal_r3",
+              "rank": 3,
+              "count": 10
+            },
+            {
+              "archetype": "spider_normal_r3",
+              "rank": 3,
+              "count": 7
+            }
+          ]
+        },
+        {
+          "id": "tower-f05-w15",
+          "wave": 15,
+          "kind": "elite",
+          "normal": {
+            "snake": 11,
+            "spider": 6,
+            "crocodile": 5
+          },
+          "elite": {
+            "spider": 2
+          },
+          "boss_count": 0,
+          "normal_count": 22,
+          "planned_required": 24,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "snake_normal_r3",
+              "rank": 3,
+              "count": 11
+            },
+            {
+              "archetype": "spider_normal_r3",
+              "rank": 3,
+              "count": 6
+            },
+            {
+              "archetype": "crocodile_normal_r3",
+              "rank": 3,
+              "count": 5
+            },
+            {
+              "archetype": "spider_elite_f5_w15_n4",
+              "rank": 4,
+              "count": 1
+            },
+            {
+              "archetype": "spider_elite_f5_w15_n5",
+              "rank": 4,
+              "count": 1
+            }
+          ]
+        },
+        {
+          "id": "tower-f05-w16",
+          "wave": 16,
+          "kind": "normal",
+          "normal": {
+            "snake": 16,
+            "crocodile": 9,
+            "spider": 7
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 32,
+          "planned_required": 32,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "snake_normal_r3",
+              "rank": 3,
+              "count": 16
+            },
+            {
+              "archetype": "crocodile_normal_r3",
+              "rank": 3,
+              "count": 9
+            },
+            {
+              "archetype": "spider_normal_r3",
+              "rank": 3,
+              "count": 7
+            }
+          ]
+        },
+        {
+          "id": "tower-f05-w17",
+          "wave": 17,
+          "kind": "normal",
+          "normal": {
+            "snake": 17,
+            "spider": 17
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 34,
+          "planned_required": 34,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "snake_normal_r3",
+              "rank": 3,
+              "count": 17
+            },
+            {
+              "archetype": "spider_normal_r3",
+              "rank": 3,
+              "count": 10
+            },
+            {
+              "archetype": "spider_normal_r3",
+              "rank": 3,
+              "count": 7
+            }
+          ]
+        },
+        {
+          "id": "tower-f05-w18",
+          "wave": 18,
+          "kind": "normal",
+          "normal": {
+            "snake": 18,
+            "spider": 10,
+            "crocodile": 8
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 36,
+          "planned_required": 36,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "snake_normal_r3",
+              "rank": 3,
+              "count": 18
+            },
+            {
+              "archetype": "spider_normal_r3",
+              "rank": 3,
+              "count": 10
+            },
+            {
+              "archetype": "crocodile_normal_r3",
+              "rank": 3,
+              "count": 8
+            }
+          ]
+        },
+        {
+          "id": "tower-f05-w19",
+          "wave": 19,
+          "kind": "normal",
+          "normal": {
+            "snake": 19,
+            "crocodile": 11,
+            "spider": 8
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 38,
+          "planned_required": 38,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "snake_normal_r3",
+              "rank": 3,
+              "count": 19
+            },
+            {
+              "archetype": "crocodile_normal_r3",
+              "rank": 3,
+              "count": 11
+            },
+            {
+              "archetype": "spider_normal_r3",
+              "rank": 3,
+              "count": 8
+            }
+          ]
+        },
+        {
+          "id": "tower-f05-w20",
+          "wave": 20,
+          "kind": "boss",
+          "normal": {
+            "snake": 4,
+            "spider": 4
+          },
+          "elite": {},
+          "boss_count": 1,
+          "normal_count": 8,
+          "planned_required": 9,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [
+            {
+              "trigger": "start",
+              "count": 4
+            },
+            {
+              "trigger": "boss_half_hp_or_death",
+              "count": 4
+            }
+          ],
+          "enemy_groups": [
+            {
+              "archetype": "snake_normal_r3",
+              "rank": 3,
+              "count": 4
+            },
+            {
+              "archetype": "spider_normal_r3",
+              "rank": 3,
+              "count": 2
+            },
+            {
+              "archetype": "spider_normal_r3",
+              "rank": 3,
+              "count": 2
+            },
+            {
+              "archetype": "snake_boss",
+              "rank": 5,
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "floor_stat_scale": {
+        "version": 4,
+        "reference_level": 15,
+        "normal_hp": 880,
+        "elite_hp": 64400,
+        "boss_hp": 693000,
+        "normal_damage": 16.5195,
+        "elite_damage": 28.089,
+        "boss_damage": 33.0435,
+        "boss_heavy_damage": 52.8705,
+        "early_normal_through_wave": 4,
+        "early_normal_hp_multiplier": 1,
+        "rank_role_version": 1,
+        "boss_budget_revision": "rank-role-middle-gear-v1"
+      },
+      "cultivation_xp_budget": 1176,
+      "roster_revision": "rank-role-v1",
+      "stat_scale_rule": "普通/精英共享物种与品阶基础，精英气血2.5倍、普攻1.15倍；Boss独立遭遇预算。"
+    },
+    {
+      "floor": 6,
+      "name": "玄岩洞窟",
+      "main_family": "bear",
+      "boss_name": "撼地熊王",
+      "boss_id": "bear_boss",
+      "boss_rank": 5,
+      "concurrent_cap": 44,
+      "unlock": "clear-floor-5",
+      "normal_family_pool": [
+        "bear",
+        "boar",
+        "bat"
+      ],
+      "waves": [
+        {
+          "id": "tower-f06-w01",
+          "wave": 1,
+          "kind": "normal",
+          "normal": {
+            "bear": 8,
+            "boar": 12
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 20,
+          "planned_required": 20,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "bear_normal_r3",
+              "rank": 3,
+              "count": 8
+            },
+            {
+              "archetype": "boar_normal_r3",
+              "rank": 3,
+              "count": 12
+            }
+          ]
+        },
+        {
+          "id": "tower-f06-w02",
+          "wave": 2,
+          "kind": "normal",
+          "normal": {
+            "boar": 22
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 22,
+          "planned_required": 22,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "boar_normal_r3",
+              "rank": 3,
+              "count": 22
+            }
+          ]
+        },
+        {
+          "id": "tower-f06-w03",
+          "wave": 3,
+          "kind": "normal",
+          "normal": {
+            "bear": 9,
+            "boar": 15
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 24,
+          "planned_required": 24,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "bear_normal_r3",
+              "rank": 3,
+              "count": 9
+            },
+            {
+              "archetype": "boar_normal_r3",
+              "rank": 3,
+              "count": 15
+            }
+          ]
+        },
+        {
+          "id": "tower-f06-w04",
+          "wave": 4,
+          "kind": "normal",
+          "normal": {
+            "bear": 10,
+            "boar": 16
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 26,
+          "planned_required": 26,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "bear_normal_r3",
+              "rank": 3,
+              "count": 10
+            },
+            {
+              "archetype": "boar_normal_r3",
+              "rank": 3,
+              "count": 16
+            }
+          ]
+        },
+        {
+          "id": "tower-f06-w05",
+          "wave": 5,
+          "kind": "elite",
+          "normal": {
+            "bear": 8,
+            "boar": 12
+          },
+          "elite": {
+            "bear": 1
+          },
+          "boss_count": 0,
+          "normal_count": 20,
+          "planned_required": 21,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "bear_normal_r3",
+              "rank": 3,
+              "count": 8
+            },
+            {
+              "archetype": "boar_normal_r3",
+              "rank": 3,
+              "count": 12
+            },
+            {
+              "archetype": "bear_elite_f6_w5_n1",
+              "rank": 4,
+              "count": 1
+            }
+          ]
+        },
+        {
+          "id": "tower-f06-w06",
+          "wave": 6,
+          "kind": "normal",
+          "normal": {
+            "bear": 10,
+            "boar": 16
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 26,
+          "planned_required": 26,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "bear_normal_r3",
+              "rank": 3,
+              "count": 10
+            },
+            {
+              "archetype": "boar_normal_r3",
+              "rank": 3,
+              "count": 16
+            }
+          ]
+        },
+        {
+          "id": "tower-f06-w07",
+          "wave": 7,
+          "kind": "normal",
+          "normal": {
+            "bear": 11,
+            "bat": 17
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 28,
+          "planned_required": 28,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "bear_normal_r3",
+              "rank": 3,
+              "count": 11
+            },
+            {
+              "archetype": "bat_normal_r3",
+              "rank": 3,
+              "count": 17
+            }
+          ]
+        },
+        {
+          "id": "tower-f06-w08",
+          "wave": 8,
+          "kind": "normal",
+          "normal": {
+            "bear": 12,
+            "boar": 18
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 30,
+          "planned_required": 30,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "bear_normal_r3",
+              "rank": 3,
+              "count": 12
+            },
+            {
+              "archetype": "boar_normal_r3",
+              "rank": 3,
+              "count": 18
+            }
+          ]
+        },
+        {
+          "id": "tower-f06-w09",
+          "wave": 9,
+          "kind": "normal",
+          "normal": {
+            "bear": 12,
+            "boar": 20
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 32,
+          "planned_required": 32,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "bear_normal_r3",
+              "rank": 3,
+              "count": 12
+            },
+            {
+              "archetype": "boar_normal_r3",
+              "rank": 3,
+              "count": 20
+            }
+          ]
+        },
+        {
+          "id": "tower-f06-w10",
+          "wave": 10,
+          "kind": "elite",
+          "normal": {
+            "bear": 8,
+            "boar": 14
+          },
+          "elite": {
+            "bear": 2
+          },
+          "boss_count": 0,
+          "normal_count": 22,
+          "planned_required": 24,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "bear_normal_r3",
+              "rank": 3,
+              "count": 8
+            },
+            {
+              "archetype": "boar_normal_r3",
+              "rank": 3,
+              "count": 14
+            },
+            {
+              "archetype": "bear_elite_f6_w10_n2",
+              "rank": 4,
+              "count": 1
+            },
+            {
+              "archetype": "bear_elite_f6_w10_n3",
+              "rank": 4,
+              "count": 1
+            }
+          ]
+        },
+        {
+          "id": "tower-f06-w11",
+          "wave": 11,
+          "kind": "normal",
+          "normal": {
+            "bear": 12,
+            "bat": 12,
+            "boar": 6
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 30,
+          "planned_required": 30,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "bear_normal_r3",
+              "rank": 3,
+              "count": 12
+            },
+            {
+              "archetype": "bat_normal_r3",
+              "rank": 3,
+              "count": 12
+            },
+            {
+              "archetype": "boar_normal_r3",
+              "rank": 3,
+              "count": 6
+            }
+          ]
+        },
+        {
+          "id": "tower-f06-w12",
+          "wave": 12,
+          "kind": "normal",
+          "normal": {
+            "bear": 12,
+            "boar": 20
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 32,
+          "planned_required": 32,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "bear_normal_r3",
+              "rank": 3,
+              "count": 5
+            },
+            {
+              "archetype": "boar_normal_r3",
+              "rank": 3,
+              "count": 20
+            },
+            {
+              "archetype": "bear_normal_r3",
+              "rank": 3,
+              "count": 7
+            }
+          ]
+        },
+        {
+          "id": "tower-f06-w13",
+          "wave": 13,
+          "kind": "normal",
+          "normal": {
+            "bear": 13,
+            "boar": 21
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 34,
+          "planned_required": 34,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "bear_normal_r3",
+              "rank": 3,
+              "count": 3
+            },
+            {
+              "archetype": "bear_normal_r3",
+              "rank": 3,
+              "count": 10
+            },
+            {
+              "archetype": "boar_normal_r3",
+              "rank": 3,
+              "count": 21
+            }
+          ]
+        },
+        {
+          "id": "tower-f06-w14",
+          "wave": 14,
+          "kind": "normal",
+          "normal": {
+            "bear": 14,
+            "boar": 14,
+            "bat": 8
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 36,
+          "planned_required": 36,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "bear_normal_r3",
+              "rank": 3,
+              "count": 14
+            },
+            {
+              "archetype": "boar_normal_r3",
+              "rank": 3,
+              "count": 14
+            },
+            {
+              "archetype": "bat_normal_r3",
+              "rank": 3,
+              "count": 8
+            }
+          ]
+        },
+        {
+          "id": "tower-f06-w15",
+          "wave": 15,
+          "kind": "elite",
+          "normal": {
+            "bear": 9,
+            "bat": 10,
+            "boar": 5
+          },
+          "elite": {
+            "bat": 2
+          },
+          "boss_count": 0,
+          "normal_count": 24,
+          "planned_required": 26,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "bear_normal_r3",
+              "rank": 3,
+              "count": 9
+            },
+            {
+              "archetype": "bat_normal_r3",
+              "rank": 3,
+              "count": 10
+            },
+            {
+              "archetype": "boar_normal_r3",
+              "rank": 3,
+              "count": 5
+            },
+            {
+              "archetype": "bat_elite_f6_w15_n4",
+              "rank": 5,
+              "count": 1
+            },
+            {
+              "archetype": "bat_elite_f6_w15_n5",
+              "rank": 5,
+              "count": 1
+            }
+          ]
+        },
+        {
+          "id": "tower-f06-w16",
+          "wave": 16,
+          "kind": "normal",
+          "normal": {
+            "bear": 13,
+            "boar": 21
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 34,
+          "planned_required": 34,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "bear_normal_r3",
+              "rank": 3,
+              "count": 6
+            },
+            {
+              "archetype": "boar_normal_r3",
+              "rank": 3,
+              "count": 21
+            },
+            {
+              "archetype": "bear_normal_r3",
+              "rank": 3,
+              "count": 7
+            }
+          ]
+        },
+        {
+          "id": "tower-f06-w17",
+          "wave": 17,
+          "kind": "normal",
+          "normal": {
+            "bear": 14,
+            "boar": 22
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 36,
+          "planned_required": 36,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "bear_normal_r3",
+              "rank": 3,
+              "count": 4
+            },
+            {
+              "archetype": "bear_normal_r3",
+              "rank": 3,
+              "count": 6
+            },
+            {
+              "archetype": "bear_normal_r4",
+              "rank": 4,
+              "count": 4
+            },
+            {
+              "archetype": "boar_normal_r4",
+              "rank": 4,
+              "count": 22
+            }
+          ]
+        },
+        {
+          "id": "tower-f06-w18",
+          "wave": 18,
+          "kind": "normal",
+          "normal": {
+            "bear": 15,
+            "boar": 15,
+            "bat": 8
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 38,
+          "planned_required": 38,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "bear_normal_r4",
+              "rank": 4,
+              "count": 15
+            },
+            {
+              "archetype": "boar_normal_r4",
+              "rank": 4,
+              "count": 15
+            },
+            {
+              "archetype": "bat_normal_r4",
+              "rank": 4,
+              "count": 8
+            }
+          ]
+        },
+        {
+          "id": "tower-f06-w19",
+          "wave": 19,
+          "kind": "normal",
+          "normal": {
+            "bear": 16,
+            "bat": 16,
+            "boar": 8
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 40,
+          "planned_required": 40,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "bear_normal_r4",
+              "rank": 4,
+              "count": 16
+            },
+            {
+              "archetype": "bat_normal_r4",
+              "rank": 4,
+              "count": 16
+            },
+            {
+              "archetype": "boar_normal_r4",
+              "rank": 4,
+              "count": 8
+            }
+          ]
+        },
+        {
+          "id": "tower-f06-w20",
+          "wave": 20,
+          "kind": "boss",
+          "normal": {
+            "bear": 3,
+            "boar": 5
+          },
+          "elite": {},
+          "boss_count": 1,
+          "normal_count": 8,
+          "planned_required": 9,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [
+            {
+              "trigger": "start",
+              "count": 4
+            },
+            {
+              "trigger": "boss_half_hp_or_death",
+              "count": 4
+            }
+          ],
+          "enemy_groups": [
+            {
+              "archetype": "bear_normal_r4",
+              "rank": 4,
+              "count": 1
+            },
+            {
+              "archetype": "boar_normal_r4",
+              "rank": 4,
+              "count": 5
+            },
+            {
+              "archetype": "bear_normal_r4",
+              "rank": 4,
+              "count": 2
+            },
+            {
+              "archetype": "bear_boss",
+              "rank": 5,
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "floor_stat_scale": {
+        "version": 4,
+        "reference_level": 18,
+        "normal_hp": 1250,
+        "elite_hp": 100000,
+        "boss_hp": 729000,
+        "normal_damage": 25.4375,
+        "elite_damage": 43.2465,
+        "boss_damage": 50.875,
+        "boss_heavy_damage": 81.4,
+        "early_normal_through_wave": 4,
+        "early_normal_hp_multiplier": 1,
+        "rank_role_version": 1,
+        "boss_budget_revision": "rank-role-middle-gear-v1"
+      },
+      "cultivation_xp_budget": 1561,
+      "roster_revision": "rank-role-v1",
+      "stat_scale_rule": "普通/精英共享物种与品阶基础，精英气血2.5倍、普攻1.15倍；Boss独立遭遇预算。"
+    },
+    {
+      "floor": 7,
+      "name": "震岳石关",
+      "main_family": "tiger",
+      "boss_name": "震岳犀王",
+      "boss_id": "rhino_boss",
+      "boss_rank": 6,
+      "concurrent_cap": 48,
+      "unlock": "clear-floor-6",
+      "normal_family_pool": [
+        "boar",
+        "tiger",
+        "falcon"
+      ],
+      "waves": [
+        {
+          "id": "tower-f07-w01",
+          "wave": 1,
+          "kind": "normal",
+          "normal": {
+            "tiger": 8,
+            "falcon": 14
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 22,
+          "planned_required": 22,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "tiger_normal_r3",
+              "rank": 3,
+              "count": 8
+            },
+            {
+              "archetype": "falcon_normal_r3",
+              "rank": 3,
+              "count": 14
+            }
+          ]
+        },
+        {
+          "id": "tower-f07-w02",
+          "wave": 2,
+          "kind": "normal",
+          "normal": {
+            "tiger": 9,
+            "falcon": 15
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 24,
+          "planned_required": 24,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "tiger_normal_r3",
+              "rank": 3,
+              "count": 9
+            },
+            {
+              "archetype": "falcon_normal_r3",
+              "rank": 3,
+              "count": 15
+            }
+          ]
+        },
+        {
+          "id": "tower-f07-w03",
+          "wave": 3,
+          "kind": "normal",
+          "normal": {
+            "falcon": 26
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 26,
+          "planned_required": 26,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "falcon_normal_r3",
+              "rank": 3,
+              "count": 26
+            }
+          ]
+        },
+        {
+          "id": "tower-f07-w04",
+          "wave": 4,
+          "kind": "normal",
+          "normal": {
+            "tiger": 11,
+            "falcon": 17
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 28,
+          "planned_required": 28,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "tiger_normal_r3",
+              "rank": 3,
+              "count": 11
+            },
+            {
+              "archetype": "falcon_normal_r3",
+              "rank": 3,
+              "count": 17
+            }
+          ]
+        },
+        {
+          "id": "tower-f07-w05",
+          "wave": 5,
+          "kind": "elite",
+          "normal": {
+            "tiger": 8,
+            "falcon": 14
+          },
+          "elite": {
+            "tiger": 1
+          },
+          "boss_count": 0,
+          "normal_count": 22,
+          "planned_required": 23,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "tiger_normal_r3",
+              "rank": 3,
+              "count": 8
+            },
+            {
+              "archetype": "falcon_normal_r3",
+              "rank": 3,
+              "count": 14
+            },
+            {
+              "archetype": "tiger_elite_f7_w5_n1",
+              "rank": 4,
+              "count": 1
+            }
+          ]
+        },
+        {
+          "id": "tower-f07-w06",
+          "wave": 6,
+          "kind": "normal",
+          "normal": {
+            "tiger": 11,
+            "falcon": 17
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 28,
+          "planned_required": 28,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "tiger_normal_r3",
+              "rank": 3,
+              "count": 11
+            },
+            {
+              "archetype": "falcon_normal_r3",
+              "rank": 3,
+              "count": 17
+            }
+          ]
+        },
+        {
+          "id": "tower-f07-w07",
+          "wave": 7,
+          "kind": "normal",
+          "normal": {
+            "tiger": 12,
+            "boar": 18
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 30,
+          "planned_required": 30,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "tiger_normal_r3",
+              "rank": 3,
+              "count": 12
+            },
+            {
+              "archetype": "boar_normal_r3",
+              "rank": 3,
+              "count": 18
+            }
+          ]
+        },
+        {
+          "id": "tower-f07-w08",
+          "wave": 8,
+          "kind": "normal",
+          "normal": {
+            "tiger": 12,
+            "falcon": 20
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 32,
+          "planned_required": 32,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "tiger_normal_r3",
+              "rank": 3,
+              "count": 12
+            },
+            {
+              "archetype": "falcon_normal_r3",
+              "rank": 3,
+              "count": 20
+            }
+          ]
+        },
+        {
+          "id": "tower-f07-w09",
+          "wave": 9,
+          "kind": "normal",
+          "normal": {
+            "tiger": 13,
+            "falcon": 21
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 34,
+          "planned_required": 34,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "tiger_normal_r3",
+              "rank": 3,
+              "count": 13
+            },
+            {
+              "archetype": "falcon_normal_r3",
+              "rank": 3,
+              "count": 21
+            }
+          ]
+        },
+        {
+          "id": "tower-f07-w10",
+          "wave": 10,
+          "kind": "elite",
+          "normal": {
+            "tiger": 9,
+            "falcon": 15
+          },
+          "elite": {
+            "falcon": 2
+          },
+          "boss_count": 0,
+          "normal_count": 24,
+          "planned_required": 26,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "tiger_normal_r3",
+              "rank": 3,
+              "count": 9
+            },
+            {
+              "archetype": "falcon_normal_r3",
+              "rank": 3,
+              "count": 15
+            },
+            {
+              "archetype": "falcon_elite_f7_w10_n2",
+              "rank": 4,
+              "count": 1
+            },
+            {
+              "archetype": "falcon_elite_f7_w10_n3",
+              "rank": 4,
+              "count": 1
+            }
+          ]
+        },
+        {
+          "id": "tower-f07-w11",
+          "wave": 11,
+          "kind": "normal",
+          "normal": {
+            "tiger": 3,
+            "falcon": 9,
+            "boar": 20
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 32,
+          "planned_required": 32,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "tiger_normal_r3",
+              "rank": 3,
+              "count": 3
+            },
+            {
+              "archetype": "falcon_normal_r3",
+              "rank": 3,
+              "count": 9
+            },
+            {
+              "archetype": "boar_normal_r3",
+              "rank": 3,
+              "count": 20
+            }
+          ]
+        },
+        {
+          "id": "tower-f07-w12",
+          "wave": 12,
+          "kind": "normal",
+          "normal": {
+            "tiger": 13,
+            "boar": 14,
+            "falcon": 7
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 34,
+          "planned_required": 34,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "tiger_normal_r3",
+              "rank": 3,
+              "count": 13
+            },
+            {
+              "archetype": "boar_normal_r3",
+              "rank": 3,
+              "count": 14
+            },
+            {
+              "archetype": "falcon_normal_r3",
+              "rank": 3,
+              "count": 7
+            }
+          ]
+        },
+        {
+          "id": "tower-f07-w13",
+          "wave": 13,
+          "kind": "normal",
+          "normal": {
+            "tiger": 14,
+            "falcon": 22
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 36,
+          "planned_required": 36,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "tiger_normal_r3",
+              "rank": 3,
+              "count": 14
+            },
+            {
+              "archetype": "falcon_normal_r3",
+              "rank": 3,
+              "count": 10
+            },
+            {
+              "archetype": "falcon_normal_r4",
+              "rank": 4,
+              "count": 4
+            },
+            {
+              "archetype": "falcon_normal_r4",
+              "rank": 4,
+              "count": 8
+            }
+          ]
+        },
+        {
+          "id": "tower-f07-w14",
+          "wave": 14,
+          "kind": "normal",
+          "normal": {
+            "tiger": 15,
+            "falcon": 23
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 38,
+          "planned_required": 38,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "tiger_normal_r4",
+              "rank": 4,
+              "count": 15
+            },
+            {
+              "archetype": "falcon_normal_r4",
+              "rank": 4,
+              "count": 15
+            },
+            {
+              "archetype": "falcon_normal_r4",
+              "rank": 4,
+              "count": 8
+            }
+          ]
+        },
+        {
+          "id": "tower-f07-w15",
+          "wave": 15,
+          "kind": "elite",
+          "normal": {
+            "tiger": 10,
+            "falcon": 16
+          },
+          "elite": {
+            "falcon": 2
+          },
+          "boss_count": 0,
+          "normal_count": 26,
+          "planned_required": 28,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "tiger_normal_r4",
+              "rank": 4,
+              "count": 4
+            },
+            {
+              "archetype": "falcon_normal_r4",
+              "rank": 4,
+              "count": 16
+            },
+            {
+              "archetype": "tiger_normal_r4",
+              "rank": 4,
+              "count": 6
+            },
+            {
+              "archetype": "falcon_elite_f7_w15_n4",
+              "rank": 5,
+              "count": 1
+            },
+            {
+              "archetype": "falcon_elite_f7_w15_n5",
+              "rank": 5,
+              "count": 1
+            }
+          ]
+        },
+        {
+          "id": "tower-f07-w16",
+          "wave": 16,
+          "kind": "normal",
+          "normal": {
+            "tiger": 14,
+            "boar": 22
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 36,
+          "planned_required": 36,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "tiger_normal_r4",
+              "rank": 4,
+              "count": 4
+            },
+            {
+              "archetype": "tiger_normal_r4",
+              "rank": 4,
+              "count": 10
+            },
+            {
+              "archetype": "boar_normal_r4",
+              "rank": 4,
+              "count": 22
+            }
+          ]
+        },
+        {
+          "id": "tower-f07-w17",
+          "wave": 17,
+          "kind": "normal",
+          "normal": {
+            "tiger": 15,
+            "boar": 15,
+            "falcon": 8
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 38,
+          "planned_required": 38,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "tiger_normal_r4",
+              "rank": 4,
+              "count": 15
+            },
+            {
+              "archetype": "boar_normal_r4",
+              "rank": 4,
+              "count": 15
+            },
+            {
+              "archetype": "falcon_normal_r4",
+              "rank": 4,
+              "count": 8
+            }
+          ]
+        },
+        {
+          "id": "tower-f07-w18",
+          "wave": 18,
+          "kind": "normal",
+          "normal": {
+            "tiger": 16,
+            "falcon": 24
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 40,
+          "planned_required": 40,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "tiger_normal_r4",
+              "rank": 4,
+              "count": 16
+            },
+            {
+              "archetype": "falcon_normal_r4",
+              "rank": 4,
+              "count": 16
+            },
+            {
+              "archetype": "falcon_normal_r4",
+              "rank": 4,
+              "count": 8
+            }
+          ]
+        },
+        {
+          "id": "tower-f07-w19",
+          "wave": 19,
+          "kind": "normal",
+          "normal": {
+            "tiger": 16,
+            "falcon": 26
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 42,
+          "planned_required": 42,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "tiger_normal_r4",
+              "rank": 4,
+              "count": 16
+            },
+            {
+              "archetype": "falcon_normal_r4",
+              "rank": 4,
+              "count": 17
+            },
+            {
+              "archetype": "falcon_normal_r4",
+              "rank": 4,
+              "count": 9
+            }
+          ]
+        },
+        {
+          "id": "tower-f07-w20",
+          "wave": 20,
+          "kind": "boss",
+          "normal": {
+            "tiger": 3,
+            "falcon": 5
+          },
+          "elite": {},
+          "boss_count": 1,
+          "normal_count": 8,
+          "planned_required": 9,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [
+            {
+              "trigger": "start",
+              "count": 4
+            },
+            {
+              "trigger": "boss_half_hp_or_death",
+              "count": 4
+            }
+          ],
+          "enemy_groups": [
+            {
+              "archetype": "tiger_normal_r4",
+              "rank": 4,
+              "count": 1
+            },
+            {
+              "archetype": "falcon_normal_r4",
+              "rank": 4,
+              "count": 5
+            },
+            {
+              "archetype": "tiger_normal_r4",
+              "rank": 4,
+              "count": 2
+            },
+            {
+              "archetype": "rhino_boss",
+              "rank": 6,
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "floor_stat_scale": {
+        "version": 4,
+        "reference_level": 21,
+        "normal_hp": 1850,
+        "elite_hp": 195000,
+        "boss_hp": 1122000,
+        "normal_damage": 40.0565,
+        "elite_damage": 68.0955,
+        "boss_damage": 80.1075,
+        "boss_heavy_damage": 128.1775,
+        "early_normal_through_wave": 4,
+        "early_normal_hp_multiplier": 1,
+        "rank_role_version": 1,
+        "boss_budget_revision": "rank-role-middle-gear-v1"
+      },
+      "cultivation_xp_budget": 1563,
+      "roster_revision": "rank-role-v1",
+      "stat_scale_rule": "普通/精英共享物种与品阶基础，精英气血2.5倍、普攻1.15倍；Boss独立遭遇预算。"
+    },
+    {
+      "floor": 8,
+      "name": "群妖祭坛",
+      "main_family": "wolf",
+      "boss_name": "苍鬃牛魔王",
+      "boss_id": "yak_boss",
+      "boss_rank": 6,
+      "concurrent_cap": 52,
+      "unlock": "clear-floor-7",
+      "normal_family_pool": [
+        "wolf",
+        "spider",
+        "snake",
+        "bear"
+      ],
+      "waves": [
+        {
+          "id": "tower-f08-w01",
+          "wave": 1,
+          "kind": "normal",
+          "normal": {
+            "wolf": 24
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 24,
+          "planned_required": 24,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "wolf_normal_r3",
+              "rank": 3,
+              "count": 24
+            }
+          ]
+        },
+        {
+          "id": "tower-f08-w02",
+          "wave": 2,
+          "kind": "normal",
+          "normal": {
+            "bear": 10,
+            "wolf": 16
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 26,
+          "planned_required": 26,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "bear_normal_r3",
+              "rank": 3,
+              "count": 10
+            },
+            {
+              "archetype": "wolf_normal_r3",
+              "rank": 3,
+              "count": 16
+            }
+          ]
+        },
+        {
+          "id": "tower-f08-w03",
+          "wave": 3,
+          "kind": "normal",
+          "normal": {
+            "snake": 28
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 28,
+          "planned_required": 28,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "snake_normal_r3",
+              "rank": 3,
+              "count": 28
+            }
+          ]
+        },
+        {
+          "id": "tower-f08-w04",
+          "wave": 4,
+          "kind": "normal",
+          "normal": {
+            "wolf": 18,
+            "bear": 12
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 30,
+          "planned_required": 30,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "wolf_normal_r3",
+              "rank": 3,
+              "count": 18
+            },
+            {
+              "archetype": "bear_normal_r3",
+              "rank": 3,
+              "count": 12
+            }
+          ]
+        },
+        {
+          "id": "tower-f08-w05",
+          "wave": 5,
+          "kind": "elite",
+          "normal": {
+            "wolf": 14,
+            "snake": 10
+          },
+          "elite": {
+            "wolf": 1
+          },
+          "boss_count": 0,
+          "normal_count": 24,
+          "planned_required": 25,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "wolf_normal_r3",
+              "rank": 3,
+              "count": 14
+            },
+            {
+              "archetype": "snake_normal_r3",
+              "rank": 3,
+              "count": 10
+            },
+            {
+              "archetype": "wolf_elite_f8_w5_n1",
+              "rank": 4,
+              "count": 1
+            }
+          ]
+        },
+        {
+          "id": "tower-f08-w06",
+          "wave": 6,
+          "kind": "normal",
+          "normal": {
+            "wolf": 18,
+            "bear": 12
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 30,
+          "planned_required": 30,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "wolf_normal_r3",
+              "rank": 3,
+              "count": 18
+            },
+            {
+              "archetype": "bear_normal_r3",
+              "rank": 3,
+              "count": 12
+            }
+          ]
+        },
+        {
+          "id": "tower-f08-w07",
+          "wave": 7,
+          "kind": "normal",
+          "normal": {
+            "wolf": 19,
+            "spider": 13
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 32,
+          "planned_required": 32,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "wolf_normal_r3",
+              "rank": 3,
+              "count": 19
+            },
+            {
+              "archetype": "spider_normal_r3",
+              "rank": 3,
+              "count": 13
+            }
+          ]
+        },
+        {
+          "id": "tower-f08-w08",
+          "wave": 8,
+          "kind": "normal",
+          "normal": {
+            "wolf": 21,
+            "bear": 13
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 34,
+          "planned_required": 34,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "wolf_normal_r3",
+              "rank": 3,
+              "count": 21
+            },
+            {
+              "archetype": "bear_normal_r3",
+              "rank": 3,
+              "count": 13
+            }
+          ]
+        },
+        {
+          "id": "tower-f08-w09",
+          "wave": 9,
+          "kind": "normal",
+          "normal": {
+            "wolf": 22,
+            "bear": 14
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 36,
+          "planned_required": 36,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "wolf_normal_r3",
+              "rank": 3,
+              "count": 22
+            },
+            {
+              "archetype": "bear_normal_r3",
+              "rank": 3,
+              "count": 6
+            },
+            {
+              "archetype": "bear_normal_r4",
+              "rank": 4,
+              "count": 8
+            }
+          ]
+        },
+        {
+          "id": "tower-f08-w10",
+          "wave": 10,
+          "kind": "elite",
+          "normal": {
+            "wolf": 15,
+            "snake": 11
+          },
+          "elite": {
+            "snake": 2
+          },
+          "boss_count": 0,
+          "normal_count": 26,
+          "planned_required": 28,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "wolf_normal_r4",
+              "rank": 4,
+              "count": 15
+            },
+            {
+              "archetype": "snake_normal_r4",
+              "rank": 4,
+              "count": 11
+            },
+            {
+              "archetype": "snake_elite_f8_w10_n2",
+              "rank": 4,
+              "count": 1
+            },
+            {
+              "archetype": "snake_elite_f8_w10_n3",
+              "rank": 4,
+              "count": 1
+            }
+          ]
+        },
+        {
+          "id": "tower-f08-w11",
+          "wave": 11,
+          "kind": "normal",
+          "normal": {
+            "wolf": 27,
+            "spider": 7
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 34,
+          "planned_required": 34,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "wolf_normal_r4",
+              "rank": 4,
+              "count": 17
+            },
+            {
+              "archetype": "wolf_normal_r4",
+              "rank": 4,
+              "count": 10
+            },
+            {
+              "archetype": "spider_normal_r4",
+              "rank": 4,
+              "count": 7
+            }
+          ]
+        },
+        {
+          "id": "tower-f08-w12",
+          "wave": 12,
+          "kind": "normal",
+          "normal": {
+            "wolf": 18,
+            "spider": 10,
+            "bear": 8
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 36,
+          "planned_required": 36,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "wolf_normal_r4",
+              "rank": 4,
+              "count": 18
+            },
+            {
+              "archetype": "spider_normal_r4",
+              "rank": 4,
+              "count": 10
+            },
+            {
+              "archetype": "bear_normal_r4",
+              "rank": 4,
+              "count": 8
+            }
+          ]
+        },
+        {
+          "id": "tower-f08-w13",
+          "wave": 13,
+          "kind": "normal",
+          "normal": {
+            "wolf": 23,
+            "bear": 15
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 38,
+          "planned_required": 38,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "wolf_normal_r4",
+              "rank": 4,
+              "count": 23
+            },
+            {
+              "archetype": "bear_normal_r4",
+              "rank": 4,
+              "count": 7
+            },
+            {
+              "archetype": "bear_normal_r4",
+              "rank": 4,
+              "count": 8
+            }
+          ]
+        },
+        {
+          "id": "tower-f08-w14",
+          "wave": 14,
+          "kind": "normal",
+          "normal": {
+            "wolf": 20,
+            "bear": 12,
+            "snake": 8
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 40,
+          "planned_required": 40,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "wolf_normal_r4",
+              "rank": 4,
+              "count": 20
+            },
+            {
+              "archetype": "bear_normal_r4",
+              "rank": 4,
+              "count": 12
+            },
+            {
+              "archetype": "snake_normal_r4",
+              "rank": 4,
+              "count": 8
+            }
+          ]
+        },
+        {
+          "id": "tower-f08-w15",
+          "wave": 15,
+          "kind": "elite",
+          "normal": {
+            "wolf": 20,
+            "snake": 8
+          },
+          "elite": {
+            "bear": 2
+          },
+          "boss_count": 0,
+          "normal_count": 28,
+          "planned_required": 30,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "wolf_normal_r4",
+              "rank": 4,
+              "count": 14
+            },
+            {
+              "archetype": "snake_normal_r4",
+              "rank": 4,
+              "count": 8
+            },
+            {
+              "archetype": "wolf_normal_r4",
+              "rank": 4,
+              "count": 6
+            },
+            {
+              "archetype": "bear_elite_f8_w15_n4",
+              "rank": 5,
+              "count": 1
+            },
+            {
+              "archetype": "bear_elite_f8_w15_n5",
+              "rank": 5,
+              "count": 1
+            }
+          ]
+        },
+        {
+          "id": "tower-f08-w16",
+          "wave": 16,
+          "kind": "normal",
+          "normal": {
+            "wolf": 30,
+            "spider": 8
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 38,
+          "planned_required": 38,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "wolf_normal_r4",
+              "rank": 4,
+              "count": 19
+            },
+            {
+              "archetype": "wolf_normal_r4",
+              "rank": 4,
+              "count": 11
+            },
+            {
+              "archetype": "spider_normal_r4",
+              "rank": 4,
+              "count": 8
+            }
+          ]
+        },
+        {
+          "id": "tower-f08-w17",
+          "wave": 17,
+          "kind": "normal",
+          "normal": {
+            "wolf": 20,
+            "spider": 12,
+            "bear": 8
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 40,
+          "planned_required": 40,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "wolf_normal_r4",
+              "rank": 4,
+              "count": 20
+            },
+            {
+              "archetype": "spider_normal_r4",
+              "rank": 4,
+              "count": 12
+            },
+            {
+              "archetype": "bear_normal_r4",
+              "rank": 4,
+              "count": 8
+            }
+          ]
+        },
+        {
+          "id": "tower-f08-w18",
+          "wave": 18,
+          "kind": "elite",
+          "normal": {
+            "wolf": 26,
+            "bear": 16
+          },
+          "elite": {
+            "spider": 1
+          },
+          "boss_count": 0,
+          "normal_count": 42,
+          "planned_required": 43,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "wolf_normal_r4",
+              "rank": 4,
+              "count": 26
+            },
+            {
+              "archetype": "bear_normal_r4",
+              "rank": 4,
+              "count": 7
+            },
+            {
+              "archetype": "bear_normal_r4",
+              "rank": 4,
+              "count": 9
+            },
+            {
+              "archetype": "spider_elite_chixiao",
+              "rank": 6,
+              "count": 1
+            }
+          ]
+        },
+        {
+          "id": "tower-f08-w19",
+          "wave": 19,
+          "kind": "normal",
+          "normal": {
+            "wolf": 22,
+            "bear": 13,
+            "snake": 9
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 44,
+          "planned_required": 44,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "wolf_normal_r4",
+              "rank": 4,
+              "count": 20
+            },
+            {
+              "archetype": "wolf_normal_r5",
+              "rank": 5,
+              "count": 2
+            },
+            {
+              "archetype": "bear_normal_r5",
+              "rank": 5,
+              "count": 13
+            },
+            {
+              "archetype": "snake_normal_r5",
+              "rank": 5,
+              "count": 9
+            }
+          ]
+        },
+        {
+          "id": "tower-f08-w20",
+          "wave": 20,
+          "kind": "boss",
+          "normal": {
+            "wolf": 6,
+            "snake": 2
+          },
+          "elite": {},
+          "boss_count": 1,
+          "normal_count": 8,
+          "planned_required": 9,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [
+            {
+              "trigger": "start",
+              "count": 4
+            },
+            {
+              "trigger": "boss_half_hp_or_death",
+              "count": 4
+            }
+          ],
+          "enemy_groups": [
+            {
+              "archetype": "wolf_normal_r5",
+              "rank": 5,
+              "count": 4
+            },
+            {
+              "archetype": "snake_normal_r5",
+              "rank": 5,
+              "count": 2
+            },
+            {
+              "archetype": "wolf_normal_r5",
+              "rank": 5,
+              "count": 2
+            },
+            {
+              "archetype": "yak_boss",
+              "rank": 6,
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "floor_stat_scale": {
+        "version": 4,
+        "reference_level": 24,
+        "normal_hp": 2600,
+        "elite_hp": 230000,
+        "boss_hp": 2316100,
+        "normal_damage": 50.457,
+        "elite_damage": 85.778,
+        "boss_damage": 100.914,
+        "boss_heavy_damage": 161.4635,
+        "early_normal_through_wave": 4,
+        "early_normal_hp_multiplier": 1,
+        "rank_role_version": 1,
+        "boss_budget_revision": "rank-role-middle-gear-v1"
+      },
+      "cultivation_xp_budget": 2025,
+      "roster_revision": "rank-role-v1",
+      "stat_scale_rule": "普通/精英共享物种与品阶基础，精英气血2.5倍、普攻1.15倍；Boss独立遭遇预算。"
+    },
+    {
+      "floor": 9,
+      "name": "镇魇封台",
+      "main_family": "tiger",
+      "boss_name": "镇魇白虎",
+      "boss_id": "tiger_boss_zhenyan",
+      "boss_rank": 7,
+      "concurrent_cap": 56,
+      "unlock": "clear-floor-8",
+      "normal_family_pool": [
+        "tiger",
+        "wolf",
+        "falcon"
+      ],
+      "waves": [
+        {
+          "id": "tower-f09-w01",
+          "wave": 1,
+          "kind": "normal",
+          "normal": {
+            "tiger": 10,
+            "falcon": 16
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 26,
+          "planned_required": 26,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "tiger_normal_r4",
+              "rank": 4,
+              "count": 10
+            },
+            {
+              "archetype": "falcon_normal_r4",
+              "rank": 4,
+              "count": 16
+            }
+          ]
+        },
+        {
+          "id": "tower-f09-w02",
+          "wave": 2,
+          "kind": "normal",
+          "normal": {
+            "falcon": 28
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 28,
+          "planned_required": 28,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "falcon_normal_r4",
+              "rank": 4,
+              "count": 28
+            }
+          ]
+        },
+        {
+          "id": "tower-f09-w03",
+          "wave": 3,
+          "kind": "normal",
+          "normal": {
+            "wolf": 12,
+            "falcon": 18
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 30,
+          "planned_required": 30,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "wolf_normal_r4",
+              "rank": 4,
+              "count": 12
+            },
+            {
+              "archetype": "falcon_normal_r4",
+              "rank": 4,
+              "count": 18
+            }
+          ]
+        },
+        {
+          "id": "tower-f09-w04",
+          "wave": 4,
+          "kind": "normal",
+          "normal": {
+            "tiger": 12,
+            "falcon": 20
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 32,
+          "planned_required": 32,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "tiger_normal_r4",
+              "rank": 4,
+              "count": 12
+            },
+            {
+              "archetype": "falcon_normal_r4",
+              "rank": 4,
+              "count": 20
+            }
+          ]
+        },
+        {
+          "id": "tower-f09-w05",
+          "wave": 5,
+          "kind": "elite",
+          "normal": {
+            "tiger": 10,
+            "falcon": 16
+          },
+          "elite": {
+            "tiger": 1
+          },
+          "boss_count": 0,
+          "normal_count": 26,
+          "planned_required": 27,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "tiger_normal_r4",
+              "rank": 4,
+              "count": 10
+            },
+            {
+              "archetype": "falcon_normal_r4",
+              "rank": 4,
+              "count": 16
+            },
+            {
+              "archetype": "tiger_elite_f9_w5_n1",
+              "rank": 4,
+              "count": 1
+            }
+          ]
+        },
+        {
+          "id": "tower-f09-w06",
+          "wave": 6,
+          "kind": "normal",
+          "normal": {
+            "tiger": 12,
+            "falcon": 20
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 32,
+          "planned_required": 32,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "tiger_normal_r4",
+              "rank": 4,
+              "count": 12
+            },
+            {
+              "archetype": "falcon_normal_r4",
+              "rank": 4,
+              "count": 20
+            }
+          ]
+        },
+        {
+          "id": "tower-f09-w07",
+          "wave": 7,
+          "kind": "normal",
+          "normal": {
+            "tiger": 13,
+            "wolf": 21
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 34,
+          "planned_required": 34,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "tiger_normal_r4",
+              "rank": 4,
+              "count": 13
+            },
+            {
+              "archetype": "wolf_normal_r4",
+              "rank": 4,
+              "count": 21
+            }
+          ]
+        },
+        {
+          "id": "tower-f09-w08",
+          "wave": 8,
+          "kind": "normal",
+          "normal": {
+            "tiger": 14,
+            "falcon": 22
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 36,
+          "planned_required": 36,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "tiger_normal_r4",
+              "rank": 4,
+              "count": 14
+            },
+            {
+              "archetype": "falcon_normal_r4",
+              "rank": 4,
+              "count": 22
+            }
+          ]
+        },
+        {
+          "id": "tower-f09-w09",
+          "wave": 9,
+          "kind": "normal",
+          "normal": {
+            "tiger": 15,
+            "falcon": 23
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 38,
+          "planned_required": 38,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "tiger_normal_r4",
+              "rank": 4,
+              "count": 15
+            },
+            {
+              "archetype": "falcon_normal_r4",
+              "rank": 4,
+              "count": 23
+            }
+          ]
+        },
+        {
+          "id": "tower-f09-w10",
+          "wave": 10,
+          "kind": "elite",
+          "normal": {
+            "tiger": 11,
+            "falcon": 17
+          },
+          "elite": {
+            "falcon": 2
+          },
+          "boss_count": 0,
+          "normal_count": 28,
+          "planned_required": 30,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "tiger_normal_r4",
+              "rank": 4,
+              "count": 11
+            },
+            {
+              "archetype": "falcon_normal_r4",
+              "rank": 4,
+              "count": 17
+            },
+            {
+              "archetype": "falcon_elite_f9_w10_n2",
+              "rank": 4,
+              "count": 1
+            },
+            {
+              "archetype": "falcon_elite_f9_w10_n3",
+              "rank": 4,
+              "count": 1
+            }
+          ]
+        },
+        {
+          "id": "tower-f09-w11",
+          "wave": 11,
+          "kind": "normal",
+          "normal": {
+            "tiger": 14,
+            "wolf": 22
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 36,
+          "planned_required": 36,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "tiger_normal_r4",
+              "rank": 4,
+              "count": 4
+            },
+            {
+              "archetype": "tiger_normal_r4",
+              "rank": 4,
+              "count": 10
+            },
+            {
+              "archetype": "wolf_normal_r4",
+              "rank": 4,
+              "count": 22
+            }
+          ]
+        },
+        {
+          "id": "tower-f09-w12",
+          "wave": 12,
+          "kind": "normal",
+          "normal": {
+            "tiger": 15,
+            "wolf": 15,
+            "falcon": 8
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 38,
+          "planned_required": 38,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "tiger_normal_r4",
+              "rank": 4,
+              "count": 15
+            },
+            {
+              "archetype": "wolf_normal_r4",
+              "rank": 4,
+              "count": 15
+            },
+            {
+              "archetype": "falcon_normal_r4",
+              "rank": 4,
+              "count": 8
+            }
+          ]
+        },
+        {
+          "id": "tower-f09-w13",
+          "wave": 13,
+          "kind": "normal",
+          "normal": {
+            "tiger": 16,
+            "falcon": 24
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 40,
+          "planned_required": 40,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "tiger_normal_r4",
+              "rank": 4,
+              "count": 16
+            },
+            {
+              "archetype": "falcon_normal_r4",
+              "rank": 4,
+              "count": 16
+            },
+            {
+              "archetype": "falcon_normal_r4",
+              "rank": 4,
+              "count": 8
+            }
+          ]
+        },
+        {
+          "id": "tower-f09-w14",
+          "wave": 14,
+          "kind": "normal",
+          "normal": {
+            "tiger": 7,
+            "falcon": 26,
+            "wolf": 9
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 42,
+          "planned_required": 42,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "tiger_normal_r4",
+              "rank": 4,
+              "count": 7
+            },
+            {
+              "archetype": "falcon_normal_r4",
+              "rank": 4,
+              "count": 26
+            },
+            {
+              "archetype": "wolf_normal_r4",
+              "rank": 4,
+              "count": 9
+            }
+          ]
+        },
+        {
+          "id": "tower-f09-w15",
+          "wave": 15,
+          "kind": "elite",
+          "normal": {
+            "tiger": 3,
+            "wolf": 9,
+            "falcon": 18
+          },
+          "elite": {
+            "wolf": 2
+          },
+          "boss_count": 0,
+          "normal_count": 30,
+          "planned_required": 32,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "tiger_normal_r4",
+              "rank": 4,
+              "count": 3
+            },
+            {
+              "archetype": "wolf_normal_r4",
+              "rank": 4,
+              "count": 5
+            },
+            {
+              "archetype": "wolf_normal_r5",
+              "rank": 5,
+              "count": 4
+            },
+            {
+              "archetype": "falcon_normal_r5",
+              "rank": 5,
+              "count": 18
+            },
+            {
+              "archetype": "wolf_elite_f9_w15_n4",
+              "rank": 5,
+              "count": 1
+            },
+            {
+              "archetype": "wolf_elite_f9_w15_n5",
+              "rank": 5,
+              "count": 1
+            }
+          ]
+        },
+        {
+          "id": "tower-f09-w16",
+          "wave": 16,
+          "kind": "normal",
+          "normal": {
+            "tiger": 16,
+            "wolf": 24
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 40,
+          "planned_required": 40,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "tiger_normal_r5",
+              "rank": 5,
+              "count": 4
+            },
+            {
+              "archetype": "tiger_normal_r5",
+              "rank": 5,
+              "count": 12
+            },
+            {
+              "archetype": "wolf_normal_r5",
+              "rank": 5,
+              "count": 24
+            }
+          ]
+        },
+        {
+          "id": "tower-f09-w17",
+          "wave": 17,
+          "kind": "normal",
+          "normal": {
+            "tiger": 16,
+            "wolf": 17,
+            "falcon": 9
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 42,
+          "planned_required": 42,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "tiger_normal_r5",
+              "rank": 5,
+              "count": 16
+            },
+            {
+              "archetype": "wolf_normal_r5",
+              "rank": 5,
+              "count": 17
+            },
+            {
+              "archetype": "falcon_normal_r5",
+              "rank": 5,
+              "count": 9
+            }
+          ]
+        },
+        {
+          "id": "tower-f09-w18",
+          "wave": 18,
+          "kind": "elite",
+          "normal": {
+            "tiger": 17,
+            "falcon": 27
+          },
+          "elite": {
+            "tiger": 1
+          },
+          "boss_count": 0,
+          "normal_count": 44,
+          "planned_required": 45,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "tiger_normal_r5",
+              "rank": 5,
+              "count": 17
+            },
+            {
+              "archetype": "falcon_normal_r5",
+              "rank": 5,
+              "count": 18
+            },
+            {
+              "archetype": "falcon_normal_r5",
+              "rank": 5,
+              "count": 9
+            },
+            {
+              "archetype": "tiger_elite_f9_w18_n6",
+              "rank": 6,
+              "count": 1
+            }
+          ]
+        },
+        {
+          "id": "tower-f09-w19",
+          "wave": 19,
+          "kind": "normal",
+          "normal": {
+            "tiger": 8,
+            "falcon": 28,
+            "wolf": 10
+          },
+          "elite": {},
+          "boss_count": 0,
+          "normal_count": 46,
+          "planned_required": 46,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [],
+          "enemy_groups": [
+            {
+              "archetype": "tiger_normal_r5",
+              "rank": 5,
+              "count": 8
+            },
+            {
+              "archetype": "falcon_normal_r5",
+              "rank": 5,
+              "count": 28
+            },
+            {
+              "archetype": "wolf_normal_r5",
+              "rank": 5,
+              "count": 10
+            }
+          ]
+        },
+        {
+          "id": "tower-f09-w20",
+          "wave": 20,
+          "kind": "boss",
+          "normal": {
+            "tiger": 1,
+            "falcon": 5,
+            "wolf": 2
+          },
+          "elite": {},
+          "boss_count": 1,
+          "normal_count": 8,
+          "planned_required": 9,
+          "clear_rule": "pending=0 AND alive=0 AND killed=planned AND player_alive",
+          "summon_batches": [
+            {
+              "trigger": "start",
+              "count": 4
+            },
+            {
+              "trigger": "boss_half_hp_or_death",
+              "count": 4
+            }
+          ],
+          "enemy_groups": [
+            {
+              "archetype": "tiger_normal_r5",
+              "rank": 5,
+              "count": 1
+            },
+            {
+              "archetype": "falcon_normal_r5",
+              "rank": 5,
+              "count": 2
+            },
+            {
+              "archetype": "wolf_normal_r5",
+              "rank": 5,
+              "count": 1
+            },
+            {
+              "archetype": "falcon_normal_r5",
+              "rank": 5,
+              "count": 2
+            },
+            {
+              "archetype": "wolf_normal_r5",
+              "rank": 5,
+              "count": 1
+            },
+            {
+              "archetype": "falcon_normal_r5",
+              "rank": 5,
+              "count": 1
+            },
+            {
+              "archetype": "tiger_boss_zhenyan",
+              "rank": 7,
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "floor_stat_scale": {
+        "version": 4,
+        "reference_level": 27,
+        "normal_hp": 3600,
+        "elite_hp": 285000,
+        "boss_hp": 3335000,
+        "normal_damage": 63.5635,
+        "elite_damage": 108.0585,
+        "boss_damage": 127.127,
+        "boss_heavy_damage": 203.401,
+        "early_normal_through_wave": 4,
+        "early_normal_hp_multiplier": 1,
+        "rank_role_version": 1,
+        "boss_budget_revision": "rank-role-middle-gear-v1"
+      },
+      "cultivation_xp_budget": 2295,
+      "roster_revision": "rank-role-v1",
+      "stat_scale_rule": "普通/精英共享物种与品阶基础，精英气血2.5倍、普攻1.15倍；Boss独立遭遇预算。"
+    }
+  ],
+  "stat_scale_source": "../../reports/balance-v2/floors.csv",
+  "stat_scale_rule": "Absolute role HP/damage baselines; hp=role_hp*archetype.floor_hp_factor*(0.85 for normal waves1-4 else1); move_speed=archetype.move_speed*archetype.floor_speed_factor. No player-level or legacy-rank multiplier. Keep unrounded products."
+}

@@ -1,0 +1,179 @@
+{
+  "status": "proposal-only-not-imported-by-game",
+  "baseline": "same-cultivation-and-skills-iron-sword-character",
+  "baseCharacterAttack": 97,
+  "refineBonusPctPerLevel": 1.5,
+  "refineCostsContribution": [
+    40,
+    60,
+    80,
+    100
+  ],
+  "tierBudgetCapsPct": [
+    0,
+    12,
+    18,
+    24,
+    30
+  ],
+  "draw": {
+    "stonesLower": 100,
+    "contribution": 100,
+    "tierWeightsPct": [
+      40,
+      35,
+      20,
+      5
+    ],
+    "equalIdentityWeights": true,
+    "goldPity": 20,
+    "duplicateContribution": [
+      2,
+      4,
+      8,
+      16
+    ]
+  },
+  "weapons": [
+    {
+      "id": "eq_sword_iron",
+      "name": "铁剑",
+      "tier": 0,
+      "baseAttack": 3,
+      "baseBonusPct": 0,
+      "maxRefine": 0,
+      "trait": "none",
+      "traitBonusPct": 0
+    },
+    {
+      "id": "eq_sword_suwen",
+      "name": "素问剑",
+      "tier": 1,
+      "baseAttack": 3,
+      "baseBonusPct": 4,
+      "maxRefine": 4,
+      "trait": "none",
+      "traitBonusPct": 0
+    },
+    {
+      "id": "eq_sword_qingxiao",
+      "name": "青霄剑",
+      "tier": 1,
+      "baseAttack": 3,
+      "baseBonusPct": 3,
+      "maxRefine": 4,
+      "trait": "sword_qi",
+      "traitBonusPct": 2
+    },
+    {
+      "id": "eq_sword_zhenyue",
+      "name": "镇岳剑",
+      "tier": 1,
+      "baseAttack": 3,
+      "baseBonusPct": 3,
+      "maxRefine": 4,
+      "trait": "formation",
+      "traitBonusPct": 2
+    },
+    {
+      "id": "eq_sword_tingyu",
+      "name": "听雨剑",
+      "tier": 2,
+      "baseAttack": 3,
+      "baseBonusPct": 10,
+      "maxRefine": 4,
+      "trait": "none",
+      "traitBonusPct": 0
+    },
+    {
+      "id": "eq_sword_liuxia",
+      "name": "流霞剑",
+      "tier": 2,
+      "baseAttack": 3,
+      "baseBonusPct": 8,
+      "maxRefine": 4,
+      "trait": "sword_qi",
+      "traitBonusPct": 4
+    },
+    {
+      "id": "eq_sword_xuanjun",
+      "name": "玄钧剑",
+      "tier": 2,
+      "baseAttack": 3,
+      "baseBonusPct": 8,
+      "maxRefine": 4,
+      "trait": "formation",
+      "traitBonusPct": 4
+    },
+    {
+      "id": "eq_sword_jinghong",
+      "name": "惊鸿剑",
+      "tier": 3,
+      "baseAttack": 3,
+      "baseBonusPct": 16,
+      "maxRefine": 4,
+      "trait": "none",
+      "traitBonusPct": 0
+    },
+    {
+      "id": "eq_sword_biluo",
+      "name": "碧落剑",
+      "tier": 3,
+      "baseAttack": 3,
+      "baseBonusPct": 12,
+      "maxRefine": 4,
+      "trait": "sword_qi",
+      "traitBonusPct": 6
+    },
+    {
+      "id": "eq_sword_tianshu",
+      "name": "天枢剑",
+      "tier": 3,
+      "baseAttack": 3,
+      "baseBonusPct": 12,
+      "maxRefine": 4,
+      "trait": "formation",
+      "traitBonusPct": 6
+    },
+    {
+      "id": "eq_sword_yinlu",
+      "name": "饮露剑",
+      "tier": 4,
+      "baseAttack": 3,
+      "baseBonusPct": 16,
+      "maxRefine": 4,
+      "trait": "lifesteal",
+      "traitBonusPct": 0,
+      "lifestealRate": 0.01,
+      "rollingWindowSeconds": 10,
+      "windowHpRateCap": 0.01,
+      "attemptHpRateCap": 0.1
+    },
+    {
+      "id": "eq_sword_zhaodan",
+      "name": "照胆剑",
+      "tier": 4,
+      "baseAttack": 3,
+      "baseBonusPct": 18,
+      "maxRefine": 4,
+      "trait": "weapon_crit",
+      "traitBonusPct": 6,
+      "chance": 0.1,
+      "attemptIntervalSeconds": 2
+    },
+    {
+      "id": "eq_sword_duanjie",
+      "name": "断劫剑",
+      "tier": 4,
+      "baseAttack": 3,
+      "baseBonusPct": 18,
+      "maxRefine": 4,
+      "trait": "finisher",
+      "traitBonusPct": 6,
+      "chance": 0.2,
+      "attemptIntervalSeconds": 2,
+      "targetHpThreshold": 0.25,
+      "successCooldownSeconds": 8
+    }
+  ]
+}

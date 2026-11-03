@@ -1,0 +1,2817 @@
+[
+  {
+    "name": "not ok 146 - fixed equipment applies each matching bonus once and wounds retain its result",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/sword-damage-types.test.mjs:56:1",
+    "error": "'7.7250000000000005 != 5.9225'"
+  },
+  {
+    "name": "not ok 147 - pending mixed wounds merge actual parts and preserve totals across paused restore and refresh",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/sword-damage-types.test.mjs:68:1",
+    "error": "'15 != 11.5'"
+  },
+  {
+    "name": "not ok 148 - mitigation and overkill scale both parts; inherited damage is not mitigated again",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/sword-damage-types.test.mjs:104:1",
+    "error": "'3.75 != 2.875'"
+  },
+  {
+    "name": "not ok 323 - cross is an independent ten-rank qi active at the Lianqi peak without extending the classic catalog",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/tower-qi-progression.test.mjs:36:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 324 - cross rank caps follow its four authored realm gates, including the exact XP boundaries",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/tower-qi-progression.test.mjs:53:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 325 - cross quotes enforce current stage, next-rank realm and exact costs",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/tower-qi-progression.test.mjs:67:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 326 - cross purchase and downgrade are atomic and survive reload without double spending",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/tower-qi-progression.test.mjs:80:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 327 - campaign rejects cross ranks above each realm gate even when points are sufficient",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/tower-qi-progression.test.mjs:105:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 328 - cross receives its own qi weapon affix and the qi flow bonus with readable names",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/tower-qi-progression.test.mjs:114:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 329 - cross detail requirements show the next realm at ranks zero, three, six and nine",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/tower-qi-progression.test.mjs:125:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 330 - crescent and cross text follows actual form changes rather than the former shared stages",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/tower-qi-progression.test.mjs:140:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 373 - all primary releases can trigger the existing character slash, with deterministic simultaneous priority",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/tower-skill-effects.test.mjs:235:1",
+    "error": "'WeaponQualityArt is not defined'"
+  },
+  {
+    "name": "not ok 374 - sword-line and crescent continuation hits cannot restart the committed character action",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/tower-skill-effects.test.mjs:246:1",
+    "error": "'WeaponQualityArt is not defined'"
+  },
+  {
+    "name": "not ok 375 - saved body actions use their own release, recovery and locked attack facing",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/tower-skill-effects.test.mjs:269:1",
+    "error": "'WeaponQualityArt is not defined'"
+  },
+  {
+    "name": "not ok 429 - every same-quality armor pair trades survival for physical or magical primary emphasis, including top quality",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-armor-offense.test.mjs:23:1",
+    "error": "'18 != 3'"
+  },
+  {
+    "name": "not ok 436 - obsolete armor schema resets only the campaign key and a failed reset leaves storage untouched",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-armor-offense.test.mjs:172:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 460 - shop prices and foundation purchase gate; materials cannot be purchased",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-breakthrough-items.test.mjs:32:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 502 - stage rebase preserves equipped armor pending recovery and rejects stale writes",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-developer-tools.test.mjs:75:1",
+    "error": "'Invalid equipment roll arguments'"
+  },
+  {
+    "name": "not ok 512 - all identities have slot-specific intrinsic defense and three distinct attribute sections",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-equipment-bases.test.mjs:19:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 520 - every fixed weapon uses reviewed base attack with starter replacing rather than stacking +5",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-equipment-eight-tier-budget.test.mjs:20:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 521 - all legal fixed weapon/ring pairs at levels1\u201330 stay within6x including capped crit, bone, precharged focus and maximum legal armor CDR",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-equipment-eight-tier-budget.test.mjs:24:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 522 - matched quality sets reach approved output targets within3% at every legal level, not just a relaxed ceiling",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-equipment-eight-tier-budget.test.mjs:44:1",
+    "error": "'Lv1 eq_sword_suwen/eq_ring_anxi: 1.1601523809523808, target 1.05'"
+  },
+  {
+    "name": "not ok 524 - simultaneous master weapon and ring upgrades stay below2% across native crit, bone and focus states",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-equipment-eight-tier-budget.test.mjs:67:1",
+    "error": "'fa p0 bone0 focus0: 1.3160644128421801'"
+  },
+  {
+    "name": "not ok 541 - every open tier and quality has valid deterministic equipment without buying new art",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-equipment-eight-tiers.test.mjs:14:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 552 - DOT ring boosts only converted budget and never grants a missing damage source",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-equipment-identities.test.mjs:88:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 560 - 180s skill-only scheduling preserves quality targets with basic attacks excluded from the calibration",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-equipment-output-scheduling.test.mjs:59:1",
+    "error": "'bao/4/evo_wanjian/1: 1.9749642155406315 target 2.2'"
+  },
+  {
+    "name": "not ok 566 - weapon families inherit evolutions once, general helps mixed loadouts and top quality is universal",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-fixed-equipment.test.mjs:52:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 567 - encyclopedia shows fixed stats, unique quality and explicit art gaps",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-fixed-equipment.test.mjs:82:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 568 - fixed top ring and armor cover both roles and combined master gains stay under two percent",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-fixed-equipment.test.mjs:93:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 584 - fixed catalog identities enter one legal source and one recipe only",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-forging.test.mjs:12:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 600 - medicine amounts, prices, cap, and non-consumption rules follow camp definitions",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-library.test.mjs:64:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 603 - ring descriptions show concise fixed crit and cooldown attributes",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-library.test.mjs:93:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 604 - armor descriptions list defenses and periodic recovery without explanations",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-library.test.mjs:101:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 609 - clearing battle feedback discards all pending material notices",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-material-feedback.test.mjs:38:1",
+    "error": "\"Cannot read properties of undefined (reading 'reset')\""
+  },
+  {
+    "name": "not ok 639 - bot leaves recorded sweep and charge warnings without reversing into the hit",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-monster-balance-harness.test.mjs:179:1",
+    "error": "'Invalid tower snapshot'"
+  },
+  {
+    "name": "not ok 684 - array learns incremental evolutions and retains both base investments",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-natural-growth-strategy.test.mjs:35:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 685 - unaffordable or locked evolution never dismantles its parent",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-natural-growth-strategy.test.mjs:49:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 686 - tower strategy saves points for the next evolution and never refunds in battle",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-natural-growth-strategy.test.mjs:56:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 687 - insufficient points never dismantle the parent to purchase an evolution",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-natural-growth-strategy.test.mjs:65:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 689 - an affordable tower evolution uses saved points without dismantling its parent",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-natural-growth-strategy.test.mjs:83:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 690 - already evolved routes continue investing in their base instead of refunding it",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-natural-growth-strategy.test.mjs:95:2",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 691 - pursuit split baseline buys real ranks and books, retains parents and leaves one earned point",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-natural-growth-strategy.test.mjs:105:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 693 - before first clear, stock confirmation and owned pills cannot bypass the opening gate",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-opening-pill-gate.test.mjs:22:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 694 - first clear and reload unlock purchase, crafting and use with the same six-dose limit",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-opening-pill-gate.test.mjs:42:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 725 - schema43 ring saves reset only this mode atomically; current saves reload without writes",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-ring-universal-budget.test.mjs:25:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 800 - stones cannot bypass teaching, stages, ranks, prerequisites, floors or SP",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-stone-skill-costs.test.mjs:74:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 856 - same-quality higher ranks increase the reviewed attack base without guaranteeing an off-build upgrade",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-balance-optimization.test.mjs:57:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 914 - camp pill crossing a level from 44 XP keeps existing HP and natural regeneration",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-campaign-growth.test.mjs:100:3",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 915 - camp pill crossing a level from 1484 XP keeps existing HP and natural regeneration",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-campaign-growth.test.mjs:100:3",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 916 - camp pill crossing a level from 5399 XP keeps existing HP and natural regeneration",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-campaign-growth.test.mjs:100:3",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 919 - bound tutorial roots cannot be purchased early or reclaimed as free SP",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-campaign-growth.test.mjs:147:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 923 - all learned skills act automatically regardless of the old four-slot arrays",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-campaign-growth.test.mjs:201:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 929 - a real 80-point build spends its exact budget and repeated respec cannot mint points or spirit stones",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-campaign-growth.test.mjs:299:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 930 - weapon-only presets retain three choices and cannot switch learned skills off",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-campaign-growth.test.mjs:322:1",
+    "error": "'Invalid weapon roll arguments'"
+  },
+  {
+    "name": "not ok 934 - schema1 resets all old progression once and preserves subsequent schema11 spending",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-campaign-growth.test.mjs:411:3",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 937 - schema2 resets all old progression once and preserves subsequent schema11 spending",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-campaign-growth.test.mjs:411:3",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 940 - schema3 resets all old progression once and preserves subsequent schema11 spending",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-campaign-growth.test.mjs:411:3",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 943 - schema4 resets all old progression once and preserves subsequent schema11 spending",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-campaign-growth.test.mjs:411:3",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 946 - schema5 resets all old progression once and preserves subsequent schema11 spending",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-campaign-growth.test.mjs:411:3",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 949 - schema6 resets all old progression once and preserves subsequent schema11 spending",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-campaign-growth.test.mjs:411:3",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 952 - schema7 resets all old progression once and preserves subsequent schema11 spending",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-campaign-growth.test.mjs:411:3",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 955 - schema8 resets all old progression once and preserves subsequent schema11 spending",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-campaign-growth.test.mjs:411:3",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 958 - schema9 resets all old progression once and preserves subsequent schema11 spending",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-campaign-growth.test.mjs:411:3",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 961 - schema10 resets all old progression once and preserves subsequent schema11 spending",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-campaign-growth.test.mjs:411:3",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 964 - schema11 resets all old progression once and preserves subsequent schema11 spending",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-campaign-growth.test.mjs:411:3",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 967 - schema12 resets all old progression once and preserves subsequent schema11 spending",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-campaign-growth.test.mjs:411:3",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 970 - schema13 resets all old progression once and preserves subsequent schema11 spending",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-campaign-growth.test.mjs:411:3",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 976 - book and research purchases reject low spirit-stone balances without spending points or contribution",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-campaign-growth.test.mjs:513:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 981 - fresh campaign is isolated, immutable and grants starter gifts only once",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-campaign.test.mjs:138:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 988 - only two camp pills exist, heal/XP clamp and full effects never consume inventory",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-campaign.test.mjs:253:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 989 - offline rest is saved once, rejects backwards-clock farming and cannot bank full-health time",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-campaign.test.mjs:273:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 990 - bad actions, funds, counts and capacities never publish a partial transaction",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-campaign.test.mjs:289:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 991 - every camp action publishes only after persistence, including RNG, selection and tutorial",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-campaign.test.mjs:307:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 993 - a stale store cannot overwrite spending or grant the starter balance a second time",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-campaign.test.mjs:341:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 996 - checksummed but invalid permanent state cannot bypass ownership, caps or skill locks",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-campaign.test.mjs:386:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 997 - entry is free, floor gated, carries HP/loadout/counter and isolates the returned snapshot",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-campaign.test.mjs:401:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 998 - live, paused and reloaded attempts block all camp actions and never heal offline",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-campaign.test.mjs:419:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 999 - checkpoints use base plus cumulative earnings and persist complete resumable state",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-campaign.test.mjs:439:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1001 - death retains current-wave earnings, wakes at 1 HP, and new attempts restart wave one",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-campaign.test.mjs:477:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1002 - all nine first clears award one resource per floor once and inherit fractional HP",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-campaign.test.mjs:498:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1003 - failed checkpoints and settlements retain one retryable complete transaction",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-campaign.test.mjs:536:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1004 - combat XP reaches the cap without blocking other earned resources or storing overflow",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-campaign.test.mjs:558:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1005 - real combat checkpoint, reload and abandonment preserve the same battle and wallet",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-campaign.test.mjs:568:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1016 - both pills are rejected without inventory or save changes while playing",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-campaign.test.mjs:729:56",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1017 - both pills are rejected without inventory or save changes while paused",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-campaign.test.mjs:729:56",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1018 - both pills are rejected without inventory or save changes while reloaded",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-campaign.test.mjs:729:56",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1019 - repeat clears and repeated settlement cannot replenish used cultivation allowance",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-campaign.test.mjs:740:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1021 - white tiger has an independent resource used by both tower and battle views",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-cultivation-rewards.test.mjs:29:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1024 - xuan weapon equip gate at level 19",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-doc52-tier-gate.test.mjs:9:30",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1069 - fixed ring continuum envelope stays below20% standalone with full focus and cooldown acceleration",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-equipment-budget.test.mjs:25:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1070 - armor retains31%HP,17%reduction,1%recovery,20s cooldown and10% per-floor healing limits",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-equipment-budget.test.mjs:35:1",
+    "error": "'eq_armor_qingma'"
+  },
+  {
+    "name": "not ok 1072 - armor purchases cost15 stones/9 contribution, retain affixes and never auto-equip",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-equipment-campaign.test.mjs:134:3",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1073 - armor requires level21 for ling, and rejects bad categories, tiers and insufficient payment",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-equipment-campaign.test.mjs:151:3",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1079 - armor keeps identical duplicate instances without automatic refunds",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-equipment-campaign.test.mjs:225:3",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1084 - ring purchases cost15 stones/9 contribution, retain affixes and never auto-equip",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-equipment-campaign.test.mjs:134:3",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1085 - ring requires level21 for ling, and rejects bad categories, tiers and insufficient payment",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-equipment-campaign.test.mjs:151:3",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1091 - ring keeps identical duplicate instances without automatic refunds",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-equipment-campaign.test.mjs:225:3",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1102 - per-ring counters survive swapping, entering, checkpointing, reloading and leaving a floor",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-equipment-campaign.test.mjs:423:1",
+    "error": "'fixture must land a real direct cast'"
+  },
+  {
+    "name": "not ok 1112 - fixed rings retain mandatory crit and CDR slots without retired focus and with exact fractional APIs",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-equipment-doc52.test.mjs:16:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1116 - fixed attack references follow actual unlocks and calculations cannot mutate fixed weapon instances",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-equipment-doc52.test.mjs:56:1",
+    "error": "'16 != 6'"
+  },
+  {
+    "name": "not ok 1118 - fixed armor requires its HP slot and retains bounded delayed recovery without fictitious full-health healing",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-equipment-doc52.test.mjs:88:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1119 - UI descriptions display both fixed crit and cooldown bonuses with correct units and detached summaries",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-equipment-doc52.test.mjs:107:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1120 - level-one and later legal fixed loadouts retain damage budgets as cultivation grows",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-equipment-doc52.test.mjs:114:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1121 - armor entry-state rollback at unchanged time/HP is rejected by checkpoint",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-equipment-history.test.mjs:93:3",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1122 - armor entry-state rollback at unchanged time/HP is rejected by finishFloor",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-equipment-history.test.mjs:93:3",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1123 - a later tick cannot reset armor recovery total, trigger history or cooldown",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-equipment-history.test.mjs:103:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1124 - zero-time four-cast focus fabrication is rejected by checkpoint",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-equipment-history.test.mjs:125:3",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1125 - zero-time four-cast focus fabrication is rejected by finishFloor",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-equipment-history.test.mjs:125:3",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1126 - one elapsed tick cannot hide four fabricated casts behind a later timestamp",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-equipment-history.test.mjs:136:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1127 - real ring progress cannot roll back after its projectiles have expired",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-equipment-history.test.mjs:148:1",
+    "error": "'must land a real cast'"
+  },
+  {
+    "name": "not ok 1128 - normal pending-heal reload and repeated checkpoints do not duplicate recovery",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-equipment-history.test.mjs:180:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1129 - each category has 25 identities plus its detached basic item; armor retains doc42 names",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-equipment.test.mjs:9:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1131 - seeded rolls cover all 50 fixed identities with category-only slots and roundtrip validation",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-equipment.test.mjs:44:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1133 - armor base rolls provide reduction plus bounded delayed recovery",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-equipment.test.mjs:77:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1151 - flight rejects forged low-level or excess ranks and retains passive first-learning camp restriction",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-flight.test.mjs:145:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1158 - forge hall only sells deterministic fan equipment 1280x720",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-forge-ui.test.mjs:208:2",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1159 - crafting preview covers every formal quality pool without spending 1280x720",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-forge-ui.test.mjs:221:2",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1160 - forge overlay controls and independent scroll panes stay in bounds 1280x720",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-forge-ui.test.mjs:232:2",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1161 - batch purchase debounces callback and reports only persisted awards 1280x720",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-forge-ui.test.mjs:239:2",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1162 - single purchase creates one award and inventory retains the same identity 1280x720",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-forge-ui.test.mjs:252:2",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1163 - forge details have no wish controls 1280x720",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-forge-ui.test.mjs:259:2",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1164 - forge hall only sells deterministic fan equipment 844x390",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-forge-ui.test.mjs:208:2",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1165 - crafting preview covers every formal quality pool without spending 844x390",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-forge-ui.test.mjs:221:2",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1166 - forge overlay controls and independent scroll panes stay in bounds 844x390",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-forge-ui.test.mjs:232:2",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1167 - batch purchase debounces callback and reports only persisted awards 844x390",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-forge-ui.test.mjs:239:2",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1168 - single purchase creates one award and inventory retains the same identity 844x390",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-forge-ui.test.mjs:252:2",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1169 - forge details have no wish controls 844x390",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-forge-ui.test.mjs:259:2",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1170 - crafting lists only tiers the current realm can use",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-forge-ui.test.mjs:272:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1171 - failed batch save retries with the same receipt and exactly one resource deduction",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-forge-ui.test.mjs:281:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1172 - batch quote rejects total cost, realm, count and capacity before mutating",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-forge-ui.test.mjs:292:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1174 - disabled, closed, destroyed and stale-generation callbacks cannot purchase",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-forge-ui.test.mjs:314:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1175 - quality-four preview includes both graduates and never charges on view or presentation ticks",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-forge-ui.test.mjs:321:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1176 - close and revisit preserve state without retaining a pending submission",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-forge-ui.test.mjs:327:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1177 - sect entries share cultivation state and keep tower separate from inheritance peaks",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-forge-ui.test.mjs:335:1",
+    "error": "'drawPlayerMana is not defined'"
+  },
+  {
+    "name": "not ok 1178 - danxia 1280x720: main hall opens shop, purchase persists, close and revisit reset",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-forge-ui.test.mjs:362:2",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1179 - danxia 844x390: main hall opens shop, purchase persists, close and revisit reset",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-forge-ui.test.mjs:362:2",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1181 - pill quantity and zero balance 1280",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-forge-ui.test.mjs:419:52",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1182 - pill quantity and zero balance 844",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-forge-ui.test.mjs:419:52",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1183 - pills: icon close and outside dismissal preserve state without closing on content taps",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-forge-ui.test.mjs:437:4",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1184 - fan equipment adds bounded damage without promising a kill-count breakpoint",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-growth-feedback.test.mjs:28:1",
+    "error": "'Invalid weapon roll arguments'"
+  },
+  {
+    "name": "not ok 1187 - special skills share the realm gate regardless of previous choices or floor progress",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-growth-feedback.test.mjs:59:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1193 - explicit playtest bonus extends available SP without changing natural sources or rank gates",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-growth.test.mjs:20:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1195 - realm rewards include the approved breakthrough books without repeat grants",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-growth.test.mjs:66:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1196 - nine first clears and three gated research purchases extend the 48 realm points",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-growth.test.mjs:81:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1199 - all fully invested nodes cost 343 after teaching, and an overspend remains visible",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-growth.test.mjs:128:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1200 - invalid point sources and ranks cannot silently manufacture or erase investment",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-growth.test.mjs:139:1",
+    "error": "'Missing expected exception (RangeError).'"
+  },
+  {
+    "name": "not ok 1201 - rank bands follow each skill starting phase independently of books",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-growth.test.mjs:156:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1204 - special first study needs its floor and book but no base-skill prerequisite",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-growth.test.mjs:191:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1206 - all four evolutions have independent realm gates and approved costs",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-growth.test.mjs:232:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1207 - \u5fa1\u5251\u8ffd\u51fb can be acquired one rank at a time within 80 points with all prerequisites",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-growth.test.mjs:289:3",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1208 - \u5251\u6c14\u8d2f\u7a7f can be acquired one rank at a time within 80 points with all prerequisites",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-growth.test.mjs:289:3",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1209 - \u5251\u9635\u63a7\u573a can be acquired one rank at a time within 80 points with all prerequisites",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-growth.test.mjs:289:3",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1210 - 48-point realm-only pursuit build keeps its evolution without any research purchase",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-growth.test.mjs:313:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1215 - monster art caches all nine families, bounds ID nodes, faces without hopping, and releases once",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:411:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1216 - monster missing/malformed resources and unsupported beasts retain fallback with no retry storm",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:463:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1217 - monster late completion after clearing or destruction cannot mutate stale actors",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:485:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1218 - monster synchronous resource success and exceptions are cached without unbalanced refs",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:505:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1219 - returning to camp before monster resources arrive cannot resurrect the battle",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:524:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1220 - real battle layers artwork below warnings and foreground, preserves state, and clears it on camp",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:546:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1221 - requested playtest stays read-only and never writes the ordinary save when the initial copy fails",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:612:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1222 - same-mode retry can recover a failed isolated copy without touching ordinary progress",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:631:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1223 - ordinary progress becomes writable only after an explicit switch from the failed playtest",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:657:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1224 - successful sync re-enables current-page buttons and clamps obsolete scroll (ordinary)",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:674:3",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1225 - successful sync re-enables current-page buttons and clamps obsolete scroll (playtest)",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:674:3",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1226 - playtest identity survives partial healing, full-HP redraw, and local skill-detail navigation",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:704:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1227 - skill page hides battle vitals and keeps rank hints below icons",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:723:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1228 - host resets obsolete schema3 exactly once (successful save)",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:741:3",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1229 - host resets obsolete schema3 exactly once (save failure stays read-only)",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:741:3",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1230 - economy v2 hides the wallet on hall and skills but shows it in relevant pages",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:789:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1231 - weapon draw rejects insufficient spiritStones without any state or save change",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:809:3",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1232 - weapon draw rejects insufficient contribution without any state or save change",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:809:3",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1233 - weapon draw atomically pays 100 stones and contribution and preserves the rolled instance",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:830:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1234 - skill pane uses shared weapon damage once after equipping an affix instance",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:872:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1235 - first special skill book costs 200 stones atomically and subsequent ranks do not rebuy it",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:892:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1236 - three research purchases cost 800/1600/2400 stones and failed saves grant no points",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:921:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1237 - manual healing works after sync recovery and a failed pill save consumes neither HP nor inventory",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:948:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1238 - actual tool buttons preserve paused snapshots and HP, and preferences do not publish on save failure",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:971:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1239 - a failed pause checkpoint blocks switching until the real retry button commits it",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1007:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1240 - paused and withdrawn loot displays only the 0 credited spirit stones near the wallet cap",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1051:3",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1241 - paused and withdrawn loot displays only the 1 credited spirit stones near the wallet cap",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1051:3",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1242 - paused and withdrawn loot displays only the 10 credited spirit stones near the wallet cap",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1051:3",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1243 - capped floor-three first-clear popup excludes skill points from stone overflow",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1088:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1244 - host refund preview and committed cascade show concrete skill names and ranks without undefined fields",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1117:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1245 - skill arrow follows purchase eligibility: realm cap with spare points",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1215:3",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1246 - skill arrow follows purchase eligibility: no points below cap",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1215:3",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1247 - skill arrow follows purchase eligibility: stage locked",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1215:3",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1248 - skill arrow follows purchase eligibility: no tutorial gate",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1215:3",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1249 - skill arrow follows purchase eligibility: no prerequisite gate",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1215:3",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1250 - skill arrow follows purchase eligibility: unlocked first rank",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1215:3",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1251 - skill arrow follows purchase eligibility: current rank can grow",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1215:3",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1252 - skill arrow follows purchase eligibility: absolute maximum",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1215:3",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1253 - skill arrow disappears at the realm cap after purchase and returns after refund",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1256:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1254 - dependency connections remain stable across learning and refund without mutating saved state",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1275:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1255 - async skill artwork preserves all 16 click targets, clipping, badges and camp transactions (844x390)",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1397:3",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1256 - async skill artwork preserves all 16 click targets, clipping, badges and camp transactions (1024x600)",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1397:3",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1257 - one failed skill image leaves its glyph and camp controls usable alongside loaded artwork",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1455:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1258 - destroying the real host releases loaded icon art and safely ignores pending completions",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1480:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1259 - compact skill labels show passive mastery over loaded art and right-aligned points (1280x720)",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1513:3",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1260 - physical type, flow and level are separate nonoverlapping tags (1280x720)",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1570:3",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1261 - independent skills have no dependency arrows (1280x720)",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1604:3",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1262 - realm blocks group all 26 skills with five-slot rows and no label column (1280x720)",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1621:3",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1263 - nine-stage UI keeps compact nodes and fixed footer targets (1280x720)",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1679:3",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1264 - compact skill labels show passive mastery over loaded art and right-aligned points (844x390)",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1513:3",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1265 - physical type, flow and level are separate nonoverlapping tags (844x390)",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1570:3",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1266 - independent skills have no dependency arrows (844x390)",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1604:3",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1267 - realm blocks group all 26 skills with five-slot rows and no label column (844x390)",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1621:3",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1268 - nine-stage UI keeps compact nodes and fixed footer targets (844x390)",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1679:3",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1269 - compact skill labels show passive mastery over loaded art and right-aligned points (1024x600)",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1513:3",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1270 - physical type, flow and level are separate nonoverlapping tags (1024x600)",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1570:3",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1271 - independent skills have no dependency arrows (1024x600)",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1604:3",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1272 - realm blocks group all 26 skills with five-slot rows and no label column (1024x600)",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1621:3",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1273 - nine-stage UI keeps compact nodes and fixed footer targets (1024x600)",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1679:3",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1274 - nine-stage UI plus/minus retain selection and vertical scroll in the viewport-wide tree (1280x720)",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1711:3",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1275 - nine-stage UI plus/minus retain selection and vertical scroll in the viewport-wide tree (844x390)",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1711:3",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1276 - nine-stage UI plus/minus retain selection and vertical scroll in the viewport-wide tree (1024x600)",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1711:3",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1277 - skill footer is stationary through commits, failures, read-only and selection (844x390)",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1751:3",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1278 - skill footer displays actual unlearned and maximum ranks (844x390)",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1806:3",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1279 - skill footer is stationary through commits, failures, read-only and selection (1024x600)",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1751:3",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1280 - skill footer displays actual unlearned and maximum ranks (1024x600)",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1806:3",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1281 - skill form, next-rank and future motion details fit the independent scroll (1280x720)",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1832:2",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1282 - skill form, next-rank and future motion details fit the independent scroll (844x390)",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1832:2",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1283 - nine-stage UI shows locked learning without writes below the starting phase",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1871:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1284 - nine-stage UI failed learning keeps scroll and assets, shows a fixed error, and retries once",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1895:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1285 - nine-stage UI evo_wanjian first-rank condition matches its stage without changing higher-rank gates",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1926:3",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1286 - nine-stage UI evo_tiandi first-rank condition matches its stage without changing higher-rank gates",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1926:3",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1287 - nine-stage UI evo_wuwo first-rank condition matches its stage without changing higher-rank gates",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1926:3",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1288 - nine-stage UI evo_sixiang first-rank condition matches its stage without changing higher-rank gates",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1926:3",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1289 - paused tower skills show only plus, keep its hit area, and commit a legal upgrade (844x390)",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1958:3",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1290 - paused tower skills show only plus, keep its hit area, and commit a legal upgrade (1024x600)",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:1958:3",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1291 - host decreaseSkill is rejected outside the camp library (hall)",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:2015:5",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1292 - host decreaseSkill is rejected outside the camp library (tower)",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:2015:5",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1293 - host decreaseSkill is rejected outside the camp library (battle)",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:2015:5",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1294 - host decreaseSkill is rejected outside the camp library (skills)",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:2015:5",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1295 - host decreaseSkill remains allowed in the camp library and preserves books",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:2038:3",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1296 - host respecSkills is rejected outside the camp library (hall)",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:2015:5",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1297 - host respecSkills is rejected outside the camp library (tower)",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:2015:5",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1298 - host respecSkills is rejected outside the camp library (battle)",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:2015:5",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1299 - host respecSkills is rejected outside the camp library (skills)",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:2015:5",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1300 - host respecSkills remains allowed in the camp library and preserves books",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:2038:3",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1301 - portrait launch gates camp UI and updates until a landscape frame is available",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:2117:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1302 - portrait gate preserves the playing run and requires manual continue",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:2149:3",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1303 - portrait gate preserves the paused run and requires manual continue",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:2149:3",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1304 - fixed bottom-left joystick keeps its origin, applies a deadzone, and clamps actual Run movement",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:2217:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1305 - joystick end clears movement and a later touch reuses the fixed origin",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:2251:3",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1306 - joystick cancel clears movement and a later touch reuses the fixed origin",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:2251:3",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1307 - secondary touches cannot steal, redirect or release the active joystick touch",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:2275:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1308 - right-side field touches cannot relocate or start the fixed joystick",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:2295:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1309 - \u6682\u505c resets a held stick, ignores late touch events, and resumes without movement",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:2314:3",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1310 - \u6280\u80fd resets a held stick, ignores late touch events, and resumes without movement",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:2314:3",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1311 - landscape resize releases a held stick and places its replacement at the new bottom-left",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:2345:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1312 - landscape 1280\u00d7720 pause and tool targets fit in two columns and keep real tool actions",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:2371:3",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1313 - landscape 844\u00d7390 pause and tool targets fit in two columns and keep real tool actions",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:2371:3",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1314 - extreme 1920\u00d7280 letterboxes combat and tools, then restores fixed-width without losing state",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:2404:3",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1315 - extreme 3840\u00d71080 letterboxes combat and tools, then restores fixed-width without losing state",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:2404:3",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1316 - real host up sector arc matches the locked 140-degree Run warning and actual hit direction",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:2508:3",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1317 - real host down sector arc matches the locked 140-degree Run warning and actual hit direction",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:2508:3",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1318 - real host left sector arc matches the locked 140-degree Run warning and actual hit direction",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:2508:3",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1319 - real host right sector arc matches the locked 140-degree Run warning and actual hit direction",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:2508:3",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1320 - lightweight HUD stays fixed and keeps safe targets at 1280\u00d7720",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:2564:3",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1321 - lightweight HUD stays fixed and keeps safe targets at 1024\u00d7600",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:2564:3",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1322 - lightweight HUD stays fixed and keeps safe targets at 844\u00d7390",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:2564:3",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1323 - lightweight HUD stays fixed and keeps safe targets at 1920\u00d7280",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:2564:3",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1324 - paper battle HUD HP ratio stays readable and skill points remain actionable",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:2591:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1325 - only the attacked monster appears in the centered health panel",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:2627:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1326 - queued notices display in order, keep simulation-time durations through pause, then disappear",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:2662:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1327 - passive skills do not imply damaging aura rings and rendering remains read-only",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:2699:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1328 - playtest point grant is real, repeatable to 999, and reset requires confirmation",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:2730:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1329 - normal mode cannot execute experience reset or skill grant",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:2753:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1330 - failed playtest reset retains paused run and earned skills",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:2766:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1331 - one-click top-grade grants are repeatable and preserve ordinary saves",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:2779:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1332 - camp level button reaches 27 with natural SP and no extra healing",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:2799:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1333 - in-tower level button gives a short exit hint; resource grants keep the run paused and intact",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:2814:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1334 - resource write failures show errors without publishing grants",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:2833:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1335 - full stone balance rejects the grant without changing the save",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:2850:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1336 - tools checkpoint a locally paused restored run before enabling resource actions",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:2870:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1337 - normal mode cannot invoke resource or level actions through tool methods",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:2888:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1338 - grouped tool menus fit 1280x720 without overlapping labels or buttons",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:2901:3",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1339 - grouped tool menus fit 844x390 without overlapping labels or buttons",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:2901:3",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1340 - grouped tool menus fit 1920x280 without overlapping labels or buttons",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:2901:3",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1341 - flight is a one-rank shared passive with real purchase, reload and refund",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:2918:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1342 - actual kill starts a minor level animation only once",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:2941:3",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1343 - actual kill starts a major level animation only once",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:2941:3",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1344 - avatar opens a bounded character overlay with actual attributes and read-only dismissal",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:2964:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1345 - character overlay follows camp healing and closes when leaving the hall",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:2991:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1346 - paper HUD loads the existing character art, disposes assets and rejects stale callbacks",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:3009:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1347 - paper HUD resource failure preserves readable stats in hall and combat",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:3034:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1348 - paper battle HP and realm label stay outside the avatar and realm text updates live",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:3048:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1349 - skill page keeps reset compact and moves research below the skill viewport",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:3066:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1350 - character atlas preserves feet, independent sword, movement modes and paused redraws",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:3111:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1351 - character slash follows a real short windup across a 3x frame and cannot cause damage",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:3144:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1352 - one level 1 sword-line volley completes one character action without rewinding on its 1 hits",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:3180:3",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1353 - one level 6 sword-line volley completes one character action without rewinding on its 2 hits",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:3180:3",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1354 - one level 10 sword-line volley completes one character action without rewinding on its 3 hits",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:3180:3",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1355 - character flight keeps its flying sword through idle and real skill attacks",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:3234:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1356 - invalid character atlas falls back and late resource callbacks cannot resurrect a destroyed host",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:3257:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1357 - character reads revised JSON geometry and all 35 frames across atlas rows",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:3274:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1358 - separate blade keeps a full-width shaft over the repaired source path",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:3307:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1359 - real character PNG, manifest and import metadata satisfy the running atlas contract",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:3328:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1360 - cast notifications are immutable, unsaved and independent of cooldown arithmetic",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:3350:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1361 - tower entry focuses next uncleared floor, locks future floors and enters only the selection",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:3374:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1362 - tower entry completed campaign selects ninth floor and readonly disables entry",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:3397:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1363 - tower entry artwork reuses requests and late loads cannot revive abandoned page",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:3411:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1364 - tower cards scroll with complete boss artwork and separate text (1280x720)",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:3426:2",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1365 - tower cards scroll with complete boss artwork and separate text (844x390)",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:3426:2",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1366 - falcon and ape floor cards request matching artwork without obsolete boss portraits",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:3450:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1367 - falcon battle art loads the full sprite and reuses its resource cache",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:3464:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1368 - stone battle art maps converted denominations rather than monster ranks and leaves rewards untouched",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:3477:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1369 - wallet grade icons pair with quantities and release bindings on redraw",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:3496:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1370 - approved resource icons render beside existing counters and XP feedback without altering values",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:3512:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1371 - book requirements use stone art without wallet balances and owned books retain book art",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:3530:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1372 - each pill shares its own art across apothecary, inventory cell and details without consuming pills",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:3553:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1373 - heal drop art preserves proximity pickup, one-time recovery and sprite cleanup",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:3580:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1374 - backpack art preserves menu and battle hit targets, fallback and inventory navigation",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:3599:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1375 - skill button art preserves menu and battle hit targets, fallback and skill navigation",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:3617:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1376 - settings art preserves menu settings and map-card pause actions",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:3636:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1377 - tower environment loads once, stays world anchored and cleans cancelled and completed mist",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:3659:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1378 - pillar occludes player and monsters behind it but actors in front cover the pillar",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:3676:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1379 - stone drops render bounded denomination piles without floating text or reward mutations",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:3705:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1380 - currency HUD hides only leading zero top grades and closes gaps as balances change",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:3725:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1381 - map card owns floor title and device status while battle center only shows waves",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:3748:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1382 - initialization confirmation stays visible and clears every skill (1280)",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:3761:2",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1383 - initialization confirmation stays visible and clears every skill (844)",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:3761:2",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1384 - single-save tools expose only direct actions and cycle speed without a submenu",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:3782:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1385 - single-save tool writes are atomic and close returns to paused battle",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:3808:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1386 - monster mechanics remain above every friendly effect and reuse world labels during paused redraws",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:3825:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1387 - paper experience ring resets on level-up and hides at cap in hall and combat",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:3840:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1388 - target health stays transparent and immediately below top resources 720",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:3866:2",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1389 - target health stays transparent and immediately below top resources 600",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:3866:2",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1390 - battle experience surrounds the portrait without a bottom bar",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:3879:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1391 - target role uses a silver elite or gold demon-king title and clears on a normal target",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:3889:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1392 - developer progress controls persist grants and reset a paused run (1280)",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:3910:69",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1393 - developer progress controls persist grants and reset a paused run (844)",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:3910:69",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1394 - ten-layer character panel shows full XP and pending breakthrough (1280)",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:3939:69",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1395 - ten-layer character panel shows full XP and pending breakthrough (844)",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:3939:69",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1396 - ten-layer golden core distinguishes tenth layer from full consummation",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-host-tools.test.mjs:3950:1",
+    "error": "'TowerBreakthroughAudio is not defined'"
+  },
+  {
+    "name": "not ok 1397 - mixed draw 1280x720: reveal, skip, inspect and dismiss never award twice",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:207:43",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1398 - mixed draw 844x390: reveal, skip, inspect and dismiss never award twice",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:207:43",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1399 - mixed draw: failed save has no success overlay; single draw can be confirmed",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:226:1",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1400 - mixed draw cells match backpack rendering 1280x720",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:236:43",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1401 - mixed draw cells match backpack rendering 844x390",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:236:43",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1402 - inventory 1280x720: bounded independent grid/detail scroll and fixed actions",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:268:43",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1403 - inventory 844x390: bounded independent grid/detail scroll and fixed actions",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:268:43",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1404 - cross-category acquisition order and viewed dots persist across restart without merging duplicates",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:303:1",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1405 - equipment uses current preset only; any of three presets blocks dismantling",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:316:1",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1406 - equipped items leave the backpack grid and return after replacement or unequip",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:336:1",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1407 - single dismantle requires confirmation, returns real spirit stones once and persists removal",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:356:1",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1408 - starter protection; save failure keeps item and refund atomic, then permits retry",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:370:1",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1409 - stale confirmation rechecks changed preset references",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:380:1",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1410 - pills stack outside gear capacity, consume one in camp and never mutate in a battle/read-only menu",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:386:1",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1411 - capacity prevents charging, pills do not count and dismantling frees exactly one slot",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:400:1",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1412 - filters can clear empty results, sorting is stable and all navigation retains named peaks/presets",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:412:1",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1413 - viewing, equipping and dismantling never alter forge RNG, prices or pity counters",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:426:1",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1414 - invalid inventory metadata is rejected on reload instead of trusting display state",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:436:1",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1415 - equipped items can be removed atomically and remain usable after reload",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:451:1",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1416 - inventory 1280x720: character slots, no avatar, contextual back",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:473:43",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1417 - inventory 844x390: character slots, no avatar, contextual back",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:473:43",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1418 - secondary forge: shared background-free sect return",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:496:92",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1419 - secondary pills: shared background-free sect return",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:496:92",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1420 - secondary loadouts: shared background-free sect return",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:496:92",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1421 - secondary training: shared background-free sect return",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:496:92",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1422 - secondary home: shared background-free sect return",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:496:92",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1423 - secondary gate: shared background-free sect return",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:496:92",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1424 - secondary tutorial: shared background-free sect return",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:496:92",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1425 - secondary tower: shared background-free sect return",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:496:92",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1426 - hall skill shortcut returns to its entry via button after refresh",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:514:45",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1427 - hall skill shortcut returns to its entry via escape after refresh",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:514:45",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1428 - swordPeak skill shortcut returns to its entry via button after refresh",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:514:45",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1429 - swordPeak skill shortcut returns to its entry via escape after refresh",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:514:45",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1430 - main peak opens the library reader and skills return there before returning home",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:529:1",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1431 - library refresh preserves the reader boundary and its current view",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:554:1",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1432 - pill shop 844x390: buy without healing, then consume from inventory",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:568:54",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1433 - pill shop 1280x720: buy without healing, then consume from inventory",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:568:54",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1434 - wallet 410: exact denomination quantities share one bounded row",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:587:4",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1435 - wallet 0: exact denomination quantities share one bounded row",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:587:4",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1436 - wallet 19999999999: exact denomination quantities share one bounded row",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:587:4",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1437 - equipment artwork uses definition identity and survives delayed loads and redraws",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:603:1",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1438 - equipment artwork keeps fallback after load failure and does not request unapproved items",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:630:1",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1439 - equipment icons fill their cells without text badges 1280x720",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:647:45",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1440 - equipment icons fill their cells without text badges 844x390",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:647:45",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1441 - equipment detail hierarchy and lore 1280x720",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:668:45",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1442 - equipment detail hierarchy and lore 844x390",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:668:45",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1443 - detail data unifies attributes, preserves actual realm gates and covers every equipment lore",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:688:1",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1444 - realm label reflects cultivation, not other action blockers: 0",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:716:45",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1445 - realm label reflects cultivation, not other action blockers: 14400",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:716:45",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1446 - equip closes details only on success; no item locking: weapon",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:727:49",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1447 - equip closes details only on success; no item locking: armor",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:727:49",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1448 - equip closes details only on success; no item locking: ring",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:727:49",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1449 - retired lock flag cannot block dismantling: weapon",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:743:49",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1450 - retired lock flag cannot block dismantling: armor",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:743:49",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1451 - retired lock flag cannot block dismantling: ring",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:743:49",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1452 - compact comparison cards and external actions 1280x720",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:755:43",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1453 - compact comparison cards and external actions 844x390",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:755:43",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1454 - equipped items, empty slots and pills show only one compact information card",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:783:1",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1455 - equipment quick filter groups weapons armor and rings while excluding pills",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:794:2",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1456 - paper menu header and fixed tutorial navigation 844x390",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:810:54",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1457 - paper menu header and fixed tutorial navigation 1280x720",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:810:54",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1458 - dismantle close preserves selection, item and currency without executing action",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:826:1",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1459 - opening cultivation pill gate is visible in buy, craft and inventory 844x390",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:835:54",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1460 - opening cultivation pill gate is visible in buy, craft and inventory 1280x720",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:835:54",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1461 - cultivation pill shop 844x390 shares realm allowance and confirms excess inventory",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:846:54",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1462 - cultivation pill shop 1280x720 shares realm allowance and confirms excess inventory",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:846:54",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1463 - alchemy 844x390 consumes exact recipe and ignores rapid second submission",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:860:54",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1464 - alchemy 1280x720 consumes exact recipe and ignores rapid second submission",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:860:54",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1466 - profession image releases completed loads and ignores callbacks after menu destruction",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:913:1",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1467 - HD jade loads atomically, shows latest progress and releases all texture resources",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:927:1",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1468 - HD jade failed layer keeps fallback and releases partially loaded assets",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:957:1",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1469 - last Zhuji pill keeps visible result after detail disappears (1280x720)",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:971:43",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1470 - last Zhuji pill keeps visible result after detail disappears (844x390)",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:971:43",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1471 - breakthrough materials can sell chosen quantity without consuming breakthrough (1280x720)",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:985:43",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1472 - breakthrough materials can sell chosen quantity without consuming breakthrough (844x390)",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:985:43",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1473 - alchemy save failure preserves ingredients and retries with the same receipt",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:997:1",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1474 - cultivation overflow requires a separate confirmation and preserves HP",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:1008:1",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1475 - healing remains available above bare HP cap when equipped armor raises effective cap",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:1019:1",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1476 - purchase hall remains available when furnace craftable-only filter has no materials",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:1028:1",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1477 - rapid excess-stock confirmation preserves the visible confirmation until retry",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:1035:1",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1478 - reference commerce 844: purchase is a card then a modal",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:1045:54",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1479 - reference commerce 1280: purchase is a card then a modal",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:1045:54",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1480 - reference commerce crafting confirms before spending and shows actual reward",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:1057:1",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1481 - reference commerce gear shop separates browsing, purchase and actual equipment results",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:1067:1",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1482 - reference commerce save failure keeps confirmation and retries the same receipt",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:1077:1",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1483 - reference commerce final craftable recipe still shows success after consuming all materials",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:1085:1",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1484 - reference commerce pill details retain numeric healing and breakthrough effects",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:1091:1",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1485 - purchase uses backpack detail card 844",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:1097:64",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1486 - purchase uses backpack detail card 1280",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:1097:64",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1487 - purchase uses backpack detail card 960",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:1097:64",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1488 - forge quality lanes and first product icons 1280",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:1114:52",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1489 - forge quality lanes and first product icons 844",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:1114:52",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1490 - settlement harvest wraps after eight cells and keeps full counts available",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:1146:1",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1491 - UI A01 keeps numeric values, ranges and units intact at wrapping boundaries",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:1158:1",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1492 - UI A05 long modal text scrolls without reducing font or losing the final line",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:1168:1",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1493 - settlement currencies join the grid, cultivation is hidden and notes remain accessible",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:1179:1",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1494 - UI A02 quantity controls have separated 72-unit touch targets",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:1196:1",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1495 - UI B08 quantity changes preserve long purchase reading position; new item resets it",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:1206:1",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1497 - UI B02 rewards use eight columns and expose uncapped quantities on selection",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:1221:1",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1499 - settings change sound and reduced motion without dispatching campaign actions",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:1241:1",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1500 - destroyed library menu cannot consume battle Escape",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:1250:1",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1501 - craft preview uses inventory card and exact information: weapon",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:1255:49",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1502 - craft preview uses inventory card and exact information: armor",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:1255:49",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1503 - craft preview uses inventory card and exact information: ring",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:1255:49",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1504 - forge materials keep concise type text and preserve bottom description",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:1269:1",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1505 - batch material sale is atomic, retryable, and rejects stale or invalid selections",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:1280:1",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1506 - batch sale selection supports multiple materials and duplicate clicks charge once",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:1292:1",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1507 - craft material inspection uses backpack detail card, including unowned materials",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-inventory.test.mjs:1299:1",
+    "error": "'TowerCharacterArt is not defined'"
+  },
+  {
+    "name": "not ok 1517 - first two floor rewards are points, atomic and not granted again on replay",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-manual-learning.test.mjs:15:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1518 - initialization converts only the initial arc and never grants another point",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-manual-learning.test.mjs:43:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1559 - resource menu exposes one combined repeatable grant",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-playtest-resources.test.mjs:44:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1563 - camp max level follows official XP/SP and camp health semantics, with no fake clear or research",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-playtest-resources.test.mjs:108:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1570 - real first-clear rewards preserve elevated wallets and saturate safely at the trial cap",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-playtest-resources.test.mjs:143:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1578 - reset clears a developed camp profile without touching ordinary records or tool preferences",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-playtest.test.mjs:154:2",
+    "error": "'Invalid weapon roll arguments'"
+  },
+  {
+    "name": "not ok 1579 - reset clears a developed playing profile without touching ordinary records or tool preferences",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-playtest.test.mjs:154:2",
+    "error": "'Invalid weapon roll arguments'"
+  },
+  {
+    "name": "not ok 1580 - reset clears a developed paused profile without touching ordinary records or tool preferences",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-playtest.test.mjs:154:2",
+    "error": "'Invalid weapon roll arguments'"
+  },
+  {
+    "name": "not ok 1582 - normal stores reject bonus-bearing records and normal overspends remain corrupt",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-playtest.test.mjs:221:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1593 - profile and medicine stay aligned with the approved generated economy",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-profile.test.mjs:44:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1594 - new mode starts once with its own resources and three healing pills",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-profile.test.mjs:63:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1595 - cultivation boundaries retain 27 levels with separate compounded attack and HP growth",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-profile.test.mjs:79:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1596 - offline camp healing is 1% max HP per minute, capped and persisted once",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-profile.test.mjs:90:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1597 - high-realm medicine uses the new HP ceiling and preserves atomic save and reload behavior",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-profile.test.mjs:100:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1603 - medicine has only the two camp identities, contribution prices and clamped effects",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-profile.test.mjs:174:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1604 - cultivation pill stops at \u91d1\u4e39\u5706\u6ee1, does not bank overflow or consume at cap",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-profile.test.mjs:190:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1606 - inventory capacity is all-or-nothing",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-profile.test.mjs:215:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1610 - invalid checksummed state is rejected, not silently reset or repaired",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-profile.test.mjs:268:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1611 - yujian unlocks at exactly 225 XP and persists only after a successful write",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-rank-bands.test.mjs:10:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1626 - detail page lists complete early and delayed rank bands, including maxed skills",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-rank-bands.test.mjs:44:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1628 - all skills can be learned and fully upgraded with zero cleared floors",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-realm-only-skills.test.mjs:19:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1629 - learning and rank caps are constant within each realm phase",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-realm-only-skills.test.mjs:41:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1631 - basic skills can be purchased before teaching and still respect resources and realm",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-realm-only-skills.test.mjs:66:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1662 - shot launch uses saved spec speed and poison remains one direct hit with no new damage-over-time zone",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-run-attacks.test.mjs:198:1",
+    "error": "'8.333333333333329 != 10'"
+  },
+  {
+    "name": "not ok 1669 - boar_boss shortened dash stops at its warning endpoint and cannot hit the removed tail",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-run-attacks.test.mjs:317:3",
+    "error": "'Invalid tower snapshot'"
+  },
+  {
+    "name": "not ok 1678 - real kill XP 1484\u21921485 at 10 HP heals only newly crossed levels",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-run-growth.test.mjs:59:3",
+    "error": "'69.97013881313299 != 249.87557838805415'"
+  },
+  {
+    "name": "not ok 1679 - real kill XP 5399\u21925400 at 10 HP heals only newly crossed levels",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-run-growth.test.mjs:59:3",
+    "error": "'159.85073121943506 != 624.378046747646'"
+  },
+  {
+    "name": "not ok 1682 - real kill XP 10920\u219210920 at 10 HP heals only newly crossed levels",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-run-growth.test.mjs:59:3",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1683 - same-tick authored kills cross two small levels using each new max HP and clamp each heal",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-run-growth.test.mjs:86:1",
+    "error": "'80.72533333333334 != 77.392'"
+  },
+  {
+    "name": "not ok 1684 - level healing uses the equipped player\u2019s actual post-level max HP",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-run-growth.test.mjs:101:1",
+    "error": "'69.97013881313299 != 199.90046271044332'"
+  },
+  {
+    "name": "not ok 1687 - full floor rewards and restoring a victory never add healing without a new level",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-run-growth.test.mjs:137:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1693 - new active damage at ranks 1 and 10 stays a per-cast total rather than multiplying decorative swords or eyes",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-run-growth.test.mjs:319:1",
+    "error": "'127.19999999999709 != 63.599999999999994'"
+  },
+  {
+    "name": "not ok 1694 - growth passive rank-eight effects retain crit, wound and single-trigger burst rules and HP/pickup rules",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-run-growth.test.mjs:337:1",
+    "error": "'238.5 != 111.29999999999998'"
+  },
+  {
+    "name": "not ok 1698 - all nine growth floors preserve 180 waves, 4770 deaths and bounded grade sums across live JSON replay",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-run-growth.test.mjs:480:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1703 - all nine full combat floors pay exact authored grades inside both count and value bounds",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-run-loot.test.mjs:66:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1704 - forward, reverse and interleaved kill order use the same wave/local-ID plan on floors one and nine",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-run-loot.test.mjs:117:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1707 - core visuals are already credited at the kill, persist through reload and never credit on touch or expiry",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-run-loot.test.mjs:197:1",
+    "error": "'floor 9, wave 4, kills 93'"
+  },
+  {
+    "name": "not ok 1708 - UI snapshot core summary reports denomination value separately from item count and rank sum",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-run-loot.test.mjs:217:1",
+    "error": "'floor 9, wave 4, kills 93'"
+  },
+  {
+    "name": "not ok 1709 - partial kills, retreat and death retain only actual drops and never receive a full-floor minimum",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-run-loot.test.mjs:243:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1710 - corrupt loot identity, grades, monetary totals and core visuals are rejected on validation and restore",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-run-loot.test.mjs:278:1",
+    "error": "'floor 9, wave 4, kills 93'"
+  },
+  {
+    "name": "not ok 1712 - training performs actual kills and resets while every grade, wallet award and core visual stays empty",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-run-loot.test.mjs:363:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1719 - constructor preserves fractional HP, bounds growth/equipment, and copies loadout",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-run.test.mjs:40:1",
+    "error": "'Missing expected exception.'"
+  },
+  {
+    "name": "not ok 1726 - legacy loot: all 180 authored waves and 4770 deaths retain the old reward totals",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-run.test.mjs:169:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1731 - four evolutions preserve windup, six shared ticks, total sword budget and inner/outer exclusion",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-run.test.mjs:278:1",
+    "error": "'17.51119999999355 != 15.136800000000003'"
+  },
+  {
+    "name": "not ok 1732 - heart crit excludes passive bonus, wounds spend only their budget, and gate never invents damage",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-run.test.mjs:315:1",
+    "error": "'209.88000000000466 != 162.18'"
+  },
+  {
+    "name": "not ok 1737 - first-floor boss uses authored gore damage and charge sweeps, with one hit per segment after restore",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-run.test.mjs:444:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1738 - boss dying first releases exactly four dormant adds and never clears while required units remain",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-run.test.mjs:464:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1742 - offscreen boss approaches without damage, and losing visibility cancels a full windup",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-run.test.mjs:524:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1749 - all paired passives can be fully refunded without reducing evolution ranks or changing their combat form",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-skill-decrease.test.mjs:140:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1750 - refunding parent ranks lowers inherited evolution strength without removing its rank",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-skill-decrease.test.mjs:165:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1751 - direct evolution decrease refunds only its rank and preserves another evolution and legacy presets",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-skill-decrease.test.mjs:187:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1759 - insufficient learning cannot mutate state and a zero-available-point build can refund and reinvest",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-skill-decrease.test.mjs:304:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1762 - checkpoint rejects introducing, removing or reseeding the attempt loot contract",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-skill-decrease.test.mjs:370:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1763 - new attempt settlement persists typed kill loot while legacy settlement retains its old result shape",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-skill-decrease.test.mjs:385:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1764 - typed settlement counts actual kills and excludes boss-clear and first-clear spirit-stone awards",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-skill-decrease.test.mjs:417:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1851 - all 18 icons deduplicate pending loads across redraws and reuse completed assets",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-skill-icons.test.mjs:99:1",
+    "error": "\"Cannot read properties of undefined (reading 'active')\""
+  },
+  {
+    "name": "not ok 1852 - the artwork alone is circularly clipped; learned tint keeps opacity and badge outside",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-skill-icons.test.mjs:126:1",
+    "error": "\"Cannot read properties of undefined (reading 'getComponent')\""
+  },
+  {
+    "name": "not ok 1853 - clearBindings removes stale observers even before Cocos completes node destruction",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-skill-icons.test.mjs:150:1",
+    "error": "\"Cannot read properties of undefined (reading 'active')\""
+  },
+  {
+    "name": "not ok 1854 - strict node validity protects externally destroyed icons without a menu redraw",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-skill-icons.test.mjs:165:1",
+    "error": "\"Cannot read properties of undefined (reading 'active')\""
+  },
+  {
+    "name": "not ok 1855 - destroy during outstanding loads ignores late completions and never takes asset ownership",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-skill-icons.test.mjs:177:1",
+    "error": "\"Cannot read properties of undefined (reading 'active')\""
+  },
+  {
+    "name": "not ok 1856 - missing and malformed images retain the glyph and are negatively cached for this menu",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-skill-icons.test.mjs:193:1",
+    "error": "\"Cannot read properties of undefined (reading 'active')\""
+  },
+  {
+    "name": "not ok 1857 - synchronous resource callbacks and setup failures balance ownership without retry loops",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-skill-icons.test.mjs:214:1",
+    "error": "\"Cannot read properties of undefined (reading 'active')\""
+  },
+  {
+    "name": "not ok 1859 - new icons load their artwork and retain glyph on failure",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-skill-icons.test.mjs:240:1",
+    "error": "\"Cannot read properties of undefined (reading 'active')\""
+  },
+  {
+    "name": "not ok 1880 - nine immutable stages cover all 27 character levels and exactly the 7/7/4 skill allocation",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-stage-growth.test.mjs:66:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1882 - sj_wanjian first learning and further investment obey its Lv1 stage boundary",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-stage-growth.test.mjs:94:3",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1883 - sj_spirit first learning and further investment obey its Lv1 stage boundary",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-stage-growth.test.mjs:94:3",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1884 - sj_yujian first learning and further investment obey its Lv4 stage boundary",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-stage-growth.test.mjs:94:3",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1888 - sj_line first learning and further investment obey its Lv10 stage boundary",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-stage-growth.test.mjs:94:3",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1889 - sj_shadow first learning and further investment obey its Lv10 stage boundary",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-stage-growth.test.mjs:94:3",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1890 - sj_formation first learning and further investment obey its Lv10 stage boundary",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-stage-growth.test.mjs:94:3",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1891 - sj_flight first learning and further investment obey its Lv10 stage boundary",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-stage-growth.test.mjs:94:3",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1892 - sj_mark first learning and further investment obey its Lv13 stage boundary",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-stage-growth.test.mjs:94:3",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1893 - sj_bone first learning and further investment obey its Lv13 stage boundary",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-stage-growth.test.mjs:94:3",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1894 - sj_gate first learning and further investment obey its Lv16 stage boundary",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-stage-growth.test.mjs:94:3",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1895 - evo_wanjian first learning and further investment obey its Lv19 stage boundary",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-stage-growth.test.mjs:94:3",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1896 - evo_tiandi first learning and further investment obey its Lv22 stage boundary",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-stage-growth.test.mjs:94:3",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1897 - evo_wuwo first learning and further investment obey its Lv22 stage boundary",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-stage-growth.test.mjs:94:3",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1898 - evo_sixiang first learning and further investment obey its Lv25 stage boundary",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-stage-growth.test.mjs:94:3",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1900 - actual authored nine-floor XP reaches each scheduled stage without moving the XP or SP caps",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-stage-growth.test.mjs:139:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1901 - book action cannot bypass the stage; at unlock its book is charged once",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-stage-growth.test.mjs:159:3",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1902 - book action cannot bypass the stage; at unlock its book is charged zero",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-stage-growth.test.mjs:159:3",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1904 - evo_tiandi held at old Lv19 stays valid through reload, downgrade and battle despite its later new-learning stage",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-stage-growth.test.mjs:193:3",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1905 - evo_wuwo held at old Lv19 stays valid through reload, downgrade and battle despite its later new-learning stage",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-stage-growth.test.mjs:193:3",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1906 - evo_sixiang held at old Lv19 stays valid through reload, downgrade and battle despite its later new-learning stage",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-stage-growth.test.mjs:193:3",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1907 - retained-evolution compatibility keeps the pre-existing realm, book, parent and SP validation",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-stage-growth.test.mjs:220:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1908 - each evolution can be learned and upgraded without its paired passive, with atomic book payment",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-stage-growth.test.mjs:239:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1909 - class rank caps follow new growth and evolution rank two retains its original gates",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-stage-growth.test.mjs:266:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1929 - cooldown ring changes actual cast cadence and presentation, never damage or passive hit windows",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-v21-integration.test.mjs:22:1",
+    "error": "'0.85 != 0.975'"
+  },
+  {
+    "name": "not ok 1930 - armor HP joins medicine, camp restoration and snapshots; swapping cannot heal",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-v21-integration.test.mjs:40:1",
+    "error": "'1675.6801893620116 != 1271.2482082982128'"
+  },
+  {
+    "name": "not ok 1941 - current schema starts with one immutable iron instance, zero counters and iron in all three loadouts",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-weapon-campaign.test.mjs:99:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1951 - forge rejects insufficient contribution before changing RNG or pity",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-weapon-campaign.test.mjs:176:3",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1958 - dismantling quality1 refunds exactly2 contribution, never the forge costs",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-weapon-campaign.test.mjs:253:3",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1959 - dismantling quality2 refunds exactly4 contribution, never the forge costs",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-weapon-campaign.test.mjs:253:3",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1960 - dismantling quality3 refunds exactly8 contribution, never the forge costs",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-weapon-campaign.test.mjs:253:3",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1961 - dismantling quality4 refunds exactly16 contribution, never the forge costs",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-weapon-campaign.test.mjs:253:3",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1970 - weapon flat and ring crit/focus use additive shares while preserving the original bone/crit baseline",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-weapon-combat.test.mjs:153:1",
+    "error": "'7634.942130339562 != 6152.849219455367'"
+  },
+  {
+    "name": "not ok 1971 - focus belongs to the ring, shares a counter across skills and ignores whiffs, zero hits and corpses",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-weapon-combat.test.mjs:172:1",
+    "error": "'151.8 != 138'"
+  },
+  {
+    "name": "not ok 1972 - zone aliases apply one skill family across damage types and continuous damage excludes ring effects",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-weapon-combat.test.mjs:199:1",
+    "error": "'73.76658854389268 != 122'"
+  },
+  {
+    "name": "not ok 1973 - scaled wound/burst never double-enhance damage but never reapply weapon, ring or healing",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-weapon-combat.test.mjs:225:1",
+    "error": "'225.84000000000003 != 162.3225'"
+  },
+  {
+    "name": "not ok 1974 - all legal weapon/ring grade combinations stay within the shared total budget using actual combat hits",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-weapon-combat.test.mjs:239:1",
+    "error": "'149.625 != 145.95000000000002'"
+  },
+  {
+    "name": "not ok 1975 - armor reduction composes with existing vajra and one actual hit schedules exactly one heal",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-weapon-combat.test.mjs:265:1",
+    "error": "'93.88489208633094 != 92.69244604316546'"
+  },
+  {
+    "name": "not ok 1976 - fan/1 armor heals after its delay, with real loss, entry HP and floor caps",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-weapon-combat.test.mjs:286:3",
+    "error": "'\"undefined\" is not valid JSON'"
+  },
+  {
+    "name": "not ok 1977 - fa/1 armor heals after its delay, with real loss, entry HP and floor caps",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-weapon-combat.test.mjs:286:3",
+    "error": "'\"undefined\" is not valid JSON'"
+  },
+  {
+    "name": "not ok 1978 - fa/4 armor heals after its delay, with real loss, entry HP and floor caps",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-weapon-combat.test.mjs:286:3",
+    "error": "'\"undefined\" is not valid JSON'"
+  },
+  {
+    "name": "not ok 1979 - bao/1 armor heals after its delay, with real loss, entry HP and floor caps",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-weapon-combat.test.mjs:286:3",
+    "error": "'\"undefined\" is not valid JSON'"
+  },
+  {
+    "name": "not ok 1980 - bao/4 armor heals after its delay, with real loss, entry HP and floor caps",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-weapon-combat.test.mjs:286:3",
+    "error": "'\"undefined\" is not valid JSON'"
+  },
+  {
+    "name": "not ok 1981 - ling/1 armor heals after its delay, with real loss, entry HP and floor caps",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-weapon-combat.test.mjs:286:3",
+    "error": "'\"undefined\" is not valid JSON'"
+  },
+  {
+    "name": "not ok 1982 - ling/4 armor heals after its delay, with real loss, entry HP and floor caps",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-weapon-combat.test.mjs:286:3",
+    "error": "'\"undefined\" is not valid JSON'"
+  },
+  {
+    "name": "not ok 1983 - entry max HP does not grow the armor allowance on level up; full HP never banks unused healing",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-weapon-combat.test.mjs:317:1",
+    "error": "\"Cannot read properties of undefined (reading 'amount')\""
+  },
+  {
+    "name": "not ok 1984 - pending armor heal never revives, including a lethal hit on the exact due tick",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-weapon-combat.test.mjs:336:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1985 - armor pending/cooldown survive pause, JSON restoration and paused skill learning unchanged",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-weapon-combat.test.mjs:351:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1986 - strict armor snapshot checks reject forged amount, elapsed delay, cooldown, entry HP and spent cap",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-weapon-combat.test.mjs:372:1",
+    "error": "\"Cannot read properties of undefined (reading 'amount')\""
+  },
+  {
+    "name": "not ok 1987 - real multi-sword focus is counted once and survives a save between projectile hits",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-weapon-combat.test.mjs:393:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1989 - all active skills and evolutions cross real waves with ring/armor state and deterministic replay",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-weapon-combat.test.mjs:446:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1990 - 35 frozen weapon identities and independent iron instances retain the API",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-weapons.test.mjs:8:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 1991 - fixed weapons have universal type coverage and only their declared family specialization",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-tower-weapons.test.mjs:16:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 2013 - element affixes start at bao and match their element instead of every attack",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-weapon-actions.test.mjs:56:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 2018 - independent hit settles once per cast and target, does not inherit crit or start another proc",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-weapon-actions.test.mjs:125:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 2065 - schema60 resets only this mode and failed replacement keeps the old save intact",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-yujian-growth.test.mjs:18:1",
+    "error": "|-"
+  },
+  {
+    "name": "not ok 2070 - Zhuji costs 60 contribution; failed save rolls back purchase",
+    "location": "/Users/zhangnu/WeChatProjects/rainy-mushroom/tests/xianxia-zhuji-pill.test.mjs:33:1",
+    "error": "|-"
+  }
+]

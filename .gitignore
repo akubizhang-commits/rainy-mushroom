@@ -13,7 +13,8 @@ project.private.config.json
 /temp/
 /tmp/
 /output/
-/release/
+/release/*
+!/release/settings.json
 
 # Cocos Creator generated / cache (cocos-pilot subproject)
 /cocos-pilot/library/
@@ -31,3 +32,6 @@ project.private.config.json
 # Editor scratch
 *.swp
 .vscode/*.local.json
+
+# Local browser automation artifacts
+/.playwright-mcp/

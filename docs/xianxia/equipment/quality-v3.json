@@ -1,0 +1,71 @@
+{
+  "version": "equipment-v3",
+  "status": "design-only",
+  "qualities": [
+    {
+      "id": "green",
+      "name": "下品",
+      "color": "#4D9865",
+      "rank": 0,
+      "weaponBasePct": 3,
+      "robeBasePct": 1,
+      "chancePct": 40,
+      "duplicateSpiritStones": 10
+    },
+    {
+      "id": "blue",
+      "name": "中品",
+      "color": "#397DC3",
+      "rank": 1,
+      "weaponBasePct": 4,
+      "robeBasePct": 2,
+      "chancePct": 35,
+      "duplicateSpiritStones": 20
+    },
+    {
+      "id": "purple",
+      "name": "上品",
+      "color": "#9165B8",
+      "rank": 2,
+      "weaponBasePct": 6,
+      "robeBasePct": 3,
+      "chancePct": 20,
+      "duplicateSpiritStones": 40
+    },
+    {
+      "id": "gold",
+      "name": "极品",
+      "color": "#C38A29",
+      "rank": 3,
+      "weaponBasePct": 8,
+      "robeBasePct": 4,
+      "chancePct": 5,
+      "duplicateSpiritStones": 80
+    }
+  ],
+  "refinement": {
+    "displayName": "淬炼",
+    "maxLevel": 4,
+    "percentPerLevel": 1,
+    "prices": [
+      30,
+      60,
+      100,
+      160
+    ]
+  },
+  "traitPct": {
+    "positive": 6,
+    "negative": -3
+  },
+  "goldHardPity": 20,
+  "drawSandCost": 100,
+  "marksPerDraw": 1,
+  "exchangeMarks": {
+    "blue": 12,
+    "gold": 40
+  },
+  "starterQualityId": "blue",
+  "identityCount": 36,
+  "formalPoolIdentityCount": 4
+}

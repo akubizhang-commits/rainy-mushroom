@@ -1,0 +1,27 @@
+import { CAMP_PILLS, TOWER_RESOURCE_CAP } from './TowerProfile.js'
+import { cultivationStockQuote } from './TowerPills.js'
+export { ALCHEMY_MATERIALS } from './TowerProfile.js'
+const rows = [
+ ['zhixue',1,{huichuncao:1,linglu:1}],['huichun',2,{huichuncao:2,bailuhua:1,linglu:1}],['xuming',3,{lingshenxu:2,bailuhua:2,ningluzhi:1}],
+ ['peiyuan',5,{huangjing:2,lingshenxu:1,ningluzhi:1}],['ningqi',10,{yusuizhi:1,lingshenxu:2,linglu:2}],
+ ['heqi',10,{zilinghua:1,huangjing:2,ningluzhi:1}],['yangyuan',20,{zilinghua:2,lingshenxu:2,ningluzhi:2}],
+ ['zhenyuan',16,{jinsuiguo:1,huangjing:2,linglu:2}],['zifu',32,{jinsuiguo:2,lingshenxu:2,ningluzhi:2}],
+ ['zhuji',15,{yusuizhi:2,lingshenxu:2,linglu:2}],['ningyuan',30,{yusuizhi:3,xiaoyue:1,ningluzhi:2}],
+ ['ningdan',30,{zilinghua:3,ningluzhi:2,linglu:2}],['jiuzhuan',55,{zilinghua:4,chilin:1,ningluzhi:2}],
+]
+export const ALCHEMY_RECIPES=Object.freeze(Object.fromEntries(rows.map(([id,spiritStoneCost,materials])=>[id,Object.freeze({id,outputId:id,outputCount:1,spiritStoneCost,ingredients:Object.freeze(Object.entries(materials).map(([id,count])=>Object.freeze({id,count})))})])))
+export function alchemyQuote(state,id,count,confirmed=false) {
+ const recipe=Object.hasOwn(ALCHEMY_RECIPES,id)&&ALCHEMY_RECIPES[id]
+ if(!recipe)return {ok:false,reason:'unknown-recipe'}
+ if(!Number.isSafeInteger(count)||count<1||count>99)return {ok:false,reason:'invalid-count'}
+ const cost=recipe.spiritStoneCost*count,ingredients=recipe.ingredients.map(item=>({...item,required:item.count*count,owned:state.pills[item.id]||0,missing:Math.max(0,item.count*count-(state.pills[item.id]||0))}))
+ const result={id,count,cost,ingredients}
+ if(state.activeRun)return {ok:false,reason:'in-tower',...result}
+ if(state.xp<(CAMP_PILLS[id].minXp||0))return {ok:false,reason:'realm-locked',...result}
+ if((state.pills[id]||0)+count>TOWER_RESOURCE_CAP)return {ok:false,reason:'capacity',...result}
+ const stock=cultivationStockQuote(state,id,count,confirmed)
+ if(!stock.ok)return {...result,...stock}
+ if(ingredients.some(i=>i.missing))return {ok:false,reason:'insufficient-materials',...result}
+ if(state.spiritStones<cost)return {ok:false,reason:'insufficient',...result}
+ return {...stock,ok:true,...result}
+}

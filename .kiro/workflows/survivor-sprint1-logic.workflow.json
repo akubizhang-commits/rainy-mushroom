@@ -1,0 +1,55 @@
+{
+  "name": "survivor-sprint1-logic-impl",
+  "description": "Sprint 1 实现阶段第一批：前端开发按依赖链实现纯逻辑层 T2–T6，测试工程师校验，每步跑 node --test。只动代码与测试，不做 git 破坏性操作、不删旧玩法。",
+  "inputs": {},
+  "steps": [
+    {
+      "type": "step",
+      "id": "t2-sync-wiring",
+      "agent": "wf-coder",
+      "prompt": "你是本项目的【前端开发】，用中文汇报。仓库 /Users/zhangnu/WeChatProjects/rainy-mushroom，微信小游戏 + Cocos 3.8.8。当前分支 rainy-library，用户已裁决直接在此分支开发（不新建分支/不 stash）。\n\n唯一依据是 docs/survivor/ 下的设计文档：先读 00-project-plan.md §8（用户决策回填）、03-architecture.md §0–§2、07-sprint-1-backlog.md 的 T2。严禁执行任何 git 破坏性操作（不 reset/clean/checkout 丢弃、不删旧玩法代码）；本任务只做 T2。\n\n执行 **T2 · sync-shared 白名单与入口、forest-cleanup 断言、npm 脚本接入**：按 03 §2.1 对 scripts/cocos/sync-shared.mjs 做追加式最小改动——白名单加 js/survivor/（含 data/ 子目录）；追加入口 SurvivorRun.js、SurvivorSave.js、Meta.js、Joystick.js、SafeArea.js、data/strings.js；tests/forest-cleanup.test.mjs 中“manifest 只允许 microforest/library 前缀”的断言加入 js/survivor/（只改该断言）。package.json 新增脚本 survivor:test（node --test tests/survivor-*.test.mjs）、survivor:bench、survivor:balance（后两个可先指向占位脚本或空操作，不报错即可）。先在 js/survivor/ 放一个占位模块（如 index.js 导出版本号）确保链路通。\n\n必须实际运行验证：`npm run cocos:sync` 成功且 shared-manifest 覆盖 js/survivor/；`npm test` 的失败数不超过基线（基线：仅 forest-cleanup 1 条失败，共 439 用例 438 通过）；`npm run survivor:test` 可执行（暂无用例也不报错）。把运行结果贴进汇报。只有验证通过才算完成。",
+      "artifacts": {},
+      "captureOutput": true
+    },
+    {
+      "type": "step",
+      "id": "t3-infra",
+      "agent": "wf-coder",
+      "prompt": "你是【前端开发】，用中文汇报。延续 T2 的成果，现做 **T3 · 基础设施模块**。先读 docs/survivor/03-architecture.md §2/§3.2/§3.5/§3.6 与 07-sprint-1-backlog.md 的 T3。严禁 git 破坏性操作、不删旧玩法。\n\n在 js/survivor/ 实现四个无依赖基础模块（纯 ESM，禁止 import 'cc'、wx、Date.now、Math.random）：\n- SurvivorRandom.js：复制 js/core/Random.js（或 js/library 的同类）的 SeededRandom + range/chance，支持派生子种子。\n- Pool.js：定长预分配、acquire/release 用交换删除、uid 递增、池满返回 null、暴露稠密活跃表。\n- SpatialGrid.js：跟随玩家的均匀网格、每步重建、queryCircle、large 列表。\n- SimClock.js：固定步长累加、单帧最多 5 步、frameDt 非有限或负数按 0 处理。\n\n写测试 tests/survivor-pool.test.mjs、tests/survivor-grid.test.mjs（node:test + node:assert/strict，风格对齐仓库现有 tests/*.test.mjs）：Pool 覆盖容量/交换删除/uid/池满；SpatialGrid 用“随机 500 组场景的网格查询 vs 暴力全量”对照一致（03 §13）；SurvivorRandom 同种子同序列可复现（可并入 pool 或单独文件）。\n\n必须运行 `node --test tests/survivor-pool.test.mjs tests/survivor-grid.test.mjs` 全绿，并 `npm run cocos:sync` 成功。把结果贴进汇报。未通过不得标完成。",
+      "artifacts": {},
+      "captureOutput": true
+    },
+    {
+      "type": "step",
+      "id": "t4-data",
+      "agent": "wf-coder",
+      "prompt": "你是【前端开发】（兼代策划出 S1 数值初稿），用中文汇报。现做 **T4 · S1 范围数据模块与校验**。先读 docs/survivor/03-architecture.md §4、01-gdd.md §5/§6.1/§9/§10/§13.1/§15、07-sprint-1-backlog.md 的 T4，以及 00 §8 D4（计时胜利=180 秒）。严禁 git 破坏性操作、不删旧玩法。\n\n在 js/survivor/data/ 实现只含 Object.freeze JSON 字面量的模块：player.js（基础属性）、weapons.js（spore_shot 五档 Lv1–Lv5，结构预留其余武器）、enemies.js（gnat、beetle，含 §9.1 成长系数字段）、waves.js（0–3 分钟段生成速率与组成，+ 计时胜利字段 winAtSeconds=180）、limits.js（池容量与硬上限）、strings.js（S1 面向玩家中文文案，遵守合规词表：禁止 吃/食用/采食×蘑菇/菌 组合与 击杀/消灭/死亡/血/尸）、validate.js（结构与取值校验，导出 validate()）。id 用 01 §15.5 的英文 id。所有数值取自 01-gdd 表格；GDD 缺的用合理初稿并在模块注释标注“初稿待 M2 调”。\n\n写 tests/survivor-data.test.mjs：validate() 返回空数组；spore_shot 五档与 gnat/beetle 的 生命/移速/伤害/经验/碰撞半径 与 01 表格逐项一致；波次段首尾相接、组成和为 100%、同屏上限 ≤ limits；数据可 JSON 往返；strings 通过合规词表扫描；waves.winAtSeconds===180。\n\n必须运行 `node --test tests/survivor-data.test.mjs` 全绿 + `npm run cocos:sync` 成功。贴结果。未通过不得标完成。",
+      "artifacts": {},
+      "captureOutput": true
+    },
+    {
+      "type": "step",
+      "id": "t5-core-logic",
+      "agent": "wf-coder",
+      "prompt": "你是【前端开发】，用中文汇报。现做 **T5 · 核心逻辑系统 + SurvivorRun 状态机 + 确定性测试**，这是 S1 战斗闭环的核心。先读 docs/survivor/03-architecture.md §3（全部，尤其 §3.4 系统顺序）、01-gdd.md §15（公式）、07-sprint-1-backlog.md 的 T5。严禁 git 破坏性操作、不删旧玩法。\n\n在 js/survivor/ 按 03 §3 实现 S1 需要的系统（纯 ESM，禁用 cc/wx/Date.now/Math.random，随机只用 SurvivorRandom）：Stats.js（属性合成，公式 01 §15.1）、Spawner.js（0–3 分钟段刷怪、生成位置=hypot 视口半对角线+60、同屏上限、超 max(900,半径+120) 重定位）、Enemies.js（直线追踪+分离，S1 只需 gnat/beetle）、Weapons.js（spore_shot：锁定最近敌人、扇形散射、穿透、无目标不进冷却）、Projectiles.js（玩家弹体移动/碰撞/寿命）、Pickups.js（孢子掉落/吸附/合并与外观档）、Progression.js（xpToNext 公式、升级队列、draftOffer 三选一+兜底卡+首升保底）、SurvivorRun.js（状态机 playing/levelup/paused/won/lost，每步系统顺序见 §3.4，计时胜利=180 秒，summary() 含 killer）。\n\n写 tests：survivor-stats / survivor-weapons / survivor-spawner / survivor-progression / survivor-run / survivor-determinism（.test.mjs）。覆盖 §15.1 公式、spore_shot 发数/扇形/穿透/无目标、波次组成（统计容差）、xpToNext 与 §15.2 表、三选一规则、状态机全路径（playing↔paused、levelup、计时 won、hp0 lost）、同种子同输入两次运行 summary 与逐秒状态哈希一致、源码禁用 API 扫描。\n\n必须运行这 6 个测试文件全绿 + `npm run cocos:sync` 成功。贴结果。确定性测试（survivor-determinism）必须真实通过——同种子两次运行结果完全一致。未通过不得标完成。",
+      "artifacts": {},
+      "captureOutput": true
+    },
+    {
+      "type": "step",
+      "id": "t6-joystick-safearea",
+      "agent": "wf-coder",
+      "prompt": "你是【前端开发】，用中文汇报。现做 **T6 · 摇杆与安全区纯函数**。先读 docs/survivor/01-gdd.md §4、02-ui-ux.md §2.1/§5.1、03-architecture.md §6.1、00 §8 裁决 D18、07-sprint-1-backlog.md 的 T6。严禁 git 破坏性操作、不删旧玩法。\n\n在 js/survivor/ 实现两个纯函数模块（禁用 cc/wx）：Joystick.js（偏移向量→死区 8/半径 60 的单位向量，底座钳制）、SafeArea.js（windowInfo + capsule → 四边距，接口失败回退默认 safeTop 88/safeBottom 34/左右 24）。\n\n写 tests/survivor-joystick.test.mjs（死区内归零、线性区、超半径截断、钳制）、tests/survivor-safearea.test.mjs（默认值回退、刘海机型 capsule.bottom 下移的四边距计算）。\n\n必须运行 `node --test tests/survivor-joystick.test.mjs tests/survivor-safearea.test.mjs` 全绿 + `npm run cocos:sync` 成功。贴结果。未通过不得标完成。",
+      "artifacts": {},
+      "captureOutput": true
+    },
+    {
+      "type": "step",
+      "id": "qa-batch1",
+      "agent": "wf-coder",
+      "prompt": "你是【测试工程师】，用中文汇报。对第一批实现（T2–T6，纯逻辑层）做集成验收。严禁 git 破坏性操作、不删旧玩法、不改实现代码（只能新增/修补测试与写报告）。\n\n1. 运行完整 `npm test`，确认：survivor-* 全部用例通过；旧测试失败数不超过基线（基线仅 forest-cleanup 1 条）。若 survivor 用例有失败，定位是实现问题还是测试问题——实现问题则在报告中明确列出交回前端开发，不要自行大改实现。\n2. 运行 `npm run survivor:test` 确认聚合脚本有效。\n3. 运行 `npm run cocos:sync` 确认 shared-manifest 含 js/survivor/ 全部入口。\n4. 抽查确定性：至少确认 survivor-determinism 存在且通过。\n5. 核对逻辑层禁用 API（grep 'cc'、wx、Date.now、Math.random 在 js/survivor/ 下应无违规 import/调用）。\n\n把所有命令输出贴进汇报，并在 docs/survivor/reports/ 下写 sprint-1-logic-verification.md（若 reports 目录不存在则创建）：列出 T2–T6 每项的验收结论（通过/问题）、完整 npm test 统计、禁用 API 扫描结果、遗留问题清单。全绿则结论为“第一批逻辑层通过，可进入 T7–T14 表现层”。",
+      "artifacts": { "report": "/Users/zhangnu/WeChatProjects/rainy-mushroom/docs/survivor/reports/sprint-1-logic-verification.md" },
+      "captureOutput": true
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+# 炼器抽取菜单验收
+
+- 菜单直接覆盖在炼器峰背景上，半透明遮罩、非全屏面板；黄阶和玄阶两列，共八个抽取入口。
+- 防具抽取先按法衣 2/3、戒指 1/3 选择种类，再沿用该装备的品质与词条生成规则。
+- 单抽按原价格；十连收取十倍价格，整批一次保存。资源、容量、境界不足及保存失败均不提交部分结果。
+- 新菜单与事务测试 10 项通过；主机抽取回归测试 3 项通过。
+- Web 构建通过；1280×720、844×390 浏览器验收通过（browser.json）。
+- 全量 npm test：1808 项，1767 通过，41 失败。以下失败仍存在，未计入本次通过项；工作区已有大量其他改动，本次未扩大到这些模块修复。
+
+## 全量测试未通过项
+
+- removed gameplay cannot reenter the build
+- hover independent: equipment colors reach reused projectile sprites without changing rider
+- hover independent: unknown presentation IDs reset gold tint to default
+- hover independent: ImageAsset failure retains visible legacy player
+- hover independent: JsonAsset failure retains visible legacy player
+- hover independent: malformed failure retains visible legacy player
+- hover independent: dimensions failure retains visible legacy player
+- hover independent: available from start, movement overrides input, freeze and reset
+- hover independent: damage tint, accessibility and terminal alpha remain intact
+- hover independent: delayed load after destroy never revives view or retains assets
+- hover independent: rendering real short runs leaves all logic and RNG unchanged
+- independent host: ImageAsset failure falls back to visible legacy player
+- independent host: JsonAsset failure falls back to visible legacy player
+- independent host: malformed failure falls back to visible legacy player
+- independent host: actual movement, frozen states, idle and new-run reset are wired to the controller
+- independent host: destruction while character resources are pending never revives the view
+- independent host: hover uses the existing invulnerability and terminal alpha without multiplication
+- View routes all S3 events and ground renders below hostile zones and enemies
+- same-mode retry can recover a failed isolated copy without touching ordinary progress
+- ordinary progress becomes writable only after an explicit switch from the failed playtest
+- successful sync re-enables current-page buttons and clamps obsolete scroll (ordinary)
+- successful sync re-enables current-page buttons and clamps obsolete scroll (playtest)
+- economy v2 hides the wallet on hall and skills but shows it in relevant pages
+- manual healing works after sync recovery and a failed pill save consumes neither HP nor inventory
+- tower entry artwork reuses requests and late loads cannot revive abandoned page
+- stone battle art maps converted denominations rather than monster ranks and leaves rewards untouched
+- wallet grade icons pair with quantities and release bindings on redraw
+- approved resource icons render beside existing counters and XP feedback without altering values
+- each pill shares its own art across apothecary, inventory cell and details without consuming pills
+- backpack art preserves menu and battle hit targets, fallback and inventory navigation
+- filters can clear empty results, sorting is stable and all navigation retains named peaks/presets
+- pill shop 844x390: buy without healing, then consume from inventory
+- pill shop 1280x720: buy without healing, then consume from inventory
+- wallet 410: exact denomination quantities share one bounded row
+- wallet 0: exact denomination quantities share one bounded row
+- wallet 19999999999: exact denomination quantities share one bounded row
+- boar uses three real one-shot phase clips, freezes by simulation time and never derives damage
+- only boars with explicit simulation state request motion; all legacy/static families remain compatible
+- missing or invalid motion falls back to static without leaking images or retry storms
+- async completion after clear does not create nodes; completion after destroy retains no resources
+- actor removal and recycled IDs do not retain phase clocks or sprite bindings

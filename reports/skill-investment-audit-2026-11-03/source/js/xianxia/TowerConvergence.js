@@ -1,0 +1,50 @@
+import { skillForm } from './TowerSkillForms.js'
+
+const clamp = x => Math.max(0,Math.min(1,x))
+export const CONVERGENCE_LIFT = 52
+// A fan is decorative; the main blade follows each existing settled strike.
+// All clocks come from simulation time so pause/redraw cannot replay a volley.
+export function convergencePoses(state) {
+  if (!state?.player || state.player.hp <= 0 || !Number.isFinite(state.time)) return []
+  const poses = [], time = state.time, lift = CONVERGENCE_LIFT
+  for (const z of state.zones || []) {
+    if (z.kind !== 'sword_rain' || z.formId !== 'evo_wanjian' || z.hostile || z.ticks <= 0) continue
+    const form = skillForm('evo_wanjian', z.formLevel, z.parentLevel)
+    if (![z.x,z.y,z.dirX,z.dirY,z.nextAt].every(Number.isFinite)) continue
+    const base = Math.atan2(z.dirY,z.dirX), fired = z.pulseIndex || 0
+    const age = Math.max(0,time-(z.startedAt ?? z.nextAt-form.initialDelay))
+    for (let i = fired; i < form.swords; i++) {
+      const remaining = z.nextAt + (i-fired)*form.interval-time
+      const t = clamp(1-remaining/.15), launch=t*t*t
+      for (let j=0;j<4;j++) {
+        const span=j===0?144:96, layer=j<2?0:1
+        const offset=[0,.17,-.16,.29][j]
+        const angle=base+i*Math.PI*2/form.swords+offset*(1-launch)
+        const radius=span+(form.radius+layer*48+24-span)*(1-launch)
+        const open=clamp(age/.12-j*.08)
+        const x=z.x+Math.cos(angle)*radius,y=z.y+Math.sin(angle)*radius+lift
+        const prevAngle=angle+.10*(1-launch),prevRadius=radius+32*launch
+        poses.push({id:`${z.id}:${i}:${j}`,x,y,angle:angle+Math.PI,
+          span,alpha:(j===0?255:180)*open,terminal:false,flight:t,
+          tailX:z.x+Math.cos(prevAngle)*prevRadius,tailY:z.y+Math.sin(prevAngle)*prevRadius+lift})
+      }
+    }
+    // The last beat visibly gathers into one gold blade along the cast axis.
+    if (fired===form.swords && [z.originX,z.originY].every(Number.isFinite)) {
+      const t=clamp(1-(z.nextAt-time)/form.interval),span=150+130*t
+      poses.push({id:`${z.id}:gather`,x:z.originX+Math.cos(base)*70,
+        y:z.originY+Math.sin(base)*70+lift,angle:base,span,
+        alpha:230*t,terminal:true,flight:0})
+    }
+  }
+  for (const e of state.effects || []) {
+    if (e.kind !== 'convergence' || e.hostile) continue
+    const age = time-(e.startedAt ?? e.expiresAt-.25)
+    const dx=e.toX-e.x,dy=e.toY-e.y,length=Math.hypot(dx,dy)
+    if (age<0 || age>=.25 || !Number.isFinite(length) || length<1) continue
+    const span=Math.min(e.terminal?340:144,length)
+    poses.push({id:e.id,x:e.toX-dx/length*span,y:e.toY-dy/length*span+lift,
+      angle:Math.atan2(dy,dx),span,alpha:255*(1-age/.25)**1.4,terminal:!!e.terminal,flight:0})
+  }
+  return poses.slice(0,80)
+}

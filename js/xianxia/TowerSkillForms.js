@@ -1,0 +1,131 @@
+// Shared combat geometry. Damage, cooldown and learning costs remain in Growth.
+import { COMBAT_SKILLS as GROWTH_SKILLS, COMBAT_EVOLUTIONS as GROWTH_EVOLUTIONS } from './TowerCombatSkills.js'
+import { wuwoSwordPose } from './WuwoMotion.js'
+
+const SKILLS = Object.fromEntries(GROWTH_SKILLS.map(skill => [skill.id, skill]))
+const EVOLUTIONS = Object.fromEntries(GROWTH_EVOLUTIONS.map(skill => [skill.id, skill]))
+const PARENTS = { evo_wanjian: 'sj_yujian', evo_wuwo: 'sj_wanjian',
+  evo_tiandi: 'sj_line', evo_sixiang: 'sj_formation' }
+const cache = new Map()
+const rank = (value, max) => Math.max(1, Math.min(max, Math.trunc(Number(value) || 1)))
+const stage = level => level >= 10 ? 3 : level >= 6 ? 2 : level >= 3 ? 1 : 0
+const at = (skill, key, level, fallback = 0) => Array.isArray(skill[key])
+  ? skill[key][level - 1] : skill[key] ?? fallback
+
+// Preserve the strongest first swing from the previous shape stage; distribute
+// only the extra damage over follow-up swings. Total cast budget is unchanged.
+export function skillHitShare(id, level, pulse = 1) {
+  const form = skillForm(id, level)
+  if (id === 'sj_shadow' && form.hits >= 3) {
+    const skill = SKILLS[id]
+    const retained = at(skill, 'damage', 5) / at(skill, 'damage', 6)
+    const shares = [retained / 2, retained / 2, 1 - retained]
+    if (form.hits === 4) {
+      const previous = at(skill, 'damage', 9) / at(skill, 'damage', 10)
+      return pulse === 4 ? 1 - previous : shares[pulse - 1] * previous
+    }
+    return shares[pulse - 1]
+  }
+  if (id !== 'sj_arc' || form.hits <= 1) return 1 / Math.max(1, form.hits)
+  const skill = SKILLS[id], anchorRank = 6
+  const first = Math.min(1, at(skill, 'damage', anchorRank) / at(skill, 'damage', level))
+  return pulse === 1 ? first : (1 - first) / (form.hits - 1)
+}
+
+export function skillForm(id, level = 1, parentLevel = 1) {
+  const parent = PARENTS[id], skill = SKILLS[parent ?? id]
+  if (!skill) throw new RangeError(`Unknown tower skill: ${id}`)
+  // Keep accepted VFX/collision geometry stable. Damage uses the actual parent
+  // rank in Run and Presentation, independently of this visual template.
+  const lv = rank(parent ? EVOLUTIONS[id].visualRank : level, skill.maxLevel)
+  const evolution = parent ? rank(level, 2) : 0
+  const key = `${id}:${lv}:${evolution}`
+  if (cache.has(key)) return cache.get(key)
+  const node = stage(lv)
+  const form = { id, shape: 'none', hits: 0, swords: 0, eyes: 0,
+    radius: at(skill, 'radius', lv), reach: at(skill, 'reach', lv),
+    width: at(skill, 'width', lv), angle: at(skill, 'angle', lv),
+    interval: 0, initialDelay: 0, duration: 0, targetCap: at(skill, 'target_cap', lv) }
+  if (skill.kind === 'active') {
+    switch (parent ?? id) {
+      case 'sj_yujian':
+        Object.assign(form, { shape: 'projectile', hits: at(skill, 'swords', lv),
+          swords: at(skill, 'swords', lv) })
+        break
+      case 'sj_arc':
+        Object.assign(form, { shape: lv < 4 ? 'sector' : 'crescent-projectile',
+          hits: lv < 7 ? 1 : 3, interval: lv < 7 ? 0 : .16,
+          bladeKind: 'crescent', bladeWidth: at(skill, 'bladeWidth', lv, 12),
+          width: at(skill, 'width', lv, form.radius * 1.2), speed: at(skill, 'speed', lv, 960) })
+        break
+      case 'sj_cross':
+        Object.assign(form, { shape: 'cross-burst', hits: 1,
+          bladeKind: 'cross', bladeWidth: at(skill, 'bladeWidth', lv), speed: at(skill, 'speed', lv) })
+        break
+      case 'sj_line':
+        Object.assign(form, { shape: 'line', hits: [1, 1, 2, 3][node], interval: .16 })
+        break
+      case 'sj_shadow':
+        Object.assign(form, { shape: 'shadow', hits: [1, 2, 3, 4][node],
+          width: 30, interval: .08, initialDelay: at(skill, 'delay', lv) })
+        break
+      case 'sj_formation':
+        Object.assign(form, { shape: 'circle', hits: [6, 6, 6, 7][node], eyes: 2,
+          initialDelay: .5, duration: skill.duration })
+        form.interval = (form.duration - form.initialDelay) / (form.hits - 1)
+        break
+      case 'sj_wanjian':
+        Object.assign(form, { shape: 'orbit', hits: null, swords: [4, 5, 6, 8][node],
+          interval: .6, bladeLength: 36 + 2 * (form.radius - 90), bladeWidth: 10,
+          // A new visible blade reaches each bearing at least once per damage window.
+          angularSpeed: Math.max(1.8, Math.PI * 2 / ([4, 5, 6, 8][node] * .6)),
+          innerRadius: 67 })
+        break
+    }
+  }
+  if (id === 'evo_tiandi') Object.assign(form, { hits: 1, interval: 0,
+    // Its approved geometry is independent of the base skill's new range.
+    reach: evolution === 1 ? 670 : 770, width: evolution === 1 ? 80 : 112 })
+  if (id === 'evo_wuwo') {
+    const oldRadius = form.radius + (evolution === 1 ? 24 : 48)
+    Object.assign(form, { radius: oldRadius * 1.25, swords: evolution === 1 ? 8 : 12,
+      innerRadius: (oldRadius - form.bladeLength / 2) * 1.25, motionSpeed: 2.6 })
+  }
+  if (id === 'evo_sixiang') {
+    Object.assign(form, { shape: 'diamond', hits: evolution === 1 ? 7 : 9, eyes: 4,
+      duration: EVOLUTIONS.evo_sixiang.duration,
+      radius: EVOLUTIONS.evo_sixiang.radiusByRank[evolution - 1] })
+    form.interval = (form.duration - form.initialDelay) / (form.hits - 1)
+  }
+  if (id === 'evo_wanjian') Object.assign(form, { shape: 'line', hits: evolution === 1 ? 7 : 9,
+    swords: evolution === 1 ? 6 : 8, radius: 160, reach: 440, width: 28,
+    targetCap: 6, initialDelay: .2, interval: .15 })
+  if (!form.duration && form.hits) form.duration = form.initialDelay
+    + Math.max(0, form.hits - 1) * form.interval
+  const result = Object.freeze(form)
+  cache.set(key, result)
+  return result
+}
+
+// Local coordinates: the caller adds the actual player position. Both renderer
+// and collision use the same radial blade, including the spaces between swords.
+export function orbitSwordPose(form, time, index) {
+  if (form.id === 'evo_wuwo') return wuwoSwordPose(form, time, index)
+  const angle = time * form.angularSpeed + index * Math.PI * 2 / form.swords
+  const dx = Math.cos(angle), dy = Math.sin(angle)
+  const half = form.bladeLength / 2
+  return { x: dx * form.radius, y: dy * form.radius, angle,
+    baseX: dx * (form.radius - half), baseY: dy * (form.radius - half),
+    tipX: dx * (form.radius + half), tipY: dy * (form.radius + half) }
+}
+
+// The rain owns the slot until its last beat. Fund the skipped ordinary casts
+// from the rain budget, so the displayed total and saved zone agree with combat.
+export function convergenceRainMultiplier(rank) {
+  const evo = GROWTH_EVOLUTIONS.find(row => row.id === 'evo_wanjian')
+  const parent = SKILLS.sj_yujian
+  const form = skillForm(evo.id, rank)
+  const skipped = form.duration / parent.cooldown
+  return (evo.budgetMultipliers[rank - 1] - evo.regularMultiplier)
+    * evo.rainCooldown / parent.cooldown + skipped
+}

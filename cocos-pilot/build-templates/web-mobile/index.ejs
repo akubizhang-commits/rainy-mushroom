@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+
+  <title>栖云宗</title>
+
+  <!--http://www.html5rocks.com/en/mobile/mobifying/-->
+  <meta name="viewport"
+        content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1,minimal-ui=true"/>
+
+  <!--https://developer.apple.com/library/safari/documentation/AppleApplications/Reference/SafariHTMLRef/Articles/MetaTags.html-->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="format-detection" content="telephone=no">
+
+  <!-- force webkit on 360 -->
+  <meta name="renderer" content="webkit"/>
+  <meta name="force-rendering" content="webkit"/>
+  <!-- force edge on IE -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+  <meta name="msapplication-tap-highlight" content="no">
+
+  <!-- force full screen on some browser -->
+  <meta name="full-screen" content="yes"/>
+  <meta name="x5-fullscreen" content="true"/>
+  <meta name="360-fullscreen" content="true"/>
+
+  <!--fix fireball/issues/3568 -->
+  <!--<meta name="browsermode" content="application">-->
+  <meta name="x5-page-mode" content="app">
+
+  <!--<link rel="apple-touch-icon" href=".png" />-->
+  <!--<link rel="apple-touch-icon-precomposed" href=".png" />-->
+
+  <link rel="stylesheet" type="text/css" href="<%= cssUrl %>"/>
+
+
+  <link rel="preload" as="image" href="loading-keyart.jpg">
+  <style>
+    html, body { background: #162e28; }
+    #tower-boot-loading { position: fixed; inset: 0; z-index: 9999; color: #efe7d2;
+      font-family: serif; background: #162e28 url('loading-keyart.jpg') center bottom / cover no-repeat; }
+    .tower-boot-heading { position: absolute; left: 8%; top: 9%; color: #203e38; }
+    .tower-boot-title { font-size: clamp(30px,4.55vw,58px); line-height: 1.45; letter-spacing: .16em; }
+    .tower-boot-tagline { margin-top: 5px; color: #304d44; font-size: clamp(14px,1.72vw,22px); }
+    .tower-boot-status { position: absolute; left: 50%; bottom: 7%; width: 90%;
+      transform: translateX(-50%); text-align: center; }
+    .tower-boot-caption { font-size: clamp(13px,1.56vw,20px); margin-bottom: 15px; }
+    .tower-boot-progress { height: 2px; width: 100%; margin: auto; background: rgba(222,210,165,.4); }
+  </style>
+</head>
+<body>
+  <div id="tower-boot-loading" role="status" aria-live="polite">
+    <div class="tower-boot-heading"><div class="tower-boot-title">栖云宗</div>
+      <div class="tower-boot-tagline">修习剑诀 · 独闯九层锁妖塔</div></div>
+    <div class="tower-boot-status"><div class="tower-boot-caption">正在开启山门…</div>
+      <div class="tower-boot-progress"></div></div>
+  </div>
+  <div id="GameDiv" cc_exact_fit_screen="true">
+      <div id="Cocos3dGameContainer">
+        <canvas id="GameCanvas" oncontextmenu="event.preventDefault()" tabindex="99"></canvas>
+      </div>
+    </div>
+  <%- include(cocosTemplate, {}) %>
+</body>
+</html>

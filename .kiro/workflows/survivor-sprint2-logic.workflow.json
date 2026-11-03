@@ -1,0 +1,44 @@
+{
+  "name": "survivor-sprint2-logic",
+  "description": "Sprint 2 第一批：项目经理排期，前端实现武器/被动/敌人/事件/Boss 撤离的逻辑层，策划+测试跑多种子平衡并出文字预览报告。表现层只做不崩兜底。",
+  "inputs": {},
+  "steps": [
+    {
+      "type": "step",
+      "id": "pm-s2-backlog",
+      "agent": "wf-planner",
+      "prompt": "你是本项目的【项目经理】，用中文工作。仓库 /Users/zhangnu/WeChatProjects/rainy-mushroom，微信小游戏《雨后菌语》，Cocos Creator 3.8.8。当前唯一玩法是割草生存（旧玩法已删除）。本步只写文档，不改代码、不动 git。\n\n背景：Sprint 1 已完成可玩原型（1 武器 spore_shot、2 敌人 gnat/beetle、三选一、180 秒计时胜利），见 docs/survivor/07-sprint-1-backlog.md 与 docs/survivor/reports/sprint-1-test-report.md。用户试玩反馈：玩法太单调；用户确认原因是内容太少（而不是玩法方向错）。\n\n用户已同意的 Sprint 2 范围（四项都做，按优先级）：\n1. 构筑：新增武器 菌伞旋刃 umbrella_blades、露珠环 dew_ring；新增被动 might（伤害）、cooldown（冷却）、area（范围）、speed（移速）。三选一要能抽到新武器、武器升级、被动，让每局构筑不同。不做进化、不做 raindrop/leaf_boomerang、不做 regen/magnet 被动。\n2. 敌人与节奏：新增 灰蛾 moth、雨夜蜗牛 snail、迷途菌灵 sporeling（远程浊雾泡）；波次按 01-gdd §10 补到 Boss 出现；必须做 2:30 蚊蚋包围圈事件，4:30/6:30 事件和精英 elite_beetle 列为可选。\n3. 打击感与音效：受击闪白、净化光点、轻微震屏、拾取/升级/受击/净化音效。注意项目目前没有任何音频资源（旧 forest-audio 已随旧玩法删除），需要程序化生成占位音效或另找 CC0 素材并记录许可。\n4. Boss 浊雾巨蜗 boss_mist_snail + 击败后 cleansing 演出 + extract 撤离胜利，替代 180 秒计时胜利（计时胜利降为调试开关）。\n\n数值、规则一律以 docs/survivor/01-gdd.md（§6、§7、§8、§9、§10、§12、§15）和 03-architecture.md §3 为准。\n\n写 docs/survivor/08-sprint-2-backlog.md：Sprint 目标、范围与明确不做；任务分两批——第一批“逻辑层”（武器/被动/抽卡、敌人/波次/事件、Boss/撤离、平衡脚本与文字预览，全部可 node --test 验证；表现层只做不崩兜底），第二批“表现层”（新实体占位美术、HUD 武器栏与 Boss 血条与撤离指示、打击感、音效）；每项含编号、角色、描述、依赖、验收标准、预估、涉及文件。第一批结束设一个用户检查点：给用户看多种子文字预览，确认构筑有分化后再做第二批。同时更新 00-project-plan.md 的里程碑状态。保持精炼。",
+      "artifacts": { "backlog": "/Users/zhangnu/WeChatProjects/rainy-mushroom/docs/survivor/08-sprint-2-backlog.md" },
+      "captureOutput": true
+    },
+    {
+      "type": "step",
+      "id": "s2-build-weapons-passives",
+      "agent": "wf-coder",
+      "prompt": "你是【前端开发】，用中文汇报。仓库 /Users/zhangnu/WeChatProjects/rainy-mushroom。先读 docs/survivor/08-sprint-2-backlog.md（本 Sprint 依据）、01-gdd.md §6.2/§6.3/§7/§8.2/§15、03-architecture.md §3，以及现有 js/survivor/（Weapons.js、Progression.js、Stats.js、SurvivorRun.js、data/*.js）和对应测试。\n\n做第一批中的【构筑】任务：\n- data：weapons.js 加 umbrella_blades、dew_ring 五档；新增 data/passives.js（might、cooldown、area、speed 五档，按 01 §7）；validate 覆盖新数据。\n- 逻辑：SurvivorRun 支持多武器槽（上限按 01，S1 写死 weapons[0] 的地方都要改掉）；Weapons.js 实现两把新武器（旋刃环绕、露珠环光环减速，按 01 规则，减速取最大值不叠加）；Stats.js 按 01 §15.1 合成被动；Progression.draftOffer 按 01 §8.2 从“新武器 / 已有武器升级 / 新被动 / 被动升级”抽卡，满级不再出现，候选不足时用兜底卡；summary().weapons/passives 反映真实构筑。\n- 约束：逻辑层禁止 import 'cc'、wx、Date.now、Math.random，随机只用 SurvivorRandom 子种子；保持确定性。\n- 测试：新增/更新 tests/survivor-weapons、survivor-progression、survivor-stats、survivor-data 等用例，覆盖新武器行为、被动公式、抽卡规则（满级排除、槽满不再出新武器、兜底）、多武器同时生效；确定性测试仍通过。\n- 表现层不崩：如果 SurvivorBattleArt/Hud 依赖 weapons[0] 或卡片 kind，做最小兼容（新弹体/新卡暂用已有帧或文字），不做新美术。\n\n验证必须真跑：`npm run survivor:test` 全绿、`npm test` 全绿、`npm run cocos:sync`、`npm run check`、`npm run cocos:build`（web-mobile）成功。贴结果。\ngit：工作区有大量与本任务无关的用户未提交改动，只 git add 你改动/新增的文件，用 `git -c user.name=\"Kiro Agent\" -c user.email=\"kiro@local\" commit` 提交，不改 git config，不做任何破坏性 git 操作。",
+      "captureOutput": true
+    },
+    {
+      "type": "step",
+      "id": "s2-enemies-waves",
+      "agent": "wf-coder",
+      "prompt": "你是【前端开发】，用中文汇报。仓库 /Users/zhangnu/WeChatProjects/rainy-mushroom。先读 docs/survivor/08-sprint-2-backlog.md、01-gdd.md §9/§9.1/§10/§15、03-architecture.md §3，以及现有 js/survivor/（Enemies.js、Spawner.js、Projectiles.js、SurvivorRun.js、data/enemies.js、data/waves.js、data/limits.js）和测试。上一步已完成多武器与被动。\n\n做第一批中的【敌人与节奏】任务：\n- data：enemies.js 加 moth、snail、sporeling（数值按 01 §9 表，含 §9.1 成长）；waves.js 按 01 §10 补齐从 2:00 到 Boss 出现前的全部时间段与组成（S1 为缺灰蛾临时改的 2:00–3:00 段恢复为 01 的组成）；可选：elite_beetle。\n- 行为：灰蛾追踪叠加左右摆动；蜗牛肉盾；菌灵远程，按 01 规则吐浊雾泡（mistBubbles 池，敌方弹体，伤害角色，玩家武器不抵消）。\n- 事件：必须实现 2:30 蚊蚋包围圈（24 只在半径 350 圆上等距生成并收拢，计入上限）；4:30 灰蛾横穿、6:30 蜗牛围墙为可选，若做也要有测试。事件由数据驱动。\n- 约束同前：禁用 cc/wx/Date.now/Math.random，确定性保持。\n- 测试：新增 tests/survivor-enemies.test.mjs（各敌人行为、浊雾泡命中与寿命）、更新 survivor-spawner（全部时间段、组成统计容差、包围圈事件生成数量与位置、上限不超）、survivor-data（波次覆盖、组成和 100、引用的敌人 id 均存在）。\n- 表现层不崩：新敌人与浊雾泡在 SurvivorBattleArt 里暂用已有占位帧/颜色兜底即可，不做新美术。\n\n验证必须真跑：`npm run survivor:test`、`npm test` 全绿、`npm run cocos:sync`、`npm run check`、`npm run cocos:build` 成功。贴结果。git 规则同前：只 add 自己的文件，用临时身份参数提交，不改 config，不做破坏性操作。",
+      "captureOutput": true
+    },
+    {
+      "type": "step",
+      "id": "s2-boss-extract",
+      "agent": "wf-coder",
+      "prompt": "你是【前端开发】，用中文汇报。仓库 /Users/zhangnu/WeChatProjects/rainy-mushroom。先读 docs/survivor/08-sprint-2-backlog.md、01-gdd.md §9.2/§9.3/§10/§12/§15.3、03-architecture.md §3.1（状态机含 cleansing/extract），以及现有 js/survivor/ 与测试。前两步已完成构筑与敌人波次。\n\n做第一批中的【Boss 与撤离】任务：\n- Boss 浊雾巨蜗 boss_mist_snail：按 01 §9.2 的出现时间、生命、技能（召唤虫群、雾壳冲撞含 0.8 秒预警、生命 <50% 浊雾泡环）、10:00 狂暴；不受远离重定位影响。run.boss 暴露渲染所需只读状态（位置、血量比例、当前技能/预警方向）。\n- 击败后：state → cleansing（1.5 秒，玩家无敌、全场净化）→ extract（生成撤离点、不再刷怪、每秒回复按 01）→ 在撤离点内连续 2 秒 → won。run.extraction 暴露撤离点位置与进度。\n- 胜利条件改为撤离；180 秒计时胜利降为调试开关（例如构造参数 debugTimedWinSec，默认关闭），更新所有依赖 winAtSeconds=180 的测试与 data 注释，并在 summary 里正确给出 bossDefeated。\n- 约束同前，确定性保持。\n- 测试：新增 tests/survivor-boss.test.mjs（出现时间、技能冷却与预警、<50% 才放泡环、狂暴、击败→cleansing→extract→won 全链路、撤离点外不计时、pause 在各状态下正确）；更新 survivor-run、survivor-determinism（含 Boss 与撤离的整局可复现）。\n- 表现层不崩：Boss 用放大的已有帧兜底；cleansing/extract 状态下 SurvivorView 不卡死、能进结算（撤离点可先用简单圆形占位）。新 HUD（Boss 血条、撤离指示）留给第二批。\n\n验证必须真跑：`npm run survivor:test`、`npm test` 全绿、`npm run cocos:sync`、`npm run check`、`npm run cocos:build` 和 `npm run cocos:build:wechat` 成功。贴结果。git 规则同前。",
+      "captureOutput": true
+    },
+    {
+      "type": "step",
+      "id": "s2-balance-preview",
+      "agent": "wf-coder",
+      "prompt": "你是【游戏策划 + 测试工程师】，用中文汇报。仓库 /Users/zhangnu/WeChatProjects/rainy-mushroom。前三步已完成 Sprint 2 逻辑层。本步目标：给用户一个“构筑有没有分化、节奏好不好”的文字预览，作为第一批的用户检查点。\n\n1. 实现 scripts/survivor/balance.mjs（替换占位）：用逻辑层跑 N 个种子（默认 50，可参数化）的自动对局。bot 至少两种风格：保守逃跑型、贴孢子型；选卡策略至少两种：随机、偏好某武器。统计：通关率（击败 Boss 并撤离）、平均存活时间、Boss 出现时与 3:00/5:00 的平均等级（对照 01 §8.4 目标）、各卡被提供/被选次数、最终构筑组合分布（有多少种不同的武器+被动组合）、实际净化率（00 R11）、死亡原因分布。输出可读的中文表格。`npm run survivor:balance` 指向它。脚本放 scripts/，不进构建、不被 sync。\n2. 更新 scripts/survivor/preview-run.mjs 支持多武器/被动/Boss/撤离，打印每 30 秒快照与升级选牌、Boss 战与撤离过程。\n3. 运行 balance（50 种子）与 3 个种子的 preview，结果写入 docs/survivor/reports/sprint-2-logic-preview.md：结论先行——构筑分化程度、通关率是否落在 01 的 30–60% 目标、一局时长是否在 6–9 分钟、节奏问题（哪段太空/太难）；附 3 局 preview 的精简摘录；最后给出“建议数值调整”清单（只建议，不改数值），标注哪些需要用户拍板。\n4. 质量检查：`npm test` 全绿、确定性测试通过、逻辑层禁用 API 扫描无违规、合规词扫描通过；若发现实现缺陷，在报告里列出缺陷与复现种子，不要自行大改实现（小的测试修补可以）。\n\n不得伪造数据，所有数字来自真实运行。git：只 add 本步新增/修改的脚本和报告，用 `git -c user.name=\"Kiro Agent\" -c user.email=\"kiro@local\" commit` 提交。",
+      "artifacts": { "report": "/Users/zhangnu/WeChatProjects/rainy-mushroom/docs/survivor/reports/sprint-2-logic-preview.md" },
+      "captureOutput": true
+    }
+  ]
+}

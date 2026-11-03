@@ -23,7 +23,7 @@
             "_value": false
           },
           "3d": {
-            "_value": true
+            "_value": false
           },
           "meshopt": {
             "_value": false
@@ -100,7 +100,7 @@
             "_value": true
           },
           "primitive": {
-            "_value": true
+            "_value": false
           },
           "profiler": {
             "_value": true
@@ -118,7 +118,7 @@
             "_value": false
           },
           "audio": {
-            "_value": false
+            "_value": true
           },
           "video": {
             "_value": false
@@ -139,7 +139,7 @@
             "_value": false
           },
           "light-probe": {
-            "_value": true
+            "_value": false
           },
           "tiled-map": {
             "_value": false
@@ -191,17 +191,15 @@
         },
         "includeModules": [
           "2d",
-          "3d",
           "affine-transform",
           "animation",
+          "audio",
           "base",
           "custom-pipeline",
           "gfx-webgl",
           "graphics",
           "intersection-2d",
-          "light-probe",
           "mask",
-          "primitive",
           "profiler",
           "rich-text",
           "tween",

@@ -1,0 +1,72 @@
+{
+  "name": "survivor-sprint2-finish",
+  "description": "Sprint 2 收尾：第二轮调优（用户按建议拍板）+ 复核，然后第二批表现层 P1–P6（占位美术、HUD、打击感、音效、冒烟与性能面板、提测复盘）。",
+  "inputs": {},
+  "steps": [
+    {
+      "type": "step",
+      "id": "design-round2",
+      "agent": "wf-design",
+      "prompt": "你是【游戏策划】，用中文工作。仓库 /Users/zhangnu/WeChatProjects/rainy-mushroom，微信小游戏《雨后菌语》割草生存。本步只改文档，不改代码、不动 git。\n\n先读 docs/survivor/reports/sprint-2-tuning-report.md（尤其 §4）、docs/survivor/01-gdd.md、docs/survivor/08-sprint-2-backlog.md。\n\n用户已按报告 §4 建议拍板（2026-09-11 第二轮），写进 01-gdd.md 对应章节，并在 08-sprint-2-backlog.md 记录决策（编号接续 K 系列）与新增开发任务（编号接续 L 系列）：\n1. OBS-4：从 11:00 狂暴 II 起，Boss 主动贴近角色（写明具体规则与数值，例如追近到某距离以内、移速倍率或周期性冲撞落点在角色附近），确保任何武器组合都能命中 Boss；不做超时判负。\n2. 熟练型偏简单：2:00–3:00 与 3:00–4:00 两段 spawnRate 各 +15%；Boss 生命保持 4500。\n3. 新手型近身武器吃亏：适当提高露珠环与落叶回旋镖的作用半径/射程（策划给出各档具体数值并写推算理由，目标是新手型偏好这两把时的通关率明显上升，同时不让熟练型更简单）。\n4. 孢子拾取半径 100 → 140。\n策划自行裁定并写入：\n5. 6:00–7:00 段同屏上限 200 → 160。\n6. 前期等级曲线（3:00/5:00 低于目标）与随机选卡偏弱：本轮不改，记为待观察，等 S3 进化上线后复核。\n\n每处修改标注“2026-09-11 第二轮 用户拍板/策划裁定”。汇报改了哪些章节和最终数值。",
+      "captureOutput": true
+    },
+    {
+      "type": "step",
+      "id": "tuning-round2-impl",
+      "agent": "wf-coder",
+      "prompt": "你是【前端开发】，用中文汇报。仓库 /Users/zhangnu/WeChatProjects/rainy-mushroom。先读 docs/survivor/08-sprint-2-backlog.md 与 01-gdd.md 中标注“2026-09-11 第二轮”的全部改动，以及 js/survivor/ 相关实现与测试。\n\n把这些决策落到数据与逻辑：Boss 11:00 起主动贴近角色的规则；2:00–4:00 两段 spawnRate +15%；露珠环、落叶回旋镖新的作用半径/射程；拾取半径 140；6:00–7:00 段同屏上限 160。数值一律以 01 为准，不自行发挥。约束：逻辑层禁止 import 'cc'、wx、Date.now、Math.random，随机只用 SurvivorRandom 子种子，确定性保持。\n\n测试：更新受影响用例，并新增断言覆盖每一项（尤其 Boss 在 11:00 后会进入角色附近、任何走位下距离会被拉近；新半径/射程生效；段上限 160）；确定性测试通过。\n\n验证必须真跑：`npm run survivor:test`、`npm test` 全绿，`npm run cocos:sync`、`npm run check`、`npm run cocos:build`、`npm run cocos:build:wechat` 成功。贴结果。\ngit：工作区有大量用户未提交的无关改动，只 add 你改动/新增的文件，用 `git -c user.name=\"Kiro Agent\" -c user.email=\"kiro@local\" commit` 提交，不改 git config，不做破坏性操作。",
+      "captureOutput": true
+    },
+    {
+      "type": "step",
+      "id": "rebalance-round2",
+      "agent": "wf-coder",
+      "prompt": "你是【游戏策划 + 测试工程师】，用中文汇报。仓库 /Users/zhangnu/WeChatProjects/rainy-mushroom。第二轮调优已落地。\n\n1. 运行完整平衡 `npm run survivor:balance`（50 种子 × flee/spore × random + 5 种偏好 = 600 局，上限 17:00），以及与上次相同的 3 局 preview 和 OBS-4 复现局（命令见 docs/survivor/reports/sprint-2-tuning-report.md §6）。全部数字来自真实运行，不得伪造。\n2. 写 docs/survivor/reports/sprint-2-tuning-round2.md，结论先行，核心是与 sprint-2-tuning-report.md 的前后对比：总体/新手型/熟练型通关率（目标 30–60%）、通关局时长（6–9 分钟）、Boss 战中位（新手型是否回到 90 秒内）、12:00 后仍在场局数（目标 0）、新手型偏好露珠环/落叶回旋镖的通关率、新手型拾取率、6:30–7:30 阵亡占比、构筑分化是否保持（通关局构筑种数、通关局武器组合、五把武器选取率）。最后列仍未达标项，标注哪些需要用户拍板。\n3. 质量检查：`npm test` 全绿、确定性、禁用 API、合规词扫描通过。\n4. 判定：如果出现以下任一硬问题——测试失败、确定性失败、12:00 后仍在场局数 > 0、总体通关率跌出 25–70%、通关局构筑种数比上次少一半以上——用 send_message 以 severity=warning 暂停工作流，说明情况等待决定，不要继续。否则正常完成本步（软性未达标项只记录在报告里，留给 Sprint 3）。\n\ngit：只 add 本步改动的脚本与报告，用 `git -c user.name=\"Kiro Agent\" -c user.email=\"kiro@local\" commit` 提交。",
+      "artifacts": { "report": "/Users/zhangnu/WeChatProjects/rainy-mushroom/docs/survivor/reports/sprint-2-tuning-round2.md" },
+      "captureOutput": true
+    },
+    {
+      "type": "step",
+      "id": "p1-art",
+      "agent": "wf-coder",
+      "prompt": "你是【UI/UX + 前端开发】，用中文汇报。仓库 /Users/zhangnu/WeChatProjects/rainy-mushroom。做 docs/survivor/08-sprint-2-backlog.md 中的 **P1 · 新实体几何占位美术**。先读 P1 条目、docs/survivor/02-ui-ux.md（色板、形状语言、色盲友好要求、§9 占位清单）、scripts/survivor/pack-placeholder.mjs、cocos-pilot/assets/scripts/SurvivorBattleFrames.ts 与 SurvivorBattleArt.ts。\n\n为 Sprint 2 新增的全部实体做几何占位帧并放进同一张战斗图集 survivor-battle（保证合批）：敌人 moth、snail、sporeling、elite_beetle（若数据存在）、Boss boss_mist_snail；敌方浊雾泡；武器表现 菌伞旋刃、露珠环光圈、雨滴坠击预警圈与落点、落叶回旋镖；撤离点。要求：每类敌人用不同形状区分（不只靠颜色），符合 02 色板与合规（无血腥）；尺寸取自数据中的碰撞半径。去掉 S2 第一批里的临时兜底帧。更新 02-ui-ux.md 的占位清单。\n\n验证必须真跑：`npm run survivor:art`（重新生成图集）、`npm test` 全绿、`npm run cocos:sync`、`npm run check`、`npm run cocos:build`、`npm run cocos:build:wechat` 成功，并确认 survivor 分包仍 ≤ 2.5 MiB。贴结果。git 规则：只 add 自己的文件，用临时身份参数提交，不改 config，不做破坏性操作。",
+      "captureOutput": true
+    },
+    {
+      "type": "step",
+      "id": "p2-hud",
+      "agent": "wf-coder",
+      "prompt": "你是【UI/UX + 前端开发】，用中文汇报。仓库 /Users/zhangnu/WeChatProjects/rainy-mushroom。做 docs/survivor/08-sprint-2-backlog.md 中的 **P2 · HUD：武器栏、Boss 血条、撤离指示、提示横幅**。先读 P2 条目、02-ui-ux.md（HUD 布局、安全区、胶囊下方暂停按钮、触控热区 ≥88u）、cocos-pilot/assets/scripts/SurvivorHud.ts、SurvivorView.ts，以及逻辑层只读状态 run.weapons/passives、run.boss、run.extraction、事件队列。\n\n实现：武器栏（4 格，显示武器与等级）与被动小图标；升级三选一卡片正确显示新武器、武器升级、新被动、被动升级与兜底卡（文案来自 data/strings.js）；Boss 出现横幅与 Boss 血条（含狂暴状态提示）；Boss 冲撞预警的方向提示；cleansing 演出提示与撤离点方向指示和停留进度；包围圈/横穿/围墙等事件的提示横幅；胜利结算显示撤离成功与 bossDefeated。所有新文案进 strings.js 并通过合规扫描；不得遮挡战斗主体，遵守安全区。顺带处理报告里的 BUG-S1-03：升级卡模态帧 DrawCall 降到 ≤25（合并底板/文字批次）。\n\n验证必须真跑：`npm test` 全绿（含 survivor-compliance）、`npm run cocos:sync`、`npm run check`、`npm run cocos:build`、`npm run cocos:build:wechat` 成功。贴结果。git 规则同前。",
+      "captureOutput": true
+    },
+    {
+      "type": "step",
+      "id": "p3-juice",
+      "agent": "wf-coder",
+      "prompt": "你是【前端开发】，用中文汇报。仓库 /Users/zhangnu/WeChatProjects/rainy-mushroom。做 docs/survivor/08-sprint-2-backlog.md 中的 **P3 · 打击感**。先读 P3 条目、02-ui-ux.md（反馈规范、无障碍：可关闭震动、reduceFlash 减弱闪烁）、cocos-pilot/assets/scripts/SurvivorBattleArt.ts、SurvivorView.ts、SurvivorPlatform.ts。\n\n实现：敌人受击闪白、净化时化为光点并飘散（无血腥、无尸体）、角色受击反馈、轻微震屏（Boss 冲撞、雨滴落地、Boss 被净化时更明显）、升级与拾取的轻量特效、Boss 被净化的 cleansing 演出。所有效果用对象池、走同一图集保证合批，不增加战斗帧 DrawCall 超过 25；reduceFlash 开启时禁用闪白与强闪光、降低震屏；vibration 设置控制 wx 震动（仅在合适事件调用且有频率限制）。效果只在表现层，不改逻辑层与确定性。\n\n验证必须真跑：`npm test` 全绿、`npm run cocos:sync`、`npm run check`、`npm run cocos:build`、`npm run cocos:build:wechat` 成功。贴结果。git 规则同前。",
+      "captureOutput": true
+    },
+    {
+      "type": "step",
+      "id": "p4-audio",
+      "agent": "wf-coder",
+      "prompt": "你是【前端开发】，用中文汇报。仓库 /Users/zhangnu/WeChatProjects/rainy-mushroom。做 docs/survivor/08-sprint-2-backlog.md 中的 **P4 · 程序化占位音效 + SurvivorAudio**。项目目前没有任何音频资源。先读 P4 条目、03-architecture.md 中 SurvivorAudio 的设计（并发与频率限制、静音）、SurvivorView.ts、存档 settings.sound。\n\n1. 新建 scripts/survivor/gen-sfx.mjs：纯 Node（不引入新依赖）程序化合成短音效并写成 WAV（或 Cocos 3.8 在微信端可加载的格式），放到 cocos-pilot/assets/survivor/audio/（survivor 分包内）。至少包括：拾取孢子、升级、角色受击、敌人净化、Boss 出现、Boss 冲撞预警、撤离成功、按钮点击。音色温和（雨后森林、治愈系），每个文件尽量小。package.json 增加脚本 survivor:sfx。因为是程序生成，没有第三方许可问题，在 docs/survivor/02-ui-ux.md 或素材清单里注明来源为程序生成。\n2. 新建 cocos-pilot/assets/scripts/SurvivorAudio.ts：从 survivor 分包加载音效；按事件播放；同类音效并发上限与最小间隔（净化、拾取这类高频事件必须限流）；遵守 settings.sound 静音；切后台暂停。由 SurvivorView 驱动（读逻辑事件队列），不改逻辑层。\n\n验证必须真跑：`npm run survivor:sfx`、`npm test` 全绿、`npm run cocos:sync`、`npm run check`、`npm run cocos:build`、`npm run cocos:build:wechat` 成功，确认 survivor 分包 ≤ 2.5 MiB、主包未增长。贴结果与音频总大小。git 规则同前（生成的音频文件也要提交）。",
+      "captureOutput": true
+    },
+    {
+      "type": "step",
+      "id": "p5-smoke-perf",
+      "agent": "wf-coder",
+      "prompt": "你是【前端开发 + 测试工程师】，用中文汇报。仓库 /Users/zhangnu/WeChatProjects/rainy-mushroom。做 docs/survivor/08-sprint-2-backlog.md 中的 **P5 · 冒烟扩展与性能面板（BUG-S1-02）**。先读 P5 条目、04-test-plan.md §5、cocos-pilot/assets/scripts/SurvivorSmoke.ts、SurvivorView.ts、PinePilot.ts。\n\n1. 新建 SurvivorPerf.ts：调试性能面板，浏览器 `?perf=1` 或微信启动参数 perf=1 才显示；显示 FPS、逻辑步耗时、DrawCall、活跃节点数、各池占用。默认关闭，不影响正式包体验。微信端提供一个可在开发者工具里制造 200 敌人满屏的调试开关（仅 perf=1 下可用），以便用户测 PF-2。\n2. 扩展 SurvivorSmoke.ts（`?smoke=1`）：覆盖新武器出现、新敌人与浊雾泡、至少一个事件、Boss 出现与 Boss 血条、cleansing、撤离与胜利结算、以及死亡结算路径；继续断言节点 ≤600、战斗帧 DrawCall ≤25、升级卡模态帧 DrawCall ≤25、无 console error。必要时用调试快进。\n3. 用无头 Chrome 实际跑冒烟：`npm run cocos:build` 后用本地静态服务托管 cocos-pilot/build/web-mobile，打开 `index.html?smoke=1`，经 DevTools 协议读取 window.__survivorSmoke。驱动脚本放 tmp/（已 gitignore），跑完删除。macOS 上 Chrome 在 /Applications/Google Chrome.app。\n\n验证必须真跑：`npm test` 全绿、两个构建成功、无头冒烟全部 PASS。贴冒烟完整结果。不得伪造。git 规则同前。",
+      "captureOutput": true
+    },
+    {
+      "type": "step",
+      "id": "p6-signoff",
+      "agent": "wf-coder",
+      "prompt": "你是【测试工程师（出报告）+ 项目经理（复盘）】，用中文汇报。仓库 /Users/zhangnu/WeChatProjects/rainy-mushroom。做 docs/survivor/08-sprint-2-backlog.md 中的 **P6 · Sprint 2 提测与复盘**。不改实现代码（只能补测试与写报告），不做破坏性 git 操作。\n\n全量执行并如实记录：`npm test`、`npm run survivor:test`、`npm run check`、`npm run cocos:sync`、`npm run cocos:build`、`npm run cocos:build:wechat`（记录 package-report 各分包与总包大小）、无头 Chrome `?smoke=1` 冒烟（驱动脚本放 tmp/，跑完删除）、合规扫描（strings.js 与 Survivor*.ts 面向玩家文案）。需要微信开发者工具 GUI 或真机的项（帧率 PF-2、触摸手感、音效听感、安全区多机型、切后台）标为“待用户真机验证”，并给出具体操作步骤（含 perf=1 面板与 200 敌人调试开关的用法）。\n\n写 docs/survivor/reports/sprint-2-test-report.md：各任务（L 系列、P1–P5）验收结论、自动化统计、包体对比（Sprint 1 结束时总包 2.73 MiB）、已验证 vs 待真机清单、缺陷分级、给用户的真机试玩步骤（普通编译即可进入游戏）。末尾项目经理复盘：完成度、仍未达标的平衡项（引用 sprint-2-tuning-round2.md）、Sprint 3 建议范围（进化、局外成长与营地 UI、新手引导、正式美术、提审准备等），以及需要用户拍板的事项。更新 00-project-plan.md 的里程碑状态。\n\ngit：只 add 本步的报告与文档，用 `git -c user.name=\"Kiro Agent\" -c user.email=\"kiro@local\" commit` 提交。",
+      "artifacts": { "report": "/Users/zhangnu/WeChatProjects/rainy-mushroom/docs/survivor/reports/sprint-2-test-report.md" },
+      "captureOutput": true
+    }
+  ]
+}

@@ -1,0 +1,304 @@
+# 全量测试失败清单
+
+当前1519项，1230通过，289失败。并行任务也修改了工作区，因此不将总数下降全部归因于本次改动。
+
+- 47/35/15/3 quality intervals retain exact boundaries in both macro tiers
+- 48-point realm-only pursuit build keeps its evolution without any research purchase
+- 999 bonus SP cannot bypass the level-one or level-two active rank caps
+- UI snapshot core summary reports denomination value separately from item count and rank sum
+- a failed pause checkpoint blocks switching until the real retry button commits it
+- a real 80-point build spends its exact budget and repeated respec cannot mint points or spirit stones
+- active snapshot supplies live XP and frozen equipment, without mutating it
+- actual authored nine-floor XP reaches each scheduled stage without moving the XP or SP caps
+- actual kill starts a major level animation only once
+- actual tool buttons preserve paused snapshots and HP, and preferences do not publish on save failure
+- all 256 mixed equipment grades at legal levels 1–27 stay within 35% including native passives, CDR and precharged focus
+- all 256 weapon/ring grade combinations stay within the shared total budget using actual combat hits
+- all active skills and evolutions cross real waves with ring/armor state and deterministic replay
+- all four evolutions have independent realm gates and approved costs
+- all fully invested nodes cost 343 after teaching, and an overspend remains visible
+- all nine full combat floors pay exact authored grades inside both count and value bounds
+- all rolls use exact doc52 slots, safe ranges, families and no ring/healing affixes
+- all skills can be learned and fully upgraded with zero cleared floors
+- all ten reveals finish at the overview without an eleventh draw
+- all three slots validate, omitted slots stay bare, and identities/categories cannot be forged
+- approved resource icons render beside existing counters and XP feedback without altering values
+- armor cannot equip an owned xuan instance before level19
+- armor drawEquipment save failure publishes nothing and retries deterministically
+- armor pending/cooldown survive pause, JSON restoration and paused skill learning unchanged
+- armor reduction composes with existing vajra and one actual hit schedules exactly one heal
+- armor requires level19 for xuan, and rejects bad categories, tiers and insufficient payment
+- armor soft pity preserves mid35/high15, rises on draws16/17 and caps top at33 without a guarantee
+- armor uses47/35/15/3 boundaries and persists misses beyond twenty across macro tiers
+- assisted campaign seeds once and cannot mutate ordinary progression
+- async skill artwork preserves all 16 click targets, clipping, badges and camp transactions (1024x600)
+- async skill artwork preserves all 16 click targets, clipping, badges and camp transactions (844x390)
+- backpack art preserves menu and battle hit targets, fallback and inventory navigation
+- bao forging and reload enforce minimum level at 10
+- bao/1 armor heals after its delay, with real loss, entry HP and floor caps
+- bao/4 armor heals after its delay, with real loss, entry HP and floor caps
+- batch draw failures preserve complete state and can retry
+- book action cannot bypass the stage; at unlock its book is charged once
+- book action cannot bypass the stage; at unlock its book is charged zero
+- camp level button reaches 27 with natural SP and no extra healing
+- camp max level follows official XP/SP and camp health semantics, with no fake clear or research
+- camp pill crossing a level from 1484 XP keeps existing HP and natural regeneration
+- camp pill crossing a level from 5399 XP keeps existing HP and natural regeneration
+- campaign rejects cross ranks above each realm gate even when points are sufficient
+- capped floor-three first-clear popup excludes skill points from stone overflow
+- cast snapshots bind ring and armor instances and reject counter/source tampering
+- character slash follows a real short windup across a 3x frame and cannot cause damage
+- checkpoints use base plus cumulative earnings and persist complete resumable state
+- checksummed but invalid permanent state cannot bypass ownership, caps or skill locks
+- class rank caps follow new growth and evolution rank two retains its original gates
+- combat XP reaches the cap without blocking other earned resources or storing overflow
+- compact skill labels show passive mastery over loaded art and right-aligned points (1024x600)
+- compact skill labels show passive mastery over loaded art and right-aligned points (1280x720)
+- compact skill labels show passive mastery over loaded art and right-aligned points (844x390)
+- constructor preserves fractional HP, bounds growth/equipment, and copies loadout
+- core visuals are already credited at the kill, persist through reload and never credit on touch or expiry
+- corrupt loot identity, grades, monetary totals and core visuals are rejected on validation and restore
+- cross detail requirements show the next realm at ranks zero, three, six and nine
+- cross purchase and downgrade are atomic and survive reload without double spending
+- cross quotes enforce current stage, next-rank realm and exact costs
+- cross rank caps follow its four authored realm gates, including the exact XP boundaries
+- cultivation boundaries retain 27 levels with separate compounded attack and HP growth
+- cultivation pill stops at 金丹圆满, does not bank overflow or consume at cap
+- danxia 1280x720: main hall opens shop, purchase persists, close and revisit reset
+- danxia 844x390: main hall opens shop, purchase persists, close and revisit reset
+- dependency connections remain stable across learning and refund without mutating saved state
+- dependency hints omit former special/passive gates and retain exact evolution parent ranks
+- destroying the real host releases loaded icon art and safely ignores pending completions
+- direct runs and restored snapshots cannot bypass equipment realm requirements
+- disabled and stale forge actions cannot draw
+- disabled refinement is rejected for every slot without changing a paused run
+- drawWeapon save failure is atomic; retry matches one successful transaction exactly
+- each pill shares its own art across apothecary, inventory cell and details without consuming pills
+- each stage press advances one named minor realm and grants natural skill points
+- economy v2 hides the wallet on hall and skills but shows it in relevant pages
+- equipped passives and rolled gear aggregate with combat damage bases and multiplicative defense
+- evo_sixiang first learning and further investment obey its Lv25 stage boundary
+- evo_sixiang held at old Lv19 stays valid through reload, downgrade and battle despite its later new-learning stage
+- evo_tiandi first learning and further investment obey its Lv22 stage boundary
+- evo_tiandi held at old Lv19 stays valid through reload, downgrade and battle despite its later new-learning stage
+- evo_tiandi: visual polish preserves every combat tick, damage, RNG and input movement
+- evo_wanjian first learning and further investment obey its Lv19 stage boundary
+- evo_wanjian: both ranks improve on max base without parent investment
+- evo_wuwo first learning and further investment obey its Lv22 stage boundary
+- evo_wuwo held at old Lv19 stays valid through reload, downgrade and battle despite its later new-learning stage
+- evo_wuwo: visual polish preserves every combat tick, damage, RNG and input movement
+- explicit playtest bonus extends available SP without changing natural sources or rank gates
+- extreme 1920×280 letterboxes combat and tools, then restores fixed-width without losing state
+- extreme 3840×1080 letterboxes combat and tools, then restores fixed-width without losing state
+- failed checkpoints and settlements retain one retryable complete transaction
+- failed playtest reset retains paused run and earned skills
+- falcon and ape floor cards request matching artwork without obsolete boss portraits
+- first special skill book costs 200 stones atomically and subsequent ranks do not rebuy it
+- first two floor rewards are points, atomic and not granted again on replay
+- fixed attack, family aliases and mixed type fractions remain separate and additive
+- fixed attacks use immutable unlock references and preserve total weapon caps
+- flight is a one-rank level-ten passive costing three SP without a book, floor or prerequisite
+- flight is a one-rank shared passive with real purchase, reload and refund
+- flight purchase, reload, downgrade and full respec spend and refund exactly three SP
+- flight rejects forged low-level or excess ranks and retains passive first-learning camp restriction
+- focus belongs to the ring, shares a counter across skills and ignores whiffs, zero hits and corpses
+- forge categories and tiers switch without spending and default from realm
+- forge overlay with category and tier selection 1280x720
+- forge overlay with category and tier selection 844x390
+- forge reveal and summary preserve awards 1280
+- forge reveal and summary preserve awards 844
+- forge shows four current tiers and four locked future previews
+- forge: icon close and outside dismissal preserve state without closing on content taps
+- forward, reverse and interleaved kill order use the same wave/local-ID plan on floors one and nine
+- fresh campaign is isolated, immutable and grants starter gifts only once
+- full floor rewards and restoring a victory never add healing without a new level
+- full stone balance rejects the grant without changing the save
+- grouped tool menus fit 1280x720 without overlapping labels or buttons
+- grouped tool menus fit 1920x280 without overlapping labels or buttons
+- grouped tool menus fit 844x390 without overlapping labels or buttons
+- high-realm medicine uses the new HP ceiling and preserves atomic save and reload behavior
+- host decreaseSkill is rejected outside the camp library (battle)
+- host decreaseSkill is rejected outside the camp library (hall)
+- host decreaseSkill is rejected outside the camp library (skills)
+- host decreaseSkill is rejected outside the camp library (tower)
+- host decreaseSkill remains allowed in the camp library and preserves books
+- host refund preview and committed cascade show concrete skill names and ranks without undefined fields
+- host respecSkills is rejected outside the camp library (battle)
+- host respecSkills is rejected outside the camp library (hall)
+- host respecSkills is rejected outside the camp library (skills)
+- host respecSkills is rejected outside the camp library (tower)
+- host respecSkills remains allowed in the camp library and preserves books
+- in-tower level button gives a short exit hint; resource grants keep the run paused and intact
+- independent skills have no dependency arrows (1024x600)
+- independent skills have no dependency arrows (1280x720)
+- independent skills have no dependency arrows (844x390)
+- invalid checksummed state is rejected, not silently reset or repaired
+- invalid point sources and ranks cannot silently manufacture or erase investment
+- iron follows growth; legal random attack +3 stays constant and is split across the whole multi-sword cast
+- landscape 1280×720 pause and tool targets fit in two columns and keep real tool actions
+- landscape 844×390 pause and tool targets fit in two columns and keep real tool actions
+- learning and rank caps are constant within each realm phase
+- legacy loot: all 180 authored waves and 4770 deaths retain the old reward totals
+- level healing uses the equipped player’s actual post-level max HP
+- lightweight HUD stays fixed and keeps safe targets at 1024×600
+- lightweight HUD stays fixed and keeps safe targets at 1280×720
+- lightweight HUD stays fixed and keeps safe targets at 1920×280
+- lightweight HUD stays fixed and keeps safe targets at 844×390
+- ling forging and reload enforce minimum level at 19
+- ling/1 armor heals after its delay, with real loss, entry HP and floor caps
+- ling/4 armor heals after its delay, with real loss, entry HP and floor caps
+- manual healing works after sync recovery and a failed pill save consumes neither HP nor inventory
+- medicine has only the two camp identities, contribution prices and clamped effects
+- new active damage at ranks 1 and 10 stays a per-cast total rather than multiplying decorative swords or eyes
+- new mode starts once with its own resources and three healing pills
+- next requirements follow rank caps, stage and evolution rank not first unlock
+- nine first clears and three gated research purchases extend the 48 realm points
+- nine immutable stages cover all 27 character levels and exactly the 7/7/4 skill allocation
+- nine-stage UI evo_sixiang first-rank condition matches its stage without changing higher-rank gates
+- nine-stage UI evo_tiandi first-rank condition matches its stage without changing higher-rank gates
+- nine-stage UI evo_wanjian first-rank condition matches its stage without changing higher-rank gates
+- nine-stage UI evo_wuwo first-rank condition matches its stage without changing higher-rank gates
+- nine-stage UI failed learning keeps scroll and assets, shows a fixed error, and retries once
+- nine-stage UI keeps compact nodes and fixed footer targets (1024x600)
+- nine-stage UI keeps compact nodes and fixed footer targets (1280x720)
+- nine-stage UI keeps compact nodes and fixed footer targets (844x390)
+- nine-stage UI plus/minus retain selection and vertical scroll in the viewport-wide tree (1024x600)
+- nine-stage UI plus/minus retain selection and vertical scroll in the viewport-wide tree (1280x720)
+- nine-stage UI plus/minus retain selection and vertical scroll in the viewport-wide tree (844x390)
+- nine-stage UI shows locked learning without writes below the starting phase
+- normal mode cannot invoke resource or level actions through tool methods
+- normal stores reject bonus-bearing records and normal overspends remain corrupt
+- offline camp healing is 1% max HP per minute, capped and persisted once
+- offline rest is saved once, rejects backwards-clock farming and cannot bank full-health time
+- one failed skill image leaves its glyph and camp controls usable alongside loaded artwork
+- one-click top-grade grants are repeatable and preserve ordinary saves
+- only two camp pills exist, heal/XP clamp and full effects never consume inventory
+- optional settlement grade summaries survive reload, reject corruption and preserve old summaries
+- ordinary progress becomes writable only after an explicit switch from the failed playtest
+- paper battle HP and realm label stay outside the avatar and realm text updates live
+- partial kills, retreat and death retain only actual drops and never receive a full-floor minimum
+- passive skills do not imply damaging aura rings and rendering remains read-only
+- passives use realm-scaled costs and preserve all terminal effects
+- paused SP grants preserve the entire active snapshot and never enter the combat loadout
+- paused and withdrawn loot displays only the 0 credited spirit stones near the wallet cap
+- paused and withdrawn loot displays only the 1 credited spirit stones near the wallet cap
+- paused and withdrawn loot displays only the 10 credited spirit stones near the wallet cap
+- paused tower skills show only plus, keep its hit area, and commit a legal upgrade (1024x600)
+- paused tower skills show only plus, keep its hit area, and commit a legal upgrade (844x390)
+- pending armor heal never revives, including a lethal hit on the exact due tick
+- physical type, flow and level are separate nonoverlapping tags (1024x600)
+- physical type, flow and level are separate nonoverlapping tags (1280x720)
+- physical type, flow and level are separate nonoverlapping tags (844x390)
+- pill quantity and zero balance 1280
+- pill quantity and zero balance 844
+- pills: icon close and outside dismissal preserve state without closing on content taps
+- playtest identity survives partial healing, full-HP redraw, and local skill-detail navigation
+- playtest point grant is real, repeatable to 999, and reset requires confirmation
+- playtest storage retains campaign stale-write and disk-failure protections
+- playtestContribution/ is atomic on storage failure and stale writes
+- playtestMaxLevel/ is atomic on storage failure and stale writes
+- playtestReset preserves atomicity on write/read failure and rejects stale stores
+- playtestSkillPoints preserves atomicity on write/read failure and rejects stale stores
+- playtestSpiritStones/0 is atomic on storage failure and stale writes
+- playtestSpiritStones/1 is atomic on storage failure and stale writes
+- playtestSpiritStones/2 is atomic on storage failure and stale writes
+- playtestSpiritStones/3 is atomic on storage failure and stale writes
+- real first-clear rewards preserve elevated wallets and saturate safely at the trial cap
+- real kill XP 10920→10920 at 10 HP heals only newly crossed levels
+- real kill XP 1484→1485 at 10 HP heals only newly crossed levels
+- real kill XP 5399→5400 at 10 HP heals only newly crossed levels
+- real multi-sword focus is counted once and survives a save between projectile hits
+- realm blocks group all 26 skills with five-slot rows and no label column (1024x600)
+- realm blocks group all 26 skills with five-slot rows and no label column (1280x720)
+- realm blocks group all 26 skills with five-slot rows and no label column (844x390)
+- realm rewards include the approved breakthrough books without repeat grants
+- repeat forging uses the original pool and discounted batch price atomically
+- requested playtest stays read-only and never writes the ordinary save when the initial copy fails
+- reset clears a developed camp profile without touching ordinary records or tool preferences
+- reset clears a developed paused profile without touching ordinary records or tool preferences
+- reset clears a developed playing profile without touching ordinary records or tool preferences
+- reset replaces the whole experience profile and clears active run, receipts and bonus
+- resource write failures show errors without publishing grants
+- retained investments still display the learning-stage floor on their next rank
+- retained-evolution compatibility keeps the pre-existing realm, book, parent and SP validation
+- reveals mark only top-quality rewards with gold and never roll during effects
+- ring cannot equip an owned xuan instance before level19
+- ring drawEquipment save failure publishes nothing and retries deterministically
+- ring requires level19 for xuan, and rejects bad categories, tiers and insufficient payment
+- ring soft pity preserves mid35/high15, rises on draws16/17 and caps top at33 without a guarantee
+- ring uses47/35/15/3 boundaries and persists misses beyond twenty across macro tiers
+- same-mode retry can recover a failed isolated copy without touching ordinary progress
+- same-quality higher ranks increase the reviewed attack base without guaranteeing an off-build upgrade
+- scaled wound/burst never double-enhance damage but never reapply weapon, ring or healing
+- sect entries share cultivation state and keep tower separate from inheritance peaks
+- set remaining SP is exact, spendable, idempotent and reloadable without changing normal saves
+- settlement uses backpack cell and icon geometry 1280
+- settlement uses backpack cell and icon geometry 844
+- single result contains art and name with one icon-priced repeat action
+- single reveal completes without a phantom second award and stops effects on close
+- sj_arc: visual polish preserves every combat tick, damage, RNG and input movement
+- sj_bone first learning and further investment obey its Lv13 stage boundary
+- sj_cross: visual polish preserves every combat tick, damage, RNG and input movement
+- sj_flight first learning and further investment obey its Lv10 stage boundary
+- sj_formation first learning and further investment obey its Lv10 stage boundary
+- sj_gate first learning and further investment obey its Lv16 stage boundary
+- sj_line first learning and further investment obey its Lv10 stage boundary
+- sj_line: visual polish preserves every combat tick, damage, RNG and input movement
+- sj_mark first learning and further investment obey its Lv13 stage boundary
+- sj_shadow first learning and further investment obey its Lv10 stage boundary
+- sj_shadow: visual polish preserves every combat tick, damage, RNG and input movement
+- sj_wanjian: visual polish preserves every combat tick, damage, RNG and input movement
+- skill arrow disappears at the realm cap after purchase and returns after refund
+- skill arrow follows purchase eligibility: absolute maximum
+- skill arrow follows purchase eligibility: current rank can grow
+- skill arrow follows purchase eligibility: no points below cap
+- skill arrow follows purchase eligibility: no prerequisite gate
+- skill arrow follows purchase eligibility: no tutorial gate
+- skill arrow follows purchase eligibility: realm cap with spare points
+- skill arrow follows purchase eligibility: stage locked
+- skill arrow follows purchase eligibility: unlocked first rank
+- skill footer displays actual unlearned and maximum ranks (1024x600)
+- skill footer displays actual unlearned and maximum ranks (844x390)
+- skill footer is stationary through commits, failures, read-only and selection (1024x600)
+- skill footer is stationary through commits, failures, read-only and selection (844x390)
+- skill form, next-rank and future motion details fit the independent scroll (1280x720)
+- skill form, next-rank and future motion details fit the independent scroll (844x390)
+- skill page hides battle vitals and keeps rank hints below icons
+- skill pane uses shared weapon damage once after equipping an affix instance
+- special skills share the realm gate regardless of previous choices or floor progress
+- stone battle art maps converted denominations rather than monster ranks and leaves rewards untouched
+- strict armor snapshot checks reject forged amount, elapsed delay, cooldown, entry HP and spent cap
+- successful sync re-enables current-page buttons and clamps obsolete scroll (ordinary)
+- successful sync re-enables current-page buttons and clamps obsolete scroll (playtest)
+- summary cards settle in order and effects release their nodes when leaving
+- target health stays transparent and immediately below top resources 600
+- target health stays transparent and immediately below top resources 720
+- three research purchases cost 800/1600/2400 stones and failed saves grant no points
+- tools checkpoint a locally paused restored run before enabling resource actions
+- tower entry artwork reuses requests and late loads cannot revive abandoned page
+- training performs actual kills and resets while every grade, wallet award and core visual stays empty
+- unreadable, corrupt and newer save records stay read-only and are never replaced
+- wallet grade icons pair with quantities and release bindings on redraw
+- weapon draw atomically pays 100 stones and contribution and preserves the rolled instance
+- weapon draw rejects insufficient contribution without any state or save change
+- weapon draw rejects insufficient spiritStones without any state or save change
+- weapon flat and ring crit/focus use additive shares while preserving the original bone/crit baseline
+- weapon misses persist across macro tiers without a twentieth-draw guarantee
+- weapon soft pity preserves mid35/high15, rises on draws16/17 and caps top at33 without a guarantee
+- xuan pool opens exactly at cultivation level19; unsupported tiers never spend or roll
+- xuan weapon equip gate at level 19
+- zone aliases apply one skill family, mixed A is half, and continuous damage excludes ring effects
+- 剑气贯穿 can be acquired one rank at a time within 80 points with all prerequisites
+- 剑阵控场 can be acquired one rank at a time within 80 points with all prerequisites
+- 御剑追击 can be acquired one rank at a time within 80 points with all prerequisites
+
+## 相比起始记录新增名称
+
+- failed checkpoints and settlements retain one retryable complete transaction
+- first two floor rewards are points, atomic and not granted again on replay
+- optional settlement grade summaries survive reload, reject corruption and preserve old summaries
+- real first-clear rewards preserve elevated wallets and saturate safely at the trial cap
+
+## 新增名称核对
+
+上述4项分别失败于首通灵石1190/1090、九层首通贡献400/800、首通技能点1/4、灵石结算差4的旧预期；并非十层边界或突破事务失败。本次未更改这些经济预期，保留失败信息供对应调整处理。

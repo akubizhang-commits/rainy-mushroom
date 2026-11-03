@@ -1,0 +1,145 @@
+// World-space geometry only: no combat, content, RNG, or rendering dependencies.
+export const HEX_CENTER = Object.freeze({ x: 33, y: -60 })
+export const HEX_VERTICES = Object.freeze([
+  { x: 33, y: 1020 }, { x: 978, y: 480 }, { x: 978, y: -600 },
+  { x: 33, y: -1140 }, { x: -912, y: -600 }, { x: -912, y: 480 }
+].map(Object.freeze))
+
+const EPSILON = 1e-9
+// Clockwise vertices; each unit outward normal defines n·(p-center) <= offset.
+const WALLS = HEX_VERTICES.map((a, i) => {
+  const b = HEX_VERTICES[(i + 1) % HEX_VERTICES.length]
+  const length = Math.hypot(b.x - a.x, b.y - a.y)
+  const x = (a.y - b.y) / length
+  const y = (b.x - a.x) / length
+  return { x, y, offset: x * (a.x - HEX_CENTER.x) + y * (a.y - HEX_CENTER.y) }
+})
+const MAX_RADIUS = Math.min(...WALLS.map(wall => wall.offset))
+const WALL_PAIRS = WALLS.flatMap((a, i) => WALLS.slice(i + 1).flatMap(b => {
+  const determinant = a.x * b.y - a.y * b.x
+  return Math.abs(determinant) > 1e-12 ? [{ a, b, determinant }] : []
+}))
+
+function finite(value, name) {
+  if (!Number.isFinite(value)) throw new RangeError(`${name} must be a finite number`)
+}
+
+function validatePoint(point) {
+  finite(point?.x, 'point.x')
+  finite(point?.y, 'point.y')
+}
+
+function validateRadius(radius) {
+  finite(radius, 'radius')
+  if (radius < 0 || radius > MAX_RADIUS + EPSILON) {
+    throw new RangeError(`radius must be between 0 and ${MAX_RADIUS}`)
+  }
+  // Independent callers may compute the same inradius with last-bit roundoff.
+  return Math.min(radius, MAX_RADIUS)
+}
+
+function containsRelative(x, y, radius) {
+  return WALLS.every(wall => wall.x * x + wall.y * y <= wall.offset - radius + EPSILON)
+}
+
+/** True iff the entire circle lies in all six inward half-planes (1e-9 tolerance). */
+export function insideHex(point, radius = 0) {
+  validatePoint(point)
+  radius = validateRadius(radius)
+  return containsRelative(point.x - HEX_CENTER.x, point.y - HEX_CENTER.y, radius)
+}
+
+/**
+ * Mutate only actor.x/y to the nearest legal circle center; return the same actor.
+ * A missing actor.radius means zero. Invalid inputs throw before any mutation.
+ * Projection considers face interiors and feasible wall intersections, including
+ * nonadjacent pairs when a very large radius removes an inset face.
+ */
+export function boundHexActor(actor) {
+  validatePoint(actor)
+  const radius = validateRadius(actor.radius === undefined ? 0 : actor.radius)
+  const px = actor.x - HEX_CENTER.x, py = actor.y - HEX_CENTER.y
+  if (containsRelative(px, py, radius)) return actor
+
+  // Remove the constant |p|² and scale the distance objective to avoid overflow
+  // for extreme but finite inputs. The center is always a feasible initial point.
+  const scale = Math.max(1, Math.abs(px), Math.abs(py))
+  const ux = px / scale, uy = py / scale
+  let bestX = 0, bestY = 0, bestScore = 0
+  const consider = (x, y) => {
+    if (!Number.isFinite(x) || !Number.isFinite(y) || !containsRelative(x, y, radius)) return
+    const score = (x * x + y * y) / scale - 2 * (ux * x + uy * y)
+    if (score < bestScore) {
+      bestX = x
+      bestY = y
+      bestScore = score
+    }
+  }
+
+  for (const wall of WALLS) {
+    const offset = wall.offset - radius
+    const tangent = -wall.y * px + wall.x * py
+    // Tangent coordinates avoid subtracting two huge nearly equal normal terms.
+    consider(wall.x * offset - wall.y * tangent, wall.y * offset + wall.x * tangent)
+  }
+  for (const { a, b, determinant } of WALL_PAIRS) {
+    const da = a.offset - radius, db = b.offset - radius
+    consider((da * b.y - a.y * db) / determinant, (a.x * db - da * b.x) / determinant)
+  }
+  actor.x = HEX_CENTER.x + bestX
+  actor.y = HEX_CENTER.y + bestY
+  return actor
+}
+
+/**
+ * Return t in [0, range] for endpoint origin + t * (dirX, dirY).
+ * With a unit direction, t is world-space distance. Direction is not normalized.
+ * A zero direction or origin outside the inset returns 0; origin is not moved.
+ * Invalid/nonfinite inputs, negative ranges, or impossible radii throw RangeError.
+ */
+export function clipHexRay(origin, dirX, dirY, range, radius = 0) {
+  validatePoint(origin)
+  finite(dirX, 'dirX')
+  finite(dirY, 'dirY')
+  finite(range, 'range')
+  if (range < 0) throw new RangeError('range must be nonnegative')
+  radius = validateRadius(radius)
+  const x = origin.x - HEX_CENTER.x, y = origin.y - HEX_CENTER.y
+  const scale = Math.max(Math.abs(dirX), Math.abs(dirY))
+  if (!scale || !range || !containsRelative(x, y, radius)) return 0
+  const dx = dirX / scale, dy = dirY / scale
+  let length = range
+  for (const wall of WALLS) {
+    const speed = wall.x * dx + wall.y * dy
+    if (speed > 0) {
+      const clearance = wall.offset - radius - (wall.x * x + wall.y * y)
+      length = Math.min(length, Math.max(0, clearance) / speed / scale)
+    }
+  }
+  return length
+}
+
+/** Retain the portion of a finite segment inside the inset hex, or null.
+ * Unlike a ray, either endpoint may start outside the arena.
+ */
+export function clipHexSegment(start, end, radius = 0) {
+  validatePoint(start)
+  validatePoint(end)
+  radius = validateRadius(radius)
+  const dx = end.x - start.x, dy = end.y - start.y
+  let enter = 0, exit = 1
+  for (const wall of WALLS) {
+    const clearance = wall.offset - radius
+      - wall.x * (start.x - HEX_CENTER.x) - wall.y * (start.y - HEX_CENTER.y)
+    const speed = wall.x * dx + wall.y * dy
+    if (Math.abs(speed) < 1e-12) {
+      if (clearance < -EPSILON) return null
+    } else if (speed > 0) exit = Math.min(exit, clearance / speed)
+    else enter = Math.max(enter, clearance / speed)
+    if (enter > exit) return null
+  }
+  return {
+    start: { x: start.x + dx * enter, y: start.y + dy * enter },
+    end: { x: start.x + dx * exit, y: start.y + dy * exit },
+  }
+}

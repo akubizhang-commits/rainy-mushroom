@@ -1,0 +1,74 @@
+// Source ground contact plane calibrated on the 512x636 approved pillar.
+// Runtime actors and depth ordering use ground coordinates, not image centers.
+export const PILLAR_ART = Object.freeze({width:146,height:181,offsetY:(480-318)*181/636})
+export const PILLAR_FOOTPRINT = Object.freeze([
+ {x:0,y:44},{x:73,y:13},{x:71,y:-13},
+ {x:-3,y:-44},{x:-72,y:-1},{x:-67,y:24},
+].map(Object.freeze))
+export const TOWER_PILLARS = Object.freeze([
+ {id:'north',x:33,y:310,radius:80},
+ {id:'south-west',x:-307,y:-300,radius:80},
+ {id:'south-east',x:373,y:-300,radius:80},
+].map(Object.freeze))
+const PLANES=PILLAR_FOOTPRINT.map((a,i)=>{
+ const b=PILLAR_FOOTPRINT[(i+1)%PILLAR_FOOTPRINT.length],len=Math.hypot(b.x-a.x,b.y-a.y)
+ const x=(a.y-b.y)/len,y=(b.x-a.x)/len
+ return {x,y,offset:x*a.x+y*a.y}
+})
+// Actor radius offsets all six sides consistently for movement, rays and AI.
+export function clearPillars(p,radius=0){
+ return TOWER_PILLARS.every(o=>PLANES.some(n=>n.x*(p.x-o.x)+n.y*(p.y-o.y)>=n.offset+radius-1e-7))
+}
+export function clipPillars(p,dx,dy,range,radius=0){
+ if(!dx&&!dy)return range
+ let limit=range
+ for(const o of TOWER_PILLARS){
+  let enter=0,exit=range,miss=false
+  for(const n of PLANES){
+   const from=n.x*(p.x-o.x)+n.y*(p.y-o.y)-n.offset-radius,speed=n.x*dx+n.y*dy
+   if(Math.abs(speed)<1e-12){if(from>1e-7){miss=true;break}continue}
+   const t=-from/speed
+   if(speed<0)enter=Math.max(enter,t);else exit=Math.min(exit,t)
+  }
+  if(!miss&&enter<exit-1e-9&&exit>1e-9&&enter<=range)limit=Math.min(limit,Math.max(0,enter))
+ }
+ return limit
+}
+export function pillarSight(a,b){
+ return clipPillars(a,b.x-a.x,b.y-a.y,1)>=1-1e-8
+}
+export function pushFromPillars(p){
+ for(const o of TOWER_PILLARS){
+  const r=p.radius||0,dist=PLANES.map(n=>n.x*(p.x-o.x)+n.y*(p.y-o.y)-n.offset-r)
+  const nearest=Math.max(...dist)
+  if(nearest<0){const n=PLANES[dist.indexOf(nearest)];p.x+=n.x*(-nearest+1e-6);p.y+=n.y*(-nearest+1e-6)}
+ }
+ return p
+}
+// Visibility graph of safe circumscribed rings; deterministic shortest path.
+// Only built when the direct route is blocked, no persistent AI/save state.
+export function steerPillars(a,b,radius=0){
+ // A small player can hug stone closer than a large pursuer. Aim for the
+ // nearest legal attack position instead of an unreachable player center.
+ b=pushFromPillars({x:b.x,y:b.y,radius})
+ const direction=p=>{const dx=p.x-a.x,dy=p.y-a.y,d=Math.hypot(dx,dy)||1;return {x:dx/d,y:dy/d}}
+ const visible=(p,q)=>clipPillars(p,q.x-p.x,q.y-p.y,1,radius)>=1-1e-8
+ if(visible(a,b))return direction(b)
+ const nodes=[a,b]
+ for(const o of TOWER_PILLARS)for(let i=0;i<12;i++){
+  const angle=i*Math.PI/6,r=(o.radius+radius+8)/Math.cos(Math.PI/12)
+  nodes.push({x:o.x+Math.cos(angle)*r,y:o.y+Math.sin(angle)*r})
+ }
+ const dist=nodes.map(()=>Infinity),prev=nodes.map(()=>-1),done=new Set();dist[0]=0
+ for(let k=0;k<nodes.length;k++){
+  let u=-1;for(let i=0;i<nodes.length;i++)if(!done.has(i)&&(u<0||dist[i]<dist[u]))u=i
+  if(u<0||!Number.isFinite(dist[u])||u===1)break;done.add(u)
+  for(let v=1;v<nodes.length;v++)if(!done.has(v)&&visible(nodes[u],nodes[v])){
+   const d=dist[u]+Math.hypot(nodes[u].x-nodes[v].x,nodes[u].y-nodes[v].y)
+   if(d<dist[v]){dist[v]=d;prev[v]=u}
+  }
+ }
+ let next=1;if(prev[next]<0)return {x:0,y:0}
+ while(prev[next]>0)next=prev[next]
+ return direction(nodes[next])
+}

@@ -1,0 +1,22 @@
+import {CAMP_PILLS} from './TowerProfile.js'
+export const CEREMONY_DURATION=3.5
+const clamp=(n,a=0,b=1)=>Math.max(a,Math.min(b,n))
+export function breakthroughOptions(state,gate){
+ return Object.entries(CAMP_PILLS).filter(([id,p])=>p.successChance&&p.gate===gate&&((state.pills?.[id]||0)>0||p.purchasable&&!p.material))
+  .map(([id,p])=>{const count=state.pills?.[id]||0,purchase=count===0;return{id,name:p.name,target:p.target,count,purchase,price:purchase?p.price:0,successChance:p.successChance,affordable:!purchase||(state.spiritStones||0)>=p.price}})
+  .sort((a,b)=>Number(a.purchase)-Number(b.purchase)||b.successChance-a.successChance)
+}
+export function ceremonyFrame(elapsed,success,reducedMotion=false){
+ const t=Math.max(0,elapsed),burst=clamp((t-2)/1.1),settle=clamp((t-2.65)/.85)
+ return {phase:t<1.65?'gather':t<2?'hold':t<2.65?'burst':'settle',done:t>=CEREMONY_DURATION,
+  gather:clamp(t/1.65),burst,settle,
+  flash:reducedMotion||!success?0:Math.max(0,1-Math.abs(t-2.12)/.12)*.13,
+  shake:reducedMotion||!success?0:Math.sin(t*45)*Math.max(0,1-(t-2)/.28)*(t>=2&&t<2.28?2:0)}
+}
+export function levelUpPresentation(before,after){
+ if(after.level<=before.level)return null
+ const phase=c=>c.stage??(c.layer>=7?'巅峰':c.layer>=4?'中期':'初期')
+ const numerals=['','一','二','三','四','五','六','七','八','九','十']
+ return {name:after.label||`${after.realm}${numerals[after.layer]||after.level}层`,strong:after.realm!==before.realm||phase(after)!==phase(before),
+  major:after.realm!==before.realm,levels:after.level-before.level,duration:1.2}
+}

@@ -1,0 +1,7 @@
+import test from 'node:test'
+import assert from 'node:assert/strict'
+import { ARCHETYPES } from '../js/xianxia/TowerContent.js'
+const role=r=>ARCHETYPES.find(a=>a.role===r).id
+const snap=(seed=1)=>({floor:1,loot:{seed},killLedger:[{id:1,wave:1,archetype:role('normal')},{id:2,wave:4,archetype:role('elite')},{id:3,wave:20,archetype:role('boss')}]})
+test('independent material slots are deterministic, stable under ledger order, and sliced once',async()=>{const mod=await import('../js/xianxia/TowerMaterialLoot.js').catch(()=>({}));assert.equal(typeof mod.materialDrops,'function');const s=snap();const drops=mod.materialDrops(s);assert.ok(drops.filter(id=>id==='yusuizhi').length>=2);assert.deepEqual(mod.materialDrops({...s,killLedger:[...s.killLedger].reverse()}).sort(),[...drops].sort());assert.deepEqual(mod.materialDrops(s,3),[]);assert.deepEqual(mod.materialDrops({...s,training:true}),[]);assert.deepEqual(mod.materialDrops(s).sort(),s.killLedger.flatMap((kill)=>mod.materialDrops({...s,killLedger:[kill]})).sort())})
+test('normal 6 percent and elite 50 percent one-slot distribution',async()=>{const mod=await import('../js/xianxia/TowerMaterialLoot.js').catch(()=>({}));assert.equal(typeof mod.materialDrops,'function');let herbs=0,main=0;for(let seed=0;seed<10000;seed++){const drops=mod.materialDrops(snap(seed));herbs+=drops.filter(id=>id!=='yusuizhi'&&!id.startsWith('forge_')).length;main+=drops.filter(id=>id==='yusuizhi').length-2}assert.ok(herbs>500&&herbs<700,herbs);assert.ok(main>4800&&main<5200,main)})

@@ -1,0 +1,781 @@
+{
+  "schema_version": 4,
+  "status": "implemented_economy_v2",
+  "decision_source": "../39-resource-roles-rework-proposal.md",
+  "save_policy": "new_mode_fresh_profile_no_legacy_import_or_migration",
+  "skill_persistence": "permanent_confirmed",
+  "cultivation_persistence": "permanent_confirmed",
+  "core_unit_values": [
+    1,
+    5,
+    20
+  ],
+  "currency_uses": {
+    "spirit_stones": [
+      "special_skill_books",
+      "evolution_books",
+      "limited_research",
+      "equipment_crafting",
+      "ordinary_pills",
+      "alchemy"
+    ],
+    "demon_essence": [
+      "automatic_cultivation"
+    ],
+    "contribution": [
+      "mixed_draws"
+    ]
+  },
+  "tower_cultivation_boundary": {
+    "max_realm": "金丹",
+    "status": "user_confirmed",
+    "permits_yuanying_breakthrough": false,
+    "scope": "first_release_character_all_sources_including_peiyuan"
+  },
+  "cultivation_cap": {
+    "status": "user_confirmed",
+    "max_level": 30,
+    "max_stage": "金丹大圆满",
+    "max_xp": 14400,
+    "overflow": "not_banked_not_converted",
+    "persists_across": [
+      "death",
+      "return_to_sect",
+      "new_attempt",
+      "app_restart"
+    ],
+    "other_rewards": "cores_and_contribution_unchanged",
+    "growth_formula": {
+      "source": "../71-ten-layer-realms.md",
+      "base_attack": 100,
+      "base_hp": 100,
+      "minor_attack_multiplier": 1.08,
+      "minor_hp_multiplier": 1.08,
+      "breakthrough_attack_multiplier": 1.35,
+      "breakthrough_hp_multiplier": 1.35,
+      "breakthrough_replaces_minor_step": true,
+      "major_index": "floor((level-1)/10)",
+      "minor_steps": "level-1-major_index",
+      "attack": "100 * 1.08 ** minor_steps * 1.35 ** major_index",
+      "max_hp": "100 * 1.08 ** minor_steps * 1.35 ** major_index",
+      "intermediate_rounding": false
+    },
+    "breakthrough_gate": {
+      "realm": "炼气",
+      "layer": 10,
+      "full_xp": 1800,
+      "overflow": "discarded",
+      "requires": "筑基丹"
+    },
+    "breakthrough_gates": [
+      {
+        "realm": "炼气",
+        "layer": 10,
+        "full_xp": 1800,
+        "requires": "筑基丹",
+        "overflow": "discarded"
+      },
+      {
+        "realm": "筑基",
+        "layer": 10,
+        "full_xp": 6600,
+        "requires": "pending_design",
+        "overflow": "discarded"
+      },
+      {
+        "realm": "金丹",
+        "layer": 10,
+        "full_xp": 14400,
+        "requires": "release_cap",
+        "overflow": "discarded"
+      }
+    ]
+  },
+  "core_visual_quality": [
+    "下品",
+    "中品",
+    "上品"
+  ],
+  "normal_core_every_kills": 20,
+  "normal_counter_persists_on_kill": true,
+  "reward_settlement": {
+    "kill_rewards": "record_once_per_unique_kill_at_kill_time",
+    "normal_counter": "persist_with_each_kill_not_wave_clear",
+    "death_and_retreat": "retain_all_killed_loot_including_unfinished_wave_and_uncollected",
+    "reload": "same_recorded_kill_never_awards_twice",
+    "wave_reward": "only_on_full_clear_while_alive",
+    "floor_reward": "only_on_full_floor_clear_while_alive",
+    "first_clear_reward": "once_per_floor",
+    "reward_tables": "full_clear_totals_not_partial_wave_entitlements",
+    "healing_drops": "live_in_tower_pickup_only_never_post_death_reward_or_revive"
+  },
+  "attempt_rules": {
+    "entry_cost": 0,
+    "retry_start_wave": 1,
+    "cleared_floors_persist": true,
+    "reentry_floor": "next_unlocked_floor",
+    "new_attempt_skill_remaining_cooldown": 0,
+    "cooldown_reset_includes_evolutions": true,
+    "skip_own_windup": false,
+    "pause_resume": "restore_battle_state_without_healing_or_cooldown_reset"
+  },
+  "health_rules": {
+    "inherit_remaining_hp_on": [
+      "exit_tower",
+      "enter_tower",
+      "next_floor",
+      "app_restart"
+    ],
+    "death_return_hp": 1,
+    "out_of_combat_regen_max_hp_fraction_per_minute": 0.01,
+    "offline_out_of_combat_regen": true,
+    "in_tower_regen_max_hp_fraction_per_minute": 0,
+    "paused_or_background_battle_counts_as_out_of_combat": false,
+    "regen_cap": "max_hp",
+    "recovery_clock": "persist_hp_and_last_reliable_time_without_double_counting",
+    "in_tower_healing_drops": true
+  },
+  "starter": {
+    "contribution": 0,
+    "learned": {
+      "sj_yujian": 1
+    },
+    "supplies": {
+      "回春丹": 3
+    },
+    "grant_once_per_new_profile": true,
+    "spirit_stones_lower": 500,
+    "core_units": 20,
+    "core_units_note": "legacy standalone TowerProfile only; Campaign schema4 uses spirit_stones_lower"
+  },
+  "book_active_prices": [
+    20,
+    30,
+    50,
+    80,
+    120
+  ],
+  "book_passive_prices": [
+    10,
+    20,
+    35,
+    55,
+    80
+  ],
+  "skill_loadout": {
+    "active": 4,
+    "passive": 4,
+    "evolution": 2,
+    "acquisition_and_upgrade": "out_of_combat_only",
+    "free_points_on_wave_or_breakthrough": false
+  },
+  "first_release_class": "剑修",
+  "first_release_equipment_slots": [
+    "weapon",
+    "armor",
+    "ring"
+  ],
+  "class_exclusivity": {
+    "beast": {
+      "only_class": "御兽师",
+      "first_release_enabled": false
+    },
+    "talisman": {
+      "only_class": "符师",
+      "first_release_enabled": false
+    }
+  },
+  "first_release_draw_pools": [
+    "weapon_draw",
+    "armor_draw",
+    "ring_draw"
+  ],
+  "weapon_draw": {
+    "status": "user_confirmed",
+    "enabled": true,
+    "cost": 100,
+    "rates": [
+      0.47,
+      0.35,
+      0.15,
+      0.03
+    ],
+    "identities": [
+      "eq_sword_suwen",
+      "eq_sword_qingxiao",
+      "eq_sword_zhenyue"
+    ],
+    "spirit_stone_cost": 100,
+    "probability_rule": "TowerCrafting.craftingRates: 15 misses then +2pp per miss; cap33%; no fixed guarantee"
+  },
+  "beast_draw": {
+    "status": "user_confirmed_future_beastmaster_only",
+    "enabled": false,
+    "only_class": "御兽师",
+    "cost": 100,
+    "rates": [
+      0.55,
+      0.3,
+      0.12,
+      0.03
+    ],
+    "pity": 30
+  },
+  "draw_rules": {
+    "quality_order": [
+      "下品",
+      "中品",
+      "上品",
+      "极品"
+    ],
+    "independent_pity_per_pool": true,
+    "pity": "soft_probability_only_no_fixed_guarantee",
+    "top_quality_resets_pity_immediately": true,
+    "pity_guarantees_identity": false,
+    "paid_draws": false,
+    "duplicates": "same_identity_same_or_lower_quality_returns_contribution_by_drawn_quality",
+    "pity_rule": "three independent miss counters; top resets own counter; after15 misses top chance +2pp each miss to33%; no fixed guarantee",
+    "hard_pity_enabled": false
+  },
+  "duplicate_contribution": [
+    2,
+    4,
+    8,
+    16
+  ],
+  "supplies": {
+    "回春丹": {
+      "cost": 5,
+      "heal_max_hp_fraction": 0.5,
+      "cap": "max_hp"
+    },
+    "培元丹": {
+      "cost": 20,
+      "cultivation": 50,
+      "max_xp": 14400
+    },
+    "筑基丹": {
+      "cost": 60,
+      "success_chance": 0.55,
+      "required_xp": 1800,
+      "success_xp": 1801,
+      "consume_on_failure": true,
+      "retain_xp_on_failure": true,
+      "pity": false
+    },
+    "凝元筑基丹": {
+      "cost": 120,
+      "success_chance": 0.85,
+      "required_xp": 1800,
+      "success_xp": 1801,
+      "consume_on_failure": true,
+      "retain_xp_on_failure": true,
+      "pity": false
+    },
+    "凝丹丸": {
+      "cost": 120,
+      "success_chance": 0.6,
+      "required_xp": 6600,
+      "success_xp": 6601,
+      "consume_on_failure": true,
+      "retain_xp_on_failure": true,
+      "pity": false
+    },
+    "九转结金丹": {
+      "cost": 220,
+      "success_chance": 0.85,
+      "required_xp": 6600,
+      "success_xp": 6601,
+      "consume_on_failure": true,
+      "retain_xp_on_failure": true,
+      "pity": false
+    }
+  },
+  "supply_rules": {
+    "currency": "spirit_stones",
+    "use": "out_of_combat_only",
+    "daily_limit": null,
+    "combat_slots": [],
+    "combat_damage_bonus": 0,
+    "at_full_hp_or_cultivation_cap": "reject_without_consuming_inventory",
+    "partial_effect": "clamp_to_cap",
+    "save": "atomically_save_cost_inventory_and_hp_or_cultivation"
+  },
+  "equipment_damage_bonus_cap": 0.35,
+  "equipment_damage_rule": "combined_weapon_and_ring_expected_output; tier_caps_6_10_14_18_12_18_26_35_percent",
+  "equipment_refine_included_in_damage_cap": true,
+  "future_beastmaster_balance": {
+    "status": "future_design_no_coefficients_or_runtime",
+    "adjust": "weapon_base_damage_or_attack_coefficient",
+    "compare": "weapon_plus_beast_total_output_at_equal_investment"
+  },
+  "refine_costs": [],
+  "refine_slots": [],
+  "refine_max_level": 0,
+  "robe": {
+    "status": "starter_basic_only",
+    "hp_bonus": 0,
+    "draw_enabled": false,
+    "quality_upgrade_enabled": false,
+    "refine_enabled": false
+  },
+  "pendant": "starter_cosmetic_no_paid_stats_v1",
+  "floors": [
+    {
+      "floor": 1,
+      "cultivation": 452,
+      "core_units": 63,
+      "clear_core_bonus": 0,
+      "normal_counter_after": 12,
+      "first_core_bonus": 10,
+      "first_core_total": 73,
+      "contribution": 0,
+      "first_contribution_bonus": 0,
+      "first_contribution_total": 0
+    },
+    {
+      "floor": 2,
+      "cultivation": 490,
+      "core_units": 71,
+      "clear_core_bonus": 5,
+      "normal_counter_after": 2,
+      "first_core_bonus": 10,
+      "first_core_total": 81,
+      "contribution": 0,
+      "first_contribution_bonus": 0,
+      "first_contribution_total": 0
+    },
+    {
+      "floor": 3,
+      "cultivation": 631,
+      "core_units": 88,
+      "clear_core_bonus": 10,
+      "normal_counter_after": 10,
+      "first_core_bonus": 10,
+      "first_core_total": 98,
+      "contribution": 0,
+      "first_contribution_bonus": 1000,
+      "first_contribution_total": 1000
+    },
+    {
+      "floor": 4,
+      "cultivation": 903,
+      "core_units": 102,
+      "clear_core_bonus": 15,
+      "normal_counter_after": 16,
+      "first_core_bonus": 10,
+      "first_core_total": 112,
+      "contribution": 0,
+      "first_contribution_bonus": 0,
+      "first_contribution_total": 0
+    },
+    {
+      "floor": 5,
+      "cultivation": 1000,
+      "core_units": 111,
+      "clear_core_bonus": 20,
+      "normal_counter_after": 0,
+      "first_core_bonus": 10,
+      "first_core_total": 121,
+      "contribution": 0,
+      "first_contribution_bonus": 0,
+      "first_contribution_total": 0
+    },
+    {
+      "floor": 6,
+      "cultivation": 1561,
+      "core_units": 133,
+      "clear_core_bonus": 25,
+      "normal_counter_after": 2,
+      "first_core_bonus": 10,
+      "first_core_total": 143,
+      "contribution": 0,
+      "first_contribution_bonus": 1000,
+      "first_contribution_total": 1000
+    },
+    {
+      "floor": 7,
+      "cultivation": 1511,
+      "core_units": 135,
+      "clear_core_bonus": 30,
+      "normal_counter_after": 2,
+      "first_core_bonus": 10,
+      "first_core_total": 145,
+      "contribution": 0,
+      "first_contribution_bonus": 0,
+      "first_contribution_total": 0
+    },
+    {
+      "floor": 8,
+      "cultivation": 1105,
+      "core_units": 146,
+      "clear_core_bonus": 35,
+      "normal_counter_after": 0,
+      "first_core_bonus": 10,
+      "first_core_total": 156,
+      "contribution": 0,
+      "first_contribution_bonus": 0,
+      "first_contribution_total": 0
+    },
+    {
+      "floor": 9,
+      "cultivation": 2073,
+      "core_units": 159,
+      "clear_core_bonus": 40,
+      "normal_counter_after": 16,
+      "first_core_bonus": 10,
+      "first_core_total": 169,
+      "contribution": 0,
+      "first_contribution_bonus": 1000,
+      "first_contribution_total": 1000
+    }
+  ],
+  "cultivation_levels": [
+    {
+      "level": 1,
+      "realm": "炼气",
+      "realm_step": 1,
+      "xp_total": 0,
+      "attack_bonus": 0,
+      "hp_bonus": 0
+    },
+    {
+      "level": 2,
+      "realm": "炼气",
+      "realm_step": 2,
+      "xp_total": 45,
+      "attack_bonus": 0.08000000000000007,
+      "hp_bonus": 0.08000000000000007
+    },
+    {
+      "level": 3,
+      "realm": "炼气",
+      "realm_step": 3,
+      "xp_total": 120,
+      "attack_bonus": 0.1664000000000001,
+      "hp_bonus": 0.1664000000000001
+    },
+    {
+      "level": 4,
+      "realm": "炼气",
+      "realm_step": 4,
+      "xp_total": 225,
+      "attack_bonus": 0.2597120000000004,
+      "hp_bonus": 0.2597120000000004
+    },
+    {
+      "level": 5,
+      "realm": "炼气",
+      "realm_step": 5,
+      "xp_total": 360,
+      "attack_bonus": 0.3604889600000003,
+      "hp_bonus": 0.3604889600000005
+    },
+    {
+      "level": 6,
+      "realm": "炼气",
+      "realm_step": 6,
+      "xp_total": 525,
+      "attack_bonus": 0.46932807680000055,
+      "hp_bonus": 0.46932807680000055
+    },
+    {
+      "level": 7,
+      "realm": "炼气",
+      "realm_step": 7,
+      "xp_total": 720,
+      "attack_bonus": 0.5868743229440005,
+      "hp_bonus": 0.5868743229440005
+    },
+    {
+      "level": 8,
+      "realm": "炼气",
+      "realm_step": 8,
+      "xp_total": 945,
+      "attack_bonus": 0.7138242687795207,
+      "hp_bonus": 0.7138242687795207
+    },
+    {
+      "level": 9,
+      "realm": "炼气",
+      "realm_step": 9,
+      "xp_total": 1200,
+      "attack_bonus": 0.8509302102818825,
+      "hp_bonus": 0.8509302102818825
+    },
+    {
+      "level": 10,
+      "realm": "炼气",
+      "realm_step": 10,
+      "xp_total": 1485,
+      "attack_bonus": 0.9990046271044333,
+      "hp_bonus": 0.9990046271044333
+    },
+    {
+      "level": 11,
+      "realm": "筑基",
+      "realm_step": 1,
+      "xp_total": 1801,
+      "attack_bonus": 1.6986562465909851,
+      "hp_bonus": 1.6986562465909851
+    },
+    {
+      "level": 12,
+      "realm": "筑基",
+      "realm_step": 2,
+      "xp_total": 2145,
+      "attack_bonus": 1.9145487463182644,
+      "hp_bonus": 1.9145487463182644
+    },
+    {
+      "level": 13,
+      "realm": "筑基",
+      "realm_step": 3,
+      "xp_total": 2520,
+      "attack_bonus": 2.1477126460237255,
+      "hp_bonus": 2.1477126460237255
+    },
+    {
+      "level": 14,
+      "realm": "筑基",
+      "realm_step": 4,
+      "xp_total": 2925,
+      "attack_bonus": 2.3995296577056235,
+      "hp_bonus": 2.399529657705624
+    },
+    {
+      "level": 15,
+      "realm": "筑基",
+      "realm_step": 5,
+      "xp_total": 3360,
+      "attack_bonus": 2.671492030322074,
+      "hp_bonus": 2.6714920303220735
+    },
+    {
+      "level": 16,
+      "realm": "筑基",
+      "realm_step": 6,
+      "xp_total": 3825,
+      "attack_bonus": 2.96521139274784,
+      "hp_bonus": 2.96521139274784
+    },
+    {
+      "level": 17,
+      "realm": "筑基",
+      "realm_step": 7,
+      "xp_total": 4320,
+      "attack_bonus": 3.2824283041676674,
+      "hp_bonus": 3.2824283041676674
+    },
+    {
+      "level": 18,
+      "realm": "筑基",
+      "realm_step": 8,
+      "xp_total": 4845,
+      "attack_bonus": 3.6250225685010813,
+      "hp_bonus": 3.6250225685010813
+    },
+    {
+      "level": 19,
+      "realm": "筑基",
+      "realm_step": 9,
+      "xp_total": 5400,
+      "attack_bonus": 3.9950243739811686,
+      "hp_bonus": 3.9950243739811686
+    },
+    {
+      "level": 20,
+      "realm": "筑基",
+      "realm_step": 10,
+      "xp_total": 5985,
+      "attack_bonus": 4.3946263238996615,
+      "hp_bonus": 4.394626323899661
+    },
+    {
+      "level": 21,
+      "realm": "金丹",
+      "realm_step": 1,
+      "xp_total": 6601,
+      "attack_bonus": 6.282745537264543,
+      "hp_bonus": 6.282745537264543
+    },
+    {
+      "level": 22,
+      "realm": "金丹",
+      "realm_step": 2,
+      "xp_total": 7245,
+      "attack_bonus": 6.865365180245708,
+      "hp_bonus": 6.865365180245708
+    },
+    {
+      "level": 23,
+      "realm": "金丹",
+      "realm_step": 3,
+      "xp_total": 7920,
+      "attack_bonus": 7.494594394665365,
+      "hp_bonus": 7.494594394665365
+    },
+    {
+      "level": 24,
+      "realm": "金丹",
+      "realm_step": 4,
+      "xp_total": 8625,
+      "attack_bonus": 8.174161946238595,
+      "hp_bonus": 8.174161946238595
+    },
+    {
+      "level": 25,
+      "realm": "金丹",
+      "realm_step": 5,
+      "xp_total": 9360,
+      "attack_bonus": 8.908094901937684,
+      "hp_bonus": 8.908094901937682
+    },
+    {
+      "level": 26,
+      "realm": "金丹",
+      "realm_step": 6,
+      "xp_total": 10125,
+      "attack_bonus": 9.7007424940927,
+      "hp_bonus": 9.700742494092701
+    },
+    {
+      "level": 27,
+      "realm": "金丹",
+      "realm_step": 7,
+      "xp_total": 10920,
+      "attack_bonus": 10.556801893620115,
+      "hp_bonus": 10.556801893620115
+    },
+    {
+      "level": 28,
+      "realm": "金丹",
+      "realm_step": 8,
+      "xp_total": 11745,
+      "attack_bonus": 11.481346045109726,
+      "hp_bonus": 11.481346045109726
+    },
+    {
+      "level": 29,
+      "realm": "金丹",
+      "realm_step": 9,
+      "xp_total": 12600,
+      "attack_bonus": 12.479853728718505,
+      "hp_bonus": 12.479853728718503
+    },
+    {
+      "level": 30,
+      "realm": "金丹",
+      "realm_step": 10,
+      "xp_total": 13485,
+      "attack_bonus": 13.558242027015986,
+      "hp_bonus": 13.558242027015986
+    }
+  ],
+  "storage_cap": 2000000000,
+  "spirit_stones": {
+    "grades": [
+      "下品",
+      "中品",
+      "上品",
+      "极品"
+    ],
+    "lower_unit_values": [
+      1,
+      100,
+      10000,
+      1000000
+    ],
+    "wallet_cap": 20000000000,
+    "legacy_core_unit_multiplier": 10,
+    "automatic_change": true,
+    "first_clear_bonus": 100,
+    "special_active_book": 200,
+    "special_passive_book": 100,
+    "evolution_book": 2400,
+    "research_costs": [
+      800,
+      1600,
+      2400
+    ]
+  },
+  "demon_essence": {
+    "automatic_absorption": true,
+    "rank_unit_xp": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+    ],
+    "role_quantity": {
+      "normal": 1,
+      "elite": 5,
+      "boss": 10
+    },
+    "wallet": false,
+    "combination_exchange": false,
+    "tower_max_rank": 7,
+    "xp_budget_change": 0
+  },
+  "legacy_receipt_note": "core_unit_values、normal_core_every_kills、normal_counter及floors内core_*为v1回放/迁移单位，不是当前钱包或妖丹经验；运行时经济边界转换为下品灵石，随机掉落新局已不使用击杀计数触发。book_active/passive_prices为旧schema迁移价格。",
+  "armor_draw": {
+    "enabled": true,
+    "cost": 40,
+    "spirit_stone_cost": 80,
+    "rates": [
+      0.47,
+      0.35,
+      0.15,
+      0.03
+    ],
+    "probability_rule": "TowerCrafting.craftingRates: 15 misses then +2pp per miss; cap33%; no fixed guarantee"
+  },
+  "ring_draw": {
+    "enabled": true,
+    "cost": 40,
+    "spirit_stone_cost": 80,
+    "rates": [
+      0.47,
+      0.35,
+      0.15,
+      0.03
+    ],
+    "probability_rule": "TowerCrafting.craftingRates: 15 misses then +2pp per miss; cap33%; no fixed guarantee"
+  },
+  "refinement_enabled": false,
+  "breakthrough_materials": {
+    "啸月灵露": {
+      "floor": 2,
+      "drop_chance": 0.35,
+      "success_chance": 0.75,
+      "required_xp": 1800,
+      "sell_spirit_stones": 80
+    },
+    "赤鳞金髓": {
+      "floor": 5,
+      "drop_chance": 0.35,
+      "success_chance": 0.8,
+      "required_xp": 6600,
+      "sell_spirit_stones": 120
+    }
+  },
+  "dianjuan": {
+    "display_name": "点眷",
+    "single_draw": 100,
+    "ten_draw": 1000,
+    "campaign_total": 3000,
+    "first_clear": {
+      "3": 1000,
+      "6": 1000,
+      "9": 1000
+    },
+    "repeat_income": 0,
+    "trial_draws": 0,
+    "paid_shop": "deferred"
+  }
+}

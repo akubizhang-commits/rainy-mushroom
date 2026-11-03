@@ -1,0 +1,21 @@
+{
+  "name": "survivor-design-review-and-sprint1",
+  "description": "虚拟团队第一阶段收尾：跨角色设计评审 + 项目经理修订并输出 Sprint 1 任务清单。只写文档，不改代码。",
+  "inputs": {},
+  "steps": [
+    {
+      "type": "step",
+      "id": "design-review",
+      "agent": "wf-design-reviewer",
+      "prompt": "用中文审阅 /Users/zhangnu/WeChatProjects/rainy-mushroom/docs/survivor/ 下 00–05 全部文档（00-project-plan.md、01-gdd.md、02-ui-ux.md、03-architecture.md、04-test-plan.md、05-operations.md），作为跨角色设计评审。只写报告，不修改代码、资源或 git。\n\n项目背景：微信小游戏，Cocos Creator 3.8.8，玩法为类《吸血鬼幸存者》的割草生存“雨后菌语·雨后森林幸存者”。约束：不得血腥（敌人被净化为光点）；不得有吃野生菌回血机制（回血用露水/阳光）；不得编造微信平台政策数值（须标注待核实）。\n\n重点检查：\n- 文档间矛盾（例如 GDD 的同屏实体数量 vs 架构性能预算；UI 素材清单 vs 包体预算；运营埋点 vs 架构是否支持；各文档已在第 0 节自列的待同步项是否互相冲突）。\n- 已知待裁定项：敌人数量（计划 3–4 vs GDD 5+精英+Boss）、技能数（计划 6主动4被动 vs GDD 5武器6被动）、暂停按钮位置、存档新增字段、分辨率与触控单位换算、04 测试计划第 1 节列出的上游不一致。逐条给出建议裁决。\n- MVP 范围是否可在 2–3 个 Sprint 完成。\n- 是否违反上述约束。\n- 需求是否有歧义导致开发无法开工。\n\n将报告写入 /Users/zhangnu/WeChatProjects/rainy-mushroom/docs/survivor/06-design-review.md，按 HIGH/MEDIUM/LOW 列出问题、影响和建议改法。",
+      "artifacts": { "review": "/Users/zhangnu/WeChatProjects/rainy-mushroom/docs/survivor/06-design-review.md" }
+    },
+    {
+      "type": "step",
+      "id": "pm-sprint1",
+      "agent": "wf-planner",
+      "prompt": "你是【项目经理】。用中文工作。只写/改 docs/survivor/ 下的文档，严禁修改代码、资源或 git 状态。\n\n阅读 /Users/zhangnu/WeChatProjects/rainy-mushroom/docs/survivor/ 下 00–06 全部文档。对 06-design-review.md 中每个 HIGH/MEDIUM 问题，直接修订对应文档（只改 docs/survivor/ 下的文件）或给出明确裁决并在 00-project-plan.md 里记录理由，消除各文档第 0 节列出的待同步项。\n\n然后写 /Users/zhangnu/WeChatProjects/rainy-mushroom/docs/survivor/07-sprint-1-backlog.md：Sprint 1 目标为“可玩竖切原型”（几何占位美术，1 种武器、2 种敌人、升级三选一、计时胜利/死亡结算，逻辑层有 node --test 单测，可通过 cocos:build:wechat 冒烟）。任务表每项包含：编号、负责角色（前端开发/后端开发/UI/测试/策划/运营）、描述、依赖、验收标准、预估（S/M/L）、涉及文件路径。按依赖顺序排列，第一项必须是“确认工作区未提交改动与旧 packing 玩法代码的处理方式（需用户决定，隔离不删除）”。最后附一份给用户的决策清单（需要用户拍板的问题，至少包含：账号登记名是否为《雨后菌语》、旧玩法代码去留、是否先提交/另存当前未提交改动）。",
+      "artifacts": { "backlog": "/Users/zhangnu/WeChatProjects/rainy-mushroom/docs/survivor/07-sprint-1-backlog.md" }
+    }
+  ]
+}

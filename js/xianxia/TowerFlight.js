@@ -1,0 +1,43 @@
+export const FLIGHT_DEPTH = .42;
+export function flightPoint(cx,cy,angle,x,y=0){
+ const c=Math.cos(angle),s=Math.sin(angle);
+ return {x:cx+x*c-y*s,y:cy+(x*s+y*c)*FLIGHT_DEPTH};
+}
+/** Cosmetic flight motion driven only by simulation time and actual displacement. */
+export class FlightStreamState {
+ constructor(){this.reset()}
+ reset(){this.state=null;this.last=null;this.time=-1;this.angle=0;this.strength=0}
+ sample(s){
+  if(this.state!==s||s.time<this.time)this.reset();
+  this.state=s;
+  if(!Number.isFinite(s.time)||!(s.player?.hp>0)||!(s.loadout?.passive?.sj_flight>0)||['lost','won','abandoned'].includes(s.phase)){
+   this.reset();return {visible:false};
+  }
+  const p=s.player,dt=s.time-this.time;
+  if(this.last){
+   const dx=p.x-this.last.x,dy=p.y-this.last.y,d=Math.hypot(dx,dy);
+   if(d>80||dt===0&&d>0||dt>.25){this.strength=0}
+   else if(dt>0){
+    const moving=d>.05,target=moving?1:0;
+    this.strength+=(target-this.strength)*(1-Math.exp(-dt/(moving?.12:.22)));
+    if(moving){
+     const targetAngle=Math.atan2(dy/FLIGHT_DEPTH,dx),delta=Math.atan2(Math.sin(targetAngle-this.angle),Math.cos(targetAngle-this.angle));
+     this.angle+=delta*(1-Math.exp(-dt/.09));
+    }
+   }
+  }
+  this.last={x:p.x,y:p.y};this.time=s.time;
+  const centerX=p.x,centerY=p.y+13+Math.sin(s.time*3)*2;
+  const rear=flightPoint(centerX,centerY,this.angle,-44);
+  return {visible:true,x:rear.x,y:rear.y,centerX,centerY,depth:FLIGHT_DEPTH,
+   angle:this.angle*180/Math.PI,frame:Math.min(31,Math.floor(((s.time%1.6)+1.6)%1.6*20)),
+   length:70+155*this.strength,height:(55+25*this.strength)/FLIGHT_DEPTH*(1-.75*Math.abs(Math.sin(this.angle))),alpha:95+65*this.strength,strength:this.strength};
+ }
+}
+
+/** Quiet sword riding: match the visible left/right body, never steer from vertical travel. */
+export function flightRidePose(s){
+ const p=s.player;
+ if(!Number.isFinite(s.time)||!(p?.hp>0)||!(s.loadout?.passive?.sj_flight>0)||['lost','won','abandoned'].includes(s.phase))return {visible:false};
+ return {visible:true,centerX:p.x,centerY:p.y+13+Math.sin(s.time*3)*2,depth:FLIGHT_DEPTH,angle:p.faceX<0?180:0};
+}
