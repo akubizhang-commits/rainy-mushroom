@@ -595,10 +595,11 @@ export class TowerView {
   const noticeOutline=this.foot.node.addComponent(LabelOutline);
   noticeOutline.color=C('#263F39');noticeOutline.width=1.5;noticeOutline.enabled=false;
   const settings=this.node('HUD.Pause',mapCard,72,72);
-  settings.setPosition(82,-79);
-  const visual=this.node('HUD.Pause图形',settings,36,36);
+  // Keep the 72px touch target inside the card while retaining the gear's visual position.
+  settings.setPosition(82,-62);
+  const visual=this.node('HUD.Pause图形',settings,36,36);visual.setPosition(0,-17);
   drawHudActionIcon(visual,'gear',.45);
-  this.hudArt.drawResource(settings,'battle-gear','ui_settings',0,0,36,
+  this.hudArt.drawResource(settings,'battle-gear','ui_settings',0,-17,36,
    ()=>{if(isValid(visual,true))visual.active=false;});
   const pauseButton=settings.addComponent(Button);
   pauseButton.transition=Button.Transition.SCALE;pauseButton.zoomScale=.92;

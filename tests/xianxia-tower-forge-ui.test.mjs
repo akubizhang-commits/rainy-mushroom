@@ -24,6 +24,7 @@ import * as loot from '../js/xianxia/TowerLoot.js'
 import * as economy from '../js/xianxia/TowerEconomy.js'
 import { stats as combatStats, characterCombatAttributes } from '../js/xianxia/TowerRun.js'
 import { checksum } from '../js/xianxia/Checksum.js'
+import { assertCurrentCampaign, assertActionSucceeds } from './helpers/tower-current-state.mjs'
 
 // Independent forge UI harness: real menu/business code, simulated Cocos scene graph.
 // Intentionally does not import or execute the shared host-tools test suite.
@@ -177,7 +178,7 @@ function setup(width=1280,height=720,patch={}) {
  const state=JSON.parse(record.data); Object.assign(state,{...patch,pills:{...state.pills,...patch.pills}});
  record.data=JSON.stringify(state); record.checksum=checksum(record.data);data.set(campaign.TOWER_CAMPAIGN_KEY,JSON.stringify(record));
  const store = new campaign.TowerCampaignStore(storage,1800000000000);
- assert.equal(store.readOnly,false);
+ assertCurrentCampaign(store,state);
  const calls=[]; let menu;
  menu=new Menu(new Node('canvas'),width,height,{
  action(action){calls.push(copy(action)); const result=store.act(action,1800000000000);
@@ -214,19 +215,24 @@ function action(store,category='weapon',count=1,tier='fan'){
  const sequence=store.state.forgeSequence+1;
  return{type:tier==='fan'?'buyGear':'craftGear',id:`${category}:${tier}:q1`,count,sequence,requestId:`test-${sequence}`};
 }
+function detailNamesFor(recipe){return recipe.definitionIds.map(id=>[...weaponTools.WEAPONS,...equipmentTools.EQUIPMENT].find(d=>d.id===id).name);}
 function namesFor(recipe){return recipe.definitionIds.map(id=>{const item=forgingTools.createForgedGear(recipe.id,'preview',id);return recipe.category==='weapon'?weaponTools.weaponName(item):equipmentTools.equipmentName(item);});}
 function batch(menu,count=10){for(let i=1;i<count;i++)click(menu,'增加数量');}
+function dismissDetail(menu){const shade=find(menu,'交易弹窗遮罩');shade.events.get(Node.EventType.TOUCH_END)({target:shade});}
 for(const [width,height] of [[1280,720],[844,390]]){
- test(`forge hall only sells deterministic fan equipment ${width}x${height}`,()=>{
+ test(`forge hall sells deterministic equipment with no random draw ${width}x${height}`,()=>{
   const {menu,store,calls}=setup(width,height,rich),before=copy(store.state);click(menu,'炼器主殿');
-  assert.equal(menu.gearMode,'buy');assert.match(text(menu.root),/凡器购置/);
+  assert.equal(menu.gearMode,'buy');assert.match(text(menu.root),/武器装备购买/);
   for(const category of ['weapon','armor','ring']){
    const r=selectRecipe(menu,category,'fan');
    assert.equal(menu.gearSelection,r.id);assert.equal(r.definitionIds.length,1);
-   assert.match(text(menu.root),/确定成品 · 固定属性/);
+   find(menu,'购买物品弹窗');
    assert.ok(text(menu.root).includes(namesFor(r)[0]));
+   click(menu,'取消购买');
   }
-  for(const quality of ['中品','上品','极品'])assert.equal(find(menu,quality).getComponent(Button).interactable,false);
+  click(menu,'分类-all');
+  assert.equal(all(find(menu,'武器装备购买页')).filter(n=>n.name.startsWith('商品卡片-')).length,4);
+  assert.equal(all(menu.root).some(n=>/^(中品|上品|极品)$/.test(n.name)&&n.getComponent(Button)),false);
   assert.equal(all(menu.root).some(n=>/抽取(一次|十次)$/.test(n.name)),false);
   assert.deepEqual(copy(store.state),before);assert.equal(calls.length,0);
  });
@@ -234,28 +240,38 @@ for(const [width,height] of [[1280,720],[844,390]]){
   const {menu,store,calls}=setup(width,height,rich),before=copy(store.state);click(menu,'炼器炉');
   for(const category of ['weapon','armor','ring'])for(const quality of [1,2,3,4])for(const tier of ['fa','bao','ling']){
    const r=selectRecipe(menu,category,tier,quality),contents=text(find(menu,'炼制详情'));
-   assert.ok(contents.includes(r.definitionIds.length===3?'1/3':'1/2'));
-   for(const name of namesFor(r))assert.ok(contents.includes(name),name);
-   assert.ok(contents.includes('点击成品设心愿'));
-   assert.ok(find(menu,'炼制详情').getComponent(ScrollView).vertical);
+   assert.ok(contents.includes('随机获得其中1件'));
+   assert.ok(contents.includes('点击图标查看属性'));
+   for(const [i,id] of r.definitionIds.entries()){
+    click({root:find(menu,'炼制详情')},'物品图-'+id);
+    assert.ok(text(find(menu,'制作物品详情')).includes(detailNamesFor(r)[i]),id);
+    dismissDetail(menu);
+   }
+   assert.doesNotMatch(contents,/心愿/);
+   const scroll=find(menu,'炼制详情').getComponent(ScrollView);
+   assert.equal(scroll.vertical,scroll.content.getComponent(UITransform).contentSize.height>scroll.node.getComponent(UITransform).contentSize.height);
   }
   assert.deepEqual(copy(store.state),before);assert.equal(calls.length,0);
  });
  test(`forge overlay controls and independent scroll panes stay in bounds ${width}x${height}`,()=>{
   const {menu}=setup(width,height,rich);click(menu,'炼器炉');selectRecipe(menu,'weapon','ling',4);
   const panel=find(menu,'炼器页');inside(panel,menu.root);
-  for(const name of ['关闭炼器工坊','前往背包','武器','防具','戒指','下品','中品','上品','极品','−','＋','开始炼制','配方列表','炼制详情'])inside(find(menu,name),panel);
-  for(const name of ['开始炼制','关闭炼器工坊','极品'])assert.ok(find(menu,name).getComponent(UITransform).contentSize.height*width/1280>=44);
+  for(const name of ['关闭炼器工坊','分类-fa','分类-bao','分类-ling','开始炼制','配方列表','炼制详情'])inside(find(menu,name),panel);
+  assert.equal(find(menu,'开始炼制').getComponent(UITransform).contentSize.height,58);
+  assert.equal(find(menu,'关闭炼器工坊').getComponent(UITransform).contentSize.height,68);
+  assert.equal(all(panel).some(n=>['增加数量','减少数量'].includes(n.name)),false);
   assert.notEqual(find(menu,'配方列表').getComponent(ScrollView),find(menu,'炼制详情').getComponent(ScrollView));
  });
  test(`batch purchase debounces callback and reports only persisted awards ${width}x${height}`,()=>{
   const {menu,store,calls,data}=setup(width,height,rich);click(menu,'炼器主殿');selectRecipe(menu,'armor','fan');batch(menu);
   const before=copy(store.state),callback=find(menu,'确认购买').events.get(Button.EventType.CLICK);callback();callback();
   assert.equal(calls.length,1);assert.equal(calls[0].count,10);assert.equal(calls[0].type,'buyGear');
-  assert.equal(store.state.spiritStones,before.spiritStones-150);assert.equal(store.state.contribution,before.contribution-90);
+  assert.equal(store.state.spiritStones,before.spiritStones-240);assert.equal(store.state.contribution,before.contribution);
   const ids=store.state.forgeReceipts.at(-1).ids;assert.equal(new Set(ids).size,10);
   assert.ok(ids.every(id=>store.state.equipment[id].category==='armor'&&store.state.equipment[id].quality===1));
-  assert.match(text(menu.root),/已获得：.*×10/);
+  find(menu,'获得物品弹窗');
+  assert.equal(menu.commerceRewards.length,1);assert.equal(menu.commerceRewards[0].count,10);
+  assert.equal(menu.commerceRewards[0].name,equipmentTools.equipmentName(store.state.equipment[ids[0]]));
   const saved=data.get(campaign.TOWER_CAMPAIGN_KEY),after=copy(store.state);
   for(let i=0;i<60;i++)menu.updateEffects(1/60);
   click(menu,'关闭炼器工坊');click(menu,'炼器主殿');
@@ -270,42 +286,54 @@ for(const [width,height] of [[1280,720],[844,390]]){
  });
  test(`forge details have no wish controls ${width}x${height}`,()=>{
   const {menu,store}=setup(width,height,rich);
-  menu.commerceKind='gear';menu.gearMode='craft';menu.gearCategory='weapon';menu.gearQuality=4;
-  const entry=menu.commerceEntries('gear').find(e=>e.key==='weapon:fa:q4');
-  assert.ok(entry);
-  menu.commerceDialog='detail';
-  menu.commerceModal('gear',entry,()=>{});const page=menu.root;
-  assert.doesNotMatch(text(page),/心愿|第三次必得/);
-  assert.match(text(page),/照胆剑/);assert.match(text(page),/定岳剑/);
+  click(menu,'炼器炉');const recipe=selectRecipe(menu,'weapon','fa',4);
+  for(const [i,id] of recipe.definitionIds.entries()){
+   click({root:find(menu,'炼制详情')},'物品图-'+id);
+   assert.doesNotMatch(text(menu.root),/心愿|第三次必得/);
+   assert.ok(text(find(menu,'制作物品详情')).includes(detailNamesFor(recipe)[i]));
+   dismissDetail(menu);
+  }
   assert.equal('forgeWishes' in store.state,false);
  });
 }
 
-test('crafting lists only tiers the current realm can use',()=>{
+test('crafting allows previewing locked tiers but gates submission by the current realm',()=>{
  for(const level of [1,3,4,10,11,20,21,27]){
-  const {menu,store,calls}=setup(844,390,{xp:profile.cultivationLevelXp(level)});click(menu,'炼器炉');
-  const before=copy(store.state),list=text(find(menu,'配方列表'));
-  for(const tier of tierTools.OPEN_EQUIPMENT_TIERS){const r=forgingTools.forgingRecipe(`weapon:${tier}:q1`);assert.equal(list.includes(r.name),tierTools.canUseEquipmentTier(tier,level));}
-  for(const q of ['中品','上品','极品'])assert.equal(find(menu,q).getComponent(Button).interactable,level>=4);
+  const {menu,store,calls}=setup(844,390,{...rich,xp:profile.cultivationLevelXp(level)});click(menu,'炼器炉');
+  const before=copy(store.state);
+  for(const tier of ['fa','bao','ling']){
+   selectRecipe(menu,'weapon',tier);
+   assert.equal(all(find(menu,'配方列表')).filter(n=>n.name.startsWith('配方卡片-')).length,12);
+   assert.equal(find(menu,'开始炼制').getComponent(Button).interactable,tierTools.canUseEquipmentTier(tier,level));
+  }
   assert.deepEqual(copy(store.state),before);assert.equal(calls.length,0);
  }
 });
-test('failed batch save retries with the same receipt and exactly one resource deduction',async()=>{
- const {menu,store,storage,data,calls}=setup(844,390,rich);click(menu,'炼器炉');const recipe=selectRecipe(menu,'weapon','fa');batch(menu,3);
- const before=copy(store.state),saved=data.get(campaign.TOWER_CAMPAIGN_KEY);storage.fail=true;click(menu,'开始炼制');
+test('failed craft save retries with the same receipt and exactly one resource deduction',async()=>{
+ const {menu,store,storage,data,calls}=setup(844,390,rich);click(menu,'炼器炉');const recipe=selectRecipe(menu,'weapon','fa');
+ const before=copy(store.state),saved=data.get(campaign.TOWER_CAMPAIGN_KEY);
+ assertActionSucceeds(before,action(store,'weapon',1,'fa'),1800000000000);
+ click(menu,'开始炼制');find(menu,'炼制确认弹窗');
+ assert.deepEqual(copy(store.state),before);assert.equal(calls.length,0);
+ storage.fail=true;click(menu,'确认炼制');
  assert.deepEqual(copy(store.state),before);assert.equal(data.get(campaign.TOWER_CAMPAIGN_KEY),saved);assert.match(text(menu.root),/保存失败/);
- storage.fail=false;await new Promise(resolve=>setTimeout(resolve,710));click(menu,'开始炼制');
+ assert.equal(all(menu.root).some(n=>n.name==='获得物品弹窗'),false);
+ storage.fail=false;await new Promise(resolve=>setTimeout(resolve,710));click(menu,'确认炼制');
  assert.equal(calls.length,2);assert.equal(calls[0].requestId,calls[1].requestId);assert.equal(calls[0].sequence,calls[1].sequence);
- assert.equal(store.state.spiritStones,before.spiritStones-recipe.spiritStones*3);
- assert.equal(store.state.pills.forge_xuantie,before.pills.forge_xuantie-6);
- assert.equal(store.state.forgeReceipts.at(-1).ids.length,3);
- const restored=new campaign.TowerCampaignStore(storage,1800000000000);assert.equal(restored.readOnly,false);assert.deepEqual(copy(restored.state),copy(store.state));
+ assert.equal(store.state.spiritStones,before.spiritStones-recipe.spiritStones);
+ assert.equal(store.state.contribution,before.contribution);
+ assert.equal(store.state.pills.forge_xuantie,before.pills.forge_xuantie-2);
+ assert.equal(store.state.forgeReceipts.at(-1).ids.length,1);
+ const restored=new campaign.TowerCampaignStore(storage,1800000000000);assertCurrentCampaign(restored,store.state);
 });
 test('batch quote rejects total cost, realm, count and capacity before mutating',()=>{
- for(const patch of [{spiritStones:149,contribution:10000},{spiritStones:10000,contribution:89}]){
+ for(const patch of [{spiritStones:239,contribution:10000},{spiritStones:0,contribution:10000}]){
   const {store}=setup(1280,720,patch),before=copy(store.state);
   assert.equal(store.act(action(store,'weapon',10),1800000000000).reason,'insufficient');assert.deepEqual(copy(store.state),before);
  }
+ const control=setup(1280,720,{spiritStones:240,contribution:0});
+ assert.equal(control.store.act(action(control.store,'weapon',10),1800000000000).ok,true);
+ assert.equal(control.store.state.spiritStones,0);assert.equal(control.store.state.contribution,0);
  const {store,data,storage}=setup(1280,720,{spiritStones:100000,contribution:100000});
  for(const [a,reason] of [[action(store,'weapon',1,'ling'),'realm-locked'],[action(store,'weapon',0),'invalid-count'],[action(store,'weapon',11),'invalid-count']]){
   const before=copy(store.state);assert.equal(store.act(a,1800000000000).reason,reason);assert.deepEqual(copy(store.state),before);
@@ -332,13 +360,13 @@ test('disabled, closed, destroyed and stale-generation callbacks cannot purchase
 });
 test('quality-four preview includes both graduates and never charges on view or presentation ticks',()=>{
  const {menu,store,calls}=setup(844,390,rich);click(menu,'炼器炉');const r=selectRecipe(menu,'weapon','ling',4),before=copy(store.state);
- assert.equal(r.definitionIds.length,2);for(const name of namesFor(r))assert.ok(text(menu.root).includes(name));
+ assert.equal(r.definitionIds.length,2);for(const [i,id] of r.definitionIds.entries()){click({root:find(menu,'炼制详情')},'物品图-'+id);assert.ok(text(find(menu,'制作物品详情')).includes(detailNamesFor(r)[i]));dismissDetail(menu);}
  for(let i=0;i<60;i++)menu.updateEffects(1/60);
  assert.deepEqual(copy(store.state),before);assert.equal(calls.length,0);
 });
 test('close and revisit preserve state without retaining a pending submission',()=>{
  const {menu,store,calls}=setup();click(menu,'炼器主殿');const before=copy(store.state);
- const panel=find(menu,'武器装备购买页'),close=find(menu,'关闭炼器工坊');inside(close,panel);assert.equal(text(close),'');
+ const panel=find(menu,'武器装备购买页'),close=find(menu,'关闭炼器工坊');inside(close,panel);assert.equal(text(close).trim(),'‹ 返回庭院');
  click(menu,'关闭炼器工坊');assert.equal(all(menu.root).some(n=>n.name==='武器装备购买页'),false);
  click(menu,'炼器主殿');assert.equal(menu.gearCount,1);assert.equal(menu.gearRequest,null);
  assert.deepEqual(copy(store.state),before);assert.equal(calls.length,0);
@@ -358,10 +386,12 @@ test('sect entries share cultivation state and keep tower separate from inherita
   assert.ok(find(menu,'宗门入口-'+name).getComponent(Button));
  }
  click(menu,'宗门入口-凌霄剑峰');
+ assert.equal(menu.currentPage,'swordPeak');
+ click(menu,'功法');
  const inherited=text(menu.root);
  menu.render(store.state,'home');
  click(menu,'功法');
- assert.equal(text(menu.root),inherited);
+ assert.equal(text(menu.root).replace('藏经阁','凌霄剑峰'),inherited);
  menu.render(store.state,'home');
  click(menu,'主峰建筑-洞府整备');
  menu.render(store.state,'home');
@@ -397,7 +427,7 @@ for (const [width,height] of [[1280,720],[844,390]]) {
   assert.equal(store.state.pills.huichun,initial.pills.huichun+1);
   assert.equal(calls[0].type,'buyPill');
   assert.equal(new campaign.TowerCampaignStore(storage,1800000000000).state.pills.huichun,store.state.pills.huichun);
-  const purchaseContribution=store.state.contribution;
+  const purchaseContribution=store.state.contribution,purchaseStones=store.state.spiritStones;
   const before=copy(store.state),saved=data.get(campaign.TOWER_CAMPAIGN_KEY);
   click(menu,'确认获得');click(menu,'商品卡片-huichun');
   await new Promise(resolve=>setTimeout(resolve,710));
@@ -413,9 +443,10 @@ for (const [width,height] of [[1280,720],[844,390]]) {
   menu.render(store.state,'hall');menu.render(store.state,'pills');
   assert.equal(all(menu.root).some(n=>n.name==='丹药购买页'),false);
   // Preserve the former presentation/economy assertions after exercising the transaction.
-  assert.equal(cardText, '回春丹\n5贡献');
-  assert.equal(purchaseWasOpen,false);
-  assert.equal(purchaseContribution,initial.contribution-profile.CAMP_PILLS.huichun.price);
+  assert.match(cardText,/回春丹/);assert.match(cardText,/5下品灵石/);assert.doesNotMatch(cardText,/贡献|点眷/);
+  assert.equal(purchaseWasOpen,true);
+  assert.equal(purchaseContribution,initial.contribution);
+  assert.equal(purchaseStones,initial.spiritStones-5);
  });
 }
 
@@ -436,7 +467,7 @@ test('equipment quality retains tier hue and gives top quality a stronger frame'
 });
 
 for(const [width,height] of [[1280,720],[844,390]])test(`pill quantity and zero balance ${width}`,()=>{
- const {menu,store}=setup(width,height,{contribution:27,pills:{ zhuji: 0,huichun:0,peiyuan:0}});
+ const {menu,store}=setup(width,height,{spiritStones:27,contribution:0,pills:{ zhuji: 0,huichun:0,peiyuan:0}});
  menu.render(store.state,'pills');click(menu,'丹霞主殿');click(menu,'商品卡片-peiyuan');
  find(menu,'背包详情区');click(menu,'取消购买');click(menu,'商品卡片-huichun');
  assert.equal(find(menu,'减少数量').getComponent(Button).interactable,false);
@@ -447,27 +478,22 @@ for(const [width,height] of [[1280,720],[844,390]])test(`pill quantity and zero 
  const panel=find(menu,'购买物品弹窗');
  for(const name of ['减少数量','增加数量','最大数量','确认购买','关闭交易弹窗'])inside(find(menu,name),panel);
  const quotedText=text(panel);
- click(menu,'确认购买');assert.equal(selectedQuantity,5);assert.match(quotedText,/25贡献/);assert.equal(store.state.contribution,2);assert.equal(store.state.pills.huichun,5);
+ click(menu,'确认购买');assert.equal(selectedQuantity,5);assert.match(quotedText,/25下品灵石/);assert.equal(store.state.spiritStones,2);assert.equal(store.state.contribution,0);assert.equal(store.state.pills.huichun,5);
+ click(menu,'确认获得');click(menu,'商品卡片-huichun');
  assert.equal(find(menu,'确认购买').getComponent(Button).interactable,false);
 });
 
-for (const [page, opener, backdrop, panelName, closeName] of [
- ['pills', '丹霞主殿', '丹药购买遮罩', '丹药购买页', '关闭丹药菜单'],
-]) test(`${page}: icon close and outside dismissal preserve state without closing on content taps`, () => {
+test('pill detail outside dismissal and courtyard return preserve state without closing on content taps',()=>{
  const {menu,store,calls}=setup(844,390);
- menu.render(store.state,page);click(menu,opener);
- const before=copy(store.state),shade=find(menu,backdrop),panel=find(menu,panelName),close=find(menu,closeName);
- assert.equal(text(close),'', 'close must not render a text-button label');
- assert.ok(close.getComponent(Graphics));
- const size=close.getComponent(UITransform).contentSize;
- assert.ok(size.width>=72&&size.height>=72);
- inside(close,panel);
- shade.events.get(Node.EventType.TOUCH_END)({target:panel});
- assert.equal(find(menu,panelName),panel);
- shade.events.get(Node.EventType.TOUCH_END)({target:shade});
- assert.equal(all(menu.root).some(n=>n.name===panelName),false);
+ menu.render(store.state,'pills');click(menu,'丹霞主殿');
+ const before=copy(store.state),page=find(menu,'丹药购买页'),close=find(menu,'关闭丹药菜单');
+ assert.equal(text(close).trim(),'‹ 返回庭院');inside(close,page);
+ assert.deepEqual(close.getComponent(UITransform).contentSize,{width:166,height:68});
+ // Item details use a modal backdrop; the full-page shop closes through its return button.
+ menu.commerceDialog='detail';menu.commerceModal('pills',menu.commerceEntries('pills').find(e=>e.key==='huichun'),()=>{});
+ const shade=find(menu,'交易弹窗遮罩'),panel=find(menu,'制作物品详情');
+ shade.events.get(Node.EventType.TOUCH_END)({target:panel});assert.equal(menu.commerceDialog,'detail');
+ shade.events.get(Node.EventType.TOUCH_END)({target:shade});assert.equal(menu.commerceDialog,'');
  assert.deepEqual(copy(store.state),before);assert.equal(calls.length,0);
- click(menu,opener);click(menu,closeName);
- assert.equal(all(menu.root).some(n=>n.name===panelName),false);
+ click(menu,'关闭丹药菜单');assert.equal(all(menu.root).some(n=>n.name==='丹药购买页'),false);
 });
-

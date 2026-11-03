@@ -49,6 +49,7 @@ import * as economy from '../js/xianxia/TowerEconomy.js'
 import { HEX_CENTER, HEX_VERTICES } from '../js/xianxia/TowerArena.js'
 import { TowerRun, coreLootSummary, validateTowerSnapshot, stats as combatStats, characterCombatAttributes } from '../js/xianxia/TowerRun.js'
 import { checksum } from '../js/xianxia/Checksum.js'
+import { assertCurrentCampaign, assertActionSucceeds } from './helpers/tower-current-state.mjs'
 
 // Match the existing independent Cocos tests: transform the production TS,
 // replace rendering/platform boundaries, and retain real business modules.
@@ -166,6 +167,8 @@ class Node {
   setPosition(x, y) { this.position = { x, y } }
   setScale(x, y, z) { this.scale = { x, y, z } }
   on(event, fn) { this.events.set(event, fn) }
+  emit(event, ...args) { this.events.get(event)?.(...args) }
+  get activeInHierarchy() { return this.isValid && this.active && (!this.parent || this.parent.activeInHierarchy) }
   removeFromParent() {
     if (this.parent) this.parent.children = this.parent.children.filter(node => node !== this)
     this.parent = null
@@ -178,6 +181,8 @@ class Node {
 }
 class UIOpacity { opacity = 255 }
 class UITransform {
+  get width() { return this.contentSize?.width ?? 0 }
+  get height() { return this.contentSize?.height ?? 0 }
   setContentSize(width, height) { this.contentSize = { width, height } }
   setAnchorPoint(x, y) { this.anchor = { x, y } }
 }
@@ -280,6 +285,7 @@ class Mask {
   static Type = { GRAPHICS_RECT: 0, GRAPHICS_ELLIPSE: 1 }
 }
 class BlockInputEvents {}
+class EditBox {}
 class TowerPlatform {
   constructor(host) { this.storage = host.progressStorage }
   onHidden() {} onShown() {} destroy() {}
@@ -308,6 +314,7 @@ function delayedResources() {
   }
 }
 
+const unrelatedRecords = new WeakMap()
 function disk() {
   const data = new Map(), blockedReads = new Set(), blockedWrites = new Set(), writes = [], reads = []
   return {
@@ -335,19 +342,21 @@ function seed(storage, { hp = 100, paused = false, patch = {} } = {}) {
   assert.equal(state.spiritStones, 500)
   assert.equal(Object.hasOwn(state, 'cores'), false)
   state.hp = hp
-  Object.assign(state, patch)
+  Object.assign(state, {...patch,pills:{...state.pills,...patch.pills}})
   if (patch.skills && !patch.skillsInitialized) state.skills = { sj_arc: 1, ...patch.skills }
   envelope.data = JSON.stringify(state)
   envelope.checksum = checksum(envelope.data)
   storage.data.set(campaign.TOWER_CAMPAIGN_KEY, JSON.stringify(envelope))
   const normal = new campaign.TowerCampaignStore(storage, START)
-  assert.equal(normal.readOnly, false)
+  assertCurrentCampaign(normal,state)
   if (paused) {
     assert.ok(normal.act({ type: 'startFloor', floor: 1, seed: 123 }, START).ok)
     const run = TowerRun.restore(normal.state.activeRun.snapshot)
     run.pause()
     assert.ok(normal.act({ type: 'checkpoint', snapshot: run.snapshot() }, START).ok)
   }
+  storage.data.set('other-game-progress','unchanged')
+  unrelatedRecords.set(storage,new Map([...storage.data].filter(([key])=>key!==campaign.TOWER_CAMPAIGN_KEY&&key!==playtest.TOWER_PLAYTEST_TOOLS_KEY)))
   storage.writes.length = 0
   return storage.getItem(campaign.TOWER_CAMPAIGN_KEY)
 }
@@ -386,7 +395,7 @@ function launch(t, storage, { assisted = true, buildProfile = 'qa', query = null
     AudioClip: class {}, AudioSource: class { stop(){} play(){} destroy(){} },
     ...alchemyTools, ...materialLootTools, ...shadowTools, ...hitFeedbackTools, convergencePoses, ...yujianTools, ...inventoryTools, ...weaponTools, ...equipmentTools, ...craftingTools, ...campaign, ...playtest, ...growth, ...content, ...profile, ...pillTools, ...loot, ...economy, TowerRun, coreLootSummary, skillPresentation, skillForm, orbitSwordPose, swordQiSegments, swordQiVisualLift, combatStats, characterCombatAttributes,
     Node, UITransform, UIOpacity, Graphics, Label, LabelOutline, LabelShadow, Button, Sprite, SpriteFrame, ImageAsset, Texture2D,
-    Color, Vec2, Rect, Size, JsonAsset, ScrollView, Mask, BlockInputEvents, TowerPlatform,
+    Color, Vec2, Rect, Size, JsonAsset, ScrollView, Mask, BlockInputEvents, EditBox, TowerPlatform,
     TowerLibraryPanel: TowerLibraryPanelBoundary,
     isValid: value => value?.isValid === true,
     resources: icons.resources,
@@ -394,7 +403,7 @@ function launch(t, storage, { assisted = true, buildProfile = 'qa', query = null
     view, ResolutionPolicy,
     input: { on() {}, off() {} },
     Input: { EventType: { KEY_DOWN: 'down', KEY_UP: 'up' } },
-    KeyCode: { ESCAPE: 27, KEY_A: 65, KEY_D: 68, KEY_S: 83, KEY_W: 87, ARROW_LEFT: 37, ARROW_UP: 38, ARROW_RIGHT: 39, ARROW_DOWN: 40 },
+    KeyCode: { ENTER: 13, SPACE: 32, TAB: 9, ESCAPE: 27, KEY_A: 65, KEY_D: 68, KEY_S: 83, KEY_W: 87, ARROW_LEFT: 37, ARROW_UP: 38, ARROW_RIGHT: 39, ARROW_DOWN: 40 },
     Date: class extends Date { static now() { return clock.now } },
     URL, URLSearchParams,
     document: { hidden: false, addEventListener() {}, removeEventListener() {} },
@@ -526,17 +535,18 @@ test('monster missing/malformed resources and unsupported beasts retain fallback
   const paint = f => art.draw(parent, f, f, 0, 0, 0, 10, 18)
   for (const family of ['boar', 'wolf', 'spider', 'bat', 'falcon', '../boar']) assert.equal(paint(family), 0)
   const requests = icons.requests.filter(r => r.path.startsWith('tower-monsters/'))
-  assert.equal(requests.length, 3)
-  icons.complete(requests[0], Error('missing'))
-  icons.complete(requests[2], Error('missing falcon'))
+  assert.deepEqual(requests.map(r => r.path).sort(), ['boar', 'wolf', 'spider', 'bat', 'falcon'].map(f => `tower-monsters/${f}`).sort())
   const malformed = new ImageAsset(); malformed.width = 512
-  requests[1].done(null, malformed)
+  for (const request of requests) {
+    if (request.path === 'tower-monsters/wolf') request.done(null, malformed)
+    else icons.complete(request, Error('missing authored raster'))
+  }
   for (let i = 0; i < 100; i++) {
     art.beginFrame()
     for (const family of ['boar', 'wolf', 'spider', 'bat', 'falcon']) assert.equal(paint(family), 0)
     art.endFrame()
   }
-  assert.equal(icons.requests.filter(r => r.path.startsWith('tower-monsters/')).length, 3)
+  assert.equal(icons.requests.filter(r => r.path.startsWith('tower-monsters/')).length, 5)
   assert.equal(malformed.refs, 0)
   assert.equal(parent.children.length, 0)
 })
@@ -652,6 +662,10 @@ function button(game, caption) {
   return matches[0]
 }
 function press(game, caption) {
+  if(typeof caption==='string'&&/^功法(?:节点|图标)-future_/.test(caption)&&!descendants(game.root).some(n=>n.name===caption)){
+    const id=caption.replace(/^功法(?:节点|图标)-/,''),row=stageRows.find(row=>row[2].includes(id));
+    assert.ok(row,'known future skill');press(game,'功法境界展开-'+row[1].slice(0,2));
+  }
   if(caption === '开发者工具' && !descendants(game.root).some(n=>n.name===caption && n.getComponent(Button))) press(game,'设置')
   const node = button(game, caption)
   assert.equal(node.getComponent(Button).interactable, true, `button disabled: ${node.name}`)
@@ -663,121 +677,62 @@ function hasLabel(root, text) {
 function labelText(root) {
   return descendants(root).map(node => node.getComponent(Label)?.string || '').join('\n')
 }
-function ordinaryUnchanged(storage, original) {
-  assert.equal(storage.getItem(campaign.TOWER_CAMPAIGN_KEY), original)
-  assert.equal(storage.writes.filter(key => key === campaign.TOWER_CAMPAIGN_KEY).length, 0)
+function mainSaveAndUnrelatedRecords(storage) {
+  const raw=storage.getItem(campaign.TOWER_CAMPAIGN_KEY),record=JSON.parse(raw)
+  assert.equal(record.schema,currentCampaignSchema);assert.equal(record.checksum,checksum(record.data))
+  assertCurrentCampaign(new campaign.TowerCampaignStore(playtest.towerStorage(storage,true),START),JSON.parse(record.data))
+  for(const [key,value] of unrelatedRecords.get(storage)||[])assert.equal(storage.getItem(key),value,`unrelated record ${key}`)
+  assert.ok(storage.writes.every(key=>key===campaign.TOWER_CAMPAIGN_KEY||key===playtest.TOWER_PLAYTEST_TOOLS_KEY),'only the main campaign and tool preferences may be written')
 }
 
-test('requested playtest stays read-only and never writes the ordinary save when the initial copy fails', t => {
-  const storage = disk(), original = seed(storage)
-  storage.blockedWrites.add(playtest.TOWER_PLAYTEST_KEY)
-  const { game, tick } = launch(t, storage)
-  assert.equal(game.playtest, true)
-  assert.equal(game.store.readOnly, true)
-  assert.equal(game.store.error, 'unreadable')
-  assert.equal(game.menu.state.playtest, true)
-  const result = game.action({ type: 'buyPill', id: 'peiyuan', count: 1 })
-  assert.equal(result.ok, false)
-  tick(6)
-  ordinaryUnchanged(storage, original)
-  assert.equal(storage.getItem(playtest.TOWER_PLAYTEST_KEY), null)
-  press(game, '开发者工具')
-  button(game, '重试打开体验档')
-  button(game, '切回普通档')
-  assert.ok(hasLabel(game.overlay, '体验档未打开'))
-})
-
-test('same-mode retry can recover a failed isolated copy without touching ordinary progress', t => {
-  const storage = disk(), original = seed(storage)
-  storage.blockedWrites.add(playtest.TOWER_PLAYTEST_KEY)
-  const { game, location } = launch(t, storage)
-  press(game, '开发者工具')
-  press(game, '重试打开体验档')
-  assert.equal(game.playtest, true)
-  assert.equal(game.store.readOnly, true)
-  assert.ok(hasLabel(game.overlay, '切换未完成'))
-  ordinaryUnchanged(storage, original)
-  press(game, '返回')
-  storage.blockedWrites.clear()
-  press(game, '开发者工具')
-  press(game, '重试打开体验档')
-  assert.equal(game.playtest, true)
-  assert.equal(game.store.readOnly, false)
-  assert.equal(new URLSearchParams(location.search).get('playtest'), '1')
-  assert.ok(hasLabel(game.overlay, '开发者工具'))
-  press(game, '返回宗门')
-  press(game, '丹霞峰')
-  press(game, '购买一颗 · 5贡献')
-  assert.equal(game.store.state.contribution, 295)
-  assert.equal(game.store.state.pills.huichun, 4)
-  ordinaryUnchanged(storage, original)
-})
-
-test('ordinary progress becomes writable only after an explicit switch from the failed playtest', t => {
-  const storage = disk(), original = seed(storage)
-  storage.blockedWrites.add(playtest.TOWER_PLAYTEST_KEY)
-  const { game, location } = launch(t, storage)
-  ordinaryUnchanged(storage, original)
-  press(game, '开发者工具')
-  press(game, '切回普通档')
-  assert.equal(game.playtest, false)
-  assert.equal(game.store.readOnly, false)
-  assert.equal(new URLSearchParams(location.search).has('playtest'), false)
-  press(game, '丹霞峰')
-  press(game, '购买一颗 · 5贡献')
-  assert.equal(new campaign.TowerCampaignStore(storage, START).state.contribution, 295)
-  assert.equal(storage.getItem(playtest.TOWER_PLAYTEST_KEY), null)
-})
-
-for (const assisted of [false, true]) {
-  test(`successful sync re-enables current-page buttons and clamps obsolete scroll (${assisted ? 'playtest' : 'ordinary'})`, t => {
-    const storage = disk(), original = seed(storage)
-    const { game, tick } = launch(t, storage, { assisted })
-    press(game, '丹霞峰')
-    game.menu.scroll.scrollToOffset(new Vec2(0, 150), 0)
-    const key = assisted ? playtest.TOWER_PLAYTEST_KEY : campaign.TOWER_CAMPAIGN_KEY
-    storage.blockedWrites.add(key)
-    tick(6)
-    assert.equal(game.menu.state.readOnly, true)
-    const disabled = button(game, '购买一颗 · 5贡献')
-    assert.equal(disabled.getComponent(Button).interactable, false)
-    storage.blockedWrites.clear()
-    tick(6)
-    assert.equal(game.page, 'pills')
-    assert.equal(game.menu.state.readOnly, false)
-    assert.equal(game.menu.state.playtest, assisted)
-    assert.equal(game.menu.scroll.getScrollOffset().y, 0)
-    assert.equal(game.menu.scroll.vertical, false)
-    assert.ok(hasLabel(game.menu.root, '保存已恢复'))
-    assert.equal(button(game, '购买一颗 · 5贡献').getComponent(Button).interactable, true)
-    const before = copy(game.store.state)
-    disabled.events.get(Button.EventType.CLICK)()
-    assert.deepEqual(game.store.state, before, 'the old disabled callback cannot spend after recovery')
-    press(game, '购买一颗 · 5贡献')
-    assert.equal(game.store.state.contribution, before.contribution - 5)
-    assert.equal(game.store.state.pills.huichun, before.pills.huichun + 1)
-    if (assisted) ordinaryUnchanged(storage, original)
-  })
-}
-
-test('playtest identity survives partial healing, full-HP redraw, and local skill-detail navigation', t => {
-  const storage = disk(), original = seed(storage, { hp: 99.75 })
-  const { game, tick } = launch(t, storage)
-  press(game, '功法')
-  tick(6)
-  assert.ok(game.store.state.hp > 99.75 && game.store.state.hp < 100)
-  assert.equal(game.menu.state.playtest, true)
-  press(game, '功法节点-magnet')
-  assert.equal(game.menu.detailId, 'magnet')
-  assert.ok(descendants(game.menu.root).some(node => node.name === '功法详情固定栏'))
-  assert.ok(hasLabel(game.menu.root, '技能 · 体验档'))
-  tick(12)
-  assert.equal(game.store.state.hp, 100)
-  assert.equal(game.menu.state.playtest, true)
-  assert.equal(game.menu.detailId, 'magnet', 'healing redraw preserves the selected skill')
-  assert.ok(hasLabel(game.menu.root, '技能 · 体验档'))
-  ordinaryUnchanged(storage, original)
-})
+test('legacy playtest URL and inaccessible retired key do not redirect the single main save',t=>{
+ const storage=disk();seed(storage);storage.blockedReads.add(playtest.TOWER_PLAYTEST_KEY);storage.blockedWrites.add(playtest.TOWER_PLAYTEST_KEY);
+ const {game}=launch(t,storage,{query:'?playtest=1'});
+ assert.equal(game.store.readOnly,false);assert.equal(game.store.allowPlaytestTools,true);
+ assert.equal(storage.reads.includes(playtest.TOWER_PLAYTEST_KEY),false);assert.equal(storage.writes.includes(playtest.TOWER_PLAYTEST_KEY),false);
+ game.goto('pills');press(game,'丹霞主殿');press(game,'商品卡片-huichun');press(game,'确认购买');
+ assert.equal(game.store.state.spiritStones,495);assert.equal(game.store.state.contribution,1000);
+ mainSaveAndUnrelatedRecords(storage);
+});
+test('main-save write failure is atomic and retry succeeds without creating a retired copy',t=>{
+ const storage=disk();seed(storage);const {game,clock}=launch(t,storage);
+ game.goto('pills');press(game,'丹霞主殿');press(game,'商品卡片-huichun');
+ const before=copy(game.store.state),raw=storage.getItem(campaign.TOWER_CAMPAIGN_KEY),writes=storage.writes.length;
+ assertActionSucceeds(before,{type:'buyPill',id:'huichun',count:1},START);
+ storage.blockedWrites.add(campaign.TOWER_CAMPAIGN_KEY);press(game,'确认购买');
+ assert.deepEqual(game.store.state,before);assert.equal(storage.getItem(campaign.TOWER_CAMPAIGN_KEY),raw);assert.equal(storage.writes.length,writes);
+ assert.ok(hasLabel(game.menu.root,'保存失败'));
+ storage.blockedWrites.clear();clock.now+=710;press(game,'确认购买');
+ assert.equal(game.store.state.pills.huichun,before.pills.huichun+1);assert.equal(game.store.state.spiritStones,before.spiritStones-5);
+ assert.equal(storage.writes.length,writes+1);assert.equal(storage.getItem(playtest.TOWER_PLAYTEST_KEY),null);
+ mainSaveAndUnrelatedRecords(storage);
+});
+test('unreadable main progress never falls back to or overwrites a legacy playtest record',t=>{
+ const storage=disk(),original=seed(storage);storage.data.set(playtest.TOWER_PLAYTEST_KEY,'retired-progress');storage.blockedReads.add(campaign.TOWER_CAMPAIGN_KEY);
+ const {game}=launch(t,storage);
+ assert.equal(game.store.readOnly,true);assert.equal(game.action({type:'buyPill',id:'huichun',count:1}).ok,false);
+ game.showTools();assert.ok(hasLabel(game.overlay,'存档无法读写'));assert.equal(storage.writes.length,0);
+ assert.equal(storage.data.get(campaign.TOWER_CAMPAIGN_KEY),original);assert.equal(storage.data.get(playtest.TOWER_PLAYTEST_KEY),'retired-progress');
+});
+for(const assisted of [false,true])test(`successful sync re-enables current-page purchase and clamps obsolete scroll (${assisted?'legacy URL':'ordinary URL'})`,t=>{
+ const storage=disk();seed(storage);const {game,tick}=launch(t,storage,{assisted});
+ game.goto('pills');press(game,'丹霞主殿');press(game,'商品卡片-huichun');game.menu.scroll.scrollToOffset(new Vec2(0,150),0);
+ storage.blockedWrites.add(campaign.TOWER_CAMPAIGN_KEY);tick(6);assert.equal(game.menu.state.readOnly,true);
+ const disabled=button(game,'确认购买');assert.equal(disabled.getComponent(Button).interactable,false);
+ storage.blockedWrites.clear();tick(6);assert.equal(game.page,'pills');assert.equal(game.menu.state.readOnly,false);
+ assert.equal(game.menu.scroll.getScrollOffset().y,0);assert.equal(game.menu.scroll.vertical,false);
+ assert.equal(button(game,'确认购买').getComponent(Button).interactable,true);
+ const before=copy(game.store.state);disabled.events.get(Button.EventType.CLICK)();assert.deepEqual(game.store.state,before);
+ press(game,'确认购买');assert.equal(game.store.state.spiritStones,before.spiritStones-5);assert.equal(game.store.state.contribution,before.contribution);
+ assert.equal(game.store.state.pills.huichun,before.pills.huichun+1);mainSaveAndUnrelatedRecords(storage);
+});
+test('single main progress survives healing redraw and local skill-detail navigation',t=>{
+ const storage=disk();seed(storage,{hp:95});const {game,tick}=launch(t,storage);
+ press(game,'功法');tick(6);assert.ok(game.store.state.hp>95&&game.store.state.hp<100);
+ press(game,'功法节点-sj_spirit');assert.equal(game.menu.detailId,'sj_spirit');assert.ok(named(game.menu.root,'功法详情固定栏'));
+ tick(12);assert.equal(game.store.state.hp,100);assert.equal(game.menu.detailId,'sj_spirit');
+ assert.equal(storage.getItem(playtest.TOWER_PLAYTEST_KEY),null);mainSaveAndUnrelatedRecords(storage);
+});
 
 test('skill page hides battle vitals and keeps rank hints below icons', t => {
   const storage = disk(), original = seed(storage, { hp: 50 })
@@ -793,7 +748,7 @@ test('skill page hides battle vitals and keeps rank hints below icons', t => {
   assert.equal(named(root, '功法前置连线').getComponent(Graphics).segments.length, 0)
   game.enterFloor(1)
   for (const name of ['HUD.Portrait', 'HUD.HPBar', 'HUD.PaperArtwork', 'HUD.RealmLabel']) assert.ok(named(game.root, name))
-  ordinaryUnchanged(storage, original)
+  mainSaveAndUnrelatedRecords(storage, original)
 })
 
 for (const blocked of [false, true]) {
@@ -818,7 +773,7 @@ for (const blocked of [false, true]) {
     const { game } = launch(t, storage, { assisted: false })
     assert.equal(game.store.readOnly, blocked)
     assert.equal(game.store.state.spiritStones, 500, 'obsolete balances are discarded, not converted or compensated')
-    assert.equal(game.store.state.contribution, 300)
+    assert.equal(game.store.state.contribution, 1000)
     assert.equal(game.store.state.xp, 0)
     assert.equal(Object.hasOwn(game.store.state, 'cores'), false)
     assert.deepEqual(game.store.state, expectedFresh, 'reset restores the complete new-game state')
@@ -845,88 +800,34 @@ for (const blocked of [false, true]) {
   })
 }
 
-test('economy v2 hides the wallet on hall and skills but shows it in relevant pages', t => {
-  const storage = disk(), original = seed(storage)
-  const { game } = launch(t, storage)
-  const headerText = () => game.menu.root.children.map(node => node.getComponent(Label)?.string || '').join('\n')
-  assert.doesNotMatch(headerText(), /灵石|贡献/)
-  press(game, '功法')
-  assert.doesNotMatch(headerText(), /灵石|贡献/)
-  game.goto('home')
-  const wallet = descendants(game.menu.root).find(n => n.name === '货币信息')
-  assert.ok(wallet)
-  assert.equal(descendants(wallet).filter(n=>n.getComponent(Label)).map(n=>n.getComponent(Label).string).join('\n'), '×5\n×300')
-  const text = labelText(game.menu.root)
-  assert.match(text, /妖丹 → 修为/)
-  assert.match(text, /不存入钱包/)
-  game.goto('gate')
-  assert.match(labelText(game.menu.root), /500下品灵石/)
-  ordinaryUnchanged(storage, original)
-})
-
-for (const patch of [{ spiritStones: 99 }, { contribution: 99 }]) {
-  test(`weapon draw rejects insufficient ${Object.keys(patch)[0]} without any state or save change`, t => {
-    const storage = disk(), original = seed(storage, { patch })
-    const { game } = launch(t, storage)
-    press(game, '炼器峰')
-    const before = game.store.state, raw = storage.getItem(playtest.TOWER_PLAYTEST_KEY)
-    const writes = storage.writes.length
-    press(game, '炼器主殿')
-    assert.strictEqual(game.store.state, before, 'opening and selecting do not spend or roll')
-    const control = button(game, '凡器武器抽取一次')
-    assert.match(labelText(game.menu.root), /费用不足/)
-    assert.equal(control.getComponent(Button).interactable, false)
-    control.events.get(Button.EventType.CLICK)()
-    assert.strictEqual(game.store.state, before)
-    assert.equal(game.action({ type: 'drawWeapon' }).ok, false, 'business gate also rejects a direct request')
-    assert.deepEqual(game.store.state, before)
-    assert.equal(storage.getItem(playtest.TOWER_PLAYTEST_KEY), raw)
-    assert.equal(storage.writes.length, writes)
-    ordinaryUnchanged(storage, original)
-  })
-}
-
-test('weapon draw atomically pays 100 stones and contribution and preserves the rolled instance', t => {
-  const storage = disk(), original = seed(storage)
-  const { game } = launch(t, storage)
-  press(game, '炼器峰')
-  const before = copy(game.store.state), raw = storage.getItem(playtest.TOWER_PLAYTEST_KEY)
-  const writes = storage.writes.length
-  const previewStorage = disk()
-  previewStorage.data.set(campaign.TOWER_CAMPAIGN_KEY, raw)
-  const preview = new campaign.TowerCampaignStore(previewStorage, START)
-  const expected = preview.act({ type: 'drawWeapon' }, START)
-  assert.ok(expected.ok)
-  press(game, '炼器主殿')
-  assert.deepEqual(game.store.state, before, 'selection must not consume either currency or RNG')
-  assert.equal(storage.getItem(playtest.TOWER_PLAYTEST_KEY), raw)
-  assert.equal(storage.writes.length, writes)
-  storage.blockedWrites.add(playtest.TOWER_PLAYTEST_KEY)
-  const staleConfirm = button(game, '凡器武器抽取一次').events.get(Button.EventType.CLICK)
-  press(game, '凡器武器抽取一次')
-  assert.deepEqual(game.store.state, before, 'failed save cannot publish wallet, weapon, pity or RNG changes')
-  assert.equal(storage.getItem(playtest.TOWER_PLAYTEST_KEY), raw)
-  assert.equal(storage.writes.length, writes)
-  assert.ok(named(game.menu.root, '炼制选择面板'), 'save failure keeps choices available for retry')
-  assert.equal(descendants(game.menu.root).some(node => node.name === '炼制结果卡'), false)
-  storage.blockedWrites.clear()
-  staleConfirm()
-  assert.deepEqual(game.store.state, before, 'failed-render callback cannot submit another transaction')
-  assert.equal(storage.writes.length, writes)
-  press(game, '凡器武器抽取一次')
-  assert.equal(game.store.state.spiritStones, before.spiritStones - 100)
-  assert.equal(game.store.state.contribution, before.contribution - 100 + expected.draw.refund)
-  assert.deepEqual(game.store.state, preview.state, 'retry produces the same draw as one successful transaction')
-  assert.equal(storage.writes.length, writes + 1)
-  assert.ok(named(game.menu.root, '炼制结果卡'))
-  assert.ok(labelText(game.menu.root).includes(expected.draw.name.split('·').at(-1)))
-  const committed = game.store.state
-  press(game, '返回炼器峰-左')
-  staleConfirm()
-  assert.strictEqual(game.store.state, committed, 'closing the result or replaying a stale callback cannot draw again')
-  assert.equal(storage.writes.length, writes + 1)
-  ordinaryUnchanged(storage, original)
-})
+test('wallet is shown on commerce pages and hidden on the hall and skill tree',t=>{
+ const storage=disk();seed(storage);const {game}=launch(t,storage);
+ for(const page of ['hall','librarySkills']){game.goto(page);assert.equal(descendants(game.menu.root).some(n=>n.name==='货币信息'),false);}
+ for(const page of ['pills','forge']){game.goto(page);const wallet=named(game.menu.root,'货币信息');assert.equal(descendants(wallet).filter(n=>n.getComponent(Label)).map(n=>n.getComponent(Label).string).join('\n'),'×5\n×1000');}
+ mainSaveAndUnrelatedRecords(storage);
+});
+for(const [name,stones] of [['one-stone-short',23],['empty-wallet',0]])test(`gear purchase rejects ${name} without any state or save change`,t=>{
+ const storage=disk();seed(storage,{patch:{spiritStones:stones,contribution:1000}});const {game}=launch(t,storage);
+ game.goto('forge');const before=game.store.state,raw=storage.getItem(campaign.TOWER_CAMPAIGN_KEY),writes=storage.writes.length;
+ press(game,'炼器主殿');press(game,'商品卡片-weapon:fan:q1');const control=button(game,'确认购买');
+ assert.equal(control.getComponent(Button).interactable,false);control.events.get(Button.EventType.CLICK)();
+ assert.equal(game.action({type:'buyGear',id:'weapon:fan:q1',count:1,sequence:1,requestId:'host-cost'}).reason,'insufficient');
+ assert.strictEqual(game.store.state,before);assert.equal(storage.getItem(campaign.TOWER_CAMPAIGN_KEY),raw);assert.equal(storage.writes.length,writes);mainSaveAndUnrelatedRecords(storage);
+});
+test('gear purchase atomically pays 24 stones and retains one deterministic identity across retry',t=>{
+ const storage=disk();seed(storage);const {game,clock}=launch(t,storage);game.goto('forge');
+ const before=copy(game.store.state),raw=storage.getItem(campaign.TOWER_CAMPAIGN_KEY),writes=storage.writes.length;
+ assertActionSucceeds(before,{type:'buyGear',id:'weapon:fan:q1',count:1,sequence:1,requestId:'host-control'},START);
+ press(game,'炼器主殿');press(game,'商品卡片-weapon:fan:q1');assert.deepEqual(game.store.state,before);
+ storage.blockedWrites.add(campaign.TOWER_CAMPAIGN_KEY);const stale=button(game,'确认购买').events.get(Button.EventType.CLICK);press(game,'确认购买');
+ assert.deepEqual(game.store.state,before);assert.equal(storage.getItem(campaign.TOWER_CAMPAIGN_KEY),raw);assert.equal(storage.writes.length,writes);
+ assert.ok(named(game.menu.root,'购买物品弹窗'));assert.equal(descendants(game.menu.root).some(n=>n.name==='获得物品弹窗'),false);
+ storage.blockedWrites.clear();stale();assert.deepEqual(game.store.state,before);clock.now+=710;press(game,'确认购买');
+ assert.equal(game.store.state.spiritStones,before.spiritStones-24);assert.equal(game.store.state.contribution,before.contribution);
+ const ids=game.store.state.forgeReceipts.at(-1).ids;assert.equal(ids.length,1);assert.equal(game.store.state.weapons[ids[0]].definitionId,'eq_sword_suwen');
+ assert.equal(storage.writes.length,writes+1);assert.ok(named(game.menu.root,'获得物品弹窗'));
+ const committed=game.store.state;press(game,'确认获得');press(game,'关闭炼器工坊');stale();assert.strictEqual(game.store.state,committed);mainSaveAndUnrelatedRecords(storage);
+});
 
 test('skill pane uses shared weapon damage once after equipping an affix instance', t => {
   const storage = disk();
@@ -944,8 +845,8 @@ test('skill pane uses shared weapon damage once after equipping an affix instanc
   const info = skillPresentation(game.store.state, 'sj_yujian');
   const damage = info.stats.find(row => row.key === 'roundDamage').value;
   const displayed = String(Math.round(damage * 10) / 10);
-  assert.ok(labelText(game.menu.root).includes(`每剑伤害：${displayed}`));
-  ordinaryUnchanged(storage, original);
+  assert.match(labelText(named(game.menu.root,'功法详情栏内容')).replace(/\s/g,''),new RegExp(`每剑伤害${displayed.replace('.', '\\.')}`));
+  mainSaveAndUnrelatedRecords(storage, original);
 });
 
 test('first special skill book costs 200 stones atomically and subsequent ranks do not rebuy it', t => {
@@ -957,12 +858,12 @@ test('first special skill book costs 200 stones atomically and subsequent ranks 
   press(game, '功法节点-sj_line')
   assert.equal(growth.skillRequirement(game.store.state, 'sj_line').bookCost, 200)
   assert.ok(labelText(game.menu.root).includes('经卷所需：'))
-  const before = copy(game.store.state), raw = storage.getItem(playtest.TOWER_PLAYTEST_KEY)
+  const before = copy(game.store.state), raw = storage.getItem(campaign.TOWER_CAMPAIGN_KEY)
   const writes = storage.writes.length
-  storage.blockedWrites.add(playtest.TOWER_PLAYTEST_KEY)
+  storage.blockedWrites.add(campaign.TOWER_CAMPAIGN_KEY)
   press(game, 'learnSkill-sj_line')
   assert.deepEqual(game.store.state, before)
-  assert.equal(storage.getItem(playtest.TOWER_PLAYTEST_KEY), raw)
+  assert.equal(storage.getItem(campaign.TOWER_CAMPAIGN_KEY), raw)
   assert.equal(storage.writes.length, writes)
   storage.blockedWrites.clear()
   press(game, 'learnSkill-sj_line')
@@ -974,7 +875,7 @@ test('first special skill book costs 200 stones atomically and subsequent ranks 
   assert.equal(game.store.state.spiritStones, 0)
   assert.equal(game.store.state.skills.sj_line, 2)
   assert.equal(game.store.state.contribution, before.contribution)
-  ordinaryUnchanged(storage, original)
+  mainSaveAndUnrelatedRecords(storage, original)
 })
 
 test('three research purchases cost 800/1600/2400 stones and failed saves grant no points', t => {
@@ -983,25 +884,25 @@ test('three research purchases cost 800/1600/2400 stones and failed saves grant 
   press(game, '功法')
   press(game, '获取功法点')
   for (const [index, cost] of [800, 1600, 2400].entries()) {
-    const caption = `研习 · ${economy.formatSpiritStones(cost)}灵石换1点`
-    const before = copy(game.store.state), raw = storage.getItem(playtest.TOWER_PLAYTEST_KEY)
+    const caption = `研习 · ${economy.formatSpiritStones(cost)}灵石换4点`
+    const before = copy(game.store.state), raw = storage.getItem(campaign.TOWER_CAMPAIGN_KEY)
     const writes = storage.writes.length
-    storage.blockedWrites.add(playtest.TOWER_PLAYTEST_KEY)
+    storage.blockedWrites.add(campaign.TOWER_CAMPAIGN_KEY)
     press(game, caption)
     assert.deepEqual(game.store.state, before)
-    assert.equal(storage.getItem(playtest.TOWER_PLAYTEST_KEY), raw)
+    assert.equal(storage.getItem(campaign.TOWER_CAMPAIGN_KEY), raw)
     assert.equal(storage.writes.length, writes)
     storage.blockedWrites.clear()
     press(game, caption)
     assert.equal(game.store.state.spiritStones, before.spiritStones - cost)
     assert.equal(game.store.state.researchPurchases, index + 1)
-    assert.equal(growth.growthSummary(game.store.state).available, growth.growthSummary(before).available + 1)
+    assert.equal(growth.growthSummary(game.store.state).available, growth.growthSummary(before).available + 4)
     assert.equal(game.store.state.contribution, before.contribution)
     assert.equal(storage.writes.length, writes + 1)
   }
   assert.equal(game.store.state.spiritStones, 0)
   assert.equal(button(game, '三次研习已完成').getComponent(Button).interactable, false)
-  ordinaryUnchanged(storage, original)
+  mainSaveAndUnrelatedRecords(storage, original)
 })
 
 test('manual healing works after sync recovery and a failed pill save consumes neither HP nor inventory', t => {
@@ -1010,81 +911,41 @@ test('manual healing works after sync recovery and a failed pill save consumes n
   press(game, '背包')
   press(game, '丹药')
   press(game, '背包物品-huichun')
-  storage.blockedWrites.add(playtest.TOWER_PLAYTEST_KEY)
+  storage.blockedWrites.add(campaign.TOWER_CAMPAIGN_KEY)
   tick(6)
   storage.blockedWrites.clear()
   tick(6)
   const before = copy(game.store.state)
-  const healingButton = () => button(game, '服用一颗')
+  const healingButton = () => button(game, '使用')
   assert.equal(healingButton().getComponent(Button).interactable, true)
-  storage.blockedWrites.add(playtest.TOWER_PLAYTEST_KEY)
+  storage.blockedWrites.add(campaign.TOWER_CAMPAIGN_KEY)
   healingButton().events.get(Button.EventType.CLICK)()
   assert.deepEqual(game.store.state, before)
   storage.blockedWrites.clear()
   healingButton().events.get(Button.EventType.CLICK)()
   assert.equal(game.store.state.hp, Math.min(100, before.hp + 50))
   assert.equal(game.store.state.pills.huichun, before.pills.huichun - 1)
-  ordinaryUnchanged(storage, original)
+  mainSaveAndUnrelatedRecords(storage, original)
 })
 
-test('actual tool buttons preserve paused snapshots and HP, and preferences do not publish on save failure', t => {
-  const storage = disk()
-  seed(storage, { hp: 17.5, paused: true })
-  const { game } = launch(t, storage)
-  const before = game.run.snapshot()
-  press(game, '开发者工具')
-  press(game, '游戏速度设置')
-  storage.blockedWrites.add(playtest.TOWER_PLAYTEST_TOOLS_KEY)
-  press(game, '游戏速度 ×2')
-  assert.ok(hasLabel(game.overlay, '设置未保存'))
-  assert.deepEqual(copy(game.tools), { speed: 1, invincible: false })
-  assert.deepEqual(game.run.snapshot(), before)
-  storage.blockedWrites.clear()
-  press(game, '返回工具')
-  press(game, '游戏速度设置')
-  press(game, '游戏速度 ×2')
-  press(game, '无敌：关闭')
-  assert.deepEqual(copy(game.tools), { speed: 2, invincible: true })
-  assert.deepEqual(game.run.snapshot(), before)
-  press(game, '游戏速度设置')
-  press(game, '游戏速度 ×3')
-  press(game, '无敌：开启')
-  assert.deepEqual(game.run.snapshot(), before)
-  assert.deepEqual(playtest.readPlaytestTools(storage), { speed: 3, invincible: false })
-  press(game, '切回普通档')
-  assert.equal(game.playtest, false)
-  assert.deepEqual(game.run.snapshot(), before)
-  press(game, '开发者工具')
-  press(game, '进入独立体验档')
-  assert.equal(game.playtest, true)
-  assert.deepEqual(game.run.snapshot(), before)
-  press(game, '返回战斗')
-  assert.equal(game.run.state.phase, 'playing')
-  assert.equal(game.run.state.player.hp, 17.5)
-})
-
-test('a failed pause checkpoint blocks switching until the real retry button commits it', t => {
-  const storage = disk(), original = seed(storage, { hp: 17.5, paused: true })
-  const { game } = launch(t, storage)
-  press(game, '继续挑战')
-  storage.blockedWrites.add(playtest.TOWER_PLAYTEST_KEY)
-  press(game, '暂停')
-  assert.ok(game.pending)
-  assert.ok(hasLabel(game.overlay, '保存尚未完成'))
-  const store = game.store
-  game.switchPlaytest(false)
-  assert.equal(game.store, store)
-  assert.equal(game.playtest, true)
-  ordinaryUnchanged(storage, original)
-  storage.blockedWrites.clear()
-  press(game, '重试保存')
-  assert.equal(game.pending, null)
-  assert.equal(game.run.state.phase, 'paused')
-  assert.equal(game.store.state.activeRun.snapshot.phase, 'paused')
-  assert.equal(game.run.state.player.hp, 17.5)
-  press(game, '开发者工具')
-  button(game, '切回普通档')
-})
+test('direct tool buttons preserve paused snapshots and failed preference writes',t=>{
+ const storage=disk();seed(storage,{hp:17.5,paused:true});const {game}=launch(t,storage);const before=game.run.snapshot();
+ press(game,'开发者工具');storage.blockedWrites.add(playtest.TOWER_PLAYTEST_TOOLS_KEY);press(game,'游戏速度 ×1');
+ assert.ok(hasLabel(game.overlay,'设置未保存'));assert.deepEqual(copy(game.tools),{speed:1,invincible:false});assert.deepEqual(game.run.snapshot(),before);
+ storage.blockedWrites.clear();press(game,'返回工具');press(game,'游戏速度 ×1');press(game,'无敌：关闭');
+ assert.deepEqual(copy(game.tools),{speed:2,invincible:true});assert.deepEqual(game.run.snapshot(),before);
+ press(game,'游戏速度 ×2');press(game,'无敌：开启');assert.deepEqual(playtest.readPlaytestTools(storage),{speed:3,invincible:false});
+ assert.deepEqual(game.run.snapshot(),before);press(game,'关闭开发者工具');press(game,'继续挑战');assert.equal(game.run.state.phase,'playing');assert.equal(game.run.state.player.hp,17.5);
+ mainSaveAndUnrelatedRecords(storage);
+});
+test('a failed pause checkpoint blocks developer writes until the real retry commits it',t=>{
+ const storage=disk();seed(storage,{hp:17.5,paused:true});const {game}=launch(t,storage);press(game,'继续挑战');
+ storage.blockedWrites.add(campaign.TOWER_CAMPAIGN_KEY);press(game,'暂停');assert.ok(game.pending);assert.ok(hasLabel(game.overlay,'保存尚未完成'));
+ const before=copy(game.store.state),raw=storage.getItem(campaign.TOWER_CAMPAIGN_KEY),writes=storage.writes.length;
+ game.showTools();game.editPlaytest('playtestResources');game.resetProgress();assert.deepEqual(game.store.state,before);assert.equal(storage.getItem(campaign.TOWER_CAMPAIGN_KEY),raw);assert.equal(storage.writes.length,writes);
+ storage.blockedWrites.clear();press(game,'重试保存');assert.equal(game.pending,null);assert.equal(game.run.state.phase,'paused');assert.equal(game.store.state.activeRun.snapshot.phase,'paused');assert.equal(game.run.state.player.hp,17.5);
+ press(game,'开发者工具');button(game,'+999灵石、点眷');mainSaveAndUnrelatedRecords(storage);
+});
 
 // Exercise actual spawns, damage and loot; only positions and the existing
 // playtest assist shorten combat. Pause/withdraw/finish still go through the host.
@@ -1110,9 +971,9 @@ for (const headroom of [0, 1, 10]) {
   test(`paused and withdrawn loot displays only the ${headroom} credited spirit stones near the wallet cap`, t => {
     const storage = disk()
     seed(storage, { patch: { spiritStones: economy.STONE_CAP - headroom } })
-    const { game } = launch(t, storage, { assisted: false })
+    const { game } = launch(t, storage, { assisted: false, buildProfile:'production' })
     game.enterFloor(1)
-    const snapshot = advanceCombat(game, state => economy.legacyRewardToStones(state.earned.cores) > headroom)
+    const snapshot = advanceCombat(game, state => economy.legacyRewardToStones(state.earned.cores-pendingCoreValue(state)) > headroom)
     assert.equal(snapshot.phase, 'playing')
     const rawValue = economy.legacyRewardToStones(snapshot.earned.cores)
 
@@ -1137,8 +998,9 @@ for (const headroom of [0, 1, 10]) {
     assert.equal(game.store.state.lastResult.earned.spiritStones, headroom)
     assert.equal(game.store.state.lastResult.stoneLoot, undefined)
     const result = labelText(game.overlay)
-    assert.match(result, new RegExp(`实际入账：修为 \\d+ · 灵石 ${economy.formatSpiritStones(headroom)} ·`))
-    assert.ok(result.includes(`${economy.formatSpiritStones(rawValue - headroom)}未入账`))
+    if(headroom){press(game,'结算物品-stone_low');assert.ok(hasLabel(game.overlay,`下品灵石 · 本次获得 ${headroom}`));}
+    else assert.equal(descendants(game.overlay).some(n=>n.name==='结算物品-stone_low'),false)
+    assert.ok(result.includes(`${economy.formatSpiritStones(rawValue - headroom)}灵石未入账`))
     assert.equal(result.includes('已自动入账'), false)
     assert.deepEqual(new campaign.TowerCampaignStore(storage, START).state.lastResult, game.store.state.lastResult)
   })
@@ -1147,10 +1009,10 @@ for (const headroom of [0, 1, 10]) {
 test('capped floor-three first-clear popup excludes skill points from stone overflow', t => {
   const storage = disk()
   seed(storage, { patch: {
-    spiritStones: economy.STONE_CAP - economy.legacyRewardToStones(1), clearedFloor: 2, xp: 10920, tutorialWaves: 3,
+    spiritStones: economy.STONE_CAP - economy.legacyRewardToStones(1), clearedFloor: 2, xp: 14400, tutorialWaves: 3,
     skills: { sj_yujian: 1, sj_arc: 1, sj_wanjian: 1 },
   } })
-  const { game } = launch(t, storage, { assisted: false })
+  const { game } = launch(t, storage, { assisted: false, buildProfile:'production' })
   game.enterFloor(3)
   const snapshot = advanceCombat(game, state => state.phase === 'won')
   const killValue = snapshot.killLedger.reduce((sum, kill) => sum + loot.CORE_RANK_VALUES[kill.coreRank], 0)
@@ -1162,12 +1024,14 @@ test('capped floor-three first-clear popup excludes skill points from stone over
   const result = game.store.state.lastResult
   assert.equal(result.firstClear, true)
   assert.equal(result.earned.spiritStones, 10)
-  assert.equal(result.earned.contribution, 110, '110 combat contribution; first clear gives a skill point')
+  assert.equal(result.earned.contribution, 1000, 'floor-three first clear grants point favor; combat grants none')
   assert.equal(game.store.state.spiritStones, economy.STONE_CAP)
   const popup = labelText(game.overlay)
-  assert.ok(popup.includes('实际入账：修为 0 · 灵石 10下品 · 贡献 110'))
-  assert.ok(popup.includes(`${economy.formatSpiritStones(economy.legacyRewardToStones(killValue + 9))}未入账`), 'kill loot + 100-stone clear award minus ten credited stones')
-  assert.ok(popup.includes('首通奖励已结算，包含在以上收益中'))
+  press(game,'结算物品-stone_low');assert.ok(hasLabel(game.overlay,'下品灵石 · 本次获得 10'));
+  press(game,'结算物品-resource_contribution');assert.ok(hasLabel(game.overlay,'点眷 · 本次获得 1000'));
+  assert.equal(descendants(game.overlay).some(n=>n.name==='结算物品-resource_skill_point'),false)
+  assert.ok(popup.includes(`${economy.formatSpiritStones(economy.legacyRewardToStones(killValue + 9))}灵石未入账`), 'kill loot + 100-stone clear award minus ten credited stones')
+  assert.ok(popup.includes('首通奖励已包含在收获中'))
   assert.equal(popup.includes('已自动入账'), false)
   assert.equal(popup.includes('首通另获'), false)
   assert.deepEqual(new campaign.TowerCampaignStore(storage, START).state.lastResult, result)
@@ -1213,12 +1077,12 @@ test('host refund preview and committed cascade show concrete skill names and ra
 // Independent UI expectations from the V2.1 nine-stage design. The production
 // tables still supply quotes and transactions; no test-only menu is rendered.
 const stageRows = [
-  ['lianqi-early', '炼气·初期', ['sj_yujian', 'sj_arc', 'sj_wanjian']],
-  ['lianqi-middle', '炼气·中期', ['vajra', 'magnet']],
+  ['lianqi-early', '炼气·初期', ['sj_arc', 'sj_yujian', 'sj_bone']],
+  ['lianqi-middle', '炼气·中期', ['vajra']],
   ['lianqi-peak', '炼气·巅峰', ['sj_heart', 'sj_cross']],
-  ['zhuji-early', '筑基·初期', ['sj_line', 'sj_shadow', 'sj_formation', 'sj_flight']],
-  ['zhuji-middle', '筑基·中期', ['sj_mark', 'sj_bone']],
-  ['zhuji-peak', '筑基·巅峰', ['sj_gate']],
+  ['zhuji-early', '筑基·初期', ['sj_line', 'sj_shadow', 'sj_formation', 'sj_flight', 'sj_spirit']],
+  ['zhuji-middle', '筑基·中期', ['sj_mark']],
+  ['zhuji-peak', '筑基·巅峰', ['sj_gate', 'sj_wanjian']],
   ['jindan-early', '金丹·初期', ['evo_wanjian']],
   ['jindan-middle', '金丹·中期', ['evo_tiandi', 'evo_wuwo']],
   ['jindan-peak', '金丹·巅峰', ['evo_sixiang']],
@@ -1265,8 +1129,8 @@ for (const scenario of [
   { name: 'no points below cap', id: 'sj_yujian', patch: { xp: 45, tutorialWaves: 3,
     skills: { sj_yujian: 1, sj_arc: 1 } }, level: 1, reason: 'insufficient-points' },
   { name: 'stage locked', id: 'vajra', patch: { xp: 45 }, level: 0, reason: 'stage-locked' },
-  { name: 'no tutorial gate', id: 'sj_wanjian', patch: { xp: 630 }, level: 0, reason: undefined },
-  { name: 'no prerequisite gate', id: 'evo_wanjian', patch: { xp: 10920, spiritStones: 10000, clearedFloor: 9, tutorialWaves: 3, skills: growth.giftSkills(3) }, level: 0, reason: undefined },
+  { name: 'no tutorial gate', id: 'sj_wanjian', patch: { xp: profile.cultivationLevelXp(17) }, level: 0, reason: undefined },
+  { name: 'evolution requires its parent', id: 'evo_wanjian', patch: { xp: 10920, spiritStones: 10000, clearedFloor: 9, tutorialWaves: 3, skills: growth.giftSkills(3) }, level: 0, reason: 'parent-required' },
   { name: 'unlocked first rank', id: 'vajra', patch: { xp: 630 }, level: 0, reason: undefined },
   { name: 'current rank can grow', id: 'sj_yujian', patch: { xp: 630, skills: { sj_yujian: 2 } }, level: 2, reason: undefined },
   { name: 'absolute maximum', id: 'sj_yujian', patch: { xp: 10920, skills: { sj_yujian: 10 } }, level: 10, reason: 'max-level' },
@@ -1282,8 +1146,8 @@ for (const scenario of [
       assert.ok(growth.growthSummary(game.store.state).available > 0)
       assert.equal(growth.rankCap(scenario.id, game.store.state.xp), 9)
       // Rank ten opens at the next realm phase.
-      assert.equal(growth.skillRequirement({ ...game.store.state, xp: 1484 }, scenario.id).reason, 'realm-locked')
-      assert.equal(growth.skillRequirement({ ...game.store.state, xp: 1485 }, scenario.id).ok, true)
+      assert.equal(growth.skillRequirement({ ...game.store.state, xp: 1800 }, scenario.id).reason, 'realm-locked')
+      assert.equal(growth.skillRequirement({ ...game.store.state, xp: 1801 }, scenario.id).ok, true)
     }
     if (scenario.name === 'no points below cap') {
       assert.equal(growth.growthSummary(game.store.state).available, 0)
@@ -1300,35 +1164,36 @@ for (const scenario of [
     assert.equal(hints.length, scenario.reason ? 0 : 1)
     assert.equal(button(game, `learnSkill-${scenario.id}`).getComponent(Button).interactable, !scenario.reason)
     if (hints.length) {
-      const hint = hints[0], label = descendants(hint).find(node => node.getComponent(Label)).getComponent(Label)
-      assert.equal(label.string, '↑')
-      assert.equal(label.color.r, '#2878B8')
+      const hint = hints[0], arrow=hint.getComponent(Graphics)
+      assert.ok(arrow,'upgrade arrow has a rendered silhouette')
+      assert.equal(descendants(hint).some(node=>node.getComponent(Label)),false,'arrow does not depend on a font glyph')
       assert.equal(hint.position.y, badge.position.y, 'arrow shares the rank baseline')
       assert.equal(rectWithin(hint, icon).right, 40, 'arrow sits after the centered level')
       assert.ok(rectWithin(hint, icon).left > rectWithin(badge, icon).right, 'arrow cannot overlap the numeral')
       assert.equal(hint.getComponent(Button), null)
     }
-    ordinaryUnchanged(storage, original)
+    mainSaveAndUnrelatedRecords(storage, original)
   })
 }
 
 test('skill arrow disappears at the realm cap after purchase and returns after refund', t => {
-  const storage = disk(), original = seed(storage, { patch: { xp: 630, skills: { sj_yujian: 3 } } })
+  const storage = disk(), original = seed(storage, { patch: { xp: 630, clearedFloor:1, skills: { sj_yujian: 5 } } })
   const { game } = launch(t, storage)
   press(game, '功法')
   assert.ok(named(game.menu.root, '功法可升级-sj_yujian'))
+  press(game, '功法节点-sj_yujian')
   press(game, 'learnSkill-sj_yujian')
-  assert.equal(game.store.state.skills.sj_yujian, 4)
+  assert.equal(game.store.state.skills.sj_yujian, 6)
   assert.equal(growth.skillRequirement(game.store.state, 'sj_yujian').reason, 'realm-locked')
   assert.ok(growth.growthSummary(game.store.state).available > 0)
   assert.ok(!descendants(game.menu.root).some(node => node.name === '功法可升级-sj_yujian'))
-  assert.equal(labelText(named(game.menu.root, '功法等级-sj_yujian')).trim(), '4')
+  assert.equal(labelText(named(game.menu.root, '功法等级-sj_yujian')).trim(), '6')
   press(game, 'decreaseSkill-sj_yujian')
-  assert.equal(game.store.state.skills.sj_yujian, 3)
+  assert.equal(game.store.state.skills.sj_yujian, 5)
   assert.equal(growth.skillRequirement(game.store.state, 'sj_yujian').ok, true)
   assert.ok(named(game.menu.root, '功法可升级-sj_yujian'))
-  assert.equal(labelText(named(game.menu.root, '功法等级-sj_yujian')).trim(), '3')
-  ordinaryUnchanged(storage, original)
+  assert.equal(labelText(named(game.menu.root, '功法等级-sj_yujian')).trim(), '5')
+  mainSaveAndUnrelatedRecords(storage, original)
 })
 
 test('dependency connections remain stable across learning and refund without mutating saved state', t => {
@@ -1345,7 +1210,7 @@ test('dependency connections remain stable across learning and refund without mu
   press(game, 'decreaseSkill-sj_heart')
   assert.equal(game.store.state.skills.sj_heart || 0, 0)
   assert.deepEqual(connections(), before, 'refund does not invent new dependency edges')
-  ordinaryUnchanged(storage, original)
+  mainSaveAndUnrelatedRecords(storage, original)
 })
 
 function assertFooter(game) {
@@ -1366,7 +1231,7 @@ function assertFooter(game) {
     { width: 212, height: 48 });
   const rank = game.store.state.skills[id] ?? game.store.state.evolutionRanks[id] ?? 0;
   const skill = [...growth.GROWTH_SKILLS, ...growth.GROWTH_EVOLUTIONS].find(row => row.id === id);
-  assert.equal(labelText(plus).trim(), rank >= skill.maxLevel ? '已满级' : rank ? `升至 ${rank + 1} 级` : '修习功法');
+  assert.equal(labelText(plus).trim(), rank >= skill.maxLevel ? '已满级' : rank ? `升至${rank + 1}级 · ${skill.pointCosts[rank]}点` : `学习 · ${skill.pointCosts[0]}点`);
   assert.ok(labelText(named(footer, '功法修习条件')).trim(), 'cost or unavailability reason stays visible');
   const rects = { footer: rectWithin(footer, game.menu.root), plus: rectWithin(plus, game.menu.root) };
   if (!game.store.state.activeRun) {
@@ -1405,7 +1270,7 @@ async function completeSkillImages(icons, failedId = null) {
   // Deliver outside the menu's initial call stack. The production loader owns
   // image conversion, cache, cancellation and binding; this is only I/O control.
   await Promise.resolve()
-  const expected = stageRows.flatMap(row => row[2]).filter(id => !['sj_flight', 'sj_cross'].includes(id) && !id.startsWith('future_')).map(id => `tower-skill-icons/${id}`).sort()
+  const expected = stageRows.flatMap(row => row[2]).filter(id => !id.startsWith('future_')).map(id => `tower-skill-icons/${id}`).sort()
   const skillRequests = icons.requests.filter(request => request.path.startsWith('tower-skill-icons/'))
   assert.deepEqual([...new Set(skillRequests.map(request => request.path))].sort(), expected)
   for (const request of skillRequests.filter(request => !request.settled)) {
@@ -1437,7 +1302,7 @@ function assertSkillImage(game, id, loaded = true) {
   }
   assert.strictEqual(badge.parent, icon)
   assert.ok(icon.children.indexOf(badge) > icon.children.indexOf(clip), 'the badge is drawn above the artwork')
-  assert.deepEqual(badge.getComponent(UITransform).contentSize, { width: 28, height: 28 })
+  assert.deepEqual(badge.getComponent(UITransform).contentSize, { width: 34, height: 34 })
   assert.deepEqual(badge.position, { x: 0, y: -67 })
   const level = game.store.state.skills[id] ?? game.store.state.evolutionRanks[id] ?? 0
   assert.equal(labelText(badge).trim(), String(level))
@@ -1457,10 +1322,10 @@ for (const frame of [{ width: 844, height: 390 }, { width: 1024, height: 600 }])
     const storage = disk(), original = seed(storage, { patch: investedSkillFixture() })
     const { game, icons } = launch(t, storage, { frame })
     press(game, '功法')
-    const ids = stageRows.flatMap(row => row[2]).filter(id => !['sj_flight', 'sj_cross'].includes(id) && !id.startsWith('future_'))
+    const ids = stageRows.flatMap(row => row[2]).filter(id => !id.startsWith('future_'))
     const staleSprites = ids.map(id => assertSkillImage(game, id, false))
     press(game, '功法图标-sj_line')
-    game.menu.scroll.scrollToOffset(new Vec2(0, 1500), 0)
+    game.menu.scroll.scrollToOffset(new Vec2(0, 600), 0)
     game.menu.skillPaneScroll.scrollToOffset(new Vec2(0, Math.min(20, Math.max(0,
       game.menu.skillPaneScroll.content.getComponent(UITransform).contentSize.height
       - game.menu.skillPaneScroll.node.getComponent(UITransform).contentSize.height))), 0)
@@ -1470,7 +1335,7 @@ for (const frame of [{ width: 844, height: 390 }, { width: 1024, height: 600 }])
     const hitRects = targets(), state = game.store.state, data = new Map(storage.data), writes = [...storage.writes]
     await completeSkillImages(icons)
     assert.strictEqual(named(game.menu.root, '境界功法树内容'), tree, 'asset completion must not redraw the tree')
-    assertSkillPan(game, { x: 0, y: 1500 }, 20, 'sj_line')
+    assertSkillPan(game, { x: 0, y: 600 }, 20, 'sj_line')
     assert.deepEqual(targets(), hitRects)
     assert.strictEqual(game.store.state, state)
     assert.deepEqual(storage.data, data)
@@ -1489,7 +1354,7 @@ for (const frame of [{ width: 844, height: 390 }, { width: 1024, height: 600 }])
       assertSkillImage(game, id)
     }
     press(game, '功法节点-sj_line')
-    game.menu.scroll.scrollToOffset(new Vec2(0, 1500), 0)
+    game.menu.scroll.scrollToOffset(new Vec2(0, 600), 0)
     game.menu.skillPaneScroll.scrollToOffset(new Vec2(0, Math.min(20, Math.max(0,
       game.menu.skillPaneScroll.content.getComponent(UITransform).contentSize.height
       - game.menu.skillPaneScroll.node.getComponent(UITransform).contentSize.height))), 0)
@@ -1498,16 +1363,16 @@ for (const frame of [{ width: 844, height: 390 }, { width: 1024, height: 600 }])
     assert.equal(game.store.state.skills.sj_line, 2)
     assert.equal(growth.growthSummary(game.store.state).available, available - 2)
     assertSkillImage(game, 'sj_line')
-    assertSkillPan(game, { x: 0, y: 1500 }, 20, 'sj_line')
+    assertSkillPan(game, { x: 0, y: 600 }, 20, 'sj_line')
     press(game, 'decreaseSkill-sj_line')
     assert.equal(game.store.state.skills.sj_line, 1)
     assert.equal(growth.growthSummary(game.store.state).available, available)
     assertSkillImage(game, 'sj_line')
-    assertSkillPan(game, { x: 0, y: 1500 }, game.menu.skillPaneOffset, 'sj_line')
+    assertSkillPan(game, { x: 0, y: 600 }, game.menu.skillPaneOffset, 'sj_line')
     assert.equal(game.store.state.spiritStones, state.spiritStones)
     assert.deepEqual(game.store.state.books, state.books)
     assert.doesNotMatch(labelText(game.menu.root), /undefined|NaN/)
-    ordinaryUnchanged(storage, original)
+    mainSaveAndUnrelatedRecords(storage, original)
   })
 }
 
@@ -1533,7 +1398,7 @@ test('one failed skill image leaves its glyph and camp controls usable alongside
   assertSkillImage(game, 'sj_yujian')
   assert.equal(game.store.state.spiritStones, state.spiritStones)
   assert.deepEqual(game.store.state.books, state.books)
-  ordinaryUnchanged(storage, original)
+  mainSaveAndUnrelatedRecords(storage, original)
 })
 
 test('destroying the real host releases loaded icon art and safely ignores pending completions', async t => {
@@ -1564,32 +1429,47 @@ test('destroying the real host releases loaded icon art and safely ignores pendi
   assert.strictEqual(game.store.state, state)
   assert.deepEqual(storage.data, data)
   assert.deepEqual(storage.writes, writes)
-  ordinaryUnchanged(storage, original)
+  mainSaveAndUnrelatedRecords(storage, original)
 })
 
 for (const frame of [{ width: 1280, height: 720 }, { width: 844, height: 390 }, { width: 1024, height: 600 }]) {
   const size = `${frame.width}x${frame.height}`
-  test(`compact skill labels show passive mastery over loaded art and right-aligned points (${size})`, async t => {
+  test(`compact skill labels keep current captions, passive labels and right-aligned points (${size})`, async t => {
     const storage = disk(), original = seed(storage, { patch: investedSkillFixture() })
     const { game, icons } = launch(t, storage, { frame })
     press(game, '功法')
     await completeSkillImages(icons)
+    for(const realm of ['元婴','化神','炼虚'])press(game,'功法境界展开-'+realm)
     const tree = named(game.menu.root, '境界功法树内容')
-    const passiveIds = new Set(['vajra', 'magnet', 'sj_heart', 'sj_mark', 'sj_bone', 'sj_gate',
+    const passiveIds = new Set(['vajra', 'sj_spirit', 'sj_heart', 'sj_mark', 'sj_bone', 'sj_gate',
       'future_yingling', 'future_shenshi', 'future_xubu'])
     for (const id of stageRows.flatMap(row => row[2])) {
       const icon = named(tree, `功法图标-${id}`), caption = named(tree, `功法节点-${id}`)
-      const rect = rectWithin(icon, tree)
-      assert.equal(rect.right - rect.left, 72)
-      assert.equal(rect.top - rect.bottom, 72)
+      assert.deepEqual(icon.getComponent(UITransform).contentSize, {width:96,height:96})
+      assert.equal(icon.parent.scale.x,68/96)
+      assert.equal(icon.parent.scale.y,68/96)
       const text = descendants(caption).find(node => node.getComponent(Label)).getComponent(Label)
-      assert.equal(text.fontSize, 22, 'caption shrinks from 28 to 22 without shrinking the touch target')
+      assert.equal(text.enableWrapText, false, 'the complete name and cadence stay on one line')
+      assert.doesNotMatch(text.string, /\n|…/)
+      assert.equal(caption.getComponent(Button).interactable, true)
+      const definition = [...growth.GROWTH_SKILLS, ...growth.GROWTH_EVOLUTIONS].find(skill => skill.id === id)
+      if (definition) {
+        let expected = definition.name
+        if (definition.kind !== 'passive') {
+          const info = skillPresentation(game.store.state, id)
+          const cadence = id === 'evo_wanjian' ? info.stats.find(row => row.key === 'rainCooldown').value : info.cooldown
+          expected += `(${cadence === null ? '常驻' : `${Math.round(cadence * 10) / 10}秒`})`
+        }
+        assert.equal(text.string, expected, 'full current name and actual cadence are visible')
+      }
+      const rank = named(icon, `功法等级-${id}`)
+      assert.ok(rectWithin(rank,tree).bottom > rectWithin(caption,tree).top, 'rank and name have separate nonoverlapping space')
       assert.doesNotMatch(text.string, /[（(]被动[)）]|共用/)
       const mastery = descendants(icon).filter(node => node.name === `功法精通-${id}`)
       assert.equal(mastery.length, passiveIds.has(id) ? 1 : 0, id)
       if (passiveIds.has(id)) {
         const box = rectWithin(mastery[0], icon)
-        assert.equal(labelText(mastery[0]).trim(), '精通')
+        assert.equal(labelText(mastery[0]).trim(), '心法')
         assert.ok(box.top < 0 && box.bottom >= -48 && box.left >= -48 && box.right <= 48,
           'mastery is inside the lower half of the icon')
         assert.equal(mastery[0].getComponent(Button), null)
@@ -1618,12 +1498,12 @@ for (const frame of [{ width: 1280, height: 720 }, { width: 844, height: 390 }, 
     press(game, '功法节点-sj_heart')
     assert.deepEqual(copy(game.menu.scroll.getScrollOffset()), { x: 0, y: 250 },
       'out-of-bounds horizontal pan clamps to zero while the valid vertical pan survives')
-    assert.equal(labelText(named(game.menu.root, '功法精通-sj_heart')).trim(), '精通')
+    assert.equal(labelText(named(game.menu.root, '功法精通-sj_heart')).trim(), '心法')
     press(game, 'learnSkill-sj_heart')
-    assert.equal(labelText(named(game.menu.root, '功法精通-sj_heart')).trim(), '精通')
+    assert.equal(labelText(named(game.menu.root, '功法精通-sj_heart')).trim(), '心法')
     assert.equal(named(game.menu.root, '功法点').getComponent(Label).string,
       String(growth.growthSummary(game.store.state).available))
-    ordinaryUnchanged(storage, original)
+    mainSaveAndUnrelatedRecords(storage, original)
   })
 
   test(`physical type, flow and level are separate nonoverlapping tags (${size})`, t => {
@@ -1631,8 +1511,8 @@ for (const frame of [{ width: 1280, height: 720 }, { width: 844, height: 390 }, 
     const { game } = launch(t, storage, { frame })
     press(game, '功法')
     for (const [id, category, flow] of [
-      ['sj_yujian', '物理攻击', '通用'], ['sj_arc', '物理＋法术攻击', '剑气'],
-      ['sj_wanjian', '物理＋法术攻击', '剑阵'], ['sj_gate', '物理＋法术攻击', '通用'], ['vajra', '被动技能', '通用'],
+      ['sj_yujian', '物理攻击', '通用'], ['sj_arc', '物理攻击', '剑气'],
+      ['sj_wanjian', '物理＋法术攻击', '剑阵'], ['sj_gate', '物理＋法术攻击', '通用'], ['vajra', '被动功法', '通用'],
       ['future_yingling', '辅助', '通用'],
     ]) {
       press(game, `功法节点-${id}`)
@@ -1657,7 +1537,7 @@ for (const frame of [{ width: 1280, height: 720 }, { width: 844, height: 390 }, 
       }
       assert.doesNotMatch(labelText(pane), /共用/)
     }
-    ordinaryUnchanged(storage, original)
+    mainSaveAndUnrelatedRecords(storage, original)
   })
 
   test(`independent skills have no dependency arrows (${size})`, t => {
@@ -1674,95 +1554,42 @@ for (const frame of [{ width: 1280, height: 720 }, { width: 844, height: 390 }, 
     press(game, '功法节点-evo_wanjian')
     assert.deepEqual(game.store.state, before)
     assert.deepEqual(storage.writes, writes)
-    ordinaryUnchanged(storage, original)
+    mainSaveAndUnrelatedRecords(storage, original)
   })
 
-  test(`realm blocks group all 26 skills with five-slot rows and no label column (${size})`, t => {
-    const storage = disk(), original = seed(storage)
-    const { game } = launch(t, storage, { frame })
-    assert.ok(hasLabel(game.menu.root, '落云主峰'))
-    press(game, '功法')
-    const tree = named(game.menu.root, '境界功法树内容')
-    const realms = ['炼气', '筑基', '金丹', '元婴', '化神', '炼虚']
-    const blocks = realms.map(realm => named(tree, `功法境界-${realm}`))
-    assert.equal(descendants(tree).filter(node => node.name.startsWith('功法境界-')).length, 6)
-    assert.equal(descendants(tree).filter(node => node.name.startsWith('功法阶段-')).length, 0,
-      'no standalone stage column')
-    const rows = descendants(tree).filter(node => node.name.startsWith('功法行-'))
-    assert.deepEqual(rows.map(node => node.name.slice('功法行-'.length)).sort(),
-      stageRows.flatMap(row => row[2]).sort(), 'all 18 current and 9 preview skills appear exactly once')
-    const extent = tree.getComponent(UITransform).contentSize
-    assert.equal(extent.width, named(game.menu.root, '功法树二维卷轴').getComponent(UITransform).contentSize.width)
-    for (const [index, realm] of realms.entries()) {
-      const block = blocks[index], box = rectWithin(block, tree)
-      assert.equal(box.left, 4)
-      assert.equal(box.right, extent.width - 4)
-      if (index) assert.ok(rectWithin(blocks[index - 1], tree).bottom > box.top)
-      const title = descendants(block).find(node => node.getComponent(Label)?.string === realm)
-      assert.ok(title)
-      const titleBox = rectWithin(title, tree)
-      assert.ok(titleBox.left - box.left <= 32 && box.top - titleBox.top <= 8, 'realm label is in block top-left')
-      const ids = stageRows.filter(row => row[1].startsWith(realm)).flatMap(row => row[2]).sort()
-      const grouped = rows.filter(row => {
-        const r = rectWithin(row, tree)
-        return r.top <= box.top && r.bottom >= box.bottom
-      })
-      assert.deepEqual(grouped.map(row => row.name.slice('功法行-'.length)).sort(), ids)
-      assert.equal(hasLabel(block, '未开放'), index >= 3)
-      assert.ok(Math.min(...grouped.map(row => rectWithin(row, tree).left)) < titleBox.right,
-        'skills use the title horizontal space below it; no reserved label column')
-      for (const row of grouped) {
-        const r = rectWithin(row, tree)
-        assert.ok(r.top < titleBox.bottom && r.left >= box.left && r.right <= box.right)
-      }
+  test(`realm swimlanes show 18 current skills and expand nine read-only previews (${size})`,t=>{
+    const storage=disk();seed(storage);const {game}=launch(t,storage,{frame});press(game,'功法');
+    const state=copy(game.store.state),saved=storage.getItem(campaign.TOWER_CAMPAIGN_KEY);
+    let tree=named(game.menu.root,'境界功法树内容');
+    const currentIds=stageRows.slice(0,9).flatMap(row=>row[2]);
+    assert.deepEqual(descendants(tree).filter(n=>n.name.startsWith('功法行-')).map(n=>n.name.slice(4)).sort(),currentIds.sort());
+    assert.equal(descendants(tree).filter(n=>n.name.startsWith('功法泳道-')).length,9);
+    for(const realm of ['元婴','化神','炼虚'])press(game,'功法境界展开-'+realm);
+    tree=named(game.menu.root,'境界功法树内容');
+    const rows=descendants(tree).filter(n=>n.name.startsWith('功法行-'));
+    assert.deepEqual(rows.map(n=>n.name.slice(4)).sort(),stageRows.flatMap(row=>row[2]).sort());
+    assert.equal(descendants(tree).filter(n=>n.name.startsWith('功法泳道-')).length,18);
+    const positions=rows.map(n=>[n.name,copy(n.position)]);
+    for(const [stage,title,ids] of stageRows){
+      const lane=named(tree,'功法泳道-'+stage),bounds=rectWithin(lane,tree);
+      for(const id of ids){const r=rectWithin(named(tree,'功法行-'+id),tree);assert.ok(r.left>=bounds.left&&r.right<=bounds.right&&r.top<=bounds.top&&r.bottom>=bounds.bottom,id);}
     }
-    const rowsByY = new Map()
-    for (const row of rows) {
-      const y = row.position.y
-      rowsByY.set(y, [...(rowsByY.get(y) || []), row])
-    }
-    assert.ok([...rowsByY.values()].some(row => row.length === 5), 'uses all five available slots')
-    assert.ok([...rowsByY.values()].every(row => row.length <= 5), 'at most five skills per row')
-    assert.equal(descendants(tree).filter(node => node.name.startsWith('流派-')).length, 0,
-      'flow labels do not fix skill columns')
-    for (const [, title, ids] of stageRows) {
-      for (const id of ids) {
-        press(game, `功法节点-${id}`)
-        assert.equal(game.menu.detailId, id, 'all staged skills remain inspectable, including locked ones')
-        assert.ok(labelText(named(game.menu.root, '功法详情固定栏')).replace(/\s/g, '').includes(`${title}`))
-      }
-    }
-    ordinaryUnchanged(storage, original)
+    for(const [,title,ids] of stageRows)for(const id of ids){press(game,'功法节点-'+id);assert.equal(game.menu.detailId,id);assert.ok(labelText(named(game.menu.root,'功法详情固定栏')).replace(/\s/g,'').includes(title));if(id.startsWith('future_'))assert.equal(descendants(game.root).some(n=>n.name==='learnSkill-'+id),false);}
+    tree=named(game.menu.root,'境界功法树内容');
+    assert.deepEqual(descendants(tree).filter(n=>n.name.startsWith('功法行-')).map(n=>[n.name,copy(n.position)]),positions);
+    assert.deepEqual(game.store.state,state);assert.equal(storage.getItem(campaign.TOWER_CAMPAIGN_KEY),saved);mainSaveAndUnrelatedRecords(storage);
   })
 
-  test(`nine-stage UI keeps compact nodes and fixed footer targets (${size})`, t => {
-    const storage = disk(), original = seed(storage, { patch: investedSkillFixture() })
-    const { game } = launch(t, storage, { frame })
-    press(game, '功法')
-    const tree = named(game.menu.root, '境界功法树内容')
-    const targets = descendants(tree).filter(node => node.getComponent(Button))
-    assert.equal(targets.length, stageRows.flatMap(row=>row[2]).length*2, 'each skill has only icon and name targets')
-    assert.doesNotMatch(labelText(tree), /需炼气|尚无投资|退款|常驻/)
-    for (const id of stageRows.flatMap(row => row[2])) {
-      const row = named(tree, `功法行-${id}`)
-      assert.equal(row.getComponent(UITransform).contentSize.height, 180)
-      assert.deepEqual(row.children.map(node => node.name), [
-        `功法图标-${id}`, `功法节点-${id}`,
-      ], 'row contains only its icon and caption targets')
-    }
-    for (const [i, a] of targets.entries()) for (const b of targets.slice(i + 1)) {
-      const ar = rectWithin(a, tree), br = rectWithin(b, tree)
-      assert.ok(ar.right <= br.left || br.right <= ar.left || ar.top <= br.bottom || br.top <= ar.bottom,
-        `overlapping touch rectangles: ${a.name} / ${b.name}`)
-    }
-    const fixed = assertFooter(game)
-    for (const id of stageRows.flatMap(row => row[2]).filter(id => !id.startsWith('future_'))) {
-      press(game, `功法节点-${id}`)
-      assert.deepEqual(assertFooter(game), fixed, 'switching text length cannot move the toolbar')
-      game.menu.skillPaneScroll.scrollToOffset(new Vec2(0, 500), 0)
-      assert.deepEqual(assertFooter(game), fixed, 'scrolling cannot move the toolbar')
-    }
-    ordinaryUnchanged(storage, original)
+  test(`swimlane nodes and fixed detail footer retain separate nonoverlapping targets (${size})`,t=>{
+    const storage=disk();seed(storage,{patch:investedSkillFixture()});const {game}=launch(t,storage,{frame});press(game,'功法');
+    for(const realm of ['元婴','化神','炼虚'])press(game,'功法境界展开-'+realm);
+    const tree=named(game.menu.root,'境界功法树内容'),targets=descendants(tree).filter(n=>n.getComponent(Button));
+    assert.equal(targets.length,27*2+3,'each skill has an icon and caption; each future realm has one toggle');
+    for(const id of stageRows.flatMap(row=>row[2])){const row=named(tree,'功法行-'+id);assert.deepEqual(row.children.map(n=>n.name),['功法图标容器-'+id,'功法节点-'+id]);assert.deepEqual(named(row,'功法图标-'+id).getComponent(UITransform).contentSize,{width:96,height:96});}
+    for(const [i,a] of targets.entries())for(const b of targets.slice(i+1)){const ar=rectWithin(a,tree),br=rectWithin(b,tree);assert.ok(ar.right<=br.left||br.right<=ar.left||ar.top<=br.bottom||br.top<=ar.bottom,`overlap: ${a.name} / ${b.name}`);}
+    press(game,'功法节点-sj_arc');const fixed=assertFooter(game);
+    for(const id of stageRows.slice(0,9).flatMap(row=>row[2])){press(game,'功法节点-'+id);assert.deepEqual(assertFooter(game),fixed);game.menu.skillPaneScroll.scrollToOffset(new Vec2(0,500),0);assert.deepEqual(assertFooter(game),fixed);}
+    mainSaveAndUnrelatedRecords(storage);
   })
 }
 
@@ -1772,11 +1599,11 @@ for (const frame of [{ width: 1280, height: 720 }, { width: 844, height: 390 }, 
     const { game } = launch(t, storage, { frame })
     press(game, '功法')
     press(game, '功法节点-sj_line')
-    game.menu.scroll.scrollToOffset(new Vec2(0, 1500), 0)
+    game.menu.scroll.scrollToOffset(new Vec2(0, 600), 0)
     game.menu.skillPaneScroll.scrollToOffset(new Vec2(0, Math.min(20, Math.max(0,
       game.menu.skillPaneScroll.content.getComponent(UITransform).contentSize.height
       - game.menu.skillPaneScroll.node.getComponent(UITransform).contentSize.height))), 0)
-    const offset = { x: 0, y: 1500 }, before = copy(game.store.state)
+    const offset = { x: 0, y: 600 }, before = copy(game.store.state)
     const available = growth.growthSummary(before).available
     const stalePlus = button(game, 'learnSkill-sj_line').events.get(Button.EventType.CLICK)
     press(game, 'learnSkill-sj_line')
@@ -1798,11 +1625,11 @@ for (const frame of [{ width: 1280, height: 720 }, { width: 844, height: 390 }, 
     assert.deepEqual(game.store.state.books, before.books, 'the permanent book is neither charged nor lost')
     assert.doesNotMatch(labelText(game.menu.root), /undefined|NaN/)
     const reloaded = new campaign.TowerCampaignStore({
-      getItem: () => storage.getItem(playtest.TOWER_PLAYTEST_KEY), setItem() { assert.fail('read-only reload') },
+      getItem: () => storage.getItem(campaign.TOWER_CAMPAIGN_KEY), setItem() { assert.fail('read-only reload') },
     }, START)
     assert.equal(reloaded.readOnly, false)
     assert.deepEqual(reloaded.state, game.store.state)
-    ordinaryUnchanged(storage, original)
+    mainSaveAndUnrelatedRecords(storage, original)
   })
 }
 
@@ -1818,7 +1645,7 @@ for (const frame of [{ width: 844, height: 390 }, { width: 1024, height: 600 }])
     stable()
     for (const action of ['learnSkill', 'decreaseSkill']) {
       const before = copy(game.store.state)
-      storage.blockedWrites.add(playtest.TOWER_PLAYTEST_KEY)
+      storage.blockedWrites.add(campaign.TOWER_CAMPAIGN_KEY)
       press(game, `${action}-sj_line`)
       assert.deepEqual(game.store.state, before)
       assert.ok(hasLabel(named(game.menu.root, '功法操作错误'), '保存失败'))
@@ -1843,7 +1670,7 @@ for (const frame of [{ width: 844, height: 390 }, { width: 1024, height: 600 }])
       'last refund leaves only its receipt, not an empty refund preview')
     assert.ok(hasLabel(game.menu.root, '已保存：返还2点'))
     press(game, '功法节点-sj_arc')
-    storage.blockedWrites.add(playtest.TOWER_PLAYTEST_KEY)
+    storage.blockedWrites.add(campaign.TOWER_CAMPAIGN_KEY)
     tick(6)
     assert.equal(game.menu.state.readOnly, true)
     stable()
@@ -1859,7 +1686,7 @@ for (const frame of [{ width: 844, height: 390 }, { width: 1024, height: 600 }])
     tick(6)
     assert.equal(game.menu.state.readOnly, false)
     stable()
-    ordinaryUnchanged(storage, original)
+    mainSaveAndUnrelatedRecords(storage, original)
   })
 
   test(`skill footer displays actual unlearned and maximum ranks (${frame.width}x${frame.height})`, t => {
@@ -1876,14 +1703,14 @@ for (const frame of [{ width: 844, height: 390 }, { width: 1024, height: 600 }])
     assert.equal(button(game, 'learnSkill-sj_yujian').getComponent(Button).interactable, false)
     press(game, '功法节点-vajra')
     assert.deepEqual(assertFooter(game), fixed)
-    assert.equal(labelText(button(game, 'learnSkill-vajra')).trim(), '修习功法')
+    assert.equal(labelText(button(game, 'learnSkill-vajra')).trim(), '学习 · 1点')
     assert.ok(hasLabel(game.menu.root, '被动'))
-    assert.doesNotMatch(labelText(game.menu.root), /常驻/)
+    assert.doesNotMatch(labelText(named(game.menu.root,'功法详情固定栏')), /常驻/)
     assert.equal(descendants(game.menu.root).some(node => node.name === '点−退点预览'), false)
     press(game, '功法节点-sj_arc')
     assert.equal(descendants(game.menu.root).some(node => node.name === '点−退点预览'), false,
       'a teaching gift alone is not an investment')
-    ordinaryUnchanged(storage, original)
+    mainSaveAndUnrelatedRecords(storage, original)
   })
 }
 
@@ -1900,7 +1727,7 @@ for (const frame of [{ width: 1280, height: 720 }, { width: 844, height: 390 }])
   assert.match(details(),/下一级（3级）/)
   assert.match(details(),/方向固定/)
   press(game,'功法节点-sj_formation')
-  assert.match(details(),/范围：落点半径150的圆形区域/)
+  assert.match(details(),/范围：落点半径180的圆形区域/)
   assert.match(details(),/同敌最多命中：6→7击/)
   const viewport=named(game.menu.root,'功法详情独立卷轴'),content=named(game.menu.root,'功法详情栏内容')
   const contentSize=content.getComponent(UITransform).contentSize
@@ -1923,7 +1750,7 @@ for (const frame of [{ width: 1280, height: 720 }, { width: 844, height: 390 }])
   }
   assert.equal(JSON.stringify(game.store.state),saved)
   assert.deepEqual(storage.writes,writes)
-  ordinaryUnchanged(storage,original)
+  mainSaveAndUnrelatedRecords(storage,original)
  })
 }
 
@@ -1939,16 +1766,16 @@ test('nine-stage UI shows locked learning without writes below the starting phas
   const details = labelText(named(game.menu.root, '功法详情固定栏')).replace(/\s/g, '')
   assert.ok(details.includes('学习条件角色炼气·中期'), details)
   const plus = button(game, 'learnSkill-vajra'), before = game.store.state
-  const raw = storage.getItem(playtest.TOWER_PLAYTEST_KEY), writes = storage.writes.length
+  const raw = storage.getItem(campaign.TOWER_CAMPAIGN_KEY), writes = storage.writes.length
   assert.equal(plus.getComponent(Button).interactable, false)
   plus.events.get(Button.EventType.CLICK)()
   assert.strictEqual(game.store.state, before)
-  assert.equal(storage.getItem(playtest.TOWER_PLAYTEST_KEY), raw)
+  assert.equal(storage.getItem(campaign.TOWER_CAMPAIGN_KEY), raw)
   assert.equal(storage.writes.length, writes)
   assert.equal(button(game, 'decreaseSkill-vajra').getComponent(Button).interactable, false)
   press(game, '功法节点-sj_yujian')
   assert.equal(button(game, 'decreaseSkill-sj_yujian').getComponent(Button).interactable, false)
-  ordinaryUnchanged(storage, original)
+  mainSaveAndUnrelatedRecords(storage, original)
 })
 
 test('nine-stage UI failed learning keeps scroll and assets, shows a fixed error, and retries once', t => {
@@ -1956,16 +1783,16 @@ test('nine-stage UI failed learning keeps scroll and assets, shows a fixed error
   const { game } = launch(t, storage, { frame: { width: 844, height: 390 } })
   press(game, '功法')
   press(game, '功法节点-sj_line')
-  game.menu.scroll.scrollToOffset(new Vec2(0, 1500), 0)
+  game.menu.scroll.scrollToOffset(new Vec2(0, 600), 0)
   game.menu.skillPaneScroll.scrollToOffset(new Vec2(0, Math.min(20, Math.max(0,
       game.menu.skillPaneScroll.content.getComponent(UITransform).contentSize.height
       - game.menu.skillPaneScroll.node.getComponent(UITransform).contentSize.height))), 0)
-  const before = copy(game.store.state), raw = storage.getItem(playtest.TOWER_PLAYTEST_KEY)
-  storage.blockedWrites.add(playtest.TOWER_PLAYTEST_KEY)
+  const before = copy(game.store.state), raw = storage.getItem(campaign.TOWER_CAMPAIGN_KEY)
+  storage.blockedWrites.add(campaign.TOWER_CAMPAIGN_KEY)
   press(game, 'learnSkill-sj_line')
   assert.deepEqual(game.store.state, before)
-  assert.equal(storage.getItem(playtest.TOWER_PLAYTEST_KEY), raw)
-  assertSkillPan(game, { x: 0, y: 1500 }, 20, 'sj_line')
+  assert.equal(storage.getItem(campaign.TOWER_CAMPAIGN_KEY), raw)
+  assertSkillPan(game, { x: 0, y: 600 }, 20, 'sj_line')
   const error = named(game.menu.root, '功法操作错误')
   assert.strictEqual(error.parent, named(game.menu.root, '功法详情固定栏'), 'error does not scroll away with effects')
   assert.ok(hasLabel(error, '保存失败'))
@@ -1973,9 +1800,9 @@ test('nine-stage UI failed learning keeps scroll and assets, shows a fixed error
   press(game, 'learnSkill-sj_line')
   assert.equal(game.store.state.skills.sj_line, 2)
   assert.equal(growth.growthSummary(game.store.state).spent, growth.growthSummary(before).spent + 2)
-  assertSkillPan(game, { x: 0, y: 1500 }, 20, 'sj_line')
+  assertSkillPan(game, { x: 0, y: 600 }, 20, 'sj_line')
   assert.equal(descendants(game.menu.root).some(node => node.name === '功法操作错误'), false)
-  ordinaryUnchanged(storage, original)
+  mainSaveAndUnrelatedRecords(storage, original)
 })
 
 for (const [id, stage, level] of [
@@ -1993,7 +1820,7 @@ for (const [id, stage, level] of [
     assert.ok(!conditions.includes('通关第6层'))
     assert.ok(!conditions.includes('门槛与成本'))
     assert.doesNotMatch(labelText(pane), /undefined|NaN/)
-    ordinaryUnchanged(storage, original)
+    mainSaveAndUnrelatedRecords(storage, original)
   })
 }
 
@@ -2003,7 +1830,7 @@ function assertTowerLearningOnly(game) {
   assert.equal(game.run.state.phase, 'paused')
   const tree = named(game.menu.root, '境界功法树内容')
   assert.equal(descendants(tree).filter(node => node.name.startsWith('learnSkill-')).length, 0)
-  assert.equal(descendants(tree).filter(node => node.getComponent(Button)).length, stageRows.flatMap(row=>row[2]).length*2)
+  assert.equal(descendants(tree).filter(node => node.getComponent(Button)).length, 18*2+3, '18 current icon/name pairs and three collapsed future realms')
   assert.equal(descendants(game.menu.root).filter(node => node.name.startsWith('learnSkill-')).length, 1)
   assertFooter(game)
   const forbidden = descendants(game.menu.root).filter(node =>
@@ -2021,11 +1848,10 @@ for (const frame of [{ width: 844, height: 390 }, { width: 1024, height: 600 }])
     game.update(0)
     game.update(1 / 30)
     assert.ok(game.run.state.time > 0, 'the fixture really entered and advanced a Campaign attempt')
-    press(game, '暂停')
-    press(game, /^技能 · 可用\d+点$/)
+    press(game, '功法')
     await completeSkillImages(icons)
     assertTowerLearningOnly(game)
-    for (const id of stageRows.flatMap(row => row[2]).filter(id => !['sj_flight', 'sj_cross'].includes(id) && !id.startsWith('future_'))) {
+    for (const id of stageRows.flatMap(row => row[2]).filter(id => !id.startsWith('future_'))) {
       assertSkillImage(game, id)
       press(game, `功法节点-${id}`)
       assertTowerLearningOnly(game)
@@ -2057,15 +1883,15 @@ for (const frame of [{ width: 844, height: 390 }, { width: 1024, height: 600 }])
     assert.equal(validateTowerSnapshot(after), true)
     assert.equal(game.store.state.spiritStones, state.spiritStones)
     assert.deepEqual(game.store.state.books, state.books)
-    const committed = game.store.state, raw = storage.getItem(playtest.TOWER_PLAYTEST_KEY)
+    const committed = game.store.state, raw = storage.getItem(campaign.TOWER_CAMPAIGN_KEY)
     storage.writes.length = 0
     stalePlus()
     tick(3)
     assert.strictEqual(game.store.state, committed)
     assert.deepEqual(game.run.snapshot(), after, 'time remains frozen on the paused skills page')
-    assert.equal(storage.getItem(playtest.TOWER_PLAYTEST_KEY), raw)
+    assert.equal(storage.getItem(campaign.TOWER_CAMPAIGN_KEY), raw)
     assert.deepEqual(storage.writes, [])
-    ordinaryUnchanged(storage, original)
+    mainSaveAndUnrelatedRecords(storage, original)
   })
 }
 
@@ -2090,7 +1916,7 @@ for (const action of [{ type: 'decreaseSkill', id: 'sj_line' }, { type: 'respecS
       assert.deepEqual(game.run?.snapshot(), run)
       assert.deepEqual(storage.data, data, 'all stored records remain byte-for-byte identical')
       assert.deepEqual(storage.writes, writes, 'no persistence attempt is made')
-      ordinaryUnchanged(storage, original)
+      mainSaveAndUnrelatedRecords(storage, original)
     })
   }
 
@@ -2116,11 +1942,11 @@ for (const action of [{ type: 'decreaseSkill', id: 'sj_line' }, { type: 'respecS
     assert.equal(game.store.state.spiritStones, before.spiritStones)
     assert.deepEqual(game.store.state.books, before.books)
     const reloaded = new campaign.TowerCampaignStore({
-      getItem: () => storage.getItem(playtest.TOWER_PLAYTEST_KEY), setItem() { assert.fail('read-only reload') },
+      getItem: () => storage.getItem(campaign.TOWER_CAMPAIGN_KEY), setItem() { assert.fail('read-only reload') },
     }, START)
     assert.equal(reloaded.readOnly, false)
     assert.deepEqual(reloaded.state, game.store.state)
-    ordinaryUnchanged(storage, original)
+    mainSaveAndUnrelatedRecords(storage, original)
   })
 }
 
@@ -2427,32 +2253,29 @@ test('landscape resize releases a held stick and places its replacement at the n
 })
 
 for (const frame of [{ width: 1280, height: 720 }, { width: 844, height: 390 }]) {
-  test(`landscape ${frame.width}×${frame.height} pause and tool targets fit in two columns and keep real tool actions`, t => {
+  test(`landscape ${frame.width}×${frame.height} pause and direct tool targets fit and keep real tool actions`, t => {
     const storage = disk(), original = seed(storage, { hp: 17.5, paused: true })
     const { game } = launch(t, storage, { frame })
     const before = game.run.snapshot()
     let targets = descendants(game.overlay).filter(node => node.getComponent(Button))
-    assert.equal(targets.length, 5)
-    assert.ok(targets.some(node => node.name === '背包'))
-    assert.equal(new Set(targets.map(node => node.position.x)).size, 2)
+    assert.deepEqual(targets.map(n=>n.name).sort(), ['关闭暂停菜单','继续挑战','返回宗门','开发者工具'].sort())
     assertTargetsInFrame(game, targets)
     press(game, '开发者工具')
     targets = descendants(game.overlay).filter(node => node.getComponent(Button))
-    assert.equal(targets.length, 6)
-    assert.equal(new Set(targets.map(node => node.position.x)).size, 2)
-    assert.equal(new Set(targets.map(node => node.position.y)).size, 3)
-    assertTargetsInFrame(game, [...targets, ...game.overlay.children.filter(node => node.getComponent(Label))])
-    const saved = storage.getItem(playtest.TOWER_PLAYTEST_KEY)
+    assert.equal(targets.length, 8)
+    assertTargetsInFrame(game, targets)
+    const saved = storage.getItem(campaign.TOWER_CAMPAIGN_KEY)
     storage.writes.length = 0
-    press(game, '游戏速度设置')
-    press(game, '游戏速度 ×3')
+    press(game, '游戏速度 ×1')
+    press(game, '游戏速度 ×2')
     press(game, '无敌：关闭')
     assert.deepEqual(copy(game.tools), { speed: 3, invincible: true })
     assert.deepEqual(playtest.readPlaytestTools(storage), { speed: 3, invincible: true })
     assert.deepEqual(game.run.snapshot(), before)
-    assert.equal(storage.getItem(playtest.TOWER_PLAYTEST_KEY), saved)
-    ordinaryUnchanged(storage, original)
-    press(game, '返回战斗')
+    assert.equal(storage.getItem(campaign.TOWER_CAMPAIGN_KEY), saved)
+    mainSaveAndUnrelatedRecords(storage, original)
+    press(game, '关闭开发者工具')
+    press(game, '继续挑战')
     assert.equal(game.run.state.phase, 'playing')
     assert.equal(game.run.state.player.hp, 17.5)
     assertTargetsInFrame(game, [joystick(game), button(game, '暂停'), button(game, '功法')])
@@ -2497,17 +2320,14 @@ for (const frame of [{ width: 1920, height: 280 }, { width: 3840, height: 1080 }
     assert.equal(game.store.state.activeRun.snapshot.phase, 'paused')
     press(game, '开发者工具')
     const targets = descendants(game.overlay).filter(node => node.getComponent(Button))
-    const text = game.overlay.children.filter(node => node.getComponent(Label))
-    assert.equal(targets.length, 6)
-    assert.equal(new Set(targets.map(node => node.position.x)).size, 2)
-    assert.equal(new Set(targets.map(node => node.position.y)).size, 3)
-    assert.equal(text.length, 2, 'tool title and body both exist')
-    for (const node of text) assert.ok(node.getComponent(UITransform).contentSize.height > 0, `${node.name}: positive text height`)
-    assertTargetsInFrame(game, [...targets, ...text])
+    const title = descendants(game.overlay).find(node => node.getComponent(Label)?.string === '开发者工具')
+    assert.equal(targets.length, 8)
+    assert.ok(title && title.getComponent(UITransform).contentSize.height > 0)
+    assertTargetsInFrame(game, targets)
     assert.deepEqual(TowerRun.restore(game.run.snapshot()).snapshot(), game.run.snapshot())
 
     const before = game.run.snapshot(), state = game.store.state
-    const saved = storage.getItem(playtest.TOWER_PLAYTEST_KEY)
+    const saved = storage.getItem(campaign.TOWER_CAMPAIGN_KEY)
     storage.writes.length = 0
     for (const [width, height, policy, logicalWidth] of [
       [844, 390, 2, 1280],
@@ -2523,10 +2343,10 @@ for (const frame of [{ width: 1920, height: 280 }, { width: 3840, height: 1080 }
       if (policy === 2) assert.ok(Math.abs(size.height - logicalWidth * height / width) < 1e-8)
       assert.deepEqual(game.run.snapshot(), before, 'HP, RNG, loot and pending simulation are unchanged')
       assert.strictEqual(game.store.state, state)
-      assert.equal(storage.getItem(playtest.TOWER_PLAYTEST_KEY), saved)
+      assert.equal(storage.getItem(campaign.TOWER_CAMPAIGN_KEY), saved)
       assert.deepEqual(storage.writes, [])
     }
-    ordinaryUnchanged(storage, original)
+    mainSaveAndUnrelatedRecords(storage, original)
   })
 }
 
@@ -2536,8 +2356,8 @@ function tigerSectorSnapshot(loadout, faceX, faceY) {
   // and position it relative to the player; do not fabricate a warning zone.
   run.state.cooldowns.sj_yujian = 99999
   run.advance(2)
-  const tiger = run.state.enemies.find(enemy => enemy.archetype === 'tiger_normal')
-  assert.ok(tiger, 'floor seven actually spawns a normal tiger')
+  const tiger = run.state.enemies.find(enemy => enemy.archetype === 'tiger_normal_r3')
+  assert.ok(tiger, 'floor seven actually spawns its authored rank-three normal tiger')
   for (const enemy of run.state.enemies) {
     Object.assign(enemy, { x: -500, y: -400 })
     Object.assign(enemy.ai, { entryUntil: 99999, graceUntil: 99999 })
@@ -2604,7 +2424,8 @@ for (const [direction, faceX, faceY] of [
       for (let i = 0; i < 120 && tiger.ai.mode === 'windup'; i++) run.advance(1 / 60)
       assert.equal(tiger.ai.mode, 'active')
       assert.equal(tiger.ai.attack.hit, sign === 1, 'locked sector hits in front and misses behind')
-      near(hp - run.state.player.hp, sign === 1 ? Math.min(hp, attack.damage) : 0)
+      const mitigation = characterCombatAttributes(run.state.loadout, run.state.player.xp).physicalReduction
+      near(hp - run.state.player.hp, sign === 1 ? Math.min(hp, attack.damage * (1 - mitigation)) : 0)
       assert.equal(validateTowerSnapshot(run.snapshot()), true)
     }
   })
@@ -2633,8 +2454,7 @@ for (const frame of [{ width: 1280, height: 720 }, { width: 1024, height: 600 },
       assert.ok(box.left >= -size.width / 2 && box.right <= size.width / 2, `${names[i]} horizontal bounds`)
       assert.ok(box.bottom >= -size.height / 2 && box.top <= size.height / 2, `${names[i]} vertical bounds`)
     }
-    assertTargetsInFrame(game, ['PlayerVitals', 'FloorWave', 'Boss', 'Minimap', 'Notification', 'Skills', 'Pause']
-      .map(name => named(game.battle, `HUD.${name}`)).concat(joystick(game)))
+    assertTargetsInFrame(game, descendants(game.battle).filter(node => node.getComponent(Button)).concat(joystick(game)))
     assert.equal(named(game.battle, 'HUD.Notification').active, false, 'no permanent instruction slab')
     const surface = joystick(game)
     touch(game, surface, Node.EventType.TOUCH_START, 91, 60, 0)
@@ -2658,7 +2478,7 @@ test('paper battle HUD HP ratio stays readable and skill points remain actionabl
   assert.equal(hp.length, 2)
   assert.ok(Math.abs(hp[1][2] / 200 - 17.5 / before.player.maxHp) < 1e-10)
   assert.ok(game.xpBar)
-  assert.equal(game.stats.string, '金丹 · 大圆满')
+  assert.equal(game.stats.string, '金丹十层·大圆满')
   assert.doesNotMatch(labelText(game.battle), /修为\d+%/)
   assert.doesNotMatch(labelText(game.battle), /NaN|undefined|Infinity/)
   const available = growth.growthSummary(game.store.state).available
@@ -2759,7 +2579,7 @@ test('passive skills do not imply damaging aura rings and rendering remains read
   const storage = disk(); seed(storage)
   const { game } = launch(t, storage, { assisted: false })
   game.enterTraining()
-  const ids = ['sj_heart', 'vajra', 'magnet', 'sj_mark', 'sj_bone', 'sj_gate']
+  const ids = ['sj_heart', 'vajra', 'sj_spirit', 'sj_mark', 'sj_bone', 'sj_gate']
   game.run.state.enemies = []; game.run.state.effects = []; game.run.state.zones = []
   for (const id of ids) {
     game.run.state.loadout.passive = { [id]: 1 }
@@ -2786,193 +2606,59 @@ test('passive skills do not imply damaging aura rings and rendering remains read
   assert.deepEqual(game.run.snapshot(), before)
 })
 
-test('playtest point grant is real, repeatable to 999, and reset requires confirmation', t => {
-  const storage = disk(), original = seed(storage, { patch: investedSkillFixture() })
-  const { game } = launch(t, storage)
-  press(game, '开发者工具')
-  press(game, '成长与存档')
-  press(game, '剩余技能点设为999')
-  assert.equal(growth.growthSummary(game.store.state).available, 999)
-  assert.ok(hasLabel(game.overlay, '剩余技能点 999'))
-  const before = copy(game.store.state)
-  press(game, '重新开始')
-  press(game, '取消')
-  assert.deepEqual(game.store.state, before)
-  press(game, '重新开始')
-  press(game, '确认重新开始')
-  assert.equal(game.screen, 'camp')
-  assert.equal(game.run, null)
-  assert.equal(game.store.state.xp, 0)
-  assert.deepEqual(game.store.state.skills, { sj_arc: 1 })
-  assert.equal(growth.growthSummary(game.store.state).available, 0)
-  assert.equal(game.store.state.activeRun, null)
-  ordinaryUnchanged(storage, original)
-})
-
-test('normal mode cannot execute experience reset or skill grant', t => {
-  const storage = disk(), original = seed(storage)
-  const { game } = launch(t, storage, { assisted: false })
-  storage.writes.length = 0 // normal host startup sync is legitimate; the debug actions must not write
-  const before = copy(game.store.state)
-  game.editPlaytest('playtestSkillPoints'); game.editPlaytest('playtestReset')
-  assert.deepEqual(game.store.state, before)
-  press(game, '开发者工具')
-  assert.ok(!hasLabel(game.overlay, '剩余技能点设为999'))
-  assert.ok(!hasLabel(game.overlay, '重新开始'))
-  ordinaryUnchanged(storage, original)
-})
-
-test('failed playtest reset retains paused run and earned skills', t => {
-  const storage = disk(), original = seed(storage, { paused: true })
-  const { game } = launch(t, storage)
-  const before = copy(game.store.state), run = game.run
-  game.showTools(); press(game, '成长与存档'); press(game, '重新开始')
-  storage.blockedWrites.add(playtest.TOWER_PLAYTEST_KEY)
-  press(game, '确认重新开始')
-  assert.deepEqual(game.store.state, before)
-  assert.strictEqual(game.run, run)
-  assert.ok(hasLabel(game.overlay, '体验操作未完成'))
-  ordinaryUnchanged(storage, original)
-})
-
-test('one-click top-grade grants are repeatable and preserve ordinary saves', t => {
-  const storage = disk(), original = seed(storage)
-  const { game } = launch(t, storage)
-  press(game, '开发者工具')
-  let expected = game.store.state.spiritStones
-  const contribution = game.store.state.contribution
-  for (let i = 0; i < 2; i++) {
-    press(game, '+999 极品灵石')
-    expected += 999000000
-    assert.equal(game.store.state.spiritStones, expected)
-    assert.ok(hasLabel(game.overlay, economy.formatSpiritStones(expected)))
-    assert.equal(game.store.state.contribution, contribution)
-  }
-  assert.ok(!hasLabel(game.overlay, '灵石补给'))
-  assert.ok(!hasLabel(game.overlay, '宗门贡献'))
-  const reloaded = new campaign.TowerCampaignStore(playtest.playtestStorage(storage), START)
-  assert.deepEqual(reloaded.state, game.store.state)
-  ordinaryUnchanged(storage, original)
-})
-
-test('camp level button reaches 27 with natural SP and no extra healing', t => {
-  const storage = disk(), original = seed(storage, { hp: 17.5 })
-  const { game } = launch(t, storage)
-  press(game, '开发者工具'); press(game, '成长与存档')
-  press(game, '升至金丹巅峰（27级，仅场外）')
-  assert.equal(game.store.state.xp, profile.TOWER_XP_CAP)
-  assert.equal(game.store.state.hp, 17.5)
-  assert.equal(growth.growthSummary(game.store.state).available, 30)
-  assert.equal(game.store.state.clearedFloor, 0)
-  assert.ok(hasLabel(game.overlay, '已提升至金丹巅峰'))
-  press(game, '返回工具'); press(game, '返回宗门')
-  assert.equal(game.menu.state.xp, profile.TOWER_XP_CAP)
-  ordinaryUnchanged(storage, original)
-})
-
-test('in-tower level button gives a short exit hint; resource grants keep the run paused and intact', t => {
-  const storage = disk(), original = seed(storage, { paused: true, hp: 17.5 })
-  const { game } = launch(t, storage)
-  press(game, '开发者工具'); press(game, '成长与存档')
-  const snapshot = game.run.snapshot(), state = copy(game.store.state), writes = storage.writes.length
-  press(game, '升至金丹巅峰（27级，仅场外）')
-  assert.ok(hasLabel(game.overlay, '请先退塔'))
-  assert.deepEqual(game.store.state, state)
-  assert.deepEqual(game.run.snapshot(), snapshot)
-  assert.equal(storage.writes.length, writes)
-  press(game, '返回工具'); press(game, playtest.PLAYTEST_RESOURCE_ACTIONS[0].label)
-  assert.deepEqual(game.run.snapshot(), snapshot)
-  assert.equal(game.run.state.phase, 'paused')
-  press(game, '返回战斗')
-  assert.equal(game.run.state.phase, 'playing')
-  assert.equal(game.run.state.player.hp, 17.5)
-  ordinaryUnchanged(storage, original)
-})
-
-test('resource write failures show errors without publishing grants', t => {
-  const storage = disk(), original = seed(storage, { paused: true })
-  const { game } = launch(t, storage)
-  press(game, '开发者工具')
-  const state = copy(game.store.state), snapshot = game.run.snapshot(), run = game.run
-  storage.blockedWrites.add(playtest.TOWER_PLAYTEST_KEY)
-  press(game, playtest.PLAYTEST_RESOURCE_ACTIONS[0].label)
-  assert.ok(hasLabel(game.overlay, '体验操作未完成'))
-  assert.ok(hasLabel(game.overlay, '保存失败'))
-  assert.deepEqual(game.store.state, state); assert.strictEqual(game.run, run)
-  assert.deepEqual(game.run.snapshot(), snapshot)
-  storage.blockedWrites.clear()
-  press(game, '返回'); press(game, playtest.PLAYTEST_RESOURCE_ACTIONS[0].label)
-  assert.equal(game.store.state.spiritStones, state.spiritStones + 999000000)
-  ordinaryUnchanged(storage, original)
-})
-
-test('full stone balance rejects the grant without changing the save', t => {
-  const storage = disk(), original = seed(storage)
-  const { game } = launch(t, storage)
-  const envelope = JSON.parse(storage.getItem(playtest.TOWER_PLAYTEST_KEY))
-  const data = JSON.parse(envelope.data)
-  data.spiritStones = campaign.PLAYTEST_STONE_CAP
-  envelope.data = JSON.stringify(data); envelope.checksum = checksum(envelope.data)
-  storage.setItem(playtest.TOWER_PLAYTEST_KEY, JSON.stringify(envelope))
-  game.store = new campaign.TowerCampaignStore(playtest.playtestStorage(storage), START)
-  press(game, '开发者工具')
-  const state = copy(game.store.state), raw = storage.getItem(playtest.TOWER_PLAYTEST_KEY)
-  press(game, '+999 极品灵石')
-  assert.ok(hasLabel(game.overlay, '资源已满'))
-  assert.deepEqual(game.store.state, state)
-  assert.equal(storage.getItem(playtest.TOWER_PLAYTEST_KEY), raw)
-  press(game, '返回')
-  assert.ok(hasLabel(game.overlay, '+999 极品灵石'))
-  ordinaryUnchanged(storage, original)
-})
-
-test('tools checkpoint a locally paused restored run before enabling resource actions', t => {
-  const storage = disk(); seed(storage)
-  const normal = new campaign.TowerCampaignStore(storage, START)
-  assert.ok(normal.act({ type: 'startFloor', floor: 1, seed: 123 }, START).ok)
-  const original = storage.getItem(campaign.TOWER_CAMPAIGN_KEY)
-  storage.writes.length = 0
-  const { game } = launch(t, storage)
-  assert.equal(game.run.state.phase, 'paused')
-  assert.equal(game.store.state.activeRun.snapshot.phase, 'playing')
-  press(game, '开发者工具')
-  assert.equal(game.store.state.activeRun.snapshot.phase, 'paused')
-  const before = game.run.snapshot(), balance = game.store.state.spiritStones
-  press(game, playtest.PLAYTEST_RESOURCE_ACTIONS[0].label)
-  assert.equal(game.store.state.spiritStones, balance + 999000000)
-  assert.deepEqual(game.run.snapshot(), before)
-  ordinaryUnchanged(storage, original)
-})
-
-test('normal mode cannot invoke resource or level actions through tool methods', t => {
-  const storage = disk(), original = seed(storage)
-  const { game } = launch(t, storage, { assisted: false })
-  storage.writes.length = 0
-  const before = copy(game.store.state)
-  for (const row of playtest.PLAYTEST_RESOURCE_ACTIONS) game.editPlaytest(row.action.type, row.action)
-  game.showPlaytestResources(); game.showTools()
-  assert.deepEqual(game.store.state, before)
-  assert.ok(!hasLabel(game.overlay, '+999 极品灵石'))
-  ordinaryUnchanged(storage, original)
-})
-
-for (const frame of [{ width: 1280, height: 720 }, { width: 844, height: 390 }, { width: 1920, height: 280 }]) {
-  test(`grouped tool menus fit ${frame.width}x${frame.height} without overlapping labels or buttons`, t => {
-    const storage = disk(); seed(storage)
-    const { game } = launch(t, storage, { frame })
-    const check = expected => {
-      const targets = descendants(game.overlay).filter(node => node.getComponent(Button))
-      assert.equal(targets.length, expected)
-      const labels = game.overlay.children.filter(node => node.getComponent(Label))
-      assertTargetsInFrame(game, [...targets, ...labels])
-      for (const node of labels) assert.ok(node.getComponent(UITransform).contentSize.height >= 66)
-    }
-    press(game, '开发者工具'); check(6)
-    press(game, '游戏速度设置'); check(4)
-    press(game, '返回工具'); press(game, '成长与存档'); check(4)
-    press(game, '重新开始'); check(2)
-  })
-}
+test('QA point grants add 999 each time and reset clears this mode only',t=>{
+ const storage=disk();seed(storage,{patch:investedSkillFixture()});const {game}=launch(t,storage);const available=growth.growthSummary(game.store.state).available;
+ press(game,'开发者工具');press(game,'+999功法点');press(game,'+999功法点');assert.equal(growth.growthSummary(game.store.state).available,available+1998);
+ press(game,'重置游戏进度');assert.equal(game.screen,'camp');assert.equal(game.run,null);assert.equal(game.store.state.xp,0);assert.deepEqual(game.store.state.skills,{sj_arc:1});
+ assert.equal(growth.growthSummary(game.store.state).available,0);assert.equal(game.store.state.activeRun,null);mainSaveAndUnrelatedRecords(storage);
+});
+test('production cannot execute reset or skill grants through tool methods',t=>{
+ const storage=disk();seed(storage);const {game}=launch(t,storage,{buildProfile:'production',assisted:false});const before=copy(game.store.state),writes=storage.writes.length;
+ game.editPlaytest('playtestAddSkillPoints');game.resetProgress();game.showTools();assert.deepEqual(game.store.state,before);assert.equal(storage.writes.length,writes);assert.equal(descendants(game.root).some(n=>n.name==='开发者工具遮罩'),false);mainSaveAndUnrelatedRecords(storage);
+});
+test('failed QA reset retains paused run and earned skills',t=>{
+ const storage=disk();seed(storage,{paused:true});const {game}=launch(t,storage);const before=copy(game.store.state),run=game.run;press(game,'开发者工具');
+ storage.blockedWrites.add(campaign.TOWER_CAMPAIGN_KEY);press(game,'重置游戏进度');assert.deepEqual(game.store.state,before);assert.strictEqual(game.run,run);assert.ok(hasLabel(game.overlay,'操作未完成'));assert.ok(hasLabel(game.overlay,'保存失败'));
+ storage.blockedWrites.clear();press(game,'返回工具');press(game,'重置游戏进度');assert.equal(game.store.state.activeRun,null);assert.equal(game.run,null);mainSaveAndUnrelatedRecords(storage);
+});
+test('joint top-grade grants are repeatable and preserve unrelated saves',t=>{
+ const storage=disk();seed(storage);const {game}=launch(t,storage);press(game,'开发者工具');const before=copy(game.store.state);
+ for(let i=1;i<=2;i++){press(game,'+999灵石、点眷');assert.equal(game.store.state.spiritStones,before.spiritStones+999000000*i);assert.equal(game.store.state.contribution,before.contribution+999*i);}
+ assert.deepEqual(new campaign.TowerCampaignStore(playtest.towerStorage(storage,true),START).state,game.store.state);mainSaveAndUnrelatedRecords(storage);
+});
+test('camp level button advances one layer through 30 with natural SP and no free healing',t=>{
+ const storage=disk();seed(storage,{hp:17.5});const {game}=launch(t,storage);press(game,'开发者工具');
+ for(let level=2;level<=30;level++){press(game,'提升一小境界');assert.equal(profile.cultivationAt(game.store.state.xp).level,level);assert.equal(game.store.state.hp,17.5);}
+ assert.equal(growth.growthSummary(game.store.state).available,48);assert.equal(game.store.state.clearedFloor,0);press(game,'关闭开发者工具');assert.equal(game.menu.state.xp,game.store.state.xp);mainSaveAndUnrelatedRecords(storage);
+});
+test('training blocks permanent level changes; paused tower grants leave combat intact',t=>{
+ const storage=disk();seed(storage,{hp:17.5});const {game}=launch(t,storage);game.enterTraining();game.pause();press(game,'开发者工具');const before=copy(game.store.state),snapshot=game.run.snapshot(),writes=storage.writes.length;
+ press(game,'提升一小境界');assert.ok(hasLabel(game.overlay,'请先结束演武'));assert.deepEqual(game.store.state,before);assert.deepEqual(game.run.snapshot(),snapshot);assert.equal(storage.writes.length,writes);
+ press(game,'返回工具');press(game,'+999灵石、点眷');assert.deepEqual(game.run.snapshot(),snapshot);assert.equal(game.run.state.phase,'paused');press(game,'关闭开发者工具');press(game,'继续挑战');assert.equal(game.run.state.phase,'playing');mainSaveAndUnrelatedRecords(storage);
+});
+test('resource write failures show errors without publishing grants',t=>{
+ const storage=disk();seed(storage,{paused:true});const {game}=launch(t,storage);press(game,'开发者工具');const before=copy(game.store.state),snapshot=game.run.snapshot(),run=game.run,raw=storage.getItem(campaign.TOWER_CAMPAIGN_KEY);
+ storage.blockedWrites.add(campaign.TOWER_CAMPAIGN_KEY);press(game,'+999灵石、点眷');assert.ok(hasLabel(game.overlay,'操作未完成'));assert.ok(hasLabel(game.overlay,'保存失败'));assert.deepEqual(game.store.state,before);assert.strictEqual(game.run,run);assert.deepEqual(game.run.snapshot(),snapshot);assert.equal(storage.getItem(campaign.TOWER_CAMPAIGN_KEY),raw);
+ storage.blockedWrites.clear();press(game,'返回工具');press(game,'+999灵石、点眷');assert.equal(game.store.state.spiritStones,before.spiritStones+999000000);assert.equal(game.store.state.contribution,before.contribution+999);mainSaveAndUnrelatedRecords(storage);
+});
+test('full stone balance rejects the joint grant without a partial point-favor credit',t=>{
+ const storage=disk();seed(storage);const record=JSON.parse(storage.getItem(campaign.TOWER_CAMPAIGN_KEY)),state=JSON.parse(record.data);state.spiritStones=Number.MAX_SAFE_INTEGER;record.data=JSON.stringify(state);record.checksum=checksum(record.data);storage.data.set(campaign.TOWER_CAMPAIGN_KEY,JSON.stringify(record));
+ const {game}=launch(t,storage);assertCurrentCampaign(game.store,state);press(game,'开发者工具');const raw=storage.getItem(campaign.TOWER_CAMPAIGN_KEY);press(game,'+999灵石、点眷');assert.ok(hasLabel(game.overlay,'资源已满'));assert.deepEqual(game.store.state,state);assert.equal(storage.getItem(campaign.TOWER_CAMPAIGN_KEY),raw);press(game,'返回工具');button(game,'+999灵石、点眷');mainSaveAndUnrelatedRecords(storage);
+});
+test('tools checkpoint a locally paused restored run before enabling resource actions',t=>{
+ const storage=disk();seed(storage);const normal=new campaign.TowerCampaignStore(storage,START);assert.ok(normal.act({type:'startFloor',floor:1,seed:123},START).ok);const {game}=launch(t,storage);
+ assert.equal(game.run.state.phase,'paused');assert.equal(game.store.state.activeRun.snapshot.phase,'playing');press(game,'开发者工具');assert.equal(game.store.state.activeRun.snapshot.phase,'paused');const snapshot=game.run.snapshot(),balance=game.store.state.spiritStones;press(game,'+999灵石、点眷');assert.equal(game.store.state.spiritStones,balance+999000000);assert.deepEqual(game.run.snapshot(),snapshot);mainSaveAndUnrelatedRecords(storage);
+});
+test('production cannot invoke resource or level actions through tool methods',t=>{
+ const storage=disk();seed(storage);const {game}=launch(t,storage,{buildProfile:'production',assisted:false});const before=copy(game.store.state),writes=storage.writes.length;
+ for(const row of playtest.PLAYTEST_RESOURCE_ACTIONS)game.editPlaytest(row.action.type,row.action);game.editPlaytest('playtestNextStage');game.showTools();assert.deepEqual(game.store.state,before);assert.equal(storage.writes.length,writes);assert.equal(descendants(game.root).some(n=>n.name==='开发者工具遮罩'),false);mainSaveAndUnrelatedRecords(storage);
+});
+for(const frame of [{width:1280,height:720},{width:844,height:390},{width:1920,height:280}])test(`direct tool menu fits ${frame.width}x${frame.height} without overlapping controls`,t=>{
+ const storage=disk();seed(storage);const {game}=launch(t,storage,{frame});press(game,'开发者工具');
+ const panel=named(game.overlay,'开发者工具面板'),targets=descendants(panel).filter(n=>n.getComponent(Button));assert.equal(targets.length,8);assertTargetsInFrame(game,targets);
+ const boxes=targets.map(n=>rectWithin(n,panel));for(let i=0;i<boxes.length;i++)for(const b of boxes.slice(i+1)){const a=boxes[i];assert.ok(a.right<=b.left||b.right<=a.left||a.top<=b.bottom||b.top<=a.bottom);}
+ press(game,'关闭开发者工具');assert.equal(game.overlay,null);
+});
 
 test('flight is a one-rank shared passive with real purchase, reload and refund', t => {
   const storage = disk(); seed(storage, { patch: { xp: profile.cultivationLevelXp(11) } })
@@ -2996,8 +2682,8 @@ test('flight is a one-rank shared passive with real purchase, reload and refund'
   assert.equal(game.run.state.player.moveSpeed, 220)
 })
 
-for (const [xp, major] of [[44, false], [1484, true]]) {
-  test(`actual kill starts a ${major ? 'major' : 'minor'} level animation only once`, t => {
+for (const [xp, layer] of [[44, 2], [1484, 10]]) {
+  test(`actual kill starts the layer-${layer} minor level animation only once`, t => {
     const storage = disk(); seed(storage, { patch: { xp } })
     const { game, tick } = launch(t, storage, { assisted: false })
     game.enterFloor(1); game.update(0)
@@ -3006,8 +2692,9 @@ for (const [xp, major] of [[44, false], [1484, true]]) {
     enemy.hp = 0
     game.update(.1)
     assert.equal(game.levelEffects.length, 1)
-    assert.equal(game.levelEffects[0].major, major)
-    assert.equal(game.levelEffects[0].duration, major ? 2 : 1)
+    assert.equal(profile.cultivationAt(game.run.state.player.xp).layer, layer)
+    assert.equal(game.levelEffects[0].major, false, 'ordinary XP never performs an item-gated major breakthrough')
+    assert.equal(game.levelEffects[0].duration, 1.2)
     const event = copy(game.levelEffects)
     game.draw(); game.draw(); assert.deepEqual(copy(game.levelEffects), event)
     press(game, '暂停'); tick(15)
@@ -3021,7 +2708,7 @@ for (const [xp, major] of [[44, false], [1484, true]]) {
 }
 
 test('avatar opens a bounded character overlay with actual attributes and read-only dismissal', t => {
-  const storage = disk(); seed(storage, { xp: 2730 })
+  const storage = disk(); seed(storage, { patch:{xp:2730} })
   const { game } = launch(t, storage, { assisted: false })
   const state = copy(game.store.state), saved = storage.getItem(campaign.TOWER_CAMPAIGN_KEY)
   const expected = combatStats(state.xp, campaign.combatLoadout(state))
@@ -3048,7 +2735,7 @@ test('avatar opens a bounded character overlay with actual attributes and read-o
 })
 
 test('character overlay follows camp healing and closes when leaving the hall', t => {
-  const storage = disk(); seed(storage, { hp: 99.75 })
+  const storage = disk(); seed(storage, { hp: 95 })
   const { game, tick } = launch(t, storage, { assisted: false, frame: {width:844,height:390} })
   press(game, 'HUD.Portrait')
   const panel = named(game.menu.root, '角色信息面板')
@@ -3096,7 +2783,7 @@ test('paper HUD resource failure preserves readable stats in hall and combat', t
   const request = icons.requests.find(r => r.path === 'player-hud/paper-portrait')
   icons.complete(request, new Error('missing portrait'))
   assert.equal(named(game.menu.root, 'HUD.PaperFallback').active, true)
-  assert.equal(named(game.menu.root, 'HUD.RealmLabel').getComponent(Label).string, '炼气 · 初期')
+  assert.equal(named(game.menu.root, 'HUD.RealmLabel').getComponent(Label).string, '炼气一层·初期')
   assert.match(named(game.menu.root, 'HUD.HPLabel').getComponent(Label).string, /^\d+\/\d+$/)
   assert.ok(!descendants(game.menu.root).some(n => n.name === 'HUD.ManaTrack'))
   game.enterFloor(1)
@@ -3113,7 +2800,7 @@ test('paper battle HP and realm label stay outside the avatar and realm text upd
     const track = rectWithin(named(game.battle, `HUD.${id}`), game.root)
     assert.ok(track.left >= portrait.right + 1, `${id} must not overlap avatar rectangle`)
   }
-  for (const [xp, text, realm] of [[0, '炼气 · 初期', '炼气'], [2730, '筑基 · 中期', '筑基'], [9360, '金丹 · 巅峰', '金丹']]) {
+  for (const [xp, text, realm] of [[0, '炼气一层·初期', '炼气'], [profile.cultivationLevelXp(14), '筑基四层·中期', '筑基'], [profile.cultivationLevelXp(27), '金丹七层·巅峰', '金丹']]) {
     game.run.state.player.xp = xp; game.draw()
     assert.equal(game.stats.string, text)
     assert.equal(game.portraitRealm, realm)
@@ -3184,7 +2871,7 @@ test('character atlas preserves feet, independent sword, movement modes and paus
   assert.equal(points.length, 2, 'only the blade and guard are drawn, never a grip over the source hand')
   const half = 2.5 / (108/160), normal = 1 / Math.sqrt(2)
   assert.deepEqual(points[0], [164-133.3333+normal*half, 285.3333-232+normal*half], 'blade starts at the guard with local anchor and inverted Y')
-  assert.equal(sword.fillColor.r, '#E4E6E3', 'starter sword remains separately rendered')
+  assert.equal(sword.fillColor.r, '#dce4e6', 'starter weapon uses the approved neutral silver fallback')
   assert.deepEqual(game.run.snapshot(), unchanged)
   game.touch=1; game.stick.dx=.4; game.stick.dy=0; game.update(.1)
   assert.equal(art.mode, 'walk')
@@ -3201,35 +2888,45 @@ test('character atlas preserves feet, independent sword, movement modes and paus
 })
 
 test('character slash follows a real short windup across a 3x frame and cannot cause damage', t => {
-  const storage=disk(); seed(storage,{patch:{xp:225,skillsInitialized:true,skills:{sj_yujian:1}}})
+  const storage=disk(); seed(storage,{patch:{xp:225,skillsInitialized:true,skills:{sj_arc:1}}})
   const {game,icons}=launch(t,storage)
   game.enterTraining(); supplyCharacter(icons); game.draw()
   game.run.advance(2)
   const s=game.run.state, enemy=s.enemies[0]; assert.ok(enemy)
   enemy.x=s.player.x+100; enemy.y=s.player.y
-  s.cooldowns.sj_yujian=0; s.casts=[]
+  // Let the previous real action finish before resetting the next skill's cooldown.
+  // Clearing only casts leaves orphaned weapon/action receipts and is not a legal checkpoint.
+  for (const actor of s.enemies) { actor.x=s.player.x+900; actor.y=s.player.y }
+  s.cooldowns.sj_arc=1e6
+  for(let i=0;i<120;i++)game.run.advance(1/60)
+  assert.equal(s.actions.current,null);assert.equal(s.actions.basic,null)
+  enemy.x=s.player.x+100;enemy.y=s.player.y
+  s.actions.readyAt=s.time+1;s.cooldowns.sj_arc=0
+  assert.equal(validateTowerSnapshot(game.run.snapshot()),true)
   const twin=TowerRun.restore(game.run.snapshot())
   const art=game.characterArt, before=art.sample(s)
   // Match a maximum host advance at 3x; both simulations receive identical input.
   const events=[]
   game.run.advance(.3,event=>{events.push(event);art.observeCast(event)})
-  twin.advance(.3); art.observe(before,game.run.state); game.draw()
+  twin.advance(.3); art.observe(before,game.run.state); const observedAction=copy(art.attack); game.draw()
   assert.deepEqual(game.run.snapshot(),twin.snapshot(),'observation/rendering adds neither damage nor state')
-  assert.ok(art.attack && art.attack.start>before.time)
-  assert.equal(events.filter(event=>event.skill==='sj_yujian').length,1)
-  assert.equal(game.run.state.casts.some(c=>c.skill==='sj_yujian'),false,'short windup is already gone')
-  const actualCast=events.find(event=>event.skill==='sj_yujian')
-  const expectedRelease=Math.ceil(actualCast.releaseAt*60-1e-8)/60
-  assert.equal(art.attack.release,expectedRelease)
-  assert.ok([1536,1792].includes(art.body.spriteFrame.rect.x),'one slash is still in its release/recovery frames')
+  assert.ok(observedAction && observedAction.start>before.time)
+  assert.equal(events.filter(event=>event.skill==='sj_arc').length,1)
+  assert.equal(game.run.state.casts.some(c=>c.skill==='sj_arc'),false,'short windup is already gone')
+  const actualCast=events.find(event=>event.skill==='sj_arc')
+  const expectedRelease=Math.ceil((actualCast.bodyReleaseAt ?? actualCast.releaseAt)*60-1e-8)/60
+  assert.equal(observedAction.release,expectedRelease)
+  assert.equal(art.attack,null,'the 0.24-second crescent action has completed inside this 0.3-second frame')
+  assert.equal(art.body.spriteFrame.rect.x,0,'completed actions return to idle without replaying')
   const attack=copy(art.attack), frozen=art.body.spriteFrame
   game.run.pause(); game.draw(); game.render(); game.update(.1)
   assert.deepEqual(copy(art.attack),attack); assert.strictEqual(art.body.spriteFrame,frozen)
   // Synthetic drawing times sample the authored hit marker without advancing combat.
-  const presentation={...game.run.state,time:art.attack.release}
+  art.observeCast(actualCast)
+  const presentation={...game.run.state,time:observedAction.release}
   art.draw(game.characterLayer,presentation,0,0,false)
   assert.equal(art.body.spriteFrame.rect.x,1536,'hitFrame 1 is slash sequence frame 6, not atlas frame 1')
-  presentation.time=art.attack.release+.25
+  presentation.time=observedAction.release+.25
   art.draw(game.characterLayer,presentation,0,0,false)
   assert.equal(art.body.spriteFrame.rect.x,0,'slash ends once instead of looping')
   art.reset(); game.draw(); assert.equal(art.attack,null,'a restored baseline never invents an old attack')
@@ -3247,7 +2944,7 @@ for (const [rank, pulses] of [[1,1],[6,2],[10,3]]) {
     s.arenaVersion=1; s.loadout.growthVersion=1
     s.loadout.active={sj_line:rank}; s.loadout.passive={}
     s.loadout.evolutions=[]; s.loadout.evolutionLevels={}
-    s.cooldowns={sj_line:0}; s.casts=[]; s.zones=[]; s.effects=[]; s.projectiles=[]
+    s.actions.readyAt=1e8; s.cooldowns={sj_line:0}; s.casts=[]; s.zones=[]; s.effects=[]; s.projectiles=[]
     p.x=33; p.y=-60; p.faceX=1; p.faceY=0
     const enemy=game.run._enemy({...template,id:'line-action-target',x:133,y:-60})
     enemy.hp=enemy.maxHp=1e8; enemy.moveSpeed=0
@@ -3273,7 +2970,7 @@ for (const [rank, pulses] of [[1,1],[6,2],[10,3]]) {
     }
     for(let i=0;i<60;i++)tick()
     const action=poses.filter(pose=>pose.ordinal>=0)
-    assert.equal(events.length,pulses)
+    assert.equal(events.filter(e=>e.skill==='sj_line').length,pulses)
     assert.equal(impacts.size,pulses,'all independently damaging sword lines remain present')
     assert.deepEqual([...impacts.values()].map(e=>e.pulseIndex),Array.from({length:pulses},(_,i)=>i+1))
     assert.ok(action.length>10,'a full body action must still play')
@@ -3281,36 +2978,42 @@ for (const [rank, pulses] of [[1,1],[6,2],[10,3]]) {
       assert.ok(action[i].ordinal>=action[i-1].ordinal,
         `body rewound at ${action[i].time}: ${action[i-1].ordinal} -> ${action[i].ordinal}`)
     }
-    assert.equal(action.at(-1).ordinal,13,'the approved recovery finishes instead of being cut off')
+    const sampleEvidence={casts:events.filter(e=>e.skill==='sj_line').map(({startedAt,releaseAt,bodyReleaseAt,endsAt})=>({startedAt,releaseAt,bodyReleaseAt,endsAt})),
+      tail:poses.filter(p=>p.time<=events.find(e=>e.skill==='sj_line').endsAt+1/30).slice(-9)}
+    assert.equal(action.at(-1).ordinal,13,`the approved recovery finishes instead of being cut off; samples=${JSON.stringify(sampleEvidence)}`)
     assert.equal(poses.at(-1).ordinal,-1,'the character returns to idle once the volley is over')
-    const firstStart=art.attack.start
+    const firstStart=events.find(event=>event.skill==='sj_line').startedAt
     s.cooldowns.sj_line=0
     for(let i=0;i<20;i++)tick()
-    assert.ok(art.attack.start>firstStart,'a new volley may start a fresh action')
+    assert.ok(events.some(event=>event.skill==='sj_line'&&event.startedAt>firstStart),'a new volley may start a fresh action')
   })
 }
 
-test('character flight keeps its flying sword through idle and real skill attacks', t => {
+test('character flight keeps its approved flying sword through idle and skill release presentation', t => {
   const storage=disk(); seed(storage)
   const {game,icons}=launch(t,storage,{assisted:false})
-  game.enterTraining(); supplyCharacter(icons); game.draw()
+  game.enterTraining()
+  const atlas=JSON.parse(readFileSync(new URL('../cocos-pilot/assets/resources/tower-character/ground-actions.json',import.meta.url),'utf8'))
+  supplyCharacter(icons,atlas)
+  const flightImage=icons.complete(icons.requests.find(r=>r.path==='tower-skill-fx/flight-liuquan-v1'))
   const s=game.run.state, art=game.characterArt
   s.loadout.passive.sj_flight=1; art.mode='run'; art.attack=null
-  const colors=[], g=game.playerBody, oldFill=g.fill
-  g.fill=function(){colors.push(this.fillColor?.r); oldFill.call(this)}
   game.draw()
-  assert.equal(art.body.spriteFrame.rect.x,0)
-  assert.ok(colors.includes('#a5dce6'),'fixed flying sword follows the player in the depth-sorted body layer')
+  assert.equal(art.body.spriteFrame,art.frames[1], 'approved flight stance is frame 1')
+  const flyingSword=named(game.root,'流泉剑原画'), sprite=flyingSword.getComponent(Sprite)
+  const flyingFrame=sprite.spriteFrame
+  assert.ok(flyingFrame && flyingSword.activeInHierarchy)
   const original=art.body.spriteFrame
   s.loadout.weapon=weaponTools.rollWeapon('ling',1,()=>.5,'test-weapon'); game.draw()
   assert.strictEqual(art.body.spriteFrame,original)
-  assert.equal(art.sword.fillColor.r,'#A376C7','held weapon changes without replacing the body or flying sword')
-  colors.length=0
+  assert.equal(art.sword.fillColor.r,'#dce4e6','tier changes never recolor the neutral fallback')
   art.observeCast({skill:'sj_line',startedAt:s.time,releaseAt:s.time,dirX:1,dirY:0})
   game.draw()
-  assert.notStrictEqual(art.body.spriteFrame,original,'a real attack uses the slash pose while flying')
-  assert.equal(art.body.spriteFrame.rect.x,6*256,'the existing slash impact frame matches the actual release')
-  assert.ok(colors.includes('#a5dce6'),'the flying sword stays visible beneath the attack pose')
+  assert.notStrictEqual(art.body.spriteFrame,original,'the approved derived clip supplies a flying attack')
+  assert.equal(art.body.spriteFrame,art.frames[atlas.clips.flightSlash.frames[atlas.clips.flightSlash.hitFrame]])
+  assert.strictEqual(sprite.spriteFrame,flyingFrame)
+  assert.ok(flyingSword.activeInHierarchy,'flying sword remains visible beneath the attack pose')
+  game.destroy();assert.equal(flightImage.refs,0)
 })
 
 test('invalid character atlas falls back and late resource callbacks cannot resurrect a destroyed host', t => {
@@ -3391,8 +3094,8 @@ test('real character PNG, manifest and import metadata satisfy the running atlas
   assert.deepEqual([...png.subarray(0,8)],[137,80,78,71,13,10,26,10])
   assert.equal(png.readUInt32BE(16),json.width); assert.equal(png.readUInt32BE(20),json.height)
   assert.equal(png[25],6,'RGBA PNG')
-  assert.equal(json.frames.length,35)
-  assert.deepEqual(Object.fromEntries(Object.entries(json.clips).map(([k,v])=>[k,v.frames.length])),{walk:12,run:8,slash:14,idle:1})
+  assert.equal(json.frames.length,49)
+  assert.deepEqual(Object.fromEntries(Object.entries(json.clips).map(([k,v])=>[k,v.frames.length])),{walk:12,run:8,slash:14,idle:1,flightSlash:14})
   assert.equal(json.clips.slash.hitFrame,8)
   assert.ok(!json.clips.walk.frames.includes(json.clips.idle.frames[0]),'idle has a dedicated frame')
   for(const f of json.frames) assert.ok(Math.abs(Math.hypot(...f.direction)-1)<1e-5,'unit direction')
@@ -3472,9 +3175,11 @@ test('tower entry artwork reuses requests and late loads cannot revive abandoned
   const { game, icons } = launch(t, storage, { assisted: false });
   game.goto('tower');
   const requests = icons.requests.filter(r => r.path.startsWith('tower-entry/') || r.path.startsWith('tower-monsters/'));
-  assert.equal(requests.length, 10);
+  const authoredBossArt = content.FLOORS.map(floor => content.ARCHETYPES.find(a => a.id === floor.boss_id).art_family);
+  assert.equal(new Set(authoredBossArt).size, 9, 'nine authored bosses retain their distinct portraits');
+  assert.deepEqual(requests.map(r=>r.path).sort(), authoredBossArt.map(id=>'tower-monsters/'+id).sort());
   press(game, '塔层-1');
-  assert.equal(icons.requests.filter(r => r.path.startsWith('tower-entry/') || r.path.startsWith('tower-monsters/')).length, 10);
+  assert.equal(icons.requests.filter(r => r.path.startsWith('tower-entry/') || r.path.startsWith('tower-monsters/')).length, requests.length);
   press(game, '← 宗门');
   for (const request of requests) icons.complete(request);
   assert.equal(game.page, 'hall');
@@ -3506,18 +3211,18 @@ for (const frame of [{width:1280,height:720}, {width:844,height:390}]) {
  });
 }
 
-test('falcon and ape floor cards request matching artwork without obsolete boss portraits', t => {
+test('floor seven and eight cards request their authored rhino and yak boss artwork', t => {
  const storage=disk(); seed(storage,{patch:{clearedFloor:8}});
  const {game,icons}=launch(t,storage,{assisted:false}); game.goto('tower');
- for(const [floor,name] of [[7,'裂风隼王'],[8,'撼岩猿王']]){
+ for(const [floor,name] of [[7,'震岳犀王'],[8,'苍鬃牛魔王']]){
   const row=descendants(game.menu.root).find(n=>n.name===`塔层-${floor}`);
   assert.ok(labelText(row).includes(name));
   const portrait=row.children.find(n=>n.name==='层主特写');
   assert.ok(portrait.children.some(n=>n.getComponent(Sprite)));
-  assert.ok(icons.requests.some(r=>r.path===`tower-monsters/${floor===7?'falcon':'ape'}`));
+  assert.ok(icons.requests.some(r=>r.path===`tower-monsters/${floor===7?'rhino':'yak'}`));
   press(game,`塔层-${floor}`); assert.equal(game.menu.selectedTowerFloor,floor);
  }
- assert.ok(!icons.requests.some(r=>/tower-monsters\/(rhino|yak)$/.test(r.path)));
+ assert.ok(!icons.requests.some(r=>/tower-monsters\/(falcon|ape)$/.test(r.path)));
 });
 
 test('falcon battle art loads the full sprite and reuses its resource cache', t => {
@@ -3536,28 +3241,31 @@ test('falcon battle art loads the full sprite and reuses its resource cache', t 
 test('stone battle art maps converted denominations rather than monster ranks and leaves rewards untouched', t => {
  const storage=disk();seed(storage);
  const {game,icons}=launch(t,storage,{assisted:false});game.enterFloor(1);
+ const initialRequests=icons.requests.filter(r=>r.path.startsWith('tower-stones/stone_'));
+ const initialImages=initialRequests.map(r=>{const image=new ImageAsset();image.width=image.height=128;r.asset=image;r.settled=true;r.done(null,image);return image});
  const state=game.run.state,p=state.player;
- state.drops=[1,10,1000,100000].map((amount,i)=>({id:`stone-check-${i}`,kind:'core',rank:7,amount,x:p.x+i*30,y:p.y,expiresAt:state.time+2}));
+ state.drops=[1,10,1000,100000].map((amount,i)=>({id:`stone-check-${i}`,kind:'core',rank:7,amount,receipts:[],x:p.x+i*30,y:p.y,expiresAt:state.time+2}));
+ state.earned.cores = 101011; // All uncollected parcels were already earned by kills.
  const before=JSON.stringify({drops:state.drops,earned:state.earned,wallet:game.store.state.spiritStones});
  game.draw();
- const requests=icons.requests.filter(r=>r.path.startsWith('tower-stones/stone_'));
- assert.deepEqual(requests.map(r=>r.path),['stone_low','stone_mid','stone_high','stone_top'].map(n=>`tower-stones/${n}`));
- const images=requests.map(r=>{const image=new ImageAsset();image.width=image.height=128;r.done(null,image);return image});
+ const expectedPaths=['stone_low','stone_mid','stone_high','stone_top'].map(n=>`tower-stones/${n}`)
+ for(const path of expectedPaths)assert.equal(initialRequests.filter(r=>r.path===path).length,2,'world and HUD each own one cached image')
+ assert.deepEqual(icons.requests.filter(r=>r.path.startsWith('tower-stones/stone_')),initialRequests,'drawing uses the preloaded world cache')
  game.draw();const nodes=[...game.stoneLayer.children];
- assert.equal(nodes.length,4);assert.ok(nodes.every(n=>n.active&&n.getComponent(Sprite).spriteFrame));
+ assert.equal(nodes.length,8, 'ten low stones use five bounded pieces; each larger denomination uses one');assert.ok(nodes.every(n=>n.active&&n.getComponent(Sprite).spriteFrame));
  for(let i=0;i<20;i++)game.draw();
- assert.deepEqual(game.stoneLayer.children,nodes);assert.equal(icons.requests.filter(r=>r.path.startsWith('tower-stones/stone_')).length,4);
+ assert.deepEqual(game.stoneLayer.children,nodes);assert.equal(icons.requests.filter(r=>r.path.startsWith('tower-stones/stone_')).length,initialRequests.length);
  assert.equal(JSON.stringify({drops:state.drops,earned:state.earned,wallet:game.store.state.spiritStones}),before);
  state.drops=[];game.draw();assert.equal(game.stoneLayer.children.length,0);
- game.destroy();assert.ok(images.every(i=>i.refs===0));
+ game.destroy();assert.ok(initialImages.every(i=>i.refs===0));
 });
 
 test('wallet grade icons pair with quantities and release bindings on redraw', t => {
  for(let grade=0;grade<4;grade++){
   const storage=disk();seed(storage,{patch:{spiritStones:economy.STONE_VALUES[grade]}});
-  const {game,icons}=launch(t,storage,{assisted:false});game.goto('inventory');
+  const {game,icons}=launch(t,storage,{assisted:false});game.goto('forge');
   const wallet=descendants(game.menu.root).find(n=>n.name==='货币信息');
-  assert.equal(descendants(wallet).filter(n=>n.getComponent(Label)).map(n=>n.getComponent(Label).string).join('\n'), '×1\n×300');
+  assert.equal(descendants(wallet).filter(n=>n.getComponent(Label)).map(n=>n.getComponent(Label).string).join('\n'), '×1\n×1000');
   const request=icons.requests.find(r=>r.path===`tower-stones/${['stone_low','stone_mid','stone_high','stone_top'][grade]}`);assert.ok(request);
   const old=descendants(game.menu.root).find(n=>n.name===`灵石货币图标-${grade}`);
   const image=new ImageAsset();image.width=image.height=128;request.done(null,image);
@@ -3569,11 +3277,13 @@ test('wallet grade icons pair with quantities and release bindings on redraw', t
 });
 
 test('approved resource icons render beside existing counters and XP feedback without altering values',t=>{
- const storage=disk();seed(storage);
+ const storage=disk();seed(storage,{patch:{xp:14400}});
  const {game,icons}=launch(t,storage,{assisted:false});
- game.goto('inventory');
+ game.goto('forge');
  assert.ok(icons.requests.some(r=>r.path==='tower-stones/resource_contribution'));
- game.menu.go('librarySkills');
+ game.enterFloor(1);advanceCombat(game,state=>state.phase==='won');game.update(0);
+ assert.equal(game.store.state.lastResult.firstClear,true);
+ assert.ok(named(game.overlay,'结算物品-resource_skill_point'));
  assert.ok(icons.requests.some(r=>r.path==='tower-stones/resource_skill_point'));
  game.enterFloor(1);const s=game.run.state,p=s.player;
  s.drops=[{id:'xp-icon-check',kind:'resource',role:'elite',x:p.x,y:p.y}];
@@ -3613,11 +3323,11 @@ test('each pill shares its own art across apothecary, inventory cell and details
  const storage=disk();seed(storage,{patch:{pills:{ zhuji: 0,huichun:3,peiyuan:2}}});
  const {game,icons}=launch(t,storage,{assisted:false});
  const before=JSON.stringify(game.store.state);
- game.goto('pills');const images=[];
+ game.goto('pills');press(game,'丹霞主殿');const images=[];
  for(const id of ['huichun','peiyuan']){
   const request=icons.requests.find(r=>r.path===`tower-stones/pill_${id}`);assert.ok(request);
   const image=new ImageAsset();image.width=image.height=128;request.done(null,image);images.push(image);
-  assert.ok(descendants(game.menu.root).some(n=>n.name===`灵石素材-pill_${id}-apothecary-${id}`&&n.active));
+  assert.ok(descendants(game.menu.root).some(n=>n.name.includes(`pill_${id}`)&&n.getComponent(Sprite)?.spriteFrame&&n.active));
  }
  game.goto('inventory');
  const gridTextures=['huichun','peiyuan'].map(id=>{
@@ -3659,17 +3369,17 @@ test('backpack art preserves menu and battle hit targets, fallback and inventory
  const storage=disk();seed(storage);const {game,icons}=launch(t,storage,{assisted:false});
  const loadBag=()=>{const req=icons.requests.filter(r=>r.path==='tower-stones/ui_bag').at(-1);assert.ok(req);const image=new ImageAsset();image.width=image.height=128;req.done(null,image);return image;};
  const menuBag=descendants(game.menu.root).find(n=>n.name==='背包');assert.ok(menuBag);
- assert.equal(menuBag.getComponent(UITransform).contentSize.width,80);assert.equal(menuBag.getComponent(UITransform).contentSize.height,80);
+ assert.equal(menuBag.getComponent(UITransform).contentSize.width,80);assert.equal(menuBag.getComponent(UITransform).contentSize.height,104);
  const menuFallback=menuBag.children[0];assert.equal(menuFallback.active,true);
  const menuImage=loadBag();assert.equal(menuFallback.active,false);
- assert.ok(menuBag.children.some(n=>n.getComponent(Sprite)?.spriteFrame));press(game,'背包');assert.equal(game.menu.currentPage,'inventory');
+ assert.ok(menuBag.children.some(n=>n.getComponent(Sprite)?.spriteFrame));press(game,'背包');assert.equal(game.menu.inventoryOpen,true);assert.ok(named(game.menu.root,'背包遮罩'));
  game.enterFloor(1);const battleBag=descendants(game.root).find(n=>n.name==='HUD.Inventory');assert.ok(battleBag);
  assert.equal(battleBag.getComponent(UITransform).contentSize.width,80);assert.equal(battleBag.getComponent(UITransform).contentSize.height,80);
  const battleImage=loadBag();assert.equal(battleBag.children[0].active,false);
  const sprite=battleBag.children.find(n=>n.getComponent(Sprite)?.spriteFrame);assert.ok(sprite);
  for(let i=0;i<30;i++)game.draw();assert.ok(sprite.isValid&&sprite.active);
  assert.equal(icons.requests.filter(r=>r.path==='tower-stones/ui_bag').length,2);
- press(game,'背包');assert.equal(game.menu.currentPage,'inventory');
+ press(game,'背包');assert.equal(game.menu.inventoryOpen,true);assert.ok(named(game.menu.root,'背包遮罩'));
  game.destroy();assert.equal(menuImage.refs,0);assert.equal(battleImage.refs,0);
 });
 
@@ -3677,7 +3387,7 @@ test('skill button art preserves menu and battle hit targets, fallback and skill
  const storage=disk();seed(storage);const {game,icons}=launch(t,storage,{assisted:false});
  const loadBag=()=>{const req=icons.requests.filter(r=>r.path==='tower-stones/ui_skills').at(-1);assert.ok(req);const image=new ImageAsset();image.width=image.height=128;req.done(null,image);return image;};
  const menuBag=descendants(game.menu.root).find(n=>n.name==='功法');assert.ok(menuBag);
- assert.equal(menuBag.getComponent(UITransform).contentSize.width,80);assert.equal(menuBag.getComponent(UITransform).contentSize.height,80);
+ assert.equal(menuBag.getComponent(UITransform).contentSize.width,80);assert.equal(menuBag.getComponent(UITransform).contentSize.height,104);
  const menuFallback=menuBag.children[0];assert.equal(menuFallback.active,true);
  const menuImage=loadBag();assert.equal(menuFallback.active,false);
  assert.ok(menuBag.children.some(n=>n.getComponent(Sprite)?.spriteFrame));press(game,'功法');assert.equal(game.menu.currentPage,'library');
@@ -3696,7 +3406,8 @@ test('settings art preserves menu settings and map-card pause actions',t=>{
  const storage=disk();seed(storage);const {game,icons}=launch(t,storage,{assisted:false});
  const load=()=>{const req=icons.requests.filter(r=>r.path==='tower-stones/ui_settings').at(-1);assert.ok(req);const image=new ImageAsset();image.width=image.height=128;req.done(null,image);return image;};
  const menuButton=descendants(game.menu.root).find(n=>n.name==='设置');assert.ok(menuButton);
- assert.deepEqual(menuButton.getComponent(UITransform).contentSize,{width:80,height:80});
+ assert.deepEqual(menuButton.getComponent(UITransform).contentSize,{width:80,height:104});
+ assert.ok(hasLabel(menuButton,'设置'),'fixed caption shares the icon hit target');
  const menuImage=load();assert.equal(menuButton.children[0].active,false);
  press(game,'设置');
  const shade=named(game.menu.root,'宗门设置遮罩');
@@ -3707,7 +3418,7 @@ test('settings art preserves menu settings and map-card pause actions',t=>{
  shade.events.get(Node.EventType.TOUCH_END)({target:shade});
  assert.equal(descendants(game.menu.root).some(n=>n.name==='宗门设置遮罩'),false);
  game.enterFloor(1);const hud=descendants(game.root).find(n=>n.name==='HUD.Pause');const battleImage=load();
- assert.deepEqual(hud.getComponent(UITransform).contentSize,{width:48,height:44});
+ assert.deepEqual(hud.getComponent(UITransform).contentSize,{width:72,height:72});
  assert.equal(hud.parent.name,'HUD.MapCard');
  const sprite=hud.children.find(n=>n.getComponent(Sprite)?.spriteFrame);assert.ok(sprite);assert.equal(sprite.position.x,0);
  for(let i=0;i<30;i++)game.draw();assert.ok(sprite.isValid&&sprite.active);
@@ -3843,7 +3554,7 @@ test('single-save tools expose only direct actions and cycle speed without a sub
  const {game}=launch(t,storage,{assisted:false})
  press(game,'开发者工具')
  const names=()=>descendants(game.overlay).filter(n=>n.getComponent(Button)).map(n=>n.name)
- assert.deepEqual(names(),['返回设置','关闭开发者工具','游戏速度 ×1','无敌：关闭','+999灵石、贡献','+999功法点','提升一小境界','重置游戏进度'])
+ assert.deepEqual(names(),['返回设置','关闭开发者工具','游戏速度 ×1','无敌：关闭','+999灵石、点眷','+999功法点','提升一小境界','重置游戏进度'])
  for(const forbidden of ['当前灵石','体验档','成长与存档','返回宗门','切回普通档'])assert.ok(!hasLabel(game.overlay,forbidden))
  for(const speed of [1,2,3]){press(game,`游戏速度 ×${speed}`);assert.equal(game.tools.speed,speed%3+1)}
  press(game,'返回设置')
@@ -3851,7 +3562,7 @@ test('single-save tools expose only direct actions and cycle speed without a sub
  assert.ok(!hasLabel(named(game.menu.root,'宗门设置遮罩'),'落云宗'))
  press(game,'开发者工具')
  const balance=game.store.state.spiritStones, contribution=game.store.state.contribution
- press(game,'+999灵石、贡献');press(game,'+999灵石、贡献')
+ press(game,'+999灵石、点眷');press(game,'+999灵石、点眷')
  assert.equal(game.store.state.spiritStones,balance+1998000000)
  assert.equal(game.store.state.contribution,contribution+1998)
  press(game,'+999功法点')
@@ -3859,7 +3570,7 @@ test('single-save tools expose only direct actions and cycle speed without a sub
  press(game,'提升一小境界')
  assert.equal(profile.cultivationAt(game.store.state.xp).level,2)
  assert.equal(storage.getItem(playtest.TOWER_PLAYTEST_KEY),null)
- const restored=new campaign.TowerCampaignStore(playtest.towerStorage(storage),START)
+ const restored=new campaign.TowerCampaignStore(playtest.towerStorage(storage,true),START)
  assert.equal(restored.state.spiritStones,game.store.state.spiritStones)
  press(game,'关闭开发者工具');assert.equal(game.overlay,null)
 })
@@ -3870,11 +3581,11 @@ test('single-save tool writes are atomic and close returns to paused battle', t 
  press(game,'开发者工具')
  const before=copy(game.store.state)
  storage.blockedWrites.add(campaign.TOWER_CAMPAIGN_KEY)
- press(game,'+999灵石、贡献')
+ press(game,'+999灵石、点眷')
  assert.deepEqual(game.store.state,before)
  assert.ok(hasLabel(game.overlay,'保存失败'))
  storage.blockedWrites.clear();press(game,'返回工具')
- press(game,'+999灵石、贡献')
+ press(game,'+999灵石、点眷')
  assert.equal(game.run.state.phase,'paused')
  press(game,'关闭开发者工具')
  assert.equal(game.run.state.phase,'paused')
@@ -3897,7 +3608,7 @@ test('monster mechanics remain above every friendly effect and reuse world label
 });
 
 test('paper experience ring resets on level-up and hides at cap in hall and combat', t => {
-  const storage = disk(); seed(storage, { xp: 20 })
+  const storage = disk(); seed(storage, { patch:{xp:20} })
   const { game } = launch(t, storage, { assisted: false })
   assert.ok(named(game.menu.root, 'HUD.XPRing'))
   game.enterFloor(1)
@@ -3929,8 +3640,23 @@ for (const frame of [{width:1280,height:720},{width:1280,height:600}]) {
   const name=rectWithin(game.bossLabel.node,root),bar=rectWithin(game.bossBar.node,root);
   assert.ok(name.top<=size.height/2-58 && name.top>=size.height/2-70);
   assert.ok(bar.bottom>=size.height/2-98,'target bar stays near the top');
-  const wave=rectWithin(named(game.battle,'HUD.FloorWaveLabel'),root);
-  assert.ok(wave.right<name.left,'wave is beside the target, not above it');
+  const mapNode=named(game.battle,'HUD.MapCard'),waveNode=named(game.battle,'HUD.FloorWave')
+  assert.strictEqual(waveNode.parent,mapNode)
+  assert.deepEqual(waveNode.getComponent(UITransform).contentSize,{width:112,height:32})
+  const map=rectWithin(mapNode,root),wave=rectWithin(waveNode,root),boss=rectWithin(game.bossPanel,root)
+  assert.equal(wave.left,map.left,'wave strip is aligned with the map left edge')
+  assert.equal(map.bottom-wave.top,8,'the approved gap below the map is eight design units')
+  assert.ok(wave.right<=boss.left||wave.left>=boss.right||wave.top<=boss.bottom||wave.bottom>=boss.top,'wave and target information do not overlap')
+  assert.ok(wave.bottom>=-size.height/2&&wave.top<=size.height/2&&wave.left>=-size.width/2&&wave.right<=size.width/2)
+  const originalWave=game.run.state.wave,before=game.run.snapshot(),saved=storage.getItem(campaign.TOWER_CAMPAIGN_KEY)
+  for(const waveNumber of [1,9,10,20]){
+   game.run.state.wave=waveNumber;game.draw()
+   assert.equal(named(game.battle,'HUD.FloorWaveLabel').getComponent(Label).string,`波次 ${waveNumber}/20`)
+   assert.deepEqual(rectWithin(waveNode,root),wave,'single- and double-digit waves cannot move the strip')
+  }
+  game.run.state.wave=originalWave;game.draw()
+  assert.deepEqual(game.run.snapshot(),before)
+  assert.equal(storage.getItem(campaign.TOWER_CAMPAIGN_KEY),saved)
   assert.equal(game.bossLabel.enableOutline,true);
  });
 }
@@ -3992,17 +3718,18 @@ for(const frame of [{width:1280,height:720},{width:844,height:390}])test(`develo
  assert.equal(game.store.state.playtestSkillPoints,undefined)
  assert.equal(game.store.state.clearedFloor,0)
  assert.equal(storage.getItem('other-game'),'keep')
- assert.deepEqual(new campaign.TowerCampaignStore(playtest.towerStorage(storage),START).state,game.store.state)
+ assert.deepEqual(new campaign.TowerCampaignStore(playtest.towerStorage(storage,true),START).state,game.store.state)
 })
 
 for(const frame of [{width:1280,height:720},{width:844,height:390}])test(`ten-layer character panel shows full XP and pending breakthrough (${frame.width})`,t=>{
  const storage=disk();seed(storage,{patch:{xp:6600}})
  const {game}=launch(t,storage,{frame,assisted:false})
  game.menu.showCharacterInfo()
- assert.equal(named(game.menu.root,'角色境界').getComponent(Label).string,'筑基 · 大圆满')
- assert.ok(hasLabel(game.menu.root,'修为已满 · 等待突破'))
- assert.ok(hasLabel(game.menu.root,'突破条件待定'))
- assert.equal(descendants(game.menu.root).some(n=>n.name==='突破金丹'&&n.getComponent(Button)),false)
+ assert.equal(named(game.menu.root,'角色境界').getComponent(Label).string,'剑修 · 筑基十层·大圆满')
+ assert.ok(hasLabel(game.menu.root,'615 / 615'))
+ const breakthroughButton = button(game, '选择突破物品');
+ assert.equal(breakthroughButton.getComponent(Button).interactable, true)
+ assert.equal(descendants(game.menu.root).filter(n=>n.name==='选择突破物品'&&n.getComponent(Button)).length,1)
  assert.equal(game.store.state.xp,6600)
 })
 
@@ -4010,11 +3737,12 @@ test('ten-layer golden core distinguishes tenth layer from full consummation',t=
  const storage=disk();seed(storage,{patch:{xp:13485}})
  const {game}=launch(t,storage,{assisted:false})
  game.menu.showCharacterInfo()
- assert.ok(hasLabel(game.menu.root,'金丹 十层'))
- assert.ok(hasLabel(game.menu.root,'修为  0 / 915'))
+ assert.ok(hasLabel(game.menu.root,'金丹十层'))
+ assert.ok(hasLabel(game.menu.root,'0 / 915'))
  game.store.act({type:'playtestMaxLevel'},START);game.render();game.menu.showCharacterInfo()
- assert.equal(named(game.menu.root,'角色境界').getComponent(Label).string,'金丹 · 大圆满')
- assert.ok(hasLabel(game.menu.root,'修为已圆满'))
+ assert.equal(named(game.menu.root,'角色境界').getComponent(Label).string,'剑修 · 金丹十层·大圆满')
+ assert.ok(hasLabel(game.menu.root,'经验已圆满'))
+ assert.equal(descendants(game.menu.root).some(n=>n.name==='选择突破物品'),false)
 })
 
 

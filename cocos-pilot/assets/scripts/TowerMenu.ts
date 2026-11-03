@@ -859,6 +859,8 @@ export class TowerMenu {
   if(combat.woundConversion>0){row('剩余直伤转剑痕',pct(combat.woundConversion));row('剑痕伤害加成',pct(combat.woundBonus));}
   this.characterManaLabel=row('灵力',`${number(state.mana)} / ${number(attributes.maxMana)}`);
   row('每秒恢复灵力',number(attributes.manaRegen));
+  this.characterHpLabel=row('当前气血',`${Math.min(Math.ceil(state.hp),Math.round(attributes.maxHp))}/${Math.round(attributes.maxHp)}`);
+  this.characterHpLabel.node.name='角色当前气血';
   row('气血上限',number(attributes.maxHp)).node.name='角色气血上限';
   row('每3秒恢复气血',`${Math.round(attributes.maxHp*combat.healthRegen*100)/100}`);
   row('物理防御',number(combat.physicalDefense));
