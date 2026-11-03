@@ -59,18 +59,18 @@ export function readToolchain({creator=defaultCreator}={}){
 }
 
 export function captureBuildFingerprint({root=projectRoot,platform,creator=defaultCreator,toolchain}={}){
- if(!['web-mobile','wechatgame'].includes(platform))throw Error('Unsupported build fingerprint platform')
+ if(!['web-mobile','wechatgame','taptap-minigame'].includes(platform))throw Error('Unsupported build fingerprint platform')
  const config=JSON.parse(fs.readFileSync(resolve(root,'release/settings.json')))
  const tools=JSON.parse(canonical(toolchain??readToolchain({creator})))
  const inputs=[...requiredInputs.map(path=>inputRecord(root,path)),...optionalInputs.map(path=>inputRecord(root,path,true))]
  const identity={schemaVersion:2,platform,inputs,toolchain:tools}
- return {...identity,version:config.version,appid:config.appid,sourceDigest:digestSource(root),inputDigest:sha256(canonical(identity))}
+ return {...identity,version:config.version,appid:platform==='taptap-minigame'?null:config.appid,...(platform==='taptap-minigame'?{intermediateWechatAppId:config.appid}:{}),sourceDigest:digestSource(root),inputDigest:sha256(canonical(identity))}
 }
 
 export function verifyBuildStamp(stamp,options={}){
  if(stamp?.schemaVersion!==2||!stamp.inputDigest||!stamp.toolchain||!stamp.inputs)throw Error('旧版或不完整的构建记录：需要 schemaVersion 2 完整构建指纹，请重新构建')
  const current=captureBuildFingerprint(options)
- for(const key of ['schemaVersion','platform','version','appid','sourceDigest','inputDigest','inputs','toolchain']){
+ for(const key of ['schemaVersion','platform','version','appid','intermediateWechatAppId','sourceDigest','inputDigest','inputs','toolchain']){
   if(canonical(stamp[key])!==canonical(current[key]))throw Error('构建产物已过期，build inputs or toolchain changed ('+key+')，请重新构建')
  }
  return true

@@ -5,7 +5,7 @@ import {resolve} from 'node:path'
 // Keep this explicit final packaging step reproducible for both CLI and CI.
 // Current tower artwork is emitted as the resources bundle.
 export const OPTIONAL_BUNDLES=['resources']
-export function packageWechat(root){
+export function prepareSubpackages(root){
  const read=p=>JSON.parse(readFileSync(resolve(root,p),'utf8')),write=(p,v)=>writeFileSync(resolve(root,p),JSON.stringify(v,null,2)+'\n')
  // Fixed bundles must exist; resources is appended when built.
  const settings=read('src/settings.json'),game=read('game.json'),names=['internal','main',...OPTIONAL_BUNDLES.filter(name=>existsSync(resolve(root,'assets',name,'config.json')))]
@@ -17,9 +17,16 @@ export function packageWechat(root){
   writeFileSync(resolve(to,'game.js'),existsSync(resolve(to,'index.js'))?"require('./index.js');\n":"// Resource-only subpackage.\n")
  }
  settings.assets.subpackages=names;game.subpackages=names.map(name=>({name,root:'subpackages/'+name+'/'}));write('src/settings.json',settings);write('game.json',game)
+ return measurePackage(root,names)
+}
+export function measurePackage(root,names){
  const bytes=p=>readdirSync(p,{withFileTypes:true}).reduce((n,e)=>n+(e.isDirectory()?bytes(resolve(p,e.name)):statSync(resolve(p,e.name)).size),0)
  const total=bytes(root),subpackages=Object.fromEntries(names.map(name=>[name,bytes(resolve(root,'subpackages',name))])),main=total-Object.values(subpackages).reduce((n,x)=>n+x,0)
- const report={mainBytes:main,subpackageBytes:subpackages,totalBytes:total,mainLimitBytes:4*1024*1024,totalLimitBytes:20*1024*1024}
+ return {mainBytes:main,subpackageBytes:subpackages,totalBytes:total}
+}
+export function packageWechat(root){
+ const measured=prepareSubpackages(root),{mainBytes:main,subpackageBytes:subpackages,totalBytes:total}=measured
+ const report={...measured,mainLimitBytes:4*1024*1024,totalLimitBytes:20*1024*1024}
  if(main>report.mainLimitBytes||Object.values(subpackages).some(n=>n>4*1024*1024)||total>report.totalLimitBytes)throw Error('WeChat package exceeds project budget: '+JSON.stringify(report))
  return report
 }

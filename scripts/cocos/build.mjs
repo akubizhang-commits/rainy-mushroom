@@ -4,9 +4,14 @@ import {spawnSync} from 'node:child_process'
 import {copyFileSync,existsSync,mkdirSync,writeFileSync,rmSync} from 'node:fs'
 import {resolve} from 'node:path'
 const root=resolve(import.meta.dirname,'../..'),platform=process.argv[2]||'web-mobile'
-if(!['web-mobile','wechatgame'].includes(platform))throw Error('Unsupported pilot build platform')
+if(!['web-mobile','wechatgame','taptap-minigame'].includes(platform))throw Error('Unsupported pilot build platform')
 const creator=process.env.COCOS_CREATOR_PATH||'/Applications/CocosCreator.app/Contents/MacOS/CocosCreator'
 if(!existsSync(creator))throw Error('Set COCOS_CREATOR_PATH to the Creator 3.8.8 executable')
+if(platform==='taptap-minigame'){
+ if(process.argv.includes('--release'))throw Error('Tap publication is unavailable: account, platform/device and package limits remain unverified')
+ const {buildTap}=await import('./build-tap.mjs')
+ await buildTap({root,creator})
+}else{
 const output=resolve(root,'cocos-pilot/build',platform),fingerprintOptions={root,platform,creator}
 // A failed rebuild must never retain a previous candidate's validity record.
 rmSync(resolve(output,'release-build.json'),{force:true})
@@ -28,3 +33,5 @@ stampBuild(output,before,fingerprintOptions)
 console.log(`Built ${platform}: ${root}/cocos-pilot/build/${platform}; log: ${logDir}/${platform}.log`)
 
 if(process.argv.includes('--release')){const check=spawnSync(process.execPath,[resolve(root,'scripts/check-release.mjs'),'--strict'],{stdio:'inherit'});if(check.status!==0)process.exit(check.status||1)}
+
+}

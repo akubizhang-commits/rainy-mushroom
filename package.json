@@ -12,7 +12,9 @@
     "cocos:build:wechat": "node scripts/cocos/build.mjs wechatgame",
     "cocos:test": "node --test tests/cocos-package.test.mjs tests/current-entry.test.mjs",
     "release:check": "node scripts/check-release.mjs --strict",
-    "release:build": "node scripts/cocos/build.mjs wechatgame --release"
+    "release:build": "node scripts/cocos/build.mjs wechatgame --release",
+    "cocos:build:tap": "node scripts/cocos/build.mjs taptap-minigame",
+    "cocos:test:tap": "node --test tests/tap-conversion.test.mjs"
   },
   "creator": {
     "version": "3.8.8"
