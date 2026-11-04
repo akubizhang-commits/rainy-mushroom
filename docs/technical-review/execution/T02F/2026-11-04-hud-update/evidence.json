@@ -1,0 +1,171 @@
+{
+  "capturedAt": "2026-11-04T00:14:41.378839+00:00",
+  "base": "ed97a572276ecab2d997b598d5e6b76d5bc79ce5",
+  "head": "ed97a572276ecab2d997b598d5e6b76d5bc79ce5",
+  "before": {
+    "command": [
+      "node",
+      "--test",
+      "tests/xianxia-tower-host-tools.test.mjs",
+      "tests/xianxia-tower-inventory.test.mjs"
+    ],
+    "exitCode": 1,
+    "counters": {
+      "tests": 297,
+      "pass": 292,
+      "fail": 5,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "byFile": {
+      "tests/xianxia-tower-host-tools.test.mjs": {
+        "tests": 186,
+        "pass": 183,
+        "fail": 3,
+        "skipped": 0,
+        "failures": [
+          "one level 1 sword-line volley completes one character action without rewinding on its 1 hits",
+          "paper experience ring resets on level-up and hides at cap in hall and combat",
+          "battle experience surrounds the portrait without a bottom bar"
+        ]
+      },
+      "tests/xianxia-tower-inventory.test.mjs": {
+        "tests": 111,
+        "pass": 109,
+        "fail": 2,
+        "skipped": 0,
+        "failures": [
+          "HD jade loads atomically, shows latest progress and releases all texture resources",
+          "HD jade failed layer keeps fallback and releases partially loaded assets"
+        ]
+      }
+    },
+    "byFileMethod": "partition combined TAP at the first inventory test; not a separate process per file",
+    "failures": [
+      "one level 1 sword-line volley completes one character action without rewinding on its 1 hits",
+      "paper experience ring resets on level-up and hides at cap in hall and combat",
+      "battle experience surrounds the portrait without a bottom bar",
+      "HD jade loads atomically, shows latest progress and releases all texture resources",
+      "HD jade failed layer keeps fallback and releases partially loaded assets"
+    ],
+    "uncompressedSha256": "e765cf174e973cfdf86be79f1317b94a3c8b3db66fc6759a414c1707df722866"
+  },
+  "after": {
+    "command": [
+      "node",
+      "--test",
+      "tests/xianxia-tower-host-tools.test.mjs",
+      "tests/xianxia-tower-inventory.test.mjs"
+    ],
+    "exitCode": 1,
+    "counters": {
+      "tests": 300,
+      "pass": 299,
+      "fail": 1,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "byFile": {
+      "tests/xianxia-tower-host-tools.test.mjs": {
+        "tests": 188,
+        "pass": 187,
+        "fail": 1,
+        "skipped": 0,
+        "failures": [
+          "one level 1 sword-line volley completes one character action without rewinding on its 1 hits"
+        ]
+      },
+      "tests/xianxia-tower-inventory.test.mjs": {
+        "tests": 112,
+        "pass": 112,
+        "fail": 0,
+        "skipped": 0,
+        "failures": []
+      }
+    },
+    "byFileMethod": "partition combined TAP at the first inventory test; not a separate process per file",
+    "failures": [
+      "one level 1 sword-line volley completes one character action without rewinding on its 1 hits"
+    ],
+    "uncompressedSha256": "e5360e14b8ef99f4a049d23fa28de31df36f2fe39c0f8568e22ebd352c2061fc"
+  },
+  "files": {
+    "tests/xianxia-tower-host-tools.test.mjs": {
+      "beforeSha256": "5259d982b91bc0803ab0f0ec44eabea6283bcecdcc051ef3888a27dc5a6574da",
+      "afterSha256": "3bdb94aeef32bbd8f4ab739280d7d970cf00afbfbc4f6906688ab20862e448ff",
+      "unchanged": false
+    },
+    "tests/xianxia-tower-inventory.test.mjs": {
+      "beforeSha256": "4255c489bb125662518240c5eeab0746a6f1b67bce053b4c4242a81cb5e9bd46",
+      "afterSha256": "871293f0f57194542fe0a5159970653b7365191e1d9aa4c4d356da99f4846133",
+      "unchanged": false
+    },
+    "cocos-pilot/assets/scripts/TowerPlayerHud.ts": {
+      "beforeSha256": "3dee3c1aaad2df1673d015cedfec349046b77d177895f6ab344cb8d6884dac24",
+      "afterSha256": "3dee3c1aaad2df1673d015cedfec349046b77d177895f6ab344cb8d6884dac24",
+      "unchanged": true
+    },
+    "cocos-pilot/assets/scripts/TowerView.ts": {
+      "beforeSha256": "37a99d723f932bf39f3f18c0aee09b550390371aa18882f596bdd4d92aaf9136",
+      "afterSha256": "37a99d723f932bf39f3f18c0aee09b550390371aa18882f596bdd4d92aaf9136",
+      "unchanged": true
+    },
+    "cocos-pilot/assets/scripts/TowerMenu.ts": {
+      "beforeSha256": "2196d02e89239adfeef637883274f07d18fb981465639b16ecdf8feaec2ef81b",
+      "afterSha256": "2196d02e89239adfeef637883274f07d18fb981465639b16ecdf8feaec2ef81b",
+      "unchanged": true
+    }
+  },
+  "protectedBlocks": [
+    {
+      "name": "compiled loader registration, emittedSkillIcons and emittedCapabilityHost",
+      "identical": true,
+      "bytes": 3894,
+      "sha256": "ca079d081c63884905e5033ae6a7746fb054ce6983fb7d2e2484249b8ffdc0d3"
+    },
+    {
+      "name": "T04 three tests",
+      "identical": true,
+      "bytes": 3322,
+      "sha256": "fd6f2e120f59b9c2a2c7570331970c6d67f0c7330d2c4acdfb276d07e4fb375f"
+    },
+    {
+      "name": "deferred-cleanup regression",
+      "identical": true,
+      "bytes": 1999,
+      "sha256": "6934babfb88bc43c2c39299a01531aa1cfff24a72543ab6f1118153be1cc20c0"
+    },
+    {
+      "name": "sword-line all three rank tests including known failure",
+      "identical": true,
+      "bytes": 3396,
+      "sha256": "ce41c7b0118519f452820ae5f4559c4b20b8f26c7d93841b7428ab59feb056c5"
+    },
+    {
+      "name": "retained jade renderer body",
+      "identical": true,
+      "bytes": 2281,
+      "sha256": "a65e840d873c091a35c928da3ba33b7389383cb1447671d16a1b60fae6f2e1ca"
+    }
+  ],
+  "diffCheck": {
+    "command": [
+      "git",
+      "diff",
+      "--check",
+      "--",
+      "tests/xianxia-tower-host-tools.test.mjs",
+      "tests/xianxia-tower-inventory.test.mjs"
+    ],
+    "exitCode": 0,
+    "outputFile": "diff-check.txt"
+  },
+  "patch": {
+    "file": "tests.patch.gz",
+    "uncompressedSha256": "a3f95350fdc3426d93d6922f6fa0ac619a6089a9ead59911e431b22e7a354125"
+  },
+  "historicalT02FTrackedReportsUnchanged": true,
+  "newSkipsOrTodos": false
+}

@@ -1,0 +1,23 @@
+[
+  {
+    "name": "before-owned",
+    "command": [
+      "node",
+      "--test",
+      "tests/xianxia-equipment-output-scheduling.test.mjs"
+    ],
+    "exitCode": 1,
+    "bytes": 32278
+  },
+  {
+    "name": "before-conservative6x",
+    "command": [
+      "node",
+      "--test",
+      "--test-name-pattern=conservative three-slot",
+      "tests/xianxia-equipment-eight-tier-budget.test.mjs"
+    ],
+    "exitCode": 1,
+    "bytes": 1643
+  }
+]

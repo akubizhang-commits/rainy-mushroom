@@ -58,6 +58,8 @@ class Node {
   }
 }
 class UITransform {
+  get width() { return this.contentSize?.width ?? 0 }
+  get height() { return this.contentSize?.height ?? 0 }
   setContentSize(width, height) { this.contentSize = { width, height } }
   setAnchorPoint(x, y) { this.anchor = { x, y } }
 }
@@ -883,7 +885,9 @@ for (const [width,height] of [[844,390],[1280,720]]) test(`alchemy ${width}x${he
  click(f.menu,'返回背包');click(f.menu,'出售');click(f.menu,'勾选出售-huichuncao');click(f.menu,'确认出售');assert.equal(f.store.state.pills.huichuncao,1);
 });
 
-test('paper experience ring draws only earned progress clockwise and hides zero or capped progress',()=>{
+// Retained component coverage only: the current product uses the horizontal HUD.
+// Keep the former renderer's geometry/caching checks without requiring active jade art.
+test('retained jade renderer component draws earned progress clockwise and hides zero or capped progress',()=>{
  for(const [ratio,capped,expected] of [[0,false,0],[-1,false,0],[NaN,false,0],[.001,false,.001],[.25,false,.25],[.5,false,.5],[.99,false,.99],[1,false,1],[2,false,1],[.5,true,0],[1,true,0]]){
   const points=[],rects=[],paths=[];let strokes=0,clears=0,fills=0,start=0;
   const g={node:{active:true},clear(){clears++;points.length=0;},
@@ -934,47 +938,111 @@ test('profession image releases completed loads and ignores callbacks after menu
  }finally{context.resources.load=original;}
 });
 
-test('HD jade loads atomically, shows latest progress and releases all texture resources',()=>{
+test('horizontal experience clamps invalid input, keeps an empty track and fills capped progress',()=>{
+ const node=new Node('HUD.XPBar');node.addComponent(UITransform).setContentSize(1248,4);
+ const graphics=node.addComponent(Graphics),rectangles=[];let clears=0;
+ graphics.clear=()=>{clears++;rectangles.length=0;};
+ graphics.roundRect=(...rect)=>rectangles.push({rect,color:graphics.fillColor.r});
+ const cases=[[0,false,0],[-1,false,0],[NaN,false,0],[Infinity,false,0],[-Infinity,false,0],
+  [.001,false,.001],[.25,false,.25],[.5,false,.5],[.99,false,.99],[1,false,1],[2,false,1],
+  [0,true,1],[.5,true,1],[1,true,1],[NaN,true,1]];
+ for(const [ratio,capped,expected] of cases){
+  const previousClears=clears;context.drawPlayerXp(graphics,ratio,capped);
+  assert.equal(clears,previousClears+1,'each update clears the former fill');
+  assert.equal(node.active,true,'zero and capped progress both retain their track');
+  assert.equal(rectangles.length,expected===0?1:2);
+  assert.deepEqual(rectangles[0].rect,[-624,-2,1248,4,2]);
+  if(expected>0){
+   const [x,y,width,height,radius]=rectangles[1].rect;
+   assert.equal(width,1248*expected);assert.equal(x,-624);assert.equal(y,-2);assert.equal(height,4);
+   assert.notEqual(rectangles[1].color,rectangles[0].color,'earned fill is distinct from the empty track');
+   assert.ok(radius>=0&&radius<=Math.min(2,width/2),'tiny progress cannot round beyond its own width');
+  }
+  for(const {rect} of rectangles){
+   assert.ok(rect.every(Number.isFinite));
+   assert.ok(rect[2]>=0&&rect[0]>=-624&&rect[0]+rect[2]<=624,'all drawing stays in the track');
+  }
+ }
+});
+
+test('horizontal HUD loads current images independently and releases them on redraw and navigation',async()=>{
  const original=context.resources.load,requests=[];
  context.resources.load=(path,type,done)=>requests.push({path,done});
  try{
   const f=setup();f.menu.dismissInventory();f.menu.go('hall');
-  const pending=['body','tail','head'].map(part=>requests.filter(r=>r.path===`player-hud/jade-dragon-hd/${part}`).at(-1));
-  assert.ok(pending.every(Boolean),'all three HD layers are requested');
-  const root=find(f.menu,'HUD.XPArtwork'),ring=find(f.menu,'HUD.XPRing').getComponent(Graphics);
-  const assets=pending.map(()=>new ImageAsset());
-  context.drawPlayerXp(ring,.5);
-  pending[0].done(null,assets[0]);pending[1].done(null,assets[1]);
-  assert.equal(root.active,false,'partial assets must not replace the complete fallback');
-  context.drawPlayerXp(ring,.75);
-  pending[2].done(null,assets[2]);
-  assert.equal(root.active,true);
-  const head=find(f.menu,'HUD.XPHead').getComponent(Sprite);
-  assert.equal(head.node.angle,-270,'late loading keeps the latest earned endpoint');
-  assert.ok(head.fillRange>0);
-  const sprites=['Body','Tail','Head'].map(n=>find(f.menu,`HUD.XP${n}`).getComponent(Sprite));
-  assert.ok(sprites.every(s=>Object.values(s.spriteFrame.texture.filters).every(v=>v===Texture2D.Filter.LINEAR)));
-  assert.ok(sprites.every(s=>s.spriteFrame.texture.mipFilter===Texture2D.Filter.LINEAR));
-  context.drawPlayerXp(ring,1,true);assert.equal(ring.node.active,false);
-  context.drawPlayerXp(ring,.1);assert.equal(ring.node.active,true);assert.equal(head.node.angle,-36);
-  const frames=sprites.map(s=>s.spriteFrame),textures=frames.map(f=>f.texture);
+  const paths=['player-hud/paper-portrait','player-hud/sword-cultivator'];
+  const pending=paths.map(path=>requests.filter(r=>r.path===path).at(-1));
+  assert.ok(pending.every(Boolean),'current portrait and profession assets are requested');
+  assert.equal(requests.some(r=>r.path.includes('jade-dragon')),false);
+  const hud=f.menu.playerHud,portrait=find(f.menu,'HUD.PaperArtwork').getComponent(Sprite);
+  const profession=find(f.menu,'HUD.ProfessionArtwork').getComponent(Sprite);
+  const paperFallback=find(f.menu,'HUD.PaperFallback');
+  const professionFallback=all(find(f.menu,'HUD.ProfessionIcon')).find(n=>n.getComponent(Label)?.string==='剑');
+  assert.ok(professionFallback);assert.equal(paperFallback.active,true);assert.equal(professionFallback.active,true);
+  assert.equal(hud.xpBar.node.active,false,'pending artwork cannot expose hall experience');
+  const stateBefore=stateJSON(f),saved=f.storage.getItem(campaign.TOWER_CAMPAIGN_KEY),images=pending.map(()=>new ImageAsset());
+  await Promise.resolve();pending[0].done(null,images[0]);
+  assert.equal(paperFallback.active,false);assert.equal(professionFallback.active,true);
+  assert.equal(portrait.spriteFrame.texture.image,images[0]);assert.equal(profession.spriteFrame,null);
+  f.menu.refreshVitals({...f.store.state,xp:45,hp:50});
+  assert.equal(hud.stats.string,'炼气二层·初期');assert.equal(hud.hpLabel.string,'50/108');
+  await Promise.resolve();pending[1].done(null,images[1]);
+  assert.equal(professionFallback.active,false);assert.equal(hud.stats.string,'炼气二层·初期');
+  assert.equal(hud.hpLabel.string,'50/108','late image completion cannot reset current vitals');
+  assert.equal(hud.xpBar.node.active,false);
+  const sprites=[portrait,profession],frames=sprites.map(sprite=>sprite.spriteFrame),textures=frames.map(frame=>frame.texture);
+  assert.ok(images.every(image=>image.refs===1));
+  assert.ok(textures.every(texture=>Object.values(texture.filters).every(v=>v===Texture2D.Filter.LINEAR)));
+  f.menu.render(f.store.state,'hall');
+  assert.ok(images.every(image=>image.refs===0));assert.ok(frames.every(frame=>!frame.isValid));
+  assert.ok(textures.every(texture=>!texture.isValid));assert.ok(sprites.every(sprite=>sprite.spriteFrame===null));
+  const stale=paths.map(path=>requests.filter(r=>r.path===path).at(-1));
+  assert.ok(stale.every((request,index)=>request!==pending[index]));
+  const staleSprites=['HUD.PaperArtwork','HUD.ProfessionArtwork'].map(name=>find(f.menu,name).getComponent(Sprite));
+  f.menu.go('home');
+  const ignored=stale.map(()=>new ImageAsset());
+  await Promise.resolve();stale.forEach((request,index)=>request.done(null,ignored[index]));
+  assert.ok(ignored.every(image=>image.refs===0),'navigation rejects pending assets before acquiring a reference');
+  assert.ok(staleSprites.every(sprite=>sprite.spriteFrame===null));
+  assert.equal(all(f.menu.root).some(node=>node.name==='HUD.PaperArtwork'),false);
+  assert.equal(stateJSON(f),stateBefore);assert.equal(f.storage.getItem(campaign.TOWER_CAMPAIGN_KEY),saved);
   f.menu.destroy();
-  assert.ok(assets.every(a=>a.refs===0));assert.ok(frames.every(f=>!f.isValid));assert.ok(textures.every(t=>!t.isValid));
-  const late=new ImageAsset();pending[2].done(null,late);assert.equal(late.refs,0);
  }finally{context.resources.load=original;}
 });
 
-test('HD jade failed layer keeps fallback and releases partially loaded assets',()=>{
- const original=context.resources.load,requests=[];
- context.resources.load=(path,type,done)=>requests.push({path,done});
+test('horizontal HUD image failure preserves its fallback and destroys partial loads without reviving stale nodes',async()=>{
+ const original=context.resources.load;
  try{
-  const f=setup();f.menu.dismissInventory();f.menu.go('hall');
-  const pending=['body','tail','head'].map(part=>requests.filter(r=>r.path===`player-hud/jade-dragon-hd/${part}`).at(-1));
-  const ring=find(f.menu,'HUD.XPRing').getComponent(Graphics),assets=[new ImageAsset(),new ImageAsset()];
-  pending[0].done(null,assets[0]);pending[1].done(null,assets[1]);pending[2].done(new Error('offline'));
-  context.drawPlayerXp(ring,.5);
-  assert.equal(ring.node.active,true);assert.equal(find(f.menu,'HUD.XPArtwork').active,false);
-  f.menu.destroy();assert.ok(assets.every(a=>a.refs===0));
+  for(const failedPath of ['player-hud/paper-portrait','player-hud/sword-cultivator']){
+   const requests=[];context.resources.load=(path,type,done)=>requests.push({path,done});
+   const f=setup();f.menu.dismissInventory();f.menu.go('hall');
+   const paths=['player-hud/paper-portrait','player-hud/sword-cultivator'];
+   const pending=paths.map(path=>requests.filter(r=>r.path===path).at(-1));assert.ok(pending.every(Boolean));
+   const failure=pending.find(request=>request.path===failedPath),success=pending.find(request=>request.path!==failedPath);
+   const sprites=['HUD.PaperArtwork','HUD.ProfessionArtwork'].map(name=>find(f.menu,name).getComponent(Sprite));
+   const fallbacks=[find(f.menu,'HUD.PaperFallback'),all(find(f.menu,'HUD.ProfessionIcon')).find(n=>n.getComponent(Label)?.string==='剑')];
+   const failedIndex=paths.indexOf(failedPath),loadedIndex=1-failedIndex,image=new ImageAsset();
+   await Promise.resolve();success.done(null,image);
+   const frame=sprites[loadedIndex].spriteFrame,texture=frame.texture;
+   await Promise.resolve();failure.done(new Error('offline'),null);
+   assert.equal(fallbacks[failedIndex].active,true);assert.equal(sprites[failedIndex].spriteFrame,null);
+   assert.equal(fallbacks[loadedIndex].active,false);assert.equal(image.refs,1);
+   const before=stateJSON(f),saved=f.storage.getItem(campaign.TOWER_CAMPAIGN_KEY),count=requests.length;
+   f.menu.refreshVitals({...f.store.state,hp:25});f.menu.refreshVitals({...f.store.state,hp:25});
+   assert.equal(f.menu.playerHud.hpLabel.string,'25/100');assert.equal(f.menu.playerHud.xpBar.node.active,false);
+   assert.equal(requests.length,count,'vitals refresh cannot cause a failing-image retry storm');
+   assert.equal(requests.some(request=>request.path.includes('jade-dragon')),false);
+   f.menu.render(f.store.state,'hall');
+   assert.equal(image.refs,0);assert.equal(frame.isValid,false);assert.equal(texture.isValid,false);
+   const late=paths.map(path=>requests.filter(r=>r.path===path).at(-1));
+   const lateSprites=['HUD.PaperArtwork','HUD.ProfessionArtwork'].map(name=>find(f.menu,name).getComponent(Sprite));
+   f.menu.destroy();f.menu.destroy();
+   const ignored=late.map(()=>new ImageAsset());
+   await Promise.resolve();late.forEach((request,index)=>request.done(null,ignored[index]));
+   assert.ok(ignored.every(asset=>asset.refs===0));assert.ok(lateSprites.every(sprite=>sprite.spriteFrame===null));
+   assert.equal(image.refs,0,'idempotent disposal cannot decrement a released image twice');
+   assert.equal(stateJSON(f),before);assert.equal(f.storage.getItem(campaign.TOWER_CAMPAIGN_KEY),saved);
+  }
  }finally{context.resources.load=original;}
 });
 

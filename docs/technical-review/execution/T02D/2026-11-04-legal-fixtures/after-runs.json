@@ -1,0 +1,44 @@
+[
+  {
+    "name": "after-owned",
+    "command": [
+      "node",
+      "--test",
+      "tests/xianxia-equipment-output-scheduling.test.mjs"
+    ],
+    "exitCode": 1,
+    "bytes": 56106
+  },
+  {
+    "name": "after-conservative6x",
+    "command": [
+      "node",
+      "--test",
+      "--test-name-pattern=conservative three-slot",
+      "tests/xianxia-equipment-eight-tier-budget.test.mjs"
+    ],
+    "exitCode": 1,
+    "bytes": 1644
+  },
+  {
+    "name": "after-legality",
+    "command": [
+      "node",
+      "--test",
+      "--test-name-pattern=Campaign|all50 rebuilt fixtures",
+      "tests/xianxia-equipment-output-scheduling.test.mjs"
+    ],
+    "exitCode": 0,
+    "bytes": 1319
+  },
+  {
+    "name": "after-helper-syntax",
+    "command": [
+      "node",
+      "--check",
+      "tests/helpers/equipment-standard-fixtures.mjs"
+    ],
+    "exitCode": 0,
+    "bytes": 0
+  }
+]

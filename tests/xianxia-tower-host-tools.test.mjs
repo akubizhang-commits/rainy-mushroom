@@ -3607,29 +3607,50 @@ test('monster mechanics remain above every friendly effect and reuse world label
   state.monsterMechanics.zones=[];game.draw();assert.ok(renderer.labels.every(label=>!label.node.active));
 });
 
-test('paper experience ring resets on level-up and hides at cap in hall and combat', t => {
+// Current product acceptance: the 2026-11-04 decision keeps the horizontal HUD.
+// See docs/technical-review/decisions/2026-11-04-hud-and-equipment.md and
+// execution/T02F/2026-11-04-hud-update/README.md for the independent acceptance table.
+test('horizontal battle experience resets at level-up and fills at cap while hall experience stays hidden', t => {
   const storage = disk(); seed(storage, { patch:{xp:20} })
-  const { game } = launch(t, storage, { assisted: false })
-  assert.ok(named(game.menu.root, 'HUD.XPRing'))
+  const { game, icons } = launch(t, storage, { assisted: false })
+  const campaignBefore = copy(game.store.state), hallSave = storage.getItem(campaign.TOWER_CAMPAIGN_KEY)
+  for (const xp of [0,20,45,60,1800,6600,14400]) {
+    game.menu.render({...game.store.state,xp}, 'hall')
+    const bar = named(game.menu.root, 'HUD.XPBar')
+    assert.equal(bar.active, false, `hall must not expose experience at ${xp} XP`)
+    game.menu.refreshVitals({...game.store.state,xp})
+    assert.equal(bar.active, false, 'vitals refresh must keep hall experience hidden')
+    assert.equal(descendants(game.menu.root).some(node => node.name === 'HUD.XPRing'), false)
+  }
+  assert.deepEqual(game.store.state, campaignBefore)
+  assert.equal(storage.getItem(campaign.TOWER_CAMPAIGN_KEY), hallSave)
   game.enterFloor(1)
-  assert.ok(game.xpBar)
-  game.run.state.player.xp=9;game.draw()
-  const points = []
-  const paths = []
-  game.xpBar.moveTo=(x,y)=>points.push([x,y])
-  game.xpBar.lineTo=(x,y)=>points.push([x,y])
-  game.xpBar.stroke=()=>paths.push(points.slice())
-  game.run.state.player.xp = 20; game.draw()
-  assert.equal(game.xpBar.node.active,true)
-  const maxAngle=Math.max(...points.map(([x,y])=>(Math.PI/2-Math.atan2(y,x)+Math.PI*2)%(Math.PI*2)))
-  assert.ok(Math.abs(maxAngle-2*Math.PI*20/45)<1e-8)
-  points.length = 0; game.run.state.player.xp = 45; game.draw()
-  assert.equal(points.length, 0, 'a level-up resets progress to the next level')
-  assert.equal(game.xpBar.node.active,false)
-  game.run.state.player.xp=60;game.draw()
-  assert.equal(game.xpBar.node.active,true,'earned progress reappears after a level-up')
-  game.run.state.player.xp=profile.TOWER_XP_CAP;game.draw()
-  assert.equal(game.xpBar.node.active,false,'maximum cultivation hides the ring')
+  const bar = game.xpBar, rectangles = []
+  bar.clear = () => { rectangles.length = 0 }
+  bar.roundRect = (...rect) => rectangles.push(rect)
+  const saved = storage.getItem(campaign.TOWER_CAMPAIGN_KEY)
+  // 45/120 are existing first-layer XP boundaries; 1800/6600/14400 are the
+  // approved ten-layer bottlenecks. Expected fractions do not call cultivationAt.
+  for (const [xp, share] of [[0,0],[20,20/45],[44,44/45],[45,0],[60,15/75],[119,74/75],[120,0],
+    [1485,0],[1800,1],[1801,0],[6600,1],[6601,0],[14400,1]]) {
+    game.run.state.player.xp = xp
+    const before = game.run.snapshot()
+    game.draw()
+    assert.equal(bar.node.active, true, `battle track remains visible at ${xp} XP`)
+    assert.equal(rectangles.length, share === 0 ? 1 : 2, 'empty progress draws only its stable track')
+    assert.deepEqual(rectangles[0], [-624,-2,1248,4,2])
+    if (share > 0) {
+      const [x,y,width,height,radius] = rectangles[1]
+      assert.equal(width, 1248 * share, `earned width at ${xp} XP`)
+      assert.equal(x, -624); assert.equal(y, -2); assert.equal(height, 4)
+      assert.ok(radius >= 0 && radius <= Math.min(2,width/2))
+      assert.ok(x + width <= 624, 'fill stays within the right edge')
+    }
+    assert.deepEqual(game.run.snapshot(), before, 'drawing must not award XP or mutate the run')
+    assert.equal(storage.getItem(campaign.TOWER_CAMPAIGN_KEY), saved)
+  }
+  assert.equal(icons.requests.some(request => request.path.includes('jade-dragon')), false,
+    'current HUD never loads retired jade artwork')
 })
 
 for (const frame of [{width:1280,height:720},{width:1280,height:600}]) {
@@ -3661,15 +3682,37 @@ for (const frame of [{width:1280,height:720},{width:1280,height:600}]) {
  });
 }
 
-test('battle experience surrounds the portrait without a bottom bar',t=>{
- const storage=disk();seed(storage);const {game}=launch(t,storage,{assisted:false});game.enterTraining();
- const bar=game.xpBar.node;
- assert.equal(bar.parent.name,'HUD.Portrait');
- assert.equal(bar.name,'HUD.XPRing');
- assert.equal(bar.getComponent(UITransform).contentSize.width,110);
- assert.equal(descendants(game.battle).some(node=>node.name==='HUD.XPBar'),false);
- assert.equal(descendants(game.battle).some(node=>node.name==='HUD.XPCaption'),false);
-});
+for (const frame of [{width:1280,height:720},{width:844,height:390},{width:960,height:360}]) {
+ test(`horizontal battle experience stays inside the bottom edge without covering the portrait (${frame.width}x${frame.height})`, t => {
+  const storage=disk();seed(storage);const {game,icons}=launch(t,storage,{assisted:false,frame});game.enterTraining();
+  const bar=game.xpBar.node, size=game.root.getComponent(UITransform).contentSize;
+  assert.equal(bar.name,'HUD.XPBar');assert.strictEqual(bar.parent,game.battle);
+  assert.deepEqual(bar.getComponent(UITransform).contentSize,{width:1248,height:4});
+  const bounds=rectWithin(bar,game.root);
+  // The retained horizontal layout has 16-unit side margins and its centre
+  // 24 units above the bottom; these come from the accepted layout evidence.
+  assert.equal(bounds.left,-size.width/2+16);assert.equal(bounds.right,size.width/2-16);
+  assert.equal(bounds.bottom,-size.height/2+22);assert.equal(bounds.top,-size.height/2+26);
+  for(const name of ['HUD.Portrait','HUD.HPBar','HUD.ManaBar']) {
+   const other=rectWithin(named(game.battle,name),game.root);
+   assert.ok(bounds.top<=other.bottom,`${name} stays above the experience track`);
+  }
+  assert.equal(bar.getComponent(Button),null);assert.equal(bar.getComponent(BlockInputEvents),null);
+  for(const retired of ['HUD.XPRing','HUD.XPArtwork','HUD.XPCaption']) {
+   assert.equal(descendants(game.battle).some(node=>node.name===retired),false,retired);
+  }
+  const surface=joystick(game);touch(game,surface,Node.EventType.TOUCH_START,91,60,0);
+  const x=game.run.state.player.x;game.update(.1);
+  assert.ok(game.run.state.player.x>x,'movement exercises the world/camera draw path');
+  assert.deepEqual(rectWithin(bar,game.root),bounds,'camera movement cannot move the track');
+  game.run.pause();const before=game.run.snapshot(),saved=storage.getItem(campaign.TOWER_CAMPAIGN_KEY);
+  const requests=icons.requests.length;game.draw();game.draw();
+  assert.deepEqual(rectWithin(bar,game.root),bounds,'paused redraws keep the same bounds');
+  assert.deepEqual(game.run.snapshot(),before);assert.equal(storage.getItem(campaign.TOWER_CAMPAIGN_KEY),saved);
+  assert.equal(icons.requests.length,requests,'redraw does not create resource requests');
+  assert.equal(icons.requests.some(request=>request.path.includes('jade-dragon')),false);
+ });
+}
 
 test('target role uses a silver elite or gold demon-king title and clears on a normal target',t=>{
  const storage=disk();seed(storage);const {game}=launch(t,storage,{assisted:false});
