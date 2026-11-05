@@ -1,3 +1,5 @@
+import {ordinarySectorPath} from './TowerAttackWarningPath';
+import {SancaiFormationArt} from './SancaiFormationArt';
 import {TowerBreakthroughScene,BreakthroughModel} from './TowerBreakthroughScene';
 import {TowerBreakthroughAudio} from './TowerBreakthroughAudio';
 import {TowerLevelBeamArt} from './TowerLevelBeamArt';
@@ -16,10 +18,9 @@ import { collectedMaterials, pendingCoreValue } from './shared/js/xianxia/TowerP
 import { PickupFeedback, pickupLabelBudget } from './shared/js/xianxia/TowerPickupPresentation';
 import { CAMP_PILLS } from './shared/js/xianxia/TowerProfile';
 import {JianxinAuraArt} from './JianxinAuraArt';
-import {QingpingAudio} from './QingpingAudio';
 import {SwordBurstArt} from './SwordBurstArt';
 import {ConvergenceArt} from './ConvergenceArt';
-import { drawMenuVeil, drawMenuClose } from './TowerMenuChrome';
+import { drawMenuVeil, drawMenuClose, drawMenuBack, isMenuBack } from './TowerMenuChrome';
 import { isStarterEquipment } from './shared/js/xianxia/TowerEquipmentTiers';
 import {setTowerDepth,sortTowerDepth,TowerBodyFallbacks} from './TowerDepthOrder';
 import {TowerEnvironmentArt} from './TowerEnvironmentArt';
@@ -42,6 +43,7 @@ import {createPlayerHud,drawPlayerHp,drawPlayerMana,drawPlayerXp,drawHudPortrait
 import {Node,UITransform,Graphics,Color,Label,LabelOutline,Button,BlockInputEvents,Mask,view,ResolutionPolicy,input,Input,KeyCode,EventKeyboard,EventTouch,isValid} from 'cc';
 import {TowerCampaignStore,combatLoadout,TOWER_CAMPAIGN_KEY} from './shared/js/xianxia/TowerCampaign';
 import {TowerRun,stats as combatStats} from './shared/js/xianxia/TowerRun';
+import {ningshenSurgeMultiplier} from './shared/js/xianxia/TowerSpirit';
 import {FIRST_CLEAR_REWARDS,formatSpiritStones,legacyRewardToStones,spiritStoneLootSummary,splitSpiritStones,STONE_CAP} from './shared/js/xianxia/TowerEconomy';
 import {FLOORS,SKILLS,ECONOMY} from './shared/js/xianxia/TowerContent';
 import {cultivationAt} from './shared/js/xianxia/TowerProfile';
@@ -60,7 +62,6 @@ const UI={paper:'#F2F0E6',surface:'#FBF9F1',jade:'#35685C',ink:'#263F39',muted:'
 const FAMILY:any={rhino:['犀','#87928A'],yak:['牦','#554C41'],boar:['猪','#b59a7a'],wolf:['狼','#aabcc9'],spider:['蛛','#b49cc3'],crocodile:['鳄','#88a57b'],snake:['蛇','#8fba96'],bear:['熊','#aa947d'],tiger:['虎','#d9ad64'],bat:['蝠','#8c92c0'],scorpion:['蝎','#b19382'],centipede:['蜈','#ad7d79'],ape:['猿','#c2b39b'],falcon:['隼','#95b5c1']};
 const STONE_COLORS=['#A4C6D4','#8ED5C4','#B4A4E3','#F1D58A'];
 // Back-to-front pile layout, reused each frame; at most five sprites per denomination.
-const STONE_PILE=[[-7,5],[6,7],[-10,-3],[9,-4],[0,-6]] as const;
 const STONE_GRADES=['下品','中品','上品','极品'];
 const ERROR:any={'wrong-realm':'境界不符，无法服用此突破物品。','drop-only':'此材料仅由Boss掉落。','breakthrough-required':'已达大圆满，请查看角色信息中的突破条件。','breakthrough-not-ready':'需达到当前境界十层满修为才能突破。','already-zhuji':'已经筑基，无需再次服用筑基丹。','cultivation-allowance':'本境修为丹6颗共享额度已用尽。','cultivation-stock-confirmation':'操作后库存将超过本境剩余服用额度，请确认。','cultivation-overflow-confirmation':'药力将超出本境瓶颈，请确认实际收益与浪费。','insufficient-materials':'炼丹材料不足，请查看来源。','not-usable':'此材料不可直接服用，可用于炼丹或出售。','save-failed':'保存失败，本次操作未提交。请重试。','stale-save':'另一游戏窗口已更新存档，请刷新此窗口后继续。','insufficient':'所需资源不足','floor-locked':'尚未通关前置塔层','in-tower':'请先结束当前塔内挑战','max-refine':'已达到最高强化等级','insufficient-contribution':'点眷不足','insufficient-cores':'灵石不足','insufficient-spirit-stones':'灵石不足','insufficient-stones':'灵石不足','insufficient-points':'功法点不足，提升境界可获得功法点','realm-locked':'当前境界尚未达到修习要求','stage-locked':'当前境界尚未达到修习要求','library-only':'此项修习需要返回宗门藏经阁','research-capped':'本阶段三次道悟研习已完成','full-health':'当前气血已满','cultivation-capped':'已到金丹大圆满','active-run':'请先结束本次塔内挑战','locked':'通塔进度尚未满足','invalid-loadout':'装备配装无效','refinement-disabled':'当前版本暂未开放强化','capacity':'装备仓库或资源已满','unowned-equipment':'尚未拥有此装备','locked-equipment':'请先解除装备锁定','equipped-equipment':'请先从所有配装卸下此装备','starter-equipment':'基础装备不能分解','locked-weapon':'请先解除武器锁定','equipped-weapon':'请先从所有配装卸下此武器','starter-weapon':'普通铁剑不能分解','max-level':'已经达到最高等级','no-pill':'丹药数量不足','unreadable':'无法读取存档，请检查浏览器存储后刷新','corrupt':'存档校验未通过，已停止写入，避免覆盖原数据'};
 
@@ -79,17 +80,17 @@ export class TowerView {
  private environmentArt=new TowerEnvironmentArt();
  private environmentGround:Node|null=null;private environmentProps:Node|null=null;
  private monsterArt=new TowerMonsterArt();
+ private monsterArtFloor:number|null=null;
  private monsterMechanics:TowerMonsterMechanicsView|null=null;
  private projectileArt=new TowerProjectileArt();
  private skillEffects:TowerSkillEffects|null=null;
- private arcArt=new SwordArcArt('tower-ice');private arcLayer:Node|null=null;
+ private arcArt=new SwordArcArt('tower-liuyun');private arcLayer:Node|null=null;
  private flightSwordArt=new FlightSwordArt();
  private flightArt=new FlightStreamArt();private flightLayer:Node|null=null;
  private ningshenArt=new NingshenAuraArt();private ningshenLayer:Node|null=null;
  private jianguArt=new JianguAuraArt();private jianguLayer:Node|null=null;
  private bumieArt=new BumieAuraArt();private bumieLayer:Node|null=null;
  private jianxinArt=new JianxinAuraArt();private jianxinLayer:Node|null=null;
- private qingpingAudio=new QingpingAudio();
  private burstArt=new SwordBurstArt();private burstLayer:Node|null=null;
  private convergenceArt=new ConvergenceArt();private convergenceLayer:Node|null=null;
  private lineArt=new SwordLineArt();private lineLayer:Node|null=null;
@@ -97,9 +98,11 @@ export class TowerView {
  private hitArt=new TowerHitArt();
  private damageNumbers=new TowerDamageNumbers();
  private debuffIcons=new TowerDebuffIcons();
+ private targetDebuffIcons=new TowerDebuffIcons();
  private tiandiArt=new SwordTiandiArt();private tiandiLayer:Node|null=null;
  private crossBurstArt=new CrossBurstArt();private qiArt=new SwordQiArt();private qiLayer:Node|null=null;
  private orbitArt=new OrbitSwordArt();
+ private sancaiArt=new SancaiFormationArt();
  private formationArt=new LiangyiFormationArt();private formationLayer:Node|null=null;
  private sixiangArt=new SixiangFormationArt();private formationSprites=new Set<string>();
  private currencyLabels: Label[] = [];
@@ -213,6 +216,11 @@ export class TowerView {
   l.string=text;l.fontSize=size;l.lineHeight=size*1.25;l.color=C(color);l.horizontalAlign=Label.HorizontalAlign.CENTER;l.verticalAlign=Label.VerticalAlign.CENTER;l.overflow=Label.Overflow.SHRINK;l.cacheMode=Label.CacheMode.NONE;l.enableWrapText=true;return l;
  }
  private button(text:string,parent:Node,x:number,y:number,w:number,fn:()=>void,primary=false,height=88,inset=12){
+  if(isMenuBack(text)){
+   const n=this.node(text,parent,w,height);n.setPosition(x,y);drawMenuBack(n,text);
+   const b=n.addComponent(Button);b.transition=Button.Transition.SCALE;b.zoomScale=.98;
+   n.on(Button.EventType.CLICK,fn);return n;
+  }
   const n=this.node(text,parent,w,height);n.setPosition(x,y);const g=n.addComponent(Graphics);g.fillColor=C(primary?UI.jade:UI.surface);g.strokeColor=C(primary?UI.jade:UI.edge);g.lineWidth=1.5;g.roundRect(-w/2,-(height-inset)/2,w,height-inset,9);g.fill();g.stroke();
   this.label(text,n,0,0,w-20,height-inset,28,primary?UI.surface:UI.ink);const b=n.addComponent(Button);b.transition=Button.Transition.SCALE;b.zoomScale=.96;n.on(Button.EventType.CLICK,fn);return n;
  }
@@ -241,7 +249,7 @@ export class TowerView {
    }else if(action.type==='decreaseSkill'){
     const names=(r.changes||[]).map((c:any)=>`${(GROWTH_SKILLS as any[]).find(s=>s.id===c.id)?.name||(SKILLS as any[]).find(s=>s.id===c.id)?.name||c.id} ${c.from}→${c.to}`);
     this.notice=`已返还${r.returned}功法点${names.length>1?'，关联功法同步退点':''}；经卷保留。`;
-   }else this.notice=action.type==='usePill'?'丹药已服用':['buyBook','learnSkill'].includes(action.type)?'修习已保存，进入战斗后自动生效':action.type==='respecSkills'?'已重修：实际投入点数已返还，经卷和教学领悟保留':action.type==='researchPoint'?`道悟研习完成，获得${r.points}点功法点`:['setLoadout','equipEquipment'].includes(action.type)?'装备配装已保存':'已保存';
+   }else this.notice=action.type==='usePill'?'丹药已服用':['buyBook','learnSkill'].includes(action.type)?'修习已保存，进入战斗后自动生效':action.type==='respecSkills'?'已重修：实际投入点数已返还，经卷和教学领悟保留':['setLoadout','equipEquipment'].includes(action.type)?'装备配装已保存':'已保存';
    if(this.store.state.activeRun&&(this.screen==='skills'||['setLoadout','selectLoadout','equipEquipment'].includes(action.type))){
     // Campaign commits both permanent allocation and the paused combat snapshot.
     this.run=TowerRun.restore(this.store.state.activeRun.snapshot);
@@ -330,7 +338,23 @@ export class TowerView {
  }
  private withdraw(){
   if(!this.run||this.pending)return;
-  this.run.abandon();this.finish();
+  if(this.run.state.phase!=='paused')this.pause();
+  if(this.pending)return;
+  const run=this.run;
+  this.overlay?.destroy();
+  const shade=this.overlay=this.node('退出战斗确认',this.root,this.width,this.height);
+  shade.addComponent(BlockInputEvents);drawMenuVeil(shade,this.width,this.height);
+  const width=Math.min(480,this.width-64),height=228;
+  const panel=this.node('退出战斗确认面板',shade,width,height),g=panel.addComponent(Graphics);
+  g.fillColor=C(UI.surface);g.strokeColor=C(UI.edge);g.lineWidth=1.5;
+  g.roundRect(-width/2,-height/2,width,height,16);g.fill();g.stroke();
+  this.label('确认是否退出？',panel,0,42,width-64,56,30,UI.ink);
+  const buttonWidth=(width-80)/2;
+  this.button('取消',panel,-(buttonWidth+16)/2,-50,buttonWidth,()=>this.render(),false,72,0);
+  this.button('确认',panel,(buttonWidth+16)/2,-50,buttonWidth,()=>{
+   if(this.run!==run||this.pending)return;
+   run.abandon();this.finish();
+  },true,72,0);
  }
  private finish(){
   if(!this.run||this.pending)return;
@@ -339,6 +363,9 @@ export class TowerView {
   if(this.persist({type:'finishFloor',snapshot}))this.afterFinish(snapshot);
  }
  private afterFinish(snapshot:any){
+  if(snapshot.phase==='abandoned'){
+   this.resetInput();this.run=null;this.screen='camp';this.page='hall';this.notice='';this.render();return;
+  }
   this.resetInput();this.run=null;this.screen='camp';this.page='tower';this.render();
   const e=this.store.state.lastResult.earned,won=snapshot.phase==='won';
   const first=this.store.state.lastResult?.firstClear;
@@ -348,13 +375,13 @@ export class TowerView {
   const materials=this.store.state.lastResult.materials || [];
   const overflow=this.store.state.lastResult.materialOverflow;
   const overflowText=overflow?.items?.length ? `\n材料库存已满，${overflow.items.map((i:any)=>`${(CAMP_PILLS as any)[i.id]?.name || i.id}×${i.count}`).join('、')}自动出售，到账${overflow.convertedStones}下品灵石${overflow.lostStones ? `，灵石已满损失${overflow.lostStones}` : ''}。` : '';
-  const summary=`${first?'首通奖励已包含在收获中':''}${overflowText}\n${snapshot.phase==='lost'?'以1点气血苏醒，可在丹霞峰购丹后从背包服用。':'气血继承，可回宗整备后再次挑战。'}`.trim();
+  const summary=`${first&&prize.kind!=='none'?'首通奖励已包含在收获中':''}${overflowText}\n${snapshot.phase==='lost'?'以1点气血苏醒，可在丹霞峰购丹后从背包服用。':'气血继承，可回宗整备后再次挑战。'}`.trim();
   const choices=[{text:'返回宗门',fn:()=>this.goto('hall'),primary:false}];
   if(won&&snapshot.floor<9)choices.push({text:`继续第${snapshot.floor+1}层`,fn:()=>this.enterFloor(snapshot.floor+1),primary:true});
   else choices.push({text:'前往丹霞峰',fn:()=>this.goto('pills'),primary:true});
   const creditedMaterials=materials.map((item:any)=>({...item,count:Math.max(0,item.count-(overflow?.items?.find((sold:any)=>sold.id===item.id)?.count||0))})).filter((item:any)=>item.count>0);
   const walletNotice=loot.includes('钱包已达上限')?'\n'+loot.split('\n').at(-1):'';
-  this.showModal(title,summary+walletNotice,choices,false,creditedMaterials,{...e,skillPoints:first&&prize.kind==='skillPoints'?prize.amount:0});
+  this.showModal(title,summary+walletNotice,choices,false,creditedMaterials,e);
  }
  private lootText(snapshot:any,credited?:number,extra=0){
   const loot=spiritStoneLootSummary(snapshot);
@@ -368,6 +395,14 @@ export class TowerView {
  private assetScene='';
  render(){
   if(this.disposed||this.measuring)return;
+  const monsterFloor=this.run?.state.floor??null;
+  if(monsterFloor!==this.monsterArtFloor){
+   // Keep textures across same-floor UI rebuilds, but not across completed runs
+   // or floors. Destroy also rejects late loads belonging to the old cache.
+   this.monsterArt.destroy();
+   this.monsterArt=new TowerMonsterArt();
+   this.monsterArtFloor=monsterFloor;
+  }
   this.measureViewport();
   this.root.getComponent(UITransform)!.setContentSize(this.width,this.height);
   if(this.orientationBlocked){
@@ -420,7 +455,7 @@ export class TowerView {
   this.tiandiArt.clearBindings();this.tiandiLayer=null;
   this.crossBurstArt.clearBindings();this.qiArt.clearBindings();this.qiLayer=null;
   this.orbitArt.clearBindings();
-  this.formationArt.clearBindings();this.sixiangArt.clearBindings();this.formationLayer=null;
+  this.sancaiArt.clearBindings();this.formationArt.clearBindings();this.sixiangArt.clearBindings();this.formationLayer=null;
   if(this.screen==='camp'||this.screen==='skills'){
    this.skillEffects=null;
    this.battle?.destroy();this.battle=null;this.labels=[];this.world=null;this.ui=null;
@@ -506,16 +541,15 @@ export class TowerView {
   if(!this.skillEffects)this.skillEffects=new TowerSkillEffects();
   this.arcLayer=this.node('弦月斩特效层',root);this.arcArt.preload();
   this.ritualAudio.preload();
-  this.burstLayer=this.node('剑罡爆裂层',root);this.burstArt.preload();this.qingpingAudio.preload();
+  this.burstLayer=this.node('剑罡爆裂层',root);this.burstArt.preload();
   this.convergenceLayer=this.node('万剑归宗特效层',root);this.convergenceArt.preload();
-  this.lineLayer=this.node('剑破虚空特效层',root);this.lineArt.preload();
   this.tiandiLayer=this.node('一剑开天特效层',root);this.tiandiArt.preload();
   this.environmentProps=this.node('镇妖柱与刷怪妖雾',root);
   const miasmaGround=this.node('怪物泥沼地面层',root);
+  this.warnings=this.node('攻击预警',root).addComponent(Graphics);
   this.monsterLayer=this.node('妖兽静态素材',root);
   this.orbitArt.preload();
-  this.warnings=this.node('攻击预警',root).addComponent(Graphics);
-  this.formationLayer=this.node('剑阵落剑层',root);this.formationArt.preload();this.sixiangArt.preload();
+  this.formationLayer=this.node('剑阵落剑层',root);this.sancaiArt.preload();this.formationArt.preload();this.sixiangArt.preload();
   this.shadowLayer=this.node('分光连斩层',root);this.shadowArt.preload();
   this.foreground=this.node('战斗前景',root).addComponent(Graphics);
   this.stoneLayer=this.node('灵石掉落素材层',root);
@@ -524,6 +558,8 @@ export class TowerView {
   this.monsterMechanics=new TowerMonsterMechanicsView(root,miasmaGround,this.monsterLayer);
   this.characterLayer=this.node('角色动作层',this.monsterLayer);
   this.playerBody=this.characterLayer.addComponent(Graphics);
+  // Keep the sword and rift above actors and all combat effects, below controls and HUD.
+  this.lineLayer=this.node('剑破虚空特效层',root);this.lineArt.preload();
   // The fixed thumbstick owns its touch. Taps on the field or right-hand UI do
   // not relocate the control or unexpectedly move the character.
   this.stick.x=-W/2+148;this.stick.y=-this.height/2+158;
@@ -619,7 +655,7 @@ export class TowerView {
    this.showPauseMenu([
     {text:'继续挑战',fn:()=>this.resume(),primary:true},
     ...(!this.training&&breakthroughReady(this.run.state.player.xp)?[{text:'本波结束后突破',fn:()=>{this.run.requestBreakthrough();this.resume();},primary:false}]:[]),
-    {text:'返回宗门',fn:()=>this.withdraw(),primary:false},
+    {text:'离开战斗',fn:()=>this.withdraw(),primary:true},
    ]);
   }
  }
@@ -703,16 +739,16 @@ export class TowerView {
   if(!g)return;g.clear();g.fillColor=C('#D8DFD3');g.rect(-w/2,-h/2,w,h);g.fill();
   const fill=w*Math.max(0,Math.min(1,ratio));if(fill>0){g.fillColor=C(color);g.rect(-w/2,-h/2,fill,h);g.fill();}
  }
- private drawPlayerHp(ratio:number){drawPlayerHp(this.hpBar,ratio,'paper');}
+ private drawPlayerHp(ratio:number){drawPlayerHp(this.hpBar,ratio,'paper',this.run?this.damageNumbers.heavyPulse(this.run.state):0);}
  private refreshHudPortrait(realm:string){
   if(!this.portraitGraphics||this.portraitRealm===realm)return;
   this.drawHudPortrait(this.portraitGraphics,realm);this.portraitRealm=realm;
  }
  private drawHudPortrait(g:Graphics,realm='炼气'){drawHudPortrait(g,realm,'paper');}
  private clearBattleFeedback(){
-  this.debuffIcons.reset();
+  this.debuffIcons.reset();this.targetDebuffIcons.reset();
   this.pickupFeedback?.reset();
-  this.skillEffects?.resetAftershocks();this.burstArt.reset();this.qingpingAudio.reset();
+  this.skillEffects?.resetAftershocks();this.burstArt.reset();
   this.notices=[];this.breakthroughText='';this.breakthroughUntil=0;this.enemyHealth?.clear();this.attackTargetId=null;
   this.levelEffects=[];this.ceremony=null;this.breakthroughLock=0;this.ritual?.close();this.ritualAudio.stop();this.playerMotion={distance:0,moving:false,dx:1,dy:0};this.characterArt.reset();
   this.arcArt.reset();
@@ -721,7 +757,7 @@ export class TowerView {
   this.tiandiArt.reset();this.hitArt.reset();
   this.crossBurstArt.reset();this.qiArt.reset();
   this.orbitArt.reset();
-  this.formationArt.reset();
+  this.sancaiArt.reset();this.formationArt.reset();
   this.sixiangArt.reset();this.formationSprites.clear();
  }
  private enqueueNotice(text:string,duration:number){
@@ -811,7 +847,7 @@ export class TowerView {
   panel.roundRect(-width/2,-height/2,width,height,12);panel.fill();panel.stroke();
   const headerY=height/2-50;
   this.label('开发者工具',box,0,headerY,width-160,64,36,UI.ink);
-  const back=this.button('<',box,-width/2+48,headerY,64,()=>this.backFromTools(),false,64);back.name='返回设置';
+  const back=this.button('返回设置',box,-width/2+76,headerY,136,()=>this.backFromTools(),false,64);back.name='返回设置';
   const close=this.button('',box,width/2-48,headerY,72,()=>this.closeTools(),false,72);close.name='关闭开发者工具';
   drawMenuClose(close);
   const cell=width-72,step=(height-120)/6,buttonHeight=step-10;
@@ -894,10 +930,13 @@ export class TowerView {
    if(this.touch===null){x=(this.keys.has(KeyCode.KEY_D)||this.keys.has(KeyCode.ARROW_RIGHT)?1:0)-(this.keys.has(KeyCode.KEY_A)||this.keys.has(KeyCode.ARROW_LEFT)?1:0);y=(this.keys.has(KeyCode.KEY_W)||this.keys.has(KeyCode.ARROW_UP)?1:0)-(this.keys.has(KeyCode.KEY_S)||this.keys.has(KeyCode.ARROW_DOWN)?1:0);}
    const before=cultivationAt(p.xp),beforePoints=realmPoints(p.xp),known=new Set(Object.keys(this.run.state.loadout.active));
    const killStart=this.run.state.pickups?.collected.length??this.run.state.killLedger.length;
+   const spiritUsesBefore=this.run.state.spiritState.uses.length;
    const oldX=p.x,oldY=p.y,characterBefore=this.characterArt.sample(this.run.state);
    const d=Math.max(1,Math.hypot(x,y));this.run.setInput(x/d,y/d);this.run.advance(Math.min(.1,dt)*this.tools.speed,
     (cast:any)=>this.characterArt.observeCast(cast));
    this.characterArt.observe(characterBefore,this.run.state);
+   for(const use of this.run.state.spiritState.uses.slice(spiritUsesBefore))
+    this.enqueueNotice(`自动服用回灵丹 · 灵力值 +${Math.round(use.restored)}\n随后10秒每秒恢复4点`,4);
    this.queueMaterialNotice(this.run.state,killStart);
    const after=cultivationAt(this.run.state.player.xp);
    if(!before.breakthroughReady&&after.breakthroughReady)this.enqueueNotice('修为已满，本波结束后可尝试突破',4);
@@ -964,16 +1003,15 @@ export class TowerView {
   this.formationSprites.clear();
   if(this.convergenceLayer)for(const id of this.convergenceArt.syncTower(this.convergenceLayer,s,this.camera))this.formationSprites.add(id);
   if(this.formationLayer){
+   this.sancaiArt.syncTower(this.world.node,this.formationLayer,s,this.camera,presentationPreferences().reducedMotion)
+    .forEach(id=>this.formationSprites.add(id));
    for(const id of this.formationArt.syncTower(this.world.node,this.formationLayer,s,this.camera))this.formationSprites.add(id);
    for(const id of this.sixiangArt.syncTower(this.world.node,this.formationLayer,s,this.camera))this.formationSprites.add(id);
   }
   if(p.hp<=0){this.arcArt.reset();this.lineArt.reset();this.convergenceArt.reset();this.tiandiArt.reset();this.crossBurstArt.reset();this.qiArt.reset();}
    this.skillEffects?.draw(g,s,this.camera,arcSprites,lineSprites,tiandiSprites,combinedQiSprites,orbitSprites,this.formationSprites,this.characterArt.waistPosition,shadowSprites,this.hitArt.covered);
-  this.qingpingAudio.sync(this.foreground.node,s);
-  this.skillEffects?.drawQingpingMarks(this.foreground,s,this.camera);
   this.hitArt.draw(this.foreground,this.camera);
-  this.damageNumbers.draw(this.foreground.node,s,this.camera);
-  this.debuffIcons.draw(this.foreground.node,s,this.camera,W,H);
+
   if(p.hp>0&&s.armorState?.shield>0&&s.time<s.armorState.shieldUntil){
    const shield=this.foreground;shield.strokeColor=C('#A8DBE7');shield.lineWidth=3;
    shield.ellipse(sx(p.x),sy(p.y)+44,40,58);shield.stroke();
@@ -983,17 +1021,46 @@ export class TowerView {
   this.skillEffects?.drawWuwoHits(this.foreground,legacyHits,this.camera);
   this.skillEffects?.drawShadowHits(this.foreground,legacyHits,this.camera);
   // All attack markers share world coordinates; only elites keep world nameplates.
-  for(const r of s.reserved||[]){const g=this.warnings,x=sx(r.x??r.position?.x??0),y=sy(r.y??r.position?.y??0);g.strokeColor=C('#d1a574');g.lineWidth=2;g.circle(x,y,28);g.stroke();}
+  const paintedWarnings=new Set<string>();
   for(const z of [...(s.zones||[]),...(s.effects||[])]){
-   if(z.kind==='heal_pickup'||this.skillEffects?.handles(z))continue;
+   if(z.kind==='player_hit'){
+    // Local impact stays visible when the numeric overlay is disabled.
+    const age=s.time-(z.startedAt??s.time);
+    const hit=this.foreground;
+    hit.strokeColor=new Color(z.hpLoss>0?'#FF968B':'#B9E7F2');hit.lineWidth=3;
+    const hx=sx(p.x),hy=sy(p.y)+54,extent=18+(presentationPreferences().reducedMotion?0:Math.max(0,age)*28);
+    hit.moveTo(hx-extent-7,hy+8);hit.lineTo(hx-extent,hy);hit.lineTo(hx-extent-7,hy-8);
+    hit.moveTo(hx+extent+7,hy+8);hit.lineTo(hx+extent,hy);hit.lineTo(hx+extent+7,hy-8);hit.stroke();
+    continue;
+   }
+   if(z.kind==='monster_crystal_break'||z.kind==='monster_egg_hatched'||z.kind==='heal_pickup'||this.skillEffects?.handles(z))continue;
    const g=z.hostile?this.warnings:this.world;
    const x=sx(z.x??z.fromX??p.x),y=sy(z.y??z.fromY??p.y);if(!Number.isFinite(x+y))continue;
+   if(z.hostile&&this.monsterMechanics){
+    if(z.expiresAt<=s.time)continue;
+    const owner=(s.enemies||[]).find((e:any)=>e.id===z.ownerId);
+    if(z.ownerId!==undefined&&(!owner||owner.hp<=0))continue;
+    const a=owner?.ai?.attack?.id===z.attackId?owner.ai.attack:null;
+    // Once a thrown hazard lands, only its ground zone paints that footprint.
+    if(z.renderOnly&&(s.zones||[]).some((other:any)=>other!==z&&other.hostile&&!other.renderOnly&&other.source===z.attackId))continue;
+    const shape=z.shape||(z.toX===undefined?'circle':'line');
+    const key=JSON.stringify([z.ownerId,shape,z.x,z.y,z.toX,z.toY,z.radius,z.width,z.angle]);
+    if(paintedWarnings.has(key))continue;paintedWarnings.add(key);
+    const activatesAt=a?a.startedAt+a.windup:z.activatesAt??z.nextAt??s.time;
+    // Legacy thrown stone/web ground zones have the existing fixed .35s landing delay.
+    const startedAt=a?a.startedAt:z.startedAt??(activatesAt-.35);
+    const radius=shape==='sector'?(Math.hypot((z.toX??z.x)-z.x,(z.toY??z.y)-z.y)||z.radius):(z.radius||30);
+    const warning={...z,shape,radius,startedAt,activatesAt,angle:(z.angle??90)*Math.PI/180};
+    if(a?.kind==='charge')this.monsterMechanics.drawCharge(g,warning,s.time,this.camera);
+    else this.monsterMechanics.drawAreaWarning(g,warning,s.time,this.camera);
+    continue;
+   }
    const hostile=!!z.hostile,active=z.phase==='active';
    g.strokeColor=C(hostile?(active?'#f3b08c':'#e59478'):z.kind==='armor_heal'?'#b8e9bd':'#9ddbd9');g.lineWidth=hostile?3:2;
    g.fillColor=hostile?new Color(210,102,68,active?90:35):new Color(121,207,211,24);
    if(z.shape==='sector'){
     const dir=Math.atan2(z.faceY??0,z.faceX??1),half=(z.angle||90)*Math.PI/360,r=Math.hypot((z.toX??z.x)-z.x,(z.toY??z.y)-z.y)||z.radius;
-    g.moveTo(x,y);g.arc(x,y,r,dir-half,dir+half,false);g.close();g.fill();g.stroke();
+    ordinarySectorPath(g,x,y,r,dir,half);g.fill();g.stroke();
    }else if(z.shape==='circle'||z.toX===undefined){
     g.circle(x,y,Math.min(480,z.radius||30));g.fill();g.stroke();
    }else{
@@ -1017,7 +1084,7 @@ export class TowerView {
     if(li<this.labels.length){
      const label=this.labels[li++];label.node.active=true;label.fontSize=16;label.lineHeight=20;
      label.node.setPosition(x,y-24);label.color=C('#FFF3C9');
-     label.string=core?`${legacyRewardToStones(d.amount)}`:`×${d.amount}`;
+     label.string=`×${core?legacyRewardToStones(d.amount):d.amount}`;
     }
    }
    if(core){
@@ -1027,16 +1094,12 @@ export class TowerView {
     for(let grade=0;grade<4;grade++)if(denominations[grade]>0)grades.push(grade);
     for(let i=0;i<grades.length;i++){
      const grade=grades[i],cx=x+(i-(grades.length-1)/2)*32,r=10+grade*2;
-     const count=Math.min(5,denominations[grade]);
-     for(let piece=0;piece<count;piece++){
-      const px=cx+(count===1?0:STONE_PILE[piece][0]);
-      const py=y+(count===1?0:STONE_PILE[piece][1]);
-      if(this.stoneLayer&&this.stoneArt.draw(this.stoneLayer,`${d.id}:${grade}:${piece}`,grade,px,py,r*2/.75))continue;
+      const px=cx,py=y;
+      if(this.stoneLayer&&this.stoneArt.draw(this.stoneLayer,`${d.id}:${grade}`,grade,px,py,r*2/.75))continue;
       g.fillColor=C(STONE_COLORS[grade]);g.strokeColor=C('#E6F1ED');g.lineWidth=1;
       g.moveTo(px,py+r);g.lineTo(px+7,py+3);g.lineTo(px+6,py-r*.65);
       g.lineTo(px,py-r);g.lineTo(px-6,py-r*.65);g.lineTo(px-7,py+3);g.close();g.fill();g.stroke();
       g.moveTo(px,py+r);g.lineTo(px-2,py+1);g.lineTo(px,py-r);g.stroke();
-     }
     }
    }else if(d.kind==='material'){
     if(this.stoneLayer&&this.stoneArt.drawResource(this.stoneLayer,`${d.id}:material`,
@@ -1074,6 +1137,7 @@ export class TowerView {
   // Observe offscreen enemies too so camera movement never restarts their HP reveal.
   const health=this.enemyHealth??=new Map<any,{hp:number;until:number}>(),live=new Set<any>();
   const damaged:any[]=[];
+  const damageAnchors=new Map<string|number,{x:number;y:number;halfWidth:number}>();
   const bodyReactions=this.hitArt.bodies;
   for(const e of s.enemies||[]){
    live.add(e.id);const previous=health.get(e.id);
@@ -1081,24 +1145,30 @@ export class TowerView {
    const until=e.hp<(previous?.hp??e.maxHp)?s.time+3:previous?.until??0;
    health.set(e.id,{hp:e.hp,until});
    const art=TowerMonsterArt.artFamily(e.family||e.archetype?.split('_')[0]||'boar',e.archetype);
-   const bodyScale=TowerMonsterArt.bodyScale(art,e.role);
-   const margin=bodyScale>1?265:90;
+   const bodySize=TowerMonsterArt.bodySize(art,e.role,e.radius||18,e.rank);
+   const margin=Math.max(90,bodySize*1.3*(e.mechanic?.enraged?1.2:1)+32);
    const x=sx(e.x),y=sy(e.y),r=e.radius||18;if(x<-W/2-margin||x>W/2+margin||y<-H/2-margin||y>H/2+margin)continue;
    if(this.monsterMechanics?.isObject(e))continue;
    const family=e.family||e.archetype?.split('_')[0]||'boar',style=FAMILY[family]||FAMILY.boar;
-   const size=this.monsterArt.draw(this.monsterLayer,e.id,art,x,y,e.x,p.x,r,{time:s.time,ai:e.ai,worldY:e.y,hp:e.hp,mechanic:e.mechanic,role:e.role});
+   const size=this.monsterArt.draw(this.monsterLayer,e.id,art,x,y,e.x,p.x,r,{time:s.time,ai:e.ai,worldY:e.y,hp:e.hp,mechanic:e.mechanic,role:e.role,rank:e.rank});
    if(size)this.monsterMechanics?.styleActor(e,this.monsterLayer.children.find(node=>node.name===`妖兽素材-${e.id}`));
    const impact=bodyReactions.get(e.id);
    if(size&&impact)this.monsterArt.applyImpact(e.id,impact);
-   if(!size)this.beast(this.bodyFallbacks.draw(this.monsterLayer,String(e.id),e.y),family,x+(impact?.x||0),y+r*.8+(impact?.y||0),r*bodyScale*(e.mechanic?.enraged?1.2:1),e.temporary?.kind==='clone'?'#B1E0F196':style[1]);
-   const extent=size?size/2:r;
+   if(!size){
+    const fallbackRadius=TowerMonsterArt.bodySize(family,e.role,r,e.rank)/3.2*(e.mechanic?.enraged?1.2:1);
+    this.beast(this.bodyFallbacks.draw(this.monsterLayer,String(e.id),e.y),family,x+(impact?.x||0),y+fallbackRadius*.8+(impact?.y||0),fallbackRadius,e.temporary?.kind==='clone'?'#B1E0F196':style[1]);
+   }
+   // Use the same rendered top and form sizing as the actor, never its small
+   // ground collision radius. Fallback beasts retain their own rendered height.
+   const rage=e.hp>0&&e.mechanic?.enraged?1.2:1;
+   const top=size?(this.monsterArt.top(e.id)??y+bodySize*.9*rage):y+bodySize*.65*rage;
+   damageAnchors.set(e.id,{x,y:y+(top-y)*.72,halfWidth:bodySize*.34*rage});
    if(e.role==='elite'||e.role==='boss'){
-    const fy=y-(['spider-lady','spider-queen','rhino','yak','white-tiger','snake-lady','bear-humanoid','crocodile-humanoid','wolf-humanoid','falcon-humanoid','ape-humanoid','bat-humanoid','boar-humanoid','scorpion-humanoid','centipede-humanoid'].includes(art)?0:extent)-7,d=e.role==='boss'?4:5;
+    const fy=y-7,d=e.role==='boss'?4:5;
     g.fillColor=C(e.role==='boss'?'#f1bf64':'#dbb0dc');
     g.moveTo(x,fy+d);g.lineTo(x+d,fy);g.lineTo(x,fy-d);g.lineTo(x-d,fy);g.close();g.fill();
    }
-   // Telegraph an aimed charge/strike when the combat state exposes it.
-   if(e.telegraph||e.ai?.mode==='windup'||e.mode==='windup'){g.strokeColor=C('#eb9c78');g.lineWidth=3;g.circle(x,y,r+18);g.stroke();}
+   // Range warnings already communicate the windup; no duplicate circle around the actor.
   }
   for(const id of health.keys())if(!live.has(id))health.delete(id);
   // Follow actual damage rather than promoting an idle boss. Keep the current
@@ -1109,18 +1179,33 @@ export class TowerView {
   }
   if(!(s.enemies||[]).some((e:any)=>e.id===this.attackTargetId&&e.hp>0))this.attackTargetId=null;
   this.monsterArt.endFrame(s.time,new Set((s.killLedger||[]).map(e=>e.id)),(x,y)=>({x:sx(x),y:sy(y)}));this.bodyFallbacks.end();
+  const damageBlocked:{x:number;y:number;width:number;height:number}[]=[{x:0,y:H/2-24,width:W,height:48}];
+  const mapCard=this.minimap?.node.parent;
+  for(const node of [mapCard,this.battleHud?.root,this.bossPanel]){
+   const box=node?.getComponent(UITransform);
+   if(node?.active&&box){
+    const extra=node===mapCard?42:0;
+    damageBlocked.push({x:node.position.x,y:node.position.y-extra/2,width:box.width+16,height:box.height+extra+16});
+   }
+  }
+  this.damageNumbers.draw(this.foreground.node,s,this.camera,damageAnchors,{width:W,height:H,blocked:damageBlocked},this.characterArt.waistPosition,this.characterArt.visibleFacing);
   this.projectileArt.beginFrame();
   if(this.projectileLayer)this.projectileArt.syncHover(this.projectileLayer,s,this.camera,this.characterArt.visibleFacing);
   for(const b of s.projectiles||[]){
-   const x=sx(b.x),y=sy(b.y),r=b.radius||5;if(!Number.isFinite(x+y))continue;
+   const pose=TowerMonsterArt.projectilePose(b);
+   const x=sx(pose.x),y=sy(pose.y),r=b.radius||5;if(!Number.isFinite(x+y))continue;
+   // The small ground shadow keeps the unchanged collision path readable while
+   // the release descends from a mouth, stinger or wing.
+   if(pose.lift>4){g.fillColor=C('#1c302b55');g.ellipse(sx(b.x),sy(b.y),r*.75,r*.3);g.fill();}
+   const visual=b.hostile?{...b,vx:Math.cos(pose.angle),vy:Math.sin(pose.angle)}:b;
    if(!b.hostile&&(b.bladeKind==='crescent'||b.bladeKind==='cross')){
     if(p.hp>0&&!qiSprites?.has(b.id))this.skillEffects?.drawSwordQi(g,b,s.time,this.camera);
     continue;
    }
-   if(this.projectileLayer&&this.projectileArt.draw(this.projectileLayer,b,x,y,s.time,this.camera,g))continue;
+   if(this.projectileLayer&&this.projectileArt.draw(this.projectileLayer,visual,x,y,s.time,this.camera,g))continue;
    const element=b.hostile?b.element:undefined;
    if(element==='feather'){
-    const length=Math.hypot(b.vx,b.vy)||1,dx=b.vx/length,dy=b.vy/length;
+    const length=Math.hypot(visual.vx,visual.vy)||1,dx=visual.vx/length,dy=visual.vy/length;
     g.fillColor=C('#e8d9b1');g.moveTo(x+dx*r,y+dy*r);
     g.lineTo(x-dy*r*.6,y+dx*r*.6);g.lineTo(x-dx*r,y-dy*r);
     g.lineTo(x+dy*r*.6,y-dx*r*.6);g.close();g.fill();
@@ -1132,7 +1217,8 @@ export class TowerView {
    }
   }
   this.projectileArt.endFrame();
-  this.monsterMechanics?.draw(s,this.camera,{width:this.width,height:this.height});
+  this.monsterMechanics?.draw(s,this.camera,{width:this.width,height:this.height},id=>this.monsterArt.mouthPosition(id),id=>this.monsterArt.top(id),(id,kind)=>this.monsterArt.attachmentPosition(id,kind));
+  this.debuffIcons.draw(this.foreground.node,s,this.monsterMechanics?.debuffAnchors||new Map());
   sortTowerDepth(this.monsterLayer);
   if(s.loadout?.ring?.affixes?.some((a:any)=>a.type==='focus')){
    const flash=(s.effects||[]).some((e:any)=>e.weaponFocus);
@@ -1170,8 +1256,12 @@ export class TowerView {
   const c=cultivationAt(p.xp),floor=(FLOORS as any[])[s.floor-1];
   const xpStart=c.xpStart,xpEnd=c.xpEnd;
   this.drawPlayerHp(p.hp/p.maxHp);
-  drawPlayerMana(this.battleHud?.manaBar,p.mana/p.maxMana);
-  if(this.manaLabel)this.manaLabel.string=`灵力 ${Math.floor(p.mana)}/${Math.round(p.maxMana)}`;
+  const surge=ningshenSurgeMultiplier(s);
+  drawPlayerMana(this.battleHud?.manaBar,p.mana/p.maxMana,surge>1,.5+.5*Math.sin(s.time*Math.PI*2/1.2));
+  const surgeLabel=this.battleHud?.surgeLabel;
+  const surgeChip=surgeLabel?.node.parent;
+  if(surgeLabel&&surgeChip&&isValid(surgeChip,true)){surgeChip.active=surge>1;surgeLabel.string='';}
+  if(this.manaLabel)this.manaLabel.string=`灵力值 ${Math.floor(p.mana)}/${Math.round(p.maxMana)}`;
   drawPlayerXp(this.xpBar,(p.xp-xpStart)/(xpEnd-xpStart),c.capped);
   if(this.hpLabel)this.hpLabel.string=`${Math.min(Math.ceil(p.hp),Math.round(p.maxHp))}/${Math.round(p.maxHp)}`;
   this.title!.string=`波次 ${s.wave}/20`;
@@ -1184,7 +1274,13 @@ export class TowerView {
   if(this.castLabel&&this.castBar){
    const action=s.actions?.current;
    const visible=action&&action.releaseAt-action.startedAt>=.29&&s.time<action.releaseAt;
-   this.castLabel.node.active=!!visible;this.castBar.clear();
+   const burstKnown=(s.loadout.passive?.sj_gate||0)>0,burstWait=Math.max(0,(s.swordBurstReadyAt||0)-s.time);
+   this.castLabel.node.active=!!visible||burstKnown;this.castBar.clear();
+   if(!visible&&burstKnown){
+    this.castLabel.string=burstWait>0?`剑罡冷却 ${burstWait.toFixed(1)}秒`:'剑罡已就绪 · 等待重招';
+    this.castBar.fillColor=C('#243C42');this.castBar.rect(-100,-14,200,3);this.castBar.fill();
+    this.castBar.fillColor=C('#D6BD7F');this.castBar.rect(-100,-14,200*(1-Math.min(1,burstWait/10)),3);this.castBar.fill();
+   }
    if(visible){
     const definition=[...GROWTH_SKILLS,...GROWTH_EVOLUTIONS].find((entry:any)=>entry.id===action.skill);
     this.castLabel.string=`${definition?.name||'施法'}  ${Math.max(0,action.releaseAt-s.time).toFixed(1)}秒`;
@@ -1208,8 +1304,12 @@ export class TowerView {
     this.bossLabel.node.getComponent(UITransform)!.setContentSize(roleTitle?250:300,26);
    }
    this.drawBar(this.bossBar,272,5,boss.hp/boss.maxHp,UI.danger);
-   if(this.bossBar)this.skillEffects?.drawQingpingBadge(this.bossBar,boss,s.time,-120,-19);
-   if(this.bossMechanicLabel)this.bossMechanicLabel.string=boss.role==='boss'?(this.monsterMechanics?.bossStatus(boss,s.time)||''):'';
+   if(this.bossMechanicLabel)this.bossMechanicLabel.string=boss.role==='boss'?(boss.mechanic?.vulnerableUntil>s.time?'':this.monsterMechanics?.bossStatus(boss,s.time)||''):'';
+  }
+  if(this.bossPanel){
+   this.targetDebuffIcons.draw(this.bossPanel,{time:s.time,enemies:boss?[boss]:[]},boss?new Map([[boss.id,{x:-136,y:-27}]]):new Map());
+   // Mechanic cast text keeps its own row when debuffs occupy the HP underside.
+   if(this.bossMechanicLabel)this.bossMechanicLabel.node.setPosition(0,this.targetDebuffIcons.hasActiveIcons?-53:-25);
   }
   const available=growthSummary({...this.store.state,xp:p.xp,skills:{...s.loadout.active,...s.loadout.passive},tutorialWaves:s.loadout.tutorialWaves??this.store.state.tutorialWaves}).available;
   if(this.skillBadge)this.skillBadge.active=available>0;
@@ -1324,6 +1424,7 @@ export class TowerView {
   g.fillColor=C('#26322f');g.circle(x-r*.28,y+r*.12,Math.max(2,r*.09));g.circle(x+r*.28,y+r*.12,Math.max(2,r*.09));g.fill();
  }
  destroy(){
+  this.debuffIcons.destroy();this.targetDebuffIcons.destroy();
   this.levelBeam.destroy();this.levelBeamLayer=null;
   if(this.disposed)return;this.hide();this.disposed=true;this.resetInput();
   if(typeof window!=='undefined')window.removeEventListener('keydown',this.preventMenuKeyDefault,true);
@@ -1332,8 +1433,9 @@ export class TowerView {
   if(typeof window!=='undefined'){window.removeEventListener('focus',this.shown);window.removeEventListener('blur',this.hide);window.removeEventListener('pagehide',this.hide);document.removeEventListener('visibilitychange',this.visibility);delete (window as any).__towerTest;}
   this.battleHud?.dispose();this.battleHud=null;
   this.shadowArt.destroy();this.shadowLayer=null;
+  this.sancaiArt.destroy();
   this.monsterMechanics?.destroy();this.monsterMechanics=null;
-  this.clearBattleFeedback();this.ritual?.destroy();this.ritualAudio.destroy();this.skillEffects=null;this.flightSwordArt.destroy();this.flightArt.destroy();this.flightLayer=null;this.ningshenArt.destroy();this.ningshenLayer=null;this.jianguArt.destroy();this.jianguLayer=null;this.bumieArt.destroy();this.bumieLayer=null;this.jianxinArt.destroy();this.jianxinLayer=null;this.arcArt.destroy();this.arcLayer=null;this.qingpingAudio.destroy();this.burstArt.destroy();this.burstLayer=null;this.convergenceArt.destroy();this.convergenceLayer=null;this.lineArt.destroy();this.lineLayer=null;this.tiandiArt.destroy();this.tiandiLayer=null;this.crossBurstArt.destroy();this.qiArt.destroy();this.qiLayer=null;this.orbitArt.destroy();this.formationArt.destroy();this.sixiangArt.destroy();this.formationLayer=null;this.bodyFallbacks.clear();this.environmentArt.destroy();this.hudArt.destroy();this.stoneArt.destroy();this.projectileArt.destroy();this.monsterArt.destroy();this.characterArt.destroy();this.platform.destroy();this.menu?.destroy();this.root.destroy();
+  this.clearBattleFeedback();this.ritual?.destroy();this.ritualAudio.destroy();this.skillEffects=null;this.flightSwordArt.destroy();this.flightArt.destroy();this.flightLayer=null;this.ningshenArt.destroy();this.ningshenLayer=null;this.jianguArt.destroy();this.jianguLayer=null;this.bumieArt.destroy();this.bumieLayer=null;this.jianxinArt.destroy();this.jianxinLayer=null;this.arcArt.destroy();this.arcLayer=null;this.burstArt.destroy();this.burstLayer=null;this.convergenceArt.destroy();this.convergenceLayer=null;this.lineArt.destroy();this.lineLayer=null;this.tiandiArt.destroy();this.tiandiLayer=null;this.crossBurstArt.destroy();this.qiArt.destroy();this.qiLayer=null;this.orbitArt.destroy();this.formationArt.destroy();this.sixiangArt.destroy();this.formationLayer=null;this.bodyFallbacks.clear();this.environmentArt.destroy();this.hudArt.destroy();this.stoneArt.destroy();this.projectileArt.destroy();this.monsterArt.destroy();this.characterArt.destroy();this.platform.destroy();this.menu?.destroy();this.root.destroy();
   this.portraitGraphics=null;this.portraitRealm='';
  }
 }

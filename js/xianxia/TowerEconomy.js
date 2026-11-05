@@ -12,15 +12,19 @@ export const STONE_NAMES = Object.freeze(['下品', '中品', '上品', '极品'
 // Point vouchers are finite campaign rewards, never repeatable combat income.
 export const DIANJUAN_DRAW_COST = 100
 export const DIANJUAN_STARTER = 10 * DIANJUAN_DRAW_COST
-export const DIANJUAN_CAMPAIGN_TOTAL = 3000
+// 2026-11-05: floors 1/4/7 first clears (former skill points) also grant 1000.
+export const DIANJUAN_CAMPAIGN_TOTAL = 6000
+export const FIRST_CLEAR_MATERIALS = Object.freeze({
+  2: 'forge_core_fa', 5: 'forge_core_bao', 8: 'forge_core_ling',
+})
 export const FIRST_CLEAR_REWARDS = Object.freeze([
-  { kind: 'skillPoints', name: '功法点', quantity: 4, amount: 4 },
+  { kind: 'contribution', name: '点眷', quantity: 1000, amount: 1000 },
   { kind: 'spiritStones', name: '下品灵石', quantity: 100, amount: 100, grade: 0 },
   { kind: 'contribution', name: '点眷', quantity: 1000, amount: 1000 },
-  { kind: 'skillPoints', name: '功法点', quantity: 7, amount: 7 },
+  { kind: 'contribution', name: '点眷', quantity: 1000, amount: 1000 },
   { kind: 'spiritStones', name: '中品灵石', quantity: 3, amount: 300, grade: 1 },
   { kind: 'contribution', name: '点眷', quantity: 1000, amount: 1000 },
-  { kind: 'skillPoints', name: '功法点', quantity: 9, amount: 9 },
+  { kind: 'contribution', name: '点眷', quantity: 1000, amount: 1000 },
   { kind: 'spiritStones', name: '中品灵石', quantity: 4, amount: 400, grade: 1 },
   { kind: 'contribution', name: '点眷', quantity: 1000, amount: 1000 },
 ].map(Object.freeze))

@@ -1,3 +1,4 @@
+import {TowerStatusIconArt,STATUS_ICON_SIZE} from './TowerStatusIconArt';
 import {towerResources as resources} from './TowerResources';
 import {Node,Graphics,Color,Label,ImageAsset,isValid,Sprite,SpriteFrame,Texture2D,Vec2,UITransform} from 'cc';
 const C=(s:string)=>new Color(s);
@@ -20,12 +21,23 @@ function drawResourceTrack(g:Graphics,ratio:number,height:number,color:string,wi
  g.clear();g.fillColor=C('#A4B3A8');g.roundRect(-width/2,-height/2,width,height,height/2);g.fill();
  if(fill>0){g.fillColor=C(color);g.roundRect(-width/2,-height/2,width*fill,height,Math.min(height/2,width*fill/2));g.fill();}
 }
-export function drawPlayerMana(g:Graphics|null,ratio:number){if(g)drawResourceTrack(g,ratio,6,'#397B9B');}
-export function drawPlayerHp(g:Graphics|null,ratio:number,style:HudStyle='battle'){
+/** surge: 凝神诀 low-mana regen active; pulse in [0,1] comes from simulation time. */
+export function drawPlayerMana(g:Graphics|null,ratio:number,surge=false,pulse=0){
+ if(!g)return;
+ if(!surge){drawResourceTrack(g,ratio,6,'#397B9B');return;}
+ const t=Math.max(0,Math.min(1,pulse)),mix=(a:number,b:number)=>Math.round(a+(b-a)*t);
+ drawResourceTrack(g,ratio,6,`#${[mix(0x2E,0x6F),mix(0xB5,0xE8),mix(0xA4,0xD6)].map(n=>n.toString(16).padStart(2,'0')).join('')}`);
+ g.strokeColor=C('#7FE3CF');g.lineWidth=1;g.roundRect(-101,-4,202,8,4);g.stroke();
+}
+export function drawPlayerHp(g:Graphics|null,ratio:number,style:HudStyle='battle',heavyPulse=0){
   if(!g)return;g.clear();
   const fill=Number.isFinite(ratio)?Math.max(0,Math.min(1,ratio)):0;
   if(style==='paper'){
    drawResourceTrack(g,fill,8,fill<=.25?'#963F32':'#A56855');
+   if(heavyPulse>0){
+    g.strokeColor=new Color(255,150,139,Math.round(255*Math.min(1,heavyPulse)));
+    g.lineWidth=2;g.roundRect(-103,-7,206,14,6);g.stroke();
+   }
    return;
   }
   const shape=(share:number)=>{
@@ -216,15 +228,20 @@ export function createPlayerHud(root:Node,node:(name:string,parent:Node,w:number
    const hpBar=node('HUD.HPBar',vitals,200,8).addComponent(Graphics);hpBar.node.setPosition(44,0);
    const manaBar=node('HUD.ManaBar',vitals,200,6).addComponent(Graphics);manaBar.node.setPosition(44,-14);
    const xpBar=node('HUD.XPBar',vitals,200,4).addComponent(Graphics);xpBar.node.setPosition(44,-27);
+   // 凝神诀 low-mana regen cue; shown only while the surge is active.
+   const surgeChip=node('HUD.NingshenSurge',vitals,STATUS_ICON_SIZE,STATUS_ICON_SIZE);surgeChip.setPosition(-56+STATUS_ICON_SIZE/2,-43);
+   const surgeIcons=new TowerStatusIconArt();surgeIcons.attach(surgeChip,'spirit');
+   const surgeLabel=label('',surgeChip,0,0,0,0,9,'#A8F2E1');surgeLabel.node.name='HUD.NingshenSurgeText';
+   surgeLabel.node.active=false;surgeChip.active=false;
    const dispose=()=>{
-    if(disposed)return;disposed=true;
+    if(disposed)return;disposed=true;surgeIcons.destroy();
     if(isValid(art,true))art.spriteFrame=null;
     frame?.destroy();texture?.destroy();image?.decRef();frame=null;texture=null;image=null;
     if(isValid(professionArt,true))professionArt.spriteFrame=null;
     professionFrame?.destroy();professionTexture?.destroy();professionImage?.decRef();
     professionFrame=null;professionTexture=null;professionImage=null;
    };
-   return {root:vitals,hpBar,manaBar,portraitGraphics,hpLabel,manaLabel,xpBar,stats,style,dispose};
+   return {root:vitals,hpBar,manaBar,surgeLabel,portraitGraphics,hpLabel,manaLabel,xpBar,stats,style,dispose};
   }
   const vitals=node('HUD.PlayerVitals',root,360,140);
 
@@ -243,7 +260,7 @@ export function createPlayerHud(root:Node,node:(name:string,parent:Node,w:number
   lg.roundRect(-78,-16,156,32,6);lg.fill();lg.stroke();
   const stats=label('',level,0,0,144,32,24,'#FFFFFF');stats.node.name='HUD.RealmLabel';
 
- return {root:vitals,hpBar,manaBar:null,portraitGraphics,hpLabel,manaLabel,xpBar,stats,style,dispose:()=>{}};
+ return {root:vitals,hpBar,manaBar:null,surgeLabel:null as Label|null,portraitGraphics,hpLabel,manaLabel,xpBar,stats,style,dispose:()=>{}};
 }
 
 // Shared paper action glyphs keep the hall and combat controls visually identical.
