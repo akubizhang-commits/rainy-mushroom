@@ -15,7 +15,7 @@ const copy = value => JSON.parse(JSON.stringify(value))
 const stageLevels = [1, 4, 7, 11, 14, 17, 21, 24, 27]
 const thresholds = stageLevels.map(cultivationLevelXp)
 const allocation = [
-  ['sj_arc', 'sj_yujian', 'sj_bone'], ['sj_moon', 'vajra'], ['sj_wanjian'],
+  ['sj_arc', 'sj_yujian', 'sj_bone'], ['sj_moon', 'vajra', 'sj_wanjian'], ['sj_qinglian'],
   ['sj_line', 'sj_shadow', 'sj_sancai', 'sj_flight', 'sj_spirit'], ['sj_moon_triple', 'sj_mark'], ['sj_cross', 'sj_gate', 'sj_formation'],
   ['sj_heart', 'evo_wanjian', 'evo_tiandi'], ['evo_wuwo'], ['evo_sixiang'],
 ]
@@ -69,7 +69,7 @@ test('nine immutable stages cover all 30 levels with the approved 6/10/5 allocat
   assert.equal(GROWTH_STAGES.length, 9)
   assert.deepEqual(GROWTH_STAGES.map(stage => stage.skillIds), allocation)
   assert.deepEqual(['炼气', '筑基', '金丹'].map(realm =>
-    GROWTH_STAGES.filter(stage => stage.realm === realm).flatMap(stage => stage.skillIds).length), [6, 10, 5])
+    GROWTH_STAGES.filter(stage => stage.realm === realm).flatMap(stage => stage.skillIds).length), [7, 10, 5])
   assert.deepEqual(allocation.flat().slice().sort(), definitions.map(row => row.id).sort())
   for (const [i, stage] of GROWTH_STAGES.entries()) {
     assert.equal(stage.minLevel, stageLevels[i])

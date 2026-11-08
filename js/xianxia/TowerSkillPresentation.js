@@ -103,6 +103,7 @@ function presentRank(state, id) {
   const pct = (key, label, value, condition = '') => add(key, label, percent(value), '', condition)
   const descriptions = {
     sj_line: '剑气沿狭长直线贯穿敌人；精进后沿同一道剑路连续穿刺。',
+    sj_qinglian: '剑气凝成三层莲瓣形剑刃，内、中、外三环依次展开并旋转切割；整招伤害按20%/35%/45%分给内、中、外三环，同一目标一招最多承受一次整招伤害。',
     sj_shadow: '在目标位置留下剑痕，短暂延迟后由不同方向接连斩落。',
     evo_tiandi: '蓄势凝成一柄巨剑，一击劈开前方敌阵；地面裂光随后消散。',
     sj_spirit: '凝聚神识：灵力低于30%时，战斗中回灵速度大幅提升，灵力条转为青色并显示“凝神回灵”。每级另增加10点神识（10%施法速度，提高灵力上限和恢复）与4%御剑术索敌距离；同时扩大灵石、材料和地面治疗物的拾取范围。适合灵力消耗高的流派。',
@@ -305,7 +306,7 @@ function describeForm(id, form) {
     sj_moon: '原地宽幅月弧横扫', sj_moon_triple: '斜斩、横斩、下劈三发月牙',
     sj_cross: `${swordQiFormName(id, form)}，原地爆发一次`,
     sj_line: `${form.hits}次同路穿刺`, sj_shadow: `${form.hits}道交错剑痕`,
-    sj_wanjian: `${form.swords}剑环身`, sj_formation: '双眼圆形剑阵', sj_sancai: '三剑三角阵',
+    sj_wanjian: `${form.swords}剑环身`, sj_qinglian: '三层莲瓣剑环，判定剑扫过才命中', sj_formation: '双眼圆形剑阵', sj_sancai: '三剑三角阵',
     evo_wanjian: `${form.hits - 1}次向心穿刺＋1记合剑`, evo_tiandi: '一道巨剑重斩',
     evo_wuwo: `${form.swords}剑错轨巡游与近身剑意`, evo_sixiang: '四眼菱形剑阵',
   }[id]
@@ -331,6 +332,7 @@ function describeForm(id, form) {
   else if (id === 'sj_moon') lines.push(`范围：原地横扫${form.angle}°，横向${form.width}、纵向${form.radius}；月弧不飞行。`)
   else if (form.shape === 'sector') lines.push(`范围：前方${form.angle}°扇区，半径${form.radius}。`)
   else if (form.shape === 'line') lines.push(`范围：最长${form.reach}、宽${form.width}的直线剑路。`)
+  else if (form.shape === 'lotus') lines.push(`范围：三层莲瓣剑环，半径约${form.rings.map(ring => ring.radius).join('、')}像素（0.6m、1.2m、2.0m），内4剑、中6剑、外8剑；每0.5秒判定一次，判定剑扫过的环才命中。`)
   else if (form.shape === 'orbit') lines.push(`范围：剑环轨道半径${form.radius}，剑身外缘约${form.radius + form.bladeLength / 2 + form.bladeWidth / 2}${id === 'sj_wanjian' ? `，内侧约${form.innerRadius}为近身空隙` : `，内圈覆盖至半径${form.innerRadius}`}。`)
   else if (form.shape === 'triangle') lines.push(`范围：三角形内部，中心至顶点${form.radius}，最远布置距离${form.reach}。`)
   else if (form.shape === 'diamond') lines.push(`范围：菱形内部，中心至顶点${form.radius}。`)
@@ -347,6 +349,7 @@ function describeForm(id, form) {
     sj_line: '首刺锁定起点与方向，后续穿刺沿原剑路发出。',
     sj_shadow: '出招时固定落点，后续剑痕不追随敌人。',
     sj_wanjian: '剑环跟随人物移动，只有剑身扫过才会命中。',
+    sj_qinglian: '阵眼固定在施放位置，不追随人物；起阵0.8秒后爆发，判定剑扫过的环才命中，不减速敌人。',
     sj_formation: '起手时锁定落点，剑阵固定在原地，不追随敌人；剑雨余光不追加伤害。',
     sj_sancai: '起手时选择敌群落点，剑阵固定在原地；三剑共用三次伤害预算，减速不影响敌人出招。',
     evo_wanjian: '归宗落点固定，穿刺与末段合剑各自命中所在剑路。',

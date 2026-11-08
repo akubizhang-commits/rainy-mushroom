@@ -3,8 +3,9 @@ import {skillForm,orbitSwordPose} from './shared/js/xianxia/TowerSkillForms';
 import {swordQiSegments,swordQiVisualLift,swordQiPoseIndex} from './shared/js/xianxia/TowerSwordQi';
 import {SHADOW_LIFT,shadowPreviewLine,shadowHitFeedback} from './shared/js/xianxia/TowerShadow';
 import {sancaiVertices} from './shared/js/xianxia/TowerSancai';
+import {drawQinglianWindup,drawQinglianBurst} from './QinglianFormationArt';
 
-const FRIENDLY=new Set(['basic_swing','arc','cross','line','tiandi','tiandi_windup','shadow','formation','sancai','convergence','sword_rain','orbit','wuwo','hit','gate','armor_heal','sword_charge','sword_burst_charge','sword_burst','sword_burst_hit']);
+const FRIENDLY=new Set(['basic_swing','arc','cross','line','tiandi','tiandi_windup','shadow','formation','sancai','qinglian','convergence','sword_rain','orbit','wuwo','hit','gate','armor_heal','sword_charge','sword_burst_charge','sword_burst','sword_burst_hit']);
 /** Geometric skill presentation. Every damaging frontier comes from combat.
  * Uses one existing Graphics layer and cached colors: no per-frame nodes,
  * textures, tweens, timers, particles, random choices or gameplay writes.
@@ -320,6 +321,12 @@ export class TowerSkillEffects {
   const alpha=zone?1:Math.pow(1-progress,1.2);
   const x=e.x-this.cx,y=e.y-this.cy;
   if(e.kind==='orbit'||e.kind==='wuwo')return; // Actual blades already convey these hits.
+  if(e.kind==='qinglian'){
+   // A zone-less windup shows 起阵/成阵; the zone itself shows the burst and fade.
+   if(!zone&&e.phase==='windup')drawQinglianWindup(g,x,y,time-e.startedAt,e.expiresAt-e.startedAt);
+   else drawQinglianBurst(g,x,y,time,e.startedAt,e.expiresAt-e.startedAt,e.pulseIndex??0);
+   return;
+  }
   if(e.kind==='sancai'){
    const vertices=sancaiVertices({x,y,radius:e.radius});
    this.lineColor(g,147,230,228,130*alpha,1.5);

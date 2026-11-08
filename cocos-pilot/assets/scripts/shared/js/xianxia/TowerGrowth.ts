@@ -17,8 +17,8 @@ function freeze(value) {
 // Each skill opens rank bands relative to its own starting realm phase.
 export const GROWTH_STAGES = freeze([
   { id: 'lianqi-early', realm: '炼气', phase: '初期', skillIds: ['sj_arc', 'sj_yujian', 'sj_bone'] },
-  { id: 'lianqi-middle', realm: '炼气', phase: '中期', skillIds: ['sj_moon', 'vajra'] },
-  { id: 'lianqi-peak', realm: '炼气', phase: '巅峰', skillIds: ['sj_wanjian'] },
+  { id: 'lianqi-middle', realm: '炼气', phase: '中期', skillIds: ['sj_moon', 'vajra', 'sj_wanjian'] },
+  { id: 'lianqi-peak', realm: '炼气', phase: '巅峰', skillIds: ['sj_qinglian'] },
   { id: 'zhuji-early', realm: '筑基', phase: '初期', skillIds: ['sj_line', 'sj_shadow', 'sj_sancai', 'sj_flight', 'sj_spirit'] },
   { id: 'zhuji-middle', realm: '筑基', phase: '中期', skillIds: ['sj_moon_triple', 'sj_mark'] },
   { id: 'zhuji-peak', realm: '筑基', phase: '巅峰', skillIds: ['sj_cross', 'sj_gate', 'sj_formation'] },
@@ -67,7 +67,7 @@ const oldSkills = new Map(SKILLS.map(skill => [skill.id, skill]))
 // Sword scars use their own hybrid budget; utility buffs deal no damage.
 const damageTypes = {
   sj_yujian: 'physical', sj_arc: 'physical', sj_moon: 'physical', sj_moon_triple: 'physical', sj_cross: 'physical', sj_line: 'physical', sj_shadow: 'hybrid',
-  sj_wanjian: 'hybrid', sj_formation: 'hybrid', sj_sancai: 'hybrid',
+  sj_wanjian: 'hybrid', sj_formation: 'hybrid', sj_sancai: 'hybrid', sj_qinglian: 'hybrid',
   sj_mark: 'none', sj_gate: 'hybrid',
   sj_spirit: 'none', sj_heart: 'none', sj_bone: 'none', vajra: 'none', sj_flight: 'none',
 }
@@ -115,6 +115,13 @@ function skill(id, effects, metadata = oldSkills.get(id)) {
 export const GROWTH_POINT_CAP = 35
 // Retained for shared consumers; research no longer grants skill points.
 export const GROWTH_RESEARCH = freeze([])
+
+// 青莲剑阵的三层判定环。swords 为判定剑数；视觉瓣数为 2 × swords，偶数瓣为判定剑。
+export const QINGLIAN_RINGS = freeze([
+  { radius: 90, share: .20, swords: 4, visualPetals: 8, alpha: .80 },
+  { radius: 150, share: .35, swords: 6, visualPetals: 12, alpha: .70 },
+  { radius: 200, share: .45, swords: 8, visualPetals: 16, alpha: .60 },
+])
 
 export const GROWTH_SKILLS = freeze([
   skill('sj_yujian', {
@@ -174,6 +181,13 @@ export const GROWTH_SKILLS = freeze([
     target_cap: 6, single_dps_factor: 1 / .6, hit_assumption: .6,
     rule: '发动起冷却6秒，剑环持续4秒；生效期间伤害乘10/7，以每轮最多7击补偿原6秒10击。所有环绕剑对同一目标共用0.6秒命中间隔，不乘剑数。周天剑域保留常驻与原伤害。',
   }, { ...oldSkills.get('sj_wanjian'), pointCosts: [...activeCosts] }),
+  // 青莲剑阵：三层判定环共用一招预算。share 为每次判定的预算比例；只有判定剑扫过的环结算。
+  skill('sj_qinglian', {
+    damage: damageCurve(8, 1.15), cooldown: 9, windup: .8, duration: 1,
+    hit_interval: .5, reach: QINGLIAN_RINGS.at(-1).radius, target_cap: 6,
+    single_dps_factor: 1 / 9, hit_assumption: .6,
+    rule: '起阵0.3秒、成阵0.5秒后三层莲瓣剑环爆发1秒，每0.5秒判定一次。内4剑、中6剑、外8剑，半径0.6m、1.2m、2.0m（约90、150、200像素），预算分配20%/35%/45%。每次判定仅被判定剑扫过的环结算，同目标一招最多结算整招预算；最多6个目标，不减速敌人。',
+  }, { name: '青莲剑阵', kind: 'active', clear: 0 }),
   skill('sj_line', {
     damage: damageCurve(8 * 1.8 * 1.5, 1.10), cooldown: 12, windup: .12,
     reach: [450, 450, 490, 490, 530, 560, 560, 600, 600, 640],

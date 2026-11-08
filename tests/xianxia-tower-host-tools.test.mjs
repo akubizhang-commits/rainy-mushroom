@@ -1272,9 +1272,9 @@ test('host refund preserves the learned evolution and displays the committed ran
 // Independent UI expectations from the V2.1 nine-stage design. The production
 // tables still supply quotes and transactions; no test-only menu is rendered.
 const stageRows = [
-  ['lianqi-early', '炼气·初期', ['sj_yujian', 'sj_arc', 'sj_wanjian']],
-  ['lianqi-middle', '炼气·中期', ['vajra', 'magnet']],
-  ['lianqi-peak', '炼气·巅峰', ['sj_heart', 'sj_cross']],
+  ['lianqi-early', '炼气·初期', ['sj_yujian', 'sj_arc']],
+  ['lianqi-middle', '炼气·中期', ['vajra', 'magnet', 'sj_wanjian']],
+  ['lianqi-peak', '炼气·巅峰', ['sj_heart', 'sj_cross', 'sj_qinglian']],
   ['zhuji-early', '筑基·初期', ['sj_line', 'sj_shadow', 'sj_formation', 'sj_flight']],
   ['zhuji-middle', '筑基·中期', ['sj_mark', 'sj_bone']],
   ['zhuji-peak', '筑基·巅峰', ['sj_gate']],
@@ -1736,7 +1736,7 @@ for (const frame of [{ width: 1280, height: 720 }, { width: 844, height: 390 }, 
     press(game, '功法'); expandFutureRealms(game)
     for (const [id, category, flow] of [
       ['sj_yujian', '物理攻击', '御剑'], ['sj_arc', '物理攻击', '剑气'],
-      ['sj_wanjian', '物理＋法术攻击', '剑阵'], ['sj_gate', '物理＋法术攻击', '通用'],
+      ['sj_wanjian', '物理＋法术攻击', '剑阵'], ['sj_qinglian', '物理＋法术攻击', '剑阵'], ['sj_gate', '物理＋法术攻击', '通用'],
       ['vajra', '被动功法', '通用'], ['future_yingling', '辅助', '通用'],
     ]) {
       press(game, `功法节点-${id}`)

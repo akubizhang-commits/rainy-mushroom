@@ -1,6 +1,7 @@
 // Shared combat geometry. Damage, cooldown and learning costs remain in Growth.
 import { COMBAT_SKILLS as GROWTH_SKILLS, COMBAT_EVOLUTIONS as GROWTH_EVOLUTIONS } from './TowerCombatSkills.js'
 import { wuwoSwordPose } from './WuwoMotion.js'
+import { QINGLIAN_RINGS } from './TowerGrowth.js'
 
 const SKILLS = Object.fromEntries(GROWTH_SKILLS.map(skill => [skill.id, skill]))
 const EVOLUTIONS = Object.fromEntries(GROWTH_EVOLUTIONS.map(skill => [skill.id, skill]))
@@ -83,6 +84,11 @@ export function skillForm(id, level = 1, parentLevel = 1, trainedLevel = level) 
           initialDelay: .5, duration: skill.duration })
         form.interval = (form.duration - form.initialDelay) / (form.hits - 1)
         break
+      case 'sj_qinglian':
+        // Two judgment pulses at release and +0.5s; each pulse sweeps its window.
+        Object.assign(form, { shape: 'lotus', radius: QINGLIAN_RINGS.at(-1).radius, hits: 2,
+          interval: .5, initialDelay: 0, duration: skill.duration, rings: QINGLIAN_RINGS })
+        break
       case 'sj_wanjian':
         Object.assign(form, { shape: 'orbit', hits: null, swords: [4, 5, 6, 8][node],
           interval: .6, bladeLength: 36 + 2 * (form.radius - 90), bladeWidth: 10,
@@ -114,6 +120,51 @@ export function skillForm(id, level = 1, parentLevel = 1, trainedLevel = level) 
   const result = Object.freeze(form)
   cache.set(key, result)
   return result
+}
+
+// 青莲剑阵：第 k 环的瓣以 phi_k + ω_k·t 为基准旋转；内环最快，外环最慢，相邻环错开 π/8。
+// 偶数瓣为判定剑（index 2i 与判定剑 i 同角），奇数瓣只绘制。
+const QINGLIAN_SPIN = [2.4, 1.6, 1.0]
+const QINGLIAN_BLADE_BASE = .35, QINGLIAN_BLADE_WIDTH = 8
+export function qinglianPetalPose(form, time, ringIndex, petalIndex) {
+  const ring = form.rings[ringIndex]
+  const petals = ring.visualPetals
+  const angle = ringIndex * Math.PI / 8 + QINGLIAN_SPIN[ringIndex] * time + petalIndex * Math.PI * 2 / petals
+  const dx = Math.cos(angle), dy = Math.sin(angle)
+  return { x: dx * ring.radius, y: dy * ring.radius, angle,
+    baseX: dx * ring.radius * QINGLIAN_BLADE_BASE, baseY: dy * ring.radius * QINGLIAN_BLADE_BASE,
+    tipX: dx * ring.radius, tipY: dy * ring.radius, judgment: petalIndex % 2 === 0 }
+}
+// Judgment sword i of ring k is visual petal 2i, so the damage blades match the drawn ones.
+export function qinglianBladePose(form, time, ringIndex, index) {
+  return qinglianPetalPose(form, time, ringIndex, index * 2)
+}
+const segmentDistanceLocal = (px, py, ax, ay, bx, by) => {
+  const vx = bx - ax, vy = by - ay
+  const t = Math.max(0, Math.min(1, ((px - ax) * vx + (py - ay) * vy) / (vx * vx + vy * vy || 1)))
+  return Math.hypot(px - ax - vx * t, py - ay - vy * t)
+}
+// Returns the shares of the rings whose judgment blades sweep the target during
+// [time, time + window). Coverage uses the target's edge, not its centre.
+export function qinglianRingShares(form, center, target, time, window) {
+  const offset = Math.hypot(target.x - center.x, target.y - center.y)
+  const local = { x: target.x - center.x, y: target.y - center.y }
+  const shares = []
+  form.rings.forEach((ring, k) => {
+    if (offset - (target.radius ?? 0) > ring.radius + 1e-6) return
+    const samples = 8
+    for (let j = 0; j < samples; j++) {
+      const t = time + window * j / samples
+      let hit = false
+      for (let i = 0; i < ring.swords && !hit; i++) {
+        const pose = qinglianBladePose(form, t, k, i)
+        hit = segmentDistanceLocal(local.x, local.y, pose.baseX, pose.baseY, pose.tipX, pose.tipY)
+          <= (target.radius ?? 0) + QINGLIAN_BLADE_WIDTH / 2
+      }
+      if (hit) { shares.push(ring.share); break }
+    }
+  })
+  return shares
 }
 
 // Local coordinates: the caller adds the actual player position. Both renderer

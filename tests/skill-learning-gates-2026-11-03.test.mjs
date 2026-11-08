@@ -108,19 +108,19 @@ test('newly unlocked spirit purchase stays atomic if saving fails',()=>{
  assert.equal(JSON.stringify(store.state),before);assert.equal(disk.raw,raw)
 })
 
-test('orbit starts at refining peak and reaches rank ten at foundation peak',()=>{
- const early=fixture(6),before=early.disk.raw
+test('orbit starts at refining middle and reaches rank ten at foundation peak',()=>{
+ const early=fixture(3),before=early.disk.raw
  assert.equal(early.store.act({type:'learnSkill',id:'sj_wanjian'},0).reason,'stage-locked')
  assert.equal(early.disk.raw,before)
- const ready=fixture(7)
+ const ready=fixture(4)
  assert.equal(ready.store.act({type:'learnSkill',id:'sj_wanjian'},0).level,1)
  assert.equal(new TowerCampaignStore(ready.disk,0).state.skills.sj_wanjian,1)
- for(const [level,cap] of [[6,0],[7,3],[10,3],[11,6],[13,6],[14,9],[16,9],[17,10]])
+ for(const [level,cap] of [[3,0],[4,3],[6,3],[7,6],[10,6],[11,9],[13,9],[14,10],[16,10],[17,10]])
   assert.equal(rankCap('sj_wanjian',cultivationLevelXp(level)),cap)
  const definition=GROWTH_SKILLS.find(s=>s.id==='sj_wanjian')
  assert.deepEqual(definition.pointCosts,Array(10).fill(1))
  assert.equal(definition.cooldown,6);assert.equal(definition.duration,4)
- assert.match(skillPresentation(ready.store.state,'sj_wanjian').requirementLines[0],/炼气.*巅峰/)
+ assert.match(skillPresentation(ready.store.state,'sj_wanjian').requirementLines[0],/炼气.*中期/)
  const evolve=fixture(24,{sj_wanjian:1})
  assert.equal(evolve.store.act({type:'learnSkill',id:'evo_wuwo'},0).level,1)
  assert.equal(new TowerCampaignStore(evolve.disk,0).state.evolutionRanks.evo_wuwo,1)

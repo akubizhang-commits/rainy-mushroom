@@ -51,13 +51,13 @@ export const WEAPON_FIXED_ATTACK_RANGES = freeze(Object.fromEntries(
     spec && spec.A.map(amount => Math.max(.1, Math.floor(amount * .008 * WEAPON_ATTACK_REFERENCE[tier] * 10 + 1e-8) / 10)))])))
 const families = freeze({
   // 2026-11-06：御剑流派与85号共鸣一致（御剑术、分光连斩，万剑归宗经进化归属继承）。
-  yujian: ['sj_yujian', 'sj_shadow'], qi: ['sj_arc', 'sj_moon', 'sj_moon_triple', 'sj_line', 'sj_cross'], formation: ['sj_wanjian', 'sj_formation', 'sj_sancai'],
+  yujian: ['sj_yujian', 'sj_shadow'], qi: ['sj_arc', 'sj_moon', 'sj_moon_triple', 'sj_line', 'sj_cross'], formation: ['sj_wanjian', 'sj_qinglian', 'sj_formation', 'sj_sancai'],
 })
 const evolutionFamilies = freeze({
   evo_wanjian: 'sj_yujian', evo_tiandi: 'sj_line', evo_wuwo: 'sj_wanjian', evo_sixiang: 'sj_formation',
 })
 const skillNames = freeze({ sj_yujian: '御剑术', sj_shadow: '分光连斩', sj_arc: '流云斩', sj_moon: '玄月斩', sj_moon_triple: '逐月斩', sj_cross: '双月斩',
-  sj_line: '剑破虚空', sj_wanjian: '周天剑阵', sj_formation: '两仪剑阵', sj_sancai: '三才剑阵' })
+  sj_line: '剑破虚空', sj_wanjian: '周天剑阵', sj_qinglian: '青莲剑阵', sj_formation: '两仪剑阵', sj_sancai: '三才剑阵' })
 const own = (o, key) => Object.prototype.hasOwnProperty.call(o, key)
 const record = x => x !== null && typeof x === 'object' && !Array.isArray(x)
 const exactKeys = (x, keys) => record(x) && Object.keys(x).length === keys.length && keys.every(k => own(x, k))
