@@ -91,3 +91,26 @@ Verified in worktree (headless, the same build): skill page shows 炼气初期 (
 Tests: node --test tests/*.test.mjs: 2399 tests, 2367 pass, 32 fail. Zero names fail that passed at baseline (cmp against baseline/full-tap.txt). The bonus fix clears 71 tests that failed in the previous after-run. Output: full-tap-final.txt.
 Build: node scripts/cocos/build.mjs web-mobile, exit 0 with zero error TS lines.
 Open item: the three skill icons and their .meta files need the same git decision as the status icons. The mainline (codex/crafting-minigames) still lacks them.
+
+## Final handoff (mainline codex/crafting-minigames cf4f36b9)
+Merge commits: 7a2bb33f (feature merge). Follow-up on mainline: 3213c983 (cherry-pick of 922e9586, TowerMenu badge fix), cf4f36b9 (skill icons sj_moon, sj_moon_triple, sj_sancai and metas). Earlier status icons: 8cb05702.
+
+Build: `node scripts/cocos/build.mjs web-mobile` on the mainline: exit 0, zero `error TS` lines, no tracked-file changes.
+
+Skill page (功法) check on the mainline build, headless shell:
+- 1280×720: console empty except "Setting window size is not supported." No ReferenceError, no TowerAssets warnings. Cards shown: 炼气·初期 (流云斩, 御剑术, 剑骨), 中期 (玄月斩, 周天剑阵, 护体剑罡), 巅峰 (青莲剑阵). Screenshot: live/skill-page-mainline-1280x720.png.
+- 844×390: 初期 and 中期 visible at open. After scrolling the tree: 巅峰 青莲剑阵 and 筑基 cards visible; console empty. Screenshots: live/skill-page-mainline-844x390.png and -scrolled.png.
+- Not clicked through each card or tested learning/refund on the mainline. Only layout and console were checked.
+
+Balance on the mainline (natural harness, floors 1–9, 18 attempts, seeds 101 and 202, routes qi, array, formation): balance/mainline-*.json and logs. Outcome sequences match the worktree-after runs for all 54 floor slices. Three-way table: balance/comparison-3way.md.
+- Qi: unchanged from before.
+- Formation (pure sword): floor 4 needs more attempts after the change (seed 101 first win @5 before, @8 now; seed 202 @4 → @5). Floor 4 still clears within 18 attempts on both seeds; no tuning applied.
+- Array (周天-heavy): floor 6 seed 202 first win moves from @1 to @3, and floor 7 seed 202 changes from @2 to @1.
+- Not claimed: a match to 2026-11-06 files (different producer, not in repo); a yujian natural route does not exist in the harness.
+
+Tests: not re-run in this step; the last full run is on the feature worktree (2399 tests, 2367 pass, 32 fail, zero regressions against baseline, full-tap-final.txt).
+
+Not verified:
+- Clicking every skill card and performing learn/refund/cast/pause/death/exit on the mainline.
+- Tower gameplay checks (judgment hits, cooldowns, recordings). Not run in this session.
+- Full test run on the mainline after cf4f36b9 (only the feature worktree was run).
