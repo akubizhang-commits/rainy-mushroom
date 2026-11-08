@@ -3810,7 +3810,7 @@ test('tower entry completed campaign selects ninth floor and readonly disables e
     if (prize.kind !== 'none') {
       assert.ok(labelText(rewards[0]).replace(/\s/g,'').includes(`×${prize.quantity}`))
       assert.ok(named(rewards[0], '首通奖励已领取对勾'))
-      assert.ok(labelText(row).includes(prize.name))
+      assert.ok(!labelText(row).includes(prize.name))
     }
   }
   const before = storage.getItem(campaign.TOWER_CAMPAIGN_KEY), state=copy(game.store.state), writes=storage.writes.length;
