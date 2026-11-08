@@ -1,0 +1,103 @@
+not ok 1420 - sect entries share cultivation state and keep tower separate from inheritance peaks
+not ok 1470 - single-save healing redraw preserves the selected current skill
+not ok 1471 - skill page hides battle vitals and keeps rank hints below icons
+not ok 1478 - skill pane uses shared weapon damage once after equipping an affix instance
+not ok 1479 - first special skill book costs 200 stones atomically and subsequent ranks do not rebuy it
+not ok 1480 - level-only point information has no purchase action and does not change resources
+not ok 1490 - host refund preserves the learned evolution and displays the committed rank change
+not ok 1491 - skill arrow follows purchase eligibility: realm cap with spare points
+not ok 1492 - skill arrow follows purchase eligibility: no points below cap
+not ok 1493 - skill arrow follows purchase eligibility: stage locked
+not ok 1494 - skill arrow follows purchase eligibility: no tutorial gate at the required character level
+not ok 1495 - skill arrow follows purchase eligibility: evolution requires its parent skill
+not ok 1496 - skill arrow follows purchase eligibility: unlocked first rank
+not ok 1497 - skill arrow follows purchase eligibility: current rank can grow
+not ok 1498 - skill arrow follows purchase eligibility: absolute maximum
+not ok 1499 - skill arrow disappears at the realm cap after purchase and returns after refund
+not ok 1500 - dependency connections remain stable while learning and refund each commit once
+not ok 1501 - async skill artwork preserves all current skill click targets, clipping, badges and camp transactions (844x390)
+not ok 1502 - async skill artwork preserves all current skill click targets, clipping, badges and camp transactions (1024x600)
+not ok 1503 - one failed skill image leaves its glyph and camp controls usable alongside loaded artwork
+not ok 1504 - destroying the real host releases loaded icon art and safely ignores pending completions
+not ok 1505 - compact skill labels preserve passive tags and available points (1280x720)
+not ok 1506 - physical type, flow and level are separate nonoverlapping tags (1280x720)
+not ok 1507 - selected evolution shows only its actual parent connection (1280x720)
+not ok 1508 - realm lanes group current skills and toggle future previews (1280x720)
+not ok 1509 - phase layout keeps nonoverlapping targets and a fixed detail footer (1280x720)
+not ok 1510 - compact skill labels preserve passive tags and available points (844x390)
+not ok 1511 - physical type, flow and level are separate nonoverlapping tags (844x390)
+not ok 1512 - selected evolution shows only its actual parent connection (844x390)
+not ok 1513 - realm lanes group current skills and toggle future previews (844x390)
+not ok 1514 - phase layout keeps nonoverlapping targets and a fixed detail footer (844x390)
+not ok 1515 - compact skill labels preserve passive tags and available points (1024x600)
+not ok 1516 - physical type, flow and level are separate nonoverlapping tags (1024x600)
+not ok 1517 - selected evolution shows only its actual parent connection (1024x600)
+not ok 1518 - realm lanes group current skills and toggle future previews (1024x600)
+not ok 1519 - phase layout keeps nonoverlapping targets and a fixed detail footer (1024x600)
+not ok 1520 - nine-stage UI plus/minus retain selection and vertical scroll in the viewport-wide tree (1280x720)
+not ok 1521 - nine-stage UI plus/minus retain selection and vertical scroll in the viewport-wide tree (844x390)
+not ok 1522 - nine-stage UI plus/minus retain selection and vertical scroll in the viewport-wide tree (1024x600)
+not ok 1523 - skill footer is stationary through commits, failures, read-only and selection (844x390)
+not ok 1524 - skill footer displays actual unlearned and maximum ranks (844x390)
+not ok 1525 - skill footer is stationary through commits, failures, read-only and selection (1024x600)
+not ok 1526 - skill footer displays actual unlearned and maximum ranks (1024x600)
+not ok 1527 - skill form, next-rank and future motion details fit the independent scroll (1280x720)
+not ok 1528 - skill form, next-rank and future motion details fit the independent scroll (844x390)
+not ok 1529 - nine-stage UI shows locked learning without writes below the starting phase
+not ok 1530 - failed learning keeps scroll and loaded assets, shows a fixed error, and retries once
+not ok 1531 - nine-stage UI evo_wanjian first-rank condition matches its stage without changing higher-rank gates
+not ok 1532 - nine-stage UI evo_tiandi first-rank condition matches its stage without changing higher-rank gates
+not ok 1533 - nine-stage UI evo_wuwo first-rank condition matches its stage without changing higher-rank gates
+not ok 1534 - nine-stage UI evo_sixiang first-rank condition matches its stage without changing higher-rank gates
+not ok 1535 - paused tower skills show only plus, keep its hit area, and commit a legal upgrade (844x390)
+not ok 1536 - paused tower skills show only plus, keep its hit area, and commit a legal upgrade (1024x600)
+not ok 1540 - host decreaseSkill is rejected outside the camp library (skills)
+not ok 1541 - host decreaseSkill remains allowed in the camp library and preserves books
+not ok 1545 - host respecSkills is rejected outside the camp library (skills)
+not ok 1546 - host respecSkills remains allowed in the camp library and preserves books
+not ok 1556 - 技能 resets a held stick, ignores late touch events, and resumes without movement
+not ok 1570 - paper battle HUD HP ratio stays readable and skill points remain actionable
+not ok 1591 - flight is a one-rank shared passive with real purchase, reload and refund
+not ok 1602 - skill page keeps reset compact and moves point information below the skill viewport
+not ok 1615 - tower entry completed campaign selects ninth floor and readonly disables entry
+not ok 1623 - approved resource icons render beside existing counters and XP feedback without altering values
+not ok 1624 - book requirements use stone art without wallet balances and owned books retain book art
+not ok 1628 - skill button art preserves menu and battle hit targets, fallback and skill navigation
+not ok 1635 - initialization confirmation stays visible and clears every skill (1280)
+not ok 1636 - initialization confirmation stays visible and clears every skill (844)
+not ok 1639 - monster mechanics remain above every friendly effect and reuse world labels during paused redraws
+not ok 1680 - hall skill shortcut returns to its entry via button after refresh
+not ok 1681 - hall skill shortcut returns to its entry via escape after refresh
+not ok 1682 - swordPeak skill shortcut returns to its entry via button after refresh
+not ok 1683 - swordPeak skill shortcut returns to its entry via escape after refresh
+not ok 1684 - main peak opens the library reader and skills return there before returning home
+not ok 1799 - low-rank spider owns its atlas, phases and frontal pose; death holds frontal pose until cleanup
+not ok 1800 - bat flight keeps native480 detail, pauses and falls back for undelivered combat
+not ok 1801 - falcon flight keeps native384 detail, pauses and falls back for undelivered comfalcon
+not ok 1802 - crocodile movement and sweep preserve detail, timing, pause and mechanic fallback
+not ok 1803 - bear walk keeps fixed frame, simulation clock and static combat fallback
+not ok 1804 - bear slam selects phased frames, freezes when paused and keeps mechanics isolated
+not ok 1805 - tiger walking uses its own atlas only while moving, with static combat and higher forms isolated
+not ok 1806 - tiger production motion inference follows displacement and keeps higher-form resources isolated
+not ok 1807 - upright rhino walks only on displacement and preserves static attacks, mechanics and yak isolation
+not ok 1808 - upright yak walks only on displacement and preserves static attacks, mechanics and rhino isolation
+not ok 1809 - low tiger sweep follows combat phases with constant body scale and feet, leaving mechanics static
+not ok 1810 - upright wolf walks only on displacement with independent movement and static combat
+not ok 1811 - upright tiger walks only on displacement with independent movement and static combat
+not ok 1812 - upright falcon walks only on displacement with independent movement and static combat
+not ok 1813 - low-rank snake slithers only on displacement; shots and mechanics keep the portrait
+not ok 1814 - upright bear walks only on displacement with independent movement and static combat
+not ok 1815 - upright boar walks only on displacement with independent movement and static combat
+not ok 1816 - upright crocodile walks only on displacement with independent movement and static combat
+not ok 1817 - rank-five serpent queen walks only on displacement with independent movement and static combat
+not ok 1818 - rank-six spider lady walks only on displacement with independent movement and static combat
+not ok 1819 - rank-four bat warrior walks only on displacement with independent movement and static combat
+not ok 1820 - rank-seven white tiger walks only on displacement with independent movement and static combat
+not ok 1821 - boar charge phases use per-frame hoof anchors at the unchanged world origin
+not ok 1822 - discarded floor preload ignores late motion callbacks while replacement cache loads once
+not ok 1823 - floor renderer releases queued motion originals but retains shared portraits and skill effects
+not ok 1826 - death after a charge restores the death foot anchor while retaining enlarged elite size
+not ok 57 - each existing weapon illustration requests its own held image instead of the generic sword
+not ok 716 - encyclopedia shows fixed stats, unique quality and explicit art gaps
+not ok 762 - only real accepted icons are referenced, missing art does not remove entries
+not ok 779 - clearing battle feedback discards all pending material notices
