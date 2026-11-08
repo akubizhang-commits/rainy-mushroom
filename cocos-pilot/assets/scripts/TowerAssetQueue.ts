@@ -56,6 +56,16 @@ export class TowerAssetQueue {
   }
   this.emit();
  }
+ /** Caller must own every pending binding for this exact path/type. */
+ release(path:string,type:any){
+  const group=this.entries.get(type),e=group?.get(path);
+  if(!e)return;
+  ++e.token;clearTimeout(e.timer);e.callbacks=[];
+  group!.delete(path);if(!group!.size)this.entries.delete(type);
+  this.batch=this.batch.filter(item=>item!==e);
+  const asset=e.asset;e.asset=undefined;asset?.decRef();
+  this.emit();
+ }
  dispose(){
   this.dead=true;this.onChange=null;
   for(const group of this.entries.values())for(const e of group.values()){
@@ -79,8 +89,10 @@ export class TowerAssetQueue {
    // Keep this entry pending while callbacks request dependent images/metadata.
    const callbacks=e.callbacks.splice(0);
    for(const callback of callbacks){
+    if(this.dead||token!==e.token)return;
     try{callback(null,asset);}catch(error){console.error(`[TowerAssets] ${e.path}: binding failed`,error);}
    }
+   if(this.dead||token!==e.token)return;
    e.status='ready';this.emit();
   };
   e.timer=setTimeout(()=>finish(new Error('Resource load timed out'),null),15000);

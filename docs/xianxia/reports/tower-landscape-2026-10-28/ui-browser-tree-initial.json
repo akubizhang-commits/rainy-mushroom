@@ -1,0 +1,1932 @@
+{
+  "status": "AUTOMATED_PASS_VISUAL_REVIEW_PENDING",
+  "startedAt": "2026-10-28T05:24:15.616Z",
+  "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/index.html?ruleset=xianxia&tower=1",
+  "preparation": {
+    "status": "PREPARED_WAITING_FOR_BUILD_READY",
+    "browserExecuted": false,
+    "preparedAt": "2026-10-28T05:24:15.292Z",
+    "sizes": [
+      {
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "width": 844,
+        "height": 390
+      },
+      {
+        "width": 1024,
+        "height": 768
+      },
+      {
+        "width": 390,
+        "height": 844
+      }
+    ],
+    "contract": {
+      "selectors": {
+        "treePanel": "技能树面板",
+        "treeScroll": "技能树二维卷轴",
+        "treeContent": "境界技能树内容",
+        "detail": "技能详情固定栏",
+        "detailScroll": "技能详情独立卷轴",
+        "detailContent": "技能详情栏内容",
+        "name": "技能节点-<id>",
+        "icon": "技能图标-<id>",
+        "level": "技能等级-<id>",
+        "plus": "learnSkill-<id>",
+        "minus": "decreaseSkill-<id>",
+        "joystick": "移动摇杆"
+      },
+      "expectedRealmRows": {
+        "炼气": 12,
+        "金丹": 4
+      },
+      "handoff844LogicalViewports": {
+        "tree": {
+          "width": 820,
+          "height": 297.47
+        },
+        "detail": {
+          "width": 364,
+          "height": 281.47
+        }
+      },
+      "cdMeaning": "Current source displays authored cooldown / hit interval / 常驻, not a live countdown.",
+      "sourceHashes": {
+        "cocos-pilot/assets/scripts/TowerMenu.ts": "195a4db6ea11414fbcd8ab49e45aeb46a0b92feec7b16b5e7269f60f415f5390",
+        "cocos-pilot/assets/scripts/TowerView.ts": "6b37e9f6ebab068c6a37372ae2145e9b55a1717a5990cff5544d9331089d720b",
+        "cocos-pilot/assets/scripts/PinePilot.ts": "2159b0491dde3dcf1e770ec226876e601b944c5f946e833e3fedfd44259dff60",
+        "js/xianxia/TowerCampaign.js": "37fbd24596caeeaa04e72b5109769e91284e019f29e0fc70c23562c9fa039337",
+        "js/xianxia/TowerGrowth.js": "6d380a236d33043757b7525c628b0da0e5bad491c3f503e2aefbce417462ba92",
+        "js/xianxia/TowerRun.js": "2d425380f198d37341ca3970f16b94c690d662e0e428934ac85099a88c9561bb",
+        "js/xianxia/TowerLoot.js": "f2eeb5dca0ee913fc30250ef46e9515fe58f4d1318855431e55408d2d1cd9761"
+      }
+    },
+    "fixtures": [
+      {
+        "kind": "ARTIFICIAL CAMPAIGN-VALIDATED UI FIXTURE — NOT NATURAL PROGRESSION/BALANCE",
+        "name": "tree",
+        "sources": {
+          "xp": 10920,
+          "hp": 120,
+          "cores": 2000,
+          "clearedFloor": 9,
+          "tutorialWaves": 3
+        },
+        "transactions": [
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_arc"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_arc",
+              "level": 2,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_line"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_line",
+              "level": 1,
+              "cost": 2,
+              "bookCost": 20
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_yujian"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_yujian",
+              "level": 2,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_yujian"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_yujian",
+              "level": 3,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_yujian"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_yujian",
+              "level": 4,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_yujian"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_yujian",
+              "level": 5,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_yujian"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_yujian",
+              "level": 6,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_yujian"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_yujian",
+              "level": 7,
+              "cost": 2,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_yujian"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_yujian",
+              "level": 8,
+              "cost": 2,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_heart"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_heart",
+              "level": 1,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_heart"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_heart",
+              "level": 2,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_heart"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_heart",
+              "level": 3,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_heart"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_heart",
+              "level": 4,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_heart"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_heart",
+              "level": 5,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "evo_wanjian"
+            },
+            "result": {
+              "ok": true,
+              "id": "evo_wanjian",
+              "level": 1,
+              "cost": 3,
+              "bookCost": 240
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "evo_wanjian"
+            },
+            "result": {
+              "ok": true,
+              "id": "evo_wanjian",
+              "level": 2,
+              "cost": 4,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "sync"
+            },
+            "result": {
+              "ok": true,
+              "hp": 120
+            }
+          }
+        ],
+        "rawHash": "5503d94cf083bb5abdc2b3942fa29a71970cd5dff62e12cc61b0a59edd7ab9cc",
+        "growth": {
+          "total": 33,
+          "spent": 24,
+          "available": 9,
+          "realm": 30,
+          "firstClear": 3,
+          "research": 0,
+          "cap": 36
+        },
+        "skills": {
+          "sj_yujian": 8,
+          "sj_arc": 2,
+          "sj_wanjian": 1,
+          "sj_line": 1,
+          "sj_heart": 5
+        },
+        "evolutionRanks": {
+          "evo_wanjian": 2
+        }
+      },
+      {
+        "kind": "ARTIFICIAL CAMPAIGN-VALIDATED UI FIXTURE — NOT NATURAL PROGRESSION/BALANCE",
+        "name": "input",
+        "sources": {
+          "xp": 10920,
+          "hp": 120,
+          "cores": 2000,
+          "clearedFloor": 9,
+          "tutorialWaves": 3
+        },
+        "transactions": [
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "vajra"
+            },
+            "result": {
+              "ok": true,
+              "id": "vajra",
+              "level": 1,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "sync"
+            },
+            "result": {
+              "ok": true,
+              "hp": 120
+            }
+          }
+        ],
+        "rawHash": "2fe0ea62015f595979a73163e99102abd38318fddf941f024cfb36e1e78350e6",
+        "growth": {
+          "total": 33,
+          "spent": 1,
+          "available": 32,
+          "realm": 30,
+          "firstClear": 3,
+          "research": 0,
+          "cap": 36
+        },
+        "skills": {
+          "sj_yujian": 1,
+          "sj_arc": 1,
+          "sj_wanjian": 1,
+          "vajra": 1
+        },
+        "evolutionRanks": {}
+      }
+    ]
+  },
+  "browser": {
+    "version": "155.0.8059.12",
+    "module": "/Users/zhangnu/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright",
+    "executablePath": "/Users/zhangnu/Library/Caches/ms-playwright/chromium_headless_shell-1247/chrome-headless-shell-mac-arm64/chrome-headless-shell"
+  },
+  "results": [
+    {
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "kind": "tree",
+      "fixtureHash": "5503d94cf083bb5abdc2b3942fa29a71970cd5dff62e12cc61b0a59edd7ab9cc",
+      "ok": true,
+      "checks": [
+        {
+          "name": "844x390 handoff geometry and initial +/- edge visibility",
+          "passed": true,
+          "treeViewport": {
+            "width": 820,
+            "height": 297.46919431279616
+          },
+          "detailViewport": {
+            "width": 364,
+            "height": 281.46919431279616
+          },
+          "controls": [
+            {
+              "name": "learnSkill-vajra",
+              "box": {
+                "left": 126.59999999999992,
+                "right": 179.34999999999997,
+                "top": 272.32187500000003,
+                "bottom": 325.071875
+              },
+              "clip": {
+                "left": 21.099999999999923,
+                "right": 561.7875,
+                "top": 129.896875,
+                "bottom": 326.04062500000003
+              }
+            },
+            {
+              "name": "decreaseSkill-vajra",
+              "box": {
+                "left": 68.57499999999995,
+                "right": 121.32499999999995,
+                "top": 272.32187500000003,
+                "bottom": 325.071875
+              },
+              "clip": {
+                "left": 21.099999999999923,
+                "right": 561.7875,
+                "top": 129.896875,
+                "bottom": 326.04062500000003
+              }
+            },
+            {
+              "name": "learnSkill-magnet",
+              "box": {
+                "left": 253.19999999999993,
+                "right": 305.94999999999993,
+                "top": 272.32187500000003,
+                "bottom": 325.071875
+              },
+              "clip": {
+                "left": 21.099999999999923,
+                "right": 561.7875,
+                "top": 129.896875,
+                "bottom": 326.04062500000003
+              }
+            },
+            {
+              "name": "decreaseSkill-magnet",
+              "box": {
+                "left": 195.17499999999995,
+                "right": 247.92499999999995,
+                "top": 272.32187500000003,
+                "bottom": 325.071875
+              },
+              "clip": {
+                "left": 21.099999999999923,
+                "right": 561.7875,
+                "top": 129.896875,
+                "bottom": 326.04062500000003
+              }
+            },
+            {
+              "name": "learnSkill-sj_yujian",
+              "box": {
+                "left": 379.8,
+                "right": 432.54999999999995,
+                "top": 272.32187500000003,
+                "bottom": 325.071875
+              },
+              "clip": {
+                "left": 21.099999999999923,
+                "right": 561.7875,
+                "top": 129.896875,
+                "bottom": 326.04062500000003
+              }
+            },
+            {
+              "name": "decreaseSkill-sj_yujian",
+              "box": {
+                "left": 321.775,
+                "right": 374.525,
+                "top": 272.32187500000003,
+                "bottom": 325.071875
+              },
+              "clip": {
+                "left": 21.099999999999923,
+                "right": 561.7875,
+                "top": 129.896875,
+                "bottom": 326.04062500000003
+              }
+            },
+            {
+              "name": "learnSkill-sj_heart",
+              "box": {
+                "left": 506.4,
+                "right": 559.1500000000001,
+                "top": 272.32187500000003,
+                "bottom": 325.071875
+              },
+              "clip": {
+                "left": 21.099999999999923,
+                "right": 561.7875,
+                "top": 129.896875,
+                "bottom": 326.04062500000003
+              }
+            },
+            {
+              "name": "decreaseSkill-sj_heart",
+              "box": {
+                "left": 448.375,
+                "right": 501.125,
+                "top": 272.32187500000003,
+                "bottom": 325.071875
+              },
+              "clip": {
+                "left": 21.099999999999923,
+                "right": 561.7875,
+                "top": 129.896875,
+                "bottom": 326.04062500000003
+              }
+            }
+          ]
+        },
+        {
+          "name": "16 circle icons, lower-left rank badges, authored CD/name captions and two realm rows",
+          "passed": true,
+          "basicRowY": [
+            185.28437499999998,
+            185.28437499999998,
+            185.28437499999998,
+            185.28437499999998,
+            185.28437499999998,
+            185.28437499999998,
+            185.28437499999998,
+            185.28437499999998,
+            185.28437499999998,
+            185.28437499999998,
+            185.28437499999998,
+            185.28437499999998
+          ],
+          "evolutionRowY": [
+            588.8218750000001,
+            588.8218750000001,
+            588.8218750000001,
+            588.8218750000001
+          ]
+        },
+        {
+          "name": "All 16 nodes reachable by real two-axis drag and pointer selection; fixed pane stays put",
+          "passed": true
+        },
+        {
+          "name": "learnSkill-sj_line: allocation, selection, two-axis tree pan and detail pan retained",
+          "passed": true,
+          "beforeHost": {
+            "screen": "camp",
+            "landscape": true,
+            "size": {
+              "width": 1280,
+              "height": 591.4691943127962
+            },
+            "selected": "sj_line",
+            "menuPage": "library",
+            "treePan": {
+              "x": -903.8864000000001,
+              "y": 111.79560284360196
+            },
+            "detailPan": {
+              "x": 0,
+              "y": 1.1368683772161603e-13
+            },
+            "stick": {
+              "x": 0,
+              "y": 0,
+              "dx": 0,
+              "dy": 0
+            },
+            "touch": null,
+            "keys": []
+          },
+          "afterHost": {
+            "screen": "camp",
+            "landscape": true,
+            "size": {
+              "width": 1280,
+              "height": 591.4691943127962
+            },
+            "selected": "sj_line",
+            "menuPage": "library",
+            "treePan": {
+              "x": -903.8864000000001,
+              "y": 111.79560284360196
+            },
+            "detailPan": {
+              "x": 0,
+              "y": 1.1368683772161603e-13
+            },
+            "stick": {
+              "x": 0,
+              "y": 0,
+              "dx": 0,
+              "dy": 0
+            },
+            "touch": null,
+            "keys": []
+          },
+          "quote": {
+            "ok": true,
+            "nextLevel": 2,
+            "cost": 2,
+            "bookCost": 0
+          }
+        },
+        {
+          "name": "decreaseSkill-sj_line: allocation, selection, two-axis tree pan and detail pan retained",
+          "passed": true,
+          "beforeHost": {
+            "screen": "camp",
+            "landscape": true,
+            "size": {
+              "width": 1280,
+              "height": 591.4691943127962
+            },
+            "selected": "sj_line",
+            "menuPage": "library",
+            "treePan": {
+              "x": -903.8864000000001,
+              "y": 111.79560284360196
+            },
+            "detailPan": {
+              "x": 0,
+              "y": 1.1368683772161603e-13
+            },
+            "stick": {
+              "x": 0,
+              "y": 0,
+              "dx": 0,
+              "dy": 0
+            },
+            "touch": null,
+            "keys": []
+          },
+          "afterHost": {
+            "screen": "camp",
+            "landscape": true,
+            "size": {
+              "width": 1280,
+              "height": 591.4691943127962
+            },
+            "selected": "sj_line",
+            "menuPage": "library",
+            "treePan": {
+              "x": -903.8864000000001,
+              "y": 111.79560284360196
+            },
+            "detailPan": {
+              "x": 0,
+              "y": 1.1368683772161603e-13
+            },
+            "stick": {
+              "x": 0,
+              "y": 0,
+              "dx": 0,
+              "dy": 0
+            },
+            "touch": null,
+            "keys": []
+          },
+          "quote": {
+            "ok": true,
+            "reason": "",
+            "returned": 2,
+            "changes": [
+              {
+                "id": "sj_line",
+                "from": 2,
+                "to": 1
+              }
+            ],
+            "skills": {
+              "sj_yujian": 8,
+              "sj_arc": 2,
+              "sj_wanjian": 1,
+              "sj_line": 1,
+              "sj_heart": 5
+            },
+            "evolutionRanks": {
+              "evo_wanjian": 2
+            }
+          }
+        },
+        {
+          "name": "decreaseSkill-evo_wanjian: allocation, selection, two-axis tree pan and detail pan retained",
+          "passed": true,
+          "beforeHost": {
+            "screen": "camp",
+            "landscape": true,
+            "size": {
+              "width": 1280,
+              "height": 591.4691943127962
+            },
+            "selected": "evo_wanjian",
+            "menuPage": "library",
+            "treePan": {
+              "x": -90.9948,
+              "y": 608.5947028436019
+            },
+            "detailPan": {
+              "x": 0,
+              "y": 221.42220284360212
+            },
+            "stick": {
+              "x": 0,
+              "y": 0,
+              "dx": 0,
+              "dy": 0
+            },
+            "touch": null,
+            "keys": []
+          },
+          "afterHost": {
+            "screen": "camp",
+            "landscape": true,
+            "size": {
+              "width": 1280,
+              "height": 591.4691943127962
+            },
+            "selected": "evo_wanjian",
+            "menuPage": "library",
+            "treePan": {
+              "x": -90.9948,
+              "y": 608.5947028436019
+            },
+            "detailPan": {
+              "x": 0,
+              "y": 221.42220284360212
+            },
+            "stick": {
+              "x": 0,
+              "y": 0,
+              "dx": 0,
+              "dy": 0
+            },
+            "touch": null,
+            "keys": []
+          },
+          "quote": {
+            "ok": true,
+            "reason": "",
+            "returned": 4,
+            "changes": [
+              {
+                "id": "evo_wanjian",
+                "from": 2,
+                "to": 1
+              }
+            ],
+            "skills": {
+              "sj_yujian": 8,
+              "sj_arc": 2,
+              "sj_wanjian": 1,
+              "sj_line": 1,
+              "sj_heart": 5
+            },
+            "evolutionRanks": {
+              "evo_wanjian": 1
+            }
+          }
+        },
+        {
+          "name": "learnSkill-evo_wanjian: allocation, selection, two-axis tree pan and detail pan retained",
+          "passed": true,
+          "beforeHost": {
+            "screen": "camp",
+            "landscape": true,
+            "size": {
+              "width": 1280,
+              "height": 591.4691943127962
+            },
+            "selected": "evo_wanjian",
+            "menuPage": "library",
+            "treePan": {
+              "x": -90.9948,
+              "y": 608.5947028436019
+            },
+            "detailPan": {
+              "x": 0,
+              "y": 221.42220284360212
+            },
+            "stick": {
+              "x": 0,
+              "y": 0,
+              "dx": 0,
+              "dy": 0
+            },
+            "touch": null,
+            "keys": []
+          },
+          "afterHost": {
+            "screen": "camp",
+            "landscape": true,
+            "size": {
+              "width": 1280,
+              "height": 591.4691943127962
+            },
+            "selected": "evo_wanjian",
+            "menuPage": "library",
+            "treePan": {
+              "x": -90.9948,
+              "y": 608.5947028436019
+            },
+            "detailPan": {
+              "x": 0,
+              "y": 221.42220284360212
+            },
+            "stick": {
+              "x": 0,
+              "y": 0,
+              "dx": 0,
+              "dy": 0
+            },
+            "touch": null,
+            "keys": []
+          },
+          "quote": {
+            "ok": true,
+            "nextLevel": 2,
+            "cost": 4,
+            "bookCost": 0
+          }
+        },
+        {
+          "name": "Modal stays inside viewport: camp respec",
+          "passed": true,
+          "viewport": {
+            "width": 844,
+            "height": 390
+          },
+          "box": {
+            "left": 195.17499999999995,
+            "right": 648.825,
+            "top": 10.549999999999997,
+            "bottom": 379.45
+          },
+          "controls": [
+            "关闭",
+            "确认全洗 · 返还24点",
+            "取消 · 返回技能树"
+          ]
+        },
+        {
+          "name": "Committed allocation survives independent-context reload",
+          "passed": true
+        }
+      ],
+      "actions": [
+        {
+          "type": "pointer-click",
+          "target": "技能树",
+          "x": 522.225,
+          "y": 358.35,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "技能图标-sj_yujian",
+          "x": 377.16249999999997,
+          "y": 185.28437499999998,
+          "enabled": true
+        },
+        {
+          "type": "pointer-drag",
+          "label": "reveal 技能图标-sj_arc",
+          "from": {
+            "x": 440.1328125,
+            "y": 227.96875
+          },
+          "to": {
+            "x": 142.75468749999993,
+            "y": 227.96875
+          },
+          "holdMs": 0,
+          "release": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "技能图标-sj_arc",
+          "x": 458.96245249999987,
+          "y": 185.28437312500003,
+          "enabled": true
+        },
+        {
+          "type": "pointer-drag",
+          "label": "reveal 技能图标-sj_wanjian",
+          "from": {
+            "x": 440.1328125,
+            "y": 227.96875
+          },
+          "to": {
+            "x": 142.75468749999993,
+            "y": 227.96875
+          },
+          "holdMs": 0,
+          "release": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "技能图标-sj_wanjian",
+          "x": 194.59705781249988,
+          "y": 185.28437312500003,
+          "enabled": true
+        },
+        {
+          "type": "pointer-drag",
+          "label": "reveal 技能图标-sj_line",
+          "from": {
+            "x": 142.75468749999993,
+            "y": 227.96875
+          },
+          "to": {
+            "x": 440.1328125,
+            "y": 227.96875
+          },
+          "holdMs": 0,
+          "release": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "技能图标-sj_line",
+          "x": 239.3971053124999,
+          "y": 185.28437312500003,
+          "enabled": true
+        },
+        {
+          "type": "pointer-drag",
+          "label": "reveal 技能图标-sj_shadow",
+          "from": {
+            "x": 142.75468749999993,
+            "y": 227.96875
+          },
+          "to": {
+            "x": 440.1328125,
+            "y": 227.96875
+          },
+          "holdMs": 0,
+          "release": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "技能图标-sj_shadow",
+          "x": 284.19715281249995,
+          "y": 185.28437312500003,
+          "enabled": true
+        },
+        {
+          "type": "pointer-drag",
+          "label": "reveal 技能图标-sj_formation",
+          "from": {
+            "x": 440.1328125,
+            "y": 227.96875
+          },
+          "to": {
+            "x": 142.75468749999993,
+            "y": 227.96875
+          },
+          "holdMs": 0,
+          "release": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "技能图标-sj_formation",
+          "x": 387.93048937500015,
+          "y": 185.28437312500003,
+          "enabled": true
+        },
+        {
+          "type": "pointer-drag",
+          "label": "reveal 技能图标-sj_heart",
+          "from": {
+            "x": 142.75468749999993,
+            "y": 227.96875
+          },
+          "to": {
+            "x": 440.1328125,
+            "y": 227.96875
+          },
+          "holdMs": 0,
+          "release": true
+        },
+        {
+          "type": "pointer-drag",
+          "label": "reveal 技能图标-sj_heart",
+          "from": {
+            "x": 142.75468749999993,
+            "y": 227.96875
+          },
+          "to": {
+            "x": 440.1328125,
+            "y": 227.96875
+          },
+          "holdMs": 0,
+          "release": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "技能图标-sj_heart",
+          "x": 97.73058437499986,
+          "y": 185.28437312500003,
+          "enabled": true
+        },
+        {
+          "type": "pointer-drag",
+          "label": "reveal 技能图标-sj_mark",
+          "from": {
+            "x": 440.1328125,
+            "y": 227.96875
+          },
+          "to": {
+            "x": 142.75468749999993,
+            "y": 227.96875
+          },
+          "holdMs": 0,
+          "release": true
+        },
+        {
+          "type": "pointer-drag",
+          "label": "reveal 技能图标-sj_mark",
+          "from": {
+            "x": 142.75468749999993,
+            "y": 227.96875
+          },
+          "to": {
+            "x": 440.1328125,
+            "y": 227.96875
+          },
+          "holdMs": 0,
+          "release": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "技能图标-sj_mark",
+          "x": 284.81254749999994,
+          "y": 185.28437312500003,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "技能图标-sj_bone",
+          "x": 538.0125475,
+          "y": 185.28437312500003,
+          "enabled": true
+        },
+        {
+          "type": "pointer-drag",
+          "label": "reveal 技能图标-sj_gate",
+          "from": {
+            "x": 440.1328125,
+            "y": 227.96875
+          },
+          "to": {
+            "x": 142.75468749999993,
+            "y": 227.96875
+          },
+          "holdMs": 0,
+          "release": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "技能图标-sj_gate",
+          "x": 493.2125,
+          "y": 185.28437312500003,
+          "enabled": true
+        },
+        {
+          "type": "pointer-drag",
+          "label": "reveal 技能图标-vajra",
+          "from": {
+            "x": 142.75468749999993,
+            "y": 227.96875
+          },
+          "to": {
+            "x": 440.1328125,
+            "y": 227.96875
+          },
+          "holdMs": 0,
+          "release": true
+        },
+        {
+          "type": "pointer-drag",
+          "label": "reveal 技能图标-vajra",
+          "from": {
+            "x": 142.75468749999993,
+            "y": 227.96875
+          },
+          "to": {
+            "x": 440.1328125,
+            "y": 227.96875
+          },
+          "holdMs": 0,
+          "release": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "技能图标-vajra",
+          "x": 123.96249999999993,
+          "y": 185.28437312500003,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "技能图标-magnet",
+          "x": 250.5625,
+          "y": 185.28437499999998,
+          "enabled": true
+        },
+        {
+          "type": "pointer-drag",
+          "label": "reveal 技能图标-evo_wanjian",
+          "from": {
+            "x": 291.44374999999997,
+            "y": 281.90828125
+          },
+          "to": {
+            "x": 291.44374999999997,
+            "y": 174.02921874999998
+          },
+          "holdMs": 0,
+          "release": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "技能图标-evo_wanjian",
+          "x": 377.16249999999997,
+          "y": 301.14539625,
+          "enabled": true
+        },
+        {
+          "type": "pointer-drag",
+          "label": "reveal 技能图标-evo_wuwo",
+          "from": {
+            "x": 440.1328125,
+            "y": 227.96875
+          },
+          "to": {
+            "x": 142.75468749999993,
+            "y": 227.96875
+          },
+          "holdMs": 0,
+          "release": true
+        },
+        {
+          "type": "pointer-drag",
+          "label": "reveal 技能图标-evo_wuwo",
+          "from": {
+            "x": 440.1328125,
+            "y": 227.96875
+          },
+          "to": {
+            "x": 142.75468749999993,
+            "y": 227.96875
+          },
+          "holdMs": 0,
+          "release": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "技能图标-evo_wuwo",
+          "x": 540.762405,
+          "y": 301.106493125,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "技能图标-evo_tiandi",
+          "x": 287.56240499999996,
+          "y": 301.106493125,
+          "enabled": true
+        },
+        {
+          "type": "pointer-drag",
+          "label": "reveal 技能图标-evo_sixiang",
+          "from": {
+            "x": 440.1328125,
+            "y": 227.96875
+          },
+          "to": {
+            "x": 142.75468749999993,
+            "y": 227.96875
+          },
+          "holdMs": 0,
+          "release": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "技能图标-evo_sixiang",
+          "x": 495.9623575,
+          "y": 301.106493125,
+          "enabled": true
+        },
+        {
+          "type": "pointer-drag",
+          "label": "reveal 技能节点-sj_line",
+          "from": {
+            "x": 142.75468749999993,
+            "y": 174.02921874999998
+          },
+          "to": {
+            "x": 440.1328125,
+            "y": 281.90828125
+          },
+          "holdMs": 0,
+          "release": true
+        },
+        {
+          "type": "pointer-drag",
+          "label": "reveal 技能节点-sj_line",
+          "from": {
+            "x": 291.44374999999997,
+            "y": 174.02921874999998
+          },
+          "to": {
+            "x": 291.44374999999997,
+            "y": 281.90828125
+          },
+          "holdMs": 0,
+          "release": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "技能节点-sj_line",
+          "x": 287.56240499999996,
+          "y": 169.59414937499994,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "learnSkill-sj_line",
+          "x": 316.57490499999994,
+          "y": 224.981649375,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "decreaseSkill-sj_line",
+          "x": 258.5499049999999,
+          "y": 224.981649375,
+          "enabled": true
+        },
+        {
+          "type": "pointer-drag",
+          "label": "reveal 技能图标-evo_wanjian",
+          "from": {
+            "x": 142.75468749999993,
+            "y": 281.90828125
+          },
+          "to": {
+            "x": 440.1328125,
+            "y": 174.02921874999998
+          },
+          "holdMs": 0,
+          "release": true
+        },
+        {
+          "type": "pointer-drag",
+          "label": "reveal 技能图标-evo_wanjian",
+          "from": {
+            "x": 291.44374999999997,
+            "y": 280.28227671875
+          },
+          "to": {
+            "x": 291.44374999999997,
+            "y": 175.65522328124996
+          },
+          "holdMs": 0,
+          "release": true
+        },
+        {
+          "type": "pointer-drag",
+          "label": "reveal 技能图标-evo_wanjian",
+          "from": {
+            "x": 291.44374999999997,
+            "y": 174.02921874999998
+          },
+          "to": {
+            "x": 291.44374999999997,
+            "y": 281.90828125
+          },
+          "holdMs": 0,
+          "release": true
+        },
+        {
+          "type": "pointer-drag",
+          "label": "reveal 技能图标-evo_wanjian",
+          "from": {
+            "x": 291.44374999999997,
+            "y": 281.87499703124996
+          },
+          "to": {
+            "x": 291.44374999999997,
+            "y": 174.06250296875004
+          },
+          "holdMs": 0,
+          "release": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "技能图标-evo_wanjian",
+          "x": 377.16249999999997,
+          "y": 228.84123499999998,
+          "enabled": true
+        },
+        {
+          "type": "pointer-drag",
+          "label": "reveal decreaseSkill-evo_wanjian",
+          "from": {
+            "x": 291.44374999999997,
+            "y": 281.90828125
+          },
+          "to": {
+            "x": 291.44374999999997,
+            "y": 174.02921874999998
+          },
+          "holdMs": 0,
+          "release": true
+        },
+        {
+          "type": "pointer-drag",
+          "label": "reveal decreaseSkill-evo_wanjian",
+          "from": {
+            "x": 291.44374999999997,
+            "y": 176.7796884375
+          },
+          "to": {
+            "x": 291.44374999999997,
+            "y": 279.1578115625
+          },
+          "holdMs": 0,
+          "release": true
+        },
+        {
+          "type": "pointer-drag",
+          "label": "establish horizontal retention fixture",
+          "from": {
+            "x": 321.44374999999997,
+            "y": 227.96875
+          },
+          "to": {
+            "x": 261.44374999999997,
+            "y": 227.96875
+          },
+          "holdMs": 0,
+          "release": true
+        },
+        {
+          "type": "pointer-drag",
+          "label": "independent detail scroll",
+          "from": {
+            "x": 702.8937500000001,
+            "y": 306.04062500000003
+          },
+          "to": {
+            "x": 702.8937500000001,
+            "y": 160.446875
+          },
+          "holdMs": 0,
+          "release": true
+        },
+        {
+          "type": "pointer-drag",
+          "label": "reveal 技能图标-evo_wanjian",
+          "from": {
+            "x": 291.44374999999997,
+            "y": 174.02921874999998
+          },
+          "to": {
+            "x": 291.44374999999997,
+            "y": 281.90828125
+          },
+          "holdMs": 0,
+          "release": true
+        },
+        {
+          "type": "pointer-drag",
+          "label": "reveal 技能图标-evo_wanjian",
+          "from": {
+            "x": 291.44374999999997,
+            "y": 281.90828125
+          },
+          "to": {
+            "x": 291.44374999999997,
+            "y": 174.02921874999998
+          },
+          "holdMs": 0,
+          "release": true
+        },
+        {
+          "type": "pointer-drag",
+          "label": "reveal 技能图标-evo_wanjian",
+          "from": {
+            "x": 291.44374999999997,
+            "y": 174.02921874999998
+          },
+          "to": {
+            "x": 291.44374999999997,
+            "y": 281.90828125
+          },
+          "holdMs": 0,
+          "release": true
+        },
+        {
+          "type": "pointer-drag",
+          "label": "reveal 技能图标-evo_wanjian",
+          "from": {
+            "x": 291.44374999999997,
+            "y": 281.90828125
+          },
+          "to": {
+            "x": 291.44374999999997,
+            "y": 174.02921874999998
+          },
+          "holdMs": 0,
+          "release": true
+        },
+        {
+          "type": "pointer-drag",
+          "label": "reveal 技能图标-evo_wanjian",
+          "from": {
+            "x": 291.44374999999997,
+            "y": 174.02921874999998
+          },
+          "to": {
+            "x": 291.44374999999997,
+            "y": 281.90828125
+          },
+          "holdMs": 0,
+          "release": true
+        },
+        {
+          "type": "pointer-drag",
+          "label": "reveal 技能图标-evo_wanjian",
+          "from": {
+            "x": 291.44374999999997,
+            "y": 281.90828125
+          },
+          "to": {
+            "x": 291.44374999999997,
+            "y": 174.02921874999998
+          },
+          "holdMs": 0,
+          "release": true
+        },
+        {
+          "type": "pointer-drag",
+          "label": "reveal 技能图标-evo_wanjian",
+          "from": {
+            "x": 291.44374999999997,
+            "y": 174.02921874999998
+          },
+          "to": {
+            "x": 291.44374999999997,
+            "y": 281.90828125
+          },
+          "holdMs": 0,
+          "release": true
+        },
+        {
+          "type": "pointer-drag",
+          "label": "reveal 技能图标-evo_wanjian",
+          "from": {
+            "x": 291.44374999999997,
+            "y": 281.90828125
+          },
+          "to": {
+            "x": 291.44374999999997,
+            "y": 174.02921874999998
+          },
+          "holdMs": 0,
+          "release": true
+        },
+        {
+          "type": "pointer-drag",
+          "label": "reveal 技能图标-evo_wanjian",
+          "from": {
+            "x": 291.44374999999997,
+            "y": 174.910294375
+          },
+          "to": {
+            "x": 291.44374999999997,
+            "y": 281.02720562499997
+          },
+          "holdMs": 0,
+          "release": true
+        },
+        {
+          "type": "pointer-drag",
+          "label": "reveal 技能图标-evo_wanjian",
+          "from": {
+            "x": 291.44374999999997,
+            "y": 281.90828125
+          },
+          "to": {
+            "x": 291.44374999999997,
+            "y": 174.02921874999998
+          },
+          "holdMs": 0,
+          "release": true
+        },
+        {
+          "type": "pointer-drag",
+          "label": "reveal 技能图标-evo_wanjian",
+          "from": {
+            "x": 291.44374999999997,
+            "y": 175.49598421874998
+          },
+          "to": {
+            "x": 291.44374999999997,
+            "y": 280.44151578125
+          },
+          "holdMs": 0,
+          "release": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "技能图标-evo_wanjian",
+          "x": 317.16280375,
+          "y": 227.96129906249996,
+          "enabled": true
+        },
+        {
+          "type": "pointer-drag",
+          "label": "reveal decreaseSkill-evo_wanjian",
+          "from": {
+            "x": 291.44374999999997,
+            "y": 281.90828125
+          },
+          "to": {
+            "x": 291.44374999999997,
+            "y": 174.02921874999998
+          },
+          "holdMs": 0,
+          "release": true
+        },
+        {
+          "type": "pointer-drag",
+          "label": "reveal decreaseSkill-evo_wanjian",
+          "from": {
+            "x": 291.44374999999997,
+            "y": 176.7796884375
+          },
+          "to": {
+            "x": 291.44374999999997,
+            "y": 279.1578115625
+          },
+          "holdMs": 0,
+          "release": true
+        },
+        {
+          "type": "pointer-drag",
+          "label": "reveal decreaseSkill-evo_wanjian",
+          "from": {
+            "x": 291.44374999999997,
+            "y": 281.90828125
+          },
+          "to": {
+            "x": 291.44374999999997,
+            "y": 174.02921874999998
+          },
+          "holdMs": 0,
+          "release": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "decreaseSkill-evo_wanjian",
+          "x": 288.15030375,
+          "y": 300.9422428125,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "learnSkill-evo_wanjian",
+          "x": 346.17530375,
+          "y": 300.9422428125,
+          "enabled": true
+        },
+        {
+          "type": "pointer-drag",
+          "label": "reveal 查看全洗退款明细",
+          "from": {
+            "x": 702.8937500000001,
+            "y": 284.28203125000005
+          },
+          "to": {
+            "x": 702.8937500000001,
+            "y": 182.20546875000002
+          },
+          "holdMs": 0,
+          "release": true
+        },
+        {
+          "type": "pointer-drag",
+          "label": "reveal 查看全洗退款明细",
+          "from": {
+            "x": 702.8937500000001,
+            "y": 284.28203125000005
+          },
+          "to": {
+            "x": 702.8937500000001,
+            "y": 182.20546875000002
+          },
+          "holdMs": 0,
+          "release": true
+        },
+        {
+          "type": "pointer-drag",
+          "label": "reveal 查看全洗退款明细",
+          "from": {
+            "x": 702.8937500000001,
+            "y": 284.28203125000005
+          },
+          "to": {
+            "x": 702.8937500000001,
+            "y": 182.20546875000002
+          },
+          "holdMs": 0,
+          "release": true
+        },
+        {
+          "type": "pointer-drag",
+          "label": "reveal 查看全洗退款明细",
+          "from": {
+            "x": 702.8937500000001,
+            "y": 284.28203125000005
+          },
+          "to": {
+            "x": 702.8937500000001,
+            "y": 182.20546875000002
+          },
+          "holdMs": 0,
+          "release": true
+        },
+        {
+          "type": "pointer-drag",
+          "label": "reveal 查看全洗退款明细",
+          "from": {
+            "x": 702.8937500000001,
+            "y": 284.28203125000005
+          },
+          "to": {
+            "x": 702.8937500000001,
+            "y": 182.20546875000002
+          },
+          "holdMs": 0,
+          "release": true
+        },
+        {
+          "type": "pointer-drag",
+          "label": "reveal 查看全洗退款明细",
+          "from": {
+            "x": 702.8937500000001,
+            "y": 284.28203125000005
+          },
+          "to": {
+            "x": 702.8937500000001,
+            "y": 182.20546875000002
+          },
+          "holdMs": 0,
+          "release": true
+        },
+        {
+          "type": "pointer-drag",
+          "label": "reveal 查看全洗退款明细",
+          "from": {
+            "x": 702.8937500000001,
+            "y": 284.28203125000005
+          },
+          "to": {
+            "x": 702.8937500000001,
+            "y": 182.20546875000002
+          },
+          "holdMs": 0,
+          "release": true
+        },
+        {
+          "type": "pointer-drag",
+          "label": "reveal 查看全洗退款明细",
+          "from": {
+            "x": 702.8937500000001,
+            "y": 284.28203125000005
+          },
+          "to": {
+            "x": 702.8937500000001,
+            "y": 182.20546875000002
+          },
+          "holdMs": 0,
+          "release": true
+        },
+        {
+          "type": "pointer-drag",
+          "label": "reveal 查看全洗退款明细",
+          "from": {
+            "x": 702.8937500000001,
+            "y": 284.28203125000005
+          },
+          "to": {
+            "x": 702.8937500000001,
+            "y": 182.20546875000002
+          },
+          "holdMs": 0,
+          "release": true
+        },
+        {
+          "type": "pointer-drag",
+          "label": "reveal 查看全洗退款明细",
+          "from": {
+            "x": 702.8937500000001,
+            "y": 284.28203125000005
+          },
+          "to": {
+            "x": 702.8937500000001,
+            "y": 182.20546875000002
+          },
+          "holdMs": 0,
+          "release": true
+        },
+        {
+          "type": "pointer-drag",
+          "label": "reveal 查看全洗退款明细",
+          "from": {
+            "x": 702.8937500000001,
+            "y": 284.28203125000005
+          },
+          "to": {
+            "x": 702.8937500000001,
+            "y": 182.20546875000002
+          },
+          "holdMs": 0,
+          "release": true
+        },
+        {
+          "type": "pointer-drag",
+          "label": "reveal 查看全洗退款明细",
+          "from": {
+            "x": 702.8937500000001,
+            "y": 284.28203125000005
+          },
+          "to": {
+            "x": 702.8937500000001,
+            "y": 182.20546875000002
+          },
+          "holdMs": 0,
+          "release": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "查看全洗退款明细",
+          "x": 702.8937500000001,
+          "y": 271.97187687499985,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "关闭",
+          "x": 596.075,
+          "y": 43.51875000000003,
+          "enabled": true
+        }
+      ],
+      "screenshots": [
+        "ui-tree-initial-844x390-tree-initial-tree.png",
+        "ui-tree-initial-844x390-tree-last-evolution-selected.png",
+        "ui-tree-initial-844x390-tree-pan-and-selection-retained.png",
+        "ui-tree-initial-844x390-tree-respec-modal.png"
+      ],
+      "pageErrors": [],
+      "console": [
+        {
+          "type": "warning",
+          "text": "[.WebGL-0x1340043ea00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+        },
+        {
+          "type": "warning",
+          "text": "[.WebGL-0x1340043ea00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+        },
+        {
+          "type": "warning",
+          "text": "[.WebGL-0x1340043ea00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+        },
+        {
+          "type": "warning",
+          "text": "[.WebGL-0x1340043ea00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (setting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.setFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "Setting window size is not supported."
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (setting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.setFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "Setting window size is not supported."
+        }
+      ],
+      "httpErrors": [],
+      "requestFailures": [],
+      "assets": [
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/system.bundle.cc789.js",
+          "status": 200,
+          "sha256": "5d1a25de07cc11276a6b1d6479cac7f12c0c561dd06941b8339e568c9d94f900"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/polyfills.bundle.5adbf.js",
+          "status": 200,
+          "sha256": "f1e4ced3322168d6b9915e782e4c1cf1055d75f66f2b38e7fcd60f48cf89082b"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/index.6ce8c.js",
+          "status": 200,
+          "sha256": "021f254debe3760acdb1715ee0ff88cbe17b685434b206bda473fa9bc23a783b"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/application.f82c6.js",
+          "status": 200,
+          "sha256": "b24db6b02a8fc281cc7c3d2f22f7a71dbf387e64640b44d93a0fded053273c77"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/cocos-js/cc.c2df8.js",
+          "status": 200,
+          "sha256": "a670bba566ce7e3a2c25e17b7eb104efc0463a62d85c3d4974d2be9b586eee89"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/chunks/bundle.e2cd5.js",
+          "status": 200,
+          "sha256": "c0ab1af06c40484eba8e9d40042b2162a8355e8d8d1d914ea5a21d4d420dc1d5"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/assets/internal/index.4e53f.js",
+          "status": 200,
+          "sha256": "d842bf596127320ad8cd42ce506a2817cd8a6402fbec6735e6b13af359a40757"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/assets/main/index.4b436.js",
+          "status": 200,
+          "sha256": "e26afe867fd2aba74053be7d7c3de765c5170a4a6c5cf0563fa73c831ea26438"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/polyfills.bundle.5adbf.js",
+          "status": 304,
+          "bodyReadError": "Error: response.body: Response body is unavailable for redirect responses"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/system.bundle.cc789.js",
+          "status": 304,
+          "bodyReadError": "Error: response.body: Response body is unavailable for redirect responses"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/index.6ce8c.js",
+          "status": 304,
+          "bodyReadError": "Error: response.body: Response body is unavailable for redirect responses"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/application.f82c6.js",
+          "status": 304,
+          "bodyReadError": "Error: response.body: Response body is unavailable for redirect responses"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/cocos-js/cc.c2df8.js",
+          "status": 304,
+          "bodyReadError": "Error: response.body: Response body is unavailable for redirect responses"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/chunks/bundle.e2cd5.js",
+          "status": 304,
+          "bodyReadError": "Error: response.body: Response body is unavailable for redirect responses"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/assets/internal/index.4e53f.js",
+          "status": 304,
+          "bodyReadError": "Error: response.body: Response body is unavailable for redirect responses"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/assets/main/index.4b436.js",
+          "status": 304,
+          "bodyReadError": "Error: response.body: Response body is unavailable for redirect responses"
+        }
+      ],
+      "invalidLabels": []
+    }
+  ],
+  "failures": 0,
+  "visualReview": "PENDING: actual circle geometry, row labels, fixed pane, joystick and modal images.",
+  "finishedAt": "2026-10-28T05:26:56.948Z"
+}

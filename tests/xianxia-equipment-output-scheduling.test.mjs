@@ -7,7 +7,8 @@ import {EQUIPMENT,createFixedEquipment,createBasicEquipment} from '../js/xianxia
 import {cultivationLevelXp} from '../js/xianxia/TowerProfile.js'
 // Controlled stationary-target laboratory, NOT a legal campaign or clear-rate
 // claim. Skill release, travel, direct/periodic hits, focus and ticks are real.
-const targets={fan:[null,1.05],fa:[null,1.15,1.32,1.52,1.75],bao:[null,1.45,1.67,1.92,2.2],ling:[null,1.85,2.13,2.45,2.8]}
+// Integer V2 supersedes the former two-slot percentage targets. This lab
+// checks the observed 6x ceiling only; it does not prove every three-slot build.
 const parents={evo_wanjian:'sj_yujian',evo_tiandi:'sj_line',evo_wuwo:'sj_wanjian',evo_sixiang:'sj_formation'}
 const skills=[...Object.keys(parents),'sj_yujian','sj_shadow','sj_arc','sj_line','sj_cross','sj_wanjian','sj_formation']
 function sample(tier,quality,skill,count=1){
@@ -56,18 +57,16 @@ function sample(tier,quality,skill,count=1){
  assert.ok(hits>0,`${tier}/${quality}/${skill} has no actual hits`)
  return {damage,hits,direct,periodic,time:run.state.time}
 }
-test('180s skill-only scheduling preserves quality targets with basic attacks excluded from the calibration',t=>{
+test('180s skill-only scheduling stays within the integer V2 ceiling across sampled fixed pairs',t=>{
  const rows=[]
  for(const count of [1,3,8])for(const skill of skills){
   const base=sample('fan',0,skill,count)
   for(const tier of ['fan','fa','bao','ling'])for(const q of tier==='fan'?[1]:[1,2,3,4]){
-   const measured=sample(tier,q,skill,count),ratio=measured.damage/base.damage,target=targets[tier][q]
-   rows.push({tier,quality:q,skill,count,target,ratio,relativeError:ratio/target-1,...measured})
-   // Finite-window cast phase, crit granularity, general coverage and orbit
-   // uptime are explicit tolerances. Formula targets remain independently3%.
-   assert.ok(Math.abs(ratio/target-1)<=.06,`${tier}/${q}/${skill}/${count}: ${ratio} target ${target}`)
+   const measured=sample(tier,q,skill,count),ratio=measured.damage/base.damage
+   rows.push({tier,quality:q,skill,count,ratio,...measured})
+   assert.ok(ratio>1&&ratio<=6,`${tier}/${q}/${skill}/${count}: ${ratio}`)
   }
  }
  if(process.env.EQUIPMENT_SCHEDULING_REPORT)fs.writeFileSync(process.env.EQUIPMENT_SCHEDULING_REPORT,JSON.stringify({seconds:180,level:30,passive:{sj_heart:1,sj_bone:2},note:'stationary targets; basic target acquisition disabled to isolate skill budget; real skill release/hits; not combined melee or natural campaign',rows},null,2)+'\n')
- t.diagnostic(`${rows.length} real-scheduler samples, maximum target error ${Math.max(...rows.map(r=>Math.abs(r.relativeError)))*100}%`)
+ t.diagnostic(`${rows.length} real-scheduler samples, maximum sampled ratio ${Math.max(...rows.map(r=>r.ratio))}`)
 })

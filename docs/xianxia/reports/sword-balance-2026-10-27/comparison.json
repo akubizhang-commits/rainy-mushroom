@@ -1,0 +1,43 @@
+{
+  "baseline": {
+    "n": 100,
+    "wins": 1,
+    "evolved": 22,
+    "two": 2,
+    "boss": 42,
+    "winMedian": 709.0166666663505,
+    "winUnder9": 0,
+    "actualEvolutions": {
+      "sj_yujian": 19,
+      "sj_line": 1,
+      "sj_wanjian": 4
+    },
+    "bubbleDrops": 13
+  },
+  "candidate": {
+    "n": 100,
+    "wins": 29,
+    "evolved": 49,
+    "two": 27,
+    "boss": 74,
+    "winMedian": 557.3666666664884,
+    "winUnder9": 6,
+    "actualEvolutions": {
+      "sj_yujian": 43,
+      "sj_formation": 8,
+      "sj_line": 2,
+      "sj_wanjian": 23
+    },
+    "bubbleDrops": 1
+  },
+  "pairedFlips": {
+    "lost→lost": 70,
+    "lost→won": 29,
+    "won→lost": 1
+  },
+  "winDifferenceSeedClusterBootstrap95": [
+    0.22000000000000003,
+    0.35
+  ],
+  "limitations": "10 shared seeds; exploratory, not human win rates. Wilson intervals per 10-run cell; aggregate difference clustered by seed. No independent holdout, no runtime adoption."
+}

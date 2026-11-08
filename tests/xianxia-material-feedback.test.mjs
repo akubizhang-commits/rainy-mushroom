@@ -13,7 +13,7 @@ const View=runInNewContext(source+'\nTowerView',{materialDrops,collectedMaterial
 const boss=ARCHETYPES.find(a=>a.role==='boss').id
 const receipt=id=>({id,wave:20,archetype:boss})
 function fixture(){
- const host=Object.create(View.prototype),state={phase:'playing',time:10,floor:1,loot:{seed:7},pickups:{version:1,forgePity:{fa:0,bao:0,ling:0},collected:[]},killLedger:[receipt('old')],player:{xp:0,x:0,y:0},loadout:{active:{}}};
+ const host=Object.create(View.prototype),state={spiritState:{uses:[]},phase:'playing',time:10,floor:1,loot:{seed:7},pickups:{version:1,forgePity:{fa:0,bao:0,ling:0},collected:[]},killLedger:[receipt('old')],player:{xp:0,x:0,y:0},loadout:{active:{}}};
  Object.assign(host,{notices:[],breakthroughText:'',breakthroughUntil:0,training:false,screen:'battle',landscape:true,width:1280,height:720,stick:{dx:0,dy:0},touch:null,keys:new Set(),tools:{speed:1},saveElapsed:0,characterArt:{sample(){},observe(){},reset(){}},run:{state,setViewport(){},setInput(){},advance(dt){state.time+=dt;}},draw(){this.advanceNotice(state.time)}});
  return host;
 }
@@ -37,6 +37,6 @@ test('training suppresses feedback and pause freezes notice time',()=>{
 });
 test('clearing battle feedback discards all pending material notices',()=>{
  const host=fixture();host.queueMaterialNotice(host.run.state,0);
- for(const name of ['burstArt','qingpingAudio','arcArt','lineArt','convergenceArt','shadowArt','tiandiArt','hitArt','crossBurstArt','qiArt','orbitArt','formationArt','sixiangArt'])host[name]={reset(){}};
- host.formationSprites=new Map();host.clearBattleFeedback();assert.equal(host.notices.length,0);assert.equal(host.breakthroughText,'');
+ for(const name of ['debuffIcons','sancaiArt','burstArt','qingpingAudio','arcArt','lineArt','convergenceArt','shadowArt','tiandiArt','hitArt','crossBurstArt','qiArt','orbitArt','formationArt','sixiangArt'])host[name]={reset(){}};
+ host.ritualAudio={stop(){}};host.formationSprites=new Map();host.clearBattleFeedback();assert.equal(host.notices.length,0);assert.equal(host.breakthroughText,'');
 });

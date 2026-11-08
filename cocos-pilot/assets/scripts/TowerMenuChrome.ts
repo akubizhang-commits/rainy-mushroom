@@ -1,4 +1,29 @@
-import { Color, Graphics, Node } from 'cc';
+import { Color, Graphics, Label, Node, UITransform } from 'cc';
+
+export const isMenuBack = (text: string) => /^(?:取消\s*·\s*)?(?:‹\s*)?返回/.test(text);
+
+/** Navigation shares one unboxed chevron and single-line destination label. */
+export function drawMenuBack(node: Node, text: string, enabled = true) {
+ const caption = text.replace(/^(?:取消\s*·\s*)?(?:‹\s*)?返回/, '');
+ const width = node.getComponent(UITransform)!.contentSize.width;
+ const font = Math.min(26, (width - 48) / Math.max(1, caption.length));
+ const textWidth = caption.length * font, left = -(textWidth + 32) / 2;
+ const tint = enabled ? MENU_COLORS.primary : MENU_COLORS.muted;
+ const arrow = new Node('返回箭头'); arrow.layer = node.layer; node.addChild(arrow);
+ arrow.setPosition(left + 8, 0); arrow.addComponent(UITransform).setContentSize(24, 28);
+ const g = arrow.addComponent(Graphics); g.fillColor = new Color(tint);
+ g.moveTo(3, 10); g.lineTo(5, 8); g.lineTo(-3, 0);
+ g.lineTo(5, -8); g.lineTo(3, -10); g.lineTo(-7, 0); g.close(); g.fill();
+ const title = new Node('返回目的地'); title.layer = node.layer; node.addChild(title);
+ title.setPosition(left + 32 + textWidth / 2, 0);
+ title.addComponent(UITransform).setContentSize(textWidth + 4, 48);
+ const label = title.addComponent(Label);
+ label.string = caption; label.fontSize = font; label.lineHeight = 36;
+ label.color = new Color(tint); label.enableWrapText = false;
+ label.horizontalAlign = Label.HorizontalAlign.CENTER; label.verticalAlign = Label.VerticalAlign.CENTER;
+ label.overflow = Label.Overflow.CLAMP;
+ label.enableOutline = true; label.outlineColor = new Color(MENU_COLORS.panel); label.outlineWidth = 1;
+}
 
 /** Semantic palette: item cells/details keep the backpack green; reading pages stay paper. */
 export const MENU_COLORS = Object.freeze({

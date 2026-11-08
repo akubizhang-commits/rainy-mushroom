@@ -3,12 +3,12 @@ import assert from 'node:assert/strict'
 import {convergencePoses} from '../js/xianxia/TowerConvergence.js'
 const state=(rank=1)=>({time:1,player:{hp:1},effects:[],zones:[{
  id:'rain',kind:'sword_rain',formId:'evo_wanjian',formLevel:rank,parentLevel:10,
- x:160,y:0,dirX:1,dirY:0,nextAt:1.2,pulseIndex:0,ticks:rank===1?7:9,
+ x:160,y:0,dirX:1,dirY:0,nextAt:1.2,pulseIndex:0,ticks:rank===1?19:25,
 }]})
 for(const rank of [1,2])test(`rank ${rank}: swords are consumed once and sampling is read only`,()=>{
- const s=state(rank),count=rank===1?6:8
+ const s=state(rank),count=rank===1?18:24
  for(let i=0;i<=count;i++){
-  s.zones[0].pulseIndex=i;s.zones[0].nextAt=1.2+i*.15;s.time=1+i*.15
+  s.zones[0].pulseIndex=i;s.zones[0].nextAt=1.2+i*.1;s.time=1+i*.1
   const before=JSON.stringify(s),poses=convergencePoses(s)
   assert.equal(poses.length,(count-i)*4);assert.equal(JSON.stringify(s),before)
   assert.deepEqual(convergencePoses(s),poses)

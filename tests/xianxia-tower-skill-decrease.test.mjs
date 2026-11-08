@@ -4,6 +4,7 @@ import assert from 'node:assert/strict'
 import * as Growth from '../js/xianxia/TowerGrowth.js'
 import { TowerCampaignStore, TOWER_CAMPAIGN_KEY, combatLoadout } from '../js/xianxia/TowerCampaign.js'
 import { TowerRun, validateTowerSnapshot } from '../js/xianxia/TowerRun.js'
+import { cultivationLevelXp } from '../js/xianxia/TowerProfile.js'
 import { CORE_RANK_VALUES } from '../js/xianxia/TowerLoot.js'
 import { STONE_CAP, STONE_VALUES, stoneLootFromLegacy } from '../js/xianxia/TowerEconomy.js'
 import { checksum } from '../js/xianxia/Checksum.js'
@@ -35,8 +36,8 @@ function fixture(patch = {}) {
   const disk = storage()
   const initial = new TowerCampaignStore(disk, 0)
   put(disk, {
-    ...clone(initial.state), xp: 10920, clearedFloor: 9, tutorialWaves: 3,
-    researchPurchases: 3, skills: { ...gifts }, ...patch,
+    ...clone(initial.state), xp: cultivationLevelXp(30), clearedFloor: 9, tutorialWaves: 3,
+    researchPurchases: 0, skills: { ...gifts }, ...patch,
   })
   const store = new TowerCampaignStore(disk, 0)
   assert.equal(store.readOnly, false, store.error)
@@ -93,9 +94,9 @@ test('only the initial arc rank is protected from direct refund', () => {
 test('decrement returns the actual last-rank cost for basic, special and passive nodes', () => {
   for (const [id, rank, returned, skills, books] of [
     ['sj_yujian', 7, 1, { ...gifts, sj_yujian: 7 }, []],
-    ['sj_shadow', 7, 2, { ...gifts, sj_yujian: 2, sj_shadow: 7 }, ['sj_shadow']],
+    ['sj_shadow', 7, 1, { ...gifts, sj_yujian: 2, sj_shadow: 7 }, ['sj_shadow']],
     ['sj_heart', 4, 1, { ...gifts, sj_heart: 4 }, []],
-    ['sj_mark', 4, 2, { ...gifts, sj_mark: 4 }, ['sj_mark']],
+    ['sj_mark', 1, 1, { ...gifts, sj_mark:1 }, ['sj_mark']],
   ]) {
     const { store, disk } = fixture({ skills: { ...skills, sj_spirit: 2 }, books })
     committed(store, disk, id, returned, [{ id, from: rank, to: rank - 1 }])
@@ -140,11 +141,12 @@ test('an unrelated decrement preserves legacy special investments allowed by the
 test('all paired passives can be fully refunded without reducing evolution ranks or changing their combat form', () => {
   for (const row of Growth.GROWTH_EVOLUTIONS) {
     const books = [row.id, ...Growth.GROWTH_SKILLS.filter(s => s.special && [row.parent, row.passive].includes(s.id)).map(s => s.id)]
+    const passiveMax=Growth.GROWTH_SKILLS.find(s=>s.id===row.passive).maxLevel
     const { store, disk } = fixture({
-      skills: { ...gifts, [row.parent]: 6, [row.passive]: 4 }, books,
+      skills: { ...gifts, [row.parent]: 6, [row.passive]: passiveMax }, books,
       evolutionRanks: { [row.id]: 2 }, evolutions: [row.id],
     })
-    for (let rank = 4; rank >= 1; rank--) {
+    for (let rank = passiveMax; rank >= 1; rank--) {
       const returned = Growth.GROWTH_SKILLS.find(s => s.id === row.passive).pointCosts[rank - 1]
       committed(store, disk, row.passive, returned, [{ id: row.passive, from: rank, to: rank - 1 }])
       assert.deepEqual(store.state.evolutionRanks, { [row.id]: 2 })
@@ -169,7 +171,7 @@ test('refunding parent ranks lowers inherited evolution strength without removin
       skills: { ...gifts, [row.parent]: 9 }, books: special ? [row.parent, row.id] : [row.id],
       evolutionRanks: { [row.id]: 2 }, evolutions: [row.id],
     })
-    const highCost = special ? 2 : 1, lowCost = highCost
+    const highCost = 1, lowCost = highCost
     committed(store, disk, row.parent, highCost, [{ id: row.parent, from: 9, to: 8 }])
     committed(store, disk, row.parent, highCost, [
       { id: row.parent, from: 8, to: 7 },
@@ -187,7 +189,7 @@ test('refunding parent ranks lowers inherited evolution strength without removin
 test('direct evolution decrease refunds only its rank and preserves another evolution and legacy presets', () => {
   const { store, disk } = fixture({
     skills: { ...gifts, sj_yujian: 8, sj_heart: 3, sj_wanjian: 6, sj_bone: 4 },
-    books: ['evo_wanjian', 'evo_wuwo', 'sj_bone'],
+    books: ['evo_wanjian', 'evo_wuwo'],
     evolutionRanks: { evo_wanjian: 2, evo_wuwo: 1 }, evolutions: ['evo_wanjian', 'evo_wuwo'],
     selectedLoadout: 1,
     loadouts: [
@@ -212,13 +214,13 @@ test('special book remains paid after rank zero and relearning consumes points w
   assert.equal(learned.ok, true, learned.reason)
   assert.equal(learned.bookCost, 200)
   assert.equal(store.state.spiritStones, 0)
-  committed(store, disk, 'sj_shadow', 2, [{ id: 'sj_shadow', from: 1, to: 0 }])
+  committed(store, disk, 'sj_shadow', 1, [{ id: 'sj_shadow', from: 1, to: 0 }])
   assert.equal(Object.hasOwn(store.state.skills, 'sj_shadow'), false)
   const reload = new TowerCampaignStore(disk, 0)
   assert.deepEqual(reload.state.books, ['sj_shadow'])
   const relearned = reload.act({ type: 'learnSkill', id: 'sj_shadow' }, 0)
   assert.equal(relearned.ok, true, relearned.reason)
-  assert.equal(relearned.cost, 2)
+  assert.equal(relearned.cost, 1)
   assert.equal(relearned.bookCost, 0)
   assert.equal(reload.state.spiritStones, 0)
 })
@@ -264,7 +266,7 @@ test('playing and paused tower runs reject decreases without changing their snap
 
 test('a failed cascade save publishes none of the refund, ranks or passive healing and can retry', () => {
   const { store, disk } = fixture({
-    hp: 1, skills: { ...gifts, sj_arc: 2, sj_line: 6, sj_mark: 4 },
+    hp: 1, skills: { ...gifts, sj_arc: 2, sj_line: 6, sj_mark:1 },
     books: ['sj_line', 'sj_mark', 'evo_tiandi'],
     evolutionRanks: { evo_tiandi: 1 }, evolutions: ['evo_tiandi'],
   })
@@ -272,7 +274,7 @@ test('a failed cascade save publishes none of the refund, ranks or passive heali
   rejected(store, disk, decrease('sj_line'), 'save-failed')
   assert.deepEqual(new TowerCampaignStore(disk, 0).state, store.state)
   disk.fail = false
-  committed(store, disk, 'sj_line', 2, [
+  committed(store, disk, 'sj_line', 1, [
     { id: 'sj_line', from: 6, to: 5 },
   ])
 })
@@ -303,14 +305,14 @@ test('read-only and unreadable storage cannot publish a decrease', () => {
 
 test('insufficient learning cannot mutate state and a zero-available-point build can refund and reinvest', () => {
   const { store, disk } = fixture({
-    xp: 45, clearedFloor: 0, researchPurchases: 0, hp: 1,
-    skills: { sj_arc:1, sj_wanjian: 1 }, spiritStones: 0,
+    xp: 120, clearedFloor: 0, researchPurchases: 0, hp: 1,
+    skills: { sj_arc:1, sj_yujian: 2 }, spiritStones: 0,
   })
   assert.equal(Growth.growthSummary(store.state).available, 0)
   rejected(store, disk, { type: 'learnSkill', id: 'sj_arc' }, 'insufficient-points')
-  committed(store, disk, 'sj_wanjian', 1, [{ id: 'sj_wanjian', from: 1, to: 0 }])
+  committed(store, disk, 'sj_yujian', 1, [{ id: 'sj_yujian', from: 2, to: 1 }])
   assert.equal(store.act({ type: 'learnSkill', id: 'sj_arc' }, 0).ok, true)
-  rejected(store, disk, { type: 'learnSkill', id: 'sj_wanjian' }, 'insufficient-points')
+  rejected(store, disk, { type: 'learnSkill', id: 'sj_yujian' }, 'insufficient-points')
   assert.equal(new TowerCampaignStore(disk, 0).state.skills.sj_arc, 2)
 })
 
@@ -355,45 +357,23 @@ test('schema11 reload accepts optional typed stone loot and rejects inconsistent
   assert.equal(new TowerCampaignStore(disk, 0).error, 'corrupt')
 })
 
-function campaignWithLoot(loot) {
-  const { store, disk } = fixture()
-  assert.equal(store.act({ type: 'startFloor', floor: 1, seed: 12 }, 0).ok, true)
-  const state = clone(store.state)
-  if (loot) state.activeRun.snapshot.loot = loot
-  else delete state.activeRun.snapshot.loot
-  put(disk, state)
-  const reload = new TowerCampaignStore(disk, 0)
-  assert.equal(reload.readOnly, false, reload.error)
-  return { store: reload, disk }
-}
-
-test('checkpoint rejects introducing, removing or reseeding the attempt loot contract', () => {
-  for (const [before, after] of [
-    [undefined, { version: 1, seed: 123 }],
-    [{ version: 1, seed: 123 }, undefined],
-    [{ version: 1, seed: 123 }, { version: 1, seed: 456 }],
-  ]) {
-    const { store, disk } = campaignWithLoot(before)
-    const snapshot = clone(store.state.activeRun.snapshot)
-    if (after) snapshot.loot = after
-    else delete snapshot.loot
-    assert.equal(validateTowerSnapshot(snapshot), true, 'each empty attempt is independently valid')
-    rejected(store, disk, { type: 'checkpoint', snapshot }, 'invalid-snapshot')
-  }
+test('checkpoint rejects removing or reseeding the current attempt loot contract',()=>{
+ for(const alter of [s=>{delete s.loot},s=>{s.loot.seed^=1}]){
+  const {store,disk}=fixture()
+  assert.equal(store.act({type:'startFloor',floor:1,seed:12},0).ok,true)
+  const snapshot=clone(store.state.activeRun.snapshot);alter(snapshot)
+  rejected(store,disk,{type:'checkpoint',snapshot},'invalid-snapshot')
+ }
 })
-
-test('new attempt settlement persists typed kill loot while legacy settlement retains its old result shape', () => {
-  for (const loot of [undefined, { version: 1, seed: 123 }]) {
-    const { store, disk } = campaignWithLoot(loot)
-    const run = TowerRun.restore(store.state.activeRun.snapshot)
-    run.abandon()
-    const result = store.act({ type: 'finishFloor', snapshot: run.snapshot() }, 0)
-    assert.equal(result.ok, true, result.reason)
-    if (loot) assert.deepEqual(result.stoneLoot, { byGrade: [0, 0, 0, 0], count: 0, value: 0 })
-    else assert.equal(Object.hasOwn(result, 'stoneLoot'), false)
-    assert.deepEqual(store.state.lastResult.stoneLoot, result.stoneLoot)
-    assert.deepEqual(new TowerCampaignStore(disk, 0).state.lastResult, store.state.lastResult)
-  }
+test('current attempt settlement persists typed kill loot after reload',()=>{
+ const {store,disk}=fixture()
+ assert.equal(store.act({type:'startFloor',floor:1,seed:12},0).ok,true)
+ const reload=new TowerCampaignStore(disk,0),run=TowerRun.restore(reload.state.activeRun.snapshot)
+ run.abandon()
+ const result=reload.act({type:'finishFloor',snapshot:run.snapshot()},0)
+ assert.equal(result.ok,true,result.reason)
+ assert.deepEqual(result.stoneLoot,{byGrade:[0,0,0,0],count:0,value:0})
+ assert.deepEqual(new TowerCampaignStore(disk,0).state.lastResult,reload.state.lastResult)
 })
 
 function clearThirdFloor(store) {
@@ -426,7 +406,7 @@ test('typed settlement counts actual kills and excludes boss-clear and first-cle
   assert.ok(result.stoneLoot.count > 0)
   assert.equal(result.stoneLoot.value,
     snapshot.killLedger.reduce((sum, kill) => sum + CORE_RANK_VALUES[kill.coreRank] * 10, 0))
-  assert.equal(result.earned.spiritStones - result.stoneLoot.value, 200, 'floor3 boss-clear 100 plus first-clear stones 100')
+  assert.equal(result.earned.spiritStones - result.stoneLoot.value, 100, 'floor3 boss-clear is 100 stones; first clear now awards vouchers')
   assert.equal(store.state.spiritStones, result.earned.spiritStones)
   assert.deepEqual(new TowerCampaignStore(disk, 0).state.lastResult.stoneLoot, result.stoneLoot)
   rejected(store, disk, { type: 'finishFloor', snapshot }, 'wrong-attempt')

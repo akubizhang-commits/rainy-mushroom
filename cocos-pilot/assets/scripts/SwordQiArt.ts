@@ -1,6 +1,6 @@
 import {towerResources as resources} from './TowerResources';
 import {Color,ImageAsset,isValid,Node,Sprite,SpriteFrame,Texture2D,UITransform} from 'cc';
-import {swordQiVisualLift} from './shared/js/xianxia/TowerSwordQi';
+import {swordQiVisualLift,swordQiPoseIndex} from './shared/js/xianxia/TowerSwordQi';
 
 type Part={node:Node;sprite:Sprite;ui:UITransform;color:Color};
 type Actor={node:Node;parts:Part[];seen:boolean};
@@ -8,6 +8,7 @@ type Asset={image:ImageAsset|null;texture:Texture2D|null;frame:SpriteFrame|null;
 const CAP=24;
 const SPECS={
  crescent:{path:'tower-skill-fx/sword-qi-crescent-ice-diagonal-v1',width:512,height:512,anchor:.9319826338639653,anchorY:.5014471780028944,span:512*.7091172214182344},
+ moonWhite:{path:'tower-skill-fx/sword-qi-moon-sweep-v3',width:1024,height:1024,anchor:.5,anchorY:.5,span:880},
  sweep:{path:'tower-skill-fx/sword-qi-crescent-ice-sweep-v1',width:512,height:512,anchor:.9319826338639653,anchorY:.5014471780028944,span:512*.7091172214182344},
  down:{path:'tower-skill-fx/sword-qi-crescent-ice-down-v1',width:512,height:512,anchor:.9319826338639653,anchorY:.5014471780028944,span:512*.7091172214182344},
  cross:{path:'tower-skill-fx/sword-qi-cross-v3',width:512,height:512,anchor:.7555981975459283,anchorY:.5,span:472.60467427781646},
@@ -20,6 +21,7 @@ const SPECS={
 export class SwordQiArt {
  private dead=false;private lastTime=-1;
  private assets:Record<string,Asset>={
+  moonWhite:{image:null,texture:null,frame:null,requested:false},
   crescent:{image:null,texture:null,frame:null,requested:false},
   sweep:{image:null,texture:null,frame:null,requested:false},
   down:{image:null,texture:null,frame:null,requested:false},
@@ -66,15 +68,17 @@ export class SwordQiArt {
  }
  private draw(parent:Node,item:any,time:number,camera:{x:number;y:number},near:boolean){
   if(!item||item.hostile||typeof item.id!=='string')return;
-  const kind=near?'cross':item.bladeKind;
+  const moon=near&&item.source==='sj_moon'&&item.shape==='sector';
+  const kind=moon?'crescent':near?'cross':item.bladeKind;
   if(kind!=='cross'&&kind!=='crescent')return;
-  if(near?(item.kind!=='cross'||item.source!=='sj_cross'||item.shape!=='cross'):
-   (item.source!==(kind==='crescent'?'sj_arc':'sj_cross')||item.shape!==`${kind}-projectile`))return;
+  if(!moon&&(near?(item.kind!=='cross'||item.source!=='sj_cross'||item.shape!=='cross'):
+   ((kind==='crescent'?!['sj_arc','sj_moon','sj_moon_triple'].includes(item.source):item.source!=='sj_cross')||item.shape!==`${kind}-projectile`)))return;
   const dx=item.dirX??item.vx,dy=item.dirY??item.vy,d=Math.hypot(dx,dy);
   const started=item.startedAt,expires=item.expiresAt,width=item.width;
   if(![item.x,item.y,dx,dy,d,started,expires,width].every(Number.isFinite)
    ||width<=0||d<1e-8||time<started||time>=expires)return;
-  const variant=kind==='crescent'?(item.pulseIndex===2?'sweep':item.pulseIndex===3?'down':'crescent'):kind;
+  const pose=swordQiPoseIndex(item);
+  const variant=kind==='crescent'&&item.source==='sj_moon'?'moonWhite':kind==='crescent'?(pose===2?'sweep':pose===3?'down':'crescent'):kind;
   const asset=this.assets[variant],spec=SPECS[variant as keyof typeof SPECS];
   if(!asset.frame)return;
   let actor=this.actors.get(item.id);
@@ -89,7 +93,7 @@ export class SwordQiArt {
   actor.node.setPosition(item.x-camera.x,item.y-camera.y+swordQiVisualLift(item));
   actor.node.angle=Math.atan2(dy,dx)*180/Math.PI;
   const dissolved=Number.isFinite(item.dissolveAt)&&time>=item.dissolveAt;
-  const opacity=near?Math.pow(Math.max(0,1-(time-started)/(expires-started)),1.2):
+  const opacity=moon?Math.min(1,(time-started)/.035)*Math.pow(Math.max(0,1-(time-started)/(expires-started)),.65):near?Math.pow(Math.max(0,1-(time-started)/(expires-started)),1.2):
    dissolved?Math.pow(Math.max(0,1-(time-item.dissolveAt)/Math.max(.001,expires-item.dissolveAt)),1.35):
    Math.min(1,(time-started)/.055);
   for(let i=0;i<actor.parts.length;i++){

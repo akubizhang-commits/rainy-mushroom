@@ -153,15 +153,15 @@ test('ordinary rain staggers without changing tones or landings and final swords
   assert.ok(rain.swords.some(x=>x.phase==='impact'))
   assert.deepEqual(plain(rain.points),before.points)
   assert.deepEqual(plain(rain.tones),before.tones)
-  s.time=z.startedAt+4.74;z.pulseIndex=6;z.nextAt=z.startedAt+5;s.effects=[];f.sync(s)
+  s.time=z.startedAt+7.74;z.pulseIndex=z.pulseCount-1;z.nextAt=z.startedAt+8;s.effects=[];f.sync(s)
   rain=f.art.slots[0].painter.last.swordRain
   assert.equal(rain.swords.length,7)
   assert.ok(rain.swords.every(x=>x.phase==='hover'&&x.progress===0))
-  s.time=z.startedAt+4.92;f.sync(s)
+  s.time=z.startedAt+7.92;f.sync(s)
   rain=f.art.slots[0].painter.last.swordRain
   assert.ok(rain.swords.every(x=>x.phase==='falling'))
   assert.equal(new Set(rain.swords.map(x=>x.progress)).size,1)
-  s.time=z.startedAt+5;pulse(s,7,s.time);f.sync(s)
+  s.time=z.startedAt+8;pulse(s,z.pulseCount,s.time);f.sync(s)
   rain=f.art.slots[0].painter.last.swordRain
   assert.ok(rain.swords.every(x=>x.phase==='impact'&&x.landingOffset===0))
 })
@@ -369,21 +369,21 @@ test('a real first-pulse wave clear cancels the old track and reuses its texture
   assert.equal(slot.surfaces, surfaces); assert.equal(f.textures.length, 2)
 })
 
-test('the 3.68s visual tail expires and its surfaces are reused for the next cast', () => {
-  const f = ready(), s = state(10, 5.5)
-  pulse(s, 7)
+test('the 0.68s visual tail expires and its surfaces are reused for the next cast', () => {
+  const f = ready(), s = state(10, 8.5)
+  pulse(s, s.zones[0].pulseCount)
   f.sync(s)
   const slot = f.art.slots[0], surfaces = slot.surfaces
-  s.zones = []; s.effects = []; s.time = 6.179
+  s.zones = []; s.effects = []; s.time = 9.179
   assert.equal(f.sync(s).has('zone-1'), true)
   assert.equal(slot.painter.last.visible, true)
-  s.time = 6.18
+  s.time = 9.18
   assert.equal(f.sync(s).size, 0)
   assert.equal(slot.track, null)
   assert.equal(slot.ground.node.active, false); assert.equal(slot.air.node.active, false)
-  const next = state(1, 6.2).zones[0]
-  Object.assign(next, { id: 'zone-2', startedAt: 6.2, nextAt: 6.7 })
-  s.zones = [next]; s.time = 6.2
+  const next = state(1, 9.2).zones[0]
+  Object.assign(next, { id: 'zone-2', startedAt: 9.2, nextAt: 9.7 })
+  s.zones = [next]; s.time = 9.2
   assert.equal(f.sync(s).has('zone-2'), true)
   assert.equal(f.art.slots.length, 1); assert.equal(slot.surfaces, surfaces)
   assert.equal(f.textures.length, 2)
@@ -413,3 +413,10 @@ test('new runs and death clear active tracks; destruction releases owned assets 
     assert.equal(asset.destroyCalls, 1)
   }
 })
+
+ test('eight-second formation keeps art through its final real attack', () => {
+ const f=ready(),s=state(10);s.time=8.3;f.sync(s);
+ assert.ok(f.art.slots[0]?.painter.last?.fade>0);
+ s.time=8.5;pulse(s,s.zones[0].pulseCount,8.5);f.sync(s);
+ assert.ok(f.art.slots[0]?.painter.last?.fade>0);
+ });

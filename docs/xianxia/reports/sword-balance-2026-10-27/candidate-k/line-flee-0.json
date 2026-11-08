@@ -1,0 +1,267 @@
+{
+  "seed": "sword-balance-0",
+  "route": "line",
+  "move": "flee",
+  "outcome": "lost",
+  "time": 422.61666666661097,
+  "level": 11,
+  "firstChoice": 11.816666666666833,
+  "bossAt": 420.03333333328,
+  "bossDead": null,
+  "bossFightSec": null,
+  "evolutions": [],
+  "choices": [
+    {
+      "time": 11.816666666666833,
+      "level": 2,
+      "picked": {
+        "kind": "passive",
+        "id": "sj_bone",
+        "level": 1,
+        "isNew": true,
+        "evolution": false
+      },
+      "offer": [
+        "weapon:sj_arc",
+        "weapon:sj_wanjian",
+        "passive:sj_bone"
+      ]
+    },
+    {
+      "time": 21.133333333333415,
+      "level": 3,
+      "picked": {
+        "kind": "passive",
+        "id": "sj_heart",
+        "level": 1,
+        "isNew": true,
+        "evolution": false
+      },
+      "offer": [
+        "passive:sj_heart",
+        "weapon:sj_wanjian",
+        "passive:sj_mark"
+      ]
+    },
+    {
+      "time": 36.98333333333252,
+      "level": 4,
+      "picked": {
+        "kind": "weapon",
+        "id": "sj_yujian",
+        "level": 2,
+        "isNew": false,
+        "evolution": false
+      },
+      "offer": [
+        "weapon:sj_yujian",
+        "weapon:sj_arc",
+        "weapon:sj_wanjian"
+      ]
+    },
+    {
+      "time": 51.93333333333167,
+      "level": 5,
+      "picked": {
+        "kind": "passive",
+        "id": "sj_bone",
+        "level": 2,
+        "isNew": false,
+        "evolution": false
+      },
+      "offer": [
+        "passive:vajra",
+        "passive:sj_bone",
+        "passive:sj_heart"
+      ]
+    },
+    {
+      "time": 75.19999999999702,
+      "level": 6,
+      "picked": {
+        "kind": "passive",
+        "id": "sj_bone",
+        "level": 3,
+        "isNew": false,
+        "evolution": false
+      },
+      "offer": [
+        "passive:sj_bone",
+        "weapon:sj_wanjian",
+        "pill:pill_wind"
+      ]
+    },
+    {
+      "time": 122.34999999999434,
+      "level": 7,
+      "picked": {
+        "kind": "weapon",
+        "id": "sj_yujian",
+        "level": 3,
+        "isNew": false,
+        "evolution": false
+      },
+      "offer": [
+        "weapon:sj_yujian",
+        "passive:sj_heart",
+        "passive:sj_bone"
+      ]
+    },
+    {
+      "time": 191.68333333337802,
+      "level": 8,
+      "picked": {
+        "kind": "passive",
+        "id": "sj_bone",
+        "level": 4,
+        "isNew": false,
+        "evolution": false
+      },
+      "offer": [
+        "passive:sj_bone",
+        "pill:pill_power",
+        "weapon:sj_wanjian"
+      ]
+    },
+    {
+      "time": 259.0333333334264,
+      "level": 9,
+      "picked": {
+        "kind": "weapon",
+        "id": "sj_yujian",
+        "level": 4,
+        "isNew": false,
+        "evolution": false
+      },
+      "offer": [
+        "pill:pill_power",
+        "weapon:sj_yujian",
+        "passive:vajra"
+      ]
+    },
+    {
+      "time": 338.38333333335424,
+      "level": 10,
+      "picked": {
+        "kind": "weapon",
+        "id": "sj_line",
+        "level": 1,
+        "isNew": true,
+        "evolution": false
+      },
+      "offer": [
+        "weapon:sj_wanjian",
+        "pill:pill_power",
+        "weapon:sj_line"
+      ]
+    },
+    {
+      "time": 382.8333333333138,
+      "level": 11,
+      "picked": {
+        "kind": "weapon",
+        "id": "sj_line",
+        "level": 2,
+        "isNew": false,
+        "evolution": false
+      },
+      "offer": [
+        "weapon:sj_line",
+        "passive:sj_mark",
+        "passive:sj_bone"
+      ]
+    }
+  ],
+  "levels": {
+    "0": {
+      "level": 1,
+      "hp": 100,
+      "maxHp": 100,
+      "kills": 0
+    },
+    "1": {
+      "level": 5,
+      "hp": 112,
+      "maxHp": 112,
+      "kills": 70
+    },
+    "2": {
+      "level": 6,
+      "hp": 110,
+      "maxHp": 115,
+      "kills": 128
+    },
+    "3": {
+      "level": 7,
+      "hp": 70,
+      "maxHp": 118,
+      "kills": 180
+    },
+    "4": {
+      "level": 8,
+      "hp": 49,
+      "maxHp": 121,
+      "kills": 232
+    },
+    "5": {
+      "level": 9,
+      "hp": 52,
+      "maxHp": 124,
+      "kills": 312
+    },
+    "6": {
+      "level": 10,
+      "hp": 126,
+      "maxHp": 150,
+      "kills": 380
+    },
+    "7": {
+      "level": 11,
+      "hp": 54,
+      "maxHp": 154,
+      "kills": 442
+    }
+  },
+  "damage": {
+    "sj_yujian": 157855,
+    "sj_line": 15970
+  },
+  "events": {
+    "playerHurt": 22,
+    "swordLineStrike": 27
+  },
+  "weapons": [
+    {
+      "id": "sj_yujian",
+      "level": 4,
+      "evolved": false
+    },
+    {
+      "id": "sj_line",
+      "level": 2,
+      "evolved": false
+    }
+  ],
+  "passives": {
+    "sj_bone": 4,
+    "sj_heart": 1
+  },
+  "maxEnemies": 171,
+  "maxShots": 4,
+  "diag": {
+    "capSkipped": {
+      "enemies": 692,
+      "pickups": 0
+    },
+    "dropped": {
+      "enemies": 0,
+      "shots": 0,
+      "bubbles": 0,
+      "zones": 0,
+      "pickups": 0
+    },
+    "droppedTime": 0
+  },
+  "steps": 25358,
+  "wallMs": 562.3921249999985
+}

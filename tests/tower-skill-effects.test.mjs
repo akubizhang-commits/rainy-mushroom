@@ -1,9 +1,10 @@
 import test from 'node:test'
+import {castActionTiming} from '../js/xianxia/TowerSkillTiming.js'
 import assert from 'node:assert/strict'
 import {readFileSync} from 'node:fs'
 import {stripTypeScriptTypes} from 'node:module'
 import {runInNewContext} from 'node:vm'
-import {swordQiSegments,swordQiVisualLift} from '../js/xianxia/TowerSwordQi.js'
+import {swordQiSegments,swordQiVisualLift,swordQiPoseIndex} from '../js/xianxia/TowerSwordQi.js'
 import {SHADOW_LIFT,shadowPreviewLine,shadowHitFeedback} from '../js/xianxia/TowerShadow.js'
 
 const source=name=>stripTypeScriptTypes(readFileSync(new URL(`../cocos-pilot/assets/scripts/${name}.ts`,import.meta.url),'utf8').replace(/^import .*$/gm,''),{mode:'transform'}).replace(/^export /gm,'')
@@ -25,10 +26,11 @@ function fixture(){
   return {x:Math.cos(angle)*100,y:Math.sin(angle)*100,angle,baseX:Math.cos(angle)*84,baseY:Math.sin(angle)*84,
    tipX:Math.cos(angle)*116,tipY:Math.sin(angle)*116}
  }
- const Art=runInNewContext(`(()=>{${source('TowerSkillEffects')};return TowerSkillEffects})()`,{Color,Graphics,skillForm,orbitSwordPose,swordQiSegments,swordQiVisualLift,SHADOW_LIFT,shadowPreviewLine,shadowHitFeedback,Math,Number})
+ const Art=runInNewContext(`(()=>{${source('TowerSkillEffects')};return TowerSkillEffects})()`,{Color,Graphics,skillForm,orbitSwordPose,swordQiSegments,swordQiVisualLift,swordQiPoseIndex,SHADOW_LIFT,shadowPreviewLine,shadowHitFeedback,Math,Number})
  const state={time:10,phase:'paused',player:{x:0,y:0,hp:100},loadout:{active:{},passive:{},evolutions:[],evolutionLevels:{}},zones:[],effects:[],enemies:[]}
  return {art:new Art(),g:new Graphics(),state,poses}
 }
+class WeaponQualityArt {reset(){}}
 const camera={x:0,y:0}
 test('orbit fallback stops drawing at expiry and still supports permanent wuwo',()=>{
  const {art,g,state,poses}=fixture()
@@ -233,8 +235,8 @@ test('passive feedback only follows real hit and enemy wound states, no passive 
  art.draw(g,state,camera);assert.ok(g.calls.some(c=>c[0]==='line'));assert.equal(g.calls.filter(c=>c[0]==='circle').length,0)
 })
 test('all primary releases can trigger the existing character slash, with deterministic simultaneous priority',()=>{
- const Art=runInNewContext(`(()=>{${source('TowerCharacterArt')};return TowerCharacterArt})()`,{Color})
- for(const skill of ['sj_yujian','sj_arc','sj_cross','sj_line','sj_shadow','sj_formation','evo_wanjian','evo_tiandi','evo_sixiang']){
+ const Art=runInNewContext(`(()=>{${source('TowerCharacterArt')};return TowerCharacterArt})()`,{Color,castActionTiming,WeaponQualityArt})
+ for(const skill of ['sj_yujian','sj_arc','sj_moon','sj_moon_triple','sj_cross','sj_line','sj_shadow','sj_formation','evo_wanjian','evo_tiandi','evo_sixiang']){
   const a=new Art();a.observeCast({skill,startedAt:1,releaseAt:1.2,dirX:-1,dirY:0})
   assert.ok(a.attack,skill);assert.equal(a.attack.face,-1)
  }
@@ -244,7 +246,7 @@ test('all primary releases can trigger the existing character slash, with determ
 })
 
 test('sword-line and crescent continuation hits cannot restart the committed character action',()=>{
- const Art=runInNewContext(`(()=>{${source('TowerCharacterArt')};return TowerCharacterArt})()`,{Color})
+ const Art=runInNewContext(`(()=>{${source('TowerCharacterArt')};return TowerCharacterArt})()`,{Color,castActionTiming,WeaponQualityArt})
  const a=new Art()
  const event=(skill,pulseIndex,time)=>({skill,pulseIndex,pulseCount:3,startedAt:time,releaseAt:time,dirX:1,dirY:0})
  a.observeCast(event('sj_line',2,.3))
@@ -267,7 +269,7 @@ test('sword-line and crescent continuation hits cannot restart the committed cha
 })
 
 test('saved body actions use their own release, recovery and locked attack facing',()=>{
- const Art=runInNewContext(`(()=>{${source('TowerCharacterArt')};return TowerCharacterArt})()`,{Color})
+ const Art=runInNewContext(`(()=>{${source('TowerCharacterArt')};return TowerCharacterArt})()`,{Color,castActionTiming,WeaponQualityArt})
  const a=new Art()
  assert.equal(typeof a.syncAction,'function')
  a.syncAction({time:1.05,player:{faceX:-1},actions:{current:null,basic:{
@@ -395,4 +397,14 @@ test('qingping blood-drop badge has no background disk',()=>{
  assert.equal(g.calls.filter(c=>c[0]==='circle').length,0);
  assert.equal(g.calls.filter(c=>c[0]==='fill').length,2,'only blood drop and highlight fill');
  assert.equal(g.calls.filter(c=>c[0]==='arc').length,1,'countdown remains');
+});
+
+test('saved melee action presents three independent strokes and restores the same pose',()=>{
+ const Art=runInNewContext(`(()=>{${source('TowerCharacterArt')};return TowerCharacterArt})()`,{Color,castActionTiming,WeaponQualityArt});
+ const art=new Art(),timing=castActionTiming('sj_arc',3),live={skill:'sj_arc',hits:3,speed:0,startedAt:1,releaseAt:1+timing.releases[0],endsAt:1+timing.duration,dirX:1};
+ const windows=timing.releases.map(t=>{art.syncAction({time:1+t,player:{faceX:-1},actions:{current:live}});return {...art.attack}});
+ assert.equal(new Set(windows.map(w=>w.start)).size,3);
+ for(let i=0;i<3;i++){assert.equal(windows[i].release,1+timing.releases[i]);assert.ok(windows[i].start<windows[i].release);assert.ok(windows[i].end>windows[i].release)}
+ const restored=new Art();restored.syncAction({time:1+timing.releases[1],player:{faceX:-1},actions:{current:live}});
+ assert.deepEqual({...restored.attack},windows[1]);
 });

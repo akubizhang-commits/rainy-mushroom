@@ -1,0 +1,44 @@
+{
+  "status": "PASS: exact arithmetic DESIGN model only",
+  "counts": {
+    "loadouts": 2250,
+    "loadout_meta_rows": 5184000,
+    "loadout_reduction_rows": 454500,
+    "rounded_damage_rows": 1266540,
+    "strict_integer_rows": 19019,
+    "snapshot_lineage_rows": 836,
+    "gold_blue_rows": 250,
+    "fixed_budget_rows": 5130,
+    "hp_heal_rows": 10000,
+    "awakening_fill_rows": 90,
+    "self_cost_snapshot_rows": 10800,
+    "loot_tree_edges": 10080,
+    "focus_switch_pairs": 1620,
+    "unreleased_focus_rejections": 7,
+    "first_gold_outcomes": 20
+  },
+  "rounding_contract": "n0 + floor(n0 * ePct / 100); exact unchanged zero-equipment baseline; strict per-event <=1.18",
+  "rejected_alternatives": [
+    "residual bonus ledger",
+    "non-refillable reserveHP"
+  ],
+  "max_damage_factor": "1.18",
+  "max_hp_factor": "1.08",
+  "max_static_product": "1593/1250",
+  "max_static_product_decimal": 1.2744,
+  "strongest_gold_vs_weakest_blue_product": 1.2370413511939429,
+  "meta_profiles": 2304,
+  "reduction_states": 202,
+  "factorized_cartesian_domain_not_directly_iterated": 1047168000,
+  "catalogue_identities": 36,
+  "released_one_class_identities": 12,
+  "expected_first_gold_draws": 12.830281551829156,
+  "long_run_gold_fraction": 0.07794061228979302,
+  "probability_reach_guaranteed_draw": 0.37735360253530764,
+  "first_gold_quantiles": {
+    "50": 14,
+    "90": 20,
+    "95": 20
+  },
+  "scope": "Enumerated domains printed in source; no runtime integration, gameplay, winrate, retention, or collection-time simulation."
+}

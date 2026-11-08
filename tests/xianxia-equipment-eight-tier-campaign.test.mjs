@@ -46,7 +46,7 @@ for (const [tier, minLevel] of [['fan', 1], ['fa', 4], ['bao', 11], ['ling', 21]
   }
 }
 test('all entry points reject unmet tiers even for valid held equipment', () => {
-  for (const [tier, level] of [['fa', 3], ['bao', 10], ['ling', 20]]) {
+  for (const [tier, level] of [['bao', 10], ['ling', 20]]) {
     const { disk, records } = fixture(level)
     const record = JSON.parse(records.get(TOWER_CAMPAIGN_KEY)), state = JSON.parse(record.data)
     const weapon = rollWeapon(tier, 4, () => 0, 'weapon-1')
@@ -91,7 +91,7 @@ test('starter fan equipment stays protected while ordinary fan can be dismantled
 
 test('direct runs and restored snapshots cannot bypass equipment realm requirements', () => {
   const { store } = fixture(1)
-  for (const [tier, minXp] of [['fa', cultivationLevelXp(4)], ['bao', cultivationLevelXp(11)], ['ling', cultivationLevelXp(21)]]) {
+  for (const [tier, minXp] of [['bao', cultivationLevelXp(11)], ['ling', cultivationLevelXp(21)]]) {
     const state = structuredClone(store.state), item = rollWeapon(tier, 1, () => 0, 'weapon-1')
     state.weapons[item.id] = item; state.loadouts[0].weaponId = item.id
     const loadout = combatLoadout(state)
@@ -101,4 +101,39 @@ test('direct runs and restored snapshots cannot bypass equipment realm requireme
     const forged = run.snapshot(); forged.player.xp = 0
     assert.equal(validateTowerSnapshot(forged), false)
   }
+})
+
+for (const level of [1, 2, 3]) test(`held fa gear equips atomically and reloads at level ${level}`, () => {
+  const { disk, records } = fixture(level)
+  const record = JSON.parse(records.get(TOWER_CAMPAIGN_KEY)), state = JSON.parse(record.data)
+  const weapon = rollWeapon('fa', 2, () => 0, 'weapon-1')
+  state.weapons[weapon.id] = weapon; state.weaponSequence = 1; state.weaponCounters[weapon.id] = 0
+  for (const [i, category] of ['armor', 'ring'].entries()) {
+    const item = rollEquipment(category, 'fa', 2, () => 0, `gear-${i + 1}`)
+    state.equipment[item.id] = item; state.equipmentDraws[category] = 1
+    if (category === 'ring') state.equipmentCounters[item.id] = 0
+  }
+  state.equipmentSequence = 2
+  record.data = JSON.stringify(state); record.checksum = checksum(record.data)
+  records.set(TOWER_CAMPAIGN_KEY, JSON.stringify(record))
+  const store = new TowerCampaignStore(disk, now)
+  for (const id of ['weapon-1', 'gear-1', 'gear-2']) {
+    const quote = inventoryQuote(store.state, id, 'equip')
+    assert.ok(quote.ok, quote.reason)
+    const before = JSON.stringify(store.state), saved = records.get(TOWER_CAMPAIGN_KEY)
+    disk.fail = true
+    assert.equal(store.act(quote.action, now).reason, 'save-failed')
+    assert.equal(JSON.stringify(store.state), before)
+    assert.equal(records.get(TOWER_CAMPAIGN_KEY), saved)
+    disk.fail = false
+    assert.ok(store.act(quote.action, now).ok)
+  }
+  const loaded = new TowerCampaignStore(disk, now)
+  assert.deepEqual(loaded.state.loadouts, store.state.loadouts)
+  assert.equal(loaded.state.loadouts[0].weaponId, 'weapon-1')
+  assert.equal(loaded.state.loadouts[0].armorId, 'gear-1')
+  assert.equal(loaded.state.loadouts[0].ringId, 'gear-2')
+  assert.equal(records.get('unrelated'), 'preserve')
+  const run = new TowerRun({ attemptId: 1, floor: 1, xp: loaded.state.xp, hp: 100, loadout: combatLoadout(loaded.state) })
+  assert.ok(validateTowerSnapshot(run.snapshot()))
 })

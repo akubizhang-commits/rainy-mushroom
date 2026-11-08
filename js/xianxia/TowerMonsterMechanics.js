@@ -1,9 +1,10 @@
 // Fixed-step, JSON-only monster controllers. All damage is authored enemy damage,
 // never a fraction of the current player's HP. Cooldowns start after recovery.
-import { ARCHETYPES, FLOOR01 } from './TowerContent.js'
+import { ARCHETYPES, FLOOR01, FLOORS } from './TowerContent.js'
 import { insideHex, clipHexRay } from './TowerArena.js'
 import { clearPillars, clipPillars, pillarSight } from './TowerObstacles.js'
 import { towerEnemyStats, towerEnemyRadius } from './TowerEnemyStats.js'
+import {setObjectiveAttributes,summonedMonsterHp} from './TowerMonsterAttributes.js'
 const STEP=1/60, EPS=1e-7, TAU=Math.PI*2
 const archetypes=new Map(ARCHETYPES.map(a=>[a.id,a]))
 const rows=[
@@ -37,8 +38,8 @@ export function initializeMonsterMechanics(run,e){
  const elite=ELITE_SKILLS
  const skills=e.role==='boss'?[...BOSS_MECHANIC_LOADOUTS[run.state.floor-1]]:[elite[e.family]||'M07']
  e.mechanic={version:1,skills,phase:'idle',skillId:'',label:'',enraged:false,enrageUntil:0,spawnedAt:run.state.time,
-  startedAt:0,activatesAt:0,until:0,cooldowns:Object.fromEntries(skills.map(id=>[id,run.state.time+MONSTER_SKILLS[id].first])),
-  uses:Object.fromEntries(skills.map(id=>[id,0])),vulnerableUntil:0,vulnerability:0,healed:0,healBudget:0,
+  startedAt:0,activatesAt:0,until:0,cooldowns:Object.fromEntries(skills.map(id=>[id,run.state.time+(e.role==='elite'?Math.min(4,MONSTER_SKILLS[id].first):MONSTER_SKILLS[id].first)])),
+  uses:Object.fromEntries(skills.map(id=>[id,0])),vulnerableUntil:0,vulnerableStartedAt:0,vulnerability:0,healed:0,healBudget:0,
   batch:0,rewardedBatch:0,armorUntil:0,armor:0,nextPulseAt:0,pulses:0,chargeX:e.x,chargeY:e.y,spawnPoints:[],healRemaining:0,setupUntil:0,chargeStarted:false}
 }
 function legal(s,p,r=24){return (!s.view||(p.x-r>=s.view.xmin&&p.x+r<=s.view.xmax&&p.y-r>=s.view.ymin&&p.y+r<=s.view.ymax))
@@ -48,10 +49,24 @@ function spot(s,origin,r=100,index=0,reserved=[],bodyRadius=24){
   if(reserved.every(q=>dist(p,q)>65)&&legal(s,p,bodyRadius)&& (s.arenaVersion!==1||pillarSight(origin,p)) && s.enemies.every(e=>e.hp<=0||dist(p,e)>e.radius+bodyRadius+6))return p}
  return null
 }
+// Raw per-hit coefficients, before the shared incoming multiplier and defenses.
+// DOT budgets count accepted ticks (overlapping pools do not stack through i-frames).
+export const MONSTER_SKILL_DAMAGE = Object.freeze({
+ M06:3,M07:3,M08:3,M09:3,M10:2.5,M11:.55,M12:.65,
+ M13:3,M14:.75,M15:3,M16:1.15,M17:1.5,M18:.3,M19:3,M20:3,M24:3,
+})
+function skillDamage(s,e,id){
+ // High-rank early elites must not hit harder than this floor's boss mechanic.
+ // Keep their authored ordinary attacks and the first-floor tutorial unchanged.
+ const base=e.role==='elite'&&s.floor>1
+  ?Math.min(e.damage,FLOORS[s.floor-1].floor_stat_scale.boss_damage*.8):e.damage
+ // The first boss is the dodge tutorial; keep its already calibrated four-hit charge.
+ return base*(s.floor===1&&id==='M06'?1.8:(MONSTER_SKILL_DAMAGE[id]??0))*(e.role==='elite'?1.25:1)
+}
 function zone(run,e,id,extra={}){
  const s=run.state,m=e.mechanic,k=MONSTER_SKILLS[id],z={id:`mechanic:${++state(run).sequence}`,ownerId:e.id,skillId:id,name:k.name,
   shape:'circle',x:e.x,y:e.y,radius:90,width:64,toX:e.x,toY:e.y,faceX:1,faceY:0,angle:Math.PI,innerRadius:0,safeZones:[],
-  phase:'windup',startedAt:s.time,activatesAt:m.activatesAt,expiresAt:m.activatesAt+.2,damage:e.damage*1.8,damageType:k.damageType,
+  phase:'windup',startedAt:s.time,activatesAt:m.activatesAt,expiresAt:m.activatesAt+.2,damage:skillDamage(s,e,id),damageType:k.damageType,
   hit:false,nextAt:m.activatesAt,interval:0,control:null,...extra};state(run).zones.push(z);return z
 }
 function cleanupActorEffects(s,actors){
@@ -60,8 +75,8 @@ function cleanupActorEffects(s,actors){
  s.projectiles=(s.projectiles||[]).filter(p=>!p.hostile||!actors.some(e=>typeof p.source==='string'&&p.source.startsWith(`${e.id}:a`)))
 }
 function removeZones(run,e){state(run).zones=state(run).zones.filter(z=>z.ownerId!==e.id)}
-function reward(run,e,seconds=4,amount=.15){const m=e.mechanic;if(m.skillId==='M20')m.cooldowns.M06=run.state.time+seconds+8;if(m.skillId&&m.skillId!=='M23')m.cooldowns[m.skillId]=run.state.time+seconds+MONSTER_SKILLS[m.skillId].cooldown;m.vulnerableUntil=Math.max(m.vulnerableUntil,run.state.time+seconds);m.vulnerability=Math.max(m.vulnerability,amount);m.armor=0;m.armorUntil=0;m.phase='recovery';m.skillId='M23';m.until=m.vulnerableUntil;m.label='妖核暴露';removeZones(run,e)}
-function recover(run,e){const m=e.mechanic;const opening=run.state.floor===6&&e.role==='boss'&&m.phase==='active'&&['M07','M09'].includes(m.skillId);m.phase='recovery';m.until=run.state.time+MONSTER_SKILLS[m.skillId].recovery+(opening?3:0);if(opening){m.label='收势破绽 · 承伤+20%';m.vulnerableUntil=Math.max(m.vulnerableUntil,m.until);m.vulnerability=Math.max(m.vulnerability,.2)}}
+function reward(run,e,seconds=4,amount=.15){const m=e.mechanic;if(m.skillId==='M20')m.cooldowns.M06=run.state.time+seconds+8;if(m.skillId&&m.skillId!=='M23')m.cooldowns[m.skillId]=run.state.time+seconds+MONSTER_SKILLS[m.skillId].cooldown;m.vulnerableStartedAt=run.state.time;m.vulnerableUntil=Math.max(m.vulnerableUntil,run.state.time+seconds);m.vulnerability=Math.max(m.vulnerability,amount);m.armor=0;m.armorUntil=0;m.phase='recovery';m.skillId='M23';m.until=m.vulnerableUntil;m.label='妖核暴露';removeZones(run,e)}
+function recover(run,e){const m=e.mechanic;const opening=run.state.floor===6&&e.role==='boss'&&m.phase==='active'&&['M07','M09'].includes(m.skillId);m.phase='recovery';m.until=run.state.time+MONSTER_SKILLS[m.skillId].recovery+(opening?3:0);if(opening){m.label='收势破绽 · 承伤+20%';m.vulnerableStartedAt=run.state.time;m.vulnerableUntil=Math.max(m.vulnerableUntil,m.until);m.vulnerability=Math.max(m.vulnerability,.2)}}
 const summonedArchetype=e=>archetypes.has(`${e.family}_normal`)?`${e.family}_normal`:'boar_normal'
 const summonedRadius=e=>towerEnemyRadius(summonedArchetype(e))
 function summon(run,e,kind,position,life=15){
@@ -69,8 +84,9 @@ function summon(run,e,kind,position,life=15){
  if(!legal(s,position,towerEnemyRadius(archetype)))return null
  const id=`temporary:${e.id}:${++state(run).sequence}`
  const a=run._enemy({id,archetype,x:position.x,y:position.y});delete a.mechanic
+ if(objectives.has(kind))setObjectiveAttributes(a)
  const ratios=TEMP_RATIOS
- if(ratios[kind]){a.maxHp=Math.max(1,e.maxHp*ratios[kind][0]);a.damage=e.damage*ratios[kind][1]}
+ if(ratios[kind]){a.maxHp=summonedMonsterHp(e,a,ratios[kind][0]);a.damage=e.damage*ratios[kind][1]}
  else {a.maxHp*=.8;a.damage*=.65}
  a.hp=a.maxHp;a.moveSpeed=kind==='clone'?e.moveSpeed:objectives.has(kind)?0:a.moveSpeed
  a.name=({clone:'镜魄',core:'汲灵核',crystal:'护甲结晶',pillar:'破阵机关柱',egg:'噬灵妖卵',lock:'狱锁柱',minion:'召唤随从',hatchling:'妖卵幼体'})[kind]
@@ -141,17 +157,17 @@ function start(run,e,id){
   if(id==='M20'){m.armor=.5;m.armorUntil=s.time+8;m.label='护甲减伤50% · 引兽撞柱';const p=spot(s,s.player,110,0,[],summonedRadius(e));if(p)summon(run,e,'pillar',p,8)}
  }else if(['M07','M08','M16','M15'].includes(id)){
   const shape=id==='M07'?'circle':id==='M15'?'ring':'sector'
-  zone(run,e,id,{...base,shape,radius:id==='M15'?200:145,innerRadius:0,angle:id==='M15'?Math.PI*1.5:Math.PI*1.2,expiresAt:m.activatesAt+(id==='M16'?3:id==='M15'?1:.2),damage:e.damage*(id==='M16'?.55:1.8),interval:id==='M16'?1:0,sweepHeading:Math.atan2(d.y,d.x),sweepDirection:1})
+  zone(run,e,id,{...base,shape,radius:id==='M15'?200:145,innerRadius:0,angle:id==='M15'?Math.PI*1.5:Math.PI*1.2,expiresAt:m.activatesAt+(id==='M16'?3:id==='M15'?1:.2),damage:skillDamage(s,e,id),interval:id==='M16'?1:0,sweepHeading:Math.atan2(d.y,d.x),sweepDirection:1})
  }else if(['M10','M11','M13','M14'].includes(id)){
-  zone(run,e,id,{...base,x:s.player.x,y:s.player.y,radius:id==='M11'?65:55,damage:e.damage*(id==='M10'?.65:id==='M11'?.12:id==='M14'?.75:1.8),
+  zone(run,e,id,{...base,x:s.player.x,y:s.player.y,radius:id==='M11'?65:55,damage:skillDamage(s,e,id),
    expiresAt:m.activatesAt+(id==='M11'?6:.2),interval:id==='M11'?1:0,control:id==='M10'?{rootSeconds:.7}:id==='M11'?{slowFraction:.25,slowSeconds:.5}:null})
  }else if(id==='M17'){
-  for(const sign of [-1,1])zone(run,e,id,{...base,shape:'capsule',x:e.x-d.y*110*sign,y:e.y+d.x*110*sign,toX:e.x+d.x*260-d.y*110*sign,toY:e.y+d.y*260+d.x*110*sign,radius:32,width:64,damage:e.damage*1.5})
+  for(const sign of [-1,1])zone(run,e,id,{...base,shape:'capsule',x:e.x-d.y*110*sign,y:e.y+d.x*110*sign,toX:e.x+d.x*260-d.y*110*sign,toY:e.y+d.y*260+d.x*110*sign,radius:32,width:64,damage:skillDamage(s,e,id)})
  }else if(id==='M18'){
-  zone(run,e,id,{...base,shape:'ring',x:s.player.x,y:s.player.y,radius:110,innerRadius:82,angle:Math.PI*1.5,expiresAt:m.activatesAt+4,damage:e.damage*.3,interval:1})
+  zone(run,e,id,{...base,shape:'ring',x:s.player.x,y:s.player.y,radius:110,innerRadius:82,angle:Math.PI*1.5,expiresAt:m.activatesAt+4,damage:skillDamage(s,e,id),interval:1})
  }else if(['M19','M24'].includes(id)){
   const safeZones=gates(s);m.activatesAt=s.time+Math.max(k.windup,100/Math.max(60,s.player.moveSpeed||150)+.8)
-  zone(run,e,id,{shape:'safe-gates',x:s.player.x,y:s.player.y,radius:2400,safeZones,activatesAt:m.activatesAt,nextAt:m.activatesAt,expiresAt:m.activatesAt+.2,damage:e.damage*3})
+  zone(run,e,id,{shape:'safe-gates',x:s.player.x,y:s.player.y,radius:2400,safeZones,activatesAt:m.activatesAt,nextAt:m.activatesAt,expiresAt:m.activatesAt+.2,damage:skillDamage(s,e,id)})
  }else if(id==='M21'){
   const p=spot(s,s.player,65);if(p)zone(run,e,id,{...p,radius:55,damage:0,expiresAt:m.activatesAt+8})
  }else zone(run,e,id,{radius:Math.min(100,e.radius+40),damage:0,expiresAt:m.activatesAt+.2})
@@ -236,7 +252,13 @@ export function tickMonsterMechanics(run,incoming){
  const s=run.state;if(!state(run))return
  // Expiry is disappearance, never a combat kill or an economy event.
  const expired=s.enemies.filter(e=>e.temporary&&e.temporary.expiresAt<=s.time+EPS)
- for(const a of expired)if(a.temporary.kind==='egg'&&a.hp>0){const owner=s.enemies.find(e=>e.id===a.temporary.ownerId&&e.hp>0);if(owner&&count(s,owner.id,'hatchling')<4)spawnMany(run,owner,'hatchling',2,15)}
+ for(const a of expired)if(a.temporary.kind==='egg'&&a.hp>0){
+  const owner=s.enemies.find(e=>e.id===a.temporary.ownerId&&e.hp>0)
+  if(owner&&count(s,owner.id,'hatchling')<4){
+   const before=count(s,owner.id,'hatchling');spawnMany(run,owner,'hatchling',2,15)
+   if(count(s,owner.id,'hatchling')>before)(s.effects ||= []).push({id:`egg-hatched:${a.id}`,kind:'monster_egg_hatched',ownerId:owner.id,sourceEggId:a.id,x:a.x,y:a.y,radius:a.radius,startedAt:s.time,expiresAt:s.time+1.2})
+  }
+ }
  cleanupActorEffects(s,expired)
  s.enemies=s.enemies.filter(e=>!e.temporary||e.temporary.expiresAt>s.time+EPS)
  for(const e of s.enemies){
@@ -265,9 +287,9 @@ export function tickMonsterMechanics(run,incoming){
    }
    if(m.skillId==='M12'&&m.pulses<3&&s.time+EPS>=m.nextPulseAt){
     // Each new pool keeps its own full warning; the previous pools never move.
-    zone(run,e,'M12',{x:s.player.x,y:s.player.y,radius:48,activatesAt:s.time+1,nextAt:s.time+1,expiresAt:s.time+6,damage:e.damage*.08,interval:1});m.pulses++;m.nextPulseAt=s.time+1
+    zone(run,e,'M12',{x:s.player.x,y:s.player.y,radius:48,activatesAt:s.time+1,nextAt:s.time+1,expiresAt:s.time+6,damage:skillDamage(s,e,'M12'),interval:1});m.pulses++;m.nextPulseAt=s.time+1
    }
-   if(m.skillId==='M14'&&m.pulses<3&&s.time+EPS>=m.nextPulseAt){zone(run,e,'M14',{x:s.player.x,y:s.player.y,radius:55,activatesAt:s.time+1.2,nextAt:s.time+1.2,expiresAt:s.time+1.4,damage:e.damage*.75});m.pulses++;m.nextPulseAt=s.time+1.2;m.until=s.time+1.4}
+   if(m.skillId==='M14'&&m.pulses<3&&s.time+EPS>=m.nextPulseAt){zone(run,e,'M14',{x:s.player.x,y:s.player.y,radius:55,activatesAt:s.time+1.2,nextAt:s.time+1.2,expiresAt:s.time+1.4,damage:skillDamage(s,e,'M14')});m.pulses++;m.nextPulseAt=s.time+1.2;m.until=s.time+1.4}
    if(m.phase==='active'&&s.time+EPS>=m.until)recover(run,e)
   }
   if(m.phase==='recovery'&&s.time+EPS>=m.until){m.cooldowns[m.skillId]=s.time+MONSTER_SKILLS[m.skillId].cooldown;if(m.skillId==='M20')m.cooldowns.M06=s.time+8;m.phase='idle';m.skillId='';m.label='';state(run).nextMajorAt=Math.max(state(run).nextMajorAt,s.time+.5)}
@@ -275,8 +297,13 @@ export function tickMonsterMechanics(run,incoming){
  tickZones(run,incoming)
  if(s.time<state(run).nextMajorAt||s.monsterControl?.rootUntil+1.5>s.time)return
  if(s.enemies.some(e=>e.hp>0&&e.mechanic&&['windup','active','recovery'].includes(e.mechanic.phase)))return
- if(state(run).zones.length||(s.projectiles||[]).some(p=>p.hostile)||(s.zones||[]).some(z=>z.hostile&&!z.renderOnly))return
- for(const e of s.enemies){if(e.hp<=0||!e.mechanic||e.mechanic.phase!=='idle'||e.ai.mode!=='approach'||s.time<e.ai.entryUntil||!run._visible(e))continue
+ if(state(run).zones.length||(s.zones||[]).some(z=>z.hostile&&!z.renderOnly))return
+ const candidates=s.enemies.filter(e=>!(e.hp<=0||!e.mechanic||e.mechanic.phase!=='idle'
+  ||e.ai.mode!=='approach'||s.time<e.ai.entryUntil||!run._visible(e)))
+ // Let already-fired shots finish without replenishing them forever. Return a
+ // tick-local scheduling hint: the last shot may expire later in this same tick.
+ if((s.projectiles||[]).some(p=>p.hostile))return candidates.some(e=>e.mechanic.skills.some(id=>eligible(run,e,id)))
+ for(const e of candidates){
   const skills=[...e.mechanic.skills].sort((a,b)=>(a==='M02'?-1:b==='M02'?1:0))
   for(const id of skills)if(eligible(run,e,id)&&start(run,e,id))return
  }
@@ -296,6 +323,10 @@ export function onMonsterDeaths(run,dead){
   if(e.mechanic){e.mechanic.enraged=false;removeZones(run,e);cleanupActorEffects(s,[e,...s.enemies.filter(a=>a.temporary?.ownerId===e.id)]);s.enemies=s.enemies.filter(a=>a.temporary?.ownerId!==e.id);continue}
   const t=e.temporary;if(!t)continue;cleanupActorEffects(s,[e]);const owner=s.enemies.find(a=>a.id===t.ownerId&&a.hp>0);if(!owner)continue
   const m=owner.mechanic
+  if(t.kind==='crystal'){
+   const id=`crystal-break:${e.id}`
+   if(!(s.effects||[]).some(f=>f.id===id))(s.effects ||= []).push({id,kind:'monster_crystal_break',ownerId:owner.id,sourceCrystalId:e.id,x:e.x,y:e.y,radius:e.radius,startedAt:s.time,expiresAt:s.time+.7})
+  }
   if(t.kind==='lock'){removeZones(run,owner);recover(run,owner)}
   if(t.batch===m.rewardedBatch)continue
   if(t.kind==='core'||t.kind==='crystal'&&!count(s,owner.id,'crystal')||t.kind==='clone'&&!count(s,owner.id,'clone')){
@@ -304,7 +335,7 @@ export function onMonsterDeaths(run,dead){
  }
 }
 const onlyKeys=(o,keys)=>!!o&&typeof o==='object'&&!Array.isArray(o)&&Object.keys(o).every(k=>keys.includes(k))
-const MECHANIC_KEYS='version skills phase skillId label enraged enrageUntil spawnedAt startedAt activatesAt until cooldowns uses vulnerableUntil vulnerability healed healBudget batch rewardedBatch armorUntil armor nextPulseAt pulses chargeX chargeY spawnPoints healRemaining setupUntil chargeStarted'.split(' ')
+const MECHANIC_KEYS='version skills phase skillId label enraged enrageUntil spawnedAt startedAt activatesAt until cooldowns uses vulnerableUntil vulnerableStartedAt vulnerability healed healBudget batch rewardedBatch armorUntil armor nextPulseAt pulses chargeX chargeY spawnPoints healRemaining setupUntil chargeStarted'.split(' ')
 const ZONE_KEYS='id ownerId skillId name shape x y radius width toX toY faceX faceY angle innerRadius safeZones phase startedAt activatesAt expiresAt damage damageType hit nextAt interval control spawnKind sweepHeading sweepDirection'.split(' ')
 export function validateMonsterMechanics(s){
  const mm=s.monsterMechanics;if(!mm)return !s.enemies.some(e=>e.mechanic||e.temporary)
@@ -333,6 +364,7 @@ export function validateMonsterMechanics(s){
    ||JSON.stringify(m.skills)!==JSON.stringify(e.role==='boss'?BOSS_MECHANIC_LOADOUTS[s.floor-1]:[ELITE_SKILLS[e.family]||'M07'])
    ||!['idle','windup','active','recovery'].includes(m.phase)||typeof m.enraged!=='boolean'||typeof m.chargeStarted!=='boolean'||typeof m.label!=='string'||(m.phase==='idle'?m.skillId!=='':!m.skills.includes(m.skillId)&&m.skillId!=='M23')
    ||!['enrageUntil','spawnedAt','startedAt','activatesAt','until','vulnerableUntil','vulnerability','healed','healBudget','batch','rewardedBatch','armorUntil','armor','nextPulseAt','pulses','healRemaining','setupUntil'].every(k=>positive(m[k]))
+   ||m.vulnerableStartedAt!==undefined&&(!positive(m.vulnerableStartedAt)||m.vulnerableStartedAt>s.time+EPS||m.vulnerableStartedAt>m.vulnerableUntil)
    ||!Array.isArray(m.spawnPoints)||m.spawnPoints.some(p=>!finite(p.x)||!finite(p.y)||!positive(p.life)||!['clone','core','crystal','minion','lock','egg'].includes(p.kind))
    ||!finite(m.chargeX)||!finite(m.chargeY)||m.vulnerability>.2||m.armor>.8||m.healed>e.maxHp*.12+EPS||m.healBudget>e.maxHp*.06+EPS||m.rewardedBatch>m.batch
    ||m.enrageUntil>0&&(!m.skills.includes('M02')||m.uses?.M02!==1||m.enrageUntil>s.time+MONSTER_SKILLS.M02.duration+EPS||m.enrageUntil<m.spawnedAt+MONSTER_SKILLS.M02.windup+MONSTER_SKILLS.M02.duration-EPS)
@@ -347,8 +379,9 @@ export function validateMonsterMechanics(s){
    ||!finite(e.hp)||e.hp<=0||e.hp>e.maxHp||!finite(e.x)||!finite(e.y)||!positive(e.radius)||e.radius>100||!e.ai||!['approach','windup','active','recovery'].includes(e.ai.mode)
    ||!['readyAt','graceUntil','until','entryUntil','sequence','offset'].every(k=>finite(e.ai[k]))||!['woundBudget','woundUntil','orbitNextAt'].every(k=>positive(e[k]))
    ||s.arenaVersion===1&&!insideHex(e,e.radius))return false
+   if(e.archetype!==summonedArchetype(o)||e.radius!==towerEnemyRadius(e.archetype))return false
    const ratio=TEMP_RATIOS[t.kind],base=towerEnemyStats(archetypes.get(e.archetype),s.floor,s.wave)
-   const hp=ratio?Math.max(1,o.maxHp*ratio[0]):base.hp*.8,damage=ratio?o.damage*ratio[1]:base.damage*.65
+   const hp=ratio?summonedMonsterHp(o,e,ratio[0]):base.hp*.8,damage=ratio?o.damage*ratio[1]:base.damage*.65
    const speed=t.kind==='clone'?o.moveSpeed:objectives.has(t.kind)?0:base.moveSpeed
    if(e.maxHp!==hp||e.damage!==damage||e.moveSpeed!==speed||e.family!==(archetypes.get(e.archetype).species??e.archetype.split('_')[0])||e.role!=='normal'||e.rank!==archetypes.get(e.archetype).rank)return false
    const life=t.expiresAt-t.spawnedAt,limits={clone:15,core:6,crystal:8,pillar:10,egg:8,lock:4,minion:20,hatchling:15}

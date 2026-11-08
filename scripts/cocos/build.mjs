@@ -1,4 +1,5 @@
 import {stampBuild} from '../release-integrity.mjs'
+import {validateWebEntry} from './validate-web-entry.mjs'
 import {packageWechat} from './package-wechat.mjs'
 import {spawnSync} from 'node:child_process'
 import {copyFileSync,existsSync,mkdirSync,writeFileSync} from 'node:fs'
@@ -17,6 +18,7 @@ if(![0,36].includes(result.status)||!log.includes(`build Task (${platform}) Fini
  console.error(log.slice(-10000));throw result.error||Error(`Creator failed (${result.status}); see ${logDir}`)
 }
 if(platform==='web-mobile')copyFileSync(resolve(root,'cocos-pilot/assets/resources/loading/keyart.jpg'),resolve(root,'cocos-pilot/build/web-mobile/loading-keyart.jpg'))
+if(platform==='web-mobile')validateWebEntry(resolve(root,'cocos-pilot/build/web-mobile'))
 stampBuild(resolve(root,'cocos-pilot/build',platform))
 if(platform==='wechatgame'){const report=packageWechat(resolve(root,'cocos-pilot/build/wechatgame'));writeFileSync(resolve(root,'cocos-pilot/package-report.json'),JSON.stringify(report,null,2)+'\n');console.log('WeChat main package:',(report.mainBytes/1024/1024).toFixed(2)+' MiB')}
 console.log(`Built ${platform}: ${root}/cocos-pilot/build/${platform}; log: ${logDir}/${platform}.log`)

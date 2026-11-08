@@ -6,8 +6,8 @@ import { GROWTH_SKILLS, GROWTH_EVOLUTIONS, skillRequirement, decreaseSkillQuote,
 import { skillPresentation } from '../js/xianxia/TowerSkillPresentation.js'
 import { TowerRun, validateTowerSnapshot } from '../js/xianxia/TowerRun.js'
 import { checksum } from '../js/xianxia/Checksum.js'
-const xpAt = n => 30*(n-1)+15*(n-1)**2
-function fixture(level=27) {
+import {cultivationLevelXp as xpAt} from '../js/xianxia/TowerProfile.js'
+function fixture(level=30) {
  const disk={raw:null,getItem(){return this.raw},setItem(k,v){assert.equal(k,TOWER_CAMPAIGN_KEY);if(this.fail)throw Error('disk full');this.raw=v}}
  const state=structuredClone(new TowerCampaignStore(disk,0).state)
  state.xp=xpAt(level);state.spiritStones=10000
@@ -38,10 +38,11 @@ test('all skills can be learned and fully upgraded with zero cleared floors',()=
   assert.equal(new TowerCampaignStore(disk,0).readOnly,false,row.id)
  }
 })
-test('learning and rank caps are constant within each realm phase',()=>{
- for(const row of [...GROWTH_SKILLS,...GROWTH_EVOLUTIONS]) for(let level=1;level<=25;level+=3){
-  const caps=[0,1,2].map(offset=>rankCap(row.id,xpAt(level+offset),0))
-  assert.equal(new Set(caps).size,1,`${row.id} phase ${level}`)
+test('rank caps change only on an authored learning or rank threshold',()=>{
+ for(const row of [...GROWTH_SKILLS,...GROWTH_EVOLUTIONS]) for(let level=2;level<=30;level++){
+  const before=rankCap(row.id,xpAt(level)-1,0),after=rankCap(row.id,xpAt(level),0)
+  assert.ok(after>=before,row.id)
+  if(after!==before) assert.ok(row.rankRequirements.some(req=>req.characterLevel===level),`${row.id} level ${level}`)
  }
 })
 test('advanced skills retain actual parent rank across casts and partial refunds',()=>{
@@ -67,7 +68,7 @@ test('basic skills can be purchased before teaching and still respect resources 
  const {store}=fixture(2)
  assert.equal(store.act({type:'learnSkill',id:'sj_arc'},0).ok,true)
  assert.equal(skillRequirement(store.state,'sj_line').reason,'stage-locked')
- assert.equal(skillRequirement(store.state,'sj_wanjian').reason,'insufficient-points')
+ assert.equal(skillRequirement(store.state,'sj_wanjian').reason,'stage-locked')
 })
 
 test('paused book purchases debit atomically and remain debited through checkpoints and settlement',()=>{

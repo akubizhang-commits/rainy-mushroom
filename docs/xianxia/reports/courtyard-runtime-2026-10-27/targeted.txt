@@ -1,0 +1,168 @@
+TAP version 13
+# (node:78570) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: courtyard is a single world-aligned image; resize, legacy switch and destroy retain the contract
+ok 1 - courtyard is a single world-aligned image; resize, legacy switch and destroy retain the contract
+  ---
+  duration_ms: 6.337167
+  type: 'test'
+  ...
+# Subtest: missing courtyard keeps a playable ground fallback and visible boundary
+ok 2 - missing courtyard keeps a playable ground fallback and visible boundary
+  ---
+  duration_ms: 1.097666
+  type: 'test'
+  ...
+# Subtest: all pooled gnat bodies remain visible; aura cannot displace a body
+ok 3 - all pooled gnat bodies remain visible; aura cannot displace a body
+  ---
+  duration_ms: 2.610041
+  type: 'test'
+  ...
+# Subtest: all pooled elite_beetle bodies remain visible; aura cannot displace a body
+ok 4 - all pooled elite_beetle bodies remain visible; aura cannot displace a body
+  ---
+  duration_ms: 2.098542
+  type: 'test'
+  ...
+# Subtest: classic loads no new textures and keeps its original five player sprites
+ok 5 - classic loads no new textures and keeps its original five player sprites
+  ---
+  duration_ms: 0.6185
+  type: 'test'
+  ...
+# Subtest: hover image failure retains original player and no retained image reference
+ok 6 - hover image failure retains original player and no retained image reference
+  ---
+  duration_ms: 0.745375
+  type: 'test'
+  ...
+# Subtest: hover json failure retains original player and no retained image reference
+ok 7 - hover json failure retains original player and no retained image reference
+  ---
+  duration_ms: 0.524791
+  type: 'test'
+  ...
+# Subtest: hover invalid failure retains original player and no retained image reference
+ok 8 - hover invalid failure retains original player and no retained image reference
+  ---
+  duration_ms: 0.519875
+  type: 'test'
+  ...
+# Subtest: hover is enabled from level one, uses one anchored sprite, and never requests old atlases
+ok 9 - hover is enabled from level one, uses one anchored sprite, and never requests old atlases
+  ---
+  duration_ms: 1.659666
+  type: 'test'
+  ...
+# Subtest: single hover sprite retains damage tint and original invulnerability alpha
+ok 10 - single hover sprite retains damage tint and original invulnerability alpha
+  ---
+  duration_ms: 0.784458
+  type: 'test'
+  ...
+# Subtest: single crescent stays inside sector, freezes with tick, reduces opacity and clears after decay
+ok 11 - single crescent stays inside sector, freezes with tick, reduces opacity and clears after decay
+  ---
+  duration_ms: 2.982459
+  type: 'test'
+  ...
+# Subtest: courtyard is explicit and xianxia-only; firstRun stays legacy without arena
+ok 12 - courtyard is explicit and xianxia-only; firstRun stays legacy without arena
+  ---
+  duration_ms: 5.126917
+  type: 'test'
+  ...
+# Subtest: player movement is radius-contained at every corner
+ok 13 - player movement is radius-contained at every corner
+  ---
+  duration_ms: 1.218792
+  type: 'test'
+  ...
+# Subtest: routine, event, boss and summon spawns remain safe at all corners
+ok 14 - routine, event, boss and summon spawns remain safe at all corners
+  ---
+  duration_ms: 7.355416
+  type: 'test'
+  ...
+# Subtest: source geometry, radius clamp and camera use distinct world rectangles
+ok 15 - source geometry, radius clamp and camera use distinct world rectangles
+  ---
+  duration_ms: 0.11025
+  type: 'test'
+  ...
+# Subtest: unsafe placements prefer outside the viewport without consuming RNG
+ok 16 - unsafe placements prefer outside the viewport without consuming RNG
+  ---
+  duration_ms: 0.486125
+  type: 'test'
+  ...
+# Subtest: relocation is bounded and keeps the legacy number of RNG draws
+ok 17 - relocation is bounded and keeps the legacy number of RNG draws
+  ---
+  duration_ms: 1.353333
+  type: 'test'
+  ...
+# Subtest: boss skill summons use the safe spawn path
+ok 18 - boss skill summons use the safe spawn path
+  ---
+  duration_ms: 1.513375
+  type: 'test'
+  ...
+# Subtest: arena opt-in leaves spawn RNG sequence unchanged and survivor ignores the option
+ok 19 - arena opt-in leaves spawn RNG sequence unchanged and survivor ignores the option
+  ---
+  duration_ms: 9.214084
+  type: 'test'
+  ...
+# Subtest: safe injected positions are preserved; unsafe injections are relocated
+ok 20 - safe injected positions are preserved; unsafe injections are relocated
+  ---
+  duration_ms: 0.625333
+  type: 'test'
+  ...
+# Subtest: enemy knockback, boss charge and separation are clamped before combat grid queries
+ok 21 - enemy knockback, boss charge and separation are clamped before combat grid queries
+  ---
+  duration_ms: 0.954708
+  type: 'test'
+  ...
+# Subtest: loot and extraction are reachable at every corner and extraction can complete
+ok 22 - loot and extraction are reachable at every corner and extraction can complete
+  ---
+  duration_ms: 3.442084
+  type: 'test'
+  ...
+# Subtest: playtest is opt-in and locks seed, viewport and initial conditions
+ok 23 - playtest is opt-in and locks seed, viewport and initial conditions
+  ---
+  duration_ms: 1.208791
+  type: 'test'
+  ...
+# Subtest: frame batching, accepted choices and pause export replay exactly without changing live run
+ok 24 - frame batching, accepted choices and pause export replay exactly without changing live run
+  ---
+  duration_ms: 189.295417
+  type: 'test'
+  ...
+# Subtest: abandon replay is distinct from combat death
+ok 25 - abandon replay is distinct from combat death
+  ---
+  duration_ms: 2.756958
+  type: 'test'
+  ...
+# Subtest: zero-step input preserves facing before the next neutral frame
+ok 26 - zero-step input preserves facing before the next neutral frame
+  ---
+  duration_ms: 2.802167
+  type: 'test'
+  ...
+1..26
+# tests 26
+# suites 0
+# pass 26
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 279.530834

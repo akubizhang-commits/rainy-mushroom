@@ -11,10 +11,10 @@ export class TowerEggArt {
  private texture:Texture2D|null=null;
  private frame:SpriteFrame|null=null;
  private eggs=new Map<string,Egg>();
- constructor(private parent:Node){}
+ constructor(private parent:Node,private hatched=false){}
  private load(){
   if(this.requested)return;this.requested=true;
-  resources.load('tower-monsters-motion/egg',ImageAsset,(error,image)=>{
+  resources.load(this.hatched?'tower-monsters-motion/egg-hatched':'tower-monsters-motion/egg',ImageAsset,(error,image)=>{
    if(this.dead||error||!image||!isValid(this.parent,true))return;
    image.addRef();this.image=image;
    this.texture=new Texture2D();this.texture.image=image;
@@ -26,13 +26,16 @@ export class TowerEggArt {
  draw(state:any,camera:{x:number;y:number}){
   if(this.dead)return;
   for(const egg of this.eggs.values())egg.seen=false;
-  for(const e of state.enemies||[]){
+  // Preload while the intact egg is visible; a hatch event remains authoritative.
+  if(this.hatched&&(state.enemies||[]).some((e:any)=>e.temporary?.kind==='egg'&&e.hp>0))this.load();
+  const candidates=this.hatched?(state.effects||[]).filter((e:any)=>e.kind==='monster_egg_hatched'&&state.time>=e.startedAt&&state.time<e.expiresAt).map((e:any)=>({...e,hp:1,temporary:{kind:'egg',ownerId:e.ownerId,expiresAt:e.expiresAt}})):state.enemies||[];
+  for(const e of candidates){
    if(e.temporary?.kind!=='egg'||e.hp<=0||state.time>=e.temporary.expiresAt||![e.x,e.y,e.radius].every(Number.isFinite))continue;
    if(!state.enemies.some((owner:any)=>owner.id===e.temporary.ownerId&&owner.hp>0))continue;
    this.load();if(!this.frame)continue;
    let egg=this.eggs.get(e.id);
    if(!egg){
-    const node=new Node(`妖卵-${e.id}`);node.layer=this.parent.layer;this.parent.addChild(node);
+    const node=new Node(`${this.hatched?"孵化残囊":"妖卵"}-${e.id}`);node.layer=this.parent.layer;this.parent.addChild(node);
     const transform=node.addComponent(UITransform);const sprite=node.addComponent(Sprite);
     sprite.sizeMode=Sprite.SizeMode.CUSTOM;sprite.trim=false;sprite.spriteFrame=this.frame;
     egg={node,transform,sprite,seen:true};this.eggs.set(e.id,egg);
@@ -42,7 +45,7 @@ export class TowerEggArt {
    egg.transform.setContentSize(size,size);
    egg.node.setPosition(e.x-camera.x,e.y-camera.y+height/2);
    setTowerDepth(egg.node,e.y);
-   egg.sprite.color=new Color(255,255,255,255);
+   egg.sprite.color=new Color(255,255,255,this.hatched?Math.round(255*Math.min(1,Math.max(0,(e.expiresAt-state.time)/.5))):255);
   }
   for(const [id,egg]of this.eggs)if(!egg.seen){egg.sprite.spriteFrame=null;egg.node.removeFromParent();egg.node.destroy();this.eggs.delete(id);}
  }

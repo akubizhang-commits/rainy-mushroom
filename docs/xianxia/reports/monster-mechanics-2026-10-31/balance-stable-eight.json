@@ -1,0 +1,1547 @@
+{
+  "method": "Fixed legal SP/stage fixtures; books/item acquisition NOT proven natural. Real TowerRun at 60Hz, normal damage and HP, movement-only deterministic bot, landscape viewport; includes failures. elapsed is first observed spawn to death (includes entry travel); engagedSeconds begins when visible within 460px; firstDamageSeconds begins observed HP decrease; playerLevelAtSpawn exposes in-layer progression, total layer time includes all waves. Equipment rolls fixed independently of combat seeds. No human or device-performance verdict.",
+  "hashes": {
+    "Catalog": "b8fddda690cfc9934872edc75e04ef21d88ae161d317479aca69816477d35ab2",
+    "Courtyard": "9c6c2cb7004ccf90793589a155819a6ad88a3068ec56553e509505d37a6dc22d",
+    "EquipmentCombat": "cb9e3973920d560ae73fb2d13f2f3fec0c968787421af673270750acfc0d9443",
+    "EquipmentTest": "7d04ad2deb9b43cef60729456581781bed2a70e95aa95d247f5826fdb8fc0174",
+    "Pills": "3d0df7a683672a0898737d14724e9048815d9c59f1e0ce563716c6ecb6c02e39",
+    "Playtest": "3d655042b6799e67b67569552b461005922fe364d3339b467f233055f9ba92de",
+    "PlaytestBuild": "3074bdb45e1aa029108b8d340db552806c26b304106395ab48acf6d5f9779eee",
+    "Realms": "6e33d7813edc90e2bccb84360abe55d073427472718c4785a3c42a1a748fd7f2",
+    "SwordCardText": "e5fe077d7bde2d8db27de4cbbc9e5efc4d7f03019abc601dd5d403f6e9032026",
+    "SwordCombat": "d2e26a3d3bf08606147c95ce3fcc5fe0c1183b1dc8c7a61519e4c3b0cac510d4",
+    "TowerArena": "f79cc3c9f5eb833abcf3b2b511046dafa579cf78b7f2e758bc3b6cf7259c43b6",
+    "TowerCampaign": "813e4a6c07015fe1471562c0b70f5166c59572c40c17ae7b5fbf621e941c152e",
+    "TowerContent": "6bf486c8fe9249f52ad538acf2d6dffb00e26478b4a9217c8de2f3acac43be02",
+    "TowerCrafting": "9c4019fb6a553769389585dea0fe7c8d964257c78c7e631f5791c9fe978ae1ca",
+    "TowerCultivationRewards": "e92b74acf33191d18591b8b58f38ad41402b0a44b4719dffee4e36bb4dd0ce3b",
+    "TowerEconomy": "228d93e04b51aed1fd8aff7e1c3cab3f8ee9436856e7364bc73cd59faf1a65bd",
+    "TowerEnemyAttacks": "b9c5257d19586b3e3d3fd9071d520a6026756f4c623380ea76a68ed2b0fe5ff6",
+    "TowerEnemyStats": "eea1804ef7d12375c215f2a76714d29ded21381a4646a0f78f70a3f8e09bcf86",
+    "TowerEquipment": "80744232e9baed39a827c04eb3522ee9af69ed146daa29f21463351a35d15224",
+    "TowerEquipmentLore": "c95465637b5bdf32858224428c63b6e0059069ec557ec4b504af72f016c5a158",
+    "TowerEquipmentTiers": "7db44454d15da02c4c3ff87c28a33ad18b861e184ddbb995a21fb4792f7cce36",
+    "TowerGrowth": "470893127f1ce688b6b88b8d189ab05cc3a3bb5b275589856780fd4b5d4e290d",
+    "TowerInventory": "776691951d1d4b9682e19d17e2957b626afd7fc886e093457abdbecb95ddc78c",
+    "TowerLibrary": "8c752234d3369700830eaec61b59a684ae779fe3741a054474b79ce426772997",
+    "TowerLoot": "f2eeb5dca0ee913fc30250ef46e9515fe58f4d1318855431e55408d2d1cd9761",
+    "TowerMonsterMechanics": "84bf27a31fa770b0de6f9012f1fc270c91240b58fd2105a380e956896d67fea6",
+    "TowerObstacles": "81b4f866b43eaf361994442f1722a4e9f9825f588a9f441773b0dd2afdc4a0de",
+    "TowerPlaytest": "dc017bbef2ca61a5a9e7a7e560bcbfbc68ba3a2216f689417760946ec54fc319",
+    "TowerProfile": "0090c5fd1156bfb9fd4b6dd3d7c8d5d50949c8c70e908c2394c58cbcdc13dc6b",
+    "TowerRun": "9430fd5edaa36870eb4531713a7850b62b53792f6cc078228d2ba55079ce6025",
+    "TowerSkillForms": "6ffe399ba1268cc17fcc27014e5175ea3e0b87602181ca7a036885088f9f525b",
+    "TowerSkillPresentation": "af064f748c4e5c995796a7b2ec9e43d7349b0ba597df4db02e7d75ed98e50736",
+    "TowerSkillTiming": "6e285f94721859ea07e3843dedb423610ef7f61b7f4bfed6eab1f67cfd265a08",
+    "TowerSwordQi": "734f77ad1fbbd36348d25c740e38b54b66aaabd9be1787d38b58b6a944fd88a7",
+    "TowerWeapons": "28a41893b470de24963f94ffbc4400f32ec990b94f0db3a90cd26a48839519b2",
+    "TowerYujian": "0db988832253cbaa4aa5d74c20fb02d0a06a9143c91469febf497f796258b68e",
+    "WuwoMotion": "6205a618b1c825fae3d584998c01fa4d2a1cafd90c02a2fe9e1dfec1831dbedb"
+  },
+  "seeds": [
+    101,
+    211
+  ],
+  "fixtures": [
+    {
+      "floor": 8,
+      "route": "qi",
+      "quality": 2,
+      "level": 24,
+      "tier": "ling",
+      "xp": 8625,
+      "skills": {
+        "sj_arc": 9,
+        "sj_yujian": 3,
+        "sj_wanjian": 1,
+        "vajra": 2,
+        "sj_line": 6,
+        "sj_mark": 2
+      },
+      "books": [
+        "sj_line",
+        "sj_mark"
+      ],
+      "bookCost": 300,
+      "points": {
+        "total": 32,
+        "spent": 32,
+        "available": 0,
+        "realm": 27,
+        "firstClear": 4,
+        "research": 0,
+        "cap": 38
+      },
+      "loadout": {
+        "active": {
+          "sj_yujian": 3,
+          "sj_arc": 9,
+          "sj_wanjian": 1,
+          "sj_line": 6
+        },
+        "passive": {
+          "sj_mark": 2,
+          "vajra": 2
+        },
+        "evolutions": [],
+        "skillsInitialized": true,
+        "growthVersion": 1,
+        "evolutionLevels": {},
+        "tutorialWaves": 3,
+        "weaponId": "calibration-weapon",
+        "weaponQuality": 2,
+        "weaponRefine": 0,
+        "weapon": {
+          "id": "calibration-weapon",
+          "definitionId": "eq_sword_tianshu",
+          "tier": "ling",
+          "quality": 2,
+          "refine": 0,
+          "locked": false,
+          "affixes": [
+            {
+              "type": "attack",
+              "value": 7.4
+            },
+            {
+              "type": "skill",
+              "value": 1.9,
+              "target": "sj_wanjian"
+            },
+            {
+              "type": "skill",
+              "value": 2.4,
+              "target": "sj_formation"
+            }
+          ]
+        },
+        "weaponFocusCount": 0,
+        "weaponEquipped": true,
+        "armorId": "calibration-armor",
+        "ringId": "calibration-ring",
+        "armor": {
+          "id": "calibration-armor",
+          "definitionId": "eq_armor_budong",
+          "category": "armor",
+          "tier": "ling",
+          "quality": 2,
+          "refine": 0,
+          "locked": false,
+          "affixes": [
+            {
+              "type": "hpBonus",
+              "value": 5.9
+            },
+            {
+              "type": "reduction",
+              "value": 4
+            },
+            {
+              "type": "healFraction",
+              "value": 0.6
+            }
+          ]
+        },
+        "ring": {
+          "id": "calibration-ring",
+          "definitionId": "eq_ring_taihe",
+          "category": "ring",
+          "tier": "ling",
+          "quality": 2,
+          "refine": 0,
+          "locked": false,
+          "affixes": [
+            {
+              "type": "critChance",
+              "value": 2.6
+            },
+            {
+              "type": "cooldownReduction",
+              "value": 1.3
+            }
+          ]
+        }
+      },
+      "stats": {
+        "maxHp": 971.5437501066672,
+        "attack": 1004.8161946238595,
+        "moveSpeed": 220
+      }
+    },
+    {
+      "floor": 8,
+      "route": "array",
+      "quality": 2,
+      "level": 24,
+      "tier": "ling",
+      "xp": 8625,
+      "skills": {
+        "sj_arc": 1,
+        "sj_yujian": 3,
+        "sj_wanjian": 9,
+        "vajra": 2,
+        "sj_formation": 6,
+        "sj_gate": 2
+      },
+      "books": [
+        "sj_formation",
+        "sj_gate"
+      ],
+      "bookCost": 300,
+      "points": {
+        "total": 32,
+        "spent": 32,
+        "available": 0,
+        "realm": 27,
+        "firstClear": 4,
+        "research": 0,
+        "cap": 38
+      },
+      "loadout": {
+        "active": {
+          "sj_yujian": 3,
+          "sj_arc": 1,
+          "sj_wanjian": 9,
+          "sj_formation": 6
+        },
+        "passive": {
+          "sj_gate": 2,
+          "vajra": 2
+        },
+        "evolutions": [],
+        "skillsInitialized": true,
+        "growthVersion": 1,
+        "evolutionLevels": {},
+        "tutorialWaves": 3,
+        "weaponId": "calibration-weapon",
+        "weaponQuality": 2,
+        "weaponRefine": 0,
+        "weapon": {
+          "id": "calibration-weapon",
+          "definitionId": "eq_sword_tianshu",
+          "tier": "ling",
+          "quality": 2,
+          "refine": 0,
+          "locked": false,
+          "affixes": [
+            {
+              "type": "attack",
+              "value": 7.4
+            },
+            {
+              "type": "skill",
+              "value": 1.9,
+              "target": "sj_wanjian"
+            },
+            {
+              "type": "skill",
+              "value": 2.4,
+              "target": "sj_formation"
+            }
+          ]
+        },
+        "weaponFocusCount": 0,
+        "weaponEquipped": true,
+        "armorId": "calibration-armor",
+        "ringId": "calibration-ring",
+        "armor": {
+          "id": "calibration-armor",
+          "definitionId": "eq_armor_budong",
+          "category": "armor",
+          "tier": "ling",
+          "quality": 2,
+          "refine": 0,
+          "locked": false,
+          "affixes": [
+            {
+              "type": "hpBonus",
+              "value": 5.9
+            },
+            {
+              "type": "reduction",
+              "value": 4
+            },
+            {
+              "type": "healFraction",
+              "value": 0.6
+            }
+          ]
+        },
+        "ring": {
+          "id": "calibration-ring",
+          "definitionId": "eq_ring_taihe",
+          "category": "ring",
+          "tier": "ling",
+          "quality": 2,
+          "refine": 0,
+          "locked": false,
+          "affixes": [
+            {
+              "type": "critChance",
+              "value": 2.6
+            },
+            {
+              "type": "cooldownReduction",
+              "value": 1.3
+            }
+          ]
+        }
+      },
+      "stats": {
+        "maxHp": 971.5437501066672,
+        "attack": 1004.8161946238595,
+        "moveSpeed": 220
+      }
+    },
+    {
+      "floor": 8,
+      "route": "mixed",
+      "quality": 2,
+      "level": 24,
+      "tier": "ling",
+      "xp": 8625,
+      "skills": {
+        "sj_arc": 6,
+        "sj_yujian": 3,
+        "sj_wanjian": 6,
+        "vajra": 2,
+        "sj_formation": 3,
+        "sj_line": 3,
+        "sj_heart": 3
+      },
+      "books": [
+        "sj_formation",
+        "sj_line"
+      ],
+      "bookCost": 400,
+      "points": {
+        "total": 32,
+        "spent": 32,
+        "available": 0,
+        "realm": 27,
+        "firstClear": 4,
+        "research": 0,
+        "cap": 38
+      },
+      "loadout": {
+        "active": {
+          "sj_yujian": 3,
+          "sj_arc": 6,
+          "sj_wanjian": 6,
+          "sj_line": 3,
+          "sj_formation": 3
+        },
+        "passive": {
+          "sj_heart": 3,
+          "vajra": 2
+        },
+        "evolutions": [],
+        "skillsInitialized": true,
+        "growthVersion": 1,
+        "evolutionLevels": {},
+        "tutorialWaves": 3,
+        "weaponId": "calibration-weapon",
+        "weaponQuality": 2,
+        "weaponRefine": 0,
+        "weapon": {
+          "id": "calibration-weapon",
+          "definitionId": "eq_sword_tianshu",
+          "tier": "ling",
+          "quality": 2,
+          "refine": 0,
+          "locked": false,
+          "affixes": [
+            {
+              "type": "attack",
+              "value": 7.4
+            },
+            {
+              "type": "skill",
+              "value": 1.9,
+              "target": "sj_wanjian"
+            },
+            {
+              "type": "skill",
+              "value": 2.4,
+              "target": "sj_formation"
+            }
+          ]
+        },
+        "weaponFocusCount": 0,
+        "weaponEquipped": true,
+        "armorId": "calibration-armor",
+        "ringId": "calibration-ring",
+        "armor": {
+          "id": "calibration-armor",
+          "definitionId": "eq_armor_budong",
+          "category": "armor",
+          "tier": "ling",
+          "quality": 2,
+          "refine": 0,
+          "locked": false,
+          "affixes": [
+            {
+              "type": "hpBonus",
+              "value": 5.9
+            },
+            {
+              "type": "reduction",
+              "value": 4
+            },
+            {
+              "type": "healFraction",
+              "value": 0.6
+            }
+          ]
+        },
+        "ring": {
+          "id": "calibration-ring",
+          "definitionId": "eq_ring_taihe",
+          "category": "ring",
+          "tier": "ling",
+          "quality": 2,
+          "refine": 0,
+          "locked": false,
+          "affixes": [
+            {
+              "type": "critChance",
+              "value": 2.6
+            },
+            {
+              "type": "cooldownReduction",
+              "value": 1.3
+            }
+          ]
+        }
+      },
+      "stats": {
+        "maxHp": 971.5437501066672,
+        "attack": 1004.8161946238595,
+        "moveSpeed": 220
+      }
+    }
+  ],
+  "samples": [
+    {
+      "floor": 8,
+      "route": "qi",
+      "quality": 2,
+      "seed": 101,
+      "hpFraction": 1,
+      "outcome": "won",
+      "time": 694.3,
+      "lastWave": 20,
+      "hp": 473.539,
+      "maxHp": 1133.209,
+      "damage": 3475902,
+      "effectiveDps": 5006.34,
+      "movementDistance": 132568.256,
+      "playerHits": 33,
+      "playerDamage": 2618.129,
+      "bossWaveSeconds": 123.967,
+      "encounters": [
+        {
+          "id": "a1:f8:w5:u25",
+          "archetype": "crocodile_elite",
+          "role": "elite",
+          "wave": 5,
+          "spawnAt": 75.817,
+          "firstAttackableAt": 83.6,
+          "firstDamageAt": 84.05,
+          "playerLevelAtSpawn": 24,
+          "playerXpAtSpawn": 8920,
+          "playerHpAtSpawn": 971.544,
+          "skillsAtSpawn": {
+            "sj_yujian": 3,
+            "sj_arc": 9,
+            "sj_wanjian": 1,
+            "sj_line": 6
+          },
+          "maxHp": 229999.99999999997,
+          "lastHp": 3363.6230249584314,
+          "lastSeen": 180.6,
+          "deadAt": 180.617,
+          "elapsed": 104.8,
+          "engagedSeconds": 97.017,
+          "firstDamageSeconds": 96.567,
+          "success": true
+        },
+        {
+          "id": "a1:f8:w10:u27",
+          "archetype": "scorpion_elite",
+          "role": "elite",
+          "wave": 10,
+          "spawnAt": 257.883,
+          "firstAttackableAt": 257.8833333333333,
+          "firstDamageAt": 267.98333333333335,
+          "playerLevelAtSpawn": 25,
+          "playerXpAtSpawn": 9376,
+          "playerHpAtSpawn": 967.784,
+          "skillsAtSpawn": {
+            "sj_yujian": 3,
+            "sj_arc": 9,
+            "sj_wanjian": 1,
+            "sj_line": 6
+          },
+          "maxHp": 150000,
+          "lastHp": 109.82467921266291,
+          "lastSeen": 291.18333333333334,
+          "deadAt": 291.2,
+          "elapsed": 33.317,
+          "engagedSeconds": 33.317,
+          "firstDamageSeconds": 23.217,
+          "success": true
+        },
+        {
+          "id": "a1:f8:w10:u28",
+          "archetype": "scorpion_elite",
+          "role": "elite",
+          "wave": 10,
+          "spawnAt": 292.4,
+          "firstAttackableAt": 295.6666666666667,
+          "firstDamageAt": 295.48333333333335,
+          "playerLevelAtSpawn": 25,
+          "playerXpAtSpawn": 9458,
+          "playerHpAtSpawn": 900.284,
+          "skillsAtSpawn": {
+            "sj_yujian": 3,
+            "sj_arc": 9,
+            "sj_wanjian": 1,
+            "sj_line": 6
+          },
+          "maxHp": 150000,
+          "lastHp": 1821.2089391447762,
+          "lastSeen": 311.45,
+          "deadAt": 311.467,
+          "elapsed": 19.067,
+          "engagedSeconds": 15.8,
+          "firstDamageSeconds": 15.983,
+          "success": true
+        },
+        {
+          "id": "a1:f8:w15:u29",
+          "archetype": "centipede_elite",
+          "role": "elite",
+          "wave": 15,
+          "spawnAt": 405.65,
+          "firstAttackableAt": 411.05,
+          "firstDamageAt": 412.7,
+          "playerLevelAtSpawn": 25,
+          "playerXpAtSpawn": 9912,
+          "playerHpAtSpawn": 1049.267,
+          "skillsAtSpawn": {
+            "sj_yujian": 3,
+            "sj_arc": 9,
+            "sj_wanjian": 1,
+            "sj_line": 6
+          },
+          "maxHp": 200000,
+          "lastHp": 241.08758701642864,
+          "lastSeen": 441.78333333333336,
+          "deadAt": 441.8,
+          "elapsed": 36.15,
+          "engagedSeconds": 30.75,
+          "firstDamageSeconds": 29.1,
+          "success": true
+        },
+        {
+          "id": "a1:f8:w15:u30",
+          "archetype": "centipede_elite",
+          "role": "elite",
+          "wave": 15,
+          "spawnAt": 443,
+          "firstAttackableAt": 444.9166666666667,
+          "firstDamageAt": 445.0833333333333,
+          "playerLevelAtSpawn": 25,
+          "playerXpAtSpawn": 10025,
+          "playerHpAtSpawn": 1049.267,
+          "skillsAtSpawn": {
+            "sj_yujian": 3,
+            "sj_arc": 9,
+            "sj_wanjian": 1,
+            "sj_line": 6
+          },
+          "maxHp": 200000,
+          "lastHp": 1609.8577745200032,
+          "lastSeen": 484.1333333333333,
+          "deadAt": 484.15,
+          "elapsed": 41.15,
+          "engagedSeconds": 39.233,
+          "firstDamageSeconds": 39.067,
+          "success": true
+        },
+        {
+          "id": "a1:f8:w20:u1",
+          "archetype": "yak_boss",
+          "role": "boss",
+          "wave": 20,
+          "spawnAt": 571.55,
+          "firstAttackableAt": 573.4,
+          "firstDamageAt": 574.4166666666666,
+          "playerLevelAtSpawn": 26,
+          "playerXpAtSpawn": 10514,
+          "playerHpAtSpawn": 1133.209,
+          "skillsAtSpawn": {
+            "sj_yujian": 3,
+            "sj_arc": 9,
+            "sj_wanjian": 1,
+            "sj_line": 6
+          },
+          "maxHp": 954000,
+          "lastHp": 2871.7854683379965,
+          "lastSeen": 694.2833333333333,
+          "deadAt": 694.3,
+          "elapsed": 122.75,
+          "engagedSeconds": 120.9,
+          "firstDamageSeconds": 119.883,
+          "success": true
+        }
+      ]
+    },
+    {
+      "floor": 8,
+      "route": "qi",
+      "quality": 2,
+      "seed": 211,
+      "hpFraction": 1,
+      "outcome": "lost",
+      "time": 154.2,
+      "lastWave": 6,
+      "hp": 0,
+      "maxHp": 971.544,
+      "damage": 605131.685,
+      "effectiveDps": 3924.33,
+      "movementDistance": 31927.467,
+      "playerHits": 13,
+      "playerDamage": 1002.634,
+      "bossWaveSeconds": null,
+      "encounters": [
+        {
+          "id": "a1:f8:w5:u25",
+          "archetype": "crocodile_elite",
+          "role": "elite",
+          "wave": 5,
+          "spawnAt": 88.783,
+          "firstAttackableAt": 94.88333333333334,
+          "firstDamageAt": 96.41666666666667,
+          "playerLevelAtSpawn": 24,
+          "playerXpAtSpawn": 8927,
+          "playerHpAtSpawn": 840.776,
+          "skillsAtSpawn": {
+            "sj_yujian": 3,
+            "sj_arc": 9,
+            "sj_wanjian": 1,
+            "sj_line": 6
+          },
+          "maxHp": 229999.99999999997,
+          "lastHp": 1255.2761814782598,
+          "lastSeen": 138.45,
+          "deadAt": 138.467,
+          "elapsed": 49.683,
+          "engagedSeconds": 43.583,
+          "firstDamageSeconds": 42.05,
+          "success": true
+        }
+      ]
+    },
+    {
+      "floor": 8,
+      "route": "array",
+      "quality": 2,
+      "seed": 101,
+      "hpFraction": 1,
+      "outcome": "lost",
+      "time": 599.067,
+      "lastWave": 20,
+      "hp": 0,
+      "maxHp": 1133.209,
+      "damage": 3414339.2,
+      "effectiveDps": 5699.431,
+      "movementDistance": 127661.062,
+      "playerHits": 31,
+      "playerDamage": 2587.164,
+      "bossWaveSeconds": 122.05,
+      "encounters": [
+        {
+          "id": "a1:f8:w5:u25",
+          "archetype": "crocodile_elite",
+          "role": "elite",
+          "wave": 5,
+          "spawnAt": 68.717,
+          "firstAttackableAt": 75.98333333333333,
+          "firstDamageAt": 77.43333333333334,
+          "playerLevelAtSpawn": 24,
+          "playerXpAtSpawn": 8926,
+          "playerHpAtSpawn": 971.544,
+          "skillsAtSpawn": {
+            "sj_yujian": 3,
+            "sj_arc": 1,
+            "sj_wanjian": 9,
+            "sj_formation": 6
+          },
+          "maxHp": 229999.99999999997,
+          "lastHp": 2967.721272358489,
+          "lastSeen": 107.23333333333333,
+          "deadAt": 107.25,
+          "elapsed": 38.533,
+          "engagedSeconds": 31.267,
+          "firstDamageSeconds": 29.817,
+          "success": true
+        },
+        {
+          "id": "a1:f8:w10:u27",
+          "archetype": "scorpion_elite",
+          "role": "elite",
+          "wave": 10,
+          "spawnAt": 187.483,
+          "firstAttackableAt": 195.48333333333332,
+          "firstDamageAt": 196.76666666666668,
+          "playerLevelAtSpawn": 25,
+          "playerXpAtSpawn": 9374,
+          "playerHpAtSpawn": 1049.267,
+          "skillsAtSpawn": {
+            "sj_yujian": 3,
+            "sj_arc": 1,
+            "sj_wanjian": 9,
+            "sj_formation": 6
+          },
+          "maxHp": 150000,
+          "lastHp": 3283.077880640164,
+          "lastSeen": 217.41666666666666,
+          "deadAt": 217.433,
+          "elapsed": 29.95,
+          "engagedSeconds": 21.95,
+          "firstDamageSeconds": 20.667,
+          "success": true
+        },
+        {
+          "id": "a1:f8:w10:u28",
+          "archetype": "scorpion_elite",
+          "role": "elite",
+          "wave": 10,
+          "spawnAt": 218.633,
+          "firstAttackableAt": 220.75,
+          "firstDamageAt": 223.5,
+          "playerLevelAtSpawn": 25,
+          "playerXpAtSpawn": 9458,
+          "playerHpAtSpawn": 918.499,
+          "skillsAtSpawn": {
+            "sj_yujian": 3,
+            "sj_arc": 1,
+            "sj_wanjian": 9,
+            "sj_formation": 6
+          },
+          "maxHp": 150000,
+          "lastHp": 1731.6968399784826,
+          "lastSeen": 241.61666666666667,
+          "deadAt": 241.633,
+          "elapsed": 23,
+          "engagedSeconds": 20.883,
+          "firstDamageSeconds": 18.133,
+          "success": true
+        },
+        {
+          "id": "a1:f8:w15:u30",
+          "archetype": "centipede_elite",
+          "role": "elite",
+          "wave": 15,
+          "spawnAt": 328.867,
+          "firstAttackableAt": 334.68333333333334,
+          "firstDamageAt": 336.15,
+          "playerLevelAtSpawn": 25,
+          "playerXpAtSpawn": 9909,
+          "playerHpAtSpawn": 852.955,
+          "skillsAtSpawn": {
+            "sj_yujian": 3,
+            "sj_arc": 1,
+            "sj_wanjian": 9,
+            "sj_formation": 6
+          },
+          "maxHp": 200000,
+          "lastHp": 4387.4033436315995,
+          "lastSeen": 361.76666666666665,
+          "deadAt": 361.783,
+          "elapsed": 32.917,
+          "engagedSeconds": 27.1,
+          "firstDamageSeconds": 25.633,
+          "success": true
+        },
+        {
+          "id": "a1:f8:w15:u29",
+          "archetype": "centipede_elite",
+          "role": "elite",
+          "wave": 15,
+          "spawnAt": 362.983,
+          "firstAttackableAt": 364.5,
+          "firstDamageAt": 365.01666666666665,
+          "playerLevelAtSpawn": 25,
+          "playerXpAtSpawn": 10024,
+          "playerHpAtSpawn": 945.699,
+          "skillsAtSpawn": {
+            "sj_yujian": 3,
+            "sj_arc": 1,
+            "sj_wanjian": 9,
+            "sj_formation": 6
+          },
+          "maxHp": 200000,
+          "lastHp": 2741.4054926475947,
+          "lastSeen": 392.8666666666667,
+          "deadAt": 392.883,
+          "elapsed": 29.9,
+          "engagedSeconds": 28.383,
+          "firstDamageSeconds": 27.867,
+          "success": true
+        },
+        {
+          "id": "a1:f8:w20:u1",
+          "archetype": "yak_boss",
+          "role": "boss",
+          "wave": 20,
+          "spawnAt": 478.233,
+          "firstAttackableAt": 480.6,
+          "firstDamageAt": 481.3666666666667,
+          "playerLevelAtSpawn": 26,
+          "playerXpAtSpawn": 10514,
+          "playerHpAtSpawn": 903.971,
+          "skillsAtSpawn": {
+            "sj_yujian": 3,
+            "sj_arc": 1,
+            "sj_wanjian": 9,
+            "sj_formation": 6
+          },
+          "maxHp": 954000,
+          "lastHp": 63954.79969160505,
+          "lastSeen": 599.0666666666667,
+          "deadAt": null,
+          "elapsed": 120.833,
+          "engagedSeconds": 118.467,
+          "firstDamageSeconds": 117.7,
+          "success": false
+        }
+      ]
+    },
+    {
+      "floor": 8,
+      "route": "array",
+      "quality": 2,
+      "seed": 211,
+      "hpFraction": 1,
+      "outcome": "lost",
+      "time": 574.983,
+      "lastWave": 20,
+      "hp": 0,
+      "maxHp": 1133.209,
+      "damage": 3287141.364,
+      "effectiveDps": 5716.933,
+      "movementDistance": 119778.351,
+      "playerHits": 38,
+      "playerDamage": 2848.523,
+      "bossWaveSeconds": 107.35,
+      "encounters": [
+        {
+          "id": "a1:f8:w5:u25",
+          "archetype": "crocodile_elite",
+          "role": "elite",
+          "wave": 5,
+          "spawnAt": 70.133,
+          "firstAttackableAt": 71.6,
+          "firstDamageAt": 74.28333333333333,
+          "playerLevelAtSpawn": 24,
+          "playerXpAtSpawn": 8927,
+          "playerHpAtSpawn": 971.544,
+          "skillsAtSpawn": {
+            "sj_yujian": 3,
+            "sj_arc": 1,
+            "sj_wanjian": 9,
+            "sj_formation": 6
+          },
+          "maxHp": 229999.99999999997,
+          "lastHp": 1949.6318517279851,
+          "lastSeen": 107.15,
+          "deadAt": 107.167,
+          "elapsed": 37.033,
+          "engagedSeconds": 35.567,
+          "firstDamageSeconds": 32.883,
+          "success": true
+        },
+        {
+          "id": "a1:f8:w10:u27",
+          "archetype": "scorpion_elite",
+          "role": "elite",
+          "wave": 10,
+          "spawnAt": 185.2,
+          "firstAttackableAt": 191.23333333333332,
+          "firstDamageAt": 193.81666666666666,
+          "playerLevelAtSpawn": 25,
+          "playerXpAtSpawn": 9374,
+          "playerHpAtSpawn": 1003.735,
+          "skillsAtSpawn": {
+            "sj_yujian": 3,
+            "sj_arc": 1,
+            "sj_wanjian": 9,
+            "sj_formation": 6
+          },
+          "maxHp": 150000,
+          "lastHp": 669.6424389500469,
+          "lastSeen": 215.21666666666667,
+          "deadAt": 215.233,
+          "elapsed": 30.033,
+          "engagedSeconds": 24,
+          "firstDamageSeconds": 21.417,
+          "success": true
+        },
+        {
+          "id": "a1:f8:w10:u28",
+          "archetype": "scorpion_elite",
+          "role": "elite",
+          "wave": 10,
+          "spawnAt": 216.433,
+          "firstAttackableAt": 218.21666666666667,
+          "firstDamageAt": 218.71666666666667,
+          "playerLevelAtSpawn": 25,
+          "playerXpAtSpawn": 9458,
+          "playerHpAtSpawn": 915.766,
+          "skillsAtSpawn": {
+            "sj_yujian": 3,
+            "sj_arc": 1,
+            "sj_wanjian": 9,
+            "sj_formation": 6
+          },
+          "maxHp": 150000,
+          "lastHp": 696.6615338938261,
+          "lastSeen": 238.53333333333333,
+          "deadAt": 238.55,
+          "elapsed": 22.117,
+          "engagedSeconds": 20.333,
+          "firstDamageSeconds": 19.833,
+          "success": true
+        },
+        {
+          "id": "a1:f8:w15:u29",
+          "archetype": "centipede_elite",
+          "role": "elite",
+          "wave": 15,
+          "spawnAt": 326.667,
+          "firstAttackableAt": 331.85,
+          "firstDamageAt": 332.8666666666667,
+          "playerLevelAtSpawn": 25,
+          "playerXpAtSpawn": 9915,
+          "playerHpAtSpawn": 847.548,
+          "skillsAtSpawn": {
+            "sj_yujian": 3,
+            "sj_arc": 1,
+            "sj_wanjian": 9,
+            "sj_formation": 6
+          },
+          "maxHp": 200000,
+          "lastHp": 1331.394726719326,
+          "lastSeen": 356.65,
+          "deadAt": 356.667,
+          "elapsed": 30,
+          "engagedSeconds": 24.817,
+          "firstDamageSeconds": 23.8,
+          "success": true
+        },
+        {
+          "id": "a1:f8:w15:u30",
+          "archetype": "centipede_elite",
+          "role": "elite",
+          "wave": 15,
+          "spawnAt": 357.867,
+          "firstAttackableAt": 360.0833333333333,
+          "firstDamageAt": 360.8666666666667,
+          "playerLevelAtSpawn": 25,
+          "playerXpAtSpawn": 10025,
+          "playerHpAtSpawn": 757.959,
+          "skillsAtSpawn": {
+            "sj_yujian": 3,
+            "sj_arc": 1,
+            "sj_wanjian": 9,
+            "sj_formation": 6
+          },
+          "maxHp": 200000,
+          "lastHp": 855.7378156705752,
+          "lastSeen": 385.9,
+          "deadAt": 385.917,
+          "elapsed": 28.05,
+          "engagedSeconds": 25.833,
+          "firstDamageSeconds": 25.05,
+          "success": true
+        },
+        {
+          "id": "a1:f8:w20:u1",
+          "archetype": "yak_boss",
+          "role": "boss",
+          "wave": 20,
+          "spawnAt": 468.85,
+          "firstAttackableAt": 473.8333333333333,
+          "firstDamageAt": 474.3333333333333,
+          "playerLevelAtSpawn": 26,
+          "playerXpAtSpawn": 10514,
+          "playerHpAtSpawn": 1133.209,
+          "skillsAtSpawn": {
+            "sj_yujian": 3,
+            "sj_arc": 1,
+            "sj_wanjian": 9,
+            "sj_formation": 6
+          },
+          "maxHp": 954000,
+          "lastHp": 191152.63584405376,
+          "lastSeen": 574.9833333333333,
+          "deadAt": null,
+          "elapsed": 106.133,
+          "engagedSeconds": 101.15,
+          "firstDamageSeconds": 100.65,
+          "success": false
+        }
+      ]
+    },
+    {
+      "floor": 8,
+      "route": "mixed",
+      "quality": 2,
+      "seed": 101,
+      "hpFraction": 1,
+      "outcome": "lost",
+      "time": 577.717,
+      "lastWave": 20,
+      "hp": 0,
+      "maxHp": 1133.209,
+      "damage": 3403832.534,
+      "effectiveDps": 5891.872,
+      "movementDistance": 114884.128,
+      "playerHits": 51,
+      "playerDamage": 3537.888,
+      "bossWaveSeconds": 106.467,
+      "encounters": [
+        {
+          "id": "a1:f8:w5:u25",
+          "archetype": "crocodile_elite",
+          "role": "elite",
+          "wave": 5,
+          "spawnAt": 71.267,
+          "firstAttackableAt": 75.48333333333333,
+          "firstDamageAt": 76.85,
+          "playerLevelAtSpawn": 24,
+          "playerXpAtSpawn": 8931,
+          "playerHpAtSpawn": 880.479,
+          "skillsAtSpawn": {
+            "sj_yujian": 3,
+            "sj_arc": 6,
+            "sj_wanjian": 6,
+            "sj_line": 3,
+            "sj_formation": 3
+          },
+          "maxHp": 229999.99999999997,
+          "lastHp": 83.47995987059699,
+          "lastSeen": 113.9,
+          "deadAt": 113.917,
+          "elapsed": 42.65,
+          "engagedSeconds": 38.433,
+          "firstDamageSeconds": 37.067,
+          "success": true
+        },
+        {
+          "id": "a1:f8:w10:u27",
+          "archetype": "scorpion_elite",
+          "role": "elite",
+          "wave": 10,
+          "spawnAt": 192.133,
+          "firstAttackableAt": 199.78333333333333,
+          "firstDamageAt": 200.3,
+          "playerLevelAtSpawn": 25,
+          "playerXpAtSpawn": 9376,
+          "playerHpAtSpawn": 842.192,
+          "skillsAtSpawn": {
+            "sj_yujian": 3,
+            "sj_arc": 6,
+            "sj_wanjian": 6,
+            "sj_line": 3,
+            "sj_formation": 3
+          },
+          "maxHp": 150000,
+          "lastHp": 3541.792700400416,
+          "lastSeen": 214.95,
+          "deadAt": 214.967,
+          "elapsed": 22.833,
+          "engagedSeconds": 15.183,
+          "firstDamageSeconds": 14.667,
+          "success": true
+        },
+        {
+          "id": "a1:f8:w10:u28",
+          "archetype": "scorpion_elite",
+          "role": "elite",
+          "wave": 10,
+          "spawnAt": 216.167,
+          "firstAttackableAt": 217.46666666666667,
+          "firstDamageAt": 217.45,
+          "playerLevelAtSpawn": 25,
+          "playerXpAtSpawn": 9458,
+          "playerHpAtSpawn": 899.643,
+          "skillsAtSpawn": {
+            "sj_yujian": 3,
+            "sj_arc": 6,
+            "sj_wanjian": 6,
+            "sj_line": 3,
+            "sj_formation": 3
+          },
+          "maxHp": 150000,
+          "lastHp": 1627.738337273493,
+          "lastSeen": 232.15,
+          "deadAt": 232.167,
+          "elapsed": 16,
+          "engagedSeconds": 14.7,
+          "firstDamageSeconds": 14.717,
+          "success": true
+        },
+        {
+          "id": "a1:f8:w15:u29",
+          "archetype": "centipede_elite",
+          "role": "elite",
+          "wave": 15,
+          "spawnAt": 320.767,
+          "firstAttackableAt": 326.8333333333333,
+          "firstDamageAt": 327.85,
+          "playerLevelAtSpawn": 25,
+          "playerXpAtSpawn": 9927,
+          "playerHpAtSpawn": 1049.267,
+          "skillsAtSpawn": {
+            "sj_yujian": 3,
+            "sj_arc": 6,
+            "sj_wanjian": 6,
+            "sj_line": 3,
+            "sj_formation": 3
+          },
+          "maxHp": 200000,
+          "lastHp": 686.3760001411238,
+          "lastSeen": 366.8666666666667,
+          "deadAt": 366.883,
+          "elapsed": 46.117,
+          "engagedSeconds": 40.05,
+          "firstDamageSeconds": 39.033,
+          "success": true
+        },
+        {
+          "id": "a1:f8:w15:u30",
+          "archetype": "centipede_elite",
+          "role": "elite",
+          "wave": 15,
+          "spawnAt": 368.083,
+          "firstAttackableAt": 369,
+          "firstDamageAt": 369.98333333333335,
+          "playerLevelAtSpawn": 25,
+          "playerXpAtSpawn": 10025,
+          "playerHpAtSpawn": 560.466,
+          "skillsAtSpawn": {
+            "sj_yujian": 3,
+            "sj_arc": 6,
+            "sj_wanjian": 6,
+            "sj_line": 3,
+            "sj_formation": 3
+          },
+          "maxHp": 200000,
+          "lastHp": 281.65687790068023,
+          "lastSeen": 391.6333333333333,
+          "deadAt": 391.65,
+          "elapsed": 23.567,
+          "engagedSeconds": 22.65,
+          "firstDamageSeconds": 21.667,
+          "success": true
+        },
+        {
+          "id": "a1:f8:w20:u1",
+          "archetype": "yak_boss",
+          "role": "boss",
+          "wave": 20,
+          "spawnAt": 472.467,
+          "firstAttackableAt": 477.4166666666667,
+          "firstDamageAt": 478.1166666666667,
+          "playerLevelAtSpawn": 26,
+          "playerXpAtSpawn": 10514,
+          "playerHpAtSpawn": 1108.079,
+          "skillsAtSpawn": {
+            "sj_yujian": 3,
+            "sj_arc": 6,
+            "sj_wanjian": 6,
+            "sj_line": 3,
+            "sj_formation": 3
+          },
+          "maxHp": 954000,
+          "lastHp": 74461.46618792517,
+          "lastSeen": 577.7166666666667,
+          "deadAt": null,
+          "elapsed": 105.25,
+          "engagedSeconds": 100.3,
+          "firstDamageSeconds": 99.6,
+          "success": false
+        }
+      ]
+    },
+    {
+      "floor": 8,
+      "route": "mixed",
+      "quality": 2,
+      "seed": 211,
+      "hpFraction": 1,
+      "outcome": "won",
+      "time": 543.6,
+      "lastWave": 20,
+      "hp": 40.519,
+      "maxHp": 1133.209,
+      "damage": 3478294,
+      "effectiveDps": 6398.628,
+      "movementDistance": 113537.419,
+      "playerHits": 47,
+      "playerDamage": 3064.344,
+      "bossWaveSeconds": 101.65,
+      "encounters": [
+        {
+          "id": "a1:f8:w5:u25",
+          "archetype": "crocodile_elite",
+          "role": "elite",
+          "wave": 5,
+          "spawnAt": 71.633,
+          "firstAttackableAt": 75.96666666666667,
+          "firstDamageAt": 80.23333333333333,
+          "playerLevelAtSpawn": 24,
+          "playerXpAtSpawn": 8930,
+          "playerHpAtSpawn": 971.544,
+          "skillsAtSpawn": {
+            "sj_yujian": 3,
+            "sj_arc": 6,
+            "sj_wanjian": 6,
+            "sj_line": 3,
+            "sj_formation": 3
+          },
+          "maxHp": 229999.99999999997,
+          "lastHp": 854.5412856782032,
+          "lastSeen": 107.56666666666666,
+          "deadAt": 107.583,
+          "elapsed": 35.95,
+          "engagedSeconds": 31.617,
+          "firstDamageSeconds": 27.35,
+          "success": true
+        },
+        {
+          "id": "a1:f8:w10:u27",
+          "archetype": "scorpion_elite",
+          "role": "elite",
+          "wave": 10,
+          "spawnAt": 183.817,
+          "firstAttackableAt": 186.51666666666668,
+          "firstDamageAt": 187.16666666666666,
+          "playerLevelAtSpawn": 25,
+          "playerXpAtSpawn": 9379,
+          "playerHpAtSpawn": 1049.267,
+          "skillsAtSpawn": {
+            "sj_yujian": 3,
+            "sj_arc": 6,
+            "sj_wanjian": 6,
+            "sj_line": 3,
+            "sj_formation": 3
+          },
+          "maxHp": 150000,
+          "lastHp": 640.8897522641954,
+          "lastSeen": 203.95,
+          "deadAt": 203.967,
+          "elapsed": 20.15,
+          "engagedSeconds": 17.45,
+          "firstDamageSeconds": 16.8,
+          "success": true
+        },
+        {
+          "id": "a1:f8:w10:u28",
+          "archetype": "scorpion_elite",
+          "role": "elite",
+          "wave": 10,
+          "spawnAt": 205.167,
+          "firstAttackableAt": 208.88333333333333,
+          "firstDamageAt": 208.63333333333333,
+          "playerLevelAtSpawn": 25,
+          "playerXpAtSpawn": 9458,
+          "playerHpAtSpawn": 1049.267,
+          "skillsAtSpawn": {
+            "sj_yujian": 3,
+            "sj_arc": 6,
+            "sj_wanjian": 6,
+            "sj_line": 3,
+            "sj_formation": 3
+          },
+          "maxHp": 150000,
+          "lastHp": 906.3356978390146,
+          "lastSeen": 221.56666666666666,
+          "deadAt": 221.583,
+          "elapsed": 16.417,
+          "engagedSeconds": 12.7,
+          "firstDamageSeconds": 12.95,
+          "success": true
+        },
+        {
+          "id": "a1:f8:w15:u30",
+          "archetype": "centipede_elite",
+          "role": "elite",
+          "wave": 15,
+          "spawnAt": 305.333,
+          "firstAttackableAt": 310.25,
+          "firstDamageAt": 310.45,
+          "playerLevelAtSpawn": 25,
+          "playerXpAtSpawn": 9926,
+          "playerHpAtSpawn": 918.499,
+          "skillsAtSpawn": {
+            "sj_yujian": 3,
+            "sj_arc": 6,
+            "sj_wanjian": 6,
+            "sj_line": 3,
+            "sj_formation": 3
+          },
+          "maxHp": 200000,
+          "lastHp": 1632.3241400020345,
+          "lastSeen": 334.4,
+          "deadAt": 334.417,
+          "elapsed": 29.083,
+          "engagedSeconds": 24.167,
+          "firstDamageSeconds": 23.967,
+          "success": true
+        },
+        {
+          "id": "a1:f8:w15:u29",
+          "archetype": "centipede_elite",
+          "role": "elite",
+          "wave": 15,
+          "spawnAt": 335.617,
+          "firstAttackableAt": 336.3833333333333,
+          "firstDamageAt": 336.8666666666667,
+          "playerLevelAtSpawn": 25,
+          "playerXpAtSpawn": 10024,
+          "playerHpAtSpawn": 900.284,
+          "skillsAtSpawn": {
+            "sj_yujian": 3,
+            "sj_arc": 6,
+            "sj_wanjian": 6,
+            "sj_line": 3,
+            "sj_formation": 3
+          },
+          "maxHp": 200000,
+          "lastHp": 7640.720463400894,
+          "lastSeen": 360.6333333333333,
+          "deadAt": 360.65,
+          "elapsed": 25.033,
+          "engagedSeconds": 24.267,
+          "firstDamageSeconds": 23.783,
+          "success": true
+        },
+        {
+          "id": "a1:f8:w20:u1",
+          "archetype": "yak_boss",
+          "role": "boss",
+          "wave": 20,
+          "spawnAt": 443.167,
+          "firstAttackableAt": 445.26666666666665,
+          "firstDamageAt": 446.26666666666665,
+          "playerLevelAtSpawn": 26,
+          "playerXpAtSpawn": 10514,
+          "playerHpAtSpawn": 969.346,
+          "skillsAtSpawn": {
+            "sj_yujian": 3,
+            "sj_arc": 6,
+            "sj_wanjian": 6,
+            "sj_line": 3,
+            "sj_formation": 3
+          },
+          "maxHp": 954000,
+          "lastHp": 843.1517164310195,
+          "lastSeen": 543.5833333333334,
+          "deadAt": 543.6,
+          "elapsed": 100.433,
+          "engagedSeconds": 98.333,
+          "firstDamageSeconds": 97.333,
+          "success": true
+        }
+      ]
+    }
+  ],
+  "summary": [
+    {
+      "floor": 1,
+      "timing": "visible-within-460px engagement when observed, else legacy spawn timing",
+      "n": 0,
+      "wins": 0,
+      "bossN": 0,
+      "bossInTarget": 0,
+      "bossFailures": 0,
+      "bossMin": null,
+      "bossMax": null,
+      "bossMedian": null,
+      "bossP10": null,
+      "bossP90": null,
+      "eliteN": 0,
+      "eliteInTarget": 0,
+      "eliteMin": null,
+      "eliteMax": null,
+      "eliteMedian": null,
+      "layerMedian": null
+    },
+    {
+      "floor": 2,
+      "timing": "visible-within-460px engagement when observed, else legacy spawn timing",
+      "n": 0,
+      "wins": 0,
+      "bossN": 0,
+      "bossInTarget": 0,
+      "bossFailures": 0,
+      "bossMin": null,
+      "bossMax": null,
+      "bossMedian": null,
+      "bossP10": null,
+      "bossP90": null,
+      "eliteN": 0,
+      "eliteInTarget": 0,
+      "eliteMin": null,
+      "eliteMax": null,
+      "eliteMedian": null,
+      "layerMedian": null
+    },
+    {
+      "floor": 3,
+      "timing": "visible-within-460px engagement when observed, else legacy spawn timing",
+      "n": 0,
+      "wins": 0,
+      "bossN": 0,
+      "bossInTarget": 0,
+      "bossFailures": 0,
+      "bossMin": null,
+      "bossMax": null,
+      "bossMedian": null,
+      "bossP10": null,
+      "bossP90": null,
+      "eliteN": 0,
+      "eliteInTarget": 0,
+      "eliteMin": null,
+      "eliteMax": null,
+      "eliteMedian": null,
+      "layerMedian": null
+    },
+    {
+      "floor": 4,
+      "timing": "visible-within-460px engagement when observed, else legacy spawn timing",
+      "n": 0,
+      "wins": 0,
+      "bossN": 0,
+      "bossInTarget": 0,
+      "bossFailures": 0,
+      "bossMin": null,
+      "bossMax": null,
+      "bossMedian": null,
+      "bossP10": null,
+      "bossP90": null,
+      "eliteN": 0,
+      "eliteInTarget": 0,
+      "eliteMin": null,
+      "eliteMax": null,
+      "eliteMedian": null,
+      "layerMedian": null
+    },
+    {
+      "floor": 5,
+      "timing": "visible-within-460px engagement when observed, else legacy spawn timing",
+      "n": 0,
+      "wins": 0,
+      "bossN": 0,
+      "bossInTarget": 0,
+      "bossFailures": 0,
+      "bossMin": null,
+      "bossMax": null,
+      "bossMedian": null,
+      "bossP10": null,
+      "bossP90": null,
+      "eliteN": 0,
+      "eliteInTarget": 0,
+      "eliteMin": null,
+      "eliteMax": null,
+      "eliteMedian": null,
+      "layerMedian": null
+    },
+    {
+      "floor": 6,
+      "timing": "visible-within-460px engagement when observed, else legacy spawn timing",
+      "n": 0,
+      "wins": 0,
+      "bossN": 0,
+      "bossInTarget": 0,
+      "bossFailures": 0,
+      "bossMin": null,
+      "bossMax": null,
+      "bossMedian": null,
+      "bossP10": null,
+      "bossP90": null,
+      "eliteN": 0,
+      "eliteInTarget": 0,
+      "eliteMin": null,
+      "eliteMax": null,
+      "eliteMedian": null,
+      "layerMedian": null
+    },
+    {
+      "floor": 7,
+      "timing": "visible-within-460px engagement when observed, else legacy spawn timing",
+      "n": 0,
+      "wins": 0,
+      "bossN": 0,
+      "bossInTarget": 0,
+      "bossFailures": 0,
+      "bossMin": null,
+      "bossMax": null,
+      "bossMedian": null,
+      "bossP10": null,
+      "bossP90": null,
+      "eliteN": 0,
+      "eliteInTarget": 0,
+      "eliteMin": null,
+      "eliteMax": null,
+      "eliteMedian": null,
+      "layerMedian": null
+    },
+    {
+      "floor": 8,
+      "timing": "visible-within-460px engagement when observed, else legacy spawn timing",
+      "n": 6,
+      "wins": 2,
+      "bossN": 2,
+      "bossInTarget": 1,
+      "bossFailures": 3,
+      "bossMin": 98.333,
+      "bossMax": 120.9,
+      "bossMedian": 109.617,
+      "bossP10": 100.59,
+      "bossP90": 118.643,
+      "eliteN": 26,
+      "eliteInTarget": 18,
+      "eliteMin": 12.7,
+      "eliteMax": 97.017,
+      "eliteMedian": 25.325,
+      "layerMedian": 576.35
+    },
+    {
+      "floor": 9,
+      "timing": "visible-within-460px engagement when observed, else legacy spawn timing",
+      "n": 0,
+      "wins": 0,
+      "bossN": 0,
+      "bossInTarget": 0,
+      "bossFailures": 0,
+      "bossMin": null,
+      "bossMax": null,
+      "bossMedian": null,
+      "bossP10": null,
+      "bossP90": null,
+      "eliteN": 0,
+      "eliteInTarget": 0,
+      "eliteMin": null,
+      "eliteMax": null,
+      "eliteMedian": null,
+      "layerMedian": null
+    }
+  ]
+}

@@ -1,5 +1,5 @@
 // Fixed-fixture calibration, not a natural-progression or human playability claim.
-// Runtime changes are forbidden here: movement/viewport are the only combat inputs.
+// Runtime changes are forbidden here: movement/viewport and normal resume are the only inputs.
 import assert from 'node:assert/strict'
 import { mkdirSync, writeFileSync, readFileSync, readdirSync, existsSync } from 'node:fs'
 import { createHash } from 'node:crypto'
@@ -256,8 +256,11 @@ export function playFixture(f,{seed=101,maxSeconds=1200,hpFraction=1}={}){
  const run=new TowerRun({attemptId:1,floor:f.floor,seed,hp:f.stats.maxHp*hpFraction,xp:f.xp,loadout:f.loadout,arenaVersion:1})
  assert.equal(run._playtestAssist,false)
  const playerHitEvents=[]
- const records=new Map();let seen=new Set(),damage=0,distance=0,hits=0,playerDamage=0,bossWaveAt=null
- while(run.state.phase==='playing'&&run.state.time<maxSeconds){
+ const records=new Map(),damageByFamily={};let seen=new Set(),damage=0,distance=0,hits=0,playerDamage=0,bossWaveAt=null,resumedNodes=0
+ while(['playing','paused'].includes(run.state.phase)&&run.state.time<maxSeconds){
+  // Fixed loadout policy: defer breakthrough and resume through the public API.
+  // A safe-node pause is not a completed encounter or a loss.
+  if(run.state.phase==='paused'){run.resume();resumedNodes++}
   const s=run.state,p=s.player
   // Landscape 16:9, no artificial off-screen full-arena targeting.
   run.setViewport({xmin:p.x-560,xmax:p.x+560,ymin:p.y-315,ymax:p.y+315})
@@ -266,10 +269,20 @@ export function playFixture(f,{seed=101,maxSeconds=1200,hpFraction=1}={}){
   for(const e of s.enemies)if(!records.has(e.id))records.set(e.id,{id:e.id,archetype:e.archetype,role:e.temporary?'temporary':A[e.archetype]?.role||'temporary',wave:s.wave,spawnAt:s.time,firstAttackableAt:null,firstDamageAt:null,playerLevelAtSpawn:cultivationAt(p.xp).level,playerXpAtSpawn:p.xp,playerHpAtSpawn:round(p.hp),skillsAtSpawn:structuredClone(s.loadout.active),maxHp:e.maxHp,lastHp:e.hp,lastSeen:s.time})
   for(const e of s.enemies){const r=records.get(e.id);if(Math.abs(e.x-p.x)<=560+e.radius&&Math.abs(e.y-p.y)<=315+e.radius&&Math.hypot(e.x-p.x,e.y-p.y)<=460+e.radius)r.firstAttackableAt??=s.time;if(e.hp<r.lastHp)r.firstDamageAt??=s.time;r.lastHp=e.hp;r.lastSeen=s.time}
   for(const k of s.killLedger){const r=records.get(k.id);if(r&&!r.deadAt)r.deadAt=s.time}
+  for(const fx of s.effects){
+   if(fx.kind!=='hit'||seen.has(fx.id))continue
+   const target=records.get(fx.targetId),archetype=A[target?.archetype]
+   if(!target||!archetype||target.role==='temporary')continue
+   const family=archetype.species
+   const tally=damageByFamily[family]??={physical:0,magic:0,total:0}
+   tally.physical+=fx.damageParts?.physical??0
+   tally.magic+=fx.damageParts?.magic??0
+   tally.total+=fx.damage??0
+  }
   const next=new Set();for(const fx of s.effects){next.add(fx.id);if(seen.has(fx.id))continue;if(fx.kind==='hit')damage+=fx.damage||0;if(fx.kind==='player_hit'){hits++;playerDamage+=fx.damage||0;playerHitEvents.push({time:round(s.time),wave:s.wave,damage:round(fx.damage||0),hp:round(p.hp),position:{x:round(p.x),y:round(p.y)},source:fx.source??null,attackId:fx.attackId??null,attribution:fx.source?'runtime-effect':'unknown; nearby actors are context only',nearbyActors:s.enemies.filter(e=>e.hp>0&&Math.hypot(e.x-p.x,e.y-p.y)<400).map(e=>({id:e.id,archetype:e.archetype,distance:round(Math.hypot(e.x-p.x,e.y-p.y)),attackMode:e.ai?.mode??null,attack:e.ai?.attack?structuredClone(e.ai.attack):null})),hostileZones:[...s.zones.filter(z=>z.hostile),...(s.monsterMechanics?.zones||[])].filter(z=>zoneDanger(z,p)).map(z=>({id:z.id,skillId:z.skillId,shape:z.shape}))})}}seen=next
  }
  const s=run.state,encounters=[...records.values()].filter(e=>e.role==='elite'||e.role==='boss').map(e=>({...e,spawnAt:round(e.spawnAt),deadAt:e.deadAt?round(e.deadAt):null,elapsed:round((e.deadAt||s.time)-e.spawnAt),engagedSeconds:e.firstAttackableAt===null?null:round((e.deadAt||s.time)-e.firstAttackableAt),firstDamageSeconds:e.firstDamageAt===null?null:round((e.deadAt||s.time)-e.firstDamageAt),success:!!e.deadAt}))
- return {floor:f.floor,route:f.route,quality:f.quality,mode:f.mode,entryLevel:f.level,entryXp:f.xp,entrySkills:f.skills,playerHitEvents,seed,hpFraction,outcome:s.phase==='playing'?'timeout':s.phase,time:round(s.time),lastWave:s.wave,hp:round(s.player.hp),maxHp:round(s.player.maxHp),damage:round(damage),effectiveDps:round(damage/Math.max(1,s.time)),movementDistance:round(distance),playerHits:hits,playerDamage:round(playerDamage),bossWaveSeconds:bossWaveAt?round(s.time-bossWaveAt):null,encounters}
+ return {floor:f.floor,route:f.route,quality:f.quality,mode:f.mode,entryLevel:f.level,entryXp:f.xp,entrySkills:f.skills,playerHitEvents,seed,hpFraction,outcome:['playing','paused'].includes(s.phase)?'timeout':s.phase,time:round(s.time),lastWave:s.wave,hp:round(s.player.hp),maxHp:round(s.player.maxHp),damage:round(damage),effectiveDps:round(damage/Math.max(1,s.time)),movementDistance:round(distance),playerHits:hits,playerDamage:round(playerDamage),bossWaveSeconds:bossWaveAt?round(s.time-bossWaveAt):null,resumedNodes,damageByFamily,encounters}
 }
 const percentile=(arr,p)=>{if(!arr.length)return null;const a=[...arr].sort((x,y)=>x-y),i=(a.length-1)*p,lo=Math.floor(i),hi=Math.ceil(i);return round(a[lo]+(a[hi]-a[lo])*(i-lo))}
 export function summarize(samples){return FLOORS.map(f=>{const rows=samples.filter(s=>s.floor===f.floor),boss=rows.flatMap(s=>s.encounters.filter(e=>e.role==='boss'&&e.success).map(e=>e.engagedSeconds??e.elapsed)),elite=rows.flatMap(s=>s.encounters.filter(e=>e.role==='elite'&&e.success).map(e=>e.engagedSeconds??e.elapsed));return {floor:f.floor,timing:'visible-within-460px engagement when observed, else legacy spawn timing',n:rows.length,wins:rows.filter(s=>s.outcome==='won').length,bossN:boss.length,bossInTarget:boss.filter(t=>t>=100&&t<=140).length,bossFailures:rows.flatMap(s=>s.encounters).filter(e=>e.role==='boss'&&!e.success).length,bossMin:percentile(boss,0),bossMax:percentile(boss,1),bossMedian:percentile(boss,.5),bossP10:percentile(boss,.1),bossP90:percentile(boss,.9),eliteN:elite.length,eliteInTarget:elite.filter(t=>t>=20&&t<=40).length,eliteMin:percentile(elite,0),eliteMax:percentile(elite,1),eliteMedian:percentile(elite,.5),layerMedian:percentile(rows.map(s=>s.time),.5)}})}

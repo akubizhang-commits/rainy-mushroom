@@ -1,0 +1,348 @@
+{
+  "environment": {
+    "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36",
+    "note": "Automated interruption fixture; spawns suppressed, progression injected. Not human play or a mobile-device test."
+  },
+  "checks": [
+    {
+      "name": "keyboard moves player",
+      "pass": true,
+      "data": {
+        "first": {
+          "tick": 3,
+          "state": "playing",
+          "x": 0,
+          "y": 0,
+          "hp": 100,
+          "input": {
+            "x": 0,
+            "y": 0
+          },
+          "enabled": true,
+          "modal": null,
+          "pending": 0,
+          "applied": 1
+        },
+        "moving": {
+          "tick": 14,
+          "state": "playing",
+          "x": 30.800000000000004,
+          "y": 0,
+          "hp": 100,
+          "input": {
+            "x": 1,
+            "y": 0
+          },
+          "enabled": true,
+          "modal": null,
+          "pending": 0,
+          "applied": 1
+        }
+      }
+    },
+    {
+      "name": "blur pauses and clears input",
+      "pass": true,
+      "data": {
+        "paused": {
+          "tick": 14,
+          "state": "paused",
+          "x": 30.800000000000004,
+          "y": 0,
+          "hp": 100,
+          "input": {
+            "x": 0,
+            "y": 0
+          },
+          "enabled": false,
+          "modal": "pause",
+          "pending": 0,
+          "applied": 1
+        }
+      }
+    },
+    {
+      "name": "background ticks and HP freeze",
+      "pass": true,
+      "data": {
+        "paused": {
+          "tick": 14,
+          "state": "paused",
+          "x": 30.800000000000004,
+          "y": 0,
+          "hp": 100,
+          "input": {
+            "x": 0,
+            "y": 0
+          },
+          "enabled": false,
+          "modal": "pause",
+          "pending": 0,
+          "applied": 1
+        },
+        "frozen": {
+          "tick": 14,
+          "state": "paused",
+          "x": 30.800000000000004,
+          "y": 0,
+          "hp": 100,
+          "input": {
+            "x": 0,
+            "y": 0
+          },
+          "enabled": false,
+          "modal": "pause",
+          "pending": 0,
+          "applied": 1
+        }
+      }
+    },
+    {
+      "name": "focus requires explicit resume",
+      "pass": true
+    },
+    {
+      "name": "resume has no stale movement",
+      "pass": true,
+      "data": {
+        "resumed": {
+          "tick": 25,
+          "state": "playing",
+          "x": 30.800000000000004,
+          "y": 0,
+          "hp": 100,
+          "input": {
+            "x": 0,
+            "y": 0
+          },
+          "enabled": true,
+          "modal": null,
+          "pending": 0,
+          "applied": 1
+        },
+        "paused": {
+          "tick": 14,
+          "state": "paused",
+          "x": 30.800000000000004,
+          "y": 0,
+          "hp": 100,
+          "input": {
+            "x": 0,
+            "y": 0
+          },
+          "enabled": false,
+          "modal": "pause",
+          "pending": 0,
+          "applied": 1
+        }
+      }
+    },
+    {
+      "name": "touch drag produces movement",
+      "pass": true,
+      "data": {
+        "touch": {
+          "tick": 36,
+          "state": "playing",
+          "x": 58.799999999999976,
+          "y": 0,
+          "hp": 100,
+          "input": {
+            "x": 1,
+            "y": 0
+          },
+          "enabled": true,
+          "modal": null,
+          "pending": 0,
+          "applied": 1
+        }
+      }
+    },
+    {
+      "name": "touch cancel stops movement",
+      "pass": true,
+      "data": {
+        "cancelled": {
+          "tick": 36,
+          "state": "playing",
+          "x": 58.799999999999976,
+          "y": 0,
+          "hp": 100,
+          "input": {
+            "x": 0,
+            "y": 0
+          },
+          "enabled": true,
+          "modal": null,
+          "pending": 0,
+          "applied": 1
+        },
+        "afterCancel": {
+          "tick": 45,
+          "state": "playing",
+          "x": 58.799999999999976,
+          "y": 0,
+          "hp": 100,
+          "input": {
+            "x": 0,
+            "y": 0
+          },
+          "enabled": true,
+          "modal": null,
+          "pending": 0,
+          "applied": 1
+        }
+      }
+    },
+    {
+      "name": "drag active before resize",
+      "pass": true,
+      "data": {
+        "beforeResize": {
+          "tick": 46,
+          "state": "playing",
+          "x": 58.799999999999976,
+          "y": 0,
+          "hp": 100,
+          "input": {
+            "x": 1,
+            "y": 0
+          },
+          "enabled": true,
+          "modal": null,
+          "pending": 0,
+          "applied": 1
+        }
+      }
+    },
+    {
+      "name": "resize clears drag",
+      "pass": true,
+      "data": {
+        "resized": {
+          "tick": 64,
+          "state": "playing",
+          "x": 58.799999999999976,
+          "y": 0,
+          "hp": 100,
+          "input": {
+            "x": 0,
+            "y": 0
+          },
+          "enabled": true,
+          "modal": null,
+          "pending": 0,
+          "applied": 1
+        }
+      }
+    },
+    {
+      "name": "offer survives interruption unchanged",
+      "pass": true,
+      "data": {
+        "offered": {
+          "tick": 65,
+          "state": "levelup",
+          "x": 58.799999999999976,
+          "y": 0,
+          "hp": 100,
+          "input": {
+            "x": 0,
+            "y": 0
+          },
+          "enabled": false,
+          "modal": "cultivation-cards",
+          "offer": 1,
+          "pending": 2,
+          "applied": 1,
+          "cards": "[{\"kind\":\"passive\",\"id\":\"sj_heart\",\"level\":1,\"isNew\":true,\"evolution\":false},{\"kind\":\"passive\",\"id\":\"sj_bone\",\"level\":1,\"isNew\":true,\"evolution\":false},{\"kind\":\"passive\",\"id\":\"sj_mark\",\"level\":1,\"isNew\":true,\"evolution\":false}]"
+        },
+        "restored": {
+          "tick": 65,
+          "state": "levelup",
+          "x": 58.799999999999976,
+          "y": 0,
+          "hp": 100,
+          "input": {
+            "x": 0,
+            "y": 0
+          },
+          "enabled": false,
+          "modal": "cultivation-cards",
+          "offer": 1,
+          "pending": 2,
+          "applied": 1,
+          "cards": "[{\"kind\":\"passive\",\"id\":\"sj_heart\",\"level\":1,\"isNew\":true,\"evolution\":false},{\"kind\":\"passive\",\"id\":\"sj_bone\",\"level\":1,\"isNew\":true,\"evolution\":false},{\"kind\":\"passive\",\"id\":\"sj_mark\",\"level\":1,\"isNew\":true,\"evolution\":false}]"
+        }
+      }
+    },
+    {
+      "name": "resume restores choice input lock",
+      "pass": true,
+      "data": {
+        "early": {
+          "tick": 65,
+          "state": "levelup",
+          "x": 58.799999999999976,
+          "y": 0,
+          "hp": 100,
+          "input": {
+            "x": 0,
+            "y": 0
+          },
+          "enabled": false,
+          "modal": "cultivation-cards",
+          "offer": 1,
+          "pending": 2,
+          "applied": 1
+        }
+      }
+    },
+    {
+      "name": "queued selection commits only once",
+      "pass": true,
+      "data": {
+        "once": {
+          "tick": 65,
+          "state": "levelup",
+          "x": 58.799999999999976,
+          "y": 0,
+          "hp": 103,
+          "input": {
+            "x": 0,
+            "y": 0
+          },
+          "enabled": false,
+          "modal": "cultivation-cards",
+          "offer": 2,
+          "pending": 1,
+          "applied": 2
+        },
+        "twice": {
+          "tick": 65,
+          "state": "levelup",
+          "x": 58.799999999999976,
+          "y": 0,
+          "hp": 103,
+          "input": {
+            "x": 0,
+            "y": 0
+          },
+          "enabled": false,
+          "modal": "cultivation-cards",
+          "offer": 2,
+          "pending": 1,
+          "applied": 2
+        }
+      }
+    },
+    {
+      "name": "no page errors",
+      "pass": true,
+      "data": {
+        "errors": []
+      }
+    }
+  ],
+  "errors": []
+}

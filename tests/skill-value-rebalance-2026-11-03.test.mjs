@@ -15,41 +15,41 @@ function probe(rank=0, extra={}) {
  r._random=()=>1
  return r
 }
-test('scar keeps the approved conversion tradeoff at every rank',()=>{
- for(let rank=1;rank<=4;rank++){
-  const r=probe(rank),e=r.state.enemies[0]
-  r._damageEnemy({target:e.id,source:'sj_arc',direct:true,damage:100})
-  near(1e7-e.hp,50)
-  near(e.woundBudget,[60,65,70,75][rank-1])
-  for(let n=1;n<=6;n++){r.state.time=n*.5;for(const h of tickQingping(r))r._damageEnemy(h)}
-  near(1e7-e.hp,[110,115,120,125][rank-1])
-  assert.equal(e.qingpingDot,undefined)
- }
+test('one scar rank adds no DOT, but boosts the next direct hit',()=>{
+ const r=probe(1),e=r.state.enemies[0]
+ r._damageEnemy({target:e.id,source:'sj_arc',direct:true,damage:100})
+ near(1e7-e.hp,100)
+ for(let n=1;n<=5;n++){r.state.time=n*.5;assert.deepEqual(tickQingping(r),[])}
+ near(1e7-e.hp,100)
+ r._damageEnemy({target:e.id,source:'sj_arc',direct:true,damage:100})
+ near(1e7-e.hp,220)
 })
 test('formation and derived explosions retain their damage without triggering conversion',()=>{
  for(const source of ['formation','orbit','sword_rain','sword_burst']){
-  const r=probe(4),e=r.state.enemies[0]
+  const r=probe(1),e=r.state.enemies[0]
   r._damageEnemy({target:e.id,source,direct:false,damage:100})
-  near(1e7-e.hp,100);assert.equal(e.qingpingDot,undefined)
+  const expected=source==='sword_rain'?100:50+50*r.state.player.magicAttack/r.state.player.attack
+  near(1e7-e.hp,expected);assert.equal(e.scarDebuff,undefined)
  }
 })
-test('shadow early ranks gain damage without changing the trained endpoint or per-rank cost',()=>{
+test('shadow cadence compensation preserves its authored growth and per-rank cost',()=>{
  const d=GROWTH_SKILLS.find(s=>s.id==='sj_shadow')
- near(d.damage[0]/d.cooldown,1.6)
- near(d.damage[9],2.64*1.2**9)
+ assert.equal(d.cooldown,6)
+ near(d.damage[0],6.4)
+ near(d.damage[9],2.64*1.2**9*20/11)
  for(let i=1;i<10;i++)assert.ok(d.damage[i]>d.damage[i-1])
- assert.deepEqual(d.pointCosts,Array(10).fill(2))
+ assert.deepEqual(d.pointCosts,Array(10).fill(1))
 })
-test('burst retains its single pulse at half the investment and cannot recursively trigger itself',()=>{
- const r=probe(0,{sj_gate:4}),e=r.state.enemies[0]
- assert.deepEqual(GROWTH_SKILLS.find(s=>s.id==='sj_gate').pointCosts,[1,1,1,1])
- r._damageEnemy({target:e.id,source:'sj_arc',direct:true,damage:1})
+test('two-rank burst settles its center once and cannot recursively trigger itself',()=>{
+ const r=probe(0,{sj_gate:2}),e=r.state.enemies[0]
+ assert.deepEqual(GROWTH_SKILLS.find(s=>s.id==='sj_gate').pointCosts,[1,1])
+ r._damageEnemy({target:e.id,source:'sj_line',direct:true,damage:1})
  near(r.state.swordBursts[0].damage,r.state.player.attack*1.2)
  assert.equal(r.state.swordBursts.length,1)
  const before=e.hp;r.state.time=.42;tickSwordBursts(r)
  assert.ok(e.hp<before);assert.equal(r.state.swordBursts.length,0)
- r._damageEnemy({target:e.id,source:'sj_arc',direct:true,damage:1})
+ r._damageEnemy({target:e.id,source:'sj_line',direct:true,damage:1})
  assert.equal(r.state.swordBursts.length,0)
- r.state.time=4;r._damageEnemy({target:e.id,source:'sj_arc',direct:true,damage:1})
+ r.state.time=10;r._damageEnemy({target:e.id,source:'sj_line',direct:true,damage:1})
  assert.equal(r.state.swordBursts.length,1)
 })

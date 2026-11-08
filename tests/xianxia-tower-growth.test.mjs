@@ -5,12 +5,13 @@ import {
   giftSkills, realmPoints, totalPoints, spentPoints, growthSummary,
   skillRequirement, rankCap,
 } from '../js/xianxia/TowerGrowth.js'
+import {cultivationLevelXp, cultivationAt} from '../js/xianxia/TowerProfile.js'
 import { SKILLS, EVOLUTIONS } from '../js/xianxia/TowerContent.js'
 
 const skill = id => GROWTH_SKILLS.find(row => row.id === id)
 const evolution = id => GROWTH_EVOLUTIONS.find(row => row.id === id)
 const state = (extra = {}) => ({
-  xp: 10920, clearedFloor: 9, researchPurchases: 3, tutorialWaves: 3,
+  xp: 14400, clearedFloor: 9, researchPurchases: 0, tutorialWaves: 3,
   skills: giftSkills(3), evolutionRanks: {}, books: [], ...extra,
 })
 const close = (actual, expected, label) =>
@@ -27,19 +28,19 @@ test('explicit playtest bonus extends available SP without changing natural sour
   assert.equal(totalPoints(boosted), after.total)
   assert.equal(after.spent, before.spent)
   for (const key of ['realm', 'firstClear', 'research', 'cap']) assert.equal(after[key], before[key])
-  assert.equal(after.cap, 80, 'natural point cap is unchanged')
+  assert.equal(after.cap, 35, 'natural point cap is unchanged')
   assert.equal(quote(state({ xp: 0, skills: { sj_yujian: 3 }, playtestSkillPoints: 999 }), 'sj_yujian').reason, 'stage-locked')
-  assert.equal(totalPoints({ ...state(), playtestSkillPoints: 10000 }), 10080)
+  assert.equal(totalPoints({ ...state(), playtestSkillPoints: 10000 }), 10035)
   for (const value of [-1, .5, '999', null, undefined, Infinity, NaN, 10001, Number.MAX_SAFE_INTEGER]) {
     assert.throws(() => growthSummary({ ...ordinary, playtestSkillPoints: value }), RangeError)
   }
 })
 
 test('growth rows retain level-addressable effects without changing the legacy five-level catalog', () => {
-  assert.deepEqual(GROWTH_SKILLS.filter(row => !['sj_flight', 'sj_cross', 'sj_spirit'].includes(row.id)).map(row => row.id), SKILLS.filter(row => row.id !== 'magnet').map(row => row.id))
+  assert.deepEqual(GROWTH_SKILLS.filter(row => !['sj_flight', 'sj_cross', 'sj_spirit','sj_moon','sj_moon_triple','sj_sancai'].includes(row.id)).map(row => row.id), SKILLS.filter(row => row.id !== 'magnet').map(row => row.id))
   assert.deepEqual(GROWTH_EVOLUTIONS.map(row => row.id), EVOLUTIONS.map(row => row.id))
-  for (const row of GROWTH_SKILLS.filter(row => !['sj_flight', 'sj_cross', 'sj_spirit'].includes(row.id))) {
-    const max = row.kind === 'active' ? 10 : 4
+  for (const row of GROWTH_SKILLS.filter(row => !['sj_flight', 'sj_cross', 'sj_spirit','sj_moon','sj_moon_triple','sj_sancai'].includes(row.id))) {
+    const max = row.kind === 'active' ? 10 : row.id === 'sj_mark' ? 1 : row.id === 'sj_gate' ? 2 : 4
     assert.equal(row.maxLevel, max)
     assert.equal(row.pointCosts.length, max)
     assert.equal(row.levels.length, max)
@@ -63,40 +64,27 @@ test('growth rows retain level-addressable effects without changing the legacy f
   }
 })
 
-test('realm rewards include the approved breakthrough books without repeat grants', () => {
-  const checkpoints = [
-    [0,0],[45,1],[120,2],[225,3],[360,4],[525,5],[720,6],[945,7],[1200,8],
-    [1485,17],[1800,18],[2145,19],[2520,20],[2925,21],[3360,22],[3825,23],
-    [4320,24],[4845,25],[5400,40],[5985,41],[6600,42],[7245,43],[7920,44],
-    [8625,45],[9360,46],[10125,47],[10920,48],
-  ]
-  for (let i = 0; i < checkpoints.length; i++) {
-    const [xp, points] = checkpoints[i]
-    assert.equal(realmPoints(xp), points)
-    assert.equal(realmPoints(xp), points, 're-reading a source does not re-award it')
-    if (i) assert.equal(realmPoints(xp - 1), checkpoints[i - 1][1])
-  }
+const levelPoints=level=>(level-1)+(level>=11?3:0)+(level>=21?3:0)
+test('each level awards one point and Zhuji/Jindan breakthroughs add three', () => {
+ for(let level=1;level<=30;level++){
+  const xp=cultivationLevelXp(level)
+  assert.equal(realmPoints(xp),levelPoints(level))
+  assert.equal(realmPoints(xp),levelPoints(level),'re-reading does not award again')
+  if(level>1)assert.equal(realmPoints(xp-1),levelPoints(level-1))
+ }
 })
 
-test('nine first clears and three gated research purchases extend the 48 realm points', () => {
-  for (const [clearedFloor, firstClear] of [[0, 0], [2, 2], [3, 4], [5, 8], [6, 11], [8, 17], [9, 20]]) {
-    const s = state({ clearedFloor, researchPurchases: 0 })
-    assert.equal(growthSummary(s).firstClear, firstClear)
-    assert.equal(totalPoints(s), 48 + firstClear)
-    assert.equal(totalPoints({ ...s, kills: 100000, repeatedClears: 10000, time: 1e12 }), 48 + firstClear)
-  }
-  assert.deepEqual(GROWTH_RESEARCH, [
-    { purchase: 1, cost: 800, learnClear: 3, points: 4 },
-    { purchase: 2, cost: 1600, learnClear: 6, points: 4 },
-    { purchase: 3, cost: 2400, learnClear: 9, points: 4 },
-  ])
-  assert.deepEqual(growthSummary(state()), {
-    total: 80, spent: 0, available: 80, realm: 48, firstClear: 20, research: 12, cap: 80,
-  })
-  assert.equal(GROWTH_POINT_CAP, 80)
-  for (const [clearedFloor, researchPurchases] of [[2, 1], [5, 2], [8, 3], [9, 4]]) {
-    assert.throws(() => totalPoints(state({ clearedFloor, researchPurchases })), RangeError)
-  }
+test('first clears and retired research never extend the 35 level points', () => {
+ for(let clearedFloor=0;clearedFloor<=9;clearedFloor++){
+  const s=state({clearedFloor,researchPurchases:0})
+  assert.equal(growthSummary(s).firstClear,0)
+  assert.equal(totalPoints(s),35)
+  assert.equal(totalPoints({...s,kills:100000,repeatedClears:10000,time:1e12}),35)
+ }
+ assert.deepEqual(GROWTH_RESEARCH,[])
+ assert.deepEqual(growthSummary(state()),{total:35,spent:0,available:35,realm:35,firstClear:0,research:0,cap:35})
+ assert.equal(GROWTH_POINT_CAP,35)
+ for(const researchPurchases of [-1,.5,4])assert.throws(()=>totalPoints(state({researchPurchases})),RangeError)
 })
 
 test('starter grant is always arc and ignores all milestone counters', () => {
@@ -106,10 +94,10 @@ test('starter grant is always arc and ignores all milestone counters', () => {
  assert.equal(totalPoints(state({xp:0,clearedFloor:0,researchPurchases:0})),0)
 })
 
-test('spending charges every attained rank once and refunds no teaching rank on respec', () => {
+test('spending charges every learned rank once except the initial arc gift', () => {
   assert.equal(spentPoints(state({
     tutorialWaves: 0, skills: { sj_yujian: 3, sj_arc: 1 },
-  })), 3, 'only the initial yujian gift is free before the first clear')
+  })), 3, 'only the initial arc gift is free')
   assert.equal(spentPoints(state({
     tutorialWaves: 1, skills: { sj_yujian: 3, sj_arc: 1 },
   })), 3)
@@ -125,19 +113,19 @@ test('spending charges every attained rank once and refunds no teaching rank on 
   assert.equal(quote(reset, 'sj_yujian').nextLevel, 1)
 })
 
-test('all fully invested nodes cost 343 after teaching, and an overspend remains visible', () => {
+test('all fully invested nodes cost 142 after the starter gift, and an overspend remains visible', () => {
   const full = state({
     skills: Object.fromEntries(GROWTH_SKILLS.map(row => [row.id, row.maxLevel])),
     evolutionRanks: Object.fromEntries(GROWTH_EVOLUTIONS.map(row => [row.id, 2])),
   })
-  assert.equal(spentPoints(full), 343)
-  assert.equal(growthSummary(full).available, -263)
-  const extra = state({ skills: { ...giftSkills(3), sj_line: 10, sj_shadow: 10, sj_formation: 10 } })
+  assert.equal(spentPoints(full), 142)
+  assert.equal(growthSummary(full).available, -107)
+  const extra = state({ skills: { ...giftSkills(3), sj_line: 10, sj_shadow: 10, sj_formation: 10, sj_wanjian: 10 } })
   assert.equal(quote(extra, 'vajra').reason, 'insufficient-points')
 })
 
 test('invalid point sources and ranks cannot silently manufacture or erase investment', () => {
-  for (const xp of [-1, 1.5, NaN, Infinity, 10921, '10920']) {
+  for (const xp of [-1, 1.5, NaN, Infinity, 14401, '10920']) {
     assert.throws(() => realmPoints(xp), RangeError)
   }
   for (const n of [-1, .5, Infinity, NaN, '3']) assert.throws(() => giftSkills(n), RangeError)
@@ -162,11 +150,11 @@ test('rank bands follow each skill starting phase independently of books', () =>
   }
   assert.equal(rankCap('unknown', 0, 0), 0)
   const locked = state({ xp: 224, skills: { ...giftSkills(3), sj_yujian: 3 } })
-  assert.equal(quote(locked, 'sj_yujian').reason, 'stage-locked')
+  assert.equal(quote(locked, 'sj_yujian').reason, 'realm-locked')
   assert.deepEqual(quote({ ...locked, xp: 1485, skills: { ...locked.skills, sj_spirit: 2 } }, 'sj_yujian'), {
     ok: true, nextLevel: 4, cost: 1, bookCost: 0,
   })
-  assert.equal(quote(state({ xp: 1484, skills: { ...giftSkills(3), sj_heart: 3 } }), 'sj_heart').reason, 'realm-locked')
+  assert.equal(quote(state({ xp: 1484, skills: { ...giftSkills(3), sj_heart: 3 } }), 'sj_heart').reason, 'stage-locked')
   assert.equal(quote(state({ xp: 5400, skills: { ...giftSkills(3), sj_heart: 3 } }), 'sj_heart').cost, 1)
 })
 
@@ -176,11 +164,11 @@ test('unlearned basic attacks can be purchased without teaching events', () => {
  assert.equal(quote(before,'sj_arc').nextLevel,2)
 })
 
-test('tower upgrades allow basic attacks and already learned passives through rank 3 only', () => {
+test('tower quotes permit learned skills and evolutions within current rank gates', () => {
   assert.equal(quote(state(), 'sj_yujian', { inTower: true }).ok, true)
   assert.equal(quote(state(), 'sj_heart', { inTower: true }).ok, true)
   assert.equal(quote(state({ skills: { ...giftSkills(3), sj_heart: 1 } }), 'sj_heart', { inTower: true }).ok, true)
-  assert.equal(quote(state({ skills: { ...giftSkills(3), sj_mark: 1 } }), 'sj_mark', { inTower: true }).ok, true)
+  assert.equal(quote(state({ skills: { ...giftSkills(3), sj_mark: 1 } }), 'sj_mark', { inTower: true }).ok, false)
   assert.equal(quote(state({ skills: { ...giftSkills(3), sj_yujian: 3, sj_spirit: 2 } }), 'sj_yujian', { inTower: true }).ok, true)
   assert.equal(quote(state({ skills: { ...giftSkills(3), sj_shadow: 1 } }), 'sj_shadow', { inTower: true }).ok, true)
   for (const row of GROWTH_EVOLUTIONS) {
@@ -188,7 +176,7 @@ test('tower upgrades allow basic attacks and already learned passives through ra
   }
 })
 
-test('special first study needs its floor and book but no base-skill prerequisite', () => {
+test('special first study quotes its book cost without floor or base-skill prerequisites', () => {
   for (const [id, parent, floor] of [
     ['sj_shadow', 'sj_yujian', 1], ['sj_line', 'sj_arc', 1], ['sj_formation', 'sj_wanjian', 2],
   ]) {
@@ -198,7 +186,7 @@ test('special first study needs its floor and book but no base-skill prerequisit
     const withoutBase = { ...giftSkills(3) }; delete withoutBase[parent]
     assert.equal(quote({ ...s, clearedFloor: floor, skills: withoutBase }, id).ok, true)
     const eligible = { ...s, clearedFloor: floor }
-    assert.deepEqual(quote(eligible, id), { ok: true, nextLevel: 1, cost: 2, bookCost: 200 })
+    assert.deepEqual(quote(eligible, id), { ok: true, nextLevel: 1, cost: 1, bookCost: 200 })
     assert.equal(quote({ ...eligible, books: [id] }, id).bookCost, 0)
     assert.equal(quote({ ...eligible, skills: { ...eligible.skills, [id]: 1 } }, id).bookCost, 0)
   }
@@ -206,7 +194,7 @@ test('special first study needs its floor and book but no base-skill prerequisit
     const before = state({ researchPurchases: 0, clearedFloor: floor - 1 })
     assert.equal(quote(before, id).ok, true)
     assert.deepEqual(quote({ ...before, clearedFloor: floor }, id), {
-      ok: true, nextLevel: 1, cost: 2, bookCost: 100,
+      ok: true, nextLevel: 1, cost: 1, bookCost: id === 'sj_bone' ? 0 : 100,
     })
   }
   for (const id of ['sj_heart', 'vajra', 'sj_spirit']) {
@@ -222,7 +210,7 @@ test('insufficient points and maximum level always return a finite actionable qu
   assert.deepEqual(quote({ ...fresh, xp: 45 }, 'sj_arc'), {
     ok: true, nextLevel: 2, cost: 1, bookCost: 0,
   })
-  assert.equal(quote({ ...fresh, xp: 45, skills: { sj_yujian: 1, sj_arc: 1 } }, 'sj_arc').reason,
+  assert.equal(quote({ ...fresh, xp: 45, skills: { sj_yujian: 2, sj_arc: 1 } }, 'sj_arc').reason,
     'insufficient-points', 'a level-eligible rank still requires unspent points')
   assert.deepEqual(quote(state({ skills: { sj_arc: 10 } }), 'sj_arc'), {
     ok: false, reason: 'max-level', nextLevel: 10, cost: 0, bookCost: 0,
@@ -231,10 +219,10 @@ test('insufficient points and maximum level always return a finite actionable qu
 
 test('all four evolutions have independent realm gates and approved costs', () => {
   for (const [id, parent, passive, learnXp] of [
-    ['evo_wanjian', 'sj_yujian', 'sj_heart', 5400],
-    ['evo_wuwo', 'sj_wanjian', 'sj_bone', 7245],
+    ['evo_wanjian', 'sj_yujian', 'sj_heart', 6601],
+    ['evo_wuwo', 'sj_wanjian', 'sj_bone', 8625],
     ['evo_tiandi', 'sj_line', 'sj_mark', 7245],
-    ['evo_sixiang', 'sj_formation', 'sj_gate', 9360],
+    ['evo_sixiang', 'sj_formation', 'sj_gate', 10920],
   ]) {
     assert.equal(evolution(id).parent, parent)
     assert.equal(evolution(id).passive, passive)
@@ -260,33 +248,33 @@ test('all four evolutions have independent realm gates and approved costs', () =
       ok: false, reason: 'max-level', nextLevel: 2, cost: 0, bookCost: 0,
     })
     assert.equal(rankCap(id, 5399, 9), 0)
-    assert.equal(rankCap(id, 5400, 5), 1)
-    assert.equal(rankCap(id, 5400, 6), 1)
+    assert.equal(rankCap(id, 5400, 5), 0)
+    assert.equal(rankCap(id, 5400, 6), 0)
     assert.equal(rankCap(id, 9359, 9), 1)
-    assert.equal(rankCap(id, 10920, 9), 2)
+    assert.equal(rankCap(id, 10920, 9), id === 'evo_sixiang' ? 1 : 2)
   }
 })
 
 const routes = [
   {
-    name: '御剑追击', bookSpend: 2600, spent: 54,
+    name: '御剑追击', bookSpend: 2600, spent: 30,
     skills: { sj_spirit: 3, sj_yujian: 10, sj_heart: 4, sj_shadow: 3, sj_arc: 3, sj_wanjian: 3, vajra: 3 },
     evolutionRanks: { evo_wanjian: 1 },
   },
   {
-    name: '剑气贯穿', bookSpend: 2500, spent: 66,
-    skills: { sj_arc: 10, vajra: 4, sj_bone: 3, sj_flight: 1, sj_spirit: 3 },
+    name: '剑气贯穿', bookSpend: 2600, spent: 32,
+    skills: { sj_arc: 10, sj_line:10, vajra: 4, sj_bone: 3, sj_flight: 1, sj_spirit: 3 },
     evolutionRanks: { evo_tiandi: 1 },
   },
   {
-    name: '剑阵控场', bookSpend: 2500, spent: 80,
-    skills: { sj_arc: 10, vajra: 4, sj_bone: 3, sj_flight: 1, sj_spirit: 3 },
+    name: '剑阵控场', bookSpend: 2600, spent: 35,
+    skills: { sj_arc: 10, sj_formation:10, vajra: 1, sj_bone: 3, sj_flight: 1, sj_spirit: 3 },
     evolutionRanks: { evo_sixiang: 2 },
   },
 ]
 
 for (const route of routes) {
-  test(`${route.name} can be acquired one rank at a time within 80 points with all prerequisites`, () => {
+  test(`${route.name} can be acquired one rank at a time within 35 points with all prerequisites`, () => {
     const s = state()
     let paidBooks = 0
     for (const [table, key] of [[GROWTH_SKILLS, 'skills'], [GROWTH_EVOLUTIONS, 'evolutionRanks']]) {
@@ -304,43 +292,47 @@ for (const route of routes) {
     }
     assert.equal(paidBooks, route.bookSpend)
     assert.equal(spentPoints(s), route.spent)
-    assert.equal(growthSummary(s).available, 80 - route.spent)
-    assert.equal(totalPoints(s), 80)
-    if (route.spent === 80) assert.equal(quote(s, 'sj_yujian').reason, 'insufficient-points')
+    assert.equal(growthSummary(s).available, 35 - route.spent)
+    assert.equal(totalPoints(s), 35)
+    if (route.spent === 35) assert.equal(quote(s, 'sj_yujian').reason, 'insufficient-points')
   })
 }
 
-test('48-point realm-only pursuit build keeps its evolution without any research purchase', () => {
+test('27-point pursuit build keeps its evolution using only level points', () => {
   const { sj_shadow, ...withoutShadow } = routes[0].skills
   const s = state({
     clearedFloor: 6, researchPurchases: 0,
     skills: withoutShadow, evolutionRanks: routes[0].evolutionRanks,
   })
-  assert.equal(spentPoints(s), 48)
-  assert.equal(realmPoints(s.xp), 48)
-  assert.equal(growthSummary(s).available, 11, 'floor awards exist but are not required to pay this build')
+  assert.equal(spentPoints(s), 27)
+  assert.equal(realmPoints(s.xp), 35)
+  assert.equal(growthSummary(s).available, 8, 'only level points pay this build')
 })
 
+// 2026-11-06（84/85号复测）基础数值调整：御剑1–9级按比例压低，流云斩×1.3，剑破虚空×1.5，两仪7–10级×1.25。
+const EXTRA = { sj_yujian: [.5,.5,.52,.65,.72,.8,.85,.9,.95,1], sj_arc: Array(10).fill(1.3), sj_line: Array(10).fill(1.5), sj_formation: [1,1,1,1,1,1,1.25,1.25,1.25,1.25] }
+const extra = (id, i) => EXTRA[id]?.[i] ?? 1
 test('six active curves preserve normalized per-target budgets and constant attack frequency', () => {
   for (const [id, base, interval, factor, multiplier] of [
-    ['sj_yujian', 1.2, 1, 1, 1.13], ['sj_arc', 1.2, 1.8, 1/1.8, 1.15],
-    ['sj_wanjian', .3, 6, 1 / .6, 1.2], ['sj_line', 14.4, 6, 1/6, 1.1],
-    ['sj_shadow', 3.52, 2.2, 1/2.2, (2.64*1.2**9/3.52)**(1/9)], ['sj_formation', 32 / 15, 8, .75, 1.15],
+    ['sj_yujian', 1.2, 1, 1, 1.13], ['sj_arc', 1.2, 3.5, 1/4, 1.15],
+    ['sj_wanjian', .3, 6, 1 / .6, 1.2], ['sj_line', 14.4, 12, 1/12, 1.1],
+    ['sj_shadow', 6.4, 6, 1/6, (2.64*1.2**9/3.52)**(1/9)], ['sj_formation', 32 / 15 * 1.65, 12, .5, 1.15],
   ]) {
     const row = skill(id)
     assert.equal(row.cooldown ?? row.hit_interval, interval)
     close(row.single_dps_factor, factor, id)
     for (let i = 0; i < 10; i++) {
-      close(row.damage[i], (id === 'sj_yujian' ? (i === 0 ? 1.2 : i === 1 ? 1.5 : 1.8 * 1.13 ** (i-2)) : id === 'sj_arc' ? (.8 * (i === 0 ? 1.5 : i === 1 ? 2.1 : 3 * 1.15 ** (i-2))) : base * multiplier ** i), `${id} lv${i + 1}`)
+      const transition = id === 'sj_formation' ? [1,1,1,1,1,1,1.05,1.10,1.15,1.20][i] : 1
+      close(row.damage[i], ((id === 'sj_yujian' ? (i === 0 ? 1.2 : i === 1 ? 1.5 : 1.8 * 1.13 ** (i-2)) : id === 'sj_arc' ? (.8 * (i === 0 ? 1.5 : i === 1 ? 2.1 : 3 * 1.15 ** (i-2))) : base * multiplier ** i * transition) * extra(id, i)), `${id} lv${i + 1}`)
       const periodDamage = id === 'sj_yujian'
         ? row.damage[i] / row.swords[i] * row.swords[i]
         : row.damage[i]
-      close(periodDamage, (id === 'sj_yujian' ? (i === 0 ? 1.2 : i === 1 ? 1.5 : 1.8 * 1.13 ** (i-2)) : id === 'sj_arc' ? (.8 * (i === 0 ? 1.5 : i === 1 ? 2.1 : 3 * 1.15 ** (i-2))) : base * multiplier ** i), `${id} no extra sword multiplier`)
+      close(periodDamage, ((id === 'sj_yujian' ? (i === 0 ? 1.2 : i === 1 ? 1.5 : 1.8 * 1.13 ** (i-2)) : id === 'sj_arc' ? (.8 * (i === 0 ? 1.5 : i === 1 ? 2.1 : 3 * 1.15 ** (i-2))) : base * multiplier ** i * transition) * extra(id, i)), `${id} no extra sword multiplier`)
     }
   }
   close(skill('sj_yujian').damage[9], 1.8 * 1.13 ** 7, 'primary sword retains full damage')
   close(skill('sj_wanjian').damage[9] / skill('sj_wanjian').hit_interval, .5 * 1.2 ** 9, 'eight orbit visuals share one hit window')
-  close(skill('sj_formation').damage[9] * 6 / 8, 1.6 * 1.15 ** 9, 'six ticks per eight seconds')
+  close(skill('sj_formation').damage[9] * 6 / 8, 1.6 * 1.15 ** 9 * 1.20 * 1.65 * 1.25, 'six-tick damage budget per eight seconds')
   assert.equal(skill('sj_line').target_cap[0], 3)
   assert.equal(skill('sj_line').target_cap[9], 6)
   assert.equal(skill('sj_arc').target_cap, 6)
@@ -372,16 +364,16 @@ test('passive endpoint budgets stay bounded and their intermediate progression m
   assert.deepEqual(heart.crit_chance, [.08, .14, .20, .28])
   assert.deepEqual(skill('vajra').reduction, [.06, .09, .12, .15])
   assert.deepEqual(skill('sj_spirit').pickup_bonus, [.20, .35, .50])
-  assert.deepEqual(mark.dot_bonus, [.20, .30, .40, .50])
+  assert.equal(mark.vulnerability,.2);assert.equal(mark.maxLevel,1);assert.deepEqual(mark.pointCosts,[1])
   assert.deepEqual(bone.damage_bonus, [.06, .12, .18, .25])
   assert.deepEqual(bone.speed_bonus, [.02, .04, .06, .08])
-  assert.equal(gate.name, '剑罡爆裂'); assert.equal(gate.stacks, 4)
-  assert.deepEqual(gate.proc_damage, [.5, .7, .9, 1.2])
-  assert.equal(gate.trigger_cooldown, 4)
+  assert.equal(gate.name, '剑罡爆裂'); assert.equal(gate.maxLevel, 2)
+  assert.deepEqual(gate.proc_damage, [.5, 1.2])
+  assert.equal(gate.trigger_cooldown, 10)
   assert.equal(gate.target_cap, 6)
   close(heart.crit_chance[3] * heart.crit_bonus, .14, 'max expected crit contribution')
-  close(1000 * .5 * (1+mark.dot_bonus[3]), 750, 'half converts before rank bonus')
-  close(100 * gate.proc_damage[3], 120, 'burst damage per target scales from attack')
+  close(1000 * (1+mark.vulnerability), 1200, 'follow-up direct damage gains twenty percent')
+  close(100 * gate.proc_damage[1], 120, 'burst damage per target scales from attack')
 })
 
 test('quotes and lookups do not mutate caller state, gifts or shared tables', () => {

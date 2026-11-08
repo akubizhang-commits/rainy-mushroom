@@ -1,0 +1,2446 @@
+{
+  "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/index.html?ruleset=xianxia&tower=1",
+  "status": "AUTOMATED_CHECKS_PASSED_VISUAL_REVIEW_PENDING",
+  "selection": {
+    "cases": [
+      "playtest-isolation"
+    ],
+    "sizes": []
+  },
+  "startedAt": "2026-10-28T03:21:22.438Z",
+  "results": [
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "label": "playtest-isolation",
+      "kind": "ISOLATED ASSISTED PLAYTEST — real clock/Run/Store; NOT normal progression or balance evidence",
+      "fixture": null,
+      "checks": [
+        {
+          "name": "实际浏览器clock ×1/×3",
+          "passed": true,
+          "normalSpeed": {
+            "wallSeconds": 1.4053999999985098,
+            "simulationSeconds": 1.4166666666666667,
+            "phase": "playing",
+            "speed": 1,
+            "rate": 1.0080166975011875
+          },
+          "tripleSpeed": {
+            "wallSeconds": 1.4021999999955297,
+            "simulationSeconds": 4.25,
+            "phase": "playing",
+            "speed": 3,
+            "rate": 3.0309513621548634
+          },
+          "ratio": 3.0068463842597137
+        },
+        {
+          "name": "URL体验直开、刷新工具与暂停快照保留、普通档raw不变",
+          "passed": true
+        },
+        {
+          "name": "无伤与真实满血Boss秒杀抽样，快照校验通过",
+          "passed": true,
+          "bossKills": [
+            {
+              "before": {
+                "id": "a1:f1:w20:f01w20b01u01",
+                "hp": 3800,
+                "maxHp": 3800,
+                "x": 49.77858356618723,
+                "y": 832.5173340779565
+              },
+              "receipt": {
+                "id": "a1:f1:w20:f01w20b01u01",
+                "archetype": "boar_boss",
+                "wave": 20
+              },
+              "timeBefore": 281.23333333333335,
+              "timeAfter": 281.25,
+              "effectiveHitEffects": [
+                {
+                  "id": "fx1252",
+                  "kind": "hit",
+                  "x": 49.77858356618723,
+                  "y": 832.5173340779565,
+                  "radius": 12,
+                  "hostile": false,
+                  "expiresAt": 281.5,
+                  "damage": 3800
+                }
+              ]
+            }
+          ],
+          "hazardTicks": 962
+        },
+        {
+          "name": "普通↔体验隔离；返回仅真实墙钟1%maxHP/min恢复，其余字段不变",
+          "passed": true,
+          "switchWallBefore": 1793157695362,
+          "switchWallAfter": 1793157695600,
+          "baselineRestAt": 1793157686206,
+          "returnedRestAt": 1793157695393,
+          "beforeHp": 100,
+          "afterHp": 100.15349945833333,
+          "maxHp": 100.25,
+          "expectedHp": 100.15349945833333,
+          "upperHp": 100.15695808333334,
+          "otherFieldsUnchanged": true,
+          "policy": "raw immutable during experience/reload; real-wall-clock HP/restAt on return"
+        }
+      ],
+      "actions": [
+        "丹鼎阁",
+        "购买一颗 · 20贡献",
+        "服用一颗",
+        "宗门",
+        "体验工具",
+        "进入独立体验档",
+        "游戏速度 ×2",
+        "游戏速度 ×1",
+        "无敌秒杀：关闭",
+        "返回宗门",
+        "锁妖塔",
+        "继续挑战第1层",
+        "暂停",
+        "体验工具",
+        "游戏速度 ×3",
+        "返回战斗",
+        "暂停",
+        "体验工具",
+        "返回战斗",
+        "体验工具",
+        "切回普通档"
+      ],
+      "screenshots": [
+        "ui-390x844-playtest-isolation-normal-tool-entry.png",
+        "ui-390x844-playtest-isolation-triple-clock.png",
+        "ui-390x844-playtest-isolation-reload-tools.png",
+        "ui-390x844-playtest-isolation-boss-sample.png",
+        "ui-390x844-playtest-isolation-returned-normal.png"
+      ],
+      "errors": [],
+      "consoleErrors": [],
+      "httpErrors": [],
+      "ok": true,
+      "build": {
+        "scripts": [
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/polyfills.bundle.5adbf.js",
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/system.bundle.cc789.js",
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/import-map.14612.json"
+        ],
+        "growthVersion": null
+      },
+      "assistSample": {
+        "bossKills": [
+          {
+            "before": {
+              "id": "a1:f1:w20:f01w20b01u01",
+              "hp": 3800,
+              "maxHp": 3800,
+              "x": 49.77858356618723,
+              "y": 832.5173340779565
+            },
+            "receipt": {
+              "id": "a1:f1:w20:f01w20b01u01",
+              "archetype": "boar_boss",
+              "wave": 20
+            },
+            "timeBefore": 281.23333333333335,
+            "timeAfter": 281.25,
+            "effectiveHitEffects": [
+              {
+                "id": "fx1252",
+                "kind": "hit",
+                "x": 49.77858356618723,
+                "y": 832.5173340779565,
+                "radius": 12,
+                "hostile": false,
+                "expiresAt": 281.5,
+                "damage": 3800
+              }
+            ]
+          }
+        ],
+        "hpLoss": [],
+        "hazardTicks": 962,
+        "steps": 16394,
+        "snapshot": {
+          "schema": 1,
+          "attemptId": 1,
+          "floor": 1,
+          "phase": "playing",
+          "training": false,
+          "time": 281.25,
+          "ticks": 16875,
+          "remainder": 0.011333333334,
+          "wave": 20,
+          "waveStartedAt": 278.3333333333333,
+          "waveKilled": 1,
+          "wavePlanned": 9,
+          "nextId": 1254,
+          "player": {
+            "x": 148.82393058397565,
+            "y": 611.2541005781848,
+            "hp": 101,
+            "xp": 494,
+            "maxHp": 101,
+            "attack": 107.06,
+            "moveSpeed": 220,
+            "radius": 18,
+            "faceX": -0.4085694050207924,
+            "faceY": 0.9127272545952354
+          },
+          "enemies": [
+            {
+              "id": "a1:f1:w20:f01w20b02u01",
+              "archetype": "boar_normal",
+              "name": "铁鬃妖猪",
+              "family": "boar",
+              "role": "normal",
+              "rank": 1,
+              "x": -600.3759825320112,
+              "y": 33.7286215800844,
+              "hp": 50,
+              "maxHp": 50,
+              "radius": 26,
+              "damage": 6,
+              "moveSpeed": 154,
+              "woundBudget": 0,
+              "woundUntil": 0,
+              "orbitNextAt": 0,
+              "ai": {
+                "mode": "approach",
+                "attack": null,
+                "readyAt": 280.05,
+                "graceUntil": 280.05,
+                "until": 0,
+                "eligibleSince": -1,
+                "sequence": 0,
+                "cooldowns": {},
+                "faceX": 0.792001398836389,
+                "faceY": 0.6105192742585634,
+                "orbitSign": -1,
+                "offset": 2.9091935635891524,
+                "phase": 1,
+                "transitionUntil": 0,
+                "transitionPending": false,
+                "entryUntil": 280.05
+              }
+            },
+            {
+              "id": "a1:f1:w20:f01w20b03u01",
+              "archetype": "wolf_normal",
+              "name": "青风妖狼",
+              "family": "wolf",
+              "role": "normal",
+              "rank": 1,
+              "x": 575.4145118461115,
+              "y": 61.32595629771854,
+              "hp": 35,
+              "maxHp": 35,
+              "radius": 22,
+              "damage": 6,
+              "moveSpeed": 231,
+              "woundBudget": 0,
+              "woundUntil": 0,
+              "orbitNextAt": 0,
+              "ai": {
+                "mode": "approach",
+                "attack": null,
+                "readyAt": 280.05,
+                "graceUntil": 280.05,
+                "until": 0,
+                "eligibleSince": -1,
+                "sequence": 0,
+                "cooldowns": {},
+                "faceX": -0.6143701916826384,
+                "faceY": 0.7890179133402727,
+                "orbitSign": 1,
+                "offset": 3.0431108795657513,
+                "phase": 1,
+                "transitionUntil": 0,
+                "transitionPending": false,
+                "entryUntil": 280.05
+              }
+            },
+            {
+              "id": "a1:f1:w20:f01w20b04u01",
+              "archetype": "spider_normal",
+              "name": "墨纹妖蛛",
+              "family": "spider",
+              "role": "normal",
+              "rank": 1,
+              "x": 531.3408197502403,
+              "y": 609.2172496736913,
+              "hp": 32,
+              "maxHp": 32,
+              "radius": 24,
+              "damage": 6,
+              "moveSpeed": 143,
+              "woundBudget": 0,
+              "woundUntil": 0,
+              "orbitNextAt": 0,
+              "ai": {
+                "mode": "approach",
+                "attack": null,
+                "readyAt": 280.05,
+                "graceUntil": 280.05,
+                "until": 0,
+                "eligibleSince": -1,
+                "sequence": 0,
+                "cooldowns": {},
+                "faceX": -0.9999858232063199,
+                "faceY": 0.005324789796648831,
+                "orbitSign": 1,
+                "offset": 5.636267808880545,
+                "phase": 1,
+                "transitionUntil": 0,
+                "transitionPending": false,
+                "entryUntil": 280.05
+              }
+            },
+            {
+              "id": "a1:f1:w20:f01w20b02u02",
+              "archetype": "boar_normal",
+              "name": "铁鬃妖猪",
+              "family": "boar",
+              "role": "normal",
+              "rank": 1,
+              "x": -719.3913453755207,
+              "y": 14.30072412253995,
+              "hp": 50,
+              "maxHp": 50,
+              "radius": 26,
+              "damage": 6,
+              "moveSpeed": 154,
+              "woundBudget": 0,
+              "woundUntil": 0,
+              "orbitNextAt": 0,
+              "ai": {
+                "mode": "approach",
+                "attack": null,
+                "readyAt": 280.26666666666665,
+                "graceUntil": 280.26666666666665,
+                "until": 0,
+                "eligibleSince": -1,
+                "sequence": 0,
+                "cooldowns": {},
+                "faceX": 0.8240173883172064,
+                "faceY": 0.5665645097876237,
+                "orbitSign": -1,
+                "offset": 2.3059422272010264,
+                "phase": 1,
+                "transitionUntil": 0,
+                "transitionPending": false,
+                "entryUntil": 280.26666666666665
+              }
+            }
+          ],
+          "projectiles": [],
+          "zones": [],
+          "drops": [
+            {
+              "id": "h1029",
+              "kind": "heal",
+              "x": 99.24230846013401,
+              "y": -34.68916061596288,
+              "radius": 9,
+              "amount": 10,
+              "expiresAt": 281.8
+            },
+            {
+              "id": "h1057",
+              "kind": "heal",
+              "x": -641.2799445329988,
+              "y": -652.5009314565918,
+              "radius": 9,
+              "amount": 10,
+              "expiresAt": 285.6333333333333
+            },
+            {
+              "id": "h1132",
+              "kind": "heal",
+              "x": -201.92275032013816,
+              "y": 623.359451197066,
+              "radius": 9,
+              "amount": 10,
+              "expiresAt": 297.98333333333335
+            },
+            {
+              "id": "h1207",
+              "kind": "heal",
+              "x": 762.8723136632536,
+              "y": 230.9858635349593,
+              "radius": 9,
+              "amount": 10,
+              "expiresAt": 313.5833333333333
+            },
+            {
+              "id": "h1233",
+              "kind": "heal",
+              "x": 889.5330368485425,
+              "y": -55.63841235816707,
+              "radius": 9,
+              "amount": 10,
+              "expiresAt": 318.3833333333333
+            },
+            {
+              "id": "d1253",
+              "kind": "resource",
+              "x": 49.77858356618723,
+              "y": 832.5173340779565,
+              "radius": 5,
+              "amount": 30,
+              "expiresAt": 281.75
+            }
+          ],
+          "effects": [
+            {
+              "id": "fx1252",
+              "kind": "hit",
+              "x": 49.77858356618723,
+              "y": 832.5173340779565,
+              "radius": 12,
+              "hostile": false,
+              "expiresAt": 281.5,
+              "damage": 3800
+            }
+          ],
+          "pending": [
+            {
+              "localId": "f01w20b05u02",
+              "archetype": "boar_normal",
+              "portal": "NW",
+              "at": 0.22,
+              "trigger": "half",
+              "warning": 0.9,
+              "id": "a1:f1:w20:f01w20b05u02",
+              "retryAt": 278.3333333333333,
+              "waitingSince": 278.3333333333333
+            }
+          ],
+          "reserved": [
+            {
+              "localId": "f01w20b05u01",
+              "archetype": "boar_normal",
+              "portal": "NW",
+              "at": 0,
+              "trigger": "half",
+              "warning": 0.9,
+              "id": "a1:f1:w20:f01w20b05u01",
+              "retryAt": 278.3333333333333,
+              "waitingSince": 278.3333333333333,
+              "x": -629,
+              "y": 660,
+              "radius": 26,
+              "readyAt": 282.15
+            },
+            {
+              "localId": "f01w20b06u01",
+              "archetype": "wolf_normal",
+              "portal": "E",
+              "at": 0,
+              "trigger": "half",
+              "warning": 0.9,
+              "id": "a1:f1:w20:f01w20b06u01",
+              "retryAt": 278.3333333333333,
+              "waitingSince": 278.3333333333333,
+              "x": 828,
+              "y": -60,
+              "radius": 22,
+              "readyAt": 282.15
+            },
+            {
+              "localId": "f01w20b07u01",
+              "archetype": "spider_normal",
+              "portal": "NE",
+              "at": 0,
+              "trigger": "half",
+              "warning": 0.9,
+              "id": "a1:f1:w20:f01w20b07u01",
+              "retryAt": 278.3333333333333,
+              "waitingSince": 278.3333333333333,
+              "x": 695,
+              "y": 660,
+              "radius": 24,
+              "readyAt": 282.15
+            }
+          ],
+          "earned": {
+            "xp": 444,
+            "cores": 63,
+            "contribution": 53
+          },
+          "rawKillXp": 444,
+          "normalCoreCounter": 4,
+          "loadout": {
+            "active": {
+              "sj_yujian": 1,
+              "sj_arc": 1,
+              "sj_wanjian": 1
+            },
+            "passive": {},
+            "evolutions": [],
+            "growthVersion": 1,
+            "evolutionLevels": {},
+            "tutorialWaves": 3,
+            "weaponId": "eq_sword_suwen",
+            "weaponQuality": 1,
+            "weaponRefine": 0
+          },
+          "rng": 2639845172,
+          "base": {
+            "xp": 50,
+            "hp": 100.03640745833333,
+            "normalCoreCounter": 0,
+            "tutorialWaves": 0
+          },
+          "input": {
+            "x": -0.4085694050207924,
+            "y": 0.9127272545952354
+          },
+          "cooldowns": {
+            "sj_yujian": 281.71666666666664,
+            "sj_arc": 275.7,
+            "sj_wanjian": 0
+          },
+          "casts": [],
+          "killLedger": [
+            {
+              "id": "a1:f1:w1:f01w01b01u03",
+              "archetype": "boar_normal",
+              "wave": 1
+            },
+            {
+              "id": "a1:f1:w1:f01w01b01u01",
+              "archetype": "boar_normal",
+              "wave": 1
+            },
+            {
+              "id": "a1:f1:w1:f01w01b01u04",
+              "archetype": "boar_normal",
+              "wave": 1
+            },
+            {
+              "id": "a1:f1:w1:f01w01b01u02",
+              "archetype": "boar_normal",
+              "wave": 1
+            },
+            {
+              "id": "a1:f1:w1:f01w01b01u05",
+              "archetype": "boar_normal",
+              "wave": 1
+            },
+            {
+              "id": "a1:f1:w1:f01w01b02u03",
+              "archetype": "boar_normal",
+              "wave": 1
+            },
+            {
+              "id": "a1:f1:w1:f01w01b02u01",
+              "archetype": "boar_normal",
+              "wave": 1
+            },
+            {
+              "id": "a1:f1:w1:f01w01b02u02",
+              "archetype": "boar_normal",
+              "wave": 1
+            },
+            {
+              "id": "a1:f1:w1:f01w01b02u04",
+              "archetype": "boar_normal",
+              "wave": 1
+            },
+            {
+              "id": "a1:f1:w1:f01w01b02u05",
+              "archetype": "boar_normal",
+              "wave": 1
+            },
+            {
+              "id": "a1:f1:w2:f01w02b01u01",
+              "archetype": "wolf_normal",
+              "wave": 2
+            },
+            {
+              "id": "a1:f1:w2:f01w02b01u02",
+              "archetype": "wolf_normal",
+              "wave": 2
+            },
+            {
+              "id": "a1:f1:w2:f01w02b01u04",
+              "archetype": "wolf_normal",
+              "wave": 2
+            },
+            {
+              "id": "a1:f1:w2:f01w02b01u03",
+              "archetype": "wolf_normal",
+              "wave": 2
+            },
+            {
+              "id": "a1:f1:w2:f01w02b01u05",
+              "archetype": "wolf_normal",
+              "wave": 2
+            },
+            {
+              "id": "a1:f1:w2:f01w02b01u06",
+              "archetype": "wolf_normal",
+              "wave": 2
+            },
+            {
+              "id": "a1:f1:w2:f01w02b02u02",
+              "archetype": "wolf_normal",
+              "wave": 2
+            },
+            {
+              "id": "a1:f1:w2:f01w02b02u01",
+              "archetype": "wolf_normal",
+              "wave": 2
+            },
+            {
+              "id": "a1:f1:w2:f01w02b02u03",
+              "archetype": "wolf_normal",
+              "wave": 2
+            },
+            {
+              "id": "a1:f1:w2:f01w02b02u04",
+              "archetype": "wolf_normal",
+              "wave": 2
+            },
+            {
+              "id": "a1:f1:w2:f01w02b02u05",
+              "archetype": "wolf_normal",
+              "wave": 2
+            },
+            {
+              "id": "a1:f1:w2:f01w02b02u06",
+              "archetype": "wolf_normal",
+              "wave": 2
+            },
+            {
+              "id": "a1:f1:w3:f01w03b01u02",
+              "archetype": "spider_normal",
+              "wave": 3
+            },
+            {
+              "id": "a1:f1:w3:f01w03b01u01",
+              "archetype": "spider_normal",
+              "wave": 3
+            },
+            {
+              "id": "a1:f1:w3:f01w03b01u03",
+              "archetype": "spider_normal",
+              "wave": 3
+            },
+            {
+              "id": "a1:f1:w3:f01w03b01u04",
+              "archetype": "spider_normal",
+              "wave": 3
+            },
+            {
+              "id": "a1:f1:w3:f01w03b01u06",
+              "archetype": "spider_normal",
+              "wave": 3
+            },
+            {
+              "id": "a1:f1:w3:f01w03b01u05",
+              "archetype": "spider_normal",
+              "wave": 3
+            },
+            {
+              "id": "a1:f1:w3:f01w03b01u07",
+              "archetype": "spider_normal",
+              "wave": 3
+            },
+            {
+              "id": "a1:f1:w3:f01w03b02u01",
+              "archetype": "spider_normal",
+              "wave": 3
+            },
+            {
+              "id": "a1:f1:w3:f01w03b02u02",
+              "archetype": "spider_normal",
+              "wave": 3
+            },
+            {
+              "id": "a1:f1:w3:f01w03b02u03",
+              "archetype": "spider_normal",
+              "wave": 3
+            },
+            {
+              "id": "a1:f1:w3:f01w03b02u04",
+              "archetype": "spider_normal",
+              "wave": 3
+            },
+            {
+              "id": "a1:f1:w3:f01w03b02u06",
+              "archetype": "spider_normal",
+              "wave": 3
+            },
+            {
+              "id": "a1:f1:w3:f01w03b02u05",
+              "archetype": "spider_normal",
+              "wave": 3
+            },
+            {
+              "id": "a1:f1:w3:f01w03b02u07",
+              "archetype": "spider_normal",
+              "wave": 3
+            },
+            {
+              "id": "a1:f1:w4:f01w04b01u03",
+              "archetype": "boar_normal",
+              "wave": 4
+            },
+            {
+              "id": "a1:f1:w4:f01w04b01u01",
+              "archetype": "boar_normal",
+              "wave": 4
+            },
+            {
+              "id": "a1:f1:w4:f01w04b01u04",
+              "archetype": "boar_normal",
+              "wave": 4
+            },
+            {
+              "id": "a1:f1:w4:f01w04b01u02",
+              "archetype": "boar_normal",
+              "wave": 4
+            },
+            {
+              "id": "a1:f1:w4:f01w04b01u05",
+              "archetype": "boar_normal",
+              "wave": 4
+            },
+            {
+              "id": "a1:f1:w4:f01w04b02u01",
+              "archetype": "wolf_normal",
+              "wave": 4
+            },
+            {
+              "id": "a1:f1:w4:f01w04b02u02",
+              "archetype": "wolf_normal",
+              "wave": 4
+            },
+            {
+              "id": "a1:f1:w4:f01w04b02u04",
+              "archetype": "wolf_normal",
+              "wave": 4
+            },
+            {
+              "id": "a1:f1:w4:f01w04b02u03",
+              "archetype": "wolf_normal",
+              "wave": 4
+            },
+            {
+              "id": "a1:f1:w4:f01w04b02u05",
+              "archetype": "wolf_normal",
+              "wave": 4
+            },
+            {
+              "id": "a1:f1:w4:f01w04b02u07",
+              "archetype": "wolf_normal",
+              "wave": 4
+            },
+            {
+              "id": "a1:f1:w4:f01w04b02u06",
+              "archetype": "wolf_normal",
+              "wave": 4
+            },
+            {
+              "id": "a1:f1:w4:f01w04b03u03",
+              "archetype": "boar_normal",
+              "wave": 4
+            },
+            {
+              "id": "a1:f1:w4:f01w04b03u01",
+              "archetype": "boar_normal",
+              "wave": 4
+            },
+            {
+              "id": "a1:f1:w4:f01w04b03u02",
+              "archetype": "boar_normal",
+              "wave": 4
+            },
+            {
+              "id": "a1:f1:w4:f01w04b03u04",
+              "archetype": "boar_normal",
+              "wave": 4
+            },
+            {
+              "id": "a1:f1:w5:f01w05b01u01",
+              "archetype": "boar_elite",
+              "wave": 5
+            },
+            {
+              "id": "a1:f1:w5:f01w05b02u01",
+              "archetype": "boar_normal",
+              "wave": 5
+            },
+            {
+              "id": "a1:f1:w5:f01w05b02u03",
+              "archetype": "boar_normal",
+              "wave": 5
+            },
+            {
+              "id": "a1:f1:w5:f01w05b02u02",
+              "archetype": "boar_normal",
+              "wave": 5
+            },
+            {
+              "id": "a1:f1:w5:f01w05b03u02",
+              "archetype": "spider_normal",
+              "wave": 5
+            },
+            {
+              "id": "a1:f1:w5:f01w05b03u01",
+              "archetype": "spider_normal",
+              "wave": 5
+            },
+            {
+              "id": "a1:f1:w5:f01w05b03u04",
+              "archetype": "spider_normal",
+              "wave": 5
+            },
+            {
+              "id": "a1:f1:w5:f01w05b03u03",
+              "archetype": "spider_normal",
+              "wave": 5
+            },
+            {
+              "id": "a1:f1:w5:f01w05b04u03",
+              "archetype": "boar_normal",
+              "wave": 5
+            },
+            {
+              "id": "a1:f1:w5:f01w05b04u01",
+              "archetype": "boar_normal",
+              "wave": 5
+            },
+            {
+              "id": "a1:f1:w5:f01w05b04u02",
+              "archetype": "boar_normal",
+              "wave": 5
+            },
+            {
+              "id": "a1:f1:w6:f01w06b01u03",
+              "archetype": "boar_normal",
+              "wave": 6
+            },
+            {
+              "id": "a1:f1:w6:f01w06b01u01",
+              "archetype": "boar_normal",
+              "wave": 6
+            },
+            {
+              "id": "a1:f1:w6:f01w06b01u04",
+              "archetype": "boar_normal",
+              "wave": 6
+            },
+            {
+              "id": "a1:f1:w6:f01w06b01u02",
+              "archetype": "boar_normal",
+              "wave": 6
+            },
+            {
+              "id": "a1:f1:w6:f01w06b01u05",
+              "archetype": "boar_normal",
+              "wave": 6
+            },
+            {
+              "id": "a1:f1:w6:f01w06b02u02",
+              "archetype": "wolf_normal",
+              "wave": 6
+            },
+            {
+              "id": "a1:f1:w6:f01w06b02u01",
+              "archetype": "wolf_normal",
+              "wave": 6
+            },
+            {
+              "id": "a1:f1:w6:f01w06b02u04",
+              "archetype": "wolf_normal",
+              "wave": 6
+            },
+            {
+              "id": "a1:f1:w6:f01w06b02u03",
+              "archetype": "wolf_normal",
+              "wave": 6
+            },
+            {
+              "id": "a1:f1:w6:f01w06b03u03",
+              "archetype": "boar_normal",
+              "wave": 6
+            },
+            {
+              "id": "a1:f1:w6:f01w06b03u01",
+              "archetype": "boar_normal",
+              "wave": 6
+            },
+            {
+              "id": "a1:f1:w6:f01w06b03u02",
+              "archetype": "boar_normal",
+              "wave": 6
+            },
+            {
+              "id": "a1:f1:w6:f01w06b03u04",
+              "archetype": "boar_normal",
+              "wave": 6
+            },
+            {
+              "id": "a1:f1:w6:f01w06b04u02",
+              "archetype": "wolf_normal",
+              "wave": 6
+            },
+            {
+              "id": "a1:f1:w6:f01w06b04u01",
+              "archetype": "wolf_normal",
+              "wave": 6
+            },
+            {
+              "id": "a1:f1:w6:f01w06b04u03",
+              "archetype": "wolf_normal",
+              "wave": 6
+            },
+            {
+              "id": "a1:f1:w7:f01w07b01u02",
+              "archetype": "boar_normal",
+              "wave": 7
+            },
+            {
+              "id": "a1:f1:w7:f01w07b01u01",
+              "archetype": "boar_normal",
+              "wave": 7
+            },
+            {
+              "id": "a1:f1:w7:f01w07b01u04",
+              "archetype": "boar_normal",
+              "wave": 7
+            },
+            {
+              "id": "a1:f1:w7:f01w07b01u03",
+              "archetype": "boar_normal",
+              "wave": 7
+            },
+            {
+              "id": "a1:f1:w7:f01w07b01u05",
+              "archetype": "boar_normal",
+              "wave": 7
+            },
+            {
+              "id": "a1:f1:w7:f01w07b02u01",
+              "archetype": "spider_normal",
+              "wave": 7
+            },
+            {
+              "id": "a1:f1:w7:f01w07b02u04",
+              "archetype": "spider_normal",
+              "wave": 7
+            },
+            {
+              "id": "a1:f1:w7:f01w07b02u03",
+              "archetype": "spider_normal",
+              "wave": 7
+            },
+            {
+              "id": "a1:f1:w7:f01w07b02u02",
+              "archetype": "spider_normal",
+              "wave": 7
+            },
+            {
+              "id": "a1:f1:w7:f01w07b03u02",
+              "archetype": "boar_normal",
+              "wave": 7
+            },
+            {
+              "id": "a1:f1:w7:f01w07b03u01",
+              "archetype": "boar_normal",
+              "wave": 7
+            },
+            {
+              "id": "a1:f1:w7:f01w07b03u03",
+              "archetype": "boar_normal",
+              "wave": 7
+            },
+            {
+              "id": "a1:f1:w7:f01w07b03u04",
+              "archetype": "boar_normal",
+              "wave": 7
+            },
+            {
+              "id": "a1:f1:w7:f01w07b03u05",
+              "archetype": "boar_normal",
+              "wave": 7
+            },
+            {
+              "id": "a1:f1:w7:f01w07b04u03",
+              "archetype": "spider_normal",
+              "wave": 7
+            },
+            {
+              "id": "a1:f1:w7:f01w07b04u01",
+              "archetype": "spider_normal",
+              "wave": 7
+            },
+            {
+              "id": "a1:f1:w7:f01w07b04u04",
+              "archetype": "spider_normal",
+              "wave": 7
+            },
+            {
+              "id": "a1:f1:w7:f01w07b04u02",
+              "archetype": "spider_normal",
+              "wave": 7
+            },
+            {
+              "id": "a1:f1:w8:f01w08b01u03",
+              "archetype": "boar_normal",
+              "wave": 8
+            },
+            {
+              "id": "a1:f1:w8:f01w08b01u01",
+              "archetype": "boar_normal",
+              "wave": 8
+            },
+            {
+              "id": "a1:f1:w8:f01w08b01u02",
+              "archetype": "boar_normal",
+              "wave": 8
+            },
+            {
+              "id": "a1:f1:w8:f01w08b01u04",
+              "archetype": "boar_normal",
+              "wave": 8
+            },
+            {
+              "id": "a1:f1:w8:f01w08b01u06",
+              "archetype": "boar_normal",
+              "wave": 8
+            },
+            {
+              "id": "a1:f1:w8:f01w08b01u05",
+              "archetype": "boar_normal",
+              "wave": 8
+            },
+            {
+              "id": "a1:f1:w8:f01w08b02u02",
+              "archetype": "wolf_normal",
+              "wave": 8
+            },
+            {
+              "id": "a1:f1:w8:f01w08b02u01",
+              "archetype": "wolf_normal",
+              "wave": 8
+            },
+            {
+              "id": "a1:f1:w8:f01w08b02u04",
+              "archetype": "wolf_normal",
+              "wave": 8
+            },
+            {
+              "id": "a1:f1:w8:f01w08b02u03",
+              "archetype": "wolf_normal",
+              "wave": 8
+            },
+            {
+              "id": "a1:f1:w8:f01w08b03u01",
+              "archetype": "boar_normal",
+              "wave": 8
+            },
+            {
+              "id": "a1:f1:w8:f01w08b03u04",
+              "archetype": "boar_normal",
+              "wave": 8
+            },
+            {
+              "id": "a1:f1:w8:f01w08b03u03",
+              "archetype": "boar_normal",
+              "wave": 8
+            },
+            {
+              "id": "a1:f1:w8:f01w08b03u02",
+              "archetype": "boar_normal",
+              "wave": 8
+            },
+            {
+              "id": "a1:f1:w8:f01w08b03u05",
+              "archetype": "boar_normal",
+              "wave": 8
+            },
+            {
+              "id": "a1:f1:w8:f01w08b03u06",
+              "archetype": "boar_normal",
+              "wave": 8
+            },
+            {
+              "id": "a1:f1:w8:f01w08b04u02",
+              "archetype": "wolf_normal",
+              "wave": 8
+            },
+            {
+              "id": "a1:f1:w8:f01w08b04u01",
+              "archetype": "wolf_normal",
+              "wave": 8
+            },
+            {
+              "id": "a1:f1:w8:f01w08b04u03",
+              "archetype": "wolf_normal",
+              "wave": 8
+            },
+            {
+              "id": "a1:f1:w8:f01w08b04u04",
+              "archetype": "wolf_normal",
+              "wave": 8
+            },
+            {
+              "id": "a1:f1:w9:f01w09b01u01",
+              "archetype": "boar_normal",
+              "wave": 9
+            },
+            {
+              "id": "a1:f1:w9:f01w09b01u03",
+              "archetype": "boar_normal",
+              "wave": 9
+            },
+            {
+              "id": "a1:f1:w9:f01w09b01u04",
+              "archetype": "boar_normal",
+              "wave": 9
+            },
+            {
+              "id": "a1:f1:w9:f01w09b01u02",
+              "archetype": "boar_normal",
+              "wave": 9
+            },
+            {
+              "id": "a1:f1:w9:f01w09b01u05",
+              "archetype": "boar_normal",
+              "wave": 9
+            },
+            {
+              "id": "a1:f1:w9:f01w09b01u07",
+              "archetype": "boar_normal",
+              "wave": 9
+            },
+            {
+              "id": "a1:f1:w9:f01w09b01u06",
+              "archetype": "boar_normal",
+              "wave": 9
+            },
+            {
+              "id": "a1:f1:w9:f01w09b02u02",
+              "archetype": "spider_normal",
+              "wave": 9
+            },
+            {
+              "id": "a1:f1:w9:f01w09b02u01",
+              "archetype": "spider_normal",
+              "wave": 9
+            },
+            {
+              "id": "a1:f1:w9:f01w09b02u04",
+              "archetype": "spider_normal",
+              "wave": 9
+            },
+            {
+              "id": "a1:f1:w9:f01w09b02u05",
+              "archetype": "spider_normal",
+              "wave": 9
+            },
+            {
+              "id": "a1:f1:w9:f01w09b02u03",
+              "archetype": "spider_normal",
+              "wave": 9
+            },
+            {
+              "id": "a1:f1:w9:f01w09b03u03",
+              "archetype": "boar_normal",
+              "wave": 9
+            },
+            {
+              "id": "a1:f1:w9:f01w09b03u01",
+              "archetype": "boar_normal",
+              "wave": 9
+            },
+            {
+              "id": "a1:f1:w9:f01w09b03u02",
+              "archetype": "boar_normal",
+              "wave": 9
+            },
+            {
+              "id": "a1:f1:w9:f01w09b03u04",
+              "archetype": "boar_normal",
+              "wave": 9
+            },
+            {
+              "id": "a1:f1:w9:f01w09b03u06",
+              "archetype": "boar_normal",
+              "wave": 9
+            },
+            {
+              "id": "a1:f1:w9:f01w09b03u05",
+              "archetype": "boar_normal",
+              "wave": 9
+            },
+            {
+              "id": "a1:f1:w9:f01w09b04u02",
+              "archetype": "spider_normal",
+              "wave": 9
+            },
+            {
+              "id": "a1:f1:w9:f01w09b04u01",
+              "archetype": "spider_normal",
+              "wave": 9
+            },
+            {
+              "id": "a1:f1:w9:f01w09b04u04",
+              "archetype": "spider_normal",
+              "wave": 9
+            },
+            {
+              "id": "a1:f1:w9:f01w09b04u03",
+              "archetype": "spider_normal",
+              "wave": 9
+            },
+            {
+              "id": "a1:f1:w10:f01w10b01u01",
+              "archetype": "wolf_elite",
+              "wave": 10
+            },
+            {
+              "id": "a1:f1:w10:f01w10b02u03",
+              "archetype": "boar_normal",
+              "wave": 10
+            },
+            {
+              "id": "a1:f1:w10:f01w10b02u01",
+              "archetype": "boar_normal",
+              "wave": 10
+            },
+            {
+              "id": "a1:f1:w10:f01w10b02u02",
+              "archetype": "boar_normal",
+              "wave": 10
+            },
+            {
+              "id": "a1:f1:w10:f01w10b02u04",
+              "archetype": "boar_normal",
+              "wave": 10
+            },
+            {
+              "id": "a1:f1:w10:f01w10b03u02",
+              "archetype": "wolf_normal",
+              "wave": 10
+            },
+            {
+              "id": "a1:f1:w10:f01w10b03u01",
+              "archetype": "wolf_normal",
+              "wave": 10
+            },
+            {
+              "id": "a1:f1:w10:f01w10b03u04",
+              "archetype": "wolf_normal",
+              "wave": 10
+            },
+            {
+              "id": "a1:f1:w10:f01w10b03u03",
+              "archetype": "wolf_normal",
+              "wave": 10
+            },
+            {
+              "id": "a1:f1:w10:f01w10b03u05",
+              "archetype": "wolf_normal",
+              "wave": 10
+            },
+            {
+              "id": "a1:f1:w10:f01w10b04u01",
+              "archetype": "wolf_elite",
+              "wave": 10
+            },
+            {
+              "id": "a1:f1:w10:f01w10b05u03",
+              "archetype": "boar_normal",
+              "wave": 10
+            },
+            {
+              "id": "a1:f1:w10:f01w10b05u01",
+              "archetype": "boar_normal",
+              "wave": 10
+            },
+            {
+              "id": "a1:f1:w10:f01w10b05u02",
+              "archetype": "boar_normal",
+              "wave": 10
+            },
+            {
+              "id": "a1:f1:w11:f01w11b01u01",
+              "archetype": "boar_normal",
+              "wave": 11
+            },
+            {
+              "id": "a1:f1:w11:f01w11b01u03",
+              "archetype": "boar_normal",
+              "wave": 11
+            },
+            {
+              "id": "a1:f1:w11:f01w11b01u02",
+              "archetype": "boar_normal",
+              "wave": 11
+            },
+            {
+              "id": "a1:f1:w11:f01w11b01u04",
+              "archetype": "boar_normal",
+              "wave": 11
+            },
+            {
+              "id": "a1:f1:w11:f01w11b01u05",
+              "archetype": "boar_normal",
+              "wave": 11
+            },
+            {
+              "id": "a1:f1:w11:f01w11b02u02",
+              "archetype": "spider_normal",
+              "wave": 11
+            },
+            {
+              "id": "a1:f1:w11:f01w11b02u01",
+              "archetype": "spider_normal",
+              "wave": 11
+            },
+            {
+              "id": "a1:f1:w11:f01w11b02u04",
+              "archetype": "spider_normal",
+              "wave": 11
+            },
+            {
+              "id": "a1:f1:w11:f01w11b02u03",
+              "archetype": "spider_normal",
+              "wave": 11
+            },
+            {
+              "id": "a1:f1:w11:f01w11b02u05",
+              "archetype": "spider_normal",
+              "wave": 11
+            },
+            {
+              "id": "a1:f1:w11:f01w11b02u06",
+              "archetype": "spider_normal",
+              "wave": 11
+            },
+            {
+              "id": "a1:f1:w11:f01w11b03u02",
+              "archetype": "wolf_normal",
+              "wave": 11
+            },
+            {
+              "id": "a1:f1:w11:f01w11b03u01",
+              "archetype": "wolf_normal",
+              "wave": 11
+            },
+            {
+              "id": "a1:f1:w11:f01w11b03u04",
+              "archetype": "wolf_normal",
+              "wave": 11
+            },
+            {
+              "id": "a1:f1:w11:f01w11b03u03",
+              "archetype": "wolf_normal",
+              "wave": 11
+            },
+            {
+              "id": "a1:f1:w11:f01w11b04u03",
+              "archetype": "boar_normal",
+              "wave": 11
+            },
+            {
+              "id": "a1:f1:w11:f01w11b04u01",
+              "archetype": "boar_normal",
+              "wave": 11
+            },
+            {
+              "id": "a1:f1:w11:f01w11b04u04",
+              "archetype": "boar_normal",
+              "wave": 11
+            },
+            {
+              "id": "a1:f1:w11:f01w11b04u02",
+              "archetype": "boar_normal",
+              "wave": 11
+            },
+            {
+              "id": "a1:f1:w11:f01w11b04u05",
+              "archetype": "boar_normal",
+              "wave": 11
+            },
+            {
+              "id": "a1:f1:w12:f01w12b01u02",
+              "archetype": "boar_normal",
+              "wave": 12
+            },
+            {
+              "id": "a1:f1:w12:f01w12b01u01",
+              "archetype": "boar_normal",
+              "wave": 12
+            },
+            {
+              "id": "a1:f1:w12:f01w12b01u05",
+              "archetype": "boar_normal",
+              "wave": 12
+            },
+            {
+              "id": "a1:f1:w12:f01w12b01u03",
+              "archetype": "boar_normal",
+              "wave": 12
+            },
+            {
+              "id": "a1:f1:w12:f01w12b01u06",
+              "archetype": "boar_normal",
+              "wave": 12
+            },
+            {
+              "id": "a1:f1:w12:f01w12b01u04",
+              "archetype": "boar_normal",
+              "wave": 12
+            },
+            {
+              "id": "a1:f1:w12:f01w12b02u02",
+              "archetype": "wolf_normal",
+              "wave": 12
+            },
+            {
+              "id": "a1:f1:w12:f01w12b02u01",
+              "archetype": "wolf_normal",
+              "wave": 12
+            },
+            {
+              "id": "a1:f1:w12:f01w12b02u03",
+              "archetype": "wolf_normal",
+              "wave": 12
+            },
+            {
+              "id": "a1:f1:w12:f01w12b02u04",
+              "archetype": "wolf_normal",
+              "wave": 12
+            },
+            {
+              "id": "a1:f1:w12:f01w12b02u06",
+              "archetype": "wolf_normal",
+              "wave": 12
+            },
+            {
+              "id": "a1:f1:w12:f01w12b02u05",
+              "archetype": "wolf_normal",
+              "wave": 12
+            },
+            {
+              "id": "a1:f1:w12:f01w12b04u02",
+              "archetype": "boar_normal",
+              "wave": 12
+            },
+            {
+              "id": "a1:f1:w12:f01w12b04u01",
+              "archetype": "boar_normal",
+              "wave": 12
+            },
+            {
+              "id": "a1:f1:w12:f01w12b04u04",
+              "archetype": "boar_normal",
+              "wave": 12
+            },
+            {
+              "id": "a1:f1:w12:f01w12b04u03",
+              "archetype": "boar_normal",
+              "wave": 12
+            },
+            {
+              "id": "a1:f1:w12:f01w12b04u05",
+              "archetype": "boar_normal",
+              "wave": 12
+            },
+            {
+              "id": "a1:f1:w12:f01w12b03u01",
+              "archetype": "spider_normal",
+              "wave": 12
+            },
+            {
+              "id": "a1:f1:w12:f01w12b03u02",
+              "archetype": "spider_normal",
+              "wave": 12
+            },
+            {
+              "id": "a1:f1:w12:f01w12b03u03",
+              "archetype": "spider_normal",
+              "wave": 12
+            },
+            {
+              "id": "a1:f1:w12:f01w12b03u04",
+              "archetype": "spider_normal",
+              "wave": 12
+            },
+            {
+              "id": "a1:f1:w12:f01w12b03u05",
+              "archetype": "spider_normal",
+              "wave": 12
+            },
+            {
+              "id": "a1:f1:w13:f01w13b01u01",
+              "archetype": "boar_normal",
+              "wave": 13
+            },
+            {
+              "id": "a1:f1:w13:f01w13b01u03",
+              "archetype": "boar_normal",
+              "wave": 13
+            },
+            {
+              "id": "a1:f1:w13:f01w13b01u04",
+              "archetype": "boar_normal",
+              "wave": 13
+            },
+            {
+              "id": "a1:f1:w13:f01w13b01u02",
+              "archetype": "boar_normal",
+              "wave": 13
+            },
+            {
+              "id": "a1:f1:w13:f01w13b01u05",
+              "archetype": "boar_normal",
+              "wave": 13
+            },
+            {
+              "id": "a1:f1:w13:f01w13b01u06",
+              "archetype": "boar_normal",
+              "wave": 13
+            },
+            {
+              "id": "a1:f1:w13:f01w13b02u01",
+              "archetype": "spider_normal",
+              "wave": 13
+            },
+            {
+              "id": "a1:f1:w13:f01w13b02u02",
+              "archetype": "spider_normal",
+              "wave": 13
+            },
+            {
+              "id": "a1:f1:w13:f01w13b02u03",
+              "archetype": "spider_normal",
+              "wave": 13
+            },
+            {
+              "id": "a1:f1:w13:f01w13b02u04",
+              "archetype": "spider_normal",
+              "wave": 13
+            },
+            {
+              "id": "a1:f1:w13:f01w13b02u06",
+              "archetype": "spider_normal",
+              "wave": 13
+            },
+            {
+              "id": "a1:f1:w13:f01w13b02u05",
+              "archetype": "spider_normal",
+              "wave": 13
+            },
+            {
+              "id": "a1:f1:w13:f01w13b03u02",
+              "archetype": "wolf_normal",
+              "wave": 13
+            },
+            {
+              "id": "a1:f1:w13:f01w13b03u01",
+              "archetype": "wolf_normal",
+              "wave": 13
+            },
+            {
+              "id": "a1:f1:w13:f01w13b02u07",
+              "archetype": "spider_normal",
+              "wave": 13
+            },
+            {
+              "id": "a1:f1:w13:f01w13b03u04",
+              "archetype": "wolf_normal",
+              "wave": 13
+            },
+            {
+              "id": "a1:f1:w13:f01w13b03u03",
+              "archetype": "wolf_normal",
+              "wave": 13
+            },
+            {
+              "id": "a1:f1:w13:f01w13b03u05",
+              "archetype": "wolf_normal",
+              "wave": 13
+            },
+            {
+              "id": "a1:f1:w13:f01w13b04u01",
+              "archetype": "boar_normal",
+              "wave": 13
+            },
+            {
+              "id": "a1:f1:w13:f01w13b04u02",
+              "archetype": "boar_normal",
+              "wave": 13
+            },
+            {
+              "id": "a1:f1:w13:f01w13b04u04",
+              "archetype": "boar_normal",
+              "wave": 13
+            },
+            {
+              "id": "a1:f1:w13:f01w13b04u03",
+              "archetype": "boar_normal",
+              "wave": 13
+            },
+            {
+              "id": "a1:f1:w13:f01w13b04u05",
+              "archetype": "boar_normal",
+              "wave": 13
+            },
+            {
+              "id": "a1:f1:w13:f01w13b04u06",
+              "archetype": "boar_normal",
+              "wave": 13
+            },
+            {
+              "id": "a1:f1:w14:f01w14b01u03",
+              "archetype": "boar_normal",
+              "wave": 14
+            },
+            {
+              "id": "a1:f1:w14:f01w14b01u01",
+              "archetype": "boar_normal",
+              "wave": 14
+            },
+            {
+              "id": "a1:f1:w14:f01w14b01u02",
+              "archetype": "boar_normal",
+              "wave": 14
+            },
+            {
+              "id": "a1:f1:w14:f01w14b01u04",
+              "archetype": "boar_normal",
+              "wave": 14
+            },
+            {
+              "id": "a1:f1:w14:f01w14b01u06",
+              "archetype": "boar_normal",
+              "wave": 14
+            },
+            {
+              "id": "a1:f1:w14:f01w14b01u07",
+              "archetype": "boar_normal",
+              "wave": 14
+            },
+            {
+              "id": "a1:f1:w14:f01w14b01u05",
+              "archetype": "boar_normal",
+              "wave": 14
+            },
+            {
+              "id": "a1:f1:w14:f01w14b02u02",
+              "archetype": "wolf_normal",
+              "wave": 14
+            },
+            {
+              "id": "a1:f1:w14:f01w14b02u01",
+              "archetype": "wolf_normal",
+              "wave": 14
+            },
+            {
+              "id": "a1:f1:w14:f01w14b02u04",
+              "archetype": "wolf_normal",
+              "wave": 14
+            },
+            {
+              "id": "a1:f1:w14:f01w14b02u05",
+              "archetype": "wolf_normal",
+              "wave": 14
+            },
+            {
+              "id": "a1:f1:w14:f01w14b02u03",
+              "archetype": "wolf_normal",
+              "wave": 14
+            },
+            {
+              "id": "a1:f1:w14:f01w14b02u07",
+              "archetype": "wolf_normal",
+              "wave": 14
+            },
+            {
+              "id": "a1:f1:w14:f01w14b02u06",
+              "archetype": "wolf_normal",
+              "wave": 14
+            },
+            {
+              "id": "a1:f1:w14:f01w14b03u02",
+              "archetype": "spider_normal",
+              "wave": 14
+            },
+            {
+              "id": "a1:f1:w14:f01w14b03u01",
+              "archetype": "spider_normal",
+              "wave": 14
+            },
+            {
+              "id": "a1:f1:w14:f01w14b03u03",
+              "archetype": "spider_normal",
+              "wave": 14
+            },
+            {
+              "id": "a1:f1:w14:f01w14b03u04",
+              "archetype": "spider_normal",
+              "wave": 14
+            },
+            {
+              "id": "a1:f1:w14:f01w14b03u06",
+              "archetype": "spider_normal",
+              "wave": 14
+            },
+            {
+              "id": "a1:f1:w14:f01w14b03u05",
+              "archetype": "spider_normal",
+              "wave": 14
+            },
+            {
+              "id": "a1:f1:w14:f01w14b04u03",
+              "archetype": "boar_normal",
+              "wave": 14
+            },
+            {
+              "id": "a1:f1:w14:f01w14b04u01",
+              "archetype": "boar_normal",
+              "wave": 14
+            },
+            {
+              "id": "a1:f1:w14:f01w14b04u02",
+              "archetype": "boar_normal",
+              "wave": 14
+            },
+            {
+              "id": "a1:f1:w14:f01w14b04u04",
+              "archetype": "boar_normal",
+              "wave": 14
+            },
+            {
+              "id": "a1:f1:w14:f01w14b04u06",
+              "archetype": "boar_normal",
+              "wave": 14
+            },
+            {
+              "id": "a1:f1:w14:f01w14b04u05",
+              "archetype": "boar_normal",
+              "wave": 14
+            },
+            {
+              "id": "a1:f1:w15:f01w15b01u01",
+              "archetype": "spider_elite",
+              "wave": 15
+            },
+            {
+              "id": "a1:f1:w15:f01w15b02u02",
+              "archetype": "boar_normal",
+              "wave": 15
+            },
+            {
+              "id": "a1:f1:w15:f01w15b02u01",
+              "archetype": "boar_normal",
+              "wave": 15
+            },
+            {
+              "id": "a1:f1:w15:f01w15b02u04",
+              "archetype": "boar_normal",
+              "wave": 15
+            },
+            {
+              "id": "a1:f1:w15:f01w15b02u03",
+              "archetype": "boar_normal",
+              "wave": 15
+            },
+            {
+              "id": "a1:f1:w15:f01w15b03u01",
+              "archetype": "spider_normal",
+              "wave": 15
+            },
+            {
+              "id": "a1:f1:w15:f01w15b03u03",
+              "archetype": "spider_normal",
+              "wave": 15
+            },
+            {
+              "id": "a1:f1:w15:f01w15b03u02",
+              "archetype": "spider_normal",
+              "wave": 15
+            },
+            {
+              "id": "a1:f1:w15:f01w15b03u04",
+              "archetype": "spider_normal",
+              "wave": 15
+            },
+            {
+              "id": "a1:f1:w15:f01w15b04u01",
+              "archetype": "spider_elite",
+              "wave": 15
+            },
+            {
+              "id": "a1:f1:w15:f01w15b06u03",
+              "archetype": "boar_normal",
+              "wave": 15
+            },
+            {
+              "id": "a1:f1:w15:f01w15b06u01",
+              "archetype": "boar_normal",
+              "wave": 15
+            },
+            {
+              "id": "a1:f1:w15:f01w15b06u02",
+              "archetype": "boar_normal",
+              "wave": 15
+            },
+            {
+              "id": "a1:f1:w15:f01w15b05u02",
+              "archetype": "wolf_normal",
+              "wave": 15
+            },
+            {
+              "id": "a1:f1:w15:f01w15b05u01",
+              "archetype": "wolf_normal",
+              "wave": 15
+            },
+            {
+              "id": "a1:f1:w15:f01w15b05u03",
+              "archetype": "wolf_normal",
+              "wave": 15
+            },
+            {
+              "id": "a1:f1:w16:f01w16b01u01",
+              "archetype": "boar_normal",
+              "wave": 16
+            },
+            {
+              "id": "a1:f1:w16:f01w16b02u01",
+              "archetype": "wolf_normal",
+              "wave": 16
+            },
+            {
+              "id": "a1:f1:w16:f01w16b02u04",
+              "archetype": "wolf_normal",
+              "wave": 16
+            },
+            {
+              "id": "a1:f1:w16:f01w16b02u02",
+              "archetype": "wolf_normal",
+              "wave": 16
+            },
+            {
+              "id": "a1:f1:w16:f01w16b02u03",
+              "archetype": "wolf_normal",
+              "wave": 16
+            },
+            {
+              "id": "a1:f1:w16:f01w16b02u05",
+              "archetype": "wolf_normal",
+              "wave": 16
+            },
+            {
+              "id": "a1:f1:w16:f01w16b02u07",
+              "archetype": "wolf_normal",
+              "wave": 16
+            },
+            {
+              "id": "a1:f1:w16:f01w16b02u06",
+              "archetype": "wolf_normal",
+              "wave": 16
+            },
+            {
+              "id": "a1:f1:w16:f01w16b01u06",
+              "archetype": "boar_normal",
+              "wave": 16
+            },
+            {
+              "id": "a1:f1:w16:f01w16b01u05",
+              "archetype": "boar_normal",
+              "wave": 16
+            },
+            {
+              "id": "a1:f1:w16:f01w16b01u04",
+              "archetype": "boar_normal",
+              "wave": 16
+            },
+            {
+              "id": "a1:f1:w16:f01w16b01u03",
+              "archetype": "boar_normal",
+              "wave": 16
+            },
+            {
+              "id": "a1:f1:w16:f01w16b01u02",
+              "archetype": "boar_normal",
+              "wave": 16
+            },
+            {
+              "id": "a1:f1:w16:f01w16b03u01",
+              "archetype": "spider_normal",
+              "wave": 16
+            },
+            {
+              "id": "a1:f1:w16:f01w16b03u02",
+              "archetype": "spider_normal",
+              "wave": 16
+            },
+            {
+              "id": "a1:f1:w16:f01w16b03u03",
+              "archetype": "spider_normal",
+              "wave": 16
+            },
+            {
+              "id": "a1:f1:w16:f01w16b03u04",
+              "archetype": "spider_normal",
+              "wave": 16
+            },
+            {
+              "id": "a1:f1:w16:f01w16b03u05",
+              "archetype": "spider_normal",
+              "wave": 16
+            },
+            {
+              "id": "a1:f1:w16:f01w16b04u03",
+              "archetype": "boar_normal",
+              "wave": 16
+            },
+            {
+              "id": "a1:f1:w16:f01w16b04u05",
+              "archetype": "boar_normal",
+              "wave": 16
+            },
+            {
+              "id": "a1:f1:w16:f01w16b04u06",
+              "archetype": "boar_normal",
+              "wave": 16
+            },
+            {
+              "id": "a1:f1:w16:f01w16b04u02",
+              "archetype": "boar_normal",
+              "wave": 16
+            },
+            {
+              "id": "a1:f1:w16:f01w16b04u04",
+              "archetype": "boar_normal",
+              "wave": 16
+            },
+            {
+              "id": "a1:f1:w16:f01w16b04u01",
+              "archetype": "boar_normal",
+              "wave": 16
+            },
+            {
+              "id": "a1:f1:w17:f01w17b01u01",
+              "archetype": "boar_normal",
+              "wave": 17
+            },
+            {
+              "id": "a1:f1:w17:f01w17b01u02",
+              "archetype": "boar_normal",
+              "wave": 17
+            },
+            {
+              "id": "a1:f1:w17:f01w17b01u03",
+              "archetype": "boar_normal",
+              "wave": 17
+            },
+            {
+              "id": "a1:f1:w17:f01w17b01u04",
+              "archetype": "boar_normal",
+              "wave": 17
+            },
+            {
+              "id": "a1:f1:w17:f01w17b01u06",
+              "archetype": "boar_normal",
+              "wave": 17
+            },
+            {
+              "id": "a1:f1:w17:f01w17b01u05",
+              "archetype": "boar_normal",
+              "wave": 17
+            },
+            {
+              "id": "a1:f1:w17:f01w17b01u07",
+              "archetype": "boar_normal",
+              "wave": 17
+            },
+            {
+              "id": "a1:f1:w17:f01w17b02u03",
+              "archetype": "spider_normal",
+              "wave": 17
+            },
+            {
+              "id": "a1:f1:w17:f01w17b02u01",
+              "archetype": "spider_normal",
+              "wave": 17
+            },
+            {
+              "id": "a1:f1:w17:f01w17b02u04",
+              "archetype": "spider_normal",
+              "wave": 17
+            },
+            {
+              "id": "a1:f1:w17:f01w17b02u02",
+              "archetype": "spider_normal",
+              "wave": 17
+            },
+            {
+              "id": "a1:f1:w17:f01w17b02u05",
+              "archetype": "spider_normal",
+              "wave": 17
+            },
+            {
+              "id": "a1:f1:w17:f01w17b02u07",
+              "archetype": "spider_normal",
+              "wave": 17
+            },
+            {
+              "id": "a1:f1:w17:f01w17b02u06",
+              "archetype": "spider_normal",
+              "wave": 17
+            },
+            {
+              "id": "a1:f1:w17:f01w17b03u02",
+              "archetype": "wolf_normal",
+              "wave": 17
+            },
+            {
+              "id": "a1:f1:w17:f01w17b03u01",
+              "archetype": "wolf_normal",
+              "wave": 17
+            },
+            {
+              "id": "a1:f1:w17:f01w17b03u04",
+              "archetype": "wolf_normal",
+              "wave": 17
+            },
+            {
+              "id": "a1:f1:w17:f01w17b03u06",
+              "archetype": "wolf_normal",
+              "wave": 17
+            },
+            {
+              "id": "a1:f1:w17:f01w17b03u03",
+              "archetype": "wolf_normal",
+              "wave": 17
+            },
+            {
+              "id": "a1:f1:w17:f01w17b03u05",
+              "archetype": "wolf_normal",
+              "wave": 17
+            },
+            {
+              "id": "a1:f1:w17:f01w17b04u01",
+              "archetype": "boar_normal",
+              "wave": 17
+            },
+            {
+              "id": "a1:f1:w17:f01w17b04u03",
+              "archetype": "boar_normal",
+              "wave": 17
+            },
+            {
+              "id": "a1:f1:w17:f01w17b04u02",
+              "archetype": "boar_normal",
+              "wave": 17
+            },
+            {
+              "id": "a1:f1:w17:f01w17b04u04",
+              "archetype": "boar_normal",
+              "wave": 17
+            },
+            {
+              "id": "a1:f1:w17:f01w17b04u06",
+              "archetype": "boar_normal",
+              "wave": 17
+            },
+            {
+              "id": "a1:f1:w17:f01w17b04u05",
+              "archetype": "boar_normal",
+              "wave": 17
+            },
+            {
+              "id": "a1:f1:w18:f01w18b02u03",
+              "archetype": "boar_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w18:f01w18b02u01",
+              "archetype": "boar_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w18:f01w18b02u04",
+              "archetype": "boar_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w18:f01w18b02u02",
+              "archetype": "boar_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w18:f01w18b02u05",
+              "archetype": "boar_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w18:f01w18b02u07",
+              "archetype": "boar_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w18:f01w18b02u06",
+              "archetype": "boar_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w18:f01w18b01u02",
+              "archetype": "wolf_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w18:f01w18b01u01",
+              "archetype": "wolf_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w18:f01w18b01u04",
+              "archetype": "wolf_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w18:f01w18b01u03",
+              "archetype": "wolf_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w18:f01w18b03u02",
+              "archetype": "spider_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w18:f01w18b03u01",
+              "archetype": "spider_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w18:f01w18b03u04",
+              "archetype": "spider_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w18:f01w18b03u03",
+              "archetype": "spider_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w18:f01w18b03u05",
+              "archetype": "spider_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w18:f01w18b04u03",
+              "archetype": "boar_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w18:f01w18b04u01",
+              "archetype": "boar_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w18:f01w18b04u04",
+              "archetype": "boar_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w18:f01w18b04u02",
+              "archetype": "boar_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w18:f01w18b04u05",
+              "archetype": "boar_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w18:f01w18b04u07",
+              "archetype": "boar_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w18:f01w18b03u06",
+              "archetype": "spider_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w18:f01w18b04u06",
+              "archetype": "boar_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w18:f01w18b05u02",
+              "archetype": "wolf_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w18:f01w18b05u01",
+              "archetype": "wolf_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w18:f01w18b05u03",
+              "archetype": "wolf_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w18:f01w18b05u04",
+              "archetype": "wolf_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w19:f01w19b01u01",
+              "archetype": "boar_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b01u04",
+              "archetype": "boar_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b01u02",
+              "archetype": "boar_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b01u03",
+              "archetype": "boar_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b01u05",
+              "archetype": "boar_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b01u07",
+              "archetype": "boar_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b01u06",
+              "archetype": "boar_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b02u02",
+              "archetype": "spider_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b02u01",
+              "archetype": "spider_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b02u03",
+              "archetype": "spider_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b02u04",
+              "archetype": "spider_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b02u05",
+              "archetype": "spider_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b04u02",
+              "archetype": "boar_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b04u01",
+              "archetype": "boar_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b04u03",
+              "archetype": "boar_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b03u02",
+              "archetype": "wolf_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b03u03",
+              "archetype": "wolf_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b03u01",
+              "archetype": "wolf_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b03u04",
+              "archetype": "wolf_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b03u06",
+              "archetype": "wolf_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b03u05",
+              "archetype": "wolf_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b04u04",
+              "archetype": "boar_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b06u01",
+              "archetype": "boar_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b06u04",
+              "archetype": "boar_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b06u03",
+              "archetype": "boar_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b05u01",
+              "archetype": "spider_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b05u03",
+              "archetype": "spider_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b05u02",
+              "archetype": "spider_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b05u04",
+              "archetype": "spider_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b06u02",
+              "archetype": "boar_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w20:f01w20b01u01",
+              "archetype": "boar_boss",
+              "wave": 20
+            }
+          ],
+          "clearedWaves": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "gateEntries": [],
+          "gateReadyAt": 0,
+          "hurtUntil": 0,
+          "nextWindupAt": 281.25,
+          "supportReleased": true,
+          "supportAt": 281.25,
+          "view": {
+            "xmin": -92.31757085371589,
+            "xmax": 611.6824291462841,
+            "ymin": -142.39922783532148,
+            "ymax": 874.6007721646786
+          },
+          "trainingResetAt": 0
+        },
+        "note": "真实逐tick模拟抽样，非自然养成、非实际clock测量；未改统计/敌人/血量/奖励。"
+      },
+      "isolation": {
+        "keys": {
+          "normal": "xianxia.sect-tower.campaign.v1",
+          "playtest": "xianxia.sect-tower.playtest.v1",
+          "tools": "xianxia.sect-tower.playtest-tools.v1"
+        },
+        "ordinaryBeforeHash": "0c75e7f477ee9a57c8b2a4daf73e70eeab7709a498473b57c898bffb4a7d438a",
+        "ordinaryAfterHash": "ab09b0b5fcf49ca36864c4aa4c6b2825eabe27b21eb7c3aeedff75f1e18e7eae",
+        "ordinaryRawUnchanged": false,
+        "experienceHash": "5bdb8eea5b0ecb7fd5388c01e801e6e5c66c7b8a51ae6bb40cd8f71a46e23839",
+        "prefs": {
+          "speed": 3,
+          "invincible": true
+        },
+        "changedOrdinaryFields": [
+          "hp",
+          "restAt"
+        ],
+        "recovery": {
+          "switchWallBefore": 1793157695362,
+          "switchWallAfter": 1793157695600,
+          "baselineRestAt": 1793157686206,
+          "returnedRestAt": 1793157695393,
+          "beforeHp": 100,
+          "afterHp": 100.15349945833333,
+          "maxHp": 100.25,
+          "expectedHp": 100.15349945833333,
+          "upperHp": 100.15695808333334,
+          "otherFieldsUnchanged": true,
+          "policy": "raw immutable during experience/reload; real-wall-clock HP/restAt on return"
+        }
+      }
+    }
+  ],
+  "evidencePolicy": "自然路径仅购丹/真实模拟/Store事务；高进度fixture单列，不写用户存档。光环截图需人工视觉复核。",
+  "sourceHashes": {
+    "js/xianxia/TowerGrowth.js": "24543c0059d60a64c80fca40ac976b7055bd3783d5402cefd5c0900119ab38d0",
+    "js/xianxia/TowerCampaign.js": "b7ed35b634fd14c3a48d7fa4b9baa43fe778e7eace859972ad83e260350be592",
+    "js/xianxia/TowerRun.js": "274ca5e3fa962bdbc2583f45a4340112f06db46cad581c932c71a606b8d57e2a",
+    "js/xianxia/TowerPlaytest.js": "2b4af1b3700e8f298c5e921d25a13fd2b50b808a03393368b225a03bb111f4b6",
+    "cocos-pilot/assets/scripts/TowerMenu.ts": "43f845ab406c6ef4153cb104decf8937c22ca25d02a53453c4e99c60a2bea4ac",
+    "cocos-pilot/assets/scripts/TowerView.ts": "c334b2e7df6005557cd8c5c2bca586e09d67a2d324e604434976d7a01e0a79d5"
+  },
+  "finishedAt": "2026-10-28T03:21:35.733Z",
+  "failures": 0
+}

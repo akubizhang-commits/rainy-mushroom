@@ -30,13 +30,14 @@ for(const [id,item] of Object.entries(CAMP_PILLS).filter(([,i])=>i.successChance
  })
 }
 test('shop prices and foundation purchase gate; materials cannot be purchased',()=>{
- const {store}=fixture({contribution:1000})
- assert.equal(store.act({type:'buyPill',id:'ningyuan',count:1},0).cost,120)
+ const {store}=fixture({spiritStones:1000})
+ assert.equal(store.act({type:'buyPill',id:'ningyuan',count:1},0).reason,'craft-only')
+ assert.equal(store.act({type:'buyPill',id:'zhuji',count:1},0).cost,60)
  assert.equal(store.act({type:'buyPill',id:'ningdan',count:1},0).reason,'realm-locked')
  assert.equal(store.act({type:'buyPill',id:'xiaoyue',count:1},0).reason,'drop-only')
- const next=fixture({xp:1801,contribution:1000}).store
+ const next=fixture({xp:1801,spiritStones:1000}).store
  assert.equal(next.act({type:'buyPill',id:'ningdan',count:1},0).cost,120)
- assert.equal(next.act({type:'buyPill',id:'jiuzhuan',count:1},0).cost,220)
+ assert.equal(next.act({type:'buyPill',id:'jiuzhuan',count:1},0).reason,'craft-only')
 })
 test('selling stock is atomic, persists, and rejects invalid counts and insufficient stock',()=>{
  const {store,disk}=fixture({pills:{xiaoyue:3,chilin:2}}),before=store.state

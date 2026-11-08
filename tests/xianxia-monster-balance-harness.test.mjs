@@ -4,7 +4,7 @@ import {tmpdir} from 'node:os'
 import {execFileSync} from 'node:child_process'
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import {fixture,zoneDanger,steerMechanics} from '../scripts/verify-monster-mechanics-balance.mjs'
+import {fixture,zoneDanger,steerMechanics,playFixture} from '../scripts/verify-monster-mechanics-balance.mjs'
 import {FLOORS} from '../js/xianxia/TowerContent.js'
 import {cultivationAt} from '../js/xianxia/TowerProfile.js'
 import {TowerCampaignStore,combatLoadout} from '../js/xianxia/TowerCampaign.js'
@@ -16,6 +16,14 @@ test('all 81 fixed sword fixtures fit real level, SP, and item eligibility',()=>
   const run=new TowerRun({attemptId:1,floor,seed:101,xp:f.xp,hp:f.stats.maxHp,loadout:f.loadout,arenaVersion:1})
   assert.equal(run._playtestAssist,false);assert.equal(run.state.player.hp,f.stats.maxHp)
  }
+})
+test('calibration resumes a real breakthrough pause without inventing a breakthrough',()=>{
+ const f=fixture(4,'qi')
+ f.xp=1800
+ const result=playFixture(f,{maxSeconds:.1})
+ assert.equal(result.resumedNodes,1)
+ assert.equal(result.outcome,'timeout')
+ assert.ok(result.time>=.1)
 })
 test('bot recognizes gate interiors and sector gaps in authored radian mechanics',()=>{
  const gates={shape:'safe-gates',safeZones:[{x:100,y:0,radius:55}]}
@@ -179,13 +187,34 @@ test('bot clears an expanding shockwave instead of oscillating and stepping back
 test('bot leaves recorded sweep and charge warnings without reversing into the hit',()=>{
  const windows=JSON.parse(readFileSync(new URL('./fixtures/tower-bot-escape.json',import.meta.url),'utf8'))
  for(const f of windows){
-  const run=TowerRun.restore(f.snapshot),end=run.state.time+f.duration
-  const seen=new Set(run.state.effects.map(e=>e.id));let hits=0
+  // Historical recordings provide geometry, not compatible campaign saves.
+  // Build current actors/attributes and replay only the hostile attack window.
+  const old=f.snapshot,current=fixture(9,'mixed')
+  const run=new TowerRun({attemptId:1,floor:9,seed:601,hp:current.stats.maxHp,xp:current.xp,loadout:current.loadout,arenaVersion:1,training:true})
+  const s=run.state
+  s.time=old.time;s.ticks=Math.round(old.time*60);s.wave=20
+  s.pending=[];s.reserved=[];s.projectiles=[];s.effects=[]
+  Object.assign(s.player,{x:old.player.x,y:old.player.y,moveSpeed:old.player.moveSpeed})
+  s.enemies=old.enemies.map(e=>{
+   const actor=run._enemy({id:e.id,archetype:e.archetype,x:e.x,y:e.y})
+   actor.ai=structuredClone(e.ai)
+   if(e.mechanic)actor.mechanic={...actor.mechanic,...structuredClone(e.mechanic)}
+   actor.orbitNextAt=1e9
+   return actor
+  })
+  s.zones=structuredClone(old.zones.filter(z=>z.hostile))
+  s.monsterMechanics.zones=structuredClone(old.monsterMechanics.zones)
+  s.monsterMechanics.nextMajorAt=1e9;s.nextWindupAt=1e9
+  for(const id of Object.keys(s.cooldowns))s.cooldowns[id]=1e9
+  assert.ok(s.zones.some(z=>z.hostile)||s.monsterMechanics.zones.length,'recorded attack must be present')
+  const end=run.state.time+f.duration
+  const seen=new Set(run.state.effects.map(e=>e.id));let hits=0,steps=0
   while(run.state.phase==='playing'&&run.state.time<end){
    const p=run.state.player;run.setViewport({xmin:p.x-560,xmax:p.x+560,ymin:p.y-315,ymax:p.y+315})
-   steerMechanics(run);run.advance(1/60)
+   steerMechanics(run);run.advance(1/60);steps++
    for(const e of run.state.effects)if(!seen.has(e.id)){seen.add(e.id);if(e.kind==='player_hit')hits++}
   }
+  assert.ok(steps>=Math.floor(f.duration*60)-1,`${f.name}: replay ended before the attack window`)
   assert.equal(hits,0,f.name)
  }
 })

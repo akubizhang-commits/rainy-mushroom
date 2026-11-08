@@ -165,7 +165,7 @@ export const ROUTES = {
     ['sj_shadow',3],['sj_arc',3],['sj_wanjian',3],['vajra',3],['magnet',3],['evo_wanjian',1]] },
   pierce36: { name:'剑气贯穿36', budget:36, targets:[['sj_line',8],['sj_mark',4],
     ['evo_tiandi',1],['sj_arc',4],['sj_yujian',2],['vajra',3],['magnet',2]] },
-  formation36: { name:'剑阵控场36', budget:36, targets:[['sj_formation',6],['sj_gate',4],
+  formation36: { name:'剑阵控场36', budget:36, targets:[['sj_formation',6],['sj_gate',2],
     ['evo_sixiang',1],['sj_wanjian',6],['sj_bone',3],['vajra',3],['magnet',2],['sj_yujian',2]] },
   pursuit30: { name:'御剑追击30', budget:30, targets:[['sj_yujian',10],['sj_heart',4],
     ['sj_arc',3],['sj_wanjian',3],['vajra',3],['magnet',3],['evo_wanjian',1]] },

@@ -5,7 +5,7 @@ const unlocked = quote => quote.ok || quote.reason === 'insufficient-points'
 
 // Pure preview only. Execute each action through Campaign; never copy projected
 // currency or ranks into a live save. Base training remains useful after evolution.
-export function planNaturalGrowth(state, priorities, evolutionIds) {
+export function planNaturalGrowth(state, priorities, evolutionIds, completionPriorities = []) {
   let projected = structuredClone(state)
   const actions = []
   const quote = id => skillRequirement(projected, id, { inTower: !!projected.activeRun })
@@ -46,6 +46,18 @@ export function planNaturalGrowth(state, priorities, evolutionIds) {
     const q = quote(id)
     if (q.ok && projected.spiritStones >= q.bookCost
       && growthSummary(projected).available - q.cost >= pendingReserve()) purchase(id, q)
+  }
+  // Do not let a cheap filler consume points while a core skill is still
+  // realm-locked. Completion is opt-in and uses the same real purchase quotes.
+  if (priorities.every(([id, target]) => (projected.skills[id] || 0) >= target)) {
+    for (const [id, target] of completionPriorities) {
+      while ((projected.skills[id] || 0) < target) {
+        const q = quote(id)
+        if (!q.ok || projected.spiritStones < q.bookCost
+          || growthSummary(projected).available - q.cost < pendingReserve()) break
+        purchase(id, q)
+      }
+    }
   }
   return actions
 }

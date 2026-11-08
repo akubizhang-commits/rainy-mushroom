@@ -29,15 +29,15 @@ test('all identities have slot-specific intrinsic defense and three distinct att
     assert.deepEqual(s.lines,[...s.baseLines,...s.ordinaryLines,...s.specialLines])
     assert.ok(!s.affixes.some(a=>['strength','intelligence','awareness','vitality'].includes(a.type)))
     if(d.category==='weapon'&&d.quality){
-      assert.match(s.ordinaryLines.join(' '),/附加伤害/)
+      assert.equal(s.ordinaryLines.some(line=>/附加伤害/.test(line)),s.affixes.some(a=>a.type==='onHit'))
       assert.doesNotMatch(s.specialLines.join(' '),/附加伤害/)
-      assert.equal(s.specialLines.length,s.affixes.filter(a=>['flow','element'].includes(a.type)).length)
-      assert.ok(s.specialLines.every(line=>/流派伤害|元素.*伤害/.test(line)))
+      assert.equal(s.specialLines.length,s.affixes.filter(a=>['skill','flow','element','bleed','bleedConversion','skillLevel'].includes(a.type)).length)
+      assert.ok(s.specialLines.every(line=>/流派伤害|属性伤害|伤害|流血|技能等级/.test(line)))
     }else if(d.category==='armor'&&d.quality){
       assert.match(s.specialLines.join(' '),/气血回复 .*\/3秒/)
-      assert.equal(s.specialLines.length,1)
+      assert.equal(s.specialLines.length,1+s.affixes.filter(a=>['lowHealthShield','safeRecovery'].includes(a.type)).length)
       assert.doesNotMatch(s.ordinaryLines.join(' '),/气血回复/)
-    }else assert.equal(s.specialLines.length,0)
+    }else assert.equal(s.specialLines.length,s.affixes.filter(a=>['dotDamage','formationDamage'].includes(a.type)).length)
   }
 })
 test('each category includes one, two and three primary-attribute identities without giving every item everything',()=>{
@@ -55,7 +55,7 @@ test('three-slot primary bonuses apply once; vitality converts to HP and removed
     near(actual[k],base[k]+bases.reduce((n,a)=>n+(a[k]??0),0))
   }
   near(actual.maxMana,actual.awareness)
-  near(actual.maxHp,(base.maxHp+actual.vitality*10)*(1+gear.armorModifiers(items.armor).hpBonus))
+  near(actual.maxHp,actual.vitality*10*(1+gear.armorModifiers(items.armor).hpBonus))
   near(actual.attack,actual.strength+weaponSummary(items.weapon).baseAttack)
   near(actual.magicAttack,actual.intelligence+weaponSummary(items.weapon).baseMagicAttack)
   const unarmed=stats(0,loadout({...items,weaponEquipped:false})),withoutWeapon=stats(0,loadout({armor:items.armor,ring:items.ring}))
@@ -67,7 +67,7 @@ test('real incoming damage reads ring magic defense, armor physical defense and 
       const l=loadout(slots)
       const run=new TowerRun({attemptId:9,floor:1,seed:4,xp:cultivationLevelXp(21),hp:100,loadout:l})
       const sheet=characterCombatAttributes(l)
-      const p=1000/(1000+sheet.physicalDefense),m=1000/(1000+sheet.magicDefense)
+      const p=500/(500+sheet.physicalDefense),m=500/(500+sheet.magicDefense)
       if(!slots.ring)near(m,1)
       if(!slots.armor)near(p,1)
       run._projectile(run.state.player.x,run.state.player.y,0,0,10,20,true,{damageType:type})
@@ -76,7 +76,7 @@ test('real incoming damage reads ring magic defense, armor physical defense and 
       const restored=TowerRun.restore(JSON.parse(JSON.stringify(snapshot)))
       const hp=restored.state.player.hp
       restored.advance(1/60)
-      near(hp-restored.state.player.hp,20*(type==='physical'?p:type==='magic'?m:(p+m)/2))
+      near(hp-restored.state.player.hp,40*(type==='physical'?p:type==='magic'?m:(p+m)/2))
       run.advance(1/60);assert.deepEqual(restored.snapshot(),run.snapshot())
     }
   }

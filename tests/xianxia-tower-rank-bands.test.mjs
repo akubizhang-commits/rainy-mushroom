@@ -7,17 +7,17 @@ import { TowerCampaignStore } from '../js/xianxia/TowerCampaign.js'
 import { checksum } from '../js/xianxia/Checksum.js'
 import { cultivationLevelXp as xpAt } from '../js/xianxia/TowerProfile.js'
 const fresh = () => structuredClone(new TowerCampaignStore({getItem:()=>null,setItem(){}},0).state)
-test('yujian unlocks at exactly 225 XP and persists only after a successful write', () => {
+test('yujian unlocks at exactly level two and persists only after a successful write', () => {
   const disk={raw:null,fail:false,getItem(){return this.raw},setItem(k,v){if(this.fail)throw Error('full');this.raw=v}}
   const seed=xp=>{
     const data=JSON.stringify({...fresh(),xp})
     disk.raw=JSON.stringify({format:'xianxia-sect-tower-campaign',schema:currentCampaignSchema,data,checksum:checksum(data)})
     return new TowerCampaignStore(disk,0)
   }
-  let store=seed(224), before=store.state, raw=disk.raw
+  let store=seed(xpAt(2)-1), before=store.state, raw=disk.raw
   assert.equal(store.act({type:'learnSkill',id:'sj_yujian'},0).reason,'stage-locked')
   assert.equal(store.state,before);assert.equal(disk.raw,raw)
-  store=seed(225);before=store.state;raw=disk.raw;disk.fail=true
+  store=seed(xpAt(2));before=store.state;raw=disk.raw;disk.fail=true
   assert.equal(store.act({type:'learnSkill',id:'sj_yujian'},0).reason,'save-failed')
   assert.equal(store.state,before);assert.equal(disk.raw,raw);disk.fail=false
   assert.equal(store.act({type:'learnSkill',id:'sj_yujian'},0).ok,true)
@@ -41,18 +41,16 @@ for (const skill of GROWTH_SKILLS) test(`${skill.id}: all rank boundaries agree 
     }
   }
 })
-test('detail page lists complete early and delayed rank bands, including maxed skills',()=>{
-  const state=fresh()
-  assert.deepEqual(skillPresentation(state,'sj_yujian').rankRuleLines,
-    ['1–3级：炼气 · 中期','4–6级：炼气 · 巅峰，需凝神诀1级','7–9级：筑基 · 初期，需凝神诀2级','10级：筑基 · 中期，需凝神诀3级'])
-  assert.deepEqual(skillPresentation(state,'sj_arc').rankRuleLines,
-    ['1–3级：炼气 · 初期','4–6级：炼气 · 中期','7–9级：炼气 · 巅峰','10级：筑基 · 初期'])
-  assert.deepEqual(skillPresentation(state,'sj_line').rankRuleLines,
-    ['1–3级：筑基 · 初期','4–6级：筑基 · 中期','7–9级：筑基 · 巅峰','10级：金丹 · 初期'])
-  assert.deepEqual(skillPresentation(state,'vajra').rankRuleLines,
-    ['1级：炼气 · 中期','2–3级：炼气 · 巅峰','4级：筑基 · 初期'])
-  state.skills.sj_arc=10
-  assert.equal(skillPresentation(state,'sj_arc').rankRuleLines.length,4)
+test('ordinary skills use next-rank requirements without retired prerequisite bands',()=>{
+ const state=fresh()
+ for(const id of ['sj_yujian','sj_arc','sj_line','vajra']){
+  const definition=GROWTH_SKILLS.find(s=>s.id===id)
+  assert.deepEqual(skillPresentation(state,id).rankRuleLines,[])
+  assert.equal(skillPresentation(state,id).nextRequirement.characterLevel,definition.rankRequirements[(state.skills[id]||0)].characterLevel)
+ }
+ state.skills.sj_arc=10
+ assert.deepEqual(skillPresentation(state,'sj_arc').rankRuleLines,[])
+ assert.equal(skillPresentation(state,'sj_arc').nextRequirement,null)
 })
 test('third rank saves atomically, fourth rank stays locked until middle phase',()=>{
  const disk={raw:null,fail:false,getItem(){return this.raw},setItem(k,v){if(this.fail)throw Error('full');this.raw=v}}

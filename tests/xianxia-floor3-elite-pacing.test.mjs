@@ -1,7 +1,7 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import { TowerRun, validateTowerSnapshot } from '../js/xianxia/TowerRun.js'
-import { ARCHETYPES } from '../js/xianxia/TowerContent.js'
+import { MONSTER_RANK_BASELINE, ARCHETYPES } from '../js/xianxia/TowerContent.js'
 import { towerEnemyStats } from '../js/xianxia/TowerEnemyStats.js'
 import { fixture, steerMechanics } from '../scripts/verify-monster-mechanics-balance.mjs'
 
@@ -31,12 +31,12 @@ test('current floor-three array fixture defeats the first minor elite with movem
   t.diagnostic(`current array lower-quality fixture visible-to-kill ${(dead - visible).toFixed(3)}s`)
 })
 
-test('floor-three elites use the approved2.5HP/1.15damage budget without early-wave discounts', () => {
+test('floor-three elites use the approved rank-based HP/damage budget without early-wave discounts', () => {
   for (const archetype of ARCHETYPES.filter(a => a.role === 'elite')) {
     const baseline = towerEnemyStats({ ...archetype, role: 'normal' }, 3, 20)
     const expected = towerEnemyStats(archetype, 3, 20)
-    assert.ok(Math.abs(expected.hp / baseline.hp - 2.5) < 1e-10)
-    assert.ok(Math.abs(expected.damage / baseline.damage - 1.15) < 1e-10)
+    assert.ok(Math.abs(expected.hp / baseline.hp - MONSTER_RANK_BASELINE.elite_hp_multiplier_by_rank[archetype.rank]) < 1e-10)
+    assert.ok(Math.abs(expected.damage / baseline.damage - MONSTER_RANK_BASELINE.elite_damage_multiplier) < 1e-10)
     for (const wave of [1, 5, 6, 10, 20]) assert.deepEqual(towerEnemyStats(archetype, 3, wave), expected)
   }
 })

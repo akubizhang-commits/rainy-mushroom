@@ -34,33 +34,34 @@ test('layer bonus is applied at each tick, capped; refresh never compounds paid 
  addWeaponBleed(e,4,10,10);assert.equal(e.weaponBleed.stacks,1)
 })
 
-test('actual combat partitions critical hybrid damage, then pays both DOTs without procs or another crit',async()=>{
+test('actual combat partitions critical hybrid damage, then pays weapon DOT without scar damage, procs or another crit',async()=>{
  const {TowerRun}=await import('../js/xianxia/TowerRun.js')
  const {createFixedWeapon}=await import('../js/xianxia/TowerWeapons.js')
  const {outgoingDamageFactor}=await import('../js/xianxia/TowerAttributeRules.js')
  const {tickQingping}=await import('../js/xianxia/TowerQingping.js')
  const w=createFixedWeapon('eq_sword_caiyun','conversion-test')
- const loadout={growthVersion:1,active:{sj_arc:1},passive:{sj_mark:4,sj_heart:4,sj_gate:1},evolutions:[],evolutionLevels:{},tutorialWaves:0,weapon:w,weaponId:w.id,weaponQuality:w.quality,weaponRefine:0,weaponFocusCount:0}
+ const loadout={growthVersion:1,active:{sj_arc:1},passive:{sj_mark:1,sj_heart:4,sj_gate:1},evolutions:[],evolutionLevels:{},tutorialWaves:0,weapon:w,weaponId:w.id,weaponQuality:w.quality,weaponRefine:0,weaponFocusCount:0}
  const run=new TowerRun({attemptId:1,floor:1,seed:101,xp:13485,hp:100,training:true,loadout})
  for(let i=0;i<600&&!run.state.enemies.length;i++)run.advance(1/60)
  const e=run.state.enemies[0];e.hp=e.maxHp=1e7
  run._random=()=>0
  const multiplier=1.5+(w.affixes.find(a=>a.type==='critBonus')?.value??0)/100
- const physical=60*outgoingDamageFactor(loadout,'sj_arc','physical',true)*multiplier
- const magic=40*outgoingDamageFactor(loadout,'sj_arc','magic',true)*multiplier
+ const physical=60*outgoingDamageFactor(loadout,'sj_arc','physical',true)*multiplier*500/(500+e.physicalDefense)
+ const magic=40*outgoingDamageFactor(loadout,'sj_arc','magic',true)*multiplier*500/(500+e.magicDefense)
  const D=physical+magic,before=e.hp
  run._damageEnemy({target:e.id,source:'sj_arc',direct:true,damage:100,damageParts:{physical:60,magic:40}})
- near(before-e.hp,D*.25);near(e.weaponBleed.remaining,D*.5*1.02);near(e.woundBudget,D*.25*1.5)
- near(e.weaponBleed.physical,physical*.5*1.02);near(e.woundPhysicalBudget,physical*.25*1.5)
- const bursts=run.state.swordBursts.length,start=run.state.time
+ near(before-e.hp,D*.5);near(e.weaponBleed.remaining,D*.5*1.02)
+ near(e.weaponBleed.physical,physical*.5*1.02)
+ const start=run.state.time
+ assert.equal(e.scarDebuff.vulnerability,.2)
  run._random=()=>{throw Error('DOT cannot reroll crit')}
- e.mechanic={armorUntil:9999,armor:.9,vulnerableUntil:9999,vulnerability:2}
+ e.mechanic={armorUntil:9999,armor:.5,vulnerableUntil:0,vulnerability:0}
  for(let i=1;i<=6;i++){
   run.state.time=start+i*.5;const hits=[];tickWeaponBleeds(run.state,hits);hits.push(...tickQingping(run))
   for(const h of hits)run._damageEnemy(h)
  }
- near(before-e.hp,D*(.25+.5*1.02+.25*1.5))
- assert.equal(run.state.swordBursts.length,bursts);assert.equal(e.weaponBleed,undefined);assert.equal(e.qingpingDot,undefined)
+ near(before-e.hp,D*(.5+.5*1.02))
+ assert.equal(run.state.swordBursts?.length??0,0);assert.equal(e.weaponBleed,undefined);assert.equal(e.scarDebuff,undefined)
  assert.equal(e.woundBudget,0)
 })
 
@@ -68,13 +69,13 @@ test('both pending statuses survive pause and real resumed simulation; invalid s
  const {TowerRun,validateTowerSnapshot}=await import('../js/xianxia/TowerRun.js')
  const {createFixedWeapon}=await import('../js/xianxia/TowerWeapons.js')
  const w=createFixedWeapon('eq_sword_caiyun','restore-conversion')
- const loadout={growthVersion:1,active:{sj_arc:1},passive:{sj_mark:4},evolutions:[],evolutionLevels:{},tutorialWaves:0,weapon:w,weaponId:w.id,weaponQuality:w.quality,weaponRefine:0,weaponFocusCount:0}
+ const loadout={growthVersion:1,active:{sj_arc:1},passive:{sj_mark:1},evolutions:[],evolutionLevels:{},tutorialWaves:0,weapon:w,weaponId:w.id,weaponQuality:w.quality,weaponRefine:0,weaponFocusCount:0}
  const r=new TowerRun({attemptId:1,floor:1,seed:101,xp:13485,hp:100,training:true,loadout})
  for(let i=0;i<600&&!r.state.enemies.length;i++)r.advance(1/60)
  const e=r.state.enemies[0]
  r._damageEnemy({target:e.id,source:'sj_arc',direct:true,damage:.1})
  r.pause();const saved=r.snapshot();r.advance(1);assert.deepEqual(r.snapshot(),saved);assert.ok(validateTowerSnapshot(saved))
- for(const key of ['weaponBleed','qingpingDot'])for(const stacks of [0,12,1.5,NaN]){
+ for(const key of ['weaponBleed'])for(const stacks of [0,12,1.5,NaN]){
   const bad=structuredClone(saved);bad.enemies[0][key].stacks=stacks;assert.equal(validateTowerSnapshot(bad),false)
  }
  const restored=TowerRun.restore(saved);r.resume();restored.resume()

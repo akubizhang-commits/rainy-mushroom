@@ -3,7 +3,7 @@ import assert from 'node:assert/strict'
 import fs from 'node:fs'
 const data=()=>JSON.parse(fs.readFileSync('docs/xianxia/sect-tower-v1/data/tower-design.json'))
 const normals=[{1:372},{1:300,2:110},{1:224,2:224},{2:486},{2:262,3:262},{3:450,4:112},{3:360,4:240},{3:256,4:350,5:32},{4:474,5:202}]
-const elites=[{2:5},{2:3,3:2},{3:5},{3:3,4:2},{4:5},{4:3,5:2},{4:3,5:2},{4:3,5:2,6:1},{4:3,5:2,6:1}]
+const elites=[{2:5},{2:3,3:2},{3:5},{3:3,4:2},{4:5},{4:3,5:2},{4:3,5:2},{4:3,5:2,6:1},{5:5,6:1}]
 test('approved per-floor rank quotas, normal totals and distinct elite identities',()=>{
  const A=Object.fromEntries(JSON.parse(fs.readFileSync('docs/xianxia/sect-tower-v1/data/rank-attributes.json')).archetypes.map(a=>[a.id,a]))
  const allNames=[]
@@ -17,13 +17,13 @@ test('approved per-floor rank quotas, normal totals and distinct elite identitie
  })
  assert.equal(new Set(allNames).size,47,'all physical leaders have distinct individual names across the tower')
 })
-test('same species/rank share a normal baseline across floors; elite 2.5HP/1.15damage; normal has no elite mechanics',async()=>{
- const {ARCHETYPES}=await import('../js/xianxia/TowerContent.js');const {towerEnemyStats}=await import('../js/xianxia/TowerEnemyStats.js')
+test('same species/rank share a normal baseline across floors; elite authored rank HP/damage; normal has no elite mechanics',async()=>{
+ const {ARCHETYPES,MONSTER_RANK_BASELINE}=await import('../js/xianxia/TowerContent.js');const {towerEnemyStats}=await import('../js/xianxia/TowerEnemyStats.js')
  const {initializeMonsterMechanics}=await import('../js/xianxia/TowerMonsterMechanics.js')
  for(const a of ARCHETYPES.filter(a=>a.role==='elite'&&a.roster_revision==='rank-role-v1')){
   const n=ARCHETYPES.find(n=>n.role==='normal'&&n.species===a.species&&n.rank===a.rank);assert.ok(n,a.id)
   const e=towerEnemyStats(a,9,18),b=towerEnemyStats(n,9,18)
-  assert.ok(Math.abs(e.hp/b.hp-2.5)<1e-9);assert.ok(Math.abs(e.damage/b.damage-1.15)<1e-9)
+  assert.ok(Math.abs(e.hp/b.hp-MONSTER_RANK_BASELINE.elite_hp_multiplier_by_rank[a.rank])<1e-9);assert.ok(Math.abs(e.damage/b.damage-MONSTER_RANK_BASELINE.elite_damage_multiplier)<1e-9)
   assert.equal(e.moveSpeed,b.moveSpeed)
   assert.deepEqual(towerEnemyStats(n,6,18),b)
  }

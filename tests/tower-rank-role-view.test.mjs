@@ -21,25 +21,19 @@ test('form art is driven by authored metadata, including high-rank normals and o
   assert.equal(Art.artFamily('boar'), 'boar')
 })
 
-test('shared art never promotes an ordinary or elite enemy into a Boss', () => {
-  for (const family of ['boar', 'wolf', 'bear', 'tiger', 'white-tiger', 'ape', 'snake', 'snake-lady',
-    'crocodile', 'scorpion', 'centipede', 'rhino', 'yak', 'spider', 'spider-lady', 'spider-queen']) {
-    assert.equal(Art.bodyScale(family, 'normal'), 1, family)
-    assert.equal(Art.bodyScale(family, 'elite'), 1.12, family)
-    assert.equal(Art.bodyScale(family, 'boss'), 2, family)
-  }
-  for (const family of ['bat', 'falcon']) {
-    assert.equal(Art.bodyScale(family, 'normal'), 1.25)
-    assert.equal(Art.bodyScale(family, 'elite'), 1.12 * 1.25)
-    assert.equal(Art.bodyScale(family, 'boss'), 2.5)
-  }
-})
-
-test('collision radius does not inflate elites and every Boss keeps the approved canvas', () => {
-  for (const family of ['boar','wolf','bear','spider-lady','snake-lady','white-tiger','bat','falcon']) {
-    const normal=Art.bodySize(family,'normal',24)
-    assert.equal(Art.bodySize(family,'elite',34),normal*1.12)
-    assert.equal(Art.bodySize(family,'boss',18),['bat','falcon'].includes(family)?275:220)
+test('shared form art preserves rank progression and role hierarchy independently of collision radius', () => {
+  for (const family of ['boar','wolf','bear','tiger','white-tiger','ape','snake','snake-lady',
+    'crocodile','scorpion','centipede','rhino','yak','spider','spider-lady','spider-queen','bat','falcon']) {
+    const normal=Art.bodySize(family,'normal',24,1)
+    for(const [rank,n,e] of [[1,1,1.7],[4,1.2,1.95],[7,1.4,2.2]]) {
+      assert.ok(Math.abs(Art.bodySize(family,'normal',99,rank)/normal-n)<1e-8,family)
+      assert.ok(Math.abs(Art.bodySize(family,'elite',34,rank)/normal-e)<1e-8,family)
+      assert.ok(Art.bodySize(family,'elite',34,rank)>Art.bodySize(family,'normal',24,7),family)
+    }
+    const boss=Art.bodySize(family,'boss',18,3)
+    assert.ok(boss>=Art.bodySize(family,'elite',34,9)*1.3-1e-8,family)
+    assert.ok(boss>=(['bat','falcon'].includes(family)?275:220),family)
+    assert.equal(boss,Art.bodySize(family,'boss',99,9),family)
   }
   assert.equal(Art.bodySize('boar','normal',26),83.2)
   assert.equal(Art.bodySize('wolf','normal',22),70.4)

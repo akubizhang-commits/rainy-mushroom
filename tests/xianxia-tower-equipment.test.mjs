@@ -19,8 +19,8 @@ test('each category has 25 identities plus its detached basic item; armor retain
  }
  assert.deepEqual(ringDamageModifiers(createBasicEquipment('ring')),{critChance:0,critBonus:0,special:0})
  const basicArmor=armorModifiers(createBasicEquipment('armor'))
- assert.equal(basicArmor.physicalDefense,1);assert.equal(basicArmor.magicDefense,1)
- assert.equal(basicArmor.healFraction,0);assert.equal(basicArmor.hpBonus,0)
+ assert.equal(basicArmor.physicalDefense,1);assert.equal(basicArmor.magicDefense,0)
+ assert.equal(basicArmor.healthRegen,0);assert.equal(basicArmor.hpBonus,0)
  assert.equal(basicArmor.cooldownReduction,0);assert.equal(basicArmor.castSpeed,0)
 })
 
@@ -48,7 +48,7 @@ test('seeded rolls cover all 50 fixed identities with category-only slots and ro
   const a=rollEquipment(category,tier,q,rng(seed*1741),`${category}-${seed}`)
   assert.deepEqual(a,rollEquipment(category,tier,q,rng(seed*1741),a.id));assert.ok(validateEquipment(a,category))
   seen.add(a.definitionId);assert.equal(a.locked,false);assert.equal(a.refine,0)
-  assert.ok(a.affixes.every(f=>(category==='ring'?['critChance','critBonus','cooldownReduction','focus','skillDamage']:['hpBonus','cooldownReduction','healFraction','healDelay']).includes(f.type)))
+  assert.ok(a.affixes.every(f=>(category==='ring'?['critChance','critBonus','cooldownReduction','skillDamage','dotDamage','formationDamage']:['attackSpeed','castSpeed','healthRegen','lowHealthShield','safeRecovery']).includes(f.type)))
   assert.ok(validateEquipment(JSON.parse(JSON.stringify(a))))
  }
  assert.equal(seen.size,50)
@@ -74,16 +74,16 @@ test('strict validation rejects type mixing, missing/duplicate affixes, extras a
  assert.throws(()=>ringDamageModifiers(createBasicEquipment('armor')))
 })
 
-test('armor base rolls provide reduction plus bounded delayed recovery',()=>{
+test('armor fixed identities provide physical defense plus bounded periodic recovery',()=>{
  for(const tier of ['fan','fa','bao','ling'])for(let q=1;q<=4;q++){
   if(tier==='fan'&&q>1)continue
   const a=rollEquipment('armor',tier,q,()=>1-Number.EPSILON,'armor')
   const after=armorModifiers(a)
-  assert.ok(after.reduction>0&&after.reduction<=.17)
-  assert.ok(after.healFraction>0&&after.healFraction<=.01)
-  assert.equal(after.healDelay,q===4?2:3);assert.equal(after.healCooldown,20);assert.equal(after.healFloorCap,.1)
+  assert.ok(after.physicalDefense>0&&after.physicalReduction<.5);assert.equal(after.magicReduction,0)
+  assert.ok(after.healthRegen>0&&after.healthRegen<=2.5)
+  assert.equal(after.hpBonus,0);assert.ok(equipmentSummary(a).baseAttributes.vitality>0)
   const lines=equipmentDescription(a).join(' ')
-  assert.match(lines,/实际失血/);assert.match(lines,/20秒/);assert.match(lines,/10%/)
+  assert.match(lines,/气血回复 .*\/3秒/);assert.match(lines,/体力/)
   assert.doesNotMatch(lines,/吸血|反伤|会心|暴击/)
   assert.equal(equipmentSummary(a).categoryName,'防具')
  }

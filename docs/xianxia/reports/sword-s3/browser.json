@@ -1,0 +1,67 @@
+{
+  "version": "sword-s3",
+  "viewport": [
+    390,
+    844
+  ],
+  "acquired": [
+    "sj_shadow",
+    "sj_formation",
+    "sj_heart",
+    "sj_mark",
+    "sj_bone",
+    "sj_gate"
+  ],
+  "setup": {
+    "weapons": [
+      "sj_yujian",
+      "sj_shadow",
+      "sj_formation"
+    ],
+    "passives": {
+      "sj_heart": 1,
+      "sj_mark": 1,
+      "sj_bone": 1,
+      "sj_gate": 1
+    },
+    "shadow": {
+      "x": 0,
+      "y": 0,
+      "radius": 85,
+      "tick": 1,
+      "strikeAtTick": 40
+    },
+    "formation": {
+      "x": 70,
+      "y": 0,
+      "radius": 110,
+      "tick": 1,
+      "endTick": 181
+    },
+    "marks": 1
+  },
+  "strike": {
+    "x": 0,
+    "y": 0,
+    "tick": 40
+  },
+  "sustain": {
+    "swordShadowPlace": 2,
+    "swordFormationPlace": 1,
+    "swordFormationPulse": 6,
+    "swordShadowStrike": 2,
+    "swordDamage": 28,
+    "swordCritical": 1,
+    "dotHits": 13,
+    "pauseFrozen": true
+  },
+  "gate": {
+    "x": 70,
+    "y": 0,
+    "radius": 80,
+    "tick": 421
+  },
+  "errors": [],
+  "restored": true,
+  "limitations": "Controlled level/draft injection with real pointer choices. High-HP stationary target, spawns/pickups disabled. Gate RNG forced to zero and existing DOT cleared only for final direct-kill capture. Not a natural-run balance sample."
+}

@@ -11,6 +11,7 @@ export class TowerSpiderWebArt {
  private frame:SpriteFrame|null=null;
  private webs=new Map<string,Web>();
  constructor(private parent:Node){}
+ has(id:string){return this.webs.has(id);}
  private load(){
   if(this.requested)return;this.requested=true;
   resources.load('tower-monsters-motion/spider-web',ImageAsset,(error,image)=>{
@@ -21,7 +22,7 @@ export class TowerSpiderWebArt {
    this.frame=new SpriteFrame();this.frame.texture=this.texture;
   });
  }
- draw(state:any,camera:{x:number;y:number}){
+ draw(state:any,camera:{x:number;y:number},sourcePosition?:(id:string)=>{x:number;y:number}|null){
   if(this.dead)return;
   for(const web of this.webs.values())web.seen=false;
   for(const z of state.monsterMechanics?.zones||[]){
@@ -33,10 +34,13 @@ export class TowerSpiderWebArt {
    if(!this.frame||state.time<launch)continue;
    let web=this.webs.get(z.id);
    if(!web){
+    const point=sourcePosition?.(z.ownerId),attached=point&&Number.isFinite(point.x+point.y);
+    if(sourcePosition&&!attached&&state.time<z.activatesAt)continue;
     const node=new Node(`蛛网-${z.id}`);node.layer=this.parent.layer;this.parent.addChild(node);
     const transform=node.addComponent(UITransform);const sprite=node.addComponent(Sprite);
     sprite.sizeMode=Sprite.SizeMode.CUSTOM;sprite.trim=false;sprite.spriteFrame=this.frame;
-    web={node,transform,sprite,fromX:owner.x,fromY:owner.y+8,seen:true};this.webs.set(z.id,web);
+    web={node,transform,sprite,fromX:attached?point.x+camera.x:owner.x,
+     fromY:attached?point.y+camera.y:owner.y+8,seen:true};this.webs.set(z.id,web);
    }
    web.seen=true;
    const flight=Math.max(0,Math.min(1,(state.time-launch)/Math.max(.001,z.activatesAt-launch)));

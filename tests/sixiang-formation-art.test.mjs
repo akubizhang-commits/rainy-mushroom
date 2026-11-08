@@ -134,8 +134,8 @@ test('rain color is determined by landing position and stays stable from descent
 
 test('dense rain covers all four seals while their artwork turns slowly under fixed swords', () => {
   const f=ready(),s=state(2),z=s.zones[0]
-  for(const n of [1,9]){
-    s.time=z.startedAt+(n===1?.5:6);pulse(s,n,s.time);f.sync(s)
+  for(const n of [1,z.pulseCount]){
+    s.time=z.startedAt+(n===1?.5:8);pulse(s,n,s.time);f.sync(s)
     const view=f.art.slots[0].painter.last,rain=view.swordRain
     assert.equal(rain.points.length,n===1?20:28)
     for(const eye of view.eyes){
@@ -162,16 +162,16 @@ test('ordinary rain staggers around the damage beat, while the finale holds then
   const first=plain(rain.points)
   s.time=z.startedAt+1.2;pulse(s,2,s.time);f.sync(s)
   assert.notDeepEqual(plain(f.art.slots[0].painter.last.swordRain.points),first)
-  // The final beat is due at 6s: hold 120ms, then descend over 160ms.
-  s.time=z.startedAt+5.76;z.pulseIndex=8;z.nextAt=z.startedAt+6;s.effects=[];f.sync(s)
+  // The final beat is due at 8s: hold 120ms, then descend over 160ms.
+  s.time=z.startedAt+7.76;z.pulseIndex=z.pulseCount-1;z.nextAt=z.startedAt+8;s.effects=[];f.sync(s)
   rain=f.art.slots[0].painter.last.swordRain
   assert.equal(rain.swords.length,28)
   assert.ok(rain.swords.every(x=>x.phase==='hover'&&x.progress===0))
-  s.time=z.startedAt+5.92;f.sync(s)
+  s.time=z.startedAt+7.92;f.sync(s)
   rain=f.art.slots[0].painter.last.swordRain
   assert.ok(rain.swords.every(x=>x.phase==='falling'))
   assert.equal(new Set(rain.swords.map(x=>x.progress)).size,1)
-  s.time=z.startedAt+6;pulse(s,9,s.time);f.sync(s)
+  s.time=z.startedAt+8;pulse(s,z.pulseCount,s.time);f.sync(s)
   rain=f.art.slots[0].painter.last.swordRain
   assert.ok(rain.swords.every(x=>x.phase==='impact'))
   assert.ok(rain.landingOffsets.every(x=>x===0))
@@ -364,21 +364,21 @@ test('a real first-pulse wave clear cancels the old track and reuses its texture
   assert.equal(slot.surfaces, surfaces); assert.equal(f.textures.length, 2)
 })
 
-test('the 3.78s visual tail expires and its surfaces are reused for the next cast', () => {
-  const f = ready(), s = state(2, 6.5)
-  pulse(s, 9)
+test('the 0.78s visual tail expires and its surfaces are reused for the next cast', () => {
+  const f = ready(), s = state(2, 8.5)
+  pulse(s, s.zones[0].pulseCount)
   f.sync(s)
   const slot = f.art.slots[0], surfaces = slot.surfaces
-  s.zones = []; s.effects = []; s.time = 7.279
+  s.zones = []; s.effects = []; s.time = 9.279
   assert.equal(f.sync(s).has('zone-1'), true)
   assert.equal(slot.painter.last.visible, true)
-  s.time = 7.28
+  s.time = 9.28
   assert.equal(f.sync(s).size, 0)
   assert.equal(slot.track, null)
   assert.equal(slot.ground.node.active, false); assert.equal(slot.air.node.active, false)
-  const next = state(1, 7.3).zones[0]
-  Object.assign(next, { id: 'zone-2', startedAt: 7.3, nextAt: 7.8 })
-  s.zones = [next]; s.time = 7.3
+  const next = state(1, 9.3).zones[0]
+  Object.assign(next, { id: 'zone-2', startedAt: 9.3, nextAt: 9.8 })
+  s.zones = [next]; s.time = 9.3
   assert.equal(f.sync(s).has('zone-2'), true)
   assert.equal(f.art.slots.length, 1); assert.equal(slot.surfaces, surfaces)
   assert.equal(f.textures.length, 2)
@@ -408,3 +408,10 @@ test('new runs and death clear active tracks; destruction releases owned assets 
     assert.equal(asset.destroyCalls, 1)
   }
 })
+
+ test('eight-second formation keeps art through its final real attack', () => {
+ const f=ready(),s=state(2);s.time=8.3;f.sync(s);
+ assert.ok(f.art.slots[0]?.painter.last?.fade>0);
+ s.time=8.5;pulse(s,s.zones[0].pulseCount,8.5);f.sync(s);
+ assert.ok(f.art.slots[0]?.painter.last?.fade>0);
+ });

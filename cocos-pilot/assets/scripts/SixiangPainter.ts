@@ -25,7 +25,7 @@
     canvas:any; airCanvas:any; assets:any; g:any; a:any; last:any;
     static canvasSize = 768;
     static worldDiameterFactor = 2.4;
-    static visualEnd = 6.78;
+    static visualEnd = 8.78;
     static airWidth = 960;
     static airHeight = 1280;
     static airWorldWidthFactor = 2.8;
@@ -181,15 +181,15 @@
     draw(info) {
       this.clear();
       const age = Number(info.age), radius = Number(info.radius);
-      if (!Number.isFinite(age + radius) || age < 0 || age >= 6.78 || radius <= 0) {
+      if (!Number.isFinite(age + radius) || age < 0 || age >= 8.78 || radius <= 0) {
         this.last = { visible: false, age }; return this.last;
       }
       const pulse = Math.max(0, Number(info.pulseIndex) || 0), count = Number(info.pulseCount) || 7;
-      const high = count === 9, terminal = pulse === count && pulse > 0;
+      const high = count >= 20, terminal = pulse === count && pulse > 0;
       const active = pulse ? (pulse - 1) % 4 : -1;
       const pulseAge = pulse > 0 ? Math.max(0, age - Number(info.pulseAt)) : 999;
       const flash = pulseAge < .22 ? (pulseAge < .038 ? 1 : (1 - clamp((pulseAge - .038) / .182)) ** 1.5) : 0;
-      const fade = (1 - clamp((age - 6.12) / .66)) ** 1.2, intro = ease(age / .34);
+      const fade = (1 - clamp((age - 8.12) / .66)) ** 1.2, intro = ease(age / .34);
       const color = terminal ? GOLD : COLORS[Math.max(0, active)];
       const g = this.g, a = this.a;
       g.translate(384, 384); g.scale(320, 320);
@@ -232,7 +232,7 @@
           swordLength: eyeLength * radius, color: c });
       }
 
-      const nextAt = Number.isFinite(info.nextPulseAt) ? info.nextPulseAt : .5 + pulse * 2.5 / (count - 1);
+      const nextAt = Number.isFinite(info.nextPulseAt) ? info.nextPulseAt : .5 + pulse * 7.5 / (count - 1);
       const lead = pulse + 1 === count ? .28 : .24;
       const pending = pulse < count && age >= nextAt - lead;
       let rainPhase = 'idle', rainPulse = 0, rainPoints = [], rainElements = [], rainLength = 0, rainProgress = 0;
@@ -271,8 +271,8 @@
           }
         }
       };
-      if (pending) drawRain(pulse+1,age-nextAt);
       if (pulse > 0 && pulseAge < (terminal ? .19 : .27)) drawRain(pulse,pulseAge);
+      if (pending) drawRain(pulse+1,age-nextAt);
       const hitPoints = (info.hitPoints || []).filter(p => Number.isFinite(p.x + p.y + p.radius));
       if (pulseAge < .23) for (const hit of hitPoints) {
         this.burst(a, hit.x / radius, -hit.y / radius, pulseAge, COLORS[this.elementAt(hit.x/radius,hit.y/radius)], .66);
@@ -294,7 +294,7 @@
         terminal, eyes, introSwords, actualHitPoints: hitPoints.map(p => ({ ...p })),
         vertices: EYES.map(([x, y]) => ({ x: x * radius, y: y * radius })),
         logicalDiamondRadiusPx: 320, worldDiameter: radius * 2.4,
-        visualOnlyAfter: 6, visualEnd: 6.78, fade,
+        visualOnlyAfter: 8, visualEnd: 8.78, fade,
         layers: {
           ground: { canvasWidth: 768, canvasHeight: 768, worldWidth: 2.4 * radius, worldHeight: 2.4 * radius, anchorX: .5, anchorY: .5 },
           air: { canvasWidth: 960, canvasHeight: 1280, worldWidth: 2.8 * radius, worldHeight: 2.8 * 1280 / 960 * radius, anchorX: .5, anchorY: .35 },

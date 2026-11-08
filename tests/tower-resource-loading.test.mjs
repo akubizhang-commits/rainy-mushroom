@@ -60,3 +60,29 @@ test('tracked resources retain library metadata queries',()=>{
  assert.equal(typeof ctx.facade.getInfoWithPath,'function');
  assert.equal(ctx.facade.getInfoWithPath('library/book',image),entry);
 });
+
+test('release drops only the selected typed cache entry and permits fresh reentry',()=>{
+ const {queue,jobs}=harness(),a=asset(),meta=asset(),shared=asset();
+ queue.load('motion',image,()=>{});queue.load('motion',json,()=>{});queue.load('portrait',image,()=>{});
+ jobs[0].done(null,a);jobs[1].done(null,meta);jobs[2].done(null,shared);
+ queue.release('motion',image);queue.release('motion',image);
+ assert.equal(a.refs,0);assert.equal(meta.refs,1);assert.equal(shared.refs,1);
+ let next;queue.load('motion',image,(_,value)=>next=value);assert.equal(jobs.length,4);
+ const fresh=asset();jobs[3].done(null,fresh);assert.equal(next,fresh);assert.equal(fresh.refs,1);
+ queue.dispose();assert.equal(a.refs,0);assert.equal(fresh.refs,0);assert.equal(meta.refs,0);
+});
+test('release cancels pending retries and late responses without blocking replacement loads',()=>{
+ const {queue,jobs,timers,tick}=harness();let old=0,next=0;
+ queue.load('motion',image,()=>old++);jobs[0].done(Error('offline'));queue.release('motion',image);
+ assert.equal(queue.state.total,0);assert.equal(timers.size,0);tick();assert.equal(jobs.length,1);
+ queue.load('motion',image,()=>next++);const stale=asset();jobs[0].done(null,stale);
+ assert.equal(stale.refs,0);assert.equal(old,0);assert.equal(queue.state.pending,1);
+ jobs[1].done(null,asset());assert.equal(next,1);assert.equal(queue.state.pending,0);
+});
+test('release during completion prevents remaining stale callbacks and double release',()=>{
+ const {queue,jobs}=harness(),a=asset();let stale=0;
+ queue.load('motion',image,()=>queue.release('motion',image));
+ queue.load('motion',image,()=>stale++);jobs[0].done(null,a);
+ assert.equal(stale,0);assert.equal(a.refs,0);assert.equal(queue.state.total,0);
+ queue.dispose();assert.equal(a.refs,0);
+});

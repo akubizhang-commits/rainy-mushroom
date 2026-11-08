@@ -5,8 +5,8 @@ import {
   TowerCampaignStore, TOWER_CAMPAIGN_KEY, WEAPONS, combatLoadout,
 } from '../js/xianxia/TowerCampaign.js'
 import { createIronWeapon, rollWeapon } from '../js/xianxia/TowerWeapons.js'
-import { TowerRun, validateTowerSnapshot } from '../js/xianxia/TowerRun.js'
-import { TOWER_XP_CAP, TOWER_RESOURCE_CAP } from '../js/xianxia/TowerProfile.js'
+import { TowerRun, validateTowerSnapshot, stats as combatStats } from '../js/xianxia/TowerRun.js'
+import { TOWER_XP_CAP, TOWER_RESOURCE_CAP, freshPills } from '../js/xianxia/TowerProfile.js'
 import { checksum } from '../js/xianxia/Checksum.js'
 import { ARCHETYPES } from '../js/xianxia/TowerContent.js'
 import { CORE_DROP_RULES, CORE_RANK_VALUES } from '../js/xianxia/TowerLoot.js'
@@ -71,7 +71,7 @@ function fixture(patch = {}) {
   if (patch.skills && !patch.skillsInitialized) patch = { ...patch, skills: { sj_arc: 1, ...patch.skills } }
   const disk = storage()
   const initial = new TowerCampaignStore(disk, 0)
-  const state = { ...copy(initial.state), ...patch }
+  const state = { ...copy(initial.state), ...patch, pills: { ...initial.state.pills, ...patch.pills } }
   if (!patch.skills) { state.skillsInitialized = true; state.skills = { sj_arc: 1 } }
   // Missing inventory can represent dismantled draws; miss history still needs
   // matching lifetime totals. Raw-save corruption tests bypass this helper.
@@ -92,11 +92,11 @@ function fixture(patch = {}) {
   saveState(disk, state)
   return { disk, store: new TowerCampaignStore(disk, 0) }
 }
-function reject(store, disk, action, reason, now = 0) {
+function reject(store, disk, action, reason, now = 0, details = {}) {
   const before = store.state
   const raw = disk.records.get(TOWER_CAMPAIGN_KEY)
   const writes = disk.writes
-  assert.deepEqual(store.act(action, now), { ok: false, reason })
+  assert.deepEqual(store.act(action, now), { ok: false, reason, ...details })
   assert.strictEqual(store.state, before)
   assert.equal(disk.records.get(TOWER_CAMPAIGN_KEY), raw)
   assert.equal(disk.writes, writes)
@@ -139,14 +139,14 @@ test('fresh campaign is isolated, immutable and grants starter gifts only once',
   const disk = storage()
   const store = new TowerCampaignStore(disk, 123)
   assert.deepEqual([store.state.xp, store.state.hp, store.state.spiritStones, store.state.contribution],
-    [0, 100, 500, 0])
+    [0, 100, 500, 1000])
   assert.deepEqual(store.state.skills, { sj_arc: 1 })
-  assert.deepEqual(store.state.pills, { huichun: 3, peiyuan: 0 })
+  assert.deepEqual(store.state.pills, freshPills())
   assert.deepEqual(store.state.weapons, { iron: createIronWeapon() })
   assert.equal(store.state.loadouts.length, 3)
   assert.equal(store.act({ type: 'buyPill', id: 'huichun', count: 1 }, 123).ok, true)
   const reload = new TowerCampaignStore(disk, 123)
-  assert.equal(reload.state.spiritStones, 500)
+  assert.equal(reload.state.spiritStones, 495)
   assert.equal(reload.state.pills.huichun, 4)
   assert.equal(disk.records.get('xianxia.sect-tower.profile.v1'), 'legacy-unread')
   assert.throws(() => { reload.state.pills.huichun = 99 }, TypeError)
@@ -250,7 +250,7 @@ test('forging atomically charges exact recipe costs and preserves RNG and wishes
   assert.deepEqual(new TowerCampaignStore(disk,0).state,store.state)
 })
 
-test('only two camp pills exist, heal/XP clamp and full effects never consume inventory', () => {
+test('camp healing clamps and capped cultivation never consumes inventory', () => {
   const { store, disk } = fixture({ hp: 30, clearedFloor: 2 })
   assert.equal(store.act({ type: 'usePill', id: 'huichun' }, 0).healed, 50)
   assert.equal(store.act({ type: 'usePill', id: 'huichun' }, 0).healed, 20)
@@ -264,26 +264,29 @@ test('only two camp pills exist, heal/XP clamp and full effects never consume in
     reject(store, disk, { type: 'buyPill', id, count: 1 }, 'unknown-pill')
     reject(store, disk, { type: 'usePill', id }, 'unknown-pill')
   }
-  const capped = fixture({ xp: 10919, clearedFloor: 1, pills: { zhuji: 0, huichun: 3, peiyuan: 2 } })
-  assert.equal(capped.store.act({ type: 'usePill', id: 'peiyuan' }, 0).gained, 1)
-  reject(capped.store, capped.disk, { type: 'usePill', id: 'peiyuan' }, 'cultivation-capped')
-  assert.equal(capped.store.state.pills.peiyuan, 1)
+  const capped = fixture({ xp: TOWER_XP_CAP - 1, clearedFloor: 1, pills: { zhenyuan: 2 } })
+  reject(capped.store, capped.disk, { type: 'usePill', id: 'zhenyuan' }, 'cultivation-overflow-confirmation', 0, { gained: 1, wasted: 159 })
+  assert.equal(capped.store.act({ type: 'usePill', id: 'zhenyuan', confirmed: true }, 0).gained, 1)
+  reject(capped.store, capped.disk, { type: 'usePill', id: 'zhenyuan' }, 'cultivation-capped')
+  assert.equal(capped.store.state.pills.zhenyuan, 1)
 })
 
 test('offline rest is saved once, rejects backwards-clock farming and cannot bank full-health time', () => {
-  const maxHp = 100 * 1.08 ** 24 * 1.35 ** 2
   const { store, disk } = fixture({ xp: TOWER_XP_CAP, hp: 1 })
-  assert.equal(store.act({ type: 'sync' }, MINUTE).hp, (1 + maxHp * .01))
+  const maxHp = combatStats(store.state.xp, combatLoadout(store.state)).maxHp
+  // Starter armor has no regeneration affix: twenty 3-second pulses per minute.
+  const minuteHealing = maxHp / 60 * 20
+  assert.equal(store.act({ type: 'sync' }, MINUTE).hp, (1 + minuteHealing))
   const reload = new TowerCampaignStore(disk, MINUTE)
-  assert.equal(reload.act({ type: 'sync' }, MINUTE).hp, (1 + maxHp * .01))
-  assert.equal(reload.act({ type: 'sync' }, 0).hp, (1 + maxHp * .01))
-  assert.equal(reload.act({ type: 'sync' }, MINUTE).hp, (1 + maxHp * .01))
+  assert.equal(reload.act({ type: 'sync' }, MINUTE).hp, (1 + minuteHealing))
+  assert.equal(reload.act({ type: 'sync' }, 0).hp, (1 + minuteHealing))
+  assert.equal(reload.act({ type: 'sync' }, MINUTE).hp, (1 + minuteHealing))
   assert.equal(reload.act({ type: 'sync' }, 200 * MINUTE).hp, maxHp)
   const snapshot = start(reload, 1, 200 * MINUTE)
   assert.equal(reload.act({
     type: 'finishFloor', snapshot: report(snapshot, { phase: 'abandoned', hp: 10 }),
   }, 200 * MINUTE).ok, true)
-  assert.equal(reload.act({ type: 'sync' }, 201 * MINUTE).hp, (10 + maxHp * .01))
+  assert.equal(reload.act({ type: 'sync' }, 201 * MINUTE).hp, (10 + minuteHealing))
 })
 
 test('bad actions, funds, counts and capacities never publish a partial transaction', () => {
@@ -306,8 +309,8 @@ test('bad actions, funds, counts and capacities never publish a partial transact
 
 test('every camp action publishes only after persistence, including RNG, selection and tutorial', () => {
   for (const action of [
-    { type: 'sync' }, { type: 'buyPill', id: 'peiyuan', count: 1 },
-    { type: 'usePill', id: 'huichun' }, { type: 'usePill', id: 'peiyuan' },
+    { type: 'sync' }, { type: 'buyPill', id: 'zhenyuan', count: 1 },
+    { type: 'usePill', id: 'huichun' }, { type: 'usePill', id: 'zhenyuan' },
     { type: 'buyBook', id: 'vajra' }, { type: 'buyBook', id: 'evo_wanjian' },
     { type: 'buyGear', id: 'weapon:fan:q1', count: 1, sequence: 1, requestId: 'persistence' },
     { type: 'setLoadout', index: 1, loadout: {
@@ -317,8 +320,8 @@ test('every camp action publishes only after persistence, including RNG, selecti
     { type: 'startFloor', floor: 1, seed: 5 },
   ]) {
     const { store, disk } = fixture({
-      ...weaponPatch(), xp: 10400, hp: 10, spiritStones: 10000, clearedFloor: 6, skills: { sj_yujian: 6, sj_heart: 4 },
-      pills: { zhuji: 0, huichun: 3, peiyuan: 1 },
+      ...weaponPatch(), xp: 10400, hp: 10, spiritStones: 10000, clearedFloor: 6, skills: { sj_yujian: 6, sj_heart: 3 },
+      pills: { zhuji: 0, huichun: 3, zhenyuan: 1 },
     })
     disk.fail = true
     reject(store, disk, action, 'save-failed', MINUTE)
@@ -344,7 +347,7 @@ test('a stale store cannot overwrite spending or grant the starter balance a sec
   const stale = new TowerCampaignStore(disk, 0)
   assert.equal(first.act({ type: 'buyPill', id: 'huichun', count: 4 }, 0).ok, true)
   reject(stale, disk, { type: 'buyPill', id: 'huichun', count: 1 }, 'stale-save')
-  assert.equal(new TowerCampaignStore(disk, 0).state.contribution, 0)
+  assert.equal(new TowerCampaignStore(disk, 0).state.contribution, 1000)
 })
 
 test('storage callbacks cannot reenter the store before its transaction is committed', () => {
@@ -385,7 +388,7 @@ test('unreadable, corrupt and newer save records stay read-only and are never re
 
 test('checksummed but invalid permanent state cannot bypass ownership, caps or skill locks', () => {
   for (const patch of [
-    { hp: 0 }, { hp: 121 }, { xp: 10921 }, { contribution: -1 }, { rng: 0 },
+    { hp: 0 }, { hp: 121 }, { xp: TOWER_XP_CAP + 1 }, { contribution: -1 }, { rng: 0 },
     { clearedFloor: 10 }, { weaponPity: Number.MAX_SAFE_INTEGER + 1 }, { normalCoreCounter: 20 },
     { pills: { zhuji: 0, huichun: 3, peiyuan: 0, attack: 1 } },
     weaponPatch(4, 1), weaponPatch(4, 5),
@@ -409,14 +412,14 @@ test('entry is free, floor gated, carries HP/loadout/counter and isolates the re
   assert.equal(snapshot.normalCoreCounter, 19)
   assert.equal(snapshot.attemptId, 1)
   assert.equal(snapshot.wave, 1)
-  assert.equal(store.state.contribution, 0)
+  assert.equal(store.state.contribution, 1000)
   assert.deepEqual(snapshot.loadout, combatLoadout(store.state))
-  assert.deepEqual(store.state.activeRun.base, { xp: 0, spiritStones: 500, contribution: 0, normalCoreCounter: 19, tutorialWaves: 0 })
+  assert.deepEqual(store.state.activeRun.base, { xp: 0, spiritStones: 500, contribution: 1000, normalCoreCounter: 19, tutorialWaves: 0 })
   snapshot.player.hp = 99
   assert.equal(store.state.activeRun.snapshot.player.hp, 0.25)
 })
 
-test('live, paused and reloaded attempts block all camp actions and never heal offline', () => {
+test('paused attempts allow loadout changes, block camp spending and never heal offline', () => {
   const { store, disk } = fixture({ hp: 42 })
   const run = TowerRun.restore(start(store))
   run.pause()
@@ -426,14 +429,23 @@ test('live, paused and reloaded attempts block all camp actions and never heal o
   for (const action of [
     { type: 'buyPill', id: 'huichun', count: 1 }, { type: 'usePill', id: 'huichun' },
     { type: 'drawWeapon' },
-    { type: 'selectLoadout', index: 1 },
-    { type: 'setLoadout', index: 1, loadout: store.state.loadouts[0] },
     { type: 'tutorialDone' }, { type: 'startFloor', floor: 1, seed: 1 },
   ]) reject(reload, disk, action, 'in-tower', 100 * MINUTE)
-  run.abandon()
-  assert.equal(reload.act({ type: 'finishFloor', snapshot: run.snapshot() }, 100 * MINUTE).ok, true)
+  for (const action of [
+    { type: 'selectLoadout', index: 1 },
+    { type: 'setLoadout', index: 1, loadout: store.state.loadouts[0] },
+  ]) {
+    disk.fail = true
+    reject(reload, disk, action, 'save-failed', 100 * MINUTE)
+    disk.fail = false
+    assert.equal(reload.act(action, 100 * MINUTE).ok, true)
+    assert.equal(reload.state.hp, 42)
+  }
+  const afterEquipment = TowerRun.restore(reload.state.activeRun.snapshot)
+  afterEquipment.abandon()
+  assert.equal(reload.act({ type: 'finishFloor', snapshot: afterEquipment.snapshot() }, 100 * MINUTE).ok, true)
   assert.equal(reload.state.hp, 42)
-  assert.equal(reload.act({ type: 'sync' }, 101 * MINUTE).hp, 43)
+  assert.equal(reload.act({ type: 'sync' }, 101 * MINUTE).hp, 42 + 100 / 60 * 20)
 })
 
 test('checkpoints use base plus cumulative earnings and persist complete resumable state', () => {
@@ -443,7 +455,7 @@ test('checkpoints use base plus cumulative earnings and persist complete resumab
   const oneValue = coreLoot(one).value
   assert.equal(one.earned.cores, oneValue)
   assert.equal(store.act({ type: 'checkpoint', snapshot: one }, MINUTE).ok, true)
-  assert.deepEqual([store.state.xp, store.state.spiritStones, store.state.contribution, store.state.hp], [45, 500 + oneValue * 10, 0, 42])
+  assert.deepEqual([store.state.xp, store.state.spiritStones, store.state.contribution, store.state.hp], [45, 500 + oneValue * 10, 1000, 42])
   const reload = new TowerCampaignStore(disk, MINUTE)
   assert.deepEqual(TowerRun.restore(reload.state.activeRun.snapshot).snapshot(), one)
   assert.equal(reload.act({ type: 'checkpoint', snapshot: one }, MINUTE).ok, true)
@@ -452,7 +464,7 @@ test('checkpoints use base plus cumulative earnings and persist complete resumab
   const twoValue = coreLoot(two).value
   assert.equal(two.earned.cores, twoValue)
   assert.equal(reload.act({ type: 'checkpoint', snapshot: two }, MINUTE).ok, true)
-  assert.deepEqual([reload.state.xp, reload.state.spiritStones, reload.state.contribution], [45, 500 + twoValue * 10, 0])
+  assert.deepEqual([reload.state.xp, reload.state.spiritStones, reload.state.contribution], [45, 500 + twoValue * 10, 1000])
   assert.equal(reload.state.normalCoreCounter, 19)
   one.earned.cores = 999
   assert.equal(reload.state.activeRun.snapshot.earned.cores, twoValue)
@@ -480,7 +492,7 @@ test('death retains current-wave earnings, wakes at 1 HP, and new attempts resta
   const dead = report(initial, { phase: 'lost', kills: 1 })
   assert.equal(store.act({ type: 'finishFloor', snapshot: dead }, 100 * MINUTE).ok, true)
   assert.deepEqual([store.state.hp, store.state.xp, store.state.spiritStones, store.state.contribution],
-    [1, 45, 500 + coreLoot(dead).value * 10, 0])
+    [1, 45, 500 + coreLoot(dead).value * 10, 1000])
   assert.equal(store.state.clearedFloor, 0)
   assert.equal(store.state.lastResult.outcome, 'lost')
   reject(store, disk, { type: 'finishFloor', snapshot: dead }, 'wrong-attempt', 100 * MINUTE)
@@ -497,7 +509,7 @@ test('death retains current-wave earnings, wakes at 1 HP, and new attempts resta
 
 test('all nine first clears award one resource per floor once and inherit fractional HP', () => {
   const { store, disk } = fixture()
-  let spiritStones = 500, contribution = 0
+  let spiritStones = 500, contribution = 1000
   for (let floor = 1; floor <= 9; floor++) {
     const initial = start(store, floor)
     if (floor > 1) assert.equal(initial.player.hp, 0.25)
@@ -510,7 +522,7 @@ test('all nine first clears award one resource per floor once and inherit fracti
     assert.equal(store.act({ type: 'finishFloor', snapshot: victory }, 0).ok, true)
     assert.equal(store.state.clearedFloor, floor)
     const bonusStones = [0, 100, 0, 0, 300, 0, 0, 400, 0][floor - 1]
-    const bonusContribution = [0, 0, 1000, 0, 0, 1000, 0, 0, 1000][floor - 1]
+    const bonusContribution = [2000, 0, 0, 2000, 0, 0, 2000, 0, 0][floor - 1]
     spiritStones += floorCores * 10 + bonusStones
     contribution += bonusContribution
     assert.equal(store.state.spiritStones, spiritStones)
@@ -548,7 +560,7 @@ test('failed checkpoints and settlements retain one retryable complete transacti
       assert.equal(reload.act({ type: 'finishFloor', snapshot }, MINUTE).ok, true)
     }
     assert.deepEqual([reload.state.xp, reload.state.spiritStones, reload.state.contribution],
-      [180, 600 + coreLoot(snapshot).value * 10, 400])
+      [180, 500 + coreLoot(snapshot).value * 10, 3000])
     assert.deepEqual(reload.state.lastResult.stoneLoot, stoneLoot(snapshot))
     assert.equal(reload.state.activeRun, null)
     reject(reload, disk, { type: 'finishFloor', snapshot }, 'wrong-attempt', MINUTE)
@@ -556,13 +568,13 @@ test('failed checkpoints and settlements retain one retryable complete transacti
 })
 
 test('combat XP reaches the cap without blocking other earned resources or storing overflow', () => {
-  const { store, disk } = fixture({ xp: 10919, normalCoreCounter: 19 })
+  const { store, disk } = fixture({ xp: TOWER_XP_CAP - 1, normalCoreCounter: 19 })
   const snapshot = report(start(store), { phase: 'abandoned', kills: 2 })
   assert.equal(store.act({ type: 'finishFloor', snapshot }, 0).ok, true)
   assert.deepEqual([store.state.xp, store.state.spiritStones, store.state.contribution],
-    [10920, 500 + coreLoot(snapshot).value * 10, 0])
+    [TOWER_XP_CAP, 500 + coreLoot(snapshot).value * 10, 1000])
   assert.equal(store.state.lastResult.earned.xp, 1)
-  assert.equal(new TowerCampaignStore(disk, 0).state.xp, 10920)
+  assert.equal(new TowerCampaignStore(disk, 0).state.xp, TOWER_XP_CAP)
 })
 
 test('real combat checkpoint, reload and abandonment preserve the same battle and wallet', () => {
@@ -578,7 +590,7 @@ test('real combat checkpoint, reload and abandonment preserve the same battle an
   resumed.abandon()
   assert.equal(reload.act({ type: 'finishFloor', snapshot: resumed.snapshot() }, 2 * MINUTE).ok, true)
   assert.equal(reload.state.spiritStones, 500 + snapshot.earned.cores * 10)
-  assert.equal(reload.state.contribution, snapshot.earned.contribution)
+  assert.equal(reload.state.contribution, 1000 + snapshot.earned.contribution)
   assert.equal(reload.state.xp, snapshot.player.xp)
   assert.equal(reload.state.hp, snapshot.phase === 'lost' ? 1 : snapshot.player.hp)
 })
@@ -749,7 +761,9 @@ test('repeat clears and repeated settlement cannot replenish used cultivation al
  reject(store,disk,{type:'finishFloor',snapshot:first},'wrong-attempt')
  const repeat=report(start(store),{phase:'won'})
  assert.equal(store.act({type:'finishFloor',snapshot:repeat},0).ok,true)
- assert.equal(store.state.cultivationPillsUsed,1)
+ assert.equal(store.state.cultivationPillUses['炼气'],1)
  const reload=new TowerCampaignStore(disk,0)
- reject(reload,disk,{type:'buyPill',id:'peiyuan',count:1},'cultivation-allowance')
+ assert.equal(reload.state.cultivationPillUses['炼气'],1)
+ assert.equal(reload.act({type:'buyPill',id:'peiyuan',count:5},0).ok,true)
+ reject(reload,disk,{type:'buyPill',id:'peiyuan',count:1},'cultivation-stock-confirmation',0,{realm:'炼气',total:6,used:1,remaining:5,purchasable:5,inventoryAfter:6})
 })

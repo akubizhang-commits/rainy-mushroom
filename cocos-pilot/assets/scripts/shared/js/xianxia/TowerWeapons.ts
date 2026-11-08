@@ -50,13 +50,13 @@ export const WEAPON_FIXED_ATTACK_RANGES = freeze(Object.fromEntries(
   Object.entries(WEAPON_AFFIX_RANGES).map(([tier, specs]) => [tier, specs.map(spec =>
     spec && spec.A.map(amount => Math.max(.1, Math.floor(amount * .008 * WEAPON_ATTACK_REFERENCE[tier] * 10 + 1e-8) / 10)))])))
 const families = freeze({
-  general: ['sj_yujian', 'sj_shadow'], qi: ['sj_arc', 'sj_line', 'sj_cross'], formation: ['sj_wanjian', 'sj_formation'],
+  general: ['sj_yujian', 'sj_shadow'], qi: ['sj_arc', 'sj_moon', 'sj_moon_triple', 'sj_line', 'sj_cross'], formation: ['sj_wanjian', 'sj_formation', 'sj_sancai'],
 })
 const evolutionFamilies = freeze({
   evo_wanjian: 'sj_yujian', evo_tiandi: 'sj_line', evo_wuwo: 'sj_wanjian', evo_sixiang: 'sj_formation',
 })
-const skillNames = freeze({ sj_yujian: '御剑术', sj_shadow: '分光连斩', sj_arc: '弦月斩', sj_cross: '剑啸八方',
-  sj_line: '剑破虚空', sj_wanjian: '周天剑阵', sj_formation: '两仪剑阵' })
+const skillNames = freeze({ sj_yujian: '御剑术', sj_shadow: '分光连斩', sj_arc: '流云斩', sj_moon: '玄月斩', sj_moon_triple: '逐月斩', sj_cross: '双月斩',
+  sj_line: '剑破虚空', sj_wanjian: '周天剑阵', sj_formation: '两仪剑阵', sj_sancai: '三才剑阵' })
 const own = (o, key) => Object.prototype.hasOwnProperty.call(o, key)
 const record = x => x !== null && typeof x === 'object' && !Array.isArray(x)
 const exactKeys = (x, keys) => record(x) && Object.keys(x).length === keys.length && keys.every(k => own(x, k))
@@ -206,8 +206,8 @@ function weaponSections(instance) {
   return {baseAttributes:equipmentBaseAttributes(d),
     baseLines:[`基础物理攻击 +${range.min}～${range.max}`,
       `基础法术攻击 +${magic.min}～${magic.max}`,...primaryAttributeLines(equipmentBaseAttributes(d))],
-    ordinaryLines:lines.filter((_,i)=>!['flow','element','bleed','bleedConversion','skillLevel'].includes(instance.affixes[i].type)),
-    specialLines:lines.filter((_,i)=>['flow','element','bleed','bleedConversion','skillLevel'].includes(instance.affixes[i].type))}
+    ordinaryLines:lines.filter((_,i)=>!['skill','flow','element','bleed','bleedConversion','skillLevel'].includes(instance.affixes[i].type)),
+    specialLines:lines.filter((_,i)=>['skill','flow','element','bleed','bleedConversion','skillLevel'].includes(instance.affixes[i].type))}
 }
 export function weaponDescription(instance) {
   const s=weaponSections(instance)

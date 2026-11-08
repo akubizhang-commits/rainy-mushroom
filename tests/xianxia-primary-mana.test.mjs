@@ -16,12 +16,13 @@ const advance=(run,n)=>{for(let i=0;i<n;i++)run.advance(1/60)}
 function target(run){const p=run.state.player;run.state.enemies.push({id:'test-target',x:p.x+70,y:p.y,hp:1e8,maxHp:1e8,radius:20,armor:0})}
 test('birth, level growth and derived attack apply once; awareness drives casting',()=>{
  const l=loadout(),a=primaryAttributes(0,l)
- assert.deepEqual(a,{strength:100,intelligence:100,awareness:100,vitality:0,maxMana:100,manaRegen:4})
+ assert.deepEqual(a,{strength:110,intelligence:90,awareness:100,vitality:10,maxMana:100,manaRegen:3})
  for(let level=1;level<=30;level++){
   const xp=cultivationLevelXp(level),s=stats(xp,l)
   near(s.attack,s.strength+5);near(s.magicAttack,s.intelligence+5)
-  near(s.strength,100*cultivationAt(xp).attackMultiplier)
-  assert.equal(s.awareness,100+level-1);near(s.manaRegen,s.awareness*.04)
+  near(s.strength,110*cultivationAt(xp).attackMultiplier)
+  near(s.intelligence,90*cultivationAt(xp).attackMultiplier)
+  assert.equal(s.awareness,100+level-1);near(s.manaRegen,s.awareness*.03)
   near(equipmentCastSpeed(l,xp),(level-1)/100)
   assert.equal(s.maxMana,s.awareness);assert.ok(!('spirit' in s))
  }
@@ -32,39 +33,37 @@ test('every current active form has cost, basics and passives are free',()=>{
  for(const id of ['sj_yujian','sj_arc','sj_cross','sj_line','sj_shadow','sj_wanjian','sj_formation','evo_wanjian','evo_tiandi','evo_wuwo','evo_sixiang'])assert.ok(MANA_COSTS[id]>0,id)
  for(const id of ['basic_attack','sj_spirit','sj_bone','sj_gate'])assert.equal(skillManaCost(id),0)
 })
-test('basic forms remain sustainable at birth even at maximum cooldown reduction',()=>{
- const demand=GROWTH_SKILLS.filter(s=>s.kind==='active').reduce((sum,s)=>
-  sum+skillManaCost(s.id)/(Math.min(s.cooldown,Array.isArray(s.generation_interval)?Math.min(...s.generation_interval):s.generation_interval??Infinity)*(1-EQUIPMENT_COOLDOWN_CAP)),0)
- assert.ok(demand>0)
- assert.ok(demand<primaryAttributes(0,loadout()).manaRegen,`demand ${demand}`)
+test('starter flying swords remain sustainable, while whole-catalog spam has a cost',()=>{
+ const regen=primaryAttributes(0,loadout()).manaRegen
+ assert.ok(skillManaCost('sj_yujian')<=regen)
+ assert.ok(Object.values(MANA_COSTS).every(Number.isInteger))
 })
-test('zero and partial mana preserve the same automatic cast selection as full mana',()=>{
- for(const mana of [0,.25,100]){
+test('insufficient spirit waits without consuming partial mana; basic attacks still start',()=>{
+ for(const mana of [0,.25]){
   const r=make(loadout(),mana);target(r)
   r._growthSkills([],null,r.state.player)
-  assert.equal(r.state.actions.current.parent,'sj_arc')
-  assert.equal(r.state.manaState.spent,Math.min(mana,1))
-  near(r.state.player.mana,Math.max(0,mana-1))
-  assert.ok(r.state.cooldowns.sj_arc>0)
-  r._growthSkills([],null,r.state.player)
-  assert.equal(r.state.manaState.spent,Math.min(mana,1))
+  assert.equal(r.state.actions.current,null)
+  assert.equal(r.state.manaState.spent,0);near(r.state.player.mana,mana)
+  assert.ok(r.state.actions.basic)
  }
+ const r=make(loadout(),100);target(r);r._growthSkills([],null,r.state.player)
+ assert.equal(r.state.actions.current.parent,'sj_arc')
+ near(r.state.player.mana,100-skillManaCost('sj_arc'))
 })
-test('every evolved power still starts at zero mana',()=>{
+test('every evolved power waits at zero spirit with no medicine',()=>{
  for(const [id,evo] of Object.entries({sj_yujian:'evo_wanjian',sj_line:'evo_tiandi',sj_wanjian:'evo_wuwo',sj_formation:'evo_sixiang'})){
   const l=loadout();l.active={[id]:10};l.evolutions=[evo];l.evolutionLevels={[evo]:1}
-  const r=make(l,0);target(r);r.state.cooldowns[evo]=0
-  r._growthSkills([],null,r.state.player)
-  assert.equal(r.state.actions.current.skill,evo)
+  const r=make(l,0);target(r);r.state.cooldowns[evo]=0;r._growthSkills([],null,r.state.player)
+  assert.equal(r.state.actions.current,null)
   assert.equal(r.state.player.mana,0);assert.equal(r.state.manaState.spent,0)
  }
 })
 test('multi-hit casting charges once, and recovery has no target or full-health requirement',()=>{
  const l=loadout();l.active={sj_arc:7};const r=make(l,50);target(r)
  r._growthSkills([],null,r.state.player)
- assert.equal(r.state.manaState.spent,1)
+ assert.equal(r.state.manaState.spent,skillManaCost('sj_arc'))
  for(let i=1;i<=60;i++){r.state.time=i/60;r._advanceSkillCasts([],null)}
- assert.equal(r.state.manaState.spent,1)
+ assert.equal(r.state.manaState.spent,skillManaCost('sj_arc'))
  const empty=loadout();empty.active={};const regen=make(empty,0);regen.setPlaytestAssist(true)
  advance(regen,60);near(regen.state.player.mana,regen.state.player.manaRegen)
 })

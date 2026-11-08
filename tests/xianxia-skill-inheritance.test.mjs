@@ -13,7 +13,7 @@ function fixture() {
  const disk = { getItem: key => data.get(key) ?? null, setItem: (key,value) => { if(fail) throw Error('disk full'); data.set(key,value) } }
  let store = new TowerCampaignStore(disk,0); store.act({type:'sync'},0)
  const env = JSON.parse(data.get(TOWER_CAMPAIGN_KEY))
- env.data = JSON.stringify({...store.state,xp:TOWER_XP_CAP,clearedFloor:9,researchPurchases:3,spiritStones:20000})
+ env.data = JSON.stringify({...store.state,xp:TOWER_XP_CAP,clearedFloor:9,researchPurchases: 0,spiritStones:20000})
  env.checksum = checksum(env.data);data.set(TOWER_CAMPAIGN_KEY,JSON.stringify(env));store=new TowerCampaignStore(disk,0)
  return {store,disk,data,block:value=>{fail=value}}
 }
@@ -22,7 +22,7 @@ function learn(store,id,n=1) { for(let i=0;i<n;i++) assert.equal(store.act({type
 for(const evo of GROWTH_EVOLUTIONS) {
  test(`${evo.id}: fixed price determines full-route budget`,()=>{
   const parent=GROWTH_SKILLS.find(s=>s.id===evo.parent)
-  const expected={evo_wanjian:[12,14],evo_wuwo:[14,18],evo_tiandi:[22,24],evo_sixiang:[24,28]}[evo.id]
+  const expected={evo_wanjian:[12,14],evo_wuwo:[14,18],evo_tiandi:[12,14],evo_sixiang:[14,18]}[evo.id]
   const base=parent.pointCosts.reduce((a,b)=>a+b,0)
   assert.equal(base+evo.pointCosts[0],expected[0]);assert.equal(base+evo.pointCosts.reduce((a,b)=>a+b,0),expected[1])
  })
@@ -42,8 +42,8 @@ for(const evo of GROWTH_EVOLUTIONS) {
   learn(store,evo.parent);learn(store,evo.id)
   block(true);const retained=store.state;assert.equal(store.act({type:'respecSkills'},0).ok,false);assert.deepEqual(store.state,retained)
   block(false);assert.equal(store.act({type:'respecSkills'},0).ok,true)
-  assert.equal(growthSummary(store.state).available,81)
-  assert.equal(store.act({type:'respecSkills'},0).ok,true);assert.equal(growthSummary(store.state).available,81)
+  assert.equal(growthSummary(store.state).available,36)
+  assert.equal(store.act({type:'respecSkills'},0).ok,true);assert.equal(growthSummary(store.state).available,36)
   assert.equal(data.get('other-game'),'keep')
  })
  test(`${evo.id}: actual damage inherits parent rank while authored geometry stays unchanged`,()=>{

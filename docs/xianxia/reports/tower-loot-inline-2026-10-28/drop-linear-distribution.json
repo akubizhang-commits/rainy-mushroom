@@ -1,0 +1,2127 @@
+{
+  "reportVersion": 1,
+  "lootVersion": 1,
+  "samplesPerFloor": 20000,
+  "totalPlans": 180000,
+  "seedSequence": "(Math.imul(sampleIndex, 0x9e3779b1) >>> 0), sampleIndex=0..samples-1",
+  "runtime": "v22.22.2",
+  "elapsedMs": 12374.093709,
+  "claims": [
+    "Numeric plan verification only; TowerRun integration, migration and wallet credit are parent-owned.",
+    "Actual rates are conditioned on joint count/value bounds; base rates are not independent final guarantees.",
+    "Fallback tail uses a feasible fixed-rank recipe with random within-rank identity selection.",
+    "Candidate model assumes independent uniform draws; empirical data uses the shipped deterministic PRNG.",
+    "No proof of human difficulty, player survival or device performance."
+  ],
+  "sourceHashes": {
+    "js/xianxia/TowerLoot.js": "71f63b32816984192dac2b6baddc7c753befd2316a0f87809a0a346e2d7c329b",
+    "js/xianxia/TowerContent.js": "e736d7c6971ffccc4e53686c91af5571bb074cd6db937e56158247908dc21b6d",
+    "scripts/verify-tower-loot-distribution.mjs": "e4ebe8d4c571856e69597921d3d0257f8b49e930f4c5623864bee0beb284488e",
+    "tests/xianxia-tower-loot.test.mjs": "353327bb156484bdaae418357242d2f2fce102733201935dcd40e7776cfff279"
+  },
+  "floors": [
+    {
+      "floor": 1,
+      "samples": 20000,
+      "authored": {
+        "total": 378,
+        "normal": 372,
+        "elite": 5,
+        "boss": 1
+      },
+      "rule": {
+        "floor": 1,
+        "minCount": 50,
+        "maxCount": 66,
+        "minValue": 57,
+        "maxValue": 69,
+        "normalChance": 0.1446236559139785,
+        "eliteChance": 0.65,
+        "bossChance": 0.9,
+        "targetValue": 63
+      },
+      "oldKillValue": 63,
+      "baselineNormalCounter": 0,
+      "legacyCounterCarryDifferenceAtMost": 1,
+      "clearBonus": 0,
+      "firstClearBonus": 10,
+      "physicalCoreCount": {
+        "min": 50,
+        "p05": 52,
+        "median": 58,
+        "p95": 63,
+        "max": 66,
+        "mean": 57.84725,
+        "standardDeviation": 3.52589243,
+        "histogram": {
+          "50": 60,
+          "51": 362,
+          "52": 868,
+          "53": 1226,
+          "54": 1532,
+          "55": 1756,
+          "56": 1723,
+          "57": 1912,
+          "58": 1830,
+          "59": 1824,
+          "60": 1681,
+          "61": 1560,
+          "62": 1504,
+          "63": 1177,
+          "64": 666,
+          "65": 264,
+          "66": 55
+        }
+      },
+      "killValue": {
+        "min": 57,
+        "p05": 57,
+        "median": 63,
+        "p95": 69,
+        "max": 69,
+        "mean": 62.92075,
+        "standardDeviation": 3.53684456,
+        "histogram": {
+          "57": 1273,
+          "58": 1384,
+          "59": 1506,
+          "60": 1742,
+          "61": 1702,
+          "62": 1672,
+          "63": 1784,
+          "64": 1772,
+          "65": 1664,
+          "66": 1537,
+          "67": 1410,
+          "68": 1376,
+          "69": 1178
+        }
+      },
+      "repeatClearValueRange": [
+        57,
+        69
+      ],
+      "firstClearValueRange": [
+        67,
+        79
+      ],
+      "repeatClearValueMean": 62.92075,
+      "firstClearValueMean": 72.92075,
+      "rates": [
+        {
+          "name": "normal",
+          "entitiesPerFloor": 372,
+          "opportunities": 7440000,
+          "dropCount": 1073519,
+          "baseChance": 0.14462366,
+          "effectiveChance": 0.14429019,
+          "meanCountPerFloor": 53.67595,
+          "meanValuePerFloor": 53.67595
+        },
+        {
+          "name": "rank1",
+          "entitiesPerFloor": 372,
+          "opportunities": 7440000,
+          "dropCount": 1073519,
+          "baseChance": 0.14462366,
+          "effectiveChance": 0.14429019,
+          "meanCountPerFloor": 53.67595,
+          "meanValuePerFloor": 53.67595
+        },
+        {
+          "name": "normal:rank1",
+          "entitiesPerFloor": 372,
+          "opportunities": 7440000,
+          "dropCount": 1073519,
+          "baseChance": 0.14462366,
+          "effectiveChance": 0.14429019,
+          "meanCountPerFloor": 53.67595,
+          "meanValuePerFloor": 53.67595
+        },
+        {
+          "name": "elite",
+          "entitiesPerFloor": 5,
+          "opportunities": 100000,
+          "dropCount": 65382,
+          "baseChance": 0.65,
+          "effectiveChance": 0.65382,
+          "meanCountPerFloor": 3.2691,
+          "meanValuePerFloor": 6.5382
+        },
+        {
+          "name": "rank2",
+          "entitiesPerFloor": 5,
+          "opportunities": 100000,
+          "dropCount": 65382,
+          "baseChance": 0.65,
+          "effectiveChance": 0.65382,
+          "meanCountPerFloor": 3.2691,
+          "meanValuePerFloor": 6.5382
+        },
+        {
+          "name": "elite:rank2",
+          "entitiesPerFloor": 5,
+          "opportunities": 100000,
+          "dropCount": 65382,
+          "baseChance": 0.65,
+          "effectiveChance": 0.65382,
+          "meanCountPerFloor": 3.2691,
+          "meanValuePerFloor": 6.5382
+        },
+        {
+          "name": "boss",
+          "entitiesPerFloor": 1,
+          "opportunities": 20000,
+          "dropCount": 18044,
+          "baseChance": 0.9,
+          "effectiveChance": 0.9022,
+          "meanCountPerFloor": 0.9022,
+          "meanValuePerFloor": 2.7066
+        },
+        {
+          "name": "rank3",
+          "entitiesPerFloor": 1,
+          "opportunities": 20000,
+          "dropCount": 18044,
+          "baseChance": 0.9,
+          "effectiveChance": 0.9022,
+          "meanCountPerFloor": 0.9022,
+          "meanValuePerFloor": 2.7066
+        },
+        {
+          "name": "boss:rank3",
+          "entitiesPerFloor": 1,
+          "opportunities": 20000,
+          "dropCount": 18044,
+          "baseChance": 0.9,
+          "effectiveChance": 0.9022,
+          "meanCountPerFloor": 0.9022,
+          "meanValuePerFloor": 2.7066
+        }
+      ],
+      "candidateModel": {
+        "acceptanceProbability": 0.6353018326537067,
+        "expectedProposalsBeforeAcceptOrFallback": 1.574054804608485,
+        "exhaustionProbability16IndependentProposals": 9.793485732537994e-8,
+        "physicallyFeasibleCountRange": [
+          50,
+          66
+        ],
+        "physicallyFeasibleValueRange": [
+          57,
+          69
+        ]
+      },
+      "everyAuthoredEntityDroppedAndMissed": true,
+      "planDigestSha256": "0a0f6d0db51ad41e899c0740ed9d8afd4cee3a26d4488103f0c4988af5d854c1",
+      "measuredLoopMs": 1312.191916,
+      "verificationLoopMicrosecondsPerPlan": 65.6095958
+    },
+    {
+      "floor": 2,
+      "samples": 20000,
+      "authored": {
+        "total": 416,
+        "normal": 410,
+        "elite": 5,
+        "boss": 1
+      },
+      "rule": {
+        "floor": 2,
+        "minCount": 51,
+        "maxCount": 68,
+        "minValue": 59,
+        "maxValue": 71,
+        "normalChance": 0.13609756097560974,
+        "eliteChance": 0.65,
+        "bossChance": 0.9,
+        "targetValue": 65
+      },
+      "oldKillValue": 65,
+      "baselineNormalCounter": 0,
+      "legacyCounterCarryDifferenceAtMost": 1,
+      "clearBonus": 5,
+      "firstClearBonus": 10,
+      "physicalCoreCount": {
+        "min": 52,
+        "p05": 54,
+        "median": 60,
+        "p95": 66,
+        "max": 68,
+        "mean": 59.8709,
+        "standardDeviation": 3.53061371,
+        "histogram": {
+          "52": 72,
+          "53": 348,
+          "54": 782,
+          "55": 1304,
+          "56": 1535,
+          "57": 1731,
+          "58": 1774,
+          "59": 1815,
+          "60": 1875,
+          "61": 1761,
+          "62": 1723,
+          "63": 1609,
+          "64": 1457,
+          "65": 1201,
+          "66": 684,
+          "67": 265,
+          "68": 64
+        }
+      },
+      "killValue": {
+        "min": 59,
+        "p05": 59,
+        "median": 65,
+        "p95": 71,
+        "max": 71,
+        "mean": 64.93675,
+        "standardDeviation": 3.5341547,
+        "histogram": {
+          "59": 1271,
+          "60": 1356,
+          "61": 1568,
+          "62": 1648,
+          "63": 1610,
+          "64": 1835,
+          "65": 1771,
+          "66": 1720,
+          "67": 1654,
+          "68": 1606,
+          "69": 1424,
+          "70": 1352,
+          "71": 1185
+        }
+      },
+      "repeatClearValueRange": [
+        64,
+        76
+      ],
+      "firstClearValueRange": [
+        74,
+        86
+      ],
+      "repeatClearValueMean": 69.93675,
+      "firstClearValueMean": 79.93675,
+      "rates": [
+        {
+          "name": "normal",
+          "entitiesPerFloor": 410,
+          "opportunities": 8200000,
+          "dropCount": 1114229,
+          "baseChance": 0.13609756,
+          "effectiveChance": 0.13588159,
+          "meanCountPerFloor": 55.71145,
+          "meanValuePerFloor": 55.71145
+        },
+        {
+          "name": "rank1",
+          "entitiesPerFloor": 410,
+          "opportunities": 8200000,
+          "dropCount": 1114229,
+          "baseChance": 0.13609756,
+          "effectiveChance": 0.13588159,
+          "meanCountPerFloor": 55.71145,
+          "meanValuePerFloor": 55.71145
+        },
+        {
+          "name": "normal:rank1",
+          "entitiesPerFloor": 410,
+          "opportunities": 8200000,
+          "dropCount": 1114229,
+          "baseChance": 0.13609756,
+          "effectiveChance": 0.13588159,
+          "meanCountPerFloor": 55.71145,
+          "meanValuePerFloor": 55.71145
+        },
+        {
+          "name": "elite",
+          "entitiesPerFloor": 5,
+          "opportunities": 100000,
+          "dropCount": 65061,
+          "baseChance": 0.65,
+          "effectiveChance": 0.65061,
+          "meanCountPerFloor": 3.25305,
+          "meanValuePerFloor": 6.5061
+        },
+        {
+          "name": "rank2",
+          "entitiesPerFloor": 5,
+          "opportunities": 100000,
+          "dropCount": 65061,
+          "baseChance": 0.65,
+          "effectiveChance": 0.65061,
+          "meanCountPerFloor": 3.25305,
+          "meanValuePerFloor": 6.5061
+        },
+        {
+          "name": "elite:rank2",
+          "entitiesPerFloor": 5,
+          "opportunities": 100000,
+          "dropCount": 65061,
+          "baseChance": 0.65,
+          "effectiveChance": 0.65061,
+          "meanCountPerFloor": 3.25305,
+          "meanValuePerFloor": 6.5061
+        },
+        {
+          "name": "boss",
+          "entitiesPerFloor": 1,
+          "opportunities": 20000,
+          "dropCount": 18128,
+          "baseChance": 0.9,
+          "effectiveChance": 0.9064,
+          "meanCountPerFloor": 0.9064,
+          "meanValuePerFloor": 2.7192
+        },
+        {
+          "name": "rank3",
+          "entitiesPerFloor": 1,
+          "opportunities": 20000,
+          "dropCount": 18128,
+          "baseChance": 0.9,
+          "effectiveChance": 0.9064,
+          "meanCountPerFloor": 0.9064,
+          "meanValuePerFloor": 2.7192
+        },
+        {
+          "name": "boss:rank3",
+          "entitiesPerFloor": 1,
+          "opportunities": 20000,
+          "dropCount": 18128,
+          "baseChance": 0.9,
+          "effectiveChance": 0.9064,
+          "meanCountPerFloor": 0.9064,
+          "meanValuePerFloor": 2.7192
+        }
+      ],
+      "candidateModel": {
+        "acceptanceProbability": 0.6252962842190476,
+        "expectedProposalsBeforeAcceptOrFallback": 1.5992416302907275,
+        "exhaustionProbability16IndependentProposals": 1.5101079618313162e-7,
+        "physicallyFeasibleCountRange": [
+          52,
+          68
+        ],
+        "physicallyFeasibleValueRange": [
+          59,
+          71
+        ]
+      },
+      "everyAuthoredEntityDroppedAndMissed": true,
+      "planDigestSha256": "9b95d0ac58868b7bab6a4f87b603b2eb51236acef1e36731ff072955c9310687",
+      "measuredLoopMs": 1239.568292,
+      "verificationLoopMicrosecondsPerPlan": 61.9784146
+    },
+    {
+      "floor": 3,
+      "samples": 20000,
+      "authored": {
+        "total": 454,
+        "normal": 448,
+        "elite": 5,
+        "boss": 1
+      },
+      "rule": {
+        "floor": 3,
+        "minCount": 52,
+        "maxCount": 69,
+        "minValue": 71,
+        "maxValue": 85,
+        "normalChance": 0.12542372881355934,
+        "eliteChance": 0.65,
+        "bossChance": 0.9,
+        "targetValue": 78
+      },
+      "oldKillValue": 78,
+      "baselineNormalCounter": 0,
+      "legacyCounterCarryDifferenceAtMost": 1,
+      "clearBonus": 10,
+      "firstClearBonus": 10,
+      "physicalCoreCount": {
+        "min": 52,
+        "p05": 54,
+        "median": 60,
+        "p95": 66,
+        "max": 69,
+        "mean": 60.23395,
+        "standardDeviation": 3.71812014,
+        "histogram": {
+          "52": 200,
+          "53": 394,
+          "54": 645,
+          "55": 935,
+          "56": 1299,
+          "57": 1510,
+          "58": 1827,
+          "59": 1880,
+          "60": 1921,
+          "61": 1908,
+          "62": 1750,
+          "63": 1586,
+          "64": 1312,
+          "65": 1073,
+          "66": 824,
+          "67": 513,
+          "68": 279,
+          "69": 144
+        }
+      },
+      "killValue": {
+        "min": 71,
+        "p05": 71,
+        "median": 78,
+        "p95": 84,
+        "max": 85,
+        "mean": 77.87635,
+        "standardDeviation": 4.08943281,
+        "histogram": {
+          "71": 1045,
+          "72": 1316,
+          "73": 1285,
+          "74": 1419,
+          "75": 1464,
+          "76": 1461,
+          "77": 1524,
+          "78": 1508,
+          "79": 1505,
+          "80": 1402,
+          "81": 1345,
+          "82": 1382,
+          "83": 1237,
+          "84": 1129,
+          "85": 978
+        }
+      },
+      "repeatClearValueRange": [
+        81,
+        95
+      ],
+      "firstClearValueRange": [
+        91,
+        105
+      ],
+      "repeatClearValueMean": 87.87635,
+      "firstClearValueMean": 97.87635,
+      "rates": [
+        {
+          "name": "normal",
+          "entitiesPerFloor": 448,
+          "opportunities": 8960000,
+          "dropCount": 1121054,
+          "baseChance": 0.12542373,
+          "effectiveChance": 0.12511763,
+          "meanCountPerFloor": 56.0527,
+          "meanValuePerFloor": 66.3876
+        },
+        {
+          "name": "rank1",
+          "entitiesPerFloor": 365,
+          "opportunities": 7300000,
+          "dropCount": 914356,
+          "baseChance": 0.12542373,
+          "effectiveChance": 0.12525425,
+          "meanCountPerFloor": 45.7178,
+          "meanValuePerFloor": 45.7178
+        },
+        {
+          "name": "normal:rank1",
+          "entitiesPerFloor": 365,
+          "opportunities": 7300000,
+          "dropCount": 914356,
+          "baseChance": 0.12542373,
+          "effectiveChance": 0.12525425,
+          "meanCountPerFloor": 45.7178,
+          "meanValuePerFloor": 45.7178
+        },
+        {
+          "name": "rank2",
+          "entitiesPerFloor": 86,
+          "opportunities": 1720000,
+          "dropCount": 245952,
+          "baseChance": 0.1437229,
+          "effectiveChance": 0.14299535,
+          "meanCountPerFloor": 12.2976,
+          "meanValuePerFloor": 24.5952
+        },
+        {
+          "name": "normal:rank2",
+          "entitiesPerFloor": 83,
+          "opportunities": 1660000,
+          "dropCount": 206698,
+          "baseChance": 0.12542373,
+          "effectiveChance": 0.12451687,
+          "meanCountPerFloor": 10.3349,
+          "meanValuePerFloor": 20.6698
+        },
+        {
+          "name": "elite",
+          "entitiesPerFloor": 5,
+          "opportunities": 100000,
+          "dropCount": 65471,
+          "baseChance": 0.65,
+          "effectiveChance": 0.65471,
+          "meanCountPerFloor": 3.27355,
+          "meanValuePerFloor": 7.85795
+        },
+        {
+          "name": "elite:rank2",
+          "entitiesPerFloor": 3,
+          "opportunities": 60000,
+          "dropCount": 39254,
+          "baseChance": 0.65,
+          "effectiveChance": 0.65423333,
+          "meanCountPerFloor": 1.9627,
+          "meanValuePerFloor": 3.9254
+        },
+        {
+          "name": "rank3",
+          "entitiesPerFloor": 2,
+          "opportunities": 40000,
+          "dropCount": 26217,
+          "baseChance": 0.65,
+          "effectiveChance": 0.655425,
+          "meanCountPerFloor": 1.31085,
+          "meanValuePerFloor": 3.93255
+        },
+        {
+          "name": "elite:rank3",
+          "entitiesPerFloor": 2,
+          "opportunities": 40000,
+          "dropCount": 26217,
+          "baseChance": 0.65,
+          "effectiveChance": 0.655425,
+          "meanCountPerFloor": 1.31085,
+          "meanValuePerFloor": 3.93255
+        },
+        {
+          "name": "boss",
+          "entitiesPerFloor": 1,
+          "opportunities": 20000,
+          "dropCount": 18154,
+          "baseChance": 0.9,
+          "effectiveChance": 0.9077,
+          "meanCountPerFloor": 0.9077,
+          "meanValuePerFloor": 3.6308
+        },
+        {
+          "name": "rank4",
+          "entitiesPerFloor": 1,
+          "opportunities": 20000,
+          "dropCount": 18154,
+          "baseChance": 0.9,
+          "effectiveChance": 0.9077,
+          "meanCountPerFloor": 0.9077,
+          "meanValuePerFloor": 3.6308
+        },
+        {
+          "name": "boss:rank4",
+          "entitiesPerFloor": 1,
+          "opportunities": 20000,
+          "dropCount": 18154,
+          "baseChance": 0.9,
+          "effectiveChance": 0.9077,
+          "meanCountPerFloor": 0.9077,
+          "meanValuePerFloor": 3.6308
+        }
+      ],
+      "candidateModel": {
+        "acceptanceProbability": 0.5778289778094438,
+        "expectedProposalsBeforeAcceptOrFallback": 1.7306141094447705,
+        "exhaustionProbability16IndependentProposals": 0.0000010181569274284477,
+        "physicallyFeasibleCountRange": [
+          52,
+          69
+        ],
+        "physicallyFeasibleValueRange": [
+          71,
+          85
+        ]
+      },
+      "everyAuthoredEntityDroppedAndMissed": true,
+      "planDigestSha256": "4dec0d9143621fef4799162f9241bd06b661f7fc6ed69dc08b52a5c895d54f20",
+      "measuredLoopMs": 1334.034208,
+      "verificationLoopMicrosecondsPerPlan": 66.7017104
+    },
+    {
+      "floor": 4,
+      "samples": 20000,
+      "authored": {
+        "total": 492,
+        "normal": 486,
+        "elite": 5,
+        "boss": 1
+      },
+      "rule": {
+        "floor": 4,
+        "minCount": 43,
+        "maxCount": 57,
+        "minValue": 79,
+        "maxValue": 95,
+        "normalChance": 0.09346446700507614,
+        "eliteChance": 0.65,
+        "bossChance": 0.9,
+        "targetValue": 87
+      },
+      "oldKillValue": 87,
+      "baselineNormalCounter": 0,
+      "legacyCounterCarryDifferenceAtMost": 1,
+      "clearBonus": 15,
+      "firstClearBonus": 10,
+      "physicalCoreCount": {
+        "min": 43,
+        "p05": 44,
+        "median": 50,
+        "p95": 55,
+        "max": 57,
+        "mean": 49.5931,
+        "standardDeviation": 3.24785043,
+        "histogram": {
+          "43": 432,
+          "44": 722,
+          "45": 1124,
+          "46": 1580,
+          "47": 1783,
+          "48": 2029,
+          "49": 2178,
+          "50": 2227,
+          "51": 2078,
+          "52": 1826,
+          "53": 1467,
+          "54": 1106,
+          "55": 746,
+          "56": 456,
+          "57": 246
+        }
+      },
+      "killValue": {
+        "min": 79,
+        "p05": 80,
+        "median": 87,
+        "p95": 94,
+        "max": 95,
+        "mean": 86.9374,
+        "standardDeviation": 4.65992288,
+        "histogram": {
+          "79": 960,
+          "80": 1046,
+          "81": 1094,
+          "82": 1230,
+          "83": 1218,
+          "84": 1233,
+          "85": 1381,
+          "86": 1318,
+          "87": 1400,
+          "88": 1249,
+          "89": 1244,
+          "90": 1257,
+          "91": 1187,
+          "92": 1126,
+          "93": 1099,
+          "94": 1029,
+          "95": 929
+        }
+      },
+      "repeatClearValueRange": [
+        94,
+        110
+      ],
+      "firstClearValueRange": [
+        104,
+        120
+      ],
+      "repeatClearValueMean": 101.9374,
+      "firstClearValueMean": 111.9374,
+      "rates": [
+        {
+          "name": "normal",
+          "entitiesPerFloor": 486,
+          "opportunities": 9720000,
+          "dropCount": 908212,
+          "baseChance": 0.09346447,
+          "effectiveChance": 0.09343745,
+          "meanCountPerFloor": 45.4106,
+          "meanValuePerFloor": 73.47545
+        },
+        {
+          "name": "rank2",
+          "entitiesPerFloor": 216,
+          "opportunities": 4320000,
+          "dropCount": 425211,
+          "baseChance": 0.09861757,
+          "effectiveChance": 0.09842847,
+          "meanCountPerFloor": 21.26055,
+          "meanValuePerFloor": 42.5211
+        },
+        {
+          "name": "normal:rank2",
+          "entitiesPerFloor": 214,
+          "opportunities": 4280000,
+          "dropCount": 399051,
+          "baseChance": 0.09346447,
+          "effectiveChance": 0.09323621,
+          "meanCountPerFloor": 19.95255,
+          "meanValuePerFloor": 39.9051
+        },
+        {
+          "name": "rank1",
+          "entitiesPerFloor": 228,
+          "opportunities": 4560000,
+          "dropCount": 428038,
+          "baseChance": 0.09346447,
+          "effectiveChance": 0.09386798,
+          "meanCountPerFloor": 21.4019,
+          "meanValuePerFloor": 21.4019
+        },
+        {
+          "name": "normal:rank1",
+          "entitiesPerFloor": 228,
+          "opportunities": 4560000,
+          "dropCount": 428038,
+          "baseChance": 0.09346447,
+          "effectiveChance": 0.09386798,
+          "meanCountPerFloor": 21.4019,
+          "meanValuePerFloor": 21.4019
+        },
+        {
+          "name": "rank3",
+          "entitiesPerFloor": 45,
+          "opportunities": 900000,
+          "dropCount": 94164,
+          "baseChance": 0.10583192,
+          "effectiveChance": 0.10462667,
+          "meanCountPerFloor": 4.7082,
+          "meanValuePerFloor": 14.1246
+        },
+        {
+          "name": "normal:rank3",
+          "entitiesPerFloor": 44,
+          "opportunities": 880000,
+          "dropCount": 81123,
+          "baseChance": 0.09346447,
+          "effectiveChance": 0.09218523,
+          "meanCountPerFloor": 4.05615,
+          "meanValuePerFloor": 12.16845
+        },
+        {
+          "name": "elite",
+          "entitiesPerFloor": 5,
+          "opportunities": 100000,
+          "dropCount": 65544,
+          "baseChance": 0.65,
+          "effectiveChance": 0.65544,
+          "meanCountPerFloor": 3.2772,
+          "meanValuePerFloor": 9.84075
+        },
+        {
+          "name": "elite:rank3",
+          "entitiesPerFloor": 1,
+          "opportunities": 20000,
+          "dropCount": 13041,
+          "baseChance": 0.65,
+          "effectiveChance": 0.65205,
+          "meanCountPerFloor": 0.65205,
+          "meanValuePerFloor": 1.95615
+        },
+        {
+          "name": "rank4",
+          "entitiesPerFloor": 3,
+          "opportunities": 60000,
+          "dropCount": 44449,
+          "baseChance": 0.73333333,
+          "effectiveChance": 0.74081667,
+          "meanCountPerFloor": 2.22245,
+          "meanValuePerFloor": 8.8898
+        },
+        {
+          "name": "elite:rank4",
+          "entitiesPerFloor": 2,
+          "opportunities": 40000,
+          "dropCount": 26343,
+          "baseChance": 0.65,
+          "effectiveChance": 0.658575,
+          "meanCountPerFloor": 1.31715,
+          "meanValuePerFloor": 5.2686
+        },
+        {
+          "name": "elite:rank2",
+          "entitiesPerFloor": 2,
+          "opportunities": 40000,
+          "dropCount": 26160,
+          "baseChance": 0.65,
+          "effectiveChance": 0.654,
+          "meanCountPerFloor": 1.308,
+          "meanValuePerFloor": 2.616
+        },
+        {
+          "name": "boss",
+          "entitiesPerFloor": 1,
+          "opportunities": 20000,
+          "dropCount": 18106,
+          "baseChance": 0.9,
+          "effectiveChance": 0.9053,
+          "meanCountPerFloor": 0.9053,
+          "meanValuePerFloor": 3.6212
+        },
+        {
+          "name": "boss:rank4",
+          "entitiesPerFloor": 1,
+          "opportunities": 20000,
+          "dropCount": 18106,
+          "baseChance": 0.9,
+          "effectiveChance": 0.9053,
+          "meanCountPerFloor": 0.9053,
+          "meanValuePerFloor": 3.6212
+        }
+      ],
+      "candidateModel": {
+        "acceptanceProbability": 0.5160395772364421,
+        "expectedProposalsBeforeAcceptOrFallback": 1.9378183140803669,
+        "exhaustionProbability16IndependentProposals": 0.000009056440932571999,
+        "physicallyFeasibleCountRange": [
+          43,
+          57
+        ],
+        "physicallyFeasibleValueRange": [
+          79,
+          95
+        ]
+      },
+      "everyAuthoredEntityDroppedAndMissed": true,
+      "planDigestSha256": "ed8ffa028d2c997f42def1ca8107a9df0f5880d00296699e5b952e65cec88e3b",
+      "measuredLoopMs": 1296.326709,
+      "verificationLoopMicrosecondsPerPlan": 64.81633545
+    },
+    {
+      "floor": 5,
+      "samples": 20000,
+      "authored": {
+        "total": 530,
+        "normal": 524,
+        "elite": 5,
+        "boss": 1
+      },
+      "rule": {
+        "floor": 5,
+        "minCount": 43,
+        "maxCount": 57,
+        "minValue": 81,
+        "maxValue": 99,
+        "normalChance": 0.08706214689265536,
+        "eliteChance": 0.65,
+        "bossChance": 0.9,
+        "targetValue": 90
+      },
+      "oldKillValue": 90,
+      "baselineNormalCounter": 0,
+      "legacyCounterCarryDifferenceAtMost": 1,
+      "clearBonus": 20,
+      "firstClearBonus": 10,
+      "physicalCoreCount": {
+        "min": 43,
+        "p05": 44,
+        "median": 50,
+        "p95": 55,
+        "max": 57,
+        "mean": 49.7044,
+        "standardDeviation": 3.25782453,
+        "histogram": {
+          "43": 342,
+          "44": 678,
+          "45": 1120,
+          "46": 1576,
+          "47": 1821,
+          "48": 2061,
+          "49": 2031,
+          "50": 2139,
+          "51": 2041,
+          "52": 1818,
+          "53": 1599,
+          "54": 1226,
+          "55": 835,
+          "56": 474,
+          "57": 239
+        }
+      },
+      "killValue": {
+        "min": 81,
+        "p05": 82,
+        "median": 90,
+        "p95": 98,
+        "max": 99,
+        "mean": 89.89125,
+        "standardDeviation": 5.21023257,
+        "histogram": {
+          "81": 837,
+          "82": 957,
+          "83": 1032,
+          "84": 1036,
+          "85": 1106,
+          "86": 1140,
+          "87": 1147,
+          "88": 1197,
+          "89": 1184,
+          "90": 1094,
+          "91": 1191,
+          "92": 1126,
+          "93": 1138,
+          "94": 1073,
+          "95": 1103,
+          "96": 1045,
+          "97": 924,
+          "98": 869,
+          "99": 801
+        }
+      },
+      "repeatClearValueRange": [
+        101,
+        119
+      ],
+      "firstClearValueRange": [
+        111,
+        129
+      ],
+      "repeatClearValueMean": 109.89125,
+      "firstClearValueMean": 119.89125,
+      "rates": [
+        {
+          "name": "normal",
+          "entitiesPerFloor": 524,
+          "opportunities": 10480000,
+          "dropCount": 910429,
+          "baseChance": 0.08706215,
+          "effectiveChance": 0.086873,
+          "meanCountPerFloor": 45.52145,
+          "meanValuePerFloor": 76.82835
+        },
+        {
+          "name": "rank2",
+          "entitiesPerFloor": 363,
+          "opportunities": 7260000,
+          "dropCount": 652191,
+          "baseChance": 0.09016373,
+          "effectiveChance": 0.08983347,
+          "meanCountPerFloor": 32.60955,
+          "meanValuePerFloor": 65.2191
+        },
+        {
+          "name": "normal:rank2",
+          "entitiesPerFloor": 361,
+          "opportunities": 7220000,
+          "dropCount": 626138,
+          "baseChance": 0.08706215,
+          "effectiveChance": 0.08672271,
+          "meanCountPerFloor": 31.3069,
+          "meanValuePerFloor": 62.6138
+        },
+        {
+          "name": "rank1",
+          "entitiesPerFloor": 163,
+          "opportunities": 3260000,
+          "dropCount": 284291,
+          "baseChance": 0.08706215,
+          "effectiveChance": 0.08720583,
+          "meanCountPerFloor": 14.21455,
+          "meanValuePerFloor": 14.21455
+        },
+        {
+          "name": "normal:rank1",
+          "entitiesPerFloor": 163,
+          "opportunities": 3260000,
+          "dropCount": 284291,
+          "baseChance": 0.08706215,
+          "effectiveChance": 0.08720583,
+          "meanCountPerFloor": 14.21455,
+          "meanValuePerFloor": 14.21455
+        },
+        {
+          "name": "elite",
+          "entitiesPerFloor": 5,
+          "opportunities": 100000,
+          "dropCount": 65492,
+          "baseChance": 0.65,
+          "effectiveChance": 0.65492,
+          "meanCountPerFloor": 3.2746,
+          "meanValuePerFloor": 8.52115
+        },
+        {
+          "name": "rank3",
+          "entitiesPerFloor": 3,
+          "opportunities": 60000,
+          "dropCount": 39439,
+          "baseChance": 0.65,
+          "effectiveChance": 0.65731667,
+          "meanCountPerFloor": 1.97195,
+          "meanValuePerFloor": 5.91585
+        },
+        {
+          "name": "elite:rank3",
+          "entitiesPerFloor": 3,
+          "opportunities": 60000,
+          "dropCount": 39439,
+          "baseChance": 0.65,
+          "effectiveChance": 0.65731667,
+          "meanCountPerFloor": 1.97195,
+          "meanValuePerFloor": 5.91585
+        },
+        {
+          "name": "elite:rank2",
+          "entitiesPerFloor": 2,
+          "opportunities": 40000,
+          "dropCount": 26053,
+          "baseChance": 0.65,
+          "effectiveChance": 0.651325,
+          "meanCountPerFloor": 1.30265,
+          "meanValuePerFloor": 2.6053
+        },
+        {
+          "name": "boss",
+          "entitiesPerFloor": 1,
+          "opportunities": 20000,
+          "dropCount": 18167,
+          "baseChance": 0.9,
+          "effectiveChance": 0.90835,
+          "meanCountPerFloor": 0.90835,
+          "meanValuePerFloor": 4.54175
+        },
+        {
+          "name": "rank5",
+          "entitiesPerFloor": 1,
+          "opportunities": 20000,
+          "dropCount": 18167,
+          "baseChance": 0.9,
+          "effectiveChance": 0.90835,
+          "meanCountPerFloor": 0.90835,
+          "meanValuePerFloor": 4.54175
+        },
+        {
+          "name": "boss:rank5",
+          "entitiesPerFloor": 1,
+          "opportunities": 20000,
+          "dropCount": 18167,
+          "baseChance": 0.9,
+          "effectiveChance": 0.90835,
+          "meanCountPerFloor": 0.90835,
+          "meanValuePerFloor": 4.54175
+        }
+      ],
+      "candidateModel": {
+        "acceptanceProbability": 0.5735105664908489,
+        "expectedProposalsBeforeAcceptOrFallback": 1.7436449478344729,
+        "exhaustionProbability16IndependentProposals": 0.0000011982085447898261,
+        "physicallyFeasibleCountRange": [
+          43,
+          57
+        ],
+        "physicallyFeasibleValueRange": [
+          81,
+          99
+        ]
+      },
+      "everyAuthoredEntityDroppedAndMissed": true,
+      "planDigestSha256": "9b769b68c6638fc4c258c338641bedb0d3f6fd3633a2f9d54e76529e658c4148",
+      "measuredLoopMs": 1225.3785,
+      "verificationLoopMicrosecondsPerPlan": 61.268925
+    },
+    {
+      "floor": 6,
+      "samples": 20000,
+      "authored": {
+        "total": 568,
+        "normal": 562,
+        "elite": 5,
+        "boss": 1
+      },
+      "rule": {
+        "floor": 6,
+        "minCount": 35,
+        "maxCount": 46,
+        "minValue": 98,
+        "maxValue": 118,
+        "normalChance": 0.06413890857547838,
+        "eliteChance": 0.65,
+        "bossChance": 0.9,
+        "targetValue": 108
+      },
+      "oldKillValue": 108,
+      "baselineNormalCounter": 0,
+      "legacyCounterCarryDifferenceAtMost": 1,
+      "clearBonus": 25,
+      "firstClearBonus": 10,
+      "physicalCoreCount": {
+        "min": 35,
+        "p05": 36,
+        "median": 40,
+        "p95": 45,
+        "max": 46,
+        "mean": 40.1624,
+        "standardDeviation": 2.60783938,
+        "histogram": {
+          "35": 550,
+          "36": 1121,
+          "37": 1777,
+          "38": 2292,
+          "39": 2581,
+          "40": 2744,
+          "41": 2578,
+          "42": 2286,
+          "43": 1832,
+          "44": 1212,
+          "45": 678,
+          "46": 349
+        }
+      },
+      "killValue": {
+        "min": 98,
+        "p05": 99,
+        "median": 108,
+        "p95": 117,
+        "max": 118,
+        "mean": 107.85725,
+        "standardDeviation": 5.80985993,
+        "histogram": {
+          "98": 786,
+          "99": 855,
+          "100": 925,
+          "101": 1015,
+          "102": 939,
+          "103": 1049,
+          "104": 989,
+          "105": 1044,
+          "106": 1073,
+          "107": 1013,
+          "108": 1104,
+          "109": 978,
+          "110": 1107,
+          "111": 982,
+          "112": 939,
+          "113": 936,
+          "114": 920,
+          "115": 883,
+          "116": 852,
+          "117": 870,
+          "118": 741
+        }
+      },
+      "repeatClearValueRange": [
+        123,
+        143
+      ],
+      "firstClearValueRange": [
+        133,
+        153
+      ],
+      "repeatClearValueMean": 132.85725,
+      "firstClearValueMean": 142.85725,
+      "rates": [
+        {
+          "name": "normal",
+          "entitiesPerFloor": 562,
+          "opportunities": 11240000,
+          "dropCount": 719895,
+          "baseChance": 0.06413891,
+          "effectiveChance": 0.0640476,
+          "meanCountPerFloor": 35.99475,
+          "meanValuePerFloor": 90.2857
+        },
+        {
+          "name": "rank3",
+          "entitiesPerFloor": 389,
+          "opportunities": 7780000,
+          "dropCount": 497250,
+          "baseChance": 0.06413891,
+          "effectiveChance": 0.06391388,
+          "meanCountPerFloor": 24.8625,
+          "meanValuePerFloor": 74.5875
+        },
+        {
+          "name": "normal:rank3",
+          "entitiesPerFloor": 389,
+          "opportunities": 7780000,
+          "dropCount": 497250,
+          "baseChance": 0.06413891,
+          "effectiveChance": 0.06391388,
+          "meanCountPerFloor": 24.8625,
+          "meanValuePerFloor": 74.5875
+        },
+        {
+          "name": "elite",
+          "entitiesPerFloor": 5,
+          "opportunities": 100000,
+          "dropCount": 65334,
+          "baseChance": 0.65,
+          "effectiveChance": 0.65334,
+          "meanCountPerFloor": 3.2667,
+          "meanValuePerFloor": 13.0668
+        },
+        {
+          "name": "rank4",
+          "entitiesPerFloor": 5,
+          "opportunities": 100000,
+          "dropCount": 65334,
+          "baseChance": 0.65,
+          "effectiveChance": 0.65334,
+          "meanCountPerFloor": 3.2667,
+          "meanValuePerFloor": 13.0668
+        },
+        {
+          "name": "elite:rank4",
+          "entitiesPerFloor": 5,
+          "opportunities": 100000,
+          "dropCount": 65334,
+          "baseChance": 0.65,
+          "effectiveChance": 0.65334,
+          "meanCountPerFloor": 3.2667,
+          "meanValuePerFloor": 13.0668
+        },
+        {
+          "name": "rank1",
+          "entitiesPerFloor": 102,
+          "opportunities": 2040000,
+          "dropCount": 131326,
+          "baseChance": 0.06413891,
+          "effectiveChance": 0.06437549,
+          "meanCountPerFloor": 6.5663,
+          "meanValuePerFloor": 6.5663
+        },
+        {
+          "name": "normal:rank1",
+          "entitiesPerFloor": 102,
+          "opportunities": 2040000,
+          "dropCount": 131326,
+          "baseChance": 0.06413891,
+          "effectiveChance": 0.06437549,
+          "meanCountPerFloor": 6.5663,
+          "meanValuePerFloor": 6.5663
+        },
+        {
+          "name": "rank2",
+          "entitiesPerFloor": 71,
+          "opportunities": 1420000,
+          "dropCount": 91319,
+          "baseChance": 0.06413891,
+          "effectiveChance": 0.06430915,
+          "meanCountPerFloor": 4.56595,
+          "meanValuePerFloor": 9.1319
+        },
+        {
+          "name": "normal:rank2",
+          "entitiesPerFloor": 71,
+          "opportunities": 1420000,
+          "dropCount": 91319,
+          "baseChance": 0.06413891,
+          "effectiveChance": 0.06430915,
+          "meanCountPerFloor": 4.56595,
+          "meanValuePerFloor": 9.1319
+        },
+        {
+          "name": "boss",
+          "entitiesPerFloor": 1,
+          "opportunities": 20000,
+          "dropCount": 18019,
+          "baseChance": 0.9,
+          "effectiveChance": 0.90095,
+          "meanCountPerFloor": 0.90095,
+          "meanValuePerFloor": 4.50475
+        },
+        {
+          "name": "rank5",
+          "entitiesPerFloor": 1,
+          "opportunities": 20000,
+          "dropCount": 18019,
+          "baseChance": 0.9,
+          "effectiveChance": 0.90095,
+          "meanCountPerFloor": 0.90095,
+          "meanValuePerFloor": 4.50475
+        },
+        {
+          "name": "boss:rank5",
+          "entitiesPerFloor": 1,
+          "opportunities": 20000,
+          "dropCount": 18019,
+          "baseChance": 0.9,
+          "effectiveChance": 0.90095,
+          "meanCountPerFloor": 0.90095,
+          "meanValuePerFloor": 4.50475
+        }
+      ],
+      "candidateModel": {
+        "acceptanceProbability": 0.4794575430638623,
+        "expectedProposalsBeforeAcceptOrFallback": 2.085629800326209,
+        "exhaustionProbability16IndependentProposals": 0.000029060194822164443,
+        "physicallyFeasibleCountRange": [
+          35,
+          46
+        ],
+        "physicallyFeasibleValueRange": [
+          98,
+          118
+        ]
+      },
+      "everyAuthoredEntityDroppedAndMissed": true,
+      "planDigestSha256": "d78558ac8cfb705c6056e9e0aa07d23aa0154d388cb3185cd972dccb25514f79",
+      "measuredLoopMs": 1477.506584,
+      "verificationLoopMicrosecondsPerPlan": 73.8753292
+    },
+    {
+      "floor": 7,
+      "samples": 20000,
+      "authored": {
+        "total": 606,
+        "normal": 600,
+        "elite": 5,
+        "boss": 1
+      },
+      "rule": {
+        "floor": 7,
+        "minCount": 37,
+        "maxCount": 49,
+        "minValue": 95,
+        "maxValue": 115,
+        "normalChance": 0.06506199854121078,
+        "eliteChance": 0.65,
+        "bossChance": 0.9,
+        "targetValue": 105
+      },
+      "oldKillValue": 105,
+      "baselineNormalCounter": 0,
+      "legacyCounterCarryDifferenceAtMost": 1,
+      "clearBonus": 30,
+      "firstClearBonus": 10,
+      "physicalCoreCount": {
+        "min": 37,
+        "p05": 38,
+        "median": 43,
+        "p95": 48,
+        "max": 49,
+        "mean": 43.06315,
+        "standardDeviation": 2.85469124,
+        "histogram": {
+          "37": 391,
+          "38": 713,
+          "39": 1248,
+          "40": 1714,
+          "41": 2152,
+          "42": 2366,
+          "43": 2560,
+          "44": 2415,
+          "45": 2104,
+          "46": 1775,
+          "47": 1260,
+          "48": 822,
+          "49": 480
+        }
+      },
+      "killValue": {
+        "min": 95,
+        "p05": 96,
+        "median": 105,
+        "p95": 114,
+        "max": 115,
+        "mean": 104.8368,
+        "standardDeviation": 5.76501221,
+        "histogram": {
+          "95": 800,
+          "96": 898,
+          "97": 916,
+          "98": 929,
+          "99": 961,
+          "100": 985,
+          "101": 1005,
+          "102": 1015,
+          "103": 1072,
+          "104": 1079,
+          "105": 1085,
+          "106": 1068,
+          "107": 1044,
+          "108": 1031,
+          "109": 1007,
+          "110": 996,
+          "111": 905,
+          "112": 869,
+          "113": 853,
+          "114": 786,
+          "115": 696
+        }
+      },
+      "repeatClearValueRange": [
+        125,
+        145
+      ],
+      "firstClearValueRange": [
+        135,
+        155
+      ],
+      "repeatClearValueMean": 134.8368,
+      "firstClearValueMean": 144.8368,
+      "rates": [
+        {
+          "name": "normal",
+          "entitiesPerFloor": 600,
+          "opportunities": 12000000,
+          "dropCount": 777684,
+          "baseChance": 0.065062,
+          "effectiveChance": 0.064807,
+          "meanCountPerFloor": 38.8842,
+          "meanValuePerFloor": 88.9136
+        },
+        {
+          "name": "rank3",
+          "entitiesPerFloor": 353,
+          "opportunities": 7060000,
+          "dropCount": 458089,
+          "baseChance": 0.065062,
+          "effectiveChance": 0.06488513,
+          "meanCountPerFloor": 22.90445,
+          "meanValuePerFloor": 68.71335
+        },
+        {
+          "name": "normal:rank3",
+          "entitiesPerFloor": 353,
+          "opportunities": 7060000,
+          "dropCount": 458089,
+          "baseChance": 0.065062,
+          "effectiveChance": 0.06488513,
+          "meanCountPerFloor": 22.90445,
+          "meanValuePerFloor": 68.71335
+        },
+        {
+          "name": "rank1",
+          "entitiesPerFloor": 182,
+          "opportunities": 3640000,
+          "dropCount": 235185,
+          "baseChance": 0.065062,
+          "effectiveChance": 0.06461126,
+          "meanCountPerFloor": 11.75925,
+          "meanValuePerFloor": 11.75925
+        },
+        {
+          "name": "normal:rank1",
+          "entitiesPerFloor": 182,
+          "opportunities": 3640000,
+          "dropCount": 235185,
+          "baseChance": 0.065062,
+          "effectiveChance": 0.06461126,
+          "meanCountPerFloor": 11.75925,
+          "meanValuePerFloor": 11.75925
+        },
+        {
+          "name": "elite",
+          "entitiesPerFloor": 5,
+          "opportunities": 100000,
+          "dropCount": 65430,
+          "baseChance": 0.65,
+          "effectiveChance": 0.6543,
+          "meanCountPerFloor": 3.2715,
+          "meanValuePerFloor": 10.4785
+        },
+        {
+          "name": "rank4",
+          "entitiesPerFloor": 3,
+          "opportunities": 60000,
+          "dropCount": 39355,
+          "baseChance": 0.65,
+          "effectiveChance": 0.65591667,
+          "meanCountPerFloor": 1.96775,
+          "meanValuePerFloor": 7.871
+        },
+        {
+          "name": "elite:rank4",
+          "entitiesPerFloor": 3,
+          "opportunities": 60000,
+          "dropCount": 39355,
+          "baseChance": 0.65,
+          "effectiveChance": 0.65591667,
+          "meanCountPerFloor": 1.96775,
+          "meanValuePerFloor": 7.871
+        },
+        {
+          "name": "rank2",
+          "entitiesPerFloor": 67,
+          "opportunities": 1340000,
+          "dropCount": 110485,
+          "baseChance": 0.08252283,
+          "effectiveChance": 0.08245149,
+          "meanCountPerFloor": 5.52425,
+          "meanValuePerFloor": 11.0485
+        },
+        {
+          "name": "normal:rank2",
+          "entitiesPerFloor": 65,
+          "opportunities": 1300000,
+          "dropCount": 84410,
+          "baseChance": 0.065062,
+          "effectiveChance": 0.06493077,
+          "meanCountPerFloor": 4.2205,
+          "meanValuePerFloor": 8.441
+        },
+        {
+          "name": "elite:rank2",
+          "entitiesPerFloor": 2,
+          "opportunities": 40000,
+          "dropCount": 26075,
+          "baseChance": 0.65,
+          "effectiveChance": 0.651875,
+          "meanCountPerFloor": 1.30375,
+          "meanValuePerFloor": 2.6075
+        },
+        {
+          "name": "boss",
+          "entitiesPerFloor": 1,
+          "opportunities": 20000,
+          "dropCount": 18149,
+          "baseChance": 0.9,
+          "effectiveChance": 0.90745,
+          "meanCountPerFloor": 0.90745,
+          "meanValuePerFloor": 5.4447
+        },
+        {
+          "name": "rank6",
+          "entitiesPerFloor": 1,
+          "opportunities": 20000,
+          "dropCount": 18149,
+          "baseChance": 0.9,
+          "effectiveChance": 0.90745,
+          "meanCountPerFloor": 0.90745,
+          "meanValuePerFloor": 5.4447
+        },
+        {
+          "name": "boss:rank6",
+          "entitiesPerFloor": 1,
+          "opportunities": 20000,
+          "dropCount": 18149,
+          "baseChance": 0.9,
+          "effectiveChance": 0.90745,
+          "meanCountPerFloor": 0.90745,
+          "meanValuePerFloor": 5.4447
+        }
+      ],
+      "candidateModel": {
+        "acceptanceProbability": 0.4880427410218131,
+        "expectedProposalsBeforeAcceptOrFallback": 2.048955234799017,
+        "exhaustionProbability16IndependentProposals": 0.000022270977695145297,
+        "physicallyFeasibleCountRange": [
+          37,
+          49
+        ],
+        "physicallyFeasibleValueRange": [
+          95,
+          115
+        ]
+      },
+      "everyAuthoredEntityDroppedAndMissed": true,
+      "planDigestSha256": "3b834f14e9a3aee24f34825ab13fcfa2f9f03d41ac7fb03d1931c4d1eed34761",
+      "measuredLoopMs": 1530.708542,
+      "verificationLoopMicrosecondsPerPlan": 76.5354271
+    },
+    {
+      "floor": 8,
+      "samples": 20000,
+      "authored": {
+        "total": 644,
+        "normal": 638,
+        "elite": 5,
+        "boss": 1
+      },
+      "rule": {
+        "floor": 8,
+        "minCount": 57,
+        "maxCount": 76,
+        "minValue": 99,
+        "maxValue": 121,
+        "normalChance": 0.09744791666666666,
+        "eliteChance": 0.65,
+        "bossChance": 0.9,
+        "targetValue": 110
+      },
+      "oldKillValue": 110,
+      "baselineNormalCounter": 0,
+      "legacyCounterCarryDifferenceAtMost": 1,
+      "clearBonus": 35,
+      "firstClearBonus": 10,
+      "physicalCoreCount": {
+        "min": 57,
+        "p05": 59,
+        "median": 66,
+        "p95": 74,
+        "max": 76,
+        "mean": 66.26695,
+        "standardDeviation": 4.32802353,
+        "histogram": {
+          "57": 228,
+          "58": 380,
+          "59": 592,
+          "60": 770,
+          "61": 1005,
+          "62": 1254,
+          "63": 1413,
+          "64": 1590,
+          "65": 1646,
+          "66": 1624,
+          "67": 1611,
+          "68": 1504,
+          "69": 1475,
+          "70": 1296,
+          "71": 1081,
+          "72": 855,
+          "73": 638,
+          "74": 490,
+          "75": 328,
+          "76": 220
+        }
+      },
+      "killValue": {
+        "min": 99,
+        "p05": 100,
+        "median": 110,
+        "p95": 120,
+        "max": 121,
+        "mean": 109.8521,
+        "standardDeviation": 6.20284818,
+        "histogram": {
+          "99": 675,
+          "100": 689,
+          "101": 768,
+          "102": 862,
+          "103": 851,
+          "104": 944,
+          "105": 966,
+          "106": 937,
+          "107": 1029,
+          "108": 1013,
+          "109": 1006,
+          "110": 979,
+          "111": 983,
+          "112": 940,
+          "113": 965,
+          "114": 976,
+          "115": 923,
+          "116": 860,
+          "117": 855,
+          "118": 807,
+          "119": 721,
+          "120": 645,
+          "121": 606
+        }
+      },
+      "repeatClearValueRange": [
+        134,
+        156
+      ],
+      "firstClearValueRange": [
+        144,
+        166
+      ],
+      "repeatClearValueMean": 144.8521,
+      "firstClearValueMean": 154.8521,
+      "rates": [
+        {
+          "name": "normal",
+          "entitiesPerFloor": 638,
+          "opportunities": 12760000,
+          "dropCount": 1241895,
+          "baseChance": 0.09744792,
+          "effectiveChance": 0.09732719,
+          "meanCountPerFloor": 62.09475,
+          "meanValuePerFloor": 93.3105
+        },
+        {
+          "name": "rank1",
+          "entitiesPerFloor": 400,
+          "opportunities": 8000000,
+          "dropCount": 779781,
+          "baseChance": 0.09744792,
+          "effectiveChance": 0.09747262,
+          "meanCountPerFloor": 38.98905,
+          "meanValuePerFloor": 38.98905
+        },
+        {
+          "name": "normal:rank1",
+          "entitiesPerFloor": 400,
+          "opportunities": 8000000,
+          "dropCount": 779781,
+          "baseChance": 0.09744792,
+          "effectiveChance": 0.09747262,
+          "meanCountPerFloor": 38.98905,
+          "meanValuePerFloor": 38.98905
+        },
+        {
+          "name": "rank2",
+          "entitiesPerFloor": 154,
+          "opportunities": 3080000,
+          "dropCount": 299913,
+          "baseChance": 0.09744792,
+          "effectiveChance": 0.09737435,
+          "meanCountPerFloor": 14.99565,
+          "meanValuePerFloor": 29.9913
+        },
+        {
+          "name": "normal:rank2",
+          "entitiesPerFloor": 154,
+          "opportunities": 3080000,
+          "dropCount": 299913,
+          "baseChance": 0.09744792,
+          "effectiveChance": 0.09737435,
+          "meanCountPerFloor": 14.99565,
+          "meanValuePerFloor": 29.9913
+        },
+        {
+          "name": "elite",
+          "entitiesPerFloor": 5,
+          "opportunities": 100000,
+          "dropCount": 65329,
+          "baseChance": 0.65,
+          "effectiveChance": 0.65329,
+          "meanCountPerFloor": 3.26645,
+          "meanValuePerFloor": 11.1071
+        },
+        {
+          "name": "rank3",
+          "entitiesPerFloor": 87,
+          "opportunities": 1740000,
+          "dropCount": 201375,
+          "baseChance": 0.11650144,
+          "effectiveChance": 0.11573276,
+          "meanCountPerFloor": 10.06875,
+          "meanValuePerFloor": 30.20625
+        },
+        {
+          "name": "elite:rank3",
+          "entitiesPerFloor": 3,
+          "opportunities": 60000,
+          "dropCount": 39174,
+          "baseChance": 0.65,
+          "effectiveChance": 0.6529,
+          "meanCountPerFloor": 1.9587,
+          "meanValuePerFloor": 5.8761
+        },
+        {
+          "name": "normal:rank3",
+          "entitiesPerFloor": 84,
+          "opportunities": 1680000,
+          "dropCount": 162201,
+          "baseChance": 0.09744792,
+          "effectiveChance": 0.09654821,
+          "meanCountPerFloor": 8.11005,
+          "meanValuePerFloor": 24.33015
+        },
+        {
+          "name": "rank4",
+          "entitiesPerFloor": 2,
+          "opportunities": 40000,
+          "dropCount": 26155,
+          "baseChance": 0.65,
+          "effectiveChance": 0.653875,
+          "meanCountPerFloor": 1.30775,
+          "meanValuePerFloor": 5.231
+        },
+        {
+          "name": "elite:rank4",
+          "entitiesPerFloor": 2,
+          "opportunities": 40000,
+          "dropCount": 26155,
+          "baseChance": 0.65,
+          "effectiveChance": 0.653875,
+          "meanCountPerFloor": 1.30775,
+          "meanValuePerFloor": 5.231
+        },
+        {
+          "name": "boss",
+          "entitiesPerFloor": 1,
+          "opportunities": 20000,
+          "dropCount": 18115,
+          "baseChance": 0.9,
+          "effectiveChance": 0.90575,
+          "meanCountPerFloor": 0.90575,
+          "meanValuePerFloor": 5.4345
+        },
+        {
+          "name": "rank6",
+          "entitiesPerFloor": 1,
+          "opportunities": 20000,
+          "dropCount": 18115,
+          "baseChance": 0.9,
+          "effectiveChance": 0.90575,
+          "meanCountPerFloor": 0.90575,
+          "meanValuePerFloor": 5.4345
+        },
+        {
+          "name": "boss:rank6",
+          "entitiesPerFloor": 1,
+          "opportunities": 20000,
+          "dropCount": 18115,
+          "baseChance": 0.9,
+          "effectiveChance": 0.90575,
+          "meanCountPerFloor": 0.90575,
+          "meanValuePerFloor": 5.4345
+        }
+      ],
+      "candidateModel": {
+        "acceptanceProbability": 0.6011819658004779,
+        "expectedProposalsBeforeAcceptOrFallback": 1.663389202026227,
+        "exhaustionProbability16IndependentProposals": 4.096345844579539e-7,
+        "physicallyFeasibleCountRange": [
+          57,
+          76
+        ],
+        "physicallyFeasibleValueRange": [
+          99,
+          121
+        ]
+      },
+      "everyAuthoredEntityDroppedAndMissed": true,
+      "planDigestSha256": "b2bdf9e0a5aff4dae921aa1bc74e2c5833ba6877d87cf4c0ad0734f923314839",
+      "measuredLoopMs": 1494.960667,
+      "verificationLoopMicrosecondsPerPlan": 74.74803335
+    },
+    {
+      "floor": 9,
+      "samples": 20000,
+      "authored": {
+        "total": 682,
+        "normal": 676,
+        "elite": 5,
+        "boss": 1
+      },
+      "rule": {
+        "floor": 9,
+        "minCount": 34,
+        "maxCount": 45,
+        "minValue": 108,
+        "maxValue": 130,
+        "normalChance": 0.05279665446941976,
+        "eliteChance": 0.65,
+        "bossChance": 0.9,
+        "targetValue": 119
+      },
+      "oldKillValue": 119,
+      "baselineNormalCounter": 0,
+      "legacyCounterCarryDifferenceAtMost": 1,
+      "clearBonus": 40,
+      "firstClearBonus": 10,
+      "physicalCoreCount": {
+        "min": 34,
+        "p05": 36,
+        "median": 40,
+        "p95": 44,
+        "max": 45,
+        "mean": 39.77095,
+        "standardDeviation": 2.36613315,
+        "histogram": {
+          "34": 11,
+          "35": 385,
+          "36": 1402,
+          "37": 2191,
+          "38": 2577,
+          "39": 2757,
+          "40": 2716,
+          "41": 2556,
+          "42": 2525,
+          "43": 1832,
+          "44": 840,
+          "45": 208
+        }
+      },
+      "killValue": {
+        "min": 108,
+        "p05": 109,
+        "median": 119,
+        "p95": 129,
+        "max": 130,
+        "mean": 118.8602,
+        "standardDeviation": 6.43868433,
+        "histogram": {
+          "108": 744,
+          "109": 851,
+          "110": 871,
+          "111": 864,
+          "112": 892,
+          "113": 909,
+          "114": 856,
+          "115": 913,
+          "116": 939,
+          "117": 930,
+          "118": 933,
+          "119": 951,
+          "120": 963,
+          "121": 896,
+          "122": 895,
+          "123": 898,
+          "124": 885,
+          "125": 885,
+          "126": 818,
+          "127": 802,
+          "128": 807,
+          "129": 761,
+          "130": 737
+        }
+      },
+      "repeatClearValueRange": [
+        148,
+        170
+      ],
+      "firstClearValueRange": [
+        158,
+        180
+      ],
+      "repeatClearValueMean": 158.8602,
+      "firstClearValueMean": 168.8602,
+      "rates": [
+        {
+          "name": "normal",
+          "entitiesPerFloor": 676,
+          "opportunities": 13520000,
+          "dropCount": 711844,
+          "baseChance": 0.05279665,
+          "effectiveChance": 0.05265118,
+          "meanCountPerFloor": 35.5922,
+          "meanValuePerFloor": 100.73465
+        },
+        {
+          "name": "rank3",
+          "entitiesPerFloor": 563,
+          "opportunities": 11260000,
+          "dropCount": 617097,
+          "baseChance": 0.05491816,
+          "effectiveChance": 0.05480435,
+          "meanCountPerFloor": 30.85485,
+          "meanValuePerFloor": 92.56455
+        },
+        {
+          "name": "normal:rank3",
+          "entitiesPerFloor": 561,
+          "opportunities": 11220000,
+          "dropCount": 591005,
+          "baseChance": 0.05279665,
+          "effectiveChance": 0.05267424,
+          "meanCountPerFloor": 29.55025,
+          "meanValuePerFloor": 88.65075
+        },
+        {
+          "name": "rank2",
+          "entitiesPerFloor": 115,
+          "opportunities": 2300000,
+          "dropCount": 120839,
+          "baseChance": 0.05279665,
+          "effectiveChance": 0.0525387,
+          "meanCountPerFloor": 6.04195,
+          "meanValuePerFloor": 12.0839
+        },
+        {
+          "name": "normal:rank2",
+          "entitiesPerFloor": 115,
+          "opportunities": 2300000,
+          "dropCount": 120839,
+          "baseChance": 0.05279665,
+          "effectiveChance": 0.0525387,
+          "meanCountPerFloor": 6.04195,
+          "meanValuePerFloor": 12.0839
+        },
+        {
+          "name": "elite",
+          "entitiesPerFloor": 5,
+          "opportunities": 100000,
+          "dropCount": 65474,
+          "baseChance": 0.65,
+          "effectiveChance": 0.65474,
+          "meanCountPerFloor": 3.2737,
+          "meanValuePerFloor": 11.7902
+        },
+        {
+          "name": "rank4",
+          "entitiesPerFloor": 3,
+          "opportunities": 60000,
+          "dropCount": 39382,
+          "baseChance": 0.65,
+          "effectiveChance": 0.65636667,
+          "meanCountPerFloor": 1.9691,
+          "meanValuePerFloor": 7.8764
+        },
+        {
+          "name": "elite:rank4",
+          "entitiesPerFloor": 3,
+          "opportunities": 60000,
+          "dropCount": 39382,
+          "baseChance": 0.65,
+          "effectiveChance": 0.65636667,
+          "meanCountPerFloor": 1.9691,
+          "meanValuePerFloor": 7.8764
+        },
+        {
+          "name": "elite:rank3",
+          "entitiesPerFloor": 2,
+          "opportunities": 40000,
+          "dropCount": 26092,
+          "baseChance": 0.65,
+          "effectiveChance": 0.6523,
+          "meanCountPerFloor": 1.3046,
+          "meanValuePerFloor": 3.9138
+        },
+        {
+          "name": "boss",
+          "entitiesPerFloor": 1,
+          "opportunities": 20000,
+          "dropCount": 18101,
+          "baseChance": 0.9,
+          "effectiveChance": 0.90505,
+          "meanCountPerFloor": 0.90505,
+          "meanValuePerFloor": 6.33535
+        },
+        {
+          "name": "rank7",
+          "entitiesPerFloor": 1,
+          "opportunities": 20000,
+          "dropCount": 18101,
+          "baseChance": 0.9,
+          "effectiveChance": 0.90505,
+          "meanCountPerFloor": 0.90505,
+          "meanValuePerFloor": 6.33535
+        },
+        {
+          "name": "boss:rank7",
+          "entitiesPerFloor": 1,
+          "opportunities": 20000,
+          "dropCount": 18101,
+          "baseChance": 0.9,
+          "effectiveChance": 0.90505,
+          "meanCountPerFloor": 0.90505,
+          "meanValuePerFloor": 6.33535
+        }
+      ],
+      "candidateModel": {
+        "acceptanceProbability": 0.4957944453815074,
+        "expectedProposalsBeforeAcceptOrFallback": 2.016929722115457,
+        "exhaustionProbability16IndependentProposals": 0.000017447050289134576,
+        "physicallyFeasibleCountRange": [
+          34,
+          45
+        ],
+        "physicallyFeasibleValueRange": [
+          108,
+          130
+        ]
+      },
+      "everyAuthoredEntityDroppedAndMissed": true,
+      "planDigestSha256": "3c187b4b8e1d071a57b3f48286e7df3e445dd5741a654308077465ae6bbb57ef",
+      "measuredLoopMs": 1378.65725,
+      "verificationLoopMicrosecondsPerPlan": 68.9328625
+    }
+  ],
+  "historicalStatus": "rejected-linear-prototype",
+  "rejectionReason": "Full-floor means hid 2.55–3.85x first-three-wave income and materially stronger retreat farming. Historical findings retained; not current acceptance evidence.",
+  "replacedBy": {
+    "designRevision": "denomination-v1",
+    "rankValues": [
+      0,
+      1,
+      6,
+      24,
+      30,
+      36,
+      42,
+      48
+    ],
+    "report": "drop-distribution.json"
+  }
+}

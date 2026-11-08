@@ -1,8 +1,8 @@
 // Element and physical/magic are independent axes. Evolutions inherit once.
 export const ELEMENT_NAMES = Object.freeze({ none: '无属性', fire: '火', wind: '风', thunder: '雷', all: '全元素' })
 const ELEMENTS = Object.freeze({
-  sj_arc: 'wind', sj_cross: 'wind', sj_shadow: 'fire',
-  sj_line: 'thunder', sj_wanjian: 'thunder', sj_formation: 'thunder',
+  sj_arc: 'wind', sj_moon: 'wind', sj_moon_triple: 'wind', sj_cross: 'wind', sj_shadow: 'fire',
+  sj_line: 'thunder', sj_wanjian: 'thunder', sj_formation: 'thunder', sj_sancai: 'thunder',
   evo_tiandi: 'thunder', evo_wuwo: 'thunder', evo_sixiang: 'thunder',
 })
 export function skillElement(skillId) { return ELEMENTS[skillId] ?? 'none' }

@@ -2,22 +2,27 @@ import {applyEquipmentSkillLevels} from './TowerEquipmentSkillLevels.js'
 // Initial tuning table: primary attributes feed derived stats exactly once.
 import { cultivationAt } from './TowerProfile.js'
 import { equipmentPrimaryBonuses } from './TowerEquipmentBases.js'
-export const BIRTH_ATTRIBUTES = Object.freeze({strength:100,intelligence:100,awareness:100})
+import { classProfile, classBaseAttributes } from './TowerClassProfiles.js'
+export const BIRTH_ATTRIBUTES = classProfile().birth
 export const MANA_COSTS = Object.freeze({
-  sj_yujian:.5,sj_arc:1,sj_cross:1,sj_line:1,sj_shadow:1,sj_wanjian:1,sj_formation:1,
-  evo_wanjian:4,evo_tiandi:6,evo_wuwo:4,evo_sixiang:8,
+  sj_sancai:5,
+  sj_yujian:2,sj_arc:4,sj_moon:5,sj_moon_triple:8,sj_cross:8,sj_line:10,sj_shadow:10,sj_wanjian:8,sj_formation:12,
+  evo_wanjian:16,evo_tiandi:20,evo_wuwo:18,evo_sixiang:24,
 })
 export function characterAwareness(loadout, xp=0) {
   loadout=applyEquipmentSkillLevels(loadout)
-  return BIRTH_ATTRIBUTES.awareness + cultivationAt(xp).level - 1 + Math.min(4,loadout?.passive?.sj_spirit||0)*10
+  const profile = classProfile(loadout?.classId)
+  return profile.birth.awareness + (cultivationAt(xp).level - 1) * profile.awarenessPerLevel
+    + (profile.id === 'sword' ? Math.min(4,loadout?.passive?.sj_spirit||0)*10 : 0)
     + equipmentPrimaryBonuses(loadout).awareness
 }
 export function primaryAttributes(xp, loadout, legacy=false) {
   const growth=cultivationAt(xp,legacy)
+  const base=classBaseAttributes(loadout?.classId,growth.level,growth.attackMultiplier)
   const awareness=characterAwareness(loadout,xp)
   const equipment=equipmentPrimaryBonuses(loadout)
-  return {strength:BIRTH_ATTRIBUTES.strength*growth.attackMultiplier+equipment.strength,
-    intelligence:BIRTH_ATTRIBUTES.intelligence*growth.attackMultiplier+equipment.intelligence,
-    vitality:equipment.vitality,awareness,maxMana:awareness,manaRegen:awareness*.04}
+  return {strength:base.strength+equipment.strength,
+    intelligence:base.intelligence+equipment.intelligence,
+    vitality:base.vitality+equipment.vitality,awareness,maxMana:awareness,manaRegen:awareness*.03}
 }
 export function skillManaCost(id) { return MANA_COSTS[id] ?? 0 }

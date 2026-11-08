@@ -13,6 +13,8 @@ export function endTowerResources(queue:TowerAssetQueue){
 /** Preserve the resources.load call shape and typed callbacks in art renderers. */
 export const towerResources={
  getInfoWithPath:resources.getInfoWithPath.bind(resources),
+ // Only for resources whose pending consumers share one explicit lifetime.
+ release(path:string,type:any){session?.release(path,type);},
  load<T extends Asset>(path:string,type:new(...args:any[])=>T,complete:(error:Error|null,asset:T)=>void){
   // Missing optional sound must never prevent entering the game.
   if(!session||(type as unknown)===AudioClip){resources.load(path,type,complete);return;}

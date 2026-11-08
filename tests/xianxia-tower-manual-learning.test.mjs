@@ -12,15 +12,14 @@ test('new character has only rank-one arc; no milestone changes starter gifts',(
  for(let floor=1;floor<=9;floor++)assert.equal(tutorialProgress(0,floor,[1,8,20]),0)
  assert.equal(growthSummary(store.state).available,0)
 })
-test('first two floor rewards are points, atomic and not granted again on replay',()=>{
+test('first two floor settlements are atomic and grant no retired first-clear skill points',()=>{
  const storage=disk(),store=new TowerCampaignStore(storage,0)
  for(const floor of [1,1,2]){
-  const previousCleared=store.state.clearedFloor
   const start=store.act({type:'startFloor',floor,seed:123},0)
   assert.equal(start.ok,true,start.reason)
   const run=TowerRun.restore(start.snapshot);run.setPlaytestAssist(true)
   for(let i=0;i<2400&&run.state.phase==='playing';i++){
-   for (const enemy of run.state.enemies) if (enemy.hp > 0) run._damageEnemy({target:enemy.id,damage:enemy.hp,direct:false,scaled:true,source:'fixture'})
+   for (const enemy of run.state.enemies) if (enemy.hp > 0) run._damageEnemy({target:enemy.id,damage:1e9,direct:false,scaled:true,source:'fixture'})
    run.advance(.5)
    assert.deepEqual(run.state.loadout.active,{sj_arc:1})
   }
@@ -33,7 +32,7 @@ test('first two floor rewards are points, atomic and not granted again on replay
   storage.fail=false
   assert.equal(store.act({type:'finishFloor',snapshot:run.snapshot()},0).ok,true)
   assert.deepEqual(store.state.skills,{sj_arc:1})
-  assert.equal(growthSummary(store.state).firstClear,Math.max(previousCleared,floor))
+  assert.equal(growthSummary(store.state).firstClear,0)
   const after=store.state
   assert.equal(store.act({type:'finishFloor',snapshot:run.snapshot()},0).ok,false)
   assert.equal(store.state,after)
@@ -48,6 +47,7 @@ test('initialization converts only the initial arc and never grants another poin
  assert.equal(store.act({type:'respecSkills'},0).ok,true)
  assert.equal(growthSummary(store.state).available,1)
  assert.equal(store.act({type:'learnSkill',id:'sj_yujian'},0).reason,'stage-locked')
- assert.equal(store.act({type:'learnSkill',id:'sj_wanjian'},0).ok,true)
- assert.deepEqual(store.state.skills,{sj_wanjian:1})
+ assert.equal(store.act({type:'learnSkill',id:'sj_wanjian'},0).reason,'stage-locked')
+ assert.equal(store.act({type:'learnSkill',id:'sj_arc'},0).ok,true)
+ assert.deepEqual(store.state.skills,{sj_arc:1})
 })

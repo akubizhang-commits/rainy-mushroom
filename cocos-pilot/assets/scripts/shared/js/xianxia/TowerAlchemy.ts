@@ -4,7 +4,8 @@ import { CAMP_PILLS, TOWER_RESOURCE_CAP } from './TowerProfile'
 import { cultivationStockQuote } from './TowerPills'
 export { ALCHEMY_MATERIALS } from './TowerProfile'
 const rows = [
- ['zhixue',1,{huichuncao:1,linglu:1}],['huichun',2,{huichuncao:2,bailuhua:1,linglu:1}],['xuming',3,{lingshenxu:2,bailuhua:2,ningluzhi:1}],
+ ['huiling',1,{huichuncao:1,linglu:1}],
+ ['zhixue',1,{huichuncao:1,linglu:1}],['huichun',1,{huichuncao:2,bailuhua:1,linglu:1}],['xuming',3,{lingshenxu:2,bailuhua:2,ningluzhi:1}],
  ['peiyuan',5,{huangjing:2,lingshenxu:1,ningluzhi:1}],['ningqi',10,{yusuizhi:1,lingshenxu:2,linglu:2}],
  ['heqi',10,{zilinghua:1,huangjing:2,ningluzhi:1}],['yangyuan',20,{zilinghua:2,lingshenxu:2,ningluzhi:2}],
  ['zhenyuan',16,{jinsuiguo:1,huangjing:2,linglu:2}],['zifu',32,{jinsuiguo:2,lingshenxu:2,ningluzhi:2}],

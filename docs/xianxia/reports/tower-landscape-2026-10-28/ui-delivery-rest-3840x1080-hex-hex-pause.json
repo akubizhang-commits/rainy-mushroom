@@ -1,0 +1,2195 @@
+{
+  "host": {
+    "screen": "battle",
+    "landscape": true,
+    "size": {
+      "width": 1280,
+      "height": 560
+    },
+    "stick": {
+      "x": -492,
+      "y": -122,
+      "dx": 0,
+      "dy": 0
+    },
+    "touch": null,
+    "keys": [],
+    "phase": "paused",
+    "input": {
+      "x": 0,
+      "y": 0
+    },
+    "camera": {
+      "x": 481.1687312524468,
+      "y": 755.1720622172628
+    },
+    "tools": {
+      "speed": 3,
+      "invincible": true
+    }
+  },
+  "scene": [
+    {
+      "name": "栖云宗·功能版",
+      "ancestors": [
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "",
+      "box": {
+        "left": 685.7142857142857,
+        "right": 3154.285714285714,
+        "top": 0,
+        "bottom": 1080
+      },
+      "clip": {
+        "left": 0,
+        "right": 3840,
+        "top": 0,
+        "bottom": 1080
+      },
+      "x": 1920,
+      "y": 540,
+      "logicalSize": {
+        "width": 1280,
+        "height": 560
+      },
+      "local": {
+        "x": 0,
+        "y": 0
+      },
+      "graphics": false,
+      "graphicsPathCount": null,
+      "scroll": null
+    },
+    {
+      "name": "锁妖塔战场",
+      "ancestors": [
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "",
+      "box": {
+        "left": 685.7142857142857,
+        "right": 3154.285714285714,
+        "top": 0,
+        "bottom": 1080
+      },
+      "clip": {
+        "left": 0,
+        "right": 3840,
+        "top": 0,
+        "bottom": 1080
+      },
+      "x": 1920,
+      "y": 540,
+      "logicalSize": {
+        "width": 1280,
+        "height": 560
+      },
+      "local": {
+        "x": 0,
+        "y": 0
+      },
+      "graphics": false,
+      "graphicsPathCount": null,
+      "scroll": null
+    },
+    {
+      "name": "场地与妖兽",
+      "ancestors": [
+        "锁妖塔战场",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "",
+      "box": {
+        "left": 1919.0357142857142,
+        "right": 1920.9642857142858,
+        "top": 539.0357142857143,
+        "bottom": 540.9642857142856
+      },
+      "clip": {
+        "left": 0,
+        "right": 3840,
+        "top": 0,
+        "bottom": 1080
+      },
+      "x": 1920,
+      "y": 540,
+      "logicalSize": {
+        "width": 1,
+        "height": 1
+      },
+      "local": {
+        "x": 0,
+        "y": 0
+      },
+      "graphics": true,
+      "graphicsPathCount": 90,
+      "scroll": null
+    },
+    {
+      "name": "移动摇杆",
+      "ancestors": [
+        "锁妖塔战场",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "",
+      "box": {
+        "left": 755.1428571428569,
+        "right": 1187.142857142857,
+        "top": 559.2857142857142,
+        "bottom": 991.2857142857143
+      },
+      "clip": {
+        "left": 0,
+        "right": 3840,
+        "top": 0,
+        "bottom": 1080
+      },
+      "x": 971.142857142857,
+      "y": 775.2857142857143,
+      "logicalSize": {
+        "width": 224,
+        "height": 224
+      },
+      "local": {
+        "x": -492,
+        "y": -122
+      },
+      "graphics": false,
+      "graphicsPathCount": null,
+      "scroll": null
+    },
+    {
+      "name": "妖兽名牌",
+      "ancestors": [
+        "锁妖塔战场",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "",
+      "box": {
+        "left": 1919.0357142857142,
+        "right": 1920.9642857142858,
+        "top": 539.0357142857143,
+        "bottom": 540.9642857142856
+      },
+      "clip": {
+        "left": 0,
+        "right": 3840,
+        "top": 0,
+        "bottom": 1080
+      },
+      "x": 1920,
+      "y": 540,
+      "logicalSize": {
+        "width": 1,
+        "height": 1
+      },
+      "local": {
+        "x": 0,
+        "y": 0
+      },
+      "graphics": false,
+      "graphicsPathCount": null,
+      "scroll": null
+    },
+    {
+      "name": "动态文字",
+      "ancestors": [
+        "妖兽名牌",
+        "锁妖塔战场",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "灰羽妖隼 3阶",
+      "box": {
+        "left": 1326.443023566448,
+        "right": 1712.1573092807334,
+        "top": 936.5355421451367,
+        "bottom": 998.2498278594222
+      },
+      "clip": {
+        "left": 0,
+        "right": 3840,
+        "top": 0,
+        "bottom": 1080
+      },
+      "x": 1519.3001664235906,
+      "y": 967.3926850022793,
+      "logicalSize": {
+        "width": 200,
+        "height": 32
+      },
+      "local": {
+        "x": -207.7702840766567,
+        "y": -221.61102185303378
+      },
+      "graphics": false,
+      "graphicsPathCount": null,
+      "scroll": null
+    },
+    {
+      "name": "动态文字",
+      "ancestors": [
+        "妖兽名牌",
+        "锁妖塔战场",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "灰羽妖隼 3阶",
+      "box": {
+        "left": 1513.0647940372808,
+        "right": 1898.7790797515668,
+        "top": 932.2773107592883,
+        "bottom": 993.991596473574
+      },
+      "clip": {
+        "left": 0,
+        "right": 3840,
+        "top": 0,
+        "bottom": 1080
+      },
+      "x": 1705.9219368944237,
+      "y": 963.1344536164312,
+      "logicalSize": {
+        "width": 200,
+        "height": 32
+      },
+      "local": {
+        "x": -111.00344012881732,
+        "y": -219.40305002333469
+      },
+      "graphics": false,
+      "graphicsPathCount": null,
+      "scroll": null
+    },
+    {
+      "name": "动态文字",
+      "ancestors": [
+        "妖兽名牌",
+        "锁妖塔战场",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "灰羽妖隼 3阶",
+      "box": {
+        "left": 1406.3166145317011,
+        "right": 1792.030900245987,
+        "top": 935.4778518935541,
+        "bottom": 997.1921376078399
+      },
+      "clip": {
+        "left": 0,
+        "right": 3840,
+        "top": 0,
+        "bottom": 1080
+      },
+      "x": 1599.173757388844,
+      "y": 966.3349947506971,
+      "logicalSize": {
+        "width": 200,
+        "height": 32
+      },
+      "local": {
+        "x": -166.3543480205994,
+        "y": -221.0625898707318
+      },
+      "graphics": false,
+      "graphicsPathCount": null,
+      "scroll": null
+    },
+    {
+      "name": "动态文字",
+      "ancestors": [
+        "妖兽名牌",
+        "锁妖塔战场",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "灰羽妖隼 3阶",
+      "box": {
+        "left": 1392.8362387990999,
+        "right": 1778.5505245133857,
+        "top": 934.6920049397484,
+        "bottom": 996.4062906540339
+      },
+      "clip": {
+        "left": 0,
+        "right": 3840,
+        "top": 0,
+        "bottom": 1080
+      },
+      "x": 1585.6933816562428,
+      "y": 965.5491477968912,
+      "logicalSize": {
+        "width": 200,
+        "height": 32
+      },
+      "local": {
+        "x": -173.34417247454076,
+        "y": -220.6551136724621
+      },
+      "graphics": false,
+      "graphicsPathCount": null,
+      "scroll": null
+    },
+    {
+      "name": "动态文字",
+      "ancestors": [
+        "妖兽名牌",
+        "锁妖塔战场",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "灰羽妖隼 3阶",
+      "box": {
+        "left": 1193.6254144660413,
+        "right": 1579.339700180327,
+        "top": 837.1250234313026,
+        "bottom": 898.8393091455882
+      },
+      "clip": {
+        "left": 0,
+        "right": 3840,
+        "top": 0,
+        "bottom": 1080
+      },
+      "x": 1386.4825573231842,
+      "y": 867.9821662884455,
+      "logicalSize": {
+        "width": 200,
+        "height": 32
+      },
+      "local": {
+        "x": -276.63867398057107,
+        "y": -170.0648269643791
+      },
+      "graphics": false,
+      "graphicsPathCount": null,
+      "scroll": null
+    },
+    {
+      "name": "动态文字",
+      "ancestors": [
+        "妖兽名牌",
+        "锁妖塔战场",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "灰羽妖隼 3阶",
+      "box": {
+        "left": 1252.5209634287644,
+        "right": 1638.23524914305,
+        "top": 934.657570094048,
+        "bottom": 996.3718558083336
+      },
+      "clip": {
+        "left": 0,
+        "right": 3840,
+        "top": 0,
+        "bottom": 1080
+      },
+      "x": 1445.378106285907,
+      "y": 965.5147129511907,
+      "logicalSize": {
+        "width": 200,
+        "height": 32
+      },
+      "local": {
+        "x": -246.10024118508514,
+        "y": -220.6372585672841
+      },
+      "graphics": false,
+      "graphicsPathCount": null,
+      "scroll": null
+    },
+    {
+      "name": "战斗信息",
+      "ancestors": [
+        "锁妖塔战场",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "",
+      "box": {
+        "left": 1919.0357142857142,
+        "right": 1920.9642857142858,
+        "top": 539.0357142857143,
+        "bottom": 540.9642857142856
+      },
+      "clip": {
+        "left": 0,
+        "right": 3840,
+        "top": 0,
+        "bottom": 1080
+      },
+      "x": 1920,
+      "y": 540,
+      "logicalSize": {
+        "width": 1,
+        "height": 1
+      },
+      "local": {
+        "x": 0,
+        "y": 0
+      },
+      "graphics": true,
+      "graphicsPathCount": 16,
+      "scroll": null
+    },
+    {
+      "name": "动态文字",
+      "ancestors": [
+        "锁妖塔战场",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "体验档 ×3 · 无敌 · 1/20波",
+      "box": {
+        "left": 772.4999999999998,
+        "right": 2836.071428571429,
+        "top": 21.214285714285758,
+        "bottom": 109.92857142857152
+      },
+      "clip": {
+        "left": 0,
+        "right": 3840,
+        "top": 0,
+        "bottom": 1080
+      },
+      "x": 1804.2857142857142,
+      "y": 65.57142857142858,
+      "logicalSize": {
+        "width": 1070,
+        "height": 46
+      },
+      "local": {
+        "x": -60,
+        "y": 246
+      },
+      "graphics": false,
+      "graphicsPathCount": null,
+      "scroll": null
+    },
+    {
+      "name": "动态文字",
+      "ancestors": [
+        "锁妖塔战场",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "生命 120/120　金丹 9重　本次修为 +0",
+      "box": {
+        "left": 839.9999999999998,
+        "right": 3000,
+        "top": 115.71428571428578,
+        "bottom": 181.28571428571436
+      },
+      "clip": {
+        "left": 0,
+        "right": 3840,
+        "top": 0,
+        "bottom": 1080
+      },
+      "x": 1920,
+      "y": 148.49999999999994,
+      "logicalSize": {
+        "width": 1120,
+        "height": 34
+      },
+      "local": {
+        "x": 0,
+        "y": 203
+      },
+      "graphics": false,
+      "graphicsPathCount": null,
+      "scroll": null
+    },
+    {
+      "name": "动态文字",
+      "ancestors": [
+        "锁妖塔战场",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "3功法自动 · 1心法常驻 · 32点待修习\n左下摇杆 / WASD 移动 · 技能树修习",
+      "box": {
+        "left": 1110,
+        "right": 2915.1428571428573,
+        "top": 948.8571428571429,
+        "bottom": 1068.4285714285716
+      },
+      "clip": {
+        "left": 0,
+        "right": 3840,
+        "top": 0,
+        "bottom": 1080
+      },
+      "x": 2012.5714285714287,
+      "y": 1008.6428571428571,
+      "logicalSize": {
+        "width": 936,
+        "height": 62
+      },
+      "local": {
+        "x": 48,
+        "y": -243
+      },
+      "graphics": false,
+      "graphicsPathCount": null,
+      "scroll": null
+    },
+    {
+      "name": "暂停",
+      "ancestors": [
+        "锁妖塔战场",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": true,
+      "enabled": true,
+      "text": "",
+      "box": {
+        "left": 2932.5,
+        "right": 3125.357142857143,
+        "top": 1.9285714285713018,
+        "bottom": 171.64285714285714
+      },
+      "clip": {
+        "left": 0,
+        "right": 3840,
+        "top": 0,
+        "bottom": 1080
+      },
+      "x": 3028.9285714285716,
+      "y": 86.78571428571422,
+      "logicalSize": {
+        "width": 100,
+        "height": 88
+      },
+      "local": {
+        "x": 575,
+        "y": 235
+      },
+      "graphics": true,
+      "graphicsPathCount": 1,
+      "scroll": null
+    },
+    {
+      "name": "暂停",
+      "ancestors": [
+        "暂停",
+        "锁妖塔战场",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "暂停",
+      "box": {
+        "left": 2951.785714285714,
+        "right": 3106.071428571429,
+        "top": 13.499999999999952,
+        "bottom": 160.0714285714286
+      },
+      "clip": {
+        "left": 0,
+        "right": 3840,
+        "top": 0,
+        "bottom": 1080
+      },
+      "x": 3028.9285714285716,
+      "y": 86.78571428571422,
+      "logicalSize": {
+        "width": 80,
+        "height": 76
+      },
+      "local": {
+        "x": 0,
+        "y": 0
+      },
+      "graphics": false,
+      "graphicsPathCount": null,
+      "scroll": null
+    },
+    {
+      "name": "技能树",
+      "ancestors": [
+        "锁妖塔战场",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": true,
+      "enabled": true,
+      "text": "",
+      "box": {
+        "left": 2838.0000000000005,
+        "right": 3119.571428571429,
+        "top": 894.8571428571428,
+        "bottom": 1064.5714285714287
+      },
+      "clip": {
+        "left": 0,
+        "right": 3840,
+        "top": 0,
+        "bottom": 1080
+      },
+      "x": 2978.785714285714,
+      "y": 979.7142857142857,
+      "logicalSize": {
+        "width": 146,
+        "height": 88
+      },
+      "local": {
+        "x": 549,
+        "y": -228
+      },
+      "graphics": true,
+      "graphicsPathCount": 1,
+      "scroll": null
+    },
+    {
+      "name": "技能树",
+      "ancestors": [
+        "技能树",
+        "锁妖塔战场",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "技能树",
+      "box": {
+        "left": 2857.285714285714,
+        "right": 3100.2857142857147,
+        "top": 906.4285714285714,
+        "bottom": 1053
+      },
+      "clip": {
+        "left": 0,
+        "right": 3840,
+        "top": 0,
+        "bottom": 1080
+      },
+      "x": 2978.785714285714,
+      "y": 979.7142857142857,
+      "logicalSize": {
+        "width": 126,
+        "height": 76
+      },
+      "local": {
+        "x": 0,
+        "y": 0
+      },
+      "graphics": false,
+      "graphicsPathCount": null,
+      "scroll": null
+    },
+    {
+      "name": "对话面板",
+      "ancestors": [
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "",
+      "box": {
+        "left": 685.7142857142857,
+        "right": 3154.285714285714,
+        "top": 0,
+        "bottom": 1080
+      },
+      "clip": {
+        "left": 0,
+        "right": 3840,
+        "top": 0,
+        "bottom": 1080
+      },
+      "x": 1920,
+      "y": 540,
+      "logicalSize": {
+        "width": 1280,
+        "height": 560
+      },
+      "local": {
+        "x": 0,
+        "y": 0
+      },
+      "graphics": true,
+      "graphicsPathCount": 2,
+      "scroll": null
+    },
+    {
+      "name": "塔内暂停",
+      "ancestors": [
+        "对话面板",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "塔内暂停",
+      "box": {
+        "left": 926.7857142857142,
+        "right": 2913.214285714286,
+        "top": 142.7142857142857,
+        "bottom": 273.85714285714283
+      },
+      "clip": {
+        "left": 0,
+        "right": 3840,
+        "top": 0,
+        "bottom": 1080
+      },
+      "x": 1920,
+      "y": 208.28571428571428,
+      "logicalSize": {
+        "width": 1030,
+        "height": 68
+      },
+      "local": {
+        "x": 0,
+        "y": 172
+      },
+      "graphics": false,
+      "graphicsPathCount": null,
+      "scroll": null
+    },
+    {
+      "name": "本次获得：0修为 · 0妖丹值 · 0贡献\n掉落 0颗，尚未获得妖丹\n按一阶折合0点。已自动收取。\n回宗保留收益，本层重试从第1波开始。",
+      "ancestors": [
+        "对话面板",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "本次获得：0修为 · 0妖丹值 · 0贡献\n掉落 0颗，尚未获得妖丹\n按一阶折合0点。已自动收取。\n回宗保留收益，本层重试从第1波开始。",
+      "box": {
+        "left": 946.0714285714286,
+        "right": 2893.9285714285716,
+        "top": 300.8571428571429,
+        "bottom": 555.4285714285713
+      },
+      "clip": {
+        "left": 0,
+        "right": 3840,
+        "top": 0,
+        "bottom": 1080
+      },
+      "x": 1920,
+      "y": 428.14285714285717,
+      "logicalSize": {
+        "width": 1010,
+        "height": 132
+      },
+      "local": {
+        "x": 0,
+        "y": 58
+      },
+      "graphics": false,
+      "graphicsPathCount": null,
+      "scroll": null
+    },
+    {
+      "name": "继续挑战",
+      "ancestors": [
+        "对话面板",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": true,
+      "enabled": true,
+      "text": "",
+      "box": {
+        "left": 949.9285714285713,
+        "right": 1902.642857142857,
+        "top": 594,
+        "bottom": 763.7142857142857
+      },
+      "clip": {
+        "left": 0,
+        "right": 3840,
+        "top": 0,
+        "bottom": 1080
+      },
+      "x": 1426.2857142857142,
+      "y": 678.8571428571429,
+      "logicalSize": {
+        "width": 494,
+        "height": 88
+      },
+      "local": {
+        "x": -256,
+        "y": -72
+      },
+      "graphics": true,
+      "graphicsPathCount": 1,
+      "scroll": null
+    },
+    {
+      "name": "继续挑战",
+      "ancestors": [
+        "继续挑战",
+        "对话面板",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "继续挑战",
+      "box": {
+        "left": 969.2142857142856,
+        "right": 1883.3571428571427,
+        "top": 605.5714285714286,
+        "bottom": 752.1428571428571
+      },
+      "clip": {
+        "left": 0,
+        "right": 3840,
+        "top": 0,
+        "bottom": 1080
+      },
+      "x": 1426.2857142857142,
+      "y": 678.8571428571429,
+      "logicalSize": {
+        "width": 474,
+        "height": 76
+      },
+      "local": {
+        "x": 0,
+        "y": 0
+      },
+      "graphics": false,
+      "graphicsPathCount": null,
+      "scroll": null
+    },
+    {
+      "name": "技能树 · 可用32点",
+      "ancestors": [
+        "对话面板",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": true,
+      "enabled": true,
+      "text": "",
+      "box": {
+        "left": 1937.3571428571427,
+        "right": 2890.0714285714284,
+        "top": 594,
+        "bottom": 763.7142857142857
+      },
+      "clip": {
+        "left": 0,
+        "right": 3840,
+        "top": 0,
+        "bottom": 1080
+      },
+      "x": 2413.714285714286,
+      "y": 678.8571428571429,
+      "logicalSize": {
+        "width": 494,
+        "height": 88
+      },
+      "local": {
+        "x": 256,
+        "y": -72
+      },
+      "graphics": true,
+      "graphicsPathCount": 1,
+      "scroll": null
+    },
+    {
+      "name": "技能树 · 可用32点",
+      "ancestors": [
+        "技能树 · 可用32点",
+        "对话面板",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "技能树 · 可用32点",
+      "box": {
+        "left": 1956.6428571428573,
+        "right": 2870.7857142857147,
+        "top": 605.5714285714286,
+        "bottom": 752.1428571428571
+      },
+      "clip": {
+        "left": 0,
+        "right": 3840,
+        "top": 0,
+        "bottom": 1080
+      },
+      "x": 2413.714285714286,
+      "y": 678.8571428571429,
+      "logicalSize": {
+        "width": 474,
+        "height": 76
+      },
+      "local": {
+        "x": 0,
+        "y": 0
+      },
+      "graphics": false,
+      "graphicsPathCount": null,
+      "scroll": null
+    },
+    {
+      "name": "体验工具",
+      "ancestors": [
+        "对话面板",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": true,
+      "enabled": true,
+      "text": "",
+      "box": {
+        "left": 949.9285714285713,
+        "right": 1902.642857142857,
+        "top": 767.5714285714286,
+        "bottom": 937.2857142857143
+      },
+      "clip": {
+        "left": 0,
+        "right": 3840,
+        "top": 0,
+        "bottom": 1080
+      },
+      "x": 1426.2857142857142,
+      "y": 852.4285714285714,
+      "logicalSize": {
+        "width": 494,
+        "height": 88
+      },
+      "local": {
+        "x": -256,
+        "y": -162
+      },
+      "graphics": true,
+      "graphicsPathCount": 1,
+      "scroll": null
+    },
+    {
+      "name": "体验工具",
+      "ancestors": [
+        "体验工具",
+        "对话面板",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "体验工具",
+      "box": {
+        "left": 969.2142857142856,
+        "right": 1883.3571428571427,
+        "top": 779.1428571428571,
+        "bottom": 925.7142857142858
+      },
+      "clip": {
+        "left": 0,
+        "right": 3840,
+        "top": 0,
+        "bottom": 1080
+      },
+      "x": 1426.2857142857142,
+      "y": 852.4285714285714,
+      "logicalSize": {
+        "width": 474,
+        "height": 76
+      },
+      "local": {
+        "x": 0,
+        "y": 0
+      },
+      "graphics": false,
+      "graphicsPathCount": null,
+      "scroll": null
+    },
+    {
+      "name": "返回宗门",
+      "ancestors": [
+        "对话面板",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": true,
+      "enabled": true,
+      "text": "",
+      "box": {
+        "left": 1937.3571428571427,
+        "right": 2890.0714285714284,
+        "top": 767.5714285714286,
+        "bottom": 937.2857142857143
+      },
+      "clip": {
+        "left": 0,
+        "right": 3840,
+        "top": 0,
+        "bottom": 1080
+      },
+      "x": 2413.714285714286,
+      "y": 852.4285714285714,
+      "logicalSize": {
+        "width": 494,
+        "height": 88
+      },
+      "local": {
+        "x": 256,
+        "y": -162
+      },
+      "graphics": true,
+      "graphicsPathCount": 1,
+      "scroll": null
+    },
+    {
+      "name": "返回宗门",
+      "ancestors": [
+        "返回宗门",
+        "对话面板",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "返回宗门",
+      "box": {
+        "left": 1956.6428571428573,
+        "right": 2870.7857142857147,
+        "top": 779.1428571428571,
+        "bottom": 925.7142857142858
+      },
+      "clip": {
+        "left": 0,
+        "right": 3840,
+        "top": 0,
+        "bottom": 1080
+      },
+      "x": 2413.714285714286,
+      "y": 852.4285714285714,
+      "logicalSize": {
+        "width": 474,
+        "height": 76
+      },
+      "local": {
+        "x": 0,
+        "y": 0
+      },
+      "graphics": false,
+      "graphicsPathCount": null,
+      "scroll": null
+    }
+  ],
+  "beforeSnapshot": {
+    "schema": 1,
+    "attemptId": 1,
+    "floor": 9,
+    "phase": "paused",
+    "training": false,
+    "time": 19.783333333333335,
+    "ticks": 1187,
+    "remainder": 0.00976666668,
+    "wave": 1,
+    "waveStartedAt": 0,
+    "waveKilled": 20,
+    "wavePlanned": 26,
+    "nextId": 120,
+    "player": {
+      "x": 481.1687312524468,
+      "y": 743.1720622172628,
+      "hp": 120,
+      "xp": 10920,
+      "maxHp": 120,
+      "attack": 127.2,
+      "moveSpeed": 220,
+      "radius": 18,
+      "faceX": -0.5450529207441537,
+      "faceY": -0.8384016421669672
+    },
+    "enemies": [
+      {
+        "id": "a1:f9:w1:u11",
+        "archetype": "falcon_normal",
+        "name": "灰羽妖隼",
+        "family": "falcon",
+        "role": "normal",
+        "rank": 3,
+        "x": 273.39844717579007,
+        "y": 575.561040364229,
+        "hp": 60,
+        "maxHp": 60,
+        "radius": 20,
+        "damage": 10,
+        "moveSpeed": 220,
+        "woundBudget": 0,
+        "woundUntil": 0,
+        "orbitNextAt": 0,
+        "ai": {
+          "mode": "windup",
+          "attack": {
+            "kind": "shot",
+            "shape": "capsule",
+            "windup": 0.85,
+            "active": 0.1,
+            "recovery": 0.7,
+            "cooldown": 2.8,
+            "range": 480,
+            "radius": 12,
+            "width": 24,
+            "angle": 0,
+            "damage": 10,
+            "lock": 0.15,
+            "speed": 270,
+            "cost": 1,
+            "segments": 1,
+            "element": "feather",
+            "id": "a1:f9:w1:u11:a4:s1",
+            "segment": 1,
+            "dirX": 0.7783135582468595,
+            "dirY": 0.627875787914387,
+            "x": 273.39844717579007,
+            "y": 575.561040364229,
+            "targetX": 481.1687312524468,
+            "targetY": 743.1720622172628,
+            "startedAt": 19.6,
+            "locked": true,
+            "hit": false,
+            "fired": false,
+            "travelled": 0,
+            "boundary": false,
+            "maxRange": 480,
+            "clipped": false
+          },
+          "readyAt": 16.783333333333335,
+          "graceUntil": 3.9000000000000004,
+          "until": 20.450000000000003,
+          "eligibleSince": -1,
+          "sequence": 4,
+          "cooldowns": {
+            "shot": 19.583333333333336
+          },
+          "faceX": 0.7783135582468595,
+          "faceY": 0.627875787914387,
+          "orbitSign": -1,
+          "offset": 3.6100828599273624,
+          "phase": 1,
+          "transitionUntil": 0,
+          "transitionPending": false,
+          "entryUntil": 3.9000000000000004
+        }
+      },
+      {
+        "id": "a1:f9:w1:u13",
+        "archetype": "falcon_normal",
+        "name": "灰羽妖隼",
+        "family": "falcon",
+        "role": "normal",
+        "rank": 3,
+        "x": 370.16529112362946,
+        "y": 577.7690121939281,
+        "hp": 60,
+        "maxHp": 60,
+        "radius": 20,
+        "damage": 10,
+        "moveSpeed": 220,
+        "woundBudget": 0,
+        "woundUntil": 0,
+        "orbitNextAt": 0,
+        "ai": {
+          "mode": "approach",
+          "attack": null,
+          "readyAt": 18.05,
+          "graceUntil": 4.35,
+          "until": 18.05,
+          "eligibleSince": -1,
+          "sequence": 2,
+          "cooldowns": {
+            "shot": 20.85
+          },
+          "faceX": 0.5572511520149512,
+          "faceY": 0.8303439971349282,
+          "orbitSign": 1,
+          "offset": 1.2291243499627653,
+          "phase": 1,
+          "transitionUntil": 0,
+          "transitionPending": false,
+          "entryUntil": 4.35
+        }
+      },
+      {
+        "id": "a1:f9:w1:u14",
+        "archetype": "falcon_normal",
+        "name": "灰羽妖隼",
+        "family": "falcon",
+        "role": "normal",
+        "rank": 3,
+        "x": 314.8143832318474,
+        "y": 576.109472346531,
+        "hp": 60,
+        "maxHp": 60,
+        "radius": 20,
+        "damage": 10,
+        "moveSpeed": 220,
+        "woundBudget": 0,
+        "woundUntil": 0,
+        "orbitNextAt": 0,
+        "ai": {
+          "mode": "approach",
+          "attack": null,
+          "readyAt": 17.8,
+          "graceUntil": 4.566666666666666,
+          "until": 17.8,
+          "eligibleSince": -1,
+          "sequence": 3,
+          "cooldowns": {
+            "shot": 20.6
+          },
+          "faceX": 0.7056031581639394,
+          "faceY": 0.7086072136163128,
+          "orbitSign": -1,
+          "offset": 3.9949491051855803,
+          "phase": 1,
+          "transitionUntil": 0,
+          "transitionPending": false,
+          "entryUntil": 4.566666666666666
+        }
+      },
+      {
+        "id": "a1:f9:w1:u16",
+        "archetype": "falcon_normal",
+        "name": "灰羽妖隼",
+        "family": "falcon",
+        "role": "normal",
+        "rank": 3,
+        "x": 307.824558777906,
+        "y": 576.5169485448007,
+        "hp": 60,
+        "maxHp": 60,
+        "radius": 20,
+        "damage": 10,
+        "moveSpeed": 220,
+        "woundBudget": 0,
+        "woundUntil": 0,
+        "orbitNextAt": 0,
+        "ai": {
+          "mode": "approach",
+          "attack": null,
+          "readyAt": 17.3,
+          "graceUntil": 5,
+          "until": 17.3,
+          "eligibleSince": -1,
+          "sequence": 2,
+          "cooldowns": {
+            "shot": 20.1
+          },
+          "faceX": 0.7208787219549347,
+          "faceY": 0.6930612297860989,
+          "orbitSign": -1,
+          "offset": 3.8822841984799896,
+          "phase": 1,
+          "transitionUntil": 0,
+          "transitionPending": false,
+          "entryUntil": 5
+        }
+      },
+      {
+        "id": "a1:f9:w1:u19",
+        "archetype": "falcon_normal",
+        "name": "灰羽妖隼",
+        "family": "falcon",
+        "role": "normal",
+        "rank": 3,
+        "x": 204.53005727187568,
+        "y": 627.1072352528837,
+        "hp": 60,
+        "maxHp": 60,
+        "radius": 20,
+        "damage": 10,
+        "moveSpeed": 220,
+        "woundBudget": 0,
+        "woundUntil": 0,
+        "orbitNextAt": 0,
+        "ai": {
+          "mode": "approach",
+          "attack": null,
+          "readyAt": 18.433333333333334,
+          "graceUntil": 5.666666666666666,
+          "until": 18.433333333333334,
+          "eligibleSince": -1,
+          "sequence": 3,
+          "cooldowns": {
+            "shot": 21.233333333333334
+          },
+          "faceX": 0.9221289132685704,
+          "faceY": 0.3868827565479304,
+          "orbitSign": -1,
+          "offset": 3.422855814357974,
+          "phase": 1,
+          "transitionUntil": 0,
+          "transitionPending": false,
+          "entryUntil": 5.666666666666666
+        }
+      },
+      {
+        "id": "a1:f9:w1:u24",
+        "archetype": "falcon_normal",
+        "name": "灰羽妖隼",
+        "family": "falcon",
+        "role": "normal",
+        "rank": 3,
+        "x": 235.06849006736164,
+        "y": 576.5348036499787,
+        "hp": 60,
+        "maxHp": 60,
+        "radius": 20,
+        "damage": 10,
+        "moveSpeed": 220,
+        "woundBudget": 0,
+        "woundUntil": 0,
+        "orbitNextAt": 0,
+        "ai": {
+          "mode": "approach",
+          "attack": null,
+          "readyAt": 19.433333333333334,
+          "graceUntil": 7.916666666666666,
+          "until": 19.433333333333334,
+          "eligibleSince": -1,
+          "sequence": 2,
+          "cooldowns": {
+            "shot": 22.233333333333334
+          },
+          "faceX": 0.8280371086508795,
+          "faceY": 0.5606732976494347,
+          "orbitSign": -1,
+          "offset": 1.4779851933643684,
+          "phase": 1,
+          "transitionUntil": 0,
+          "transitionPending": false,
+          "entryUntil": 7.916666666666666
+        }
+      }
+    ],
+    "projectiles": [],
+    "zones": [
+      {
+        "id": "warning117",
+        "ownerId": "a1:f9:w1:u11",
+        "hostile": true,
+        "renderOnly": true,
+        "kind": "enemy_windup",
+        "phase": "windup",
+        "shape": "capsule",
+        "attackId": "a1:f9:w1:u11:a4:s1",
+        "x": 273.39844717579007,
+        "y": 575.561040364229,
+        "radius": 12,
+        "width": 24,
+        "toX": 646.9889551342826,
+        "toY": 876.9414185631348,
+        "angle": 0,
+        "faceX": 0.7783135582468595,
+        "faceY": 0.627875787914387,
+        "locked": true,
+        "expiresAt": 20.783333333333335
+      }
+    ],
+    "drops": [
+      {
+        "id": "d119",
+        "kind": "resource",
+        "x": 373.7194175519499,
+        "y": 577.8932835379056,
+        "radius": 5,
+        "amount": 3,
+        "expiresAt": 20.133333333333333
+      }
+    ],
+    "effects": [
+      {
+        "id": "fx118",
+        "kind": "hit",
+        "x": 373.7194175519499,
+        "y": 577.8932835379056,
+        "radius": 12,
+        "hostile": false,
+        "expiresAt": 19.883333333333333,
+        "damage": 60
+      }
+    ],
+    "pending": [],
+    "reserved": [],
+    "earned": {
+      "xp": 0,
+      "cores": 0,
+      "contribution": 0
+    },
+    "rawKillXp": 60,
+    "normalCoreCounter": 0,
+    "loadout": {
+      "active": {
+        "sj_yujian": 1,
+        "sj_arc": 1,
+        "sj_wanjian": 1
+      },
+      "passive": {
+        "vajra": 1
+      },
+      "evolutions": [],
+      "growthVersion": 1,
+      "evolutionLevels": {},
+      "tutorialWaves": 3,
+      "weaponId": "eq_sword_suwen",
+      "weaponQuality": 1,
+      "weaponRefine": 0
+    },
+    "rng": 809805612,
+    "base": {
+      "xp": 10920,
+      "hp": 120,
+      "normalCoreCounter": 0,
+      "tutorialWaves": 3
+    },
+    "input": {
+      "x": 0,
+      "y": 0
+    },
+    "cooldowns": {
+      "sj_yujian": 20.25,
+      "sj_arc": 15.3,
+      "sj_wanjian": 0
+    },
+    "casts": [],
+    "killLedger": [
+      {
+        "id": "a1:f9:w1:u1",
+        "archetype": "tiger_normal",
+        "wave": 1,
+        "coreRank": 0
+      },
+      {
+        "id": "a1:f9:w1:u4",
+        "archetype": "tiger_normal",
+        "wave": 1,
+        "coreRank": 0
+      },
+      {
+        "id": "a1:f9:w1:u6",
+        "archetype": "tiger_normal",
+        "wave": 1,
+        "coreRank": 0
+      },
+      {
+        "id": "a1:f9:w1:u9",
+        "archetype": "tiger_normal",
+        "wave": 1,
+        "coreRank": 0
+      },
+      {
+        "id": "a1:f9:w1:u17",
+        "archetype": "falcon_normal",
+        "wave": 1,
+        "coreRank": 0
+      },
+      {
+        "id": "a1:f9:w1:u22",
+        "archetype": "falcon_normal",
+        "wave": 1,
+        "coreRank": 0
+      },
+      {
+        "id": "a1:f9:w1:u25",
+        "archetype": "falcon_normal",
+        "wave": 1,
+        "coreRank": 0
+      },
+      {
+        "id": "a1:f9:w1:u2",
+        "archetype": "tiger_normal",
+        "wave": 1,
+        "coreRank": 0
+      },
+      {
+        "id": "a1:f9:w1:u8",
+        "archetype": "tiger_normal",
+        "wave": 1,
+        "coreRank": 0
+      },
+      {
+        "id": "a1:f9:w1:u7",
+        "archetype": "tiger_normal",
+        "wave": 1,
+        "coreRank": 0
+      },
+      {
+        "id": "a1:f9:w1:u3",
+        "archetype": "tiger_normal",
+        "wave": 1,
+        "coreRank": 0
+      },
+      {
+        "id": "a1:f9:w1:u5",
+        "archetype": "tiger_normal",
+        "wave": 1,
+        "coreRank": 0
+      },
+      {
+        "id": "a1:f9:w1:u10",
+        "archetype": "tiger_normal",
+        "wave": 1,
+        "coreRank": 0
+      },
+      {
+        "id": "a1:f9:w1:u23",
+        "archetype": "falcon_normal",
+        "wave": 1,
+        "coreRank": 0
+      },
+      {
+        "id": "a1:f9:w1:u15",
+        "archetype": "falcon_normal",
+        "wave": 1,
+        "coreRank": 0
+      },
+      {
+        "id": "a1:f9:w1:u20",
+        "archetype": "falcon_normal",
+        "wave": 1,
+        "coreRank": 0
+      },
+      {
+        "id": "a1:f9:w1:u18",
+        "archetype": "falcon_normal",
+        "wave": 1,
+        "coreRank": 0
+      },
+      {
+        "id": "a1:f9:w1:u26",
+        "archetype": "falcon_normal",
+        "wave": 1,
+        "coreRank": 0
+      },
+      {
+        "id": "a1:f9:w1:u12",
+        "archetype": "falcon_normal",
+        "wave": 1,
+        "coreRank": 0
+      },
+      {
+        "id": "a1:f9:w1:u21",
+        "archetype": "falcon_normal",
+        "wave": 1,
+        "coreRank": 0
+      }
+    ],
+    "clearedWaves": [],
+    "gateEntries": [],
+    "gateReadyAt": 0,
+    "hurtUntil": 0,
+    "nextWindupAt": 19.85,
+    "supportReleased": false,
+    "supportAt": -1,
+    "view": {
+      "xmin": -150.83126874755322,
+      "xmax": 1113.1687312524468,
+      "ymin": 555.1720622172628,
+      "ymax": 919.1720622172629,
+      "followPlayer": true
+    },
+    "trainingResetAt": 0,
+    "arenaVersion": 1,
+    "loot": {
+      "version": 1,
+      "seed": 522251644
+    }
+  },
+  "afterSnapshot": {
+    "schema": 1,
+    "attemptId": 1,
+    "floor": 9,
+    "phase": "paused",
+    "training": false,
+    "time": 19.783333333333335,
+    "ticks": 1187,
+    "remainder": 0.00976666668,
+    "wave": 1,
+    "waveStartedAt": 0,
+    "waveKilled": 20,
+    "wavePlanned": 26,
+    "nextId": 120,
+    "player": {
+      "x": 481.1687312524468,
+      "y": 743.1720622172628,
+      "hp": 120,
+      "xp": 10920,
+      "maxHp": 120,
+      "attack": 127.2,
+      "moveSpeed": 220,
+      "radius": 18,
+      "faceX": -0.5450529207441537,
+      "faceY": -0.8384016421669672
+    },
+    "enemies": [
+      {
+        "id": "a1:f9:w1:u11",
+        "archetype": "falcon_normal",
+        "name": "灰羽妖隼",
+        "family": "falcon",
+        "role": "normal",
+        "rank": 3,
+        "x": 273.39844717579007,
+        "y": 575.561040364229,
+        "hp": 60,
+        "maxHp": 60,
+        "radius": 20,
+        "damage": 10,
+        "moveSpeed": 220,
+        "woundBudget": 0,
+        "woundUntil": 0,
+        "orbitNextAt": 0,
+        "ai": {
+          "mode": "windup",
+          "attack": {
+            "kind": "shot",
+            "shape": "capsule",
+            "windup": 0.85,
+            "active": 0.1,
+            "recovery": 0.7,
+            "cooldown": 2.8,
+            "range": 480,
+            "radius": 12,
+            "width": 24,
+            "angle": 0,
+            "damage": 10,
+            "lock": 0.15,
+            "speed": 270,
+            "cost": 1,
+            "segments": 1,
+            "element": "feather",
+            "id": "a1:f9:w1:u11:a4:s1",
+            "segment": 1,
+            "dirX": 0.7783135582468595,
+            "dirY": 0.627875787914387,
+            "x": 273.39844717579007,
+            "y": 575.561040364229,
+            "targetX": 481.1687312524468,
+            "targetY": 743.1720622172628,
+            "startedAt": 19.6,
+            "locked": true,
+            "hit": false,
+            "fired": false,
+            "travelled": 0,
+            "boundary": false,
+            "maxRange": 480,
+            "clipped": false
+          },
+          "readyAt": 16.783333333333335,
+          "graceUntil": 3.9000000000000004,
+          "until": 20.450000000000003,
+          "eligibleSince": -1,
+          "sequence": 4,
+          "cooldowns": {
+            "shot": 19.583333333333336
+          },
+          "faceX": 0.7783135582468595,
+          "faceY": 0.627875787914387,
+          "orbitSign": -1,
+          "offset": 3.6100828599273624,
+          "phase": 1,
+          "transitionUntil": 0,
+          "transitionPending": false,
+          "entryUntil": 3.9000000000000004
+        }
+      },
+      {
+        "id": "a1:f9:w1:u13",
+        "archetype": "falcon_normal",
+        "name": "灰羽妖隼",
+        "family": "falcon",
+        "role": "normal",
+        "rank": 3,
+        "x": 370.16529112362946,
+        "y": 577.7690121939281,
+        "hp": 60,
+        "maxHp": 60,
+        "radius": 20,
+        "damage": 10,
+        "moveSpeed": 220,
+        "woundBudget": 0,
+        "woundUntil": 0,
+        "orbitNextAt": 0,
+        "ai": {
+          "mode": "approach",
+          "attack": null,
+          "readyAt": 18.05,
+          "graceUntil": 4.35,
+          "until": 18.05,
+          "eligibleSince": -1,
+          "sequence": 2,
+          "cooldowns": {
+            "shot": 20.85
+          },
+          "faceX": 0.5572511520149512,
+          "faceY": 0.8303439971349282,
+          "orbitSign": 1,
+          "offset": 1.2291243499627653,
+          "phase": 1,
+          "transitionUntil": 0,
+          "transitionPending": false,
+          "entryUntil": 4.35
+        }
+      },
+      {
+        "id": "a1:f9:w1:u14",
+        "archetype": "falcon_normal",
+        "name": "灰羽妖隼",
+        "family": "falcon",
+        "role": "normal",
+        "rank": 3,
+        "x": 314.8143832318474,
+        "y": 576.109472346531,
+        "hp": 60,
+        "maxHp": 60,
+        "radius": 20,
+        "damage": 10,
+        "moveSpeed": 220,
+        "woundBudget": 0,
+        "woundUntil": 0,
+        "orbitNextAt": 0,
+        "ai": {
+          "mode": "approach",
+          "attack": null,
+          "readyAt": 17.8,
+          "graceUntil": 4.566666666666666,
+          "until": 17.8,
+          "eligibleSince": -1,
+          "sequence": 3,
+          "cooldowns": {
+            "shot": 20.6
+          },
+          "faceX": 0.7056031581639394,
+          "faceY": 0.7086072136163128,
+          "orbitSign": -1,
+          "offset": 3.9949491051855803,
+          "phase": 1,
+          "transitionUntil": 0,
+          "transitionPending": false,
+          "entryUntil": 4.566666666666666
+        }
+      },
+      {
+        "id": "a1:f9:w1:u16",
+        "archetype": "falcon_normal",
+        "name": "灰羽妖隼",
+        "family": "falcon",
+        "role": "normal",
+        "rank": 3,
+        "x": 307.824558777906,
+        "y": 576.5169485448007,
+        "hp": 60,
+        "maxHp": 60,
+        "radius": 20,
+        "damage": 10,
+        "moveSpeed": 220,
+        "woundBudget": 0,
+        "woundUntil": 0,
+        "orbitNextAt": 0,
+        "ai": {
+          "mode": "approach",
+          "attack": null,
+          "readyAt": 17.3,
+          "graceUntil": 5,
+          "until": 17.3,
+          "eligibleSince": -1,
+          "sequence": 2,
+          "cooldowns": {
+            "shot": 20.1
+          },
+          "faceX": 0.7208787219549347,
+          "faceY": 0.6930612297860989,
+          "orbitSign": -1,
+          "offset": 3.8822841984799896,
+          "phase": 1,
+          "transitionUntil": 0,
+          "transitionPending": false,
+          "entryUntil": 5
+        }
+      },
+      {
+        "id": "a1:f9:w1:u19",
+        "archetype": "falcon_normal",
+        "name": "灰羽妖隼",
+        "family": "falcon",
+        "role": "normal",
+        "rank": 3,
+        "x": 204.53005727187568,
+        "y": 627.1072352528837,
+        "hp": 60,
+        "maxHp": 60,
+        "radius": 20,
+        "damage": 10,
+        "moveSpeed": 220,
+        "woundBudget": 0,
+        "woundUntil": 0,
+        "orbitNextAt": 0,
+        "ai": {
+          "mode": "approach",
+          "attack": null,
+          "readyAt": 18.433333333333334,
+          "graceUntil": 5.666666666666666,
+          "until": 18.433333333333334,
+          "eligibleSince": -1,
+          "sequence": 3,
+          "cooldowns": {
+            "shot": 21.233333333333334
+          },
+          "faceX": 0.9221289132685704,
+          "faceY": 0.3868827565479304,
+          "orbitSign": -1,
+          "offset": 3.422855814357974,
+          "phase": 1,
+          "transitionUntil": 0,
+          "transitionPending": false,
+          "entryUntil": 5.666666666666666
+        }
+      },
+      {
+        "id": "a1:f9:w1:u24",
+        "archetype": "falcon_normal",
+        "name": "灰羽妖隼",
+        "family": "falcon",
+        "role": "normal",
+        "rank": 3,
+        "x": 235.06849006736164,
+        "y": 576.5348036499787,
+        "hp": 60,
+        "maxHp": 60,
+        "radius": 20,
+        "damage": 10,
+        "moveSpeed": 220,
+        "woundBudget": 0,
+        "woundUntil": 0,
+        "orbitNextAt": 0,
+        "ai": {
+          "mode": "approach",
+          "attack": null,
+          "readyAt": 19.433333333333334,
+          "graceUntil": 7.916666666666666,
+          "until": 19.433333333333334,
+          "eligibleSince": -1,
+          "sequence": 2,
+          "cooldowns": {
+            "shot": 22.233333333333334
+          },
+          "faceX": 0.8280371086508795,
+          "faceY": 0.5606732976494347,
+          "orbitSign": -1,
+          "offset": 1.4779851933643684,
+          "phase": 1,
+          "transitionUntil": 0,
+          "transitionPending": false,
+          "entryUntil": 7.916666666666666
+        }
+      }
+    ],
+    "projectiles": [],
+    "zones": [
+      {
+        "id": "warning117",
+        "ownerId": "a1:f9:w1:u11",
+        "hostile": true,
+        "renderOnly": true,
+        "kind": "enemy_windup",
+        "phase": "windup",
+        "shape": "capsule",
+        "attackId": "a1:f9:w1:u11:a4:s1",
+        "x": 273.39844717579007,
+        "y": 575.561040364229,
+        "radius": 12,
+        "width": 24,
+        "toX": 646.9889551342826,
+        "toY": 876.9414185631348,
+        "angle": 0,
+        "faceX": 0.7783135582468595,
+        "faceY": 0.627875787914387,
+        "locked": true,
+        "expiresAt": 20.783333333333335
+      }
+    ],
+    "drops": [
+      {
+        "id": "d119",
+        "kind": "resource",
+        "x": 373.7194175519499,
+        "y": 577.8932835379056,
+        "radius": 5,
+        "amount": 3,
+        "expiresAt": 20.133333333333333
+      }
+    ],
+    "effects": [
+      {
+        "id": "fx118",
+        "kind": "hit",
+        "x": 373.7194175519499,
+        "y": 577.8932835379056,
+        "radius": 12,
+        "hostile": false,
+        "expiresAt": 19.883333333333333,
+        "damage": 60
+      }
+    ],
+    "pending": [],
+    "reserved": [],
+    "earned": {
+      "xp": 0,
+      "cores": 0,
+      "contribution": 0
+    },
+    "rawKillXp": 60,
+    "normalCoreCounter": 0,
+    "loadout": {
+      "active": {
+        "sj_yujian": 1,
+        "sj_arc": 1,
+        "sj_wanjian": 1
+      },
+      "passive": {
+        "vajra": 1
+      },
+      "evolutions": [],
+      "growthVersion": 1,
+      "evolutionLevels": {},
+      "tutorialWaves": 3,
+      "weaponId": "eq_sword_suwen",
+      "weaponQuality": 1,
+      "weaponRefine": 0
+    },
+    "rng": 809805612,
+    "base": {
+      "xp": 10920,
+      "hp": 120,
+      "normalCoreCounter": 0,
+      "tutorialWaves": 3
+    },
+    "input": {
+      "x": 0,
+      "y": 0
+    },
+    "cooldowns": {
+      "sj_yujian": 20.25,
+      "sj_arc": 15.3,
+      "sj_wanjian": 0
+    },
+    "casts": [],
+    "killLedger": [
+      {
+        "id": "a1:f9:w1:u1",
+        "archetype": "tiger_normal",
+        "wave": 1,
+        "coreRank": 0
+      },
+      {
+        "id": "a1:f9:w1:u4",
+        "archetype": "tiger_normal",
+        "wave": 1,
+        "coreRank": 0
+      },
+      {
+        "id": "a1:f9:w1:u6",
+        "archetype": "tiger_normal",
+        "wave": 1,
+        "coreRank": 0
+      },
+      {
+        "id": "a1:f9:w1:u9",
+        "archetype": "tiger_normal",
+        "wave": 1,
+        "coreRank": 0
+      },
+      {
+        "id": "a1:f9:w1:u17",
+        "archetype": "falcon_normal",
+        "wave": 1,
+        "coreRank": 0
+      },
+      {
+        "id": "a1:f9:w1:u22",
+        "archetype": "falcon_normal",
+        "wave": 1,
+        "coreRank": 0
+      },
+      {
+        "id": "a1:f9:w1:u25",
+        "archetype": "falcon_normal",
+        "wave": 1,
+        "coreRank": 0
+      },
+      {
+        "id": "a1:f9:w1:u2",
+        "archetype": "tiger_normal",
+        "wave": 1,
+        "coreRank": 0
+      },
+      {
+        "id": "a1:f9:w1:u8",
+        "archetype": "tiger_normal",
+        "wave": 1,
+        "coreRank": 0
+      },
+      {
+        "id": "a1:f9:w1:u7",
+        "archetype": "tiger_normal",
+        "wave": 1,
+        "coreRank": 0
+      },
+      {
+        "id": "a1:f9:w1:u3",
+        "archetype": "tiger_normal",
+        "wave": 1,
+        "coreRank": 0
+      },
+      {
+        "id": "a1:f9:w1:u5",
+        "archetype": "tiger_normal",
+        "wave": 1,
+        "coreRank": 0
+      },
+      {
+        "id": "a1:f9:w1:u10",
+        "archetype": "tiger_normal",
+        "wave": 1,
+        "coreRank": 0
+      },
+      {
+        "id": "a1:f9:w1:u23",
+        "archetype": "falcon_normal",
+        "wave": 1,
+        "coreRank": 0
+      },
+      {
+        "id": "a1:f9:w1:u15",
+        "archetype": "falcon_normal",
+        "wave": 1,
+        "coreRank": 0
+      },
+      {
+        "id": "a1:f9:w1:u20",
+        "archetype": "falcon_normal",
+        "wave": 1,
+        "coreRank": 0
+      },
+      {
+        "id": "a1:f9:w1:u18",
+        "archetype": "falcon_normal",
+        "wave": 1,
+        "coreRank": 0
+      },
+      {
+        "id": "a1:f9:w1:u26",
+        "archetype": "falcon_normal",
+        "wave": 1,
+        "coreRank": 0
+      },
+      {
+        "id": "a1:f9:w1:u12",
+        "archetype": "falcon_normal",
+        "wave": 1,
+        "coreRank": 0
+      },
+      {
+        "id": "a1:f9:w1:u21",
+        "archetype": "falcon_normal",
+        "wave": 1,
+        "coreRank": 0
+      }
+    ],
+    "clearedWaves": [],
+    "gateEntries": [],
+    "gateReadyAt": 0,
+    "hurtUntil": 0,
+    "nextWindupAt": 19.85,
+    "supportReleased": false,
+    "supportAt": -1,
+    "view": {
+      "xmin": -150.83126874755322,
+      "xmax": 1113.1687312524468,
+      "ymin": 555.1720622172628,
+      "ymax": 919.1720622172629,
+      "followPlayer": true
+    },
+    "trainingResetAt": 0,
+    "arenaVersion": 1,
+    "loot": {
+      "version": 1,
+      "seed": 522251644
+    }
+  }
+}

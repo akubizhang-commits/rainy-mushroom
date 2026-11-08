@@ -2,7 +2,7 @@ import { FORGING_RECIPES, dismantleStoneRefund } from './TowerForging.js'
 import { equipmentSourceLabel } from './TowerEquipmentSources.js'
 import { campaignMaxHp } from './TowerCampaign.js'
 import { ALCHEMY_MATERIALS, ALCHEMY_RECIPES } from './TowerAlchemy.js'
-import { cultivationPillAllowance, cultivationPillHint, cultivationUseQuote, CULTIVATION_PILL_UNLOCK_HINT } from './TowerPills.js'
+import { cultivationPillAllowance, cultivationPillHint, cultivationPillUseHint, cultivationUseQuote, CULTIVATION_PILL_UNLOCK_HINT } from './TowerPills.js'
 import { EQUIPMENT_TIERS, canUseEquipment, equipmentRequirement, isStarterEquipment } from './TowerEquipmentTiers.js'
 // Pure backpack queries. Commands are quotes only; Campaign revalidates and
 // commits them atomically against the live save.
@@ -62,6 +62,7 @@ export function inventoryQuote(state, id, operation) {
   if (operation === 'use') {
     if (category !== 'pill' && !item.successChance) return fail(item.craftingType==='forge'?'炼器材料不可直接服用':'炼丹材料不可直接服用')
     const c = cultivationAt(state.xp)
+    if (item.restoreSpirit) return fail('塔内灵力不足时自动服用，回宗后灵力回满')
     if (item.healShare && state.hp >= campaignMaxHp(state)) return fail('气血已满，不消耗丹药')
     if (item.successChance && state.xp !== item.gate) return fail(`需${item.from}十层满修为，当前境界不符时不消耗`)
     if (item.xp && c.breakthroughReady) return fail(c.realm === '炼气' ? '炼气大圆满，需服用筑基丹突破' : '筑基大圆满，需服用结丹丹药或赤鳞金髓')
@@ -108,12 +109,12 @@ export function inventoryDescription(state, row) {
   }
   if (row.category === 'pill') {
     const pill = row.item
-    return [pill.successChance ? breakthroughDescription(pill) : pill.healShare
+    return [pill.restoreSpirit ? `${pill.description}回宗后灵力值立即回满，无需手动服药。` : pill.successChance ? breakthroughDescription(pill) : pill.healShare
       ? `只能在非战斗状态使用该道具，恢复最大气血值的${pill.healShare * 100}%，不超过气血上限。每次使用一颗。`
-      : `只能在非战斗状态使用该道具，增加${pill.xp}修为。仅限${pill.realm}服用，不可跨瓶颈。每次使用一颗。${cultivationPillHint(state)}`, pill.description]
+      : `只能在非战斗状态使用该道具，增加${pill.xp}修为。仅限${pill.realm}服用，不可跨瓶颈。每次使用一颗。\n${cultivationPillHint(state,row.id)}\n${cultivationPillUseHint(state,row.id)}`, pill.description]
   }
   const detail = inventoryDetail(state, row)
-  return [`${equipmentSourceLabel(row.item.definitionId)} · 境界要求 ${detail.requirement}`, '', '装备属性', ...detail.basic,
+  return [`${equipmentSourceLabel(row.item.definitionId)} · 穿戴要求：${detail.requirement}`, '', '装备属性', ...detail.basic,
     ...(detail.effects.length ? ['', '效果', ...detail.effects] : []), '', detail.description]
 }
 

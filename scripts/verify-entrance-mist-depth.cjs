@@ -1,0 +1,48 @@
+'use strict';
+const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),{createServer}=require('node:http');
+const {chromium}=require('/Users/zhangnu/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright');
+const root=path.resolve(__dirname,'..'),out=path.join(root,'reports/entrance-mist-2026-11-05');
+(async()=>{fs.mkdirSync(out,{recursive:true});const errors=[];
+const server=createServer((req,res)=>{const file=path.resolve(root,'.'+decodeURIComponent(new URL(req.url,'http://local').pathname));if(!file.startsWith(root+path.sep)){res.writeHead(403).end();return}fs.readFile(file,(e,d)=>{if(e){res.writeHead(404).end();return}res.setHeader('Content-Type',({'.html':'text/html','.js':'text/javascript','.json':'application/json','.png':'image/png','.css':'text/css','.wasm':'application/wasm'})[path.extname(file)]||'application/octet-stream');res.end(d)})});
+await new Promise(r=>server.listen(0,'127.0.0.1',r));let browser;const layouts=[];
+try{browser=await chromium.launch({headless:true,channel:'chrome'});
+for(const viewport of [{width:1280,height:720},{width:844,height:390}]){
+const context=await browser.newContext({viewport}),page=await context.newPage();page.on('pageerror',e=>errors.push(e.message));
+await page.goto(`http://127.0.0.1:${server.address().port}/cocos-pilot/build/web-mobile/index.html?ruleset=xianxia&tower=1&smoke=1`);
+await page.waitForFunction(()=>window.__towerTest?.host?.menu);
+await page.evaluate(()=>{const h=window.__towerTest.host;h.enterTraining();h.run.pause();const s=h.run.state;s.arenaVersion=1;s.player.x=33;s.player.y=850;s.enemies=[];s.reserved=[{id:'qa-mist',portal:'N',x:33,y:870,readyAt:s.time+.2,warning:.8},{id:'qa-mist-2',portal:'N',x:125,y:870,readyAt:s.time+.3,warning:.8}];s.pending=[{portal:'N'}];h.draw()});
+await page.waitForFunction(()=>window.__towerTest.host.environmentArt.loaded.size===3);
+await page.waitForFunction(()=>{const walk=n=>[n,...n.children.flatMap(walk)];return !window.__towerTest.host.transitioning&&!walk(cc.director.getScene()).some(n=>n.name==='游戏加载界面'&&n.activeInHierarchy)},null,{timeout:60000});
+await page.waitForTimeout(200);
+await page.evaluate(()=>window.__towerTest.host.draw());
+const info=await page.evaluate(()=>{const h=window.__towerTest.host;return {layers:h.battle.children.map(n=>n.name),loaded:[...h.environmentArt.loaded.keys()],pillars:['north','south-west','south-east'].map(k=>{const n=h.environmentArt.nodes.get(k);return {id:k,active:n.active,x:n.position.x,y:n.position.y}})}});
+assert.equal(info.pillars.filter(p=>p.active).length,3);assert.ok(info.layers.indexOf('镇妖柱与刷怪妖雾')<info.layers.indexOf('攻击预警'));
+await page.screenshot({path:path.join(out,`battle-${viewport.width}x${viewport.height}.png`)});
+const grouped=await page.evaluate(()=>{const h=window.__towerTest.host;return {portals:[...h.environmentArt.previous.keys()],nodes:[...h.environmentArt.nodes.keys()].filter(k=>k.startsWith('mist-'))}});
+assert.deepEqual(grouped.portals,['N']);assert.equal(grouped.nodes.length,5);
+const depth=await page.evaluate(()=>{const h=window.__towerTest.host;return [...h.environmentArt.nodes].filter(([k])=>k.startsWith('mist-')).map(([k,n])=>({key:k,parent:n.parent.name,depth:n.towerGroundY,index:n.getSiblingIndex()}))});
+assert.equal(depth.filter(n=>n.parent==='妖兽静态素材').length,3);
+const actor=await page.evaluate(()=>{const n=window.__towerTest.host.characterLayer;return {depth:n.towerGroundY,index:n.getSiblingIndex()}});
+assert.ok(depth.some(n=>n.parent==='妖兽静态素材'&&n.depth<actor.depth&&n.index>actor.index),'front mist must occlude a character inside the entrance');
+for(const [label,offset] of [['behind',100],['inside',-20],['outside',-230]]){
+const placement=await page.evaluate(offset=>{const h=window.__towerTest.host,s=h.run.state,p=[...h.environmentArt.previous.values()][0];s.player.x=p.x;s.player.y=p.y+offset;h.draw();const a=h.characterLayer;return {actor:a.getSiblingIndex(),banks:[...h.environmentArt.nodes].filter(([k,n])=>k.startsWith('mist-')&&n.parent===h.monsterLayer).map(([k,n])=>n.getSiblingIndex())}},offset);
+if(label==='behind')assert.ok(placement.banks.every(i=>i>placement.actor));
+if(label==='outside')assert.ok(placement.banks.every(i=>i<placement.actor));
+await page.screenshot({path:path.join(out,`${label}-${viewport.width}.png`)});
+}
+const animated=await page.evaluate(()=>{const h=window.__towerTest.host,n=h.environmentArt.nodes.get('mist-:N:0'),x=n.position.x;h.run.state.time+=.5;h.draw();return n.position.x!==x});assert.equal(animated,true);
+const frozen=await page.evaluate(()=>{const h=window.__towerTest.host;return [...h.environmentArt.nodes].filter(([k])=>k.startsWith('mist-')).map(([k,n])=>[k,n.position.x,n.position.y,n.angle])});
+await page.waitForTimeout(180);
+assert.deepEqual(await page.evaluate(()=>{const h=window.__towerTest.host;return [...h.environmentArt.nodes].filter(([k])=>k.startsWith('mist-')).map(([k,n])=>[k,n.position.x,n.position.y,n.angle])}),frozen);
+const fade=await page.evaluate(()=>{const h=window.__towerTest.host,s=h.run.state;s.reserved=[];h.draw();const between=h.environmentArt.previous.size;s.pending=[];h.draw();const started=h.environmentArt.fading.size;s.time+=.35;h.draw();return {between,started,left:h.environmentArt.fading.size}});
+assert.deepEqual(fade,{between:1,started:1,left:1});
+await page.screenshot({path:path.join(out,`fading-${viewport.width}.png`)});
+await page.evaluate(()=>{const h=window.__towerTest.host;h.run.state.time+=.4;h.draw()});
+assert.equal(await page.evaluate(()=>[...window.__towerTest.host.environmentArt.nodes.keys()].filter(k=>k.startsWith('mist-')).length),0);
+await page.screenshot({path:path.join(out,`finished-${viewport.width}.png`)});
+await page.evaluate(()=>{const h=window.__towerTest.host;h.run.state.player.x=850;h.run.state.player.y=440;h.draw()});
+await page.screenshot({path:path.join(out,`edge-${viewport.width}x${viewport.height}.png`)});
+const end=await page.evaluate(()=>{const h=window.__towerTest.host;h.run.state.pending=[{portal:'N'}];h.draw();h.run.state.phase='won';h.draw();return [...h.environmentArt.nodes.keys()].filter(k=>k.startsWith('mist-')).length});assert.equal(end,0);
+layouts.push({viewport,...info,fade});await context.close();}
+assert.deepEqual(errors,[]);fs.writeFileSync(path.join(out,'report.json'),JSON.stringify({status:'PASS',layouts,errors},null,2));console.log('PASS: two landscape layouts, all textures loaded, warning order and mist cleanup');
+}finally{await browser?.close();server.close()}})().catch(e=>{console.error(e);process.exitCode=1});

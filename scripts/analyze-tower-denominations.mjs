@@ -287,7 +287,7 @@ function economics() {
     { evolution: 'evo_wanjian', completedFloors: 6, skills: { sj_yujian: 6, sj_heart: 4 } },
     { evolution: 'evo_tiandi', completedFloors: 7, skills: { sj_arc: 2, sj_line: 6, sj_mark: 4 } },
     { evolution: 'evo_wuwo', completedFloors: 7, skills: { sj_wanjian: 6, sj_bone: 4 } },
-    { evolution: 'evo_sixiang', completedFloors: 8, skills: { sj_wanjian: 2, sj_formation: 6, sj_gate: 4 } },
+    { evolution: 'evo_sixiang', completedFloors: 8, skills: { sj_wanjian: 2, sj_formation: 6, sj_gate: 2 } },
   ].map(route => {
     const level = skillStage(route.evolution).minLevel, previous = level - 1, xp = 30 * previous + 15 * previous * previous
     const state = { xp, clearedFloor: route.completedFloors, tutorialWaves: 3,

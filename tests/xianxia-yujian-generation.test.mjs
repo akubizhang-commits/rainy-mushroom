@@ -32,12 +32,12 @@ test('stored swords distribute over several enemies and share equal per-sword da
  enemies(r,2);release(r,3*interval+.01)
  assert.equal(r.state.projectiles.length,3)
  assert.equal(new Set(r.state.projectiles.map(s=>s.targetId)).size,2)
- assert.ok(r.state.projectiles.every(s=>Math.abs(s.damage-190.8*interval)<1e-8))
+ assert.ok(r.state.projectiles.every(s=>Math.abs(s.damage-209.88*.52*interval)<1e-8))
 })
 test('rank one can replenish while its previous sword is still in flight',()=>{
  const r=make(1);enemies(r,1);release(r,1);release(r,2)
  assert.equal(r.state.projectiles.length,2)
- assert.ok(r.state.projectiles.every(s=>Math.abs(s.damage-127.2)<1e-8))
+ assert.ok(r.state.projectiles.every(s=>Math.abs(s.damage-139.92*.5)<1e-8))
 })
 test('a weak lone enemy receives only enough swords and the rest remain stored',()=>{
  const r=make(10);for(let i=1;i<=10;i++)tick(r,i*.5)
@@ -113,13 +113,13 @@ test('single replacement swords cycle through all ten shoulder slots even at ran
  for(let i=1;i<=12;i++)release(r,i)
  assert.deepEqual(r.state.projectiles.map(s=>s.yujianSlot),[0,1,2,3,4,5,6,7,8,9,0,1])
 })
-test('each sword starts and waits at its own fixed shoulder point',async()=>{
+test('each sword launches from its current breathing shoulder point',async()=>{
  const {yujianHoverPose,yujianVisualPose}=await import('../js/xianxia/TowerYujian.js')
  const r=make();for(let i=1;i<=10;i++)tick(r,i*.5)
  enemies(r,1);release(r,5.01)
  for(const shot of r.state.projectiles){
   const pose=yujianHoverPose(shot.yujianSlot,r.state.time,r.state.yujian)
-  assert.deepEqual(yujianHoverPose(shot.yujianSlot,20,r.state.yujian),pose)
+  assert.deepEqual(yujianHoverPose(shot.yujianSlot,r.state.time,r.state.yujian),pose)
   for(const t of [shot.gatherAt,shot.flightAt]){
    const visual=yujianVisualPose(shot,t)
    assert.ok(Math.hypot(visual.x-pose.x,visual.y-pose.y)<1e-8)

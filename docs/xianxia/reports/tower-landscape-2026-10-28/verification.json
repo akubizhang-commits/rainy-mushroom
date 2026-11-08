@@ -1,0 +1,115 @@
+{
+  "date": "2026-10-28",
+  "phase": "functional-alpha",
+  "status": "ready-for-playtest",
+  "requirements": "docs/xianxia/sect-tower-v1/31-current-requirements.md",
+  "tests": {
+    "full": {
+      "passed": 1190,
+      "failed": 0,
+      "log": "tests-delivery.log",
+      "scope": "before final root-only Mask change"
+    },
+    "finalFocused": {
+      "passed": 37,
+      "failed": 0,
+      "log": "tests-clipped.log",
+      "scope": "final host and arena rendering"
+    }
+  },
+  "checks": {
+    "check": "check-delivery.log",
+    "types": "types-clipped.log",
+    "build": "build-clipped.log",
+    "exitCodes": [
+      0,
+      0,
+      0
+    ]
+  },
+  "sharedModules": 46,
+  "browser": [
+    {
+      "report": "ui-browser-delivery-rest.json",
+      "cases": 5,
+      "failed": 0,
+      "screenshots": 42,
+      "bundles": [
+        "c70cb27788d9c4952c5ed5a19b28d66c934d186fe2e6dd7045f6f86a8f6a1956"
+      ]
+    },
+    {
+      "report": "ui-browser-delivery-phone.json",
+      "cases": 1,
+      "failed": 0,
+      "screenshots": 10,
+      "bundles": [
+        "c70cb27788d9c4952c5ed5a19b28d66c934d186fe2e6dd7045f6f86a8f6a1956"
+      ]
+    },
+    {
+      "report": "ui-browser-delivery-ranged.json",
+      "cases": 1,
+      "failed": 0,
+      "screenshots": 2,
+      "bundles": [
+        "c70cb27788d9c4952c5ed5a19b28d66c934d186fe2e6dd7045f6f86a8f6a1956"
+      ]
+    },
+    {
+      "report": "ui-browser-delivery-arc.json",
+      "cases": 3,
+      "failed": 0,
+      "screenshots": 12,
+      "bundles": [
+        "81f0f42bd6d98f8c745cdf625a2da2a9a9b1b0fb2cea2c7ac15b34a302c7dee8"
+      ]
+    },
+    {
+      "report": "ui-browser-delivery-mask.json",
+      "cases": 3,
+      "failed": 0,
+      "screenshots": 6,
+      "bundles": [
+        "02d66ceb5c716e0a6d05149805e361c02ae0c306842e7dc1886a792a179af2cc"
+      ]
+    }
+  ],
+  "browserTotalCases": 13,
+  "browserLatestScope": "two letterbox clips and phone input; prior matrix and arc fix connected by documented source/bundle bridges",
+  "normalSmoke": {
+    "won": 7,
+    "lost": 2,
+    "timeout": 0,
+    "failedFloors": [
+      5,
+      8
+    ],
+    "secondsLimit": 900,
+    "report": "hex-combat.md",
+    "naturalJourney": false
+  },
+  "spawnDrain": {
+    "entities": 4770,
+    "clearedFloors": 9,
+    "normalCombat": false
+  },
+  "limitations": [
+    "normal human balance not accepted",
+    "WeChat build and real devices not accepted",
+    "prototype art",
+    "legacy in-flight attempts keep previous arena and loot versions"
+  ],
+  "sources": {
+    "js/xianxia/TowerRun.js": "79e4a7703d08ceee31670000ba93b4ddcd70855e6c9bb8a210e1f27423a08b0d",
+    "js/xianxia/TowerCampaign.js": "9abd84775cc6475dba457f5d6dcef714dc23216e87d7753fbbcc480416ee0283",
+    "js/xianxia/TowerGrowth.js": "6d380a236d33043757b7525c628b0da0e5bad491c3f503e2aefbce417462ba92",
+    "js/xianxia/TowerLoot.js": "f2eeb5dca0ee913fc30250ef46e9515fe58f4d1318855431e55408d2d1cd9761",
+    "js/xianxia/TowerArena.js": "f79cc3c9f5eb833abcf3b2b511046dafa579cf78b7f2e758bc3b6cf7259c43b6",
+    "js/xianxia/TowerEnemyAttacks.js": "586c053dc035220250b7c884ca6b7b456d8a9fe1863b860ac8220c9f2c32e561",
+    "cocos-pilot/assets/scripts/TowerView.ts": "4851a3656ee76c2b196e71eb3723e2130d12d5cae059c202c7098b1b1cf4a774",
+    "cocos-pilot/assets/scripts/TowerMenu.ts": "195a4db6ea11414fbcd8ab49e45aeb46a0b92feec7b16b5e7269f60f415f5390",
+    "cocos-pilot/assets/scripts/TowerArenaView.ts": "2a70b4c56a4b9a4a0c05c0ab5f18ea8ef60d8c4a565468f6aad71f4833f8e6ad",
+    "docs/xianxia/sect-tower-v1/31-current-requirements.md": "99a096a018a54e4079603124fcbed1811a3872772c8fbef3bbc57e7883f8d13e"
+  }
+}

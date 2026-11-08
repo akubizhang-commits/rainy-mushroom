@@ -1,4 +1,5 @@
 import test from 'node:test'
+import { resonanceDamageFactor } from '../js/xianxia/TowerResonance.js'
 import assert from 'node:assert/strict'
 import { readFileSync } from 'node:fs'
 import { TowerRun, validateTowerSnapshot } from '../js/xianxia/TowerRun.js'
@@ -19,7 +20,7 @@ function make(id, rank, arenaVersion) {
   run.state.cooldowns[id] = 99999
   for (let i = 0; i < 300 && !run.state.enemies.length; i++) run.advance(STEP)
   for (const [i,e] of run.state.enemies.entries()) {
-    e.x = run.state.player.x + 500; e.y = run.state.player.y + (i ? 300 : 0); e.ai.graceUntil = 99999
+    e.x = run.state.player.x + 300; e.y = run.state.player.y + (i ? 300 : 0); e.ai.graceUntil = 99999
   }
   return run
 }
@@ -37,14 +38,14 @@ function damageEvents(run, seconds) {
   return hits
 }
 
-test('arc changes only at ranks 4 and 7; other skill stages keep their thresholds', () => {
-  for (const [rank, shape, hits] of [[1,'sector',1],[3,'sector',1],[4,'crescent-projectile',1],
-    [6,'crescent-projectile',1],[7,'crescent-projectile',3],[10,'crescent-projectile',3]]) {
-    const f = skillForm('sj_arc', rank); assert.equal(f.shape, shape); assert.equal(f.hits, hits)
-    close(Array.from({ length: hits }, (_, i) => skillHitShare('sj_arc', rank, i + 1)).reduce((a,b)=>a+b), 1)
+test('independent moon skills keep their shapes and pulse totals at every rank', () => {
+  for (const rank of [1,3,4,6,7,10,11]) for (const [id,shape,hits] of [
+    ['sj_arc','sector',3],['sj_moon','sector',1],['sj_moon_triple','crescent-projectile',3]]) {
+    const f=skillForm(id,rank);assert.equal(f.shape,shape);assert.equal(f.hits,hits)
+    close(Array.from({length:hits},(_,i)=>skillHitShare(id,rank,i+1)).reduce((a,b)=>a+b),1)
   }
-  assert.equal(skillForm('sj_line', 6).hits, 2)
-  assert.equal(skillForm('sj_shadow', 3).hits, 2)
+  assert.equal(skillForm('sj_line',6).hits,2)
+  assert.equal(skillForm('sj_shadow',3).hits,2)
 })
 
 test('cross grows once at rank 7 and keeps one strike per cast', () => {
@@ -105,7 +106,7 @@ test('near crossed crescents settle their shared intersection only once',()=>{
   start(run,'sj_cross')
   const hits=damageEvents(run,.4).filter(e=>e.x===target.x&&e.y===target.y)
   assert.equal(hits.length,1)
-  close(hp-target.hp,p.attack*GROWTH_SKILLS.find(s=>s.id==='sj_cross').damage[0])
+  close(hp-target.hp,p.attack*GROWTH_SKILLS.find(s=>s.id==='sj_cross').damage[0]*500/(500+target.physicalDefense))
   assert.ok(validateTowerSnapshot(run.snapshot()))
 })
 
@@ -124,7 +125,7 @@ test('travel limit uses battlefield boundaries and blocks the middle of a wide b
   assert.ok(limit>=0 && limit<300, `the central arms must meet the north pillar, got ${limit}`)
 })
 
-for (const [id, rank, count] of [['sj_arc',4,1],['sj_arc',7,3]]) {
+for (const [id, rank, count] of [['sj_moon_triple',4,3],['sj_moon_triple',7,3]]) {
   test(`${id} rank ${rank} travels before hit, pierces targets once per wave and preserves total damage`, () => {
     const run=make(id,rank), target=run.state.enemies[0]
     Object.assign(target,{hp:1e6,maxHp:1e6,radius:5,moveSpeed:0})
@@ -133,14 +134,14 @@ for (const [id, rank, count] of [['sj_arc',4,1],['sj_arc',7,3]]) {
     const hits=damageEvents(run,1).filter(e=>e.x===target.x&&e.y===target.y)
     assert.equal(hits.length,count)
     const skill=GROWTH_SKILLS.find(s=>s.id===id)
-    close(1e6-target.hp,run.state.player.attack*skill.damage[rank-1])
+    close(1e6-target.hp,run.state.player.attack*resonanceDamageFactor(run.state.loadout,skill.id)*skill.damage[rank-1]*500/(500+target.physicalDefense))
   })
 }
 
 test('flying blade persists off-screen, holds its direction, stops at the map and cannot hit during dissolve', () => {
-  const run=make('sj_arc',4), enemy=run.state.enemies[0]
+  const run=make('sj_moon_triple',4), enemy=run.state.enemies[0]
   Object.assign(enemy,{hp:1e6,maxHp:1e6,moveSpeed:0})
-  start(run,'sj_arc'); damageEvents(run,.23)
+  start(run,'sj_moon_triple'); damageEvents(run,.23)
   const shot=run.state.projectiles[0]; assert.ok(shot)
   const y=shot.y
   run.setView?.({xmin:-100,xmax:100,ymin:-100,ymax:100})
@@ -154,7 +155,7 @@ test('flying blade persists off-screen, holds its direction, stops at the map an
   close(shot.x,x); close(enemy.hp,hp)
 })
 
-for (const id of ['sj_arc']) {
+for (const id of ['sj_moon_triple']) {
   test(`${id} in-flight and fading snapshots validate, pause and restore deterministically`, () => {
     const run=make(id,7)
     start(run,id); damageEvents(run,.4)
@@ -164,7 +165,7 @@ for (const id of ['sj_arc']) {
     const saved=run.snapshot(), restored=TowerRun.restore(saved)
     run.advance(1);assert.deepEqual(run.snapshot(),saved)
     run.resume();restored.resume()
-    run.advance(.8);restored.advance(.8)
+    run.advance(.55);restored.advance(.55)
     assert.deepEqual(run.snapshot(),restored.snapshot())
     assert.ok(validateTowerSnapshot(run.snapshot()))
     const broken=run.snapshot(), shot=broken.projectiles.find(p=>p.bladeKind)
@@ -174,24 +175,16 @@ for (const id of ['sj_arc']) {
 }
 
 
-test('cross burst hits front, rear and sides once, caps at six and excludes outside targets',()=>{
- const run=make('sj_cross',7),p=run.state.player,template=run.state.enemies[0]
- run.state.pending=[];run.state.reserved=[]
- run.state.enemies=Array.from({length:8},(_,i)=>{
-  const e=structuredClone(template),a=i*Math.PI/3,r=i===7?310:120+i*10
-  Object.assign(e,{id:'burst-'+i,x:p.x+Math.cos(a)*r,y:p.y+Math.sin(a)*r,radius:5,hp:1e6,maxHp:1e6,moveSpeed:0})
-  e.ai.graceUntil=99999;return e
- })
- start(run,'sj_cross');const hits=damageEvents(run,.8).filter(e=>e.source==='sj_cross')
- assert.equal(hits.length,6)
- assert.equal(run.state.enemies.filter(e=>e.hp<1e6).length,6)
- assert.equal(run.state.enemies[7].hp,1e6)
- assert.equal(run.state.projectiles.filter(e=>e.source==='sj_cross').length,0)
- const fx=run.state.effects.find(e=>e.shape==='cross-burst');assert.ok(fx)
- close(fx.x,p.x);close(fx.y,p.y);assert.equal(fx.radius,270)
- const hp=run.state.enemies.map(e=>e.hp);damageEvents(run,.4)
- assert.deepEqual(run.state.enemies.map(e=>e.hp),hp,'afterglow adds no damage')
-})
+for(const turn of [0,Math.PI/2,Math.PI,-Math.PI/2])test(`cross burst hits only its forward half, once, heading ${turn}`,()=>{
+ const run=make('sj_cross',7),p=run.state.player,template=run.state.enemies[0];run.state.pending=[];run.state.reserved=[];
+ const points=[[60,0],[100,70],[100,-70],[-100,0],[-90,60],[-90,-60],[320,0],...Array.from({length:7},(_,i)=>[140+i*5,0])];
+ run.state.enemies=points.map(([x,y],i)=>{const e=structuredClone(template);Object.assign(e,{id:'pair-'+i,x:p.x+x*Math.cos(turn)-y*Math.sin(turn),y:p.y+x*Math.sin(turn)+y*Math.cos(turn),radius:5,hp:1e6,maxHp:1e6,moveSpeed:0});e.ai.graceUntil=99999;return e});
+ start(run,'sj_cross');const hits=damageEvents(run,.8).filter(e=>e.source==='sj_cross');assert.equal(hits.length,8);assert.equal(new Set(hits.map(h=>h.targetId)).size,8);
+ for(const i of [3,4,5,6])assert.equal(run.state.enemies[i].hp,1e6);
+ assert.equal(run.state.projectiles.filter(e=>e.source==='sj_cross').length,0);
+ const fx=run.state.effects.find(e=>e.shape==='cross-burst');assert.ok(fx);assert.equal(fx.angle,180);close(fx.dirX,Math.cos(turn));close(fx.dirY,Math.sin(turn));
+ const hp=run.state.enemies.map(e=>e.hp);damageEvents(run,.4);assert.deepEqual(run.state.enemies.map(e=>e.hp),hp);
+});
 
 test('cross burst remains centered at release during movement, pause and save restore',()=>{
  const run=make('sj_cross',4),p=run.state.player,e=run.state.enemies[0]

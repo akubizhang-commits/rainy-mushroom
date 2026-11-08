@@ -4,12 +4,13 @@ import { FORGING_RECIPES } from './TowerForging'
 import { equipmentSourceLabel } from './TowerEquipmentSources'
 import { ALCHEMY_MATERIALS, ALCHEMY_RECIPES } from './TowerAlchemy'
 import { CULTIVATION_PILL_UNLOCK_HINT } from './TowerPills'
+import { LORE_VOLUME, LORE_ENTRIES } from './TowerLore'
 // Read-only encyclopedia for the sect/tower mode. Values come from the same
 // definitions and ranges as crafting/combat; no inventory or save is consulted.
 import { CAMP_PILLS, breakthroughDescription, TOWER_XP_CAP, cultivationAt } from './TowerProfile'
 import { WEAPONS, WEAPON_BASE_ATTACK, createFixedWeapon, weaponDescription } from './TowerWeapons'
 import { EQUIPMENT, createFixedEquipment, equipmentDescription } from './TowerEquipment'
-import { OPEN_EQUIPMENT_TIERS, equipmentTier, equipmentTierRequirement, isStarterEquipment } from './TowerEquipmentTiers'
+import { OPEN_EQUIPMENT_TIERS, equipmentTier, equipmentRequirement, isStarterEquipment } from './TowerEquipmentTiers'
 
 function freeze(value) {
   if (value && typeof value === 'object') {
@@ -26,26 +27,31 @@ const equipmentDefinitions = new Map([...WEAPONS, ...EQUIPMENT].filter(tierIsOpe
 // Only accepted runtime art belongs here. Missing art leaves a text placeholder;
 // it must never borrow another item's identity or hide its encyclopedia entry.
 const illustrated = new Set([
-  'eq_sword_iron', 'eq_sword_suwen', 'eq_sword_songfeng', 'eq_sword_shoushan',
+  'eq_sword_iron', 'eq_sword_suwen', 'eq_sword_songfeng', 'eq_sword_qingfeng', 'eq_sword_wangshu', 'eq_sword_biluo', 'eq_sword_qiyao', 'eq_sword_jinghong', 'eq_sword_xiaohan', 'eq_sword_tianshu', 'eq_sword_xuanwei', 'eq_sword_zhuiri', 'eq_sword_luotian', 'eq_sword_zhaoyuan', 'eq_sword_taiheng', 'eq_sword_shoushan',
   'eq_sword_guiyan', 'eq_sword_caiyun', 'eq_sword_panxi', 'eq_sword_liuquan',
-  'eq_sword_ningshuang', 'eq_sword_xingluo', 'eq_sword_lingxi', 'eq_sword_zhaodan', 'eq_sword_dingyue', 'eq_sword_tingyu', 'eq_sword_qingxiao', 'eq_sword_liuxia', 'eq_sword_hanguang', 'eq_sword_duanliu', 'eq_sword_hechuan', 'eq_sword_xuanjun', 'eq_sword_zhufeng', 'eq_sword_zhenyue', 'eq_armor_basic', 'eq_armor_qingma', 'eq_armor_chentie', 'eq_armor_bichen', 'eq_armor_yunwen', 'eq_armor_houlin', 'eq_armor_liufeng', 'eq_armor_ninglu', 'eq_armor_fushan', 'eq_armor_dangyu', 'eq_armor_shouyi', 'eq_armor_zhenyue', 'eq_armor_huilan', 'eq_armor_mingche', 'eq_armor_humai', 'eq_armor_jingbo', 'eq_armor_jinsuo', 'eq_armor_yuheng',
+  'eq_sword_ningshuang', 'eq_sword_xingluo', 'eq_sword_lingxi', 'eq_sword_zhaodan', 'eq_sword_dingyue', 'eq_sword_tingyu', 'eq_sword_qingxiao', 'eq_sword_liuxia', 'eq_sword_hanguang', 'eq_sword_duanliu', 'eq_sword_hechuan', 'eq_sword_chengming', 'eq_sword_kunwu', 'eq_sword_xuanjun', 'eq_sword_zhufeng', 'eq_sword_zhenyue', 'eq_armor_basic', 'eq_armor_qingma', 'eq_armor_chentie', 'eq_armor_bichen', 'eq_armor_yunwen', 'eq_armor_houlin', 'eq_armor_liufeng', 'eq_armor_ninglu', 'eq_armor_fushan', 'eq_armor_dangyu', 'eq_armor_shouyi', 'eq_armor_zhenyue', 'eq_armor_huilan', 'eq_armor_mingche', 'eq_armor_humai', 'eq_armor_jingbo', 'eq_armor_jinsuo', 'eq_armor_yuheng', 'eq_armor_panshi', 'eq_armor_chengxiao', 'eq_armor_wugou', 'eq_armor_xuansu', 'eq_armor_xingmu', 'eq_armor_taisu', 'eq_armor_budong', 'eq_armor_wuyin',
   'eq_ring_basic', 'eq_ring_anxi', 'eq_ring_huyuan', 'eq_ring_dingxin',
-  'eq_ring_qinglu', 'eq_ring_wenmai', 'eq_ring_wenpo', 'eq_ring_shoudan', 'eq_ring_huichun', 'eq_ring_changning', 'eq_ring_xuxi', 'eq_ring_huming', 'eq_ring_hanyuan', 'eq_ring_guizhen', 'eq_ring_ningyuan', 'eq_ring_bujing',
+  'eq_ring_qinglu', 'eq_ring_wenmai', 'eq_ring_wenpo', 'eq_ring_shoudan', 'eq_ring_huichun', 'eq_ring_changning', 'eq_ring_xuxi', 'eq_ring_huming', 'eq_ring_hanyuan', 'eq_ring_guizhen', 'eq_ring_ningyuan', 'eq_ring_bujing', 'eq_ring_jingshui', 'eq_ring_dingwei', 'eq_ring_guyuan', 'eq_ring_zhuixing', 'eq_ring_zhenxin', 'eq_ring_chengshen', 'eq_ring_shouzhen', 'eq_ring_guiyuan', 'eq_ring_taihe', 'eq_ring_weiming',
 ])
 const affinityNames = { general: '长剑', qi: '剑气长剑', formation: '剑阵长剑' }
 const categoryNames = { armor: '防具', ring: '戒指' }
 export const LIBRARY_QUALITY_NAMES = freeze(['不入品', '下品', '中品', '上品', '极品'])
 export const LIBRARY_VOLUMES = freeze([
+  { ...LORE_VOLUME },
   { id: 'pills', name: '丹药录', subtitle: '药性与服用' },
   { id: 'weapons', name: '兵器谱', subtitle: '锋刃与用法' },
   { id: 'equipment', name: '百器鉴', subtitle: '法衣与灵戒' },
   { id: 'materials', name: '材料录', subtitle: '灵材与用途' },
 ])
 export const LIBRARY_ENTRIES = freeze([
+  ...LORE_ENTRIES.map(e => ({
+    id: e.id, volume: LORE_VOLUME.id, chapter: e.chapter, name: e.name, category: e.category,
+    icon: '', description: e.body, qualities: [0],
+  })),
   ...Object.entries(CAMP_PILLS).map(([id, pill]) => ({
     id: `pill_${id}`, volume: pill.material ? 'materials' : 'pills', chapter: pill.material ? (pill.successChance ? '突破灵材篇' : pill.craftingType === 'forge' ? '炼器材料篇' : '炼丹材料篇') : '丹药篇', name: pill.name,
-    category: pill.material ? (pill.successChance ? '突破灵材' : pill.craftingType==='forge'?'炼器材料':'炼丹材料') : pill.successChance ? '突破丹药' : pill.healShare ? '疗伤丹药' : '修为丹药',
-    icon: ['forge_xuantie','forge_lingmu','forge_yaopi','forge_lingsi','forge_lingyu','forge_tiejing','forge_hanjingsha','forge_chitongjing','forge_zijingsui','forge_ninglingjing','forge_core_fa','forge_core_bao','forge_core_ling'].includes(id) ? `tower-stones/pill_${id}` : ['huichuncao','bailuhua','huangjing','lingshenxu','ningluzhi','linglu','yusuizhi','zilinghua','jinsuiguo','yangyuan','zhenyuan','zifu','heqi','ningqi','xuming','zhixue','huichun','peiyuan','zhuji','ningyuan','ningdan','jiuzhuan','xiaoyue','chilin'].includes(id) ? `tower-stones/pill_${id}` : '', description: pill.description, qualities: [0],
+    category: pill.material ? (pill.successChance ? '突破灵材' : pill.craftingType==='forge'?'炼器材料':'炼丹材料') : pill.restoreSpirit ? '恢复灵力' : pill.successChance ? '突破丹药' : pill.healShare ? '疗伤丹药' : '修为丹药',
+    icon: ['forge_xuantie','forge_lingmu','forge_yaopi','forge_lingsi','forge_lingyu','forge_tiejing','forge_hanjingsha','forge_chitongjing','forge_zijingsui','forge_ninglingjing','forge_core_fa','forge_core_bao','forge_core_ling'].includes(id) ? `tower-stones/pill_${id}` : ['huiling','huichuncao','bailuhua','huangjing','lingshenxu','ningluzhi','linglu','yusuizhi','zilinghua','jinsuiguo','yangyuan','zhenyuan','zifu','heqi','ningqi','xuming','zhixue','huichun','peiyuan','zhuji','ningyuan','ningdan','jiuzhuan','xiaoyue','chilin'].includes(id) ? `tower-stones/pill_${id}` : '', description: pill.description, qualities: [0],
   })),
   ...WEAPONS.filter(tierIsOpen).map(d => ({
     id: d.id, volume: 'weapons', chapter: '长剑篇', name: d.name,
@@ -109,11 +115,26 @@ function materialDetails(entry) {
   }
 }
 
+// Lore pages carry their own section titles; item-only fields stay empty so the
+// reader never labels world text as an effect, requirement or source.
+function loreDetails(entry) {
+  const lore = LORE_ENTRIES.find(e => e.id === entry.id)
+  return { lore: true, summary: lore.summary, requirement: '', effects: [], conditions: [], tips: [], source: '', note: '',
+    sections: lore.sections.map(s => ({ title: s.title, lines: [...s.lines] })) }
+}
 function pillDetails(entry) {
   const id = entry.id.slice('pill_'.length), pill = CAMP_PILLS[id]
   const recipe = ALCHEMY_RECIPES[id]
   const recipeText = recipe ? `配方：${recipe.ingredients.map(i => `${CAMP_PILLS[i.id].name}×${i.count}`).join('＋')}；炼费${recipe.spiritStoneCost}下品灵石／炉，确定产出1颗。` : ''
 
+  if (pill.restoreSpirit) return {
+    summary:'补充灵力值，供塔内持续施法。',requirement:'境界要求：无',
+    effects:[pill.description],
+    conditions:['塔内灵力值不足施法时自动服用，每次消耗1颗；灵力充足时不消耗。','没有可用丹药时，技能等待灵力恢复，普攻继续。'],
+    tips:['战斗中每秒恢复灵力上限的3%；脱战满3秒后提升到10%；离开副本立即回满。',recipeText],
+    source:`丹霞峰 · 购买或炼制 · ${number(pill.price)}下品灵石／颗`,
+    note:'新角色附赠3颗。自动服用会显示提示；药效和库存随战斗保存，暂停不计时。',
+  }
   if (pill.successChance) return {
     summary: `${pill.from}突破${pill.target}。`, requirement: `境界要求：${pill.from}十层满修为`,
     effects: [breakthroughDescription(pill)],
@@ -140,7 +161,7 @@ function pillDetails(entry) {
 function initialDetails(d, entry) {
   return {
     summary: entry.volume === 'weapons' ? '初入宗门时的基础长剑。' : '初入宗门时的基础装备。',
-    requirement: '境界要求：无',
+    requirement: `穿戴要求：${equipmentRequirement(d)}`,
     effects: entry.volume === 'weapons' ? weaponDescription(createFixedWeapon(d.id, 'iron'))
       : equipmentDescription(createFixedEquipment(d.id, `basic-${d.category}`)),
     conditions: ['穿戴在对应装备位后生效。'],
@@ -171,13 +192,14 @@ function fixedDetails(d, common) {
 export function libraryDetails(id, quality) {
   const entry = entriesById.get(id)
   if (!entry) return null
+  if (entry.volume === LORE_VOLUME.id) return freeze(loreDetails(entry))
   if (entry.volume === 'materials') return freeze(materialDetails(entry))
   if (entry.volume === 'pills') return freeze(pillDetails(entry))
   const d = equipmentDefinitions.get(id)
   const selected = d.qualities.includes(quality) ? quality : d.qualities[0]
   if (isStarterEquipment({ definitionId: id, quality: selected })) return freeze(initialDetails(d, entry))
   const common = {
-    requirement: `境界要求：${equipmentTierRequirement(d.tier)}`,
+    requirement: `穿戴要求：${equipmentRequirement(d)}`,
     note: '这里展示此装备唯一品质的固定属性；炼制仅随机产物名称。',
   }
   return freeze(fixedDetails(d, common))

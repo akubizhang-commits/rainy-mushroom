@@ -5,6 +5,7 @@ import { TowerCampaignStore, TOWER_CAMPAIGN_KEY, combatLoadout } from '../js/xia
 import { createIronWeapon, rollWeapon } from '../js/xianxia/TowerWeapons.js'
 import { TowerRun, validateTowerSnapshot } from '../js/xianxia/TowerRun.js'
 import { growthSummary } from '../js/xianxia/TowerGrowth.js'
+import {freshPills, cultivationAt} from '../js/xianxia/TowerProfile.js'
 import { checksum } from '../js/xianxia/Checksum.js'
 
 const clone = value => JSON.parse(JSON.stringify(value))
@@ -68,7 +69,7 @@ test('battle level healing checkpoints atomically, survives reload and is not re
   assert.ok(enemy)
   enemy.ai.graceUntil = 999999
   enemy.x = -700; enemy.y = -900
-  run._damageEnemy({ target: enemy.id, damage: enemy.hp, direct: false, scaled: true, source: 'fixture' })
+  run._damageEnemy({ target: enemy.id, damage: enemy.hp * 100, direct: false, scaled: true, source: 'fixture' })
   run.advance(1 / 60)
   run.pause()
   const snapshot = run.snapshot()
@@ -94,18 +95,17 @@ test('battle level healing checkpoints atomically, survives reload and is not re
   assert.equal(new TowerCampaignStore(disk, 0).state.hp, snapshot.player.hp)
 })
 
-for (const [xp, expectedHpAfterMinute] of [
-  [44, 11.08], [1484, 10 + 1.08 ** 8 * 1.35], [5399, 10 + 1.08 ** 16 * 1.35 ** 2],
-]) {
+for (const [xp,id,gain] of [[44,'peiyuan',50],[1484,'peiyuan',50],[5399,'heqi',100]]) {
   test(`camp pill crossing a level from ${xp} XP keeps existing HP and natural regeneration`, () => {
-    const { disk, store } = fixture({ xp, hp: 10, clearedFloor: 1, pills: { zhuji: 0, huichun: 3, peiyuan: 1 } })
-    assert.ok(store.act({ type: 'usePill', id: 'peiyuan' }, 0).ok)
-    assert.equal(store.state.xp, xp + 50)
-    assert.equal(store.state.hp, 10, 'battle-only level healing is not applied to camp pills')
-    const reloaded = new TowerCampaignStore(disk, 0)
-    assert.equal(reloaded.state.hp, 10)
-    assert.ok(reloaded.act({ type: 'sync' }, 60000).ok)
-    assert.ok(Math.abs(reloaded.state.hp - expectedHpAfterMinute) < 1e-9)
+    const {disk,store}=fixture({xp,hp:10,clearedFloor:1,pills:{...freshPills(),[id]:1}})
+    assert.equal(store.act({type:'usePill',id},0).ok,true)
+    assert.equal(store.state.xp,xp+gain)
+    assert.equal(store.state.hp,10,'camp leveling never applies battle-only healing')
+    const reloaded=new TowerCampaignStore(disk,0)
+    assert.equal(reloaded.state.hp,10)
+    assert.equal(reloaded.act({type:'sync'},60000).ok,true)
+    const expected=Math.min(cultivationAt(xp+gain).maxHp,10+cultivationAt(xp+gain).maxHp/3)
+    assert.ok(Math.abs(reloaded.state.hp-expected)<1e-9)
   })
 }
 
@@ -135,20 +135,21 @@ test('schema11 starts with bound sword only and cannot upgrade before reaching l
 })
 
 test('realm points are derived from permanent XP and buyBook aliases SP learning without a spirit-stone charge', () => {
-  const { store, disk } = fixture({ xp: 45 })
+  const { store, disk } = fixture({ xp: 120 })
   assert.equal(store.act({ type: 'buyBook', id: 'sj_arc' }, 0).ok, true)
   assert.equal(store.state.skills.sj_arc, 2)
   assert.equal(store.state.spiritStones, 500)
   rejected(store, disk, { type: 'learnSkill', id: 'vajra' }, 'stage-locked')
   const reload = new TowerCampaignStore(disk, 0)
-  rejected(reload, disk, { type: 'learnSkill', id: 'sj_arc' }, 'insufficient-points')
+  assert.equal(reload.act({type:'learnSkill',id:'sj_arc'},0).level,3)
+  rejected(reload, disk, { type: 'learnSkill', id: 'sj_yujian' }, 'insufficient-points')
 })
 
-test('bound tutorial roots cannot be purchased early or reclaimed as free SP', () => {
+test('current starter and learned roots retain realm checks after respec', () => {
   const { store, disk } = fixture({ xp: 10920 })
   assert.equal(store.act({ type: 'learnSkill', id: 'sj_arc' }, 0).ok, true)
   assert.equal(store.act({ type: 'learnSkill', id: 'sj_wanjian' }, 0).ok, true)
-  const bound = fixture({ xp: 120, tutorialWaves: 3, skills: { sj_arc: 1, sj_wanjian: 1 } })
+  const bound = fixture({ xp: 120, tutorialWaves: 3, skills: { sj_arc: 1, sj_yujian: 1 } })
   assert.equal(bound.store.act({ type: 'respecSkills' }, 0).ok, true)
   assert.deepEqual(bound.store.state.skills, {})
   rejected(bound.store, bound.disk, { type: 'learnSkill', id: 'vajra' }, 'stage-locked')
@@ -172,10 +173,10 @@ test('special unlock and first rank cost spirit stones and points together, then
   assert.equal(new TowerCampaignStore(disk, 0).readOnly, false)
 })
 
-test('failed growth actions do not publish books, SP allocation, research or respec', () => {
+test('failed growth actions do not publish books, SP allocation or respec', () => {
   for (const action of [
     { type: 'learnSkill', id: 'sj_shadow' }, { type: 'buyBook', id: 'vajra' },
-    { type: 'researchPoint' }, { type: 'respecSkills' },
+    { type: 'respecSkills' },
   ]) {
     const { store, disk } = fixture({ xp: 10920, clearedFloor: 9, spiritStones: 10000, skills: { sj_yujian: 2 } })
     disk.fail = true
@@ -186,22 +187,14 @@ test('failed growth actions do not publish books, SP allocation, research or res
   }
 })
 
-test('research has only three permanent purchases at 800/1600/2400 with floor3/6/9 gates', () => {
-  for (const [purchases, clear, cost] of [[0, 3, 800], [1, 6, 1600], [2, 9, 2400]]) {
-    const locked = fixture({ researchPurchases: purchases, clearedFloor: clear - 1, spiritStones: 10000 })
-    rejected(locked.store, locked.disk, { type: 'researchPoint' }, 'floor-locked')
-    const { store, disk } = fixture({ researchPurchases: purchases, clearedFloor: clear, spiritStones: 10000 })
-    assert.equal(store.act({ type: 'researchPoint' }, 0).ok, true)
-    assert.equal(store.state.spiritStones, 10000 - cost)
-    assert.equal(new TowerCampaignStore(disk, 0).state.researchPurchases, purchases + 1)
-    if (purchases === 2) rejected(store, disk, { type: 'researchPoint' }, 'max-research')
-  }
+test('retired research never writes or charges at any old gate', () => {
+ for(const clearedFloor of [0,3,6,9]){const {store,disk}=fixture({clearedFloor,spiritStones:10000});rejected(store,disk,{type:'researchPoint'},'retired-research')}
 })
 
 test('all learned skills act automatically regardless of the old four-slot arrays', () => {
   const skills = { sj_yujian: 1, sj_arc: 1, sj_wanjian: 1, sj_line: 1, sj_shadow: 1, sj_formation: 1,
     sj_heart: 1, vajra: 1, sj_spirit: 1, sj_mark: 1, sj_bone: 1, sj_gate: 1 }
-  const books = ['sj_line', 'sj_shadow', 'sj_formation', 'sj_mark', 'sj_bone', 'sj_gate']
+  const books = ['sj_line', 'sj_shadow', 'sj_formation', 'sj_mark', 'sj_gate']
   const { store } = fixture({ xp: 10920, clearedFloor: 9, tutorialWaves: 3, skills, books })
   assert.equal(store.readOnly, false)
   const loadout = combatLoadout(store.state)
@@ -296,32 +289,27 @@ test('playing and unsaved-paused runs cannot learn; saved pause still rejects li
   assert.equal(new TowerCampaignStore(disk, 0).readOnly, false)
 })
 
-test('a real 80-point build spends its exact budget and repeated respec cannot mint points or spirit stones', () => {
-  const { store, disk } = fixture({ xp: 10920, clearedFloor: 9, spiritStones: 10000, researchPurchases: 3,
-    tutorialWaves: 3, skills: { sj_arc: 1 } })
-  const targets = { sj_arc: 10, vajra: 4, sj_bone: 3, sj_flight: 1, sj_spirit: 3, evo_sixiang: 2 }
-  for (const [id, target] of Object.entries(targets)) {
-    while ((store.state.skills[id] || store.state.evolutionRanks[id] || 0) < target) {
-      const result = store.act({ type: 'learnSkill', id }, 0)
-      assert.equal(result.ok, true, `${id}: ${result.reason}`)
-    }
+test('a real 35-point build spends its exact budget and repeated respec cannot mint points or spirit stones', () => {
+  const {store,disk}=fixture({xp:14400,clearedFloor:9,spiritStones:10000})
+  const targets={sj_formation:10,evo_sixiang:2,sj_yujian:3,sj_arc:10,sj_bone:4,vajra:1}
+  for(const [id,target] of Object.entries(targets)) while((store.state.skills[id]||store.state.evolutionRanks[id]||0)<target){
+    const result=store.act({type:'learnSkill',id},0);assert.equal(result.ok,true,`${id}: ${result.reason}`)
   }
-  assert.deepEqual(growthSummary(store.state),
-    { total: 80, spent: 80, available: 0, realm: 48, firstClear: 20, research: 12, cap: 80 })
-  assert.equal(store.state.spiritStones, 7500)
-  rejected(store, disk, { type: 'learnSkill', id: 'sj_yujian' }, 'insufficient-points')
-  assert.deepEqual(new TowerCampaignStore(disk, 0).state, store.state)
-  assert.equal(store.act({ type: 'respecSkills' }, 0).returned, 81)
-  assert.equal(store.act({ type: 'respecSkills' }, 0).returned, 0)
-  assert.equal(growthSummary(store.state).available, 81)
-  assert.equal(store.state.spiritStones, 7500)
-  assert.deepEqual(store.state.books, ['sj_bone', 'evo_sixiang'])
-  assert.equal(store.state.researchPurchases, 3)
+  assert.deepEqual(growthSummary(store.state),{total:35,spent:35,available:0,realm:35,firstClear:0,research:0,cap:35})
+  assert.equal(store.state.spiritStones,7400)
+  rejected(store,disk,{type:'learnSkill',id:'sj_flight'},'insufficient-points')
+  assert.deepEqual(new TowerCampaignStore(disk,0).state,store.state)
+  assert.equal(store.act({type:'respecSkills'},0).returned,36)
+  assert.equal(store.act({type:'respecSkills'},0).returned,0)
+  assert.equal(growthSummary(store.state).available,36)
+  assert.equal(store.state.spiritStones,7400)
+  assert.deepEqual(store.state.books,['sj_formation','evo_sixiang'])
+  assert.equal(store.state.researchPurchases,0)
 })
 
 test('weapon-only presets retain three choices and cannot switch learned skills off', () => {
   // This early-level preset test must use a legal Huang weapon.
-  const weapon = rollWeapon('fan', 4, () => 0, 'weapon-1')
+  const weapon = rollWeapon('fan', 1, () => 0, 'weapon-1')
   const { store, disk } = fixture({ xp: 225, skills: { sj_yujian: 2, vajra: 1 },
     weapons: { iron: createIronWeapon(), 'weapon-1': weapon },
     weaponCounters: { iron: 0, 'weapon-1': 0 }, weaponSequence: 1 })
@@ -408,11 +396,11 @@ test('schema11 reload checks the Run entry XP and normal-core counter even when 
 })
 
 for (const schema of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]) {
-  test(`schema${schema} resets all old progression once and preserves subsequent schema11 spending`, () => {
+  test(`schema${schema} resets all old progression once and preserves subsequent current-schema spending`, () => {
     const disk = storage(), now = 12345
     const old = legacy({ xp: 10920, hp: 37, cores: 777, contribution: 888,
       skills: { sj_yujian: 5, sj_line: 3 }, books: ['sj_line'],
-      tutorialDone: true, tutorialWaves: 3, researchPurchases: 3, clearedFloor: 9,
+      tutorialDone: true, tutorialWaves: 3, researchPurchases: 0, clearedFloor: 9,
       evolutionRanks: {}, lastResult: { outcome: 'won', floor: 9, firstClear: true,
         earned: { xp: 10, cores: 30, contribution: 50 } },
     })
@@ -421,7 +409,7 @@ for (const schema of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]) {
     assert.equal(store.readOnly, false, store.error)
     assert.deepEqual(store.state, new TowerCampaignStore(storage(), now).state)
     assert.deepEqual([store.state.spiritStones, store.state.contribution, store.state.xp, store.state.hp],
-      [500, 300, 0, 100])
+      [500, 1000, 0, 100])
     assert.deepEqual(store.migrationReport, { reset: true, fromSchema: schema })
     assert.equal(JSON.parse(disk.raw).schema, currentCampaignSchema)
     assert.equal(disk.writes, 1)
@@ -431,8 +419,8 @@ for (const schema of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]) {
     assert.deepEqual(reload.state, store.state)
     assert.equal(disk.raw, raw)
     assert.equal(disk.writes, 1)
-    assert.ok(reload.act({ type: 'drawWeapon' }, now + 1000).ok)
-    assert.equal(reload.state.spiritStones, 400)
+    assert.ok(reload.act({ type: 'buyPill',id:'huichun',count:1 }, now + 1000).ok)
+    assert.equal(reload.state.spiritStones, 495)
     const spent = new TowerCampaignStore(disk, now + 2000)
     assert.deepEqual(spent.state, reload.state)
     assert.equal(spent.migrationReport, null)
@@ -514,18 +502,9 @@ test('book and research purchases reject low spirit-stone balances without spend
   const book = fixture({ xp: 10920, clearedFloor: 1, spiritStones: 199, skills: { sj_yujian: 2 } })
   rejected(book.store, book.disk, { type: 'learnSkill', id: 'sj_shadow' }, 'insufficient')
   assert.deepEqual(book.store.state.books, [])
-  for (const [researchPurchases, clearedFloor, cost] of [[0, 3, 800], [1, 6, 1600], [2, 9, 2400]]) {
-    const low = fixture({ researchPurchases, clearedFloor, spiritStones: cost - 1 })
-    rejected(low.store, low.disk, { type: 'researchPoint' }, 'insufficient')
-    const exact = fixture({ researchPurchases, clearedFloor, spiritStones: cost })
-    const before = growthSummary(exact.store.state)
-    const result = exact.store.act({ type: 'researchPoint' }, 0)
-    assert.equal(result.ok, true)
-    assert.equal(result.cost, cost)
-    assert.equal(exact.store.state.spiritStones, 0)
-    assert.equal(exact.store.state.contribution, 300)
-    assert.equal(growthSummary(exact.store.state).total, before.total + 4)
-    assert.deepEqual(new TowerCampaignStore(exact.disk, 0).state, exact.store.state)
+  for(const spiritStones of [0,799,800,1600,2400,10000]){
+    const f=fixture({clearedFloor:9,spiritStones})
+    rejected(f.store,f.disk,{type:'researchPoint'},'retired-research')
   }
 })
 

@@ -1,4 +1,5 @@
 import test from 'node:test'
+import {castActionTiming} from '../js/xianxia/TowerSkillTiming.js'
 import assert from 'node:assert/strict'
 import {readFileSync} from 'node:fs'
 import {stripTypeScriptTypes} from 'node:module'
@@ -40,7 +41,7 @@ function fixture(options){
   const code=stripTypeScriptTypes(readFileSync(new URL('../cocos-pilot/assets/scripts/TowerCharacterArt.ts',import.meta.url),'utf8')
     .replace(/^import .*$/gm,''),{mode:'transform'}).replace(/^export /gm,'')
   const Art=runInNewContext(`(()=>{${code};return TowerCharacterArt})()`,{
-    Node,UITransform,Sprite,SpriteFrame,Texture2D,Graphics,Color,ImageAsset,JsonAsset,Rect,Size,WeaponQualityArt,
+    Node,UITransform,Sprite,SpriteFrame,Texture2D,Graphics,Color,ImageAsset,JsonAsset,Rect,Size,WeaponQualityArt,castActionTiming,
     isValid:n=>n?.isValid===true,equipmentTier:()=>({color:'#fff'}),isStarterEquipment:()=>false,
     resources:{load:(path,Type,done)=>requests.push({path,Type,done})},
   })
@@ -90,7 +91,7 @@ test('seal uses directional frames and simulation timing while sword qi retains 
   assert.ok(art.root.scale.x>0,'never mirror seal hands')
   s.time=10.49;art.draw(parent,s,17,20,true)
   assert.equal(art.body.spriteFrame,art.sealFrames[7],'recover before action ends')
-  s.actions.current.skill='sj_arc';s.actions.current.dirX=1;s.time=10.3
+  s.actions.current.skill='sj_moon';s.actions.current.dirX=1;s.time=10.3
   art.draw(parent,s,17,20,false)
   assert.equal(art.body.spriteFrame,art.frames[6],'sword qi keeps slash')
   s.player.hp=0;art.draw(parent,s,17,20,false);assert.equal(art.root.active,false)
@@ -164,15 +165,17 @@ test('seal asset loader validates and releases its own image without breaking ba
 test('flight sword qi advances riding slash frames, follows riding direction and freezes on pause',()=>{
  const {art,parent,s}=fixture()
  art.atlas.clips.flightSlash={...art.atlas.clips.slash,frames:[2,3,4]}
- for(const skill of ['sj_arc','sj_cross','sj_line','evo_tiandi','basic_attack']){
-  s.player.faceX=-1;s.actions={current:{skill,startedAt:10,releaseAt:10.3,endsAt:10.5,dirX:1}}
+ for(const skill of ['sj_arc','sj_moon','sj_moon_triple','sj_cross','sj_line','evo_tiandi','basic_attack']){
+  const timing=skill==='sj_arc'?castActionTiming(skill,3):null;
+  const releaseAt=10+(timing?.releases[0]??.3),endsAt=10+(timing?.duration??.5);
+  s.player.faceX=-1;s.actions={current:{skill,startedAt:10,releaseAt,endsAt,dirX:1,hits:skill==='sj_arc'?3:1,speed:0}}
   s.time=10.1;art.draw(parent,s,0,0,true)
   assert.equal(art.body.spriteFrame,art.frames[2],skill+' flight windup')
-  s.time=10.3;art.draw(parent,s,0,0,true)
+  s.time=releaseAt;art.draw(parent,s,0,0,true)
   assert.equal(art.body.spriteFrame,art.frames[3],skill+' flight release')
   assert.equal(art.visibleFacing,-1,'feet must face with riding sword')
   const frame=art.body.spriteFrame,pos={...art.root.position}
   art.draw(parent,s,0,0,true);assert.equal(art.body.spriteFrame,frame);assert.deepEqual(art.root.position,pos)
-  s.time=10.51;art.draw(parent,s,0,0,true);assert.equal(art.body.spriteFrame,art.frames[1])
+  s.time=endsAt+.01;art.draw(parent,s,0,0,true);assert.equal(art.body.spriteFrame,art.frames[1])
  }
 })

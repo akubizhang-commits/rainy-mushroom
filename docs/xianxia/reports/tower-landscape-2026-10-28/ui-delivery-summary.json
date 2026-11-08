@@ -1,0 +1,2676 @@
+{
+  "status": "FINAL_DELIVERY_PASS_NO_KNOWN_OPEN_TRUE_FINDINGS",
+  "classification": "MASK_DELIVERY_WITH_SOURCE_BRIDGED_PRIOR_MATRIX",
+  "generatedAt": "2026-10-28T06:04:28.949Z",
+  "counts": {
+    "cases": 13,
+    "passed": 13,
+    "checks": 76,
+    "clicks": 146,
+    "drags": 23,
+    "releases": 10,
+    "keyEvents": 14,
+    "resizes": 14,
+    "screenshots": 72
+  },
+  "mainBundle": {
+    "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/assets/main/index.02690.js",
+    "sha256": "02d66ceb5c716e0a6d05149805e361c02ae0c306842e7dc1886a792a179af2cc"
+  },
+  "errors": {
+    "page": 0,
+    "console": 0,
+    "http": 0,
+    "request": 0,
+    "invalidLabels": 0
+  },
+  "warnings": {
+    "[WebGL]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels": 15,
+    "[WebGL]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)": 5,
+    "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize": 121,
+    "'%s' is deprecated. (setting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.setFrameSize": 34,
+    "Setting window size is not supported.": 34
+  },
+  "visualFindings": [
+    {
+      "id": "VIS-01",
+      "status": "CLOSED",
+      "description": "Arena floor and wall render outside the intended letterboxed game root. Automated logical bounds/input tests passed but do not test render clipping.",
+      "viewports": [
+        "1920x280",
+        "3840x1080"
+      ],
+      "evidence": [
+        "ui-delivery-letterbox-overflow-1920x280.png",
+        "ui-delivery-letterbox-overflow-3840x1080.png"
+      ],
+      "priorStatus": "REPORTED_NOT_FIXED_PARENT_REQUESTED_RELEASE",
+      "closedByBundle": {
+        "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/assets/main/index.02690.js",
+        "sha256": "02d66ceb5c716e0a6d05149805e361c02ae0c306842e7dc1886a792a179af2cc"
+      },
+      "closureEvidence": [
+        {
+          "size": "1920x280",
+          "before": "/Users/zhangnu/WeChatProjects/rainy-mushroom/docs/xianxia/reports/tower-landscape-2026-10-28/ui-delivery-mask-1920x280-mask-letterbox-before-world.png",
+          "after": "/Users/zhangnu/WeChatProjects/rainy-mushroom/docs/xianxia/reports/tower-landscape-2026-10-28/ui-delivery-mask-1920x280-mask-letterbox-wall-clipped.png",
+          "bands": [
+            {
+              "side": "left",
+              "rect": [
+                0,
+                0,
+                638,
+                280
+              ],
+              "pixels": 178640,
+              "changedPixelsBeyondOneRGBLevel": 0,
+              "maximumRGBDifference": 0
+            },
+            {
+              "side": "right",
+              "rect": [
+                1282,
+                0,
+                1920,
+                280
+              ],
+              "pixels": 178640,
+              "changedPixelsBeyondOneRGBLevel": 0,
+              "maximumRGBDifference": 0
+            }
+          ],
+          "examinedPixels": 357280,
+          "changedPixels": 0
+        },
+        {
+          "size": "3840x1080",
+          "before": "/Users/zhangnu/WeChatProjects/rainy-mushroom/docs/xianxia/reports/tower-landscape-2026-10-28/ui-delivery-mask-3840x1080-mask-letterbox-before-world.png",
+          "after": "/Users/zhangnu/WeChatProjects/rainy-mushroom/docs/xianxia/reports/tower-landscape-2026-10-28/ui-delivery-mask-3840x1080-mask-letterbox-wall-clipped.png",
+          "bands": [
+            {
+              "side": "left",
+              "rect": [
+                0,
+                0,
+                683,
+                1080
+              ],
+              "pixels": 737640,
+              "changedPixelsBeyondOneRGBLevel": 0,
+              "maximumRGBDifference": 0
+            },
+            {
+              "side": "right",
+              "rect": [
+                3157,
+                0,
+                3840,
+                1080
+              ],
+              "pixels": 737640,
+              "changedPixelsBeyondOneRGBLevel": 0,
+              "maximumRGBDifference": 0
+            }
+          ],
+          "examinedPixels": 1475280,
+          "changedPixels": 0
+        }
+      ],
+      "parentConfirmed": true
+    }
+  ],
+  "externalFinding": {
+    "status": "FIX_VERIFIED_IN_FINAL_BUNDLE",
+    "description": "Rawls sector atan2 faceX || 1 turns zero into one; parent changed to nullish fallback. Targeted 844 tree/input/hex and vertical Graphics arc verification required."
+  },
+  "cases": [
+    {
+      "source": "ui-browser-delivery-phone.json",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "kind": "hex",
+      "ok": true,
+      "checks": 12,
+      "clicks": 22,
+      "drags": 3,
+      "screenshots": [
+        "ui-delivery-phone-844x390-hex-tree-current-build.png",
+        "ui-delivery-phone-844x390-hex-camp-pointer-preview.png",
+        "ui-delivery-phone-844x390-hex-tools-modal.png",
+        "ui-delivery-phone-844x390-hex-hex-spawn.png",
+        "ui-delivery-phone-844x390-hex-hex-diagonal-wall.png",
+        "ui-delivery-phone-844x390-hex-hex-pause.png",
+        "ui-delivery-phone-844x390-hex-hex-paused-skills.png",
+        "ui-delivery-phone-844x390-hex-hex-orientation-390x844.png",
+        "ui-delivery-phone-844x390-hex-hex-orientation-844x390.png",
+        "ui-delivery-phone-844x390-hex-hex-reload.png"
+      ]
+    },
+    {
+      "source": "ui-browser-delivery-ranged.json",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "kind": "ranged",
+      "ok": true,
+      "checks": 1,
+      "clicks": 3,
+      "drags": 0,
+      "screenshots": [
+        "ui-delivery-ranged-1280x720-ranged-real-ranged-emit-1.png",
+        "ui-delivery-ranged-1280x720-ranged-real-ranged-paused.png"
+      ]
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "kind": "hex",
+      "ok": true,
+      "checks": 8,
+      "clicks": 14,
+      "drags": 2,
+      "screenshots": [
+        "ui-delivery-rest-1280x720-hex-tools-modal.png",
+        "ui-delivery-rest-1280x720-hex-hex-spawn.png",
+        "ui-delivery-rest-1280x720-hex-hex-diagonal-wall.png",
+        "ui-delivery-rest-1280x720-hex-hex-pause.png",
+        "ui-delivery-rest-1280x720-hex-hex-paused-skills.png",
+        "ui-delivery-rest-1280x720-hex-hex-orientation-390x844.png",
+        "ui-delivery-rest-1280x720-hex-hex-orientation-1280x720.png",
+        "ui-delivery-rest-1280x720-hex-hex-reload.png"
+      ]
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "kind": "hex",
+      "ok": true,
+      "checks": 8,
+      "clicks": 14,
+      "drags": 2,
+      "screenshots": [
+        "ui-delivery-rest-1024x768-hex-tools-modal.png",
+        "ui-delivery-rest-1024x768-hex-hex-spawn.png",
+        "ui-delivery-rest-1024x768-hex-hex-diagonal-wall.png",
+        "ui-delivery-rest-1024x768-hex-hex-pause.png",
+        "ui-delivery-rest-1024x768-hex-hex-paused-skills.png",
+        "ui-delivery-rest-1024x768-hex-hex-orientation-390x844.png",
+        "ui-delivery-rest-1024x768-hex-hex-orientation-1024x768.png",
+        "ui-delivery-rest-1024x768-hex-hex-reload.png"
+      ]
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "kind": "hex",
+      "ok": true,
+      "checks": 8,
+      "clicks": 15,
+      "drags": 2,
+      "screenshots": [
+        "ui-delivery-rest-390x844-hex-tools-modal.png",
+        "ui-delivery-rest-390x844-hex-hex-spawn.png",
+        "ui-delivery-rest-390x844-hex-hex-diagonal-wall.png",
+        "ui-delivery-rest-390x844-hex-hex-pause.png",
+        "ui-delivery-rest-390x844-hex-hex-paused-skills.png",
+        "ui-delivery-rest-390x844-hex-hex-orientation-844x390.png",
+        "ui-delivery-rest-390x844-hex-hex-orientation-390x844.png",
+        "ui-delivery-rest-390x844-hex-hex-reload.png"
+      ]
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "viewport": {
+        "width": 1920,
+        "height": 280
+      },
+      "kind": "hex",
+      "ok": true,
+      "checks": 9,
+      "clicks": 16,
+      "drags": 3,
+      "screenshots": [
+        "ui-delivery-rest-1920x280-hex-tree-current-build.png",
+        "ui-delivery-rest-1920x280-hex-tools-modal.png",
+        "ui-delivery-rest-1920x280-hex-hex-spawn.png",
+        "ui-delivery-rest-1920x280-hex-hex-diagonal-wall.png",
+        "ui-delivery-rest-1920x280-hex-hex-pause.png",
+        "ui-delivery-rest-1920x280-hex-hex-paused-skills.png",
+        "ui-delivery-rest-1920x280-hex-hex-orientation-390x844.png",
+        "ui-delivery-rest-1920x280-hex-hex-orientation-1920x280.png",
+        "ui-delivery-rest-1920x280-hex-hex-reload.png"
+      ]
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "viewport": {
+        "width": 3840,
+        "height": 1080
+      },
+      "kind": "hex",
+      "ok": true,
+      "checks": 9,
+      "clicks": 16,
+      "drags": 5,
+      "screenshots": [
+        "ui-delivery-rest-3840x1080-hex-tree-current-build.png",
+        "ui-delivery-rest-3840x1080-hex-tools-modal.png",
+        "ui-delivery-rest-3840x1080-hex-hex-spawn.png",
+        "ui-delivery-rest-3840x1080-hex-hex-diagonal-wall.png",
+        "ui-delivery-rest-3840x1080-hex-hex-pause.png",
+        "ui-delivery-rest-3840x1080-hex-hex-paused-skills.png",
+        "ui-delivery-rest-3840x1080-hex-hex-orientation-390x844.png",
+        "ui-delivery-rest-3840x1080-hex-hex-orientation-3840x1080.png",
+        "ui-delivery-rest-3840x1080-hex-hex-reload.png"
+      ]
+    },
+    {
+      "source": "ui-browser-delivery-arc.json",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "kind": "hex",
+      "ok": true,
+      "checks": 12,
+      "clicks": 22,
+      "drags": 3,
+      "screenshots": [
+        "ui-delivery-arc-844x390-hex-tree-current-build.png",
+        "ui-delivery-arc-844x390-hex-camp-pointer-preview.png",
+        "ui-delivery-arc-844x390-hex-tools-modal.png",
+        "ui-delivery-arc-844x390-hex-hex-spawn.png",
+        "ui-delivery-arc-844x390-hex-hex-diagonal-wall.png",
+        "ui-delivery-arc-844x390-hex-hex-pause.png",
+        "ui-delivery-arc-844x390-hex-hex-paused-skills.png",
+        "ui-delivery-arc-844x390-hex-hex-orientation-390x844.png",
+        "ui-delivery-arc-844x390-hex-hex-orientation-844x390.png",
+        "ui-delivery-arc-844x390-hex-hex-reload.png"
+      ]
+    },
+    {
+      "source": "ui-browser-delivery-arc.json",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "kind": "sector-up",
+      "ok": true,
+      "checks": 1,
+      "clicks": 0,
+      "drags": 0,
+      "screenshots": [
+        "ui-delivery-arc-844x390-sector-up-compiled-vertical-sector.png"
+      ]
+    },
+    {
+      "source": "ui-browser-delivery-arc.json",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "kind": "sector-down",
+      "ok": true,
+      "checks": 1,
+      "clicks": 0,
+      "drags": 0,
+      "screenshots": [
+        "ui-delivery-arc-844x390-sector-down-compiled-vertical-sector.png"
+      ]
+    },
+    {
+      "source": "ui-browser-delivery-mask.json",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "kind": "mask",
+      "ok": true,
+      "checks": 3,
+      "clicks": 10,
+      "drags": 1,
+      "screenshots": [
+        "ui-delivery-mask-844x390-mask-mask-tree-input.png",
+        "ui-delivery-mask-844x390-mask-mask-fixed-stick.png"
+      ]
+    },
+    {
+      "source": "ui-browser-delivery-mask.json",
+      "viewport": {
+        "width": 1920,
+        "height": 280
+      },
+      "kind": "mask",
+      "ok": true,
+      "checks": 2,
+      "clicks": 7,
+      "drags": 1,
+      "screenshots": [
+        "ui-delivery-mask-1920x280-mask-letterbox-before-world.png",
+        "ui-delivery-mask-1920x280-mask-letterbox-wall-clipped.png"
+      ]
+    },
+    {
+      "source": "ui-browser-delivery-mask.json",
+      "viewport": {
+        "width": 3840,
+        "height": 1080
+      },
+      "kind": "mask",
+      "ok": true,
+      "checks": 2,
+      "clicks": 7,
+      "drags": 1,
+      "screenshots": [
+        "ui-delivery-mask-3840x1080-mask-letterbox-before-world.png",
+        "ui-delivery-mask-3840x1080-mask-letterbox-wall-clipped.png"
+      ]
+    }
+  ],
+  "actualActions": [
+    {
+      "source": "ui-browser-delivery-phone.json",
+      "case": "844x390/hex",
+      "type": "pointer-click",
+      "target": "技能树",
+      "x": 522.225,
+      "y": 358.35,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-phone.json",
+      "case": "844x390/hex",
+      "type": "pointer-click",
+      "target": "技能图标-vajra",
+      "probe": "75% circle radius",
+      "x": 147.69999999999993,
+      "y": 185.28437499999998
+    },
+    {
+      "source": "ui-browser-delivery-phone.json",
+      "case": "844x390/hex",
+      "type": "pointer-click",
+      "target": "技能图标-magnet",
+      "probe": "75% circle radius",
+      "x": 226.825,
+      "y": 185.28437499999998
+    },
+    {
+      "source": "ui-browser-delivery-phone.json",
+      "case": "844x390/hex",
+      "type": "pointer-drag",
+      "label": "clip circle center above Mask",
+      "from": {
+        "x": 291.44374999999997,
+        "y": 261.6625
+      },
+      "to": {
+        "x": 291.44374999999997,
+        "y": 194.275
+      },
+      "holdMs": 0,
+      "release": true
+    },
+    {
+      "source": "ui-browser-delivery-phone.json",
+      "case": "844x390/hex",
+      "type": "pointer-click",
+      "target": "技能图标-vajra",
+      "probe": "outside Mask negative case",
+      "x": 123.96249999999993,
+      "y": 118.28461999999995
+    },
+    {
+      "source": "ui-browser-delivery-phone.json",
+      "case": "844x390/hex",
+      "type": "pointer-click",
+      "target": "技能节点-vajra",
+      "x": 123.96249999999993,
+      "y": 176.30961999999997,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-phone.json",
+      "case": "844x390/hex",
+      "type": "pointer-click",
+      "target": "learnSkill-vajra",
+      "x": 152.97499999999994,
+      "y": 231.69712,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-phone.json",
+      "case": "844x390/hex",
+      "type": "pointer-click",
+      "target": "decreaseSkill-vajra",
+      "x": 94.94999999999995,
+      "y": 231.69712,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-phone.json",
+      "case": "844x390/hex",
+      "type": "pointer-click",
+      "target": "宗门",
+      "x": 121.32499999999995,
+      "y": 358.35,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-phone.json",
+      "case": "844x390/hex",
+      "type": "pointer-click",
+      "target": "体验工具",
+      "x": 422,
+      "y": 203.08750000000003,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-phone.json",
+      "case": "844x390/hex",
+      "type": "pointer-click",
+      "target": "进入独立体验档",
+      "x": 253.19999999999993,
+      "y": 291.26875,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-phone.json",
+      "case": "844x390/hex",
+      "type": "pointer-click",
+      "target": "无敌秒杀：关闭",
+      "x": 590.8000000000001,
+      "y": 266.87187500000005,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-phone.json",
+      "case": "844x390/hex",
+      "type": "pointer-click",
+      "target": "游戏速度 ×3",
+      "x": 253.19999999999993,
+      "y": 266.87187500000005,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-phone.json",
+      "case": "844x390/hex",
+      "type": "pointer-click",
+      "target": "返回宗门",
+      "x": 253.19999999999993,
+      "y": 326.215625,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-phone.json",
+      "case": "844x390/hex",
+      "type": "pointer-click",
+      "target": "锁妖塔",
+      "x": 321.775,
+      "y": 358.35,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-phone.json",
+      "case": "844x390/hex",
+      "type": "pointer-click",
+      "target": "重访第9层",
+      "x": 422,
+      "y": 228.14375,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-phone.json",
+      "case": "844x390/hex",
+      "type": "pointer-drag",
+      "label": "fixed joystick toward northeast diagonal wall",
+      "from": {
+        "x": 97.58749999999993,
+        "y": 285.81874999999997
+      },
+      "to": {
+        "x": 121.32499999999993,
+        "y": 244.27812499999996
+      },
+      "holdMs": 0,
+      "release": false
+    },
+    {
+      "source": "ui-browser-delivery-phone.json",
+      "case": "844x390/hex",
+      "type": "pointer-release",
+      "target": "移动摇杆 diagonal wall"
+    },
+    {
+      "source": "ui-browser-delivery-phone.json",
+      "case": "844x390/hex",
+      "type": "pointer-drag",
+      "label": "right-side field negative",
+      "from": {
+        "x": 641.4399999999999,
+        "y": 206.70000000000002
+      },
+      "to": {
+        "x": 618.3618749999999,
+        "y": 223.18437500000002
+      },
+      "holdMs": 150,
+      "release": true
+    },
+    {
+      "source": "ui-browser-delivery-phone.json",
+      "case": "844x390/hex",
+      "type": "pointer-click",
+      "target": "暂停",
+      "x": 801.1406250000001,
+      "y": 29.671874999999993,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-phone.json",
+      "case": "844x390/hex",
+      "type": "pointer-click",
+      "target": "继续挑战",
+      "x": 253.19999999999993,
+      "y": 242.47500000000002,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-phone.json",
+      "case": "844x390/hex",
+      "type": "key-down",
+      "key": "d"
+    },
+    {
+      "source": "ui-browser-delivery-phone.json",
+      "case": "844x390/hex",
+      "type": "pointer-click",
+      "target": "技能树",
+      "x": 783.996875,
+      "y": 355.71250000000003,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-phone.json",
+      "case": "844x390/hex",
+      "type": "key-up",
+      "key": "d"
+    },
+    {
+      "source": "ui-browser-delivery-phone.json",
+      "case": "844x390/hex",
+      "type": "pointer-click",
+      "target": "技能图标-vajra",
+      "x": 123.96249999999993,
+      "y": 185.28437499999998,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-phone.json",
+      "case": "844x390/hex",
+      "type": "pointer-click",
+      "target": "decreaseSkill-vajra",
+      "x": 94.94999999999995,
+      "y": 298.69687500000003,
+      "enabled": false
+    },
+    {
+      "source": "ui-browser-delivery-phone.json",
+      "case": "844x390/hex",
+      "type": "pointer-click",
+      "target": "learnSkill-vajra",
+      "x": 152.97499999999994,
+      "y": 298.69687500000003,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-phone.json",
+      "case": "844x390/hex",
+      "type": "viewport-resize",
+      "size": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "source": "ui-browser-delivery-phone.json",
+      "case": "844x390/hex",
+      "type": "viewport-resize",
+      "size": {
+        "width": 844,
+        "height": 390
+      }
+    },
+    {
+      "source": "ui-browser-delivery-phone.json",
+      "case": "844x390/hex",
+      "type": "pointer-click",
+      "target": "继续挑战",
+      "x": 253.19999999999993,
+      "y": 242.47500000000002,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-ranged.json",
+      "case": "1280x720/ranged",
+      "type": "pointer-click",
+      "target": "锁妖塔",
+      "x": 488,
+      "y": 672,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-ranged.json",
+      "case": "1280x720/ranged",
+      "type": "pointer-click",
+      "target": "重访第9层",
+      "x": 640,
+      "y": 345.99999999999994,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-ranged.json",
+      "case": "1280x720/ranged",
+      "type": "pointer-click",
+      "target": "暂停",
+      "x": 1215,
+      "y": 45,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "1280x720/hex",
+      "type": "pointer-click",
+      "target": "体验工具",
+      "x": 640,
+      "y": 308,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "1280x720/hex",
+      "type": "pointer-click",
+      "target": "进入独立体验档",
+      "x": 384,
+      "y": 505.99999999999994,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "1280x720/hex",
+      "type": "pointer-click",
+      "target": "无敌秒杀：关闭",
+      "x": 896,
+      "y": 469,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "1280x720/hex",
+      "type": "pointer-click",
+      "target": "游戏速度 ×3",
+      "x": 384,
+      "y": 469,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "1280x720/hex",
+      "type": "pointer-click",
+      "target": "返回宗门",
+      "x": 384,
+      "y": 559,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "1280x720/hex",
+      "type": "pointer-click",
+      "target": "锁妖塔",
+      "x": 488,
+      "y": 672,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "1280x720/hex",
+      "type": "pointer-click",
+      "target": "重访第9层",
+      "x": 640,
+      "y": 345.99999999999994,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "1280x720/hex",
+      "type": "pointer-drag",
+      "label": "fixed joystick toward northeast diagonal wall",
+      "from": {
+        "x": 147.99999999999997,
+        "y": 562
+      },
+      "to": {
+        "x": 183.99999999999997,
+        "y": 499
+      },
+      "holdMs": 0,
+      "release": false
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "1280x720/hex",
+      "type": "pointer-release",
+      "target": "移动摇杆 diagonal wall"
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "1280x720/hex",
+      "type": "pointer-drag",
+      "label": "right-side field negative",
+      "from": {
+        "x": 972.8,
+        "y": 381.6
+      },
+      "to": {
+        "x": 937.8,
+        "y": 406.6
+      },
+      "holdMs": 150,
+      "release": true
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "1280x720/hex",
+      "type": "pointer-click",
+      "target": "暂停",
+      "x": 1215,
+      "y": 45,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "1280x720/hex",
+      "type": "pointer-click",
+      "target": "继续挑战",
+      "x": 384,
+      "y": 432,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "1280x720/hex",
+      "type": "key-down",
+      "key": "d"
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "1280x720/hex",
+      "type": "pointer-click",
+      "target": "技能树",
+      "x": 1189,
+      "y": 668,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "1280x720/hex",
+      "type": "key-up",
+      "key": "d"
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "1280x720/hex",
+      "type": "pointer-click",
+      "target": "技能图标-vajra",
+      "x": 187.99999999999997,
+      "y": 280.99999999999994,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "1280x720/hex",
+      "type": "pointer-click",
+      "target": "decreaseSkill-vajra",
+      "x": 144,
+      "y": 453,
+      "enabled": false
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "1280x720/hex",
+      "type": "pointer-click",
+      "target": "learnSkill-vajra",
+      "x": 231.99999999999994,
+      "y": 453,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "1280x720/hex",
+      "type": "viewport-resize",
+      "size": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "1280x720/hex",
+      "type": "viewport-resize",
+      "size": {
+        "width": 1280,
+        "height": 720
+      }
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "1280x720/hex",
+      "type": "pointer-click",
+      "target": "继续挑战",
+      "x": 384,
+      "y": 432,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "1024x768/hex",
+      "type": "pointer-click",
+      "target": "体验工具",
+      "x": 512,
+      "y": 246.39999999999998,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "1024x768/hex",
+      "type": "pointer-click",
+      "target": "进入独立体验档",
+      "x": 307.2,
+      "y": 500.8,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "1024x768/hex",
+      "type": "pointer-click",
+      "target": "无敌秒杀：关闭",
+      "x": 716.8,
+      "y": 471.2,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "1024x768/hex",
+      "type": "pointer-click",
+      "target": "游戏速度 ×3",
+      "x": 307.2,
+      "y": 471.2,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "1024x768/hex",
+      "type": "pointer-click",
+      "target": "返回宗门",
+      "x": 307.2,
+      "y": 543.2,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "1024x768/hex",
+      "type": "pointer-click",
+      "target": "锁妖塔",
+      "x": 390.4,
+      "y": 729.5999999999999,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "1024x768/hex",
+      "type": "pointer-click",
+      "target": "重访第9层",
+      "x": 512,
+      "y": 276.79999999999995,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "1024x768/hex",
+      "type": "pointer-drag",
+      "label": "fixed joystick toward northeast diagonal wall",
+      "from": {
+        "x": 118.39999999999998,
+        "y": 641.6
+      },
+      "to": {
+        "x": 147.2,
+        "y": 591.2
+      },
+      "holdMs": 0,
+      "release": false
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "1024x768/hex",
+      "type": "pointer-release",
+      "target": "移动摇杆 diagonal wall"
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "1024x768/hex",
+      "type": "pointer-drag",
+      "label": "right-side field negative",
+      "from": {
+        "x": 778.24,
+        "y": 407.04
+      },
+      "to": {
+        "x": 750.24,
+        "y": 427.04
+      },
+      "holdMs": 150,
+      "release": true
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "1024x768/hex",
+      "type": "pointer-click",
+      "target": "暂停",
+      "x": 972,
+      "y": 36,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "1024x768/hex",
+      "type": "pointer-click",
+      "target": "继续挑战",
+      "x": 307.2,
+      "y": 441.59999999999997,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "1024x768/hex",
+      "type": "key-down",
+      "key": "d"
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "1024x768/hex",
+      "type": "pointer-click",
+      "target": "技能树",
+      "x": 951.2,
+      "y": 726.4,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "1024x768/hex",
+      "type": "key-up",
+      "key": "d"
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "1024x768/hex",
+      "type": "pointer-click",
+      "target": "技能图标-vajra",
+      "x": 150.39999999999998,
+      "y": 224.79999999999993,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "1024x768/hex",
+      "type": "pointer-click",
+      "target": "decreaseSkill-vajra",
+      "x": 115.19999999999999,
+      "y": 362.40000000000003,
+      "enabled": false
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "1024x768/hex",
+      "type": "pointer-click",
+      "target": "learnSkill-vajra",
+      "x": 185.59999999999997,
+      "y": 362.40000000000003,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "1024x768/hex",
+      "type": "viewport-resize",
+      "size": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "1024x768/hex",
+      "type": "viewport-resize",
+      "size": {
+        "width": 1024,
+        "height": 768
+      }
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "1024x768/hex",
+      "type": "pointer-click",
+      "target": "继续挑战",
+      "x": 307.2,
+      "y": 441.59999999999997,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "390x844/hex",
+      "type": "pointer-click",
+      "target": "体验工具",
+      "x": 195,
+      "y": 268.66666666666663,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "390x844/hex",
+      "type": "pointer-click",
+      "target": "进入独立体验档",
+      "x": 115.91666666666667,
+      "y": 501.08333333333326,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "390x844/hex",
+      "type": "pointer-click",
+      "target": "无敌秒杀：关闭",
+      "x": 195,
+      "y": 505.4166666666667,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "390x844/hex",
+      "type": "pointer-click",
+      "target": "游戏速度 ×3",
+      "x": 195,
+      "y": 456.6666666666667,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "390x844/hex",
+      "type": "pointer-click",
+      "target": "返回宗门",
+      "x": 195,
+      "y": 554.1666666666666,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "390x844/hex",
+      "type": "pointer-click",
+      "target": "锁妖塔",
+      "x": 148.41666666666666,
+      "y": 810.4166666666666,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "390x844/hex",
+      "type": "pointer-click",
+      "target": "重访第9层",
+      "x": 195,
+      "y": 268.66666666666663,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "390x844/hex",
+      "type": "pointer-drag",
+      "label": "fixed joystick toward northeast diagonal wall",
+      "from": {
+        "x": 80.16666666666666,
+        "y": 758.4166666666666
+      },
+      "to": {
+        "x": 99.66666666666666,
+        "y": 724.2916666666666
+      },
+      "holdMs": 0,
+      "release": false
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "390x844/hex",
+      "type": "pointer-release",
+      "target": "移动摇杆 diagonal wall"
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "390x844/hex",
+      "type": "pointer-drag",
+      "label": "right-side field negative",
+      "from": {
+        "x": 296.4,
+        "y": 447.32000000000005
+      },
+      "to": {
+        "x": 277.44166666666666,
+        "y": 460.86166666666674
+      },
+      "holdMs": 150,
+      "release": true
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "390x844/hex",
+      "type": "pointer-click",
+      "target": "暂停",
+      "x": 354.7916666666667,
+      "y": 24.375000000000025,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "390x844/hex",
+      "type": "pointer-click",
+      "target": "继续挑战",
+      "x": 195,
+      "y": 412.25000000000006,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "390x844/hex",
+      "type": "key-down",
+      "key": "d"
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "390x844/hex",
+      "type": "pointer-click",
+      "target": "暂停",
+      "x": 354.7916666666667,
+      "y": 24.375000000000025,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "390x844/hex",
+      "type": "pointer-click",
+      "target": "技能树 · 可用32点",
+      "x": 195,
+      "y": 461,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "390x844/hex",
+      "type": "key-up",
+      "key": "d"
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "390x844/hex",
+      "type": "pointer-click",
+      "target": "技能图标-vajra",
+      "x": 117,
+      "y": 237.7916666666666,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "390x844/hex",
+      "type": "pointer-click",
+      "target": "decreaseSkill-vajra",
+      "x": 88.83333333333331,
+      "y": 335.2916666666667,
+      "enabled": false
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "390x844/hex",
+      "type": "pointer-click",
+      "target": "learnSkill-vajra",
+      "x": 145.16666666666666,
+      "y": 335.2916666666667,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "390x844/hex",
+      "type": "viewport-resize",
+      "size": {
+        "width": 844,
+        "height": 390
+      }
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "390x844/hex",
+      "type": "viewport-resize",
+      "size": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "390x844/hex",
+      "type": "pointer-click",
+      "target": "继续挑战",
+      "x": 195,
+      "y": 412.25000000000006,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "1920x280/hex",
+      "type": "pointer-click",
+      "target": "技能树",
+      "x": 1036,
+      "y": 256,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "1920x280/hex",
+      "type": "pointer-click",
+      "target": "宗门",
+      "x": 732,
+      "y": 256,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "1920x280/hex",
+      "type": "pointer-click",
+      "target": "体验工具",
+      "x": 960,
+      "y": 154,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "1920x280/hex",
+      "type": "pointer-click",
+      "target": "进入独立体验档",
+      "x": 832,
+      "y": 213,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "1920x280/hex",
+      "type": "pointer-click",
+      "target": "无敌秒杀：关闭",
+      "x": 1088,
+      "y": 194.5,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "1920x280/hex",
+      "type": "pointer-click",
+      "target": "游戏速度 ×3",
+      "x": 832,
+      "y": 194.5,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "1920x280/hex",
+      "type": "pointer-click",
+      "target": "返回宗门",
+      "x": 832,
+      "y": 239.50000000000003,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "1920x280/hex",
+      "type": "pointer-click",
+      "target": "锁妖塔",
+      "x": 884,
+      "y": 256,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "1920x280/hex",
+      "type": "pointer-click",
+      "target": "重访第9层",
+      "x": 960,
+      "y": 173,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "1920x280/hex",
+      "type": "pointer-drag",
+      "label": "fixed joystick toward northeast diagonal wall",
+      "from": {
+        "x": 714,
+        "y": 201
+      },
+      "to": {
+        "x": 732,
+        "y": 169.5
+      },
+      "holdMs": 0,
+      "release": false
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "1920x280/hex",
+      "type": "pointer-release",
+      "target": "移动摇杆 diagonal wall"
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "1920x280/hex",
+      "type": "pointer-drag",
+      "label": "right-side field negative",
+      "from": {
+        "x": 1126.4,
+        "y": 148.4
+      },
+      "to": {
+        "x": 1108.9,
+        "y": 160.9
+      },
+      "holdMs": 150,
+      "release": true
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "1920x280/hex",
+      "type": "pointer-click",
+      "target": "暂停",
+      "x": 1247.5,
+      "y": 22.500000000000014,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "1920x280/hex",
+      "type": "pointer-click",
+      "target": "继续挑战",
+      "x": 832,
+      "y": 176,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "1920x280/hex",
+      "type": "key-down",
+      "key": "d"
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "1920x280/hex",
+      "type": "pointer-click",
+      "target": "技能树",
+      "x": 1234.5,
+      "y": 254,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "1920x280/hex",
+      "type": "key-up",
+      "key": "d"
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "1920x280/hex",
+      "type": "pointer-click",
+      "target": "技能图标-vajra",
+      "x": 734,
+      "y": 140.5,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "1920x280/hex",
+      "type": "pointer-drag",
+      "label": "reveal decreaseSkill-vajra",
+      "from": {
+        "x": 861,
+        "y": 195.75
+      },
+      "to": {
+        "x": 861,
+        "y": 134.25
+      },
+      "holdMs": 0,
+      "release": true
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "1920x280/hex",
+      "type": "pointer-click",
+      "target": "decreaseSkill-vajra",
+      "x": 712,
+      "y": 165.5,
+      "enabled": false
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "1920x280/hex",
+      "type": "pointer-click",
+      "target": "learnSkill-vajra",
+      "x": 756,
+      "y": 165.5,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "1920x280/hex",
+      "type": "viewport-resize",
+      "size": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "1920x280/hex",
+      "type": "viewport-resize",
+      "size": {
+        "width": 1920,
+        "height": 280
+      }
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "1920x280/hex",
+      "type": "pointer-click",
+      "target": "继续挑战",
+      "x": 832,
+      "y": 176,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "3840x1080/hex",
+      "type": "pointer-click",
+      "target": "技能树",
+      "x": 2213.1428571428573,
+      "y": 987.4285714285714,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "3840x1080/hex",
+      "type": "pointer-click",
+      "target": "宗门",
+      "x": 1040.5714285714284,
+      "y": 987.4285714285714,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "3840x1080/hex",
+      "type": "pointer-click",
+      "target": "体验工具",
+      "x": 1920,
+      "y": 594,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "3840x1080/hex",
+      "type": "pointer-click",
+      "target": "进入独立体验档",
+      "x": 1426.2857142857142,
+      "y": 821.5714285714287,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "3840x1080/hex",
+      "type": "pointer-click",
+      "target": "无敌秒杀：关闭",
+      "x": 2413.714285714286,
+      "y": 750.2142857142857,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "3840x1080/hex",
+      "type": "pointer-click",
+      "target": "游戏速度 ×3",
+      "x": 1426.2857142857142,
+      "y": 750.2142857142857,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "3840x1080/hex",
+      "type": "pointer-click",
+      "target": "返回宗门",
+      "x": 1426.2857142857142,
+      "y": 923.7857142857143,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "3840x1080/hex",
+      "type": "pointer-click",
+      "target": "锁妖塔",
+      "x": 1626.857142857143,
+      "y": 987.4285714285714,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "3840x1080/hex",
+      "type": "pointer-click",
+      "target": "重访第9层",
+      "x": 1920,
+      "y": 667.2857142857143,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "3840x1080/hex",
+      "type": "pointer-drag",
+      "label": "fixed joystick toward northeast diagonal wall",
+      "from": {
+        "x": 971.142857142857,
+        "y": 775.2857142857143
+      },
+      "to": {
+        "x": 1040.5714285714284,
+        "y": 653.7857142857142
+      },
+      "holdMs": 0,
+      "release": false
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "3840x1080/hex",
+      "type": "pointer-release",
+      "target": "移动摇杆 diagonal wall"
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "3840x1080/hex",
+      "type": "pointer-drag",
+      "label": "right-side field negative",
+      "from": {
+        "x": 2561.828571428571,
+        "y": 572.4
+      },
+      "to": {
+        "x": 2494.328571428571,
+        "y": 620.6142857142858
+      },
+      "holdMs": 150,
+      "release": true
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "3840x1080/hex",
+      "type": "pointer-click",
+      "target": "暂停",
+      "x": 3028.9285714285716,
+      "y": 86.78571428571422,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "3840x1080/hex",
+      "type": "pointer-click",
+      "target": "继续挑战",
+      "x": 1426.2857142857142,
+      "y": 678.8571428571429,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "3840x1080/hex",
+      "type": "key-down",
+      "key": "d"
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "3840x1080/hex",
+      "type": "pointer-click",
+      "target": "技能树",
+      "x": 2978.785714285714,
+      "y": 979.7142857142857,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "3840x1080/hex",
+      "type": "key-up",
+      "key": "d"
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "3840x1080/hex",
+      "type": "pointer-click",
+      "target": "技能图标-vajra",
+      "x": 1048.285714285714,
+      "y": 541.9285714285714,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "3840x1080/hex",
+      "type": "pointer-drag",
+      "label": "reveal decreaseSkill-vajra",
+      "from": {
+        "x": 1538.1428571428573,
+        "y": 755.0357142857142
+      },
+      "to": {
+        "x": 1538.1428571428573,
+        "y": 517.8214285714284
+      },
+      "holdMs": 0,
+      "release": true
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "3840x1080/hex",
+      "type": "pointer-drag",
+      "label": "reveal decreaseSkill-vajra",
+      "from": {
+        "x": 1538.1428571428573,
+        "y": 495.3535714285713
+      },
+      "to": {
+        "x": 1538.1428571428573,
+        "y": 777.5035714285714
+      },
+      "holdMs": 0,
+      "release": true
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "3840x1080/hex",
+      "type": "pointer-drag",
+      "label": "reveal decreaseSkill-vajra",
+      "from": {
+        "x": 1538.1428571428573,
+        "y": 755.0357142857142
+      },
+      "to": {
+        "x": 1538.1428571428573,
+        "y": 517.8214285714284
+      },
+      "holdMs": 0,
+      "release": true
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "3840x1080/hex",
+      "type": "pointer-click",
+      "target": "decreaseSkill-vajra",
+      "x": 963.4285714285714,
+      "y": 635.6420999999999,
+      "enabled": false
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "3840x1080/hex",
+      "type": "pointer-click",
+      "target": "learnSkill-vajra",
+      "x": 1133.142857142857,
+      "y": 635.6420999999999,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "3840x1080/hex",
+      "type": "viewport-resize",
+      "size": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "3840x1080/hex",
+      "type": "viewport-resize",
+      "size": {
+        "width": 3840,
+        "height": 1080
+      }
+    },
+    {
+      "source": "ui-browser-delivery-rest.json",
+      "case": "3840x1080/hex",
+      "type": "pointer-click",
+      "target": "继续挑战",
+      "x": 1426.2857142857142,
+      "y": 678.8571428571429,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-arc.json",
+      "case": "844x390/hex",
+      "type": "pointer-click",
+      "target": "技能树",
+      "x": 522.225,
+      "y": 358.35,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-arc.json",
+      "case": "844x390/hex",
+      "type": "pointer-click",
+      "target": "技能图标-vajra",
+      "probe": "75% circle radius",
+      "x": 147.69999999999993,
+      "y": 185.28437499999998
+    },
+    {
+      "source": "ui-browser-delivery-arc.json",
+      "case": "844x390/hex",
+      "type": "pointer-click",
+      "target": "技能图标-magnet",
+      "probe": "75% circle radius",
+      "x": 226.825,
+      "y": 185.28437499999998
+    },
+    {
+      "source": "ui-browser-delivery-arc.json",
+      "case": "844x390/hex",
+      "type": "pointer-drag",
+      "label": "clip circle center above Mask",
+      "from": {
+        "x": 291.44374999999997,
+        "y": 261.6625
+      },
+      "to": {
+        "x": 291.44374999999997,
+        "y": 194.275
+      },
+      "holdMs": 0,
+      "release": true
+    },
+    {
+      "source": "ui-browser-delivery-arc.json",
+      "case": "844x390/hex",
+      "type": "pointer-click",
+      "target": "技能图标-vajra",
+      "probe": "outside Mask negative case",
+      "x": 123.96249999999993,
+      "y": 118.28461999999995
+    },
+    {
+      "source": "ui-browser-delivery-arc.json",
+      "case": "844x390/hex",
+      "type": "pointer-click",
+      "target": "技能节点-vajra",
+      "x": 123.96249999999993,
+      "y": 176.30961999999997,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-arc.json",
+      "case": "844x390/hex",
+      "type": "pointer-click",
+      "target": "learnSkill-vajra",
+      "x": 152.97499999999994,
+      "y": 231.69712,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-arc.json",
+      "case": "844x390/hex",
+      "type": "pointer-click",
+      "target": "decreaseSkill-vajra",
+      "x": 94.94999999999995,
+      "y": 231.69712,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-arc.json",
+      "case": "844x390/hex",
+      "type": "pointer-click",
+      "target": "宗门",
+      "x": 121.32499999999995,
+      "y": 358.35,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-arc.json",
+      "case": "844x390/hex",
+      "type": "pointer-click",
+      "target": "体验工具",
+      "x": 422,
+      "y": 203.08750000000003,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-arc.json",
+      "case": "844x390/hex",
+      "type": "pointer-click",
+      "target": "进入独立体验档",
+      "x": 253.19999999999993,
+      "y": 291.26875,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-arc.json",
+      "case": "844x390/hex",
+      "type": "pointer-click",
+      "target": "无敌秒杀：关闭",
+      "x": 590.8000000000001,
+      "y": 266.87187500000005,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-arc.json",
+      "case": "844x390/hex",
+      "type": "pointer-click",
+      "target": "游戏速度 ×3",
+      "x": 253.19999999999993,
+      "y": 266.87187500000005,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-arc.json",
+      "case": "844x390/hex",
+      "type": "pointer-click",
+      "target": "返回宗门",
+      "x": 253.19999999999993,
+      "y": 326.215625,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-arc.json",
+      "case": "844x390/hex",
+      "type": "pointer-click",
+      "target": "锁妖塔",
+      "x": 321.775,
+      "y": 358.35,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-arc.json",
+      "case": "844x390/hex",
+      "type": "pointer-click",
+      "target": "重访第9层",
+      "x": 422,
+      "y": 228.14375,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-arc.json",
+      "case": "844x390/hex",
+      "type": "pointer-drag",
+      "label": "fixed joystick toward northeast diagonal wall",
+      "from": {
+        "x": 97.58749999999993,
+        "y": 285.81874999999997
+      },
+      "to": {
+        "x": 121.32499999999993,
+        "y": 244.27812499999996
+      },
+      "holdMs": 0,
+      "release": false
+    },
+    {
+      "source": "ui-browser-delivery-arc.json",
+      "case": "844x390/hex",
+      "type": "pointer-release",
+      "target": "移动摇杆 diagonal wall"
+    },
+    {
+      "source": "ui-browser-delivery-arc.json",
+      "case": "844x390/hex",
+      "type": "pointer-drag",
+      "label": "right-side field negative",
+      "from": {
+        "x": 641.4399999999999,
+        "y": 206.70000000000002
+      },
+      "to": {
+        "x": 618.3618749999999,
+        "y": 223.18437500000002
+      },
+      "holdMs": 150,
+      "release": true
+    },
+    {
+      "source": "ui-browser-delivery-arc.json",
+      "case": "844x390/hex",
+      "type": "pointer-click",
+      "target": "暂停",
+      "x": 801.1406250000001,
+      "y": 29.671874999999993,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-arc.json",
+      "case": "844x390/hex",
+      "type": "pointer-click",
+      "target": "继续挑战",
+      "x": 253.19999999999993,
+      "y": 242.47500000000002,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-arc.json",
+      "case": "844x390/hex",
+      "type": "key-down",
+      "key": "d"
+    },
+    {
+      "source": "ui-browser-delivery-arc.json",
+      "case": "844x390/hex",
+      "type": "pointer-click",
+      "target": "技能树",
+      "x": 783.996875,
+      "y": 355.71250000000003,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-arc.json",
+      "case": "844x390/hex",
+      "type": "key-up",
+      "key": "d"
+    },
+    {
+      "source": "ui-browser-delivery-arc.json",
+      "case": "844x390/hex",
+      "type": "pointer-click",
+      "target": "技能图标-vajra",
+      "x": 123.96249999999993,
+      "y": 185.28437499999998,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-arc.json",
+      "case": "844x390/hex",
+      "type": "pointer-click",
+      "target": "decreaseSkill-vajra",
+      "x": 94.94999999999995,
+      "y": 298.69687500000003,
+      "enabled": false
+    },
+    {
+      "source": "ui-browser-delivery-arc.json",
+      "case": "844x390/hex",
+      "type": "pointer-click",
+      "target": "learnSkill-vajra",
+      "x": 152.97499999999994,
+      "y": 298.69687500000003,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-arc.json",
+      "case": "844x390/hex",
+      "type": "viewport-resize",
+      "size": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "source": "ui-browser-delivery-arc.json",
+      "case": "844x390/hex",
+      "type": "viewport-resize",
+      "size": {
+        "width": 844,
+        "height": 390
+      }
+    },
+    {
+      "source": "ui-browser-delivery-arc.json",
+      "case": "844x390/hex",
+      "type": "pointer-click",
+      "target": "继续挑战",
+      "x": 253.19999999999993,
+      "y": 242.47500000000002,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-mask.json",
+      "case": "844x390/mask",
+      "type": "pointer-click",
+      "target": "技能树",
+      "x": 522.225,
+      "y": 358.35,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-mask.json",
+      "case": "844x390/mask",
+      "type": "pointer-click",
+      "target": "技能图标-vajra",
+      "x": 123.96249999999993,
+      "y": 185.28437499999998,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-mask.json",
+      "case": "844x390/mask",
+      "type": "pointer-click",
+      "target": "learnSkill-vajra",
+      "x": 152.97499999999994,
+      "y": 298.69687500000003,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-mask.json",
+      "case": "844x390/mask",
+      "type": "pointer-click",
+      "target": "宗门",
+      "x": 121.32499999999995,
+      "y": 358.35,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-mask.json",
+      "case": "844x390/mask",
+      "type": "pointer-click",
+      "target": "体验工具",
+      "x": 422,
+      "y": 203.08750000000003,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-mask.json",
+      "case": "844x390/mask",
+      "type": "pointer-click",
+      "target": "进入独立体验档",
+      "x": 253.19999999999993,
+      "y": 291.26875,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-mask.json",
+      "case": "844x390/mask",
+      "type": "pointer-click",
+      "target": "无敌秒杀：关闭",
+      "x": 590.8000000000001,
+      "y": 266.87187500000005,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-mask.json",
+      "case": "844x390/mask",
+      "type": "pointer-click",
+      "target": "返回宗门",
+      "x": 253.19999999999993,
+      "y": 326.215625,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-mask.json",
+      "case": "844x390/mask",
+      "type": "pointer-click",
+      "target": "锁妖塔",
+      "x": 321.775,
+      "y": 358.35,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-mask.json",
+      "case": "844x390/mask",
+      "type": "pointer-click",
+      "target": "重访第9层",
+      "x": 422,
+      "y": 228.14375,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-mask.json",
+      "case": "844x390/mask",
+      "type": "pointer-drag",
+      "label": "legal fixed stick under root Mask",
+      "from": {
+        "x": 97.58749999999993,
+        "y": 285.81874999999997
+      },
+      "to": {
+        "x": 137.14999999999992,
+        "y": 285.81874999999997
+      },
+      "holdMs": 600,
+      "release": false
+    },
+    {
+      "source": "ui-browser-delivery-mask.json",
+      "case": "844x390/mask",
+      "type": "pointer-release",
+      "target": "移动摇杆 under root Mask"
+    },
+    {
+      "source": "ui-browser-delivery-mask.json",
+      "case": "1920x280/mask",
+      "type": "pointer-click",
+      "target": "体验工具",
+      "x": 960,
+      "y": 154,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-mask.json",
+      "case": "1920x280/mask",
+      "type": "pointer-click",
+      "target": "进入独立体验档",
+      "x": 832,
+      "y": 213,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-mask.json",
+      "case": "1920x280/mask",
+      "type": "pointer-click",
+      "target": "无敌秒杀：关闭",
+      "x": 1088,
+      "y": 194.5,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-mask.json",
+      "case": "1920x280/mask",
+      "type": "pointer-click",
+      "target": "游戏速度 ×3",
+      "x": 832,
+      "y": 194.5,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-mask.json",
+      "case": "1920x280/mask",
+      "type": "pointer-click",
+      "target": "返回宗门",
+      "x": 832,
+      "y": 239.50000000000003,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-mask.json",
+      "case": "1920x280/mask",
+      "type": "pointer-click",
+      "target": "锁妖塔",
+      "x": 884,
+      "y": 256,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-mask.json",
+      "case": "1920x280/mask",
+      "type": "pointer-click",
+      "target": "重访第9层",
+      "x": 960,
+      "y": 173,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-mask.json",
+      "case": "1920x280/mask",
+      "type": "pointer-drag",
+      "label": "reproduce former wall overflow position",
+      "from": {
+        "x": 714,
+        "y": 201
+      },
+      "to": {
+        "x": 732,
+        "y": 169.5
+      },
+      "holdMs": 0,
+      "release": false
+    },
+    {
+      "source": "ui-browser-delivery-mask.json",
+      "case": "1920x280/mask",
+      "type": "pointer-release",
+      "target": "移动摇杆 under root Mask"
+    },
+    {
+      "source": "ui-browser-delivery-mask.json",
+      "case": "3840x1080/mask",
+      "type": "pointer-click",
+      "target": "体验工具",
+      "x": 1920,
+      "y": 594,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-mask.json",
+      "case": "3840x1080/mask",
+      "type": "pointer-click",
+      "target": "进入独立体验档",
+      "x": 1426.2857142857142,
+      "y": 821.5714285714287,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-mask.json",
+      "case": "3840x1080/mask",
+      "type": "pointer-click",
+      "target": "无敌秒杀：关闭",
+      "x": 2413.714285714286,
+      "y": 750.2142857142857,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-mask.json",
+      "case": "3840x1080/mask",
+      "type": "pointer-click",
+      "target": "游戏速度 ×3",
+      "x": 1426.2857142857142,
+      "y": 750.2142857142857,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-mask.json",
+      "case": "3840x1080/mask",
+      "type": "pointer-click",
+      "target": "返回宗门",
+      "x": 1426.2857142857142,
+      "y": 923.7857142857143,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-mask.json",
+      "case": "3840x1080/mask",
+      "type": "pointer-click",
+      "target": "锁妖塔",
+      "x": 1626.857142857143,
+      "y": 987.4285714285714,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-mask.json",
+      "case": "3840x1080/mask",
+      "type": "pointer-click",
+      "target": "重访第9层",
+      "x": 1920,
+      "y": 667.2857142857143,
+      "enabled": true
+    },
+    {
+      "source": "ui-browser-delivery-mask.json",
+      "case": "3840x1080/mask",
+      "type": "pointer-drag",
+      "label": "reproduce former wall overflow position",
+      "from": {
+        "x": 971.142857142857,
+        "y": 775.2857142857143
+      },
+      "to": {
+        "x": 1040.5714285714284,
+        "y": 653.7857142857142
+      },
+      "holdMs": 0,
+      "release": false
+    },
+    {
+      "source": "ui-browser-delivery-mask.json",
+      "case": "3840x1080/mask",
+      "type": "pointer-release",
+      "target": "移动摇杆 under root Mask"
+    }
+  ],
+  "finalTargeted": {
+    "status": "PASS_VIS01_CLOSED",
+    "counts": {
+      "cases": 3,
+      "passed": 3,
+      "checks": 7,
+      "clicks": 24,
+      "drags": 3,
+      "releases": 3,
+      "screenshots": 6
+    },
+    "mainBundle": {
+      "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/assets/main/index.02690.js",
+      "sha256": "02d66ceb5c716e0a6d05149805e361c02ae0c306842e7dc1886a792a179af2cc"
+    },
+    "changedSources": [
+      "cocos-pilot/assets/scripts/TowerView.ts"
+    ],
+    "pixels": [
+      {
+        "size": "1920x280",
+        "before": "/Users/zhangnu/WeChatProjects/rainy-mushroom/docs/xianxia/reports/tower-landscape-2026-10-28/ui-delivery-mask-1920x280-mask-letterbox-before-world.png",
+        "after": "/Users/zhangnu/WeChatProjects/rainy-mushroom/docs/xianxia/reports/tower-landscape-2026-10-28/ui-delivery-mask-1920x280-mask-letterbox-wall-clipped.png",
+        "bands": [
+          {
+            "side": "left",
+            "rect": [
+              0,
+              0,
+              638,
+              280
+            ],
+            "pixels": 178640,
+            "changedPixelsBeyondOneRGBLevel": 0,
+            "maximumRGBDifference": 0
+          },
+          {
+            "side": "right",
+            "rect": [
+              1282,
+              0,
+              1920,
+              280
+            ],
+            "pixels": 178640,
+            "changedPixelsBeyondOneRGBLevel": 0,
+            "maximumRGBDifference": 0
+          }
+        ],
+        "examinedPixels": 357280,
+        "changedPixels": 0
+      },
+      {
+        "size": "3840x1080",
+        "before": "/Users/zhangnu/WeChatProjects/rainy-mushroom/docs/xianxia/reports/tower-landscape-2026-10-28/ui-delivery-mask-3840x1080-mask-letterbox-before-world.png",
+        "after": "/Users/zhangnu/WeChatProjects/rainy-mushroom/docs/xianxia/reports/tower-landscape-2026-10-28/ui-delivery-mask-3840x1080-mask-letterbox-wall-clipped.png",
+        "bands": [
+          {
+            "side": "left",
+            "rect": [
+              0,
+              0,
+              683,
+              1080
+            ],
+            "pixels": 737640,
+            "changedPixelsBeyondOneRGBLevel": 0,
+            "maximumRGBDifference": 0
+          },
+          {
+            "side": "right",
+            "rect": [
+              3157,
+              0,
+              3840,
+              1080
+            ],
+            "pixels": 737640,
+            "changedPixelsBeyondOneRGBLevel": 0,
+            "maximumRGBDifference": 0
+          }
+        ],
+        "examinedPixels": 1475280,
+        "changedPixels": 0
+      }
+    ],
+    "errors": {
+      "page": 0,
+      "console": 0,
+      "http": 0,
+      "request": 0,
+      "invalidLabels": 0
+    },
+    "screenshots": [
+      "ui-delivery-mask-844x390-mask-mask-tree-input.png",
+      "ui-delivery-mask-844x390-mask-mask-fixed-stick.png",
+      "ui-delivery-mask-1920x280-mask-letterbox-before-world.png",
+      "ui-delivery-mask-1920x280-mask-letterbox-wall-clipped.png",
+      "ui-delivery-mask-3840x1080-mask-letterbox-before-world.png",
+      "ui-delivery-mask-3840x1080-mask-letterbox-wall-clipped.png"
+    ],
+    "parentVisualReview": "Parent confirmed 1920x280 masked wall screenshot has no ground/wall in letterbox and approved VIS-01 closure.",
+    "knownOpenTrueFindings": 0,
+    "source": "ui-browser-delivery-mask.json",
+    "sourceBridge": {
+      "previousBundle": {
+        "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/assets/main/index.9d6d8.js",
+        "sha256": "81f0f42bd6d98f8c745cdf625a2da2a9a9b1b0fb2cea2c7ac15b34a302c7dee8"
+      },
+      "changedTrackedProductionSources": [
+        "cocos-pilot/assets/scripts/TowerView.ts"
+      ],
+      "change": "TowerView root adds Mask; existing UITransform logical dimensions still update on render.",
+      "verification": "Two extreme-frame pixel comparisons and one 844x390 tree/stick input case."
+    }
+  },
+  "parentVisualReview": "Parent explicitly accepted phone tree, diagonal wall and real ranged emit screenshots.",
+  "combinedCounts": {
+    "cases": 13,
+    "passed": 13,
+    "checks": 76,
+    "clicks": 146,
+    "drags": 23,
+    "releases": 10,
+    "keyEvents": 14,
+    "resizes": 14,
+    "screenshots": 72
+  },
+  "knownOpenTrueFindings": 0,
+  "matrixBundle": {
+    "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/assets/main/index.272d1.js",
+    "sha256": "c70cb27788d9c4952c5ed5a19b28d66c934d186fe2e6dd7045f6f86a8f6a1956"
+  },
+  "arcTargeted": {
+    "status": "REQUESTED_TARGETED_CHECKS_PASS_WITH_REPORTED_VISUAL_LIMITATION",
+    "source": "ui-browser-delivery-arc.json",
+    "caseCount": 3,
+    "passed": 3,
+    "checks": 14,
+    "clicks": 22,
+    "drags": 3,
+    "releases": 1,
+    "keyEvents": 2,
+    "resizes": 2,
+    "screenshots": 12,
+    "mainBundle": {
+      "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/assets/main/index.9d6d8.js",
+      "sha256": "81f0f42bd6d98f8c745cdf625a2da2a9a9b1b0fb2cea2c7ac15b34a302c7dee8"
+    },
+    "sourceBridge": {
+      "previousBundle": {
+        "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/assets/main/index.272d1.js",
+        "sha256": "c70cb27788d9c4952c5ed5a19b28d66c934d186fe2e6dd7045f6f86a8f6a1956"
+      },
+      "changedTrackedProductionSources": [
+        "cocos-pilot/assets/scripts/TowerView.ts"
+      ],
+      "parentDeclaredChange": "Only sector atan2 fallback || -> ??; 4 host direction regressions passed by parent.",
+      "browserVerified": "Actual compiled world Graphics.arc center +/-90deg, sweep 140deg with zero faceX."
+    },
+    "errors": {
+      "page": 0,
+      "console": 0,
+      "http": 0,
+      "request": 0,
+      "invalidLabels": 0
+    },
+    "sectors": [
+      {
+        "kind": "sector-up",
+        "faceX": 0,
+        "faceY": 1,
+        "radius": 123,
+        "start": 0.34906585039886595,
+        "end": 2.792526803190927,
+        "centerDegrees": 90,
+        "sweepDegrees": 140,
+        "snapshotHash": "147c87137d817f0950190bc9d522c3598e6436a9a5e020215bec4c10f91b30aa",
+        "screenshots": [
+          "ui-delivery-arc-844x390-sector-up-compiled-vertical-sector.png"
+        ]
+      },
+      {
+        "kind": "sector-down",
+        "faceX": 0,
+        "faceY": -1,
+        "radius": 123,
+        "start": -2.792526803190927,
+        "end": -0.34906585039886595,
+        "centerDegrees": -90,
+        "sweepDegrees": 140,
+        "snapshotHash": "e524e846138b4154c2b3b89e63ce81e55373e0b4bc91691b5835056c7f3ea350",
+        "screenshots": [
+          "ui-delivery-arc-844x390-sector-down-compiled-vertical-sector.png"
+        ]
+      }
+    ]
+  },
+  "maskClosure": {
+    "status": "PASS_VIS01_CLOSED",
+    "counts": {
+      "cases": 3,
+      "passed": 3,
+      "checks": 7,
+      "clicks": 24,
+      "drags": 3,
+      "releases": 3,
+      "screenshots": 6
+    },
+    "mainBundle": {
+      "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/assets/main/index.02690.js",
+      "sha256": "02d66ceb5c716e0a6d05149805e361c02ae0c306842e7dc1886a792a179af2cc"
+    },
+    "changedSources": [
+      "cocos-pilot/assets/scripts/TowerView.ts"
+    ],
+    "pixels": [
+      {
+        "size": "1920x280",
+        "before": "/Users/zhangnu/WeChatProjects/rainy-mushroom/docs/xianxia/reports/tower-landscape-2026-10-28/ui-delivery-mask-1920x280-mask-letterbox-before-world.png",
+        "after": "/Users/zhangnu/WeChatProjects/rainy-mushroom/docs/xianxia/reports/tower-landscape-2026-10-28/ui-delivery-mask-1920x280-mask-letterbox-wall-clipped.png",
+        "bands": [
+          {
+            "side": "left",
+            "rect": [
+              0,
+              0,
+              638,
+              280
+            ],
+            "pixels": 178640,
+            "changedPixelsBeyondOneRGBLevel": 0,
+            "maximumRGBDifference": 0
+          },
+          {
+            "side": "right",
+            "rect": [
+              1282,
+              0,
+              1920,
+              280
+            ],
+            "pixels": 178640,
+            "changedPixelsBeyondOneRGBLevel": 0,
+            "maximumRGBDifference": 0
+          }
+        ],
+        "examinedPixels": 357280,
+        "changedPixels": 0
+      },
+      {
+        "size": "3840x1080",
+        "before": "/Users/zhangnu/WeChatProjects/rainy-mushroom/docs/xianxia/reports/tower-landscape-2026-10-28/ui-delivery-mask-3840x1080-mask-letterbox-before-world.png",
+        "after": "/Users/zhangnu/WeChatProjects/rainy-mushroom/docs/xianxia/reports/tower-landscape-2026-10-28/ui-delivery-mask-3840x1080-mask-letterbox-wall-clipped.png",
+        "bands": [
+          {
+            "side": "left",
+            "rect": [
+              0,
+              0,
+              683,
+              1080
+            ],
+            "pixels": 737640,
+            "changedPixelsBeyondOneRGBLevel": 0,
+            "maximumRGBDifference": 0
+          },
+          {
+            "side": "right",
+            "rect": [
+              3157,
+              0,
+              3840,
+              1080
+            ],
+            "pixels": 737640,
+            "changedPixelsBeyondOneRGBLevel": 0,
+            "maximumRGBDifference": 0
+          }
+        ],
+        "examinedPixels": 1475280,
+        "changedPixels": 0
+      }
+    ],
+    "errors": {
+      "page": 0,
+      "console": 0,
+      "http": 0,
+      "request": 0,
+      "invalidLabels": 0
+    },
+    "screenshots": [
+      "ui-delivery-mask-844x390-mask-mask-tree-input.png",
+      "ui-delivery-mask-844x390-mask-mask-fixed-stick.png",
+      "ui-delivery-mask-1920x280-mask-letterbox-before-world.png",
+      "ui-delivery-mask-1920x280-mask-letterbox-wall-clipped.png",
+      "ui-delivery-mask-3840x1080-mask-letterbox-before-world.png",
+      "ui-delivery-mask-3840x1080-mask-letterbox-wall-clipped.png"
+    ],
+    "parentVisualReview": "Parent confirmed 1920x280 masked wall screenshot has no ground/wall in letterbox and approved VIS-01 closure.",
+    "knownOpenTrueFindings": 0,
+    "source": "ui-browser-delivery-mask.json",
+    "sourceBridge": {
+      "previousBundle": {
+        "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/assets/main/index.9d6d8.js",
+        "sha256": "81f0f42bd6d98f8c745cdf625a2da2a9a9b1b0fb2cea2c7ac15b34a302c7dee8"
+      },
+      "changedTrackedProductionSources": [
+        "cocos-pilot/assets/scripts/TowerView.ts"
+      ],
+      "change": "TowerView root adds Mask; existing UITransform logical dimensions still update on render.",
+      "verification": "Two extreme-frame pixel comparisons and one 844x390 tree/stick input case."
+    }
+  },
+  "sourceBridges": [
+    {
+      "previousBundle": {
+        "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/assets/main/index.272d1.js",
+        "sha256": "c70cb27788d9c4952c5ed5a19b28d66c934d186fe2e6dd7045f6f86a8f6a1956"
+      },
+      "changedTrackedProductionSources": [
+        "cocos-pilot/assets/scripts/TowerView.ts"
+      ],
+      "parentDeclaredChange": "Only sector atan2 fallback || -> ??; 4 host direction regressions passed by parent.",
+      "browserVerified": "Actual compiled world Graphics.arc center +/-90deg, sweep 140deg with zero faceX."
+    },
+    {
+      "previousBundle": {
+        "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/assets/main/index.9d6d8.js",
+        "sha256": "81f0f42bd6d98f8c745cdf625a2da2a9a9b1b0fb2cea2c7ac15b34a302c7dee8"
+      },
+      "changedTrackedProductionSources": [
+        "cocos-pilot/assets/scripts/TowerView.ts"
+      ],
+      "change": "TowerView root adds Mask; existing UITransform logical dimensions still update on render.",
+      "verification": "Two extreme-frame pixel comparisons and one 844x390 tree/stick input case."
+    }
+  ],
+  "updatedAt": "2026-10-28T06:22:42.249Z"
+}

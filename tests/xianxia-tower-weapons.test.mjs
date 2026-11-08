@@ -5,8 +5,8 @@ const clone=x=>JSON.parse(JSON.stringify(x))
 const close=(a,b)=>assert.ok(Math.abs(a-b)<1e-10,`${a} != ${b}`)
 const ordinary=WEAPONS.filter(d=>d.quality>0)
 const fixed=d=>createFixedWeapon(d.id,'test')
-test('35 frozen weapon identities and independent iron instances retain the API',()=>{
- assert.equal(WEAPONS.length,35);assert.equal(new Set(WEAPONS.map(w=>w.id)).size,35)
+test('36 frozen weapon identities and independent iron instances retain the API',()=>{
+ assert.equal(WEAPONS.length,36);assert.equal(new Set(WEAPONS.map(w=>w.id)).size,36)
  assert.ok(Object.isFrozen(WEAPONS));for(const d of WEAPONS)assert.ok(Object.isFrozen(d))
  const iron=createIronWeapon();assert.ok(validateWeapon(iron));assert.equal(weaponFlatAttack(iron),5)
  assert.equal(weaponSummary(iron).fixedAttack,5);assert.match(weaponName(iron),/铁剑/)
@@ -16,9 +16,11 @@ test('35 frozen weapon identities and independent iron instances retain the API'
 test('fixed weapons have universal type coverage and only their declared family specialization',()=>{
  for(const d of ordinary){
   const w=fixed(d);assert.ok(validateWeapon(w));assert.deepEqual(w,fixed(d))
-  assert.equal(w.affixes.filter(a=>a.type==='flow').length,['qi','formation'].includes(d.role)?1:0)
-  for(const a of w.affixes){assert.ok(['physical','magic','flow','attackSpeed','onHit','bleedConversion','bleed','element','critChance','critBonus'].includes(a.type));if(a.type==='flow')assert.equal(a.target,d.role)}
-  const m=weaponDamageModifiers(w,'sj_arc','physical');assert.ok(m.critChance>0&&m.critBonus>0);assert.equal(m.special,0);assert.equal(m.lifesteal,0)
+  assert.ok(w.affixes.filter(a=>a.type==='flow').length<=1)
+  for(const a of w.affixes){assert.ok(['physical','magic','skill','flow','attackSpeed','onHit','bleedConversion','bleed','element','critChance','critBonus','skillLevel'].includes(a.type));if(a.type==='flow')assert.ok(['qi','formation'].includes(a.target))
+   // 2026-11-06：法器阶剑阵武器的特殊词条改为流云斩伤害（剑阵前期靠流云斩过渡）。
+   if(a.type==='skill')assert.ok(d.tier==='fa'&&d.role!=='qi'&&a.target==='sj_arc',d.id)}
+  const m=weaponDamageModifiers(w,'sj_arc','physical');assert.equal(m.critChance,0);assert.equal(m.critBonus,0);assert.equal(m.special,0);assert.equal(m.lifesteal,0)
  }
 })
 test('strict validator rejects removed affixes, duplicate slots, changed values and save shape',()=>{

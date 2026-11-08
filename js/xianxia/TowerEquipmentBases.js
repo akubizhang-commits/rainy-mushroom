@@ -2,7 +2,7 @@
 import { EQUIPMENT_ROSTER } from './TowerEquipmentRoster.js'
 import { FIXED_EQUIPMENT } from './TowerEquipmentFixed.js'
 export const VITALITY_HP = 10
-export const DEFENSE_REFERENCE = 1000
+export const DEFENSE_REFERENCE = 500
 export const PRIMARY_ATTRIBUTE_KEYS = Object.freeze(['strength','intelligence','awareness','vitality'])
 const round = n => Number(n.toFixed(5))
 const definitions = new Map(EQUIPMENT_ROSTER.map(d=>[d.id,d]))

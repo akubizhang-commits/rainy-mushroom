@@ -18,7 +18,7 @@ function store(){
 }
 test('awareness unifies cast speed, mana capacity and recovery without spirit',()=>{
  const {s}=store(),l=combatLoadout(s.state),a=stats(s.state.xp,l)
- assert.equal(a.awareness,150);assert.equal(a.maxMana,150);assert.equal(a.manaRegen,6)
+ assert.equal(a.awareness,150);assert.equal(a.maxMana,150);assert.equal(a.manaRegen,4.5) // Approved 2026-11-05 combat recovery: 3% of max mana.
  assert.equal(characterCombatAttributes(l,s.state.xp).castSpeed,.5)
  assert.ok(!('spirit' in a))
 })

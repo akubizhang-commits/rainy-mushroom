@@ -1,0 +1,1228 @@
+{
+  "environment": {
+    "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36",
+    "hardwareConcurrency": 10,
+    "dpr": 1,
+    "visible": [
+      720,
+      1558.1538461538462
+    ],
+    "deviceName": "ANGLE (Apple, ANGLE Metal Renderer: Apple M4, Unspecified Version)",
+    "perfPanel": true,
+    "settings": {
+      "sound": false,
+      "vibration": false,
+      "reduceFlash": false
+    }
+  },
+  "cases": [
+    {
+      "name": "rain-orbit",
+      "repeat": 0,
+      "setup": {
+        "reset": {
+          "tick": 0,
+          "time": 0,
+          "state": "playing",
+          "hp": 100,
+          "enemies": 0,
+          "shots": 0,
+          "bubbles": 0,
+          "treeNodes": 163,
+          "active": 0,
+          "pools": {
+            "wanjian": 0,
+            "swordOrbit": 0,
+            "zones": 0,
+            "spores": 0,
+            "drops": 0,
+            "enemies": 0,
+            "shots": 0,
+            "mist": 0,
+            "fx": 0,
+            "player": 0,
+            "ring": 0,
+            "glow": 0,
+            "indicators": 0
+          },
+          "views": {
+            "arc": 0,
+            "line": 0,
+            "rain": 0,
+            "ground": 0,
+            "passive": 0,
+            "hits": 0
+          },
+          "dropped": {
+            "enemies": 0,
+            "shots": 0,
+            "bubbles": 0,
+            "zones": 0,
+            "pickups": 0
+          },
+          "droppedTime": 0
+        },
+        "fixture": {
+          "tick": 21600,
+          "time": 360,
+          "state": "playing",
+          "hp": 100000,
+          "enemies": 200,
+          "shots": 0,
+          "bubbles": 0,
+          "treeNodes": 163,
+          "active": 0,
+          "pools": {
+            "wanjian": 0,
+            "swordOrbit": 0,
+            "zones": 0,
+            "spores": 0,
+            "drops": 0,
+            "enemies": 0,
+            "shots": 0,
+            "mist": 0,
+            "fx": 0,
+            "player": 0,
+            "ring": 0,
+            "glow": 0,
+            "indicators": 0
+          },
+          "views": {
+            "arc": 0,
+            "line": 0,
+            "rain": 0,
+            "ground": 0,
+            "passive": 0,
+            "hits": 0
+          },
+          "dropped": {
+            "enemies": 0,
+            "shots": 0,
+            "bubbles": 0,
+            "zones": 0,
+            "pickups": 0
+          },
+          "droppedTime": 0
+        },
+        "weapons": [
+          {
+            "id": "sj_yujian",
+            "level": 5,
+            "evolved": true
+          },
+          {
+            "id": "sj_wanjian",
+            "level": 5,
+            "evolved": true
+          },
+          {
+            "id": "sj_line",
+            "level": 5,
+            "evolved": false
+          },
+          {
+            "id": "sj_formation",
+            "level": 5,
+            "evolved": false
+          }
+        ]
+      },
+      "result": {
+        "frames": {
+          "n": 1021,
+          "mean": 8.332908912830558,
+          "p95": 9.200000000000728,
+          "max": 9.400000000000546,
+          "min": 7.299999999999272
+        },
+        "logic": {
+          "n": 1021,
+          "mean": 0.5874632696213381,
+          "p95": 1,
+          "max": 2.0999999046325684,
+          "min": 0
+        },
+        "nodes": {
+          "n": 1021,
+          "mean": 257,
+          "p95": 257,
+          "max": 257,
+          "min": 257
+        },
+        "enemies": {
+          "n": 1021,
+          "mean": 200,
+          "p95": 200,
+          "max": 200,
+          "min": 200
+        },
+        "draws": {
+          "n": 1021,
+          "mean": 23.59941234084231,
+          "p95": 25,
+          "max": 25,
+          "min": 22
+        },
+        "end": {
+          "tick": 22219,
+          "time": 370.3166666666573,
+          "state": "playing",
+          "hp": 100000,
+          "enemies": 200,
+          "shots": 0,
+          "bubbles": 0,
+          "treeNodes": 257,
+          "active": 173,
+          "pools": {
+            "wanjian": 0,
+            "swordOrbit": 8,
+            "zones": 0,
+            "spores": 0,
+            "drops": 0,
+            "enemies": 160,
+            "shots": 0,
+            "mist": 0,
+            "fx": 0,
+            "player": 5,
+            "ring": 0,
+            "glow": 0,
+            "indicators": 0
+          },
+          "views": {
+            "arc": 0,
+            "line": 0,
+            "rain": 0,
+            "ground": 0,
+            "passive": 0,
+            "hits": 3
+          },
+          "dropped": {
+            "enemies": 0,
+            "shots": 0,
+            "bubbles": 0,
+            "zones": 0,
+            "pickups": 0
+          },
+          "droppedTime": 0
+        }
+      },
+      "pause": {
+        "before": {
+          "tick": 22219,
+          "time": 370.3166666666573,
+          "state": "paused",
+          "hp": 100000,
+          "enemies": 200,
+          "shots": 0,
+          "bubbles": 0,
+          "treeNodes": 277,
+          "active": 173,
+          "pools": {
+            "wanjian": 0,
+            "swordOrbit": 8,
+            "zones": 0,
+            "spores": 0,
+            "drops": 0,
+            "enemies": 160,
+            "shots": 0,
+            "mist": 0,
+            "fx": 0,
+            "player": 5,
+            "ring": 0,
+            "glow": 0,
+            "indicators": 0
+          },
+          "views": {
+            "arc": 0,
+            "line": 0,
+            "rain": 0,
+            "ground": 0,
+            "passive": 0,
+            "hits": 3
+          },
+          "dropped": {
+            "enemies": 0,
+            "shots": 0,
+            "bubbles": 0,
+            "zones": 0,
+            "pickups": 0
+          },
+          "droppedTime": 0
+        },
+        "after": {
+          "tick": 22219,
+          "time": 370.3166666666573,
+          "state": "paused",
+          "hp": 100000,
+          "enemies": 200,
+          "shots": 0,
+          "bubbles": 0,
+          "treeNodes": 277,
+          "active": 173,
+          "pools": {
+            "wanjian": 0,
+            "swordOrbit": 8,
+            "zones": 0,
+            "spores": 0,
+            "drops": 0,
+            "enemies": 160,
+            "shots": 0,
+            "mist": 0,
+            "fx": 0,
+            "player": 5,
+            "ring": 0,
+            "glow": 0,
+            "indicators": 0
+          },
+          "views": {
+            "arc": 0,
+            "line": 0,
+            "rain": 0,
+            "ground": 0,
+            "passive": 0,
+            "hits": 3
+          },
+          "dropped": {
+            "enemies": 0,
+            "shots": 0,
+            "bubbles": 0,
+            "zones": 0,
+            "pickups": 0
+          },
+          "droppedTime": 0
+        },
+        "frozen": true
+      }
+    },
+    {
+      "name": "rain-orbit",
+      "repeat": 1,
+      "setup": {
+        "reset": {
+          "tick": 0,
+          "time": 0,
+          "state": "playing",
+          "hp": 100,
+          "enemies": 0,
+          "shots": 0,
+          "bubbles": 0,
+          "treeNodes": 332,
+          "active": 165,
+          "pools": {
+            "wanjian": 0,
+            "swordOrbit": 0,
+            "zones": 0,
+            "spores": 0,
+            "drops": 0,
+            "enemies": 160,
+            "shots": 0,
+            "mist": 0,
+            "fx": 0,
+            "player": 5,
+            "ring": 0,
+            "glow": 0,
+            "indicators": 0
+          },
+          "views": {
+            "arc": 0,
+            "line": 0,
+            "rain": 0,
+            "ground": 0,
+            "passive": 0,
+            "hits": 0
+          },
+          "dropped": {
+            "enemies": 0,
+            "shots": 0,
+            "bubbles": 0,
+            "zones": 0,
+            "pickups": 0
+          },
+          "droppedTime": 0
+        },
+        "fixture": {
+          "tick": 21600,
+          "time": 360,
+          "state": "playing",
+          "hp": 100000,
+          "enemies": 200,
+          "shots": 0,
+          "bubbles": 0,
+          "treeNodes": 332,
+          "active": 165,
+          "pools": {
+            "wanjian": 0,
+            "swordOrbit": 0,
+            "zones": 0,
+            "spores": 0,
+            "drops": 0,
+            "enemies": 160,
+            "shots": 0,
+            "mist": 0,
+            "fx": 0,
+            "player": 5,
+            "ring": 0,
+            "glow": 0,
+            "indicators": 0
+          },
+          "views": {
+            "arc": 0,
+            "line": 0,
+            "rain": 0,
+            "ground": 0,
+            "passive": 0,
+            "hits": 0
+          },
+          "dropped": {
+            "enemies": 0,
+            "shots": 0,
+            "bubbles": 0,
+            "zones": 0,
+            "pickups": 0
+          },
+          "droppedTime": 0
+        },
+        "weapons": [
+          {
+            "id": "sj_yujian",
+            "level": 5,
+            "evolved": true
+          },
+          {
+            "id": "sj_wanjian",
+            "level": 5,
+            "evolved": true
+          },
+          {
+            "id": "sj_line",
+            "level": 5,
+            "evolved": false
+          },
+          {
+            "id": "sj_formation",
+            "level": 5,
+            "evolved": false
+          }
+        ]
+      },
+      "result": {
+        "frames": {
+          "n": 1021,
+          "mean": 8.333202742409403,
+          "p95": 9.200000000000728,
+          "max": 9.400000000001455,
+          "min": 7.299999999999272
+        },
+        "logic": {
+          "n": 1021,
+          "mean": 0.5936336939995717,
+          "p95": 1,
+          "max": 1.1000001430511475,
+          "min": 0.20000004768371582
+        },
+        "nodes": {
+          "n": 1021,
+          "mean": 257,
+          "p95": 257,
+          "max": 257,
+          "min": 257
+        },
+        "enemies": {
+          "n": 1021,
+          "mean": 200,
+          "p95": 200,
+          "max": 200,
+          "min": 200
+        },
+        "draws": {
+          "n": 1021,
+          "mean": 23.610186092066602,
+          "p95": 25,
+          "max": 25,
+          "min": 22
+        },
+        "end": {
+          "tick": 22218,
+          "time": 370.29999999999063,
+          "state": "playing",
+          "hp": 100000,
+          "enemies": 200,
+          "shots": 0,
+          "bubbles": 0,
+          "treeNodes": 257,
+          "active": 173,
+          "pools": {
+            "wanjian": 0,
+            "swordOrbit": 8,
+            "zones": 0,
+            "spores": 0,
+            "drops": 0,
+            "enemies": 160,
+            "shots": 0,
+            "mist": 0,
+            "fx": 0,
+            "player": 5,
+            "ring": 0,
+            "glow": 0,
+            "indicators": 0
+          },
+          "views": {
+            "arc": 0,
+            "line": 0,
+            "rain": 0,
+            "ground": 0,
+            "passive": 1,
+            "hits": 3
+          },
+          "dropped": {
+            "enemies": 0,
+            "shots": 0,
+            "bubbles": 0,
+            "zones": 0,
+            "pickups": 0
+          },
+          "droppedTime": 0
+        }
+      },
+      "pause": {
+        "before": {
+          "tick": 22218,
+          "time": 370.29999999999063,
+          "state": "paused",
+          "hp": 100000,
+          "enemies": 200,
+          "shots": 0,
+          "bubbles": 0,
+          "treeNodes": 277,
+          "active": 173,
+          "pools": {
+            "wanjian": 0,
+            "swordOrbit": 8,
+            "zones": 0,
+            "spores": 0,
+            "drops": 0,
+            "enemies": 160,
+            "shots": 0,
+            "mist": 0,
+            "fx": 0,
+            "player": 5,
+            "ring": 0,
+            "glow": 0,
+            "indicators": 0
+          },
+          "views": {
+            "arc": 0,
+            "line": 0,
+            "rain": 0,
+            "ground": 0,
+            "passive": 1,
+            "hits": 3
+          },
+          "dropped": {
+            "enemies": 0,
+            "shots": 0,
+            "bubbles": 0,
+            "zones": 0,
+            "pickups": 0
+          },
+          "droppedTime": 0
+        },
+        "after": {
+          "tick": 22218,
+          "time": 370.29999999999063,
+          "state": "paused",
+          "hp": 100000,
+          "enemies": 200,
+          "shots": 0,
+          "bubbles": 0,
+          "treeNodes": 277,
+          "active": 173,
+          "pools": {
+            "wanjian": 0,
+            "swordOrbit": 8,
+            "zones": 0,
+            "spores": 0,
+            "drops": 0,
+            "enemies": 160,
+            "shots": 0,
+            "mist": 0,
+            "fx": 0,
+            "player": 5,
+            "ring": 0,
+            "glow": 0,
+            "indicators": 0
+          },
+          "views": {
+            "arc": 0,
+            "line": 0,
+            "rain": 0,
+            "ground": 0,
+            "passive": 1,
+            "hits": 3
+          },
+          "dropped": {
+            "enemies": 0,
+            "shots": 0,
+            "bubbles": 0,
+            "zones": 0,
+            "pickups": 0
+          },
+          "droppedTime": 0
+        },
+        "frozen": true
+      }
+    },
+    {
+      "name": "line-formation",
+      "repeat": 0,
+      "setup": {
+        "reset": {
+          "tick": 0,
+          "time": 0,
+          "state": "playing",
+          "hp": 100,
+          "enemies": 0,
+          "shots": 0,
+          "bubbles": 0,
+          "treeNodes": 312,
+          "active": 165,
+          "pools": {
+            "wanjian": 0,
+            "swordOrbit": 0,
+            "zones": 0,
+            "spores": 0,
+            "drops": 0,
+            "enemies": 160,
+            "shots": 0,
+            "mist": 0,
+            "fx": 0,
+            "player": 5,
+            "ring": 0,
+            "glow": 0,
+            "indicators": 0
+          },
+          "views": {
+            "arc": 0,
+            "line": 0,
+            "rain": 0,
+            "ground": 0,
+            "passive": 0,
+            "hits": 0
+          },
+          "dropped": {
+            "enemies": 0,
+            "shots": 0,
+            "bubbles": 0,
+            "zones": 0,
+            "pickups": 0
+          },
+          "droppedTime": 0
+        },
+        "fixture": {
+          "tick": 21600,
+          "time": 360,
+          "state": "playing",
+          "hp": 100000,
+          "enemies": 200,
+          "shots": 0,
+          "bubbles": 0,
+          "treeNodes": 312,
+          "active": 165,
+          "pools": {
+            "wanjian": 0,
+            "swordOrbit": 0,
+            "zones": 0,
+            "spores": 0,
+            "drops": 0,
+            "enemies": 160,
+            "shots": 0,
+            "mist": 0,
+            "fx": 0,
+            "player": 5,
+            "ring": 0,
+            "glow": 0,
+            "indicators": 0
+          },
+          "views": {
+            "arc": 0,
+            "line": 0,
+            "rain": 0,
+            "ground": 0,
+            "passive": 0,
+            "hits": 0
+          },
+          "dropped": {
+            "enemies": 0,
+            "shots": 0,
+            "bubbles": 0,
+            "zones": 0,
+            "pickups": 0
+          },
+          "droppedTime": 0
+        },
+        "weapons": [
+          {
+            "id": "sj_yujian",
+            "level": 5,
+            "evolved": false
+          },
+          {
+            "id": "sj_wanjian",
+            "level": 5,
+            "evolved": false
+          },
+          {
+            "id": "sj_line",
+            "level": 5,
+            "evolved": true
+          },
+          {
+            "id": "sj_formation",
+            "level": 5,
+            "evolved": true
+          }
+        ]
+      },
+      "result": {
+        "frames": {
+          "n": 1021,
+          "mean": 8.332908912830556,
+          "p95": 9.200000000000728,
+          "max": 9.400000000001455,
+          "min": 7.299999999999272
+        },
+        "logic": {
+          "n": 1021,
+          "mean": 0.565719881907733,
+          "p95": 1.2000000476837158,
+          "max": 2,
+          "min": 0
+        },
+        "nodes": {
+          "n": 1021,
+          "mean": 257,
+          "p95": 257,
+          "max": 257,
+          "min": 257
+        },
+        "enemies": {
+          "n": 1021,
+          "mean": 200,
+          "p95": 200,
+          "max": 200,
+          "min": 200
+        },
+        "draws": {
+          "n": 1021,
+          "mean": 22.520078354554357,
+          "p95": 24,
+          "max": 24,
+          "min": 21
+        },
+        "end": {
+          "tick": 22219,
+          "time": 370.3166666666573,
+          "state": "playing",
+          "hp": 100000,
+          "enemies": 200,
+          "shots": 0,
+          "bubbles": 0,
+          "treeNodes": 257,
+          "active": 173,
+          "pools": {
+            "wanjian": 0,
+            "swordOrbit": 8,
+            "zones": 0,
+            "spores": 0,
+            "drops": 0,
+            "enemies": 160,
+            "shots": 0,
+            "mist": 0,
+            "fx": 0,
+            "player": 5,
+            "ring": 0,
+            "glow": 0,
+            "indicators": 0
+          },
+          "views": {
+            "arc": 0,
+            "line": 0,
+            "rain": 0,
+            "ground": 0,
+            "passive": 0,
+            "hits": 3
+          },
+          "dropped": {
+            "enemies": 0,
+            "shots": 0,
+            "bubbles": 0,
+            "zones": 0,
+            "pickups": 0
+          },
+          "droppedTime": 0
+        }
+      },
+      "pause": {
+        "before": {
+          "tick": 22219,
+          "time": 370.3166666666573,
+          "state": "paused",
+          "hp": 100000,
+          "enemies": 200,
+          "shots": 0,
+          "bubbles": 0,
+          "treeNodes": 277,
+          "active": 173,
+          "pools": {
+            "wanjian": 0,
+            "swordOrbit": 8,
+            "zones": 0,
+            "spores": 0,
+            "drops": 0,
+            "enemies": 160,
+            "shots": 0,
+            "mist": 0,
+            "fx": 0,
+            "player": 5,
+            "ring": 0,
+            "glow": 0,
+            "indicators": 0
+          },
+          "views": {
+            "arc": 0,
+            "line": 0,
+            "rain": 0,
+            "ground": 0,
+            "passive": 0,
+            "hits": 3
+          },
+          "dropped": {
+            "enemies": 0,
+            "shots": 0,
+            "bubbles": 0,
+            "zones": 0,
+            "pickups": 0
+          },
+          "droppedTime": 0
+        },
+        "after": {
+          "tick": 22219,
+          "time": 370.3166666666573,
+          "state": "paused",
+          "hp": 100000,
+          "enemies": 200,
+          "shots": 0,
+          "bubbles": 0,
+          "treeNodes": 277,
+          "active": 173,
+          "pools": {
+            "wanjian": 0,
+            "swordOrbit": 8,
+            "zones": 0,
+            "spores": 0,
+            "drops": 0,
+            "enemies": 160,
+            "shots": 0,
+            "mist": 0,
+            "fx": 0,
+            "player": 5,
+            "ring": 0,
+            "glow": 0,
+            "indicators": 0
+          },
+          "views": {
+            "arc": 0,
+            "line": 0,
+            "rain": 0,
+            "ground": 0,
+            "passive": 0,
+            "hits": 3
+          },
+          "dropped": {
+            "enemies": 0,
+            "shots": 0,
+            "bubbles": 0,
+            "zones": 0,
+            "pickups": 0
+          },
+          "droppedTime": 0
+        },
+        "frozen": true
+      }
+    },
+    {
+      "name": "line-formation",
+      "repeat": 1,
+      "setup": {
+        "reset": {
+          "tick": 0,
+          "time": 0,
+          "state": "playing",
+          "hp": 100,
+          "enemies": 0,
+          "shots": 0,
+          "bubbles": 0,
+          "treeNodes": 312,
+          "active": 165,
+          "pools": {
+            "wanjian": 0,
+            "swordOrbit": 0,
+            "zones": 0,
+            "spores": 0,
+            "drops": 0,
+            "enemies": 160,
+            "shots": 0,
+            "mist": 0,
+            "fx": 0,
+            "player": 5,
+            "ring": 0,
+            "glow": 0,
+            "indicators": 0
+          },
+          "views": {
+            "arc": 0,
+            "line": 0,
+            "rain": 0,
+            "ground": 0,
+            "passive": 0,
+            "hits": 0
+          },
+          "dropped": {
+            "enemies": 0,
+            "shots": 0,
+            "bubbles": 0,
+            "zones": 0,
+            "pickups": 0
+          },
+          "droppedTime": 0
+        },
+        "fixture": {
+          "tick": 21600,
+          "time": 360,
+          "state": "playing",
+          "hp": 100000,
+          "enemies": 200,
+          "shots": 0,
+          "bubbles": 0,
+          "treeNodes": 312,
+          "active": 165,
+          "pools": {
+            "wanjian": 0,
+            "swordOrbit": 0,
+            "zones": 0,
+            "spores": 0,
+            "drops": 0,
+            "enemies": 160,
+            "shots": 0,
+            "mist": 0,
+            "fx": 0,
+            "player": 5,
+            "ring": 0,
+            "glow": 0,
+            "indicators": 0
+          },
+          "views": {
+            "arc": 0,
+            "line": 0,
+            "rain": 0,
+            "ground": 0,
+            "passive": 0,
+            "hits": 0
+          },
+          "dropped": {
+            "enemies": 0,
+            "shots": 0,
+            "bubbles": 0,
+            "zones": 0,
+            "pickups": 0
+          },
+          "droppedTime": 0
+        },
+        "weapons": [
+          {
+            "id": "sj_yujian",
+            "level": 5,
+            "evolved": false
+          },
+          {
+            "id": "sj_wanjian",
+            "level": 5,
+            "evolved": false
+          },
+          {
+            "id": "sj_line",
+            "level": 5,
+            "evolved": true
+          },
+          {
+            "id": "sj_formation",
+            "level": 5,
+            "evolved": true
+          }
+        ]
+      },
+      "result": {
+        "frames": {
+          "n": 1019,
+          "mean": 8.342001962708538,
+          "p95": 9.19999999999709,
+          "max": 16.599999999998545,
+          "min": 7.30000000000291
+        },
+        "logic": {
+          "n": 1019,
+          "mean": 0.5626104020744825,
+          "p95": 1,
+          "max": 2.1999998092651367,
+          "min": 0
+        },
+        "nodes": {
+          "n": 1019,
+          "mean": 257,
+          "p95": 257,
+          "max": 257,
+          "min": 257
+        },
+        "enemies": {
+          "n": 1019,
+          "mean": 200,
+          "p95": 200,
+          "max": 200,
+          "min": 200
+        },
+        "draws": {
+          "n": 1019,
+          "mean": 22.518155053974485,
+          "p95": 24,
+          "max": 24,
+          "min": 21
+        },
+        "end": {
+          "tick": 22218,
+          "time": 370.29999999999063,
+          "state": "playing",
+          "hp": 100000,
+          "enemies": 200,
+          "shots": 0,
+          "bubbles": 0,
+          "treeNodes": 257,
+          "active": 173,
+          "pools": {
+            "wanjian": 0,
+            "swordOrbit": 8,
+            "zones": 0,
+            "spores": 0,
+            "drops": 0,
+            "enemies": 160,
+            "shots": 0,
+            "mist": 0,
+            "fx": 0,
+            "player": 5,
+            "ring": 0,
+            "glow": 0,
+            "indicators": 0
+          },
+          "views": {
+            "arc": 0,
+            "line": 0,
+            "rain": 0,
+            "ground": 0,
+            "passive": 5,
+            "hits": 3
+          },
+          "dropped": {
+            "enemies": 0,
+            "shots": 0,
+            "bubbles": 0,
+            "zones": 0,
+            "pickups": 0
+          },
+          "droppedTime": 0
+        }
+      },
+      "pause": {
+        "before": {
+          "tick": 22218,
+          "time": 370.29999999999063,
+          "state": "paused",
+          "hp": 100000,
+          "enemies": 200,
+          "shots": 0,
+          "bubbles": 0,
+          "treeNodes": 277,
+          "active": 173,
+          "pools": {
+            "wanjian": 0,
+            "swordOrbit": 8,
+            "zones": 0,
+            "spores": 0,
+            "drops": 0,
+            "enemies": 160,
+            "shots": 0,
+            "mist": 0,
+            "fx": 0,
+            "player": 5,
+            "ring": 0,
+            "glow": 0,
+            "indicators": 0
+          },
+          "views": {
+            "arc": 0,
+            "line": 0,
+            "rain": 0,
+            "ground": 0,
+            "passive": 5,
+            "hits": 3
+          },
+          "dropped": {
+            "enemies": 0,
+            "shots": 0,
+            "bubbles": 0,
+            "zones": 0,
+            "pickups": 0
+          },
+          "droppedTime": 0
+        },
+        "after": {
+          "tick": 22218,
+          "time": 370.29999999999063,
+          "state": "paused",
+          "hp": 100000,
+          "enemies": 200,
+          "shots": 0,
+          "bubbles": 0,
+          "treeNodes": 277,
+          "active": 173,
+          "pools": {
+            "wanjian": 0,
+            "swordOrbit": 8,
+            "zones": 0,
+            "spores": 0,
+            "drops": 0,
+            "enemies": 160,
+            "shots": 0,
+            "mist": 0,
+            "fx": 0,
+            "player": 5,
+            "ring": 0,
+            "glow": 0,
+            "indicators": 0
+          },
+          "views": {
+            "arc": 0,
+            "line": 0,
+            "rain": 0,
+            "ground": 0,
+            "passive": 5,
+            "hits": 3
+          },
+          "dropped": {
+            "enemies": 0,
+            "shots": 0,
+            "bubbles": 0,
+            "zones": 0,
+            "pickups": 0
+          },
+          "droppedTime": 0
+        },
+        "frozen": true
+      }
+    }
+  ],
+  "cleanup": {
+    "immediate": {
+      "tick": 0,
+      "time": 0,
+      "state": "playing",
+      "hp": 100,
+      "enemies": 0,
+      "shots": 0,
+      "bubbles": 0,
+      "treeNodes": 312,
+      "active": 165,
+      "pools": {
+        "wanjian": 0,
+        "swordOrbit": 0,
+        "zones": 0,
+        "spores": 0,
+        "drops": 0,
+        "enemies": 160,
+        "shots": 0,
+        "mist": 0,
+        "fx": 0,
+        "player": 5,
+        "ring": 0,
+        "glow": 0,
+        "indicators": 0
+      },
+      "views": {
+        "arc": 0,
+        "line": 0,
+        "rain": 0,
+        "ground": 0,
+        "passive": 0,
+        "hits": 0
+      },
+      "dropped": {
+        "enemies": 0,
+        "shots": 0,
+        "bubbles": 0,
+        "zones": 0,
+        "pickups": 0
+      },
+      "droppedTime": 0
+    },
+    "initialWeapons": [
+      "sj_yujian"
+    ],
+    "afterFrame": {
+      "tick": 7,
+      "time": 0.11666666666666665,
+      "state": "playing",
+      "hp": 100,
+      "enemies": 0,
+      "shots": 0,
+      "bubbles": 0,
+      "treeNodes": 257,
+      "active": 5,
+      "pools": {
+        "wanjian": 0,
+        "swordOrbit": 0,
+        "zones": 0,
+        "spores": 0,
+        "drops": 0,
+        "enemies": 0,
+        "shots": 0,
+        "mist": 0,
+        "fx": 0,
+        "player": 5,
+        "ring": 0,
+        "glow": 0,
+        "indicators": 0
+      },
+      "views": {
+        "arc": 0,
+        "line": 0,
+        "rain": 0,
+        "ground": 0,
+        "passive": 0,
+        "hits": 0
+      },
+      "dropped": {
+        "enemies": 0,
+        "shots": 0,
+        "bubbles": 0,
+        "zones": 0,
+        "pickups": 0
+      },
+      "droppedTime": 0
+    },
+    "reload": {
+      "screen": "camp",
+      "run": false,
+      "perf": false
+    }
+  },
+  "errors": [],
+  "note": "Injected static 200-enemy fixtures with full weapons, two evolutions, invulnerability and no pickups. Browser-only, no human/balance/device claim."
+}

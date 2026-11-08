@@ -66,7 +66,7 @@ function requirements(state, definition, learned, inTower) {
   const exactLevel = stage && characterLevel !== stage.minLevel && characterLevel !== 30 ? `（${characterLevel}级）` : ''
   const lines = [`角色${stageAt(characterLevel)}${exactLevel}`]
   for (const [id, rank] of Object.entries(prerequisites)) lines.push(`${skills.get(id).name} ${rank}级`)
-  lines.push(`功法点 ${definition.pointCosts[nextLevel - 1]}`)
+  lines.push(`悟道点 ${definition.pointCosts[nextLevel - 1]}`)
   if (quote.bookCost) lines.push(`经卷 ${formatSpiritStones(quote.bookCost)}灵石`)
   return { lines, detail: { nextLevel, characterLevel, stage: stageAt(characterLevel),
     clear, prerequisites, cost: definition.pointCosts[nextLevel - 1], bookCost: quote.bookCost,

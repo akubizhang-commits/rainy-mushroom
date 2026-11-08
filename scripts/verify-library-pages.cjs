@@ -39,7 +39,7 @@ try{for(const viewport of [{width:1280,height:720},{width:844,height:390},{width
  }
  }
  const detail=libraryDetails(entry.id,quality);const normalize=s=>s.replace(/\s/g,'');
- for(const text of [...detail.effects,...detail.conditions,...detail.tips,detail.source,detail.note])if(!normalize(content).includes(normalize(text)))failures.push('missing '+entry.id+' '+text);
+ for(const text of (detail.sections?detail.sections.flatMap(s=>[s.title,...s.lines]):[...detail.effects,...detail.conditions,...detail.tips,detail.source,detail.note]).filter(Boolean))if(!normalize(content).includes(normalize(text)))failures.push('missing '+entry.id+' '+text);
  }
  if(JSON.stringify(h.store.state)!==before)failures.push('profile changed');return{spreads,failures,entries:LIBRARY_ENTRIES.length};});
  assert.deepEqual(report.failures,[]);console.log(viewport,report.entries,report.spreads,'all content fits without scrolling');

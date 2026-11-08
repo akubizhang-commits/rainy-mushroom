@@ -2,7 +2,7 @@ import {Node,UITransform,Sprite,SpriteFrame,Texture2D,ImageAsset,Color,isValid} 
 import {towerResources as resources} from './TowerResources';
 
 type Patch = {node:Node;sprite:Sprite;transform:UITransform;seen:boolean};
-/** Presentation only: the existing M11 zone owns targeting, timing and damage. */
+/** Presentation only: the existing M11 / M12 zone owns targeting, timing and damage. */
 export class TowerMiasmaArt {
  private requested=false;
  private dead=false;
@@ -26,7 +26,7 @@ export class TowerMiasmaArt {
   if(this.dead)return;
   for(const patch of this.patches.values())patch.seen=false;
   for(const z of state.monsterMechanics?.zones||[]){
-   if(z.skillId!=='M11'||state.time>=z.expiresAt||![z.x,z.y,z.radius,z.startedAt,z.activatesAt,z.expiresAt].every(Number.isFinite))continue;
+   if(!['M11','M12'].includes(z.skillId)||(z.skillId==='M12'&&!(z.damage>0))||state.time>=z.expiresAt||![z.x,z.y,z.radius,z.startedAt,z.activatesAt,z.expiresAt].every(Number.isFinite))continue;
    const owner=state.enemies.find((e:any)=>e.id===z.ownerId&&e.hp>0);if(!owner)continue;
    this.load();
    if(!this.frame||state.time<z.activatesAt)continue;

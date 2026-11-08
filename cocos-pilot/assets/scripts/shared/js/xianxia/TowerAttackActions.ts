@@ -15,8 +15,8 @@ export function startSkillAction(actions, time, duration, skill, basicReady) {
   delete actions.waiting[skill]
   if (basicReady) actions.bypasses = 1
 }
-export const SKILL_ORDER = Object.freeze(['sj_yujian', 'sj_arc', 'sj_cross', 'sj_wanjian',
-  'sj_line', 'sj_shadow', 'sj_formation', 'evo_wanjian'])
+export const SKILL_ORDER = Object.freeze(['sj_yujian', 'sj_arc', 'sj_moon', 'sj_moon_triple', 'sj_cross', 'sj_wanjian',
+  'sj_line', 'sj_shadow', 'sj_sancai', 'sj_formation', 'evo_wanjian'])
 export function updateSkillCandidates(actions, ids, time) {
   for (const id of Object.keys(actions.waiting)) if (!ids.includes(id)) delete actions.waiting[id]
   for (const id of ids) if (actions.waiting[id] === undefined) actions.waiting[id] = time

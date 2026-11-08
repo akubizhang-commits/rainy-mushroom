@@ -64,9 +64,10 @@ test('element affixes start at bao and match their element instead of every atta
   const wind = W.weaponDamageModifiers(w, 'sj_yujian', 'physical', 'wind').flat
   const fire = W.weaponDamageModifiers(w, 'sj_yujian', 'physical', 'fire').flat
   assert.ok(wind > neutral)
-  assert.equal(fire, neutral)
+  assert.ok(Math.abs(fire-neutral-(w.affixes.find(a=>a.type==='element'&&['fire','all'].includes(a.target))?.value??0)/100)<1e-9)
   assert.equal(W.weaponDamageModifiers(w, 'sj_yujian', 'hybrid', 'wind').flat, wind)
-  assert.ok(W.weaponDescription(w).some(s => s.includes('风属性伤害')))
+  assert.ok(W.weaponDescription(w).some(s => s.includes('全元素伤害')))
+  assert.equal(wind,fire,'all-element affixes apply equally to wind and fire')
 })
 
 test('unlearned skills still allow a visible basic hit, with no damage before its swing', () => {
@@ -122,15 +123,16 @@ test('a target that leaves melee range before contact takes neither basic nor at
   assert.equal(enemy.hp, hp)
 })
 
-test('independent hit settles once per cast and target, does not inherit crit or start another proc', () => {
+test('attached damage follows every resolved direct hit and never rolls another critical', () => {
   const run = runWith({}, W.createFixedWeapon('eq_sword_zhufeng', 'a')), enemy = targetFor(run)
   const receipt = run._weaponCast('sj_arc')
   const castContext = { loadout: structuredClone(run.state.loadout), xp: run.state.player.xp, weaponAttack: 10 }
   const hit = { target: enemy.id, damage: 1, direct: true, source: 'sj_arc', ...receipt, castContext }
   run._damageEnemy(hit); run._damageEnemy(hit)
   const bonus = run.state.effects.filter(e => e.source === 'weapon_on_hit')
-  assert.equal(bonus.length, 1)
-  assert.equal(bonus[0].element, 'wind')
+  assert.equal(bonus.length, 2)
+  const parentHits=run.state.effects.filter(e=>e.kind==='hit'&&e.source==='sj_arc')
+  for(let i=0;i<2;i++)assert.ok(Math.abs(bonus[i].damage-parentHits[i].damage*W.weaponAttackProfile(run.state.loadout.weapon).onHit)<1e-9)
   assert.ok(bonus[0].damage > 0)
   assert.equal(bonus[0].critical, undefined)
   assert.equal(run.state.weaponState.effectiveCasts, 0)

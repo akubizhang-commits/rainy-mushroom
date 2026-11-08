@@ -25,3 +25,11 @@ test('owner death, cancelled zones and destroyed view cannot leave patches or la
  const late=setup();late.art.draw(state(0),{x:0,y:0});late.art.destroy();late.load();assert.equal(late.image.refs,0);
  const failed=setup();failed.art.draw(state(0),{x:0,y:0});failed.load(Error('missing'));failed.art.draw(state(1.3),{x:0,y:0});assert.equal(failed.art.patches.size,0);
 });
+
+test('M12 ignores cast marker and independently times three ground poison patches',()=>{
+ const f=setup(),s=state(1.5),base=s.monsterMechanics.zones[0];s.monsterMechanics.zones=[{...base,skillId:'M12',damage:0},...[0,1,2].map(i=>({...base,id:'poison'+i,skillId:'M12',damage:8,radius:48,x:50+i*100,activatesAt:1+i,expiresAt:6+i}))];
+ f.art.draw(s,{x:0,y:0});f.load();f.art.draw(s,{x:0,y:0});assert.equal(f.art.patches.size,1);assert.equal(f.art.has('z'),false);
+ s.time=3.5;const before=JSON.stringify(s);f.art.draw(s,{x:0,y:0});assert.equal(f.art.patches.size,3);assert.equal(JSON.stringify(s),before);
+ for(const p of f.art.patches.values())assert.ok(Math.abs(p.transform.width*480/512-96)<1e-8);
+ s.time=6;f.art.draw(s,{x:0,y:0});assert.equal(f.art.patches.size,2);assert.equal(f.art.has('poison0'),false);s.time=8;f.art.draw(s,{x:0,y:0});assert.equal(f.art.patches.size,0);f.art.destroy();
+});

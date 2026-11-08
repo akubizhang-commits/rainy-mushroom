@@ -1,3 +1,4 @@
+import { TOWER_XP_CAP } from '../js/xianxia/TowerProfile.js'
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import { TowerRun, validateTowerSnapshot, coreLootSummary } from '../js/xianxia/TowerRun.js'
@@ -9,7 +10,7 @@ const A = Object.fromEntries(ARCHETYPES.map(a => [a.id, a]))
 const loadout = { active: { sj_wanjian: 1 }, passive: {}, evolutions: [],
   weaponId: 'eq_sword_suwen', weaponQuality: 1, weaponRefine: 0 }
 const make = (extra = {}) => new TowerRun({
-  attemptId: 1, floor: 1, seed: 123, hp: 100, xp: 0, normalCoreCounter: 19, loadout, ...extra,
+  attemptId: 1, floor: 1, seed: 123, hp: 100, xp: TOWER_XP_CAP, normalCoreCounter: 19, loadout, ...extra,
 })
 const clone = value => JSON.parse(JSON.stringify(value))
 const key = kill => `${kill.wave}:${kill.id.split(':').at(-1)}`
@@ -17,12 +18,16 @@ const grades = run => Object.fromEntries(run.state.killLedger.map(k => [key(k), 
 const gradeValue = snapshot => snapshot.killLedger.reduce((sum, kill) => sum + CORE_RANK_VALUES[kill.coreRank], 0)
 
 // Explicit assist plus positioning exercises real authored spawns, full-HP
-// enemies, skill hits and settlement. It is runtime coverage, not balance data.
+// enemies, damage/death processing and settlement. It is runtime coverage, not balance data.
 function tick(run, selected = 'all') {
   for (const enemy of run.state.enemies) {
     enemy.x = selected === 'all' || selected === enemy.id ? run.state.player.x + 60 : -800
     enemy.y = selected === 'all' || selected === enemy.id ? run.state.player.y : -1000
   }
+  // Select exact recipients independently of the skills' authored cadence.
+  if (selected !== null) for (const enemy of run.state.enemies)
+    if (selected === 'all' || selected === enemy.id)
+      run._damageEnemy({target:enemy.id,damage:1e12,direct:false,scaled:true,source:'loot-fixture'})
   run.advance(STEP)
 }
 function until(run, predicate, limit = 80000) {
@@ -67,7 +72,7 @@ test('all nine full combat floors pay exact authored grades inside both count an
   const droppedRoles = new Set(), droppedRanks = new Set()
   let kills = 0
   for (let floor = 1; floor <= 9; floor++) {
-    const run = make({ floor, seed: 456 })
+    const run = make({ floor, seed: 123, xp: TOWER_XP_CAP })
     run.setPlaytestAssist(true)
     const identity = clone(run.state.loot), plan = buildCoreDropPlan(floor, identity.seed)
     for (let i = 0; i < 80000 && run.state.phase === 'playing'; i++) {
@@ -76,15 +81,19 @@ test('all nine full combat floors pay exact authored grades inside both count an
       for (const kill of run.state.killLedger.slice(before)) {
         assert.equal(kill.coreRank, plan[key(kill)] ?? 0, `floor ${floor}, ${key(kill)}`)
         assert.ok(kill.coreRank === 0 || kill.coreRank === A[kill.archetype].rank)
-        const visuals = run.state.drops.filter(d => d.kind === 'core' && d.killId === kill.id)
-        assert.equal(visuals.length, kill.coreRank ? 1 : 0)
+        const receipt = `stone:${kill.id}`
+        const visuals = run.state.drops.filter(d => d.kind === 'core' && d.receipts?.includes(receipt))
+        const collected = run.state.pickups.collected.includes(receipt)
+        assert.equal(visuals.length + Number(collected), kill.coreRank ? 1 : 0)
         if (kill.coreRank) {
           droppedRoles.add(A[kill.archetype].role)
           droppedRanks.add(kill.coreRank)
-          assert.equal(visuals[0].rank, A[kill.archetype].rank)
-          assert.equal(visuals[0].amount, CORE_RANK_VALUES[kill.coreRank])
-          assert.ok(Number.isFinite(visuals[0].x) && Number.isFinite(visuals[0].y))
-          assert.ok(visuals[0].expiresAt > run.state.time)
+          for (const visual of visuals) {
+            assert.equal(visual.rank, A[kill.archetype].rank)
+            assert.equal(visual.amount, CORE_RANK_VALUES[kill.coreRank] * visual.receipts.length)
+            assert.ok(Number.isFinite(visual.x) && Number.isFinite(visual.y))
+            assert.equal(visual.expiresAt, undefined)
+          }
         }
       }
     }
@@ -99,7 +108,7 @@ test('all nine full combat floors pay exact authored grades inside both count an
     assert.equal(summary.value, value, 'the UI summary counts kill denominations, excluding clear bonuses')
     assert.equal(summary.value, summary.byRank.reduce((sum, count, index) =>
       sum + count * CORE_RANK_VALUES[index + 1], 0))
-    assert.equal(snapshot.earned.contribution, 100 + 5 * (floor - 1))
+    assert.equal(snapshot.earned.contribution, 0)
     assert.equal(snapshot.normalCoreCounter, 19)
     assert.deepEqual(snapshot.loot, identity)
     assert.deepEqual(Object.fromEntries(Object.entries(grades(run)).filter(([, rank]) => rank > 0)), { ...plan })
@@ -109,7 +118,7 @@ test('all nine full combat floors pay exact authored grades inside both count an
     assert.deepEqual(restored.snapshot(), snapshot, 'terminal reload cannot award again')
     kills += snapshot.killLedger.length
   }
-  assert.equal(kills, 4770)
+  assert.equal(kills, 4772)
   assert.deepEqual([...droppedRoles].sort(), ['boss', 'elite', 'normal'])
   assert.deepEqual([...droppedRanks].sort(), [1, 2, 3, 4, 5, 6, 7])
 })
@@ -308,7 +317,7 @@ test('corrupt loot identity, grades, monetary totals and core visuals are reject
     ['missing kill reference', s => { delete s.drops[visual].killId }],
     ['unearned kill reference', s => { s.drops[visual].killId = s.enemies[0]?.id ?? 'unearned' }],
     ['invalid vertical position', s => { s.drops[visual].y = NaN }],
-    ['invalid expiry', s => { s.drops[visual].expiresAt = Infinity }],
+    ['invalid landing time', s => { s.drops[visual].readyAt = Infinity }],
     ['duplicate core visual', s => { s.drops.push({ ...s.drops[visual], id: 'duplicate-core' }) }],
   ]) assertRejected(saved, mutate, label)
   const originalPlan = buildCoreDropPlan(saved.floor, saved.loot.seed)
@@ -361,7 +370,7 @@ test('snapshots without loot remain legacy across repeated resumes and retain co
 })
 
 test('training performs actual kills and resets while every grade, wallet award and core visual stays empty', () => {
-  const run = make({ training: true, floor: 9 })
+  const run = make({ training: true, floor: 9, xp: 0 })
   run.setPlaytestAssist(true)
   const identity = clone(run.state.loot)
   let previous = 0, resets = 0, observed = 0

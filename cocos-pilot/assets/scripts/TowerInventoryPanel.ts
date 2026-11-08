@@ -1,5 +1,5 @@
 import { MENU_COLORS, ITEM_COLORS } from './TowerMenuChrome';
-import { drawMenuVeil, drawMenuClose } from './TowerMenuChrome';
+import { drawMenuVeil, drawMenuClose, drawMenuBack, isMenuBack } from './TowerMenuChrome';
 import { equipmentTier } from './shared/js/xianxia/TowerEquipmentTiers';
 import { BlockInputEvents, Button, Color, Graphics, Label, Mask, Node, ScrollView, UITransform, Vec2 } from 'cc';
 import { inventoryCapacity, inventoryEntries, inventoryDescription, inventoryDetail, inventoryQuote } from './shared/js/xianxia/TowerInventory';
@@ -146,6 +146,10 @@ export class TowerInventoryPanel {
  private button(parent: Node, name: string, x: number, y: number, w: number, h: number,
   run: () => void, enabled = true, primary = false, size = 22, icon = '') {
   const node = this.host.node(name, parent, w, h); node.setPosition(x, y);
+  if (isMenuBack(name)) {
+   drawMenuBack(node, name, enabled && !this.busy);
+   this.host.clickable(node, run, enabled && !this.busy); return node;
+  }
   this.host.panel(node, !enabled ? BAG_COLORS.disabled : primary ? BAG_COLORS.jade : BAG_COLORS.secondary);
   const tint = !enabled ? BAG_COLORS.muted : primary ? BAG_COLORS.paper : BAG_COLORS.ink;
   if (icon) this.itemIcon(node, `${name}图标`, icon, tint);
@@ -461,7 +465,7 @@ export class TowerInventoryPanel {
   const titleWidth = width - 32 - iconSize - 12, titleX = (iconSize + 12) / 2;
   this.text(card, info?.name || row.name, titleX, headerTop - 19, titleWidth, 38, DETAIL.title, BAG_COLORS.jade);
   this.text(card, info?.rank || '消耗品', titleX, headerTop - 53, titleWidth, 30, DETAIL.meta);
-  this.text(card, info ? `境界要求 ${info.requirement}` : row.item.material ? `售价：${row.item.sellPrice}下品灵石／份` : '无法出售',
+  this.text(card, info ? `穿戴要求：${info.requirement}` : row.item.material ? `售价：${row.item.sellPrice}下品灵石／份` : '无法出售',
    titleX, headerTop - 83, titleWidth, 30, DETAIL.meta,
    info && !info.requirementMet ? BAG_COLORS.warning : BAG_COLORS.ink);
   const blocks: { name: string; text: string; size: number; tint: string; gap: number; divider?: boolean }[] = info ? [

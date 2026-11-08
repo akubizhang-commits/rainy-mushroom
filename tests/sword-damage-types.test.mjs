@@ -35,14 +35,14 @@ test('all offensive skill sources and evolution aliases pay the intended parts e
     ...['sj_yujian','evo_wanjian','sword_rain','sj_arc','sj_cross','sj_line','evo_tiandi'].map(id=>[id,10,0]),
     ...['sj_shadow', 'shadow',
       'sj_wanjian', 'orbit', 'evo_wuwo', 'sj_formation', 'formation', 'evo_sixiang']
-      .map(id => [id, 5, 5]),
+      .map(id => [id, 5, 5 * 90 / 110]),
   ]) {
     const { r, e } = fixture()
     const before = e.hp, event = hit(r, e, source)
     assert.ok(event.damageParts, source)
-    near(event.damageParts.physical, physical)
-    near(event.damageParts.magic, magic)
-    near(before - e.hp, physical + magic)
+    near(event.damageParts.physical, physical*500/(500+e.physicalDefense))
+    near(event.damageParts.magic, magic*500/(500+e.magicDefense))
+    near(before - e.hp, physical*500/(500+e.physicalDefense) + magic*500/(500+e.magicDefense))
   }
 })
 
@@ -53,91 +53,25 @@ test('single-type bonuses boost only their half without doubling the total budge
   assert.deepEqual(scaleDamageParts(splitDamage(100, 'physical'), 1, 2), { physical: 100, magic: 0 })
 })
 
-test('fixed equipment applies each matching bonus once and wounds retain its result', () => {
-  const weapon = createFixedWeapon('eq_sword_suwen', 'type-test')
-  const { r, e } = fixture({ sj_mark: 4 }, weapon)
-  const event = hit(r, e, 'sj_shadow')
-  const expected = 10 * (1 + weapon.affixes.find(a => a.type === 'physical').value / 100)
-  near(event.damage, expected*.5)
-  near(event.damageParts.physical, expected / 4)
-  near(event.damageParts.magic, expected / 4)
-  near(e.qingping.amount, expected * .5*1.15)
-  near(e.qingping.physicalAmount, expected * .25*1.15)
-})
-
-test('pending mixed wounds merge actual parts and preserve totals across paused restore and refresh', () => {
-  const { r, e } = fixture({ sj_mark: 4 })
-  hit(r, e, 'sj_yujian')
-  hit(r, e, 'sj_shadow')
-  near(e.qingping.amount, 11.5)
-  near(e.qingping.physicalAmount, 8.625)
-  r.pause()
-  const saved = r.snapshot()
-  r.advance(1)
-  assert.deepEqual(r.snapshot(), saved)
-  const resumed = TowerRun.restore(saved)
-  resumed.resume()
-  const target = resumed.state.enemies.find(x => x.id === e.id)
-  const parts = { physical: 0, magic: 0 }
-  const original = resumed._effect.bind(resumed)
-  resumed._effect = (kind, x, y, radius, extra) => {
-    if (extra?.source === 'wound') {
-      parts.physical += extra.damageParts.physical
-      parts.magic += extra.damageParts.magic
-    }
-    return original(kind, x, y, radius, extra)
-  }
-  step(resumed, 30)
-  near(parts.physical, 8.625/6*1.01)
-  near(parts.magic, 2.875/6*1.01)
-  near(target.woundPhysicalBudget, 8.625*5/6)
-  hit(resumed, target, 'sj_shadow')
-  const next = TowerRun.restore(resumed.snapshot())
-  near(next.state.enemies.find(x => x.id === e.id).woundPhysicalBudget, 8.625*5/6+2.875)
-  step(resumed, 181)
-  near(parts.physical, 8.625/6*1.01+(8.625*5/6+2.875)*1.02)
-  near(parts.magic, 2.875/6*1.01+(2.875*5/6+2.875)*1.02)
-  near(target.woundBudget, 0)
-  near(target.woundPhysicalBudget, 0)
-})
-
-test('mitigation and overkill scale both parts; inherited damage is not mitigated again', () => {
-  const { r, e } = fixture({ sj_mark: 4 })
-  e.mechanic = { armorUntil: 9999, armor: .5 }
-  const event = hit(r, e, 'sj_shadow')
-  near(event.damage, 2.5)
-  near(e.qingping.amount, 2.875)
-  near(e.qingping.physicalAmount, 1.4375)
-  const before = e.hp
-  step(r, 180)
-  near(before - e.hp, 2.875)
-  e.hp = 3
-  const lethal = hit(r, e, 'sj_shadow', 100)
-  near(lethal.damageParts.physical, 1.5)
-  near(lethal.damageParts.magic, 1.5)
-})
-
-test('corrupt pending and active wound components are rejected by snapshot restore', () => {
-  const { r, e } = fixture({ sj_mark: 4 })
-  hit(r, e, 'sj_shadow')
-  for (const value of [-1, NaN, 100]) {
-    const bad = r.snapshot()
-    bad.enemies.find(x => x.id === e.id).qingping.physicalAmount = value
-    assert.throws(() => TowerRun.restore(bad))
-  }
-  step(r, 29)
-  const bad = r.snapshot()
-  bad.enemies.find(x => x.id === e.id).woundPhysicalBudget = 100
-  assert.throws(() => TowerRun.restore(bad))
+test('fixed equipment bonuses apply once; scar only multiplies subsequent direct hits', () => {
+  const weapon=createFixedWeapon('eq_sword_suwen','type-test'),{r,e}=fixture({sj_mark:1},weapon)
+  const event=hit(r,e,'sj_shadow')
+  const p=1+weapon.affixes.find(a=>a.type==='physical').value/100
+  const m=1+weapon.affixes.find(a=>a.type==='magic').value/100
+  near(event.damageParts.physical,5*p*500/(500+e.physicalDefense))
+  near(event.damageParts.magic,5*r.state.player.magicAttack/r.state.player.attack*m*500/(500+e.magicDefense))
+  const next=hit(r,e,'sj_shadow')
+  near(next.damageParts.physical,event.damageParts.physical*1.2*(500+e.physicalDefense)/(500+e.physicalDefense*.8))
+  near(next.damageParts.magic,event.damageParts.magic*1.2)
 })
 
 test('fractional pure physical hits never create negative spell damage or unloadable wounds', () => {
   for (const damage of [.007, 11.324, 10.1]) {
-    const { r, e } = fixture({ sj_mark: 4 })
+    const { r, e } = fixture({ sj_mark:1 })
     const event = hit(r, e, 'sj_yujian', damage)
     assert.equal(event.damageParts.magic, 0)
     assert.equal(event.damageParts.physical, event.damage)
-    assert.equal(e.qingping.physicalAmount, e.qingping.amount)
+    assert.equal(e.scarDebuff.vulnerability,.2)
     const restored = TowerRun.restore(r.snapshot())
     step(restored, 29)
     assert.doesNotThrow(() => TowerRun.restore(restored.snapshot()))
@@ -147,29 +81,29 @@ test('fractional pure physical hits never create negative spell damage or unload
 })
 
 test('sword gate stays an independent mixed burst without crit or wound recursion', () => {
-  const { r, e } = fixture({ sj_gate: 1, sj_mark: 4, sj_heart: 4 })
+  const { r, e } = fixture({ sj_gate: 1, sj_mark:1, sj_heart: 4 })
   r.state.player.attack = 10
-  hit(r, e, 'sj_yujian', 1)
-  const budget = e.qingping.amount
+  hit(r, e, 'sj_line', 1)
+  const status = structuredClone(e.scarDebuff)
   r.state.time += .42
   tickSwordBursts(r)
   const event = r.state.effects.findLast(x => x.source === 'sword_burst')
-  near(event.damage, 5)
-  near(event.damageParts.physical, 2.5)
-  near(event.damageParts.magic, 2.5)
-  near(e.qingping.amount, budget)
+  near(event.damage, 2.5*500/(500+e.physicalDefense*.8) + 2.5 * 90 / 110*500/(500+e.magicDefense))
+  near(event.damageParts.physical, 2.5*500/(500+e.physicalDefense*.8))
+  near(event.damageParts.magic, 2.5 * 90 / 110*500/(500+e.magicDefense))
+  assert.deepEqual(e.scarDebuff, status)
   assert.equal(event.critical, undefined)
   assert.equal(r.state.swordBursts.length, 0)
 })
 
-test('skill details show spell terminology, split proportions and source-inherited wounds', () => {
+test('skill details show spell terminology, split proportions and non-damaging scar debuff', () => {
   const state = new TowerCampaignStore({ getItem: () => null, setItem() {} }, 0).state
   for (const def of [...GROWTH_SKILLS, ...GROWTH_EVOLUTIONS]) {
     const p = skillPresentation(state, def.id)
     assert.doesNotMatch(p.category + p.description, /魔法/)
     if (def.id === 'sj_mark') {
-      assert.match(p.description, /继承.*物理.*法术/)
-      assert.match(p.category, /继承/)
+      assert.match(p.description, /后续直接伤害提高20%/)
+      assert.doesNotMatch(p.category, /混合/)
     } else if (def.damageType === 'hybrid') {
       assert.match(p.description, /50%.*50%/)
     }

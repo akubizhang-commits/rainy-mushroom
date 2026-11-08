@@ -11,7 +11,7 @@ import {materialDrops} from '../js/xianxia/TowerMaterialLoot.js'
 function fixture(patch={}){const disk={raw:null,fail:false,getItem(){return this.raw},setItem(k,v){if(this.fail)throw Error();this.raw=v}};const initial=new TowerCampaignStore(disk,0);initial.act({type:'sync'},0);const envelope=JSON.parse(disk.raw),data=JSON.stringify({...initial.state,...patch,pills:{...initial.state.pills,...Object.fromEntries(Object.keys(FORGE_MATERIALS).map(id=>[id,100])),...patch.pills}});disk.raw=JSON.stringify({...envelope,data,checksum:checksum(data)});return {store:new TowerCampaignStore(disk,0),disk}}
 test('fixed catalog identities enter one legal source and one recipe only',()=>{
  const counts={qualityPool:0,shopOnly:0,starter:0};for(const d of [...WEAPONS,...EQUIPMENT])counts[equipmentSource(d.id)]++
- assert.deepEqual(counts,{qualityPool:81,shopOnly:3,starter:3});assert.equal(FORGING_RECIPES.length,39)
+ assert.deepEqual(counts,{qualityPool:81,shopOnly:4,starter:3});assert.equal(FORGING_RECIPES.length,40)
  for(const r of FORGING_RECIPES)for(const id of r.definitionIds){const item=createForgedGear(r.id,'test-1',id);assert.equal(r.category==='weapon'?validateWeapon(item):validateEquipment(item),true,id)}
 })
 test('common forge material slots stay deterministic and Boss guarantee is not first-clear gated',()=>{

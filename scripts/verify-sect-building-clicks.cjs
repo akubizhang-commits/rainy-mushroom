@@ -6,7 +6,7 @@ const fs=require('node:fs');
 const url=process.env.PREVIEW_URL||'http://127.0.0.1:8769/cocos-pilot/build/web-mobile/index.html?ruleset=xianxia&tower=1';
 const out=process.env.REPORT_DIR||'reports/sect-building-clicks';
 const samples=[
- ['落云主峰',.50,.13,'home'],['凌霄剑峰',.245,.215,'library'],
+ ['霁云主峰',.50,.13,'home'],['凌霄剑峰',.245,.215,'library'],
  ['炼器峰',.10,.435,'forge'],['丹霞峰',.305,.48,'pills'],
  ['万法峰',.725,.175,''],['云篆符峰',.815,.325,''],
  ['御兽峰',.90,.52,''],['锁妖塔',.65,.455,'tower'],
@@ -32,7 +32,7 @@ const samples=[
    const point=async(name,x,y,label)=>page.evaluate(({name,x,y,label})=>{
     const walk=n=>[n,...n.children.flatMap(walk)];
     const nodes=walk(sectQA.root);
-    const painting=nodes.find(n=>n.name==='落云宗已确认母稿');
+    const painting=nodes.find(n=>n.name==='霁云宗已确认母稿');
     const size=painting.getComponent('cc.UITransform').contentSize;
     const camera=walk(cc.director.getScene()).map(n=>n.getComponent('cc.Camera')).find(Boolean);
     const p=label?nodes.find(n=>n.name===name).worldPosition:

@@ -9,7 +9,7 @@ import {TowerCampaignStore,TOWER_CAMPAIGN_KEY} from '../js/xianxia/TowerCampaign
 const near=(a,b)=>assert.ok(Math.abs(a-b)<1e-6,`${a} != ${b}`)
 function fixture(isolated=true){
  const weapon=createFixedWeapon('eq_sword_caiyun','bleed-probe')
- const loadout={growthVersion:1,skillsInitialized:true,active:{sj_arc:1},passive:{sj_heart:4,sj_mark:4,sj_gate:1},
+ const loadout={growthVersion:1,skillsInitialized:true,active:{sj_arc:1},passive:{sj_heart:4,sj_mark:1,sj_gate:1},
    evolutions:[],evolutionLevels:{},tutorialWaves:0,weapon,weaponId:weapon.id,weaponQuality:weapon.quality,weaponRefine:0,weaponFocusCount:0}
  const xp=cultivationLevelXp(30),run=new TowerRun({attemptId:1,floor:1,seed:101,xp,hp:stats(xp,loadout).maxHp,loadout,training:true})
  for(let i=0;i<600&&!run.state.enemies.length;i++)run.advance(1/60)
@@ -56,9 +56,9 @@ test('actual settled critical is inherited; bleed does not reroll crit, multiply
  run._damageEnemy({target:e.id,damage:100,damageParts:{physical:60,magic:40},source:'sj_arc',direct:true})
  const parent=run.state.effects.filter(x=>x.kind==='hit'&&!x.attached).at(-1)
  assert.ok(parent.critical)
- near(e.weaponBleed.remaining,parent.damage*2*1.02)
- const b=structuredClone(e.weaponBleed),before=e.hp,burstCount=run.state.swordBursts.length
- const wound=e.qingping.amount,oldEffects=run.state.effects.length
+ near(e.weaponBleed.remaining,parent.damage*1.02)
+ const b=structuredClone(e.weaponBleed),before=e.hp,burstCount=(run.state.swordBursts?.length??0)
+ const wound=structuredClone(e.scarDebuff),oldEffects=run.state.effects.length
  // A later armor phase must not re-mitigate this inherited damage.
  e.mechanic={kind:'armor',armorActive:true}
  run._random=()=>{throw Error('DOT must not roll random')}
@@ -67,8 +67,8 @@ test('actual settled critical is inherited; bleed does not reroll crit, multiply
   for(const hit of hits)run._damageEnemy(hit)
  }
  near(before-e.hp,b.remaining)
- assert.equal(run.state.swordBursts.length,burstCount)
- assert.equal(e.qingping.amount,wound)
+ assert.equal((run.state.swordBursts?.length??0),burstCount)
+ assert.deepEqual(e.scarDebuff,wound)
  assert.equal(e.weaponBleed,undefined)
  const hits=run.state.effects.slice(oldEffects).filter(x=>x.kind==='hit')
  assert.equal(hits.length,6);assert.ok(hits.every(x=>!x.critical&&!x.attached))

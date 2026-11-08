@@ -1,0 +1,4730 @@
+
+> rainy-mushroom-forest@3.8.8 test
+> node --test tests/*.test.mjs
+
+TAP version 13
+# Subtest: disabled, missing and unsupported ad configurations degrade without API calls
+ok 1 - disabled, missing and unsupported ad configurations degrade without API calls
+  ---
+  duration_ms: 2.688708
+  type: 'test'
+  ...
+# Subtest: rewarded video grants only after a completed close callback
+ok 2 - rewarded video grants only after a completed close callback
+  ---
+  duration_ms: 4.654458
+  type: 'test'
+  ...
+# Subtest: rewarded video does not grant when the viewer closes early
+ok 3 - rewarded video does not grant when the viewer closes early
+  ---
+  duration_ms: 0.689542
+  type: 'test'
+  ...
+# Subtest: rewarded video does not grant for an ambiguous legacy close callback
+ok 4 - rewarded video does not grant for an ambiguous legacy close callback
+  ---
+  duration_ms: 1.977542
+  type: 'test'
+  ...
+# Subtest: rewarded video loads and retries once when the first show fails
+ok 5 - rewarded video loads and retries once when the first show fails
+  ---
+  duration_ms: 1.802208
+  type: 'test'
+  ...
+# Subtest: rewarded load failure returns an error and permits a later retry
+ok 6 - rewarded load failure returns an error and permits a later retry
+  ---
+  duration_ms: 0.401708
+  type: 'test'
+  ...
+# Subtest: concurrent rewarded requests never create or show a second video
+ok 7 - concurrent rewarded requests never create or show a second video
+  ---
+  duration_ms: 0.189583
+  type: 'test'
+  ...
+# Subtest: interstitial counts only successful natural breaks and shows every third one
+ok 8 - interstitial counts only successful natural breaks and shows every third one
+  ---
+  duration_ms: 0.340417
+  type: 'test'
+  ...
+# Subtest: interstitial is suppressed during cooldown and can show after time advances
+ok 9 - interstitial is suppressed during cooldown and can show after time advances
+  ---
+  duration_ms: 0.625709
+  type: 'test'
+  ...
+# Subtest: interstitial destroys each new instance after close
+ok 10 - interstitial destroys each new instance after close
+  ---
+  duration_ms: 0.748833
+  type: 'test'
+  ...
+# Subtest: interstitial platform frequency and rendering errors are returned without throwing
+ok 11 - interstitial platform frequency and rendering errors are returned without throwing
+  ---
+  duration_ms: 0.477833
+  type: 'test'
+  ...
+# Subtest: rewarded onError plus rejected show keeps the lock through load retry
+ok 12 - rewarded onError plus rejected show keeps the lock through load retry
+  ---
+  duration_ms: 2.636208
+  type: 'test'
+  ...
+# Subtest: concurrent eligible interstitial requests create only one instance
+ok 13 - concurrent eligible interstitial requests create only one instance
+  ---
+  duration_ms: 0.288625
+  type: 'test'
+  ...
+# Subtest: event-only interstitial errors do not report shown or start cooldown
+ok 14 - event-only interstitial errors do not report shown or start cooldown
+  ---
+  duration_ms: 0.253334
+  type: 'test'
+  ...
+# Subtest: interstitial event and Promise errors settle once and destroy once
+ok 15 - interstitial event and Promise errors settle once and destroy once
+  ---
+  duration_ms: 0.17375
+  type: 'test'
+  ...
+# Subtest: late events from an old rewarded multiton instance cannot settle a new request
+ok 16 - late events from an old rewarded multiton instance cannot settle a new request
+  ---
+  duration_ms: 3.883791
+  type: 'test'
+  ...
+# Subtest: delayed interstitial onError wins over a resolved show until terminal event
+ok 17 - delayed interstitial onError wins over a resolved show until terminal event
+  ---
+  duration_ms: 0.974292
+  type: 'test'
+  ...
+# Subtest: WeChat packaging relocates the survivor build: internal, main and the survivor bundle
+ok 18 - WeChat packaging relocates the survivor build: internal, main and the survivor bundle
+  ---
+  duration_ms: 9.974125
+  type: 'test'
+  ...
+# Subtest: optional bundles (resources, survivor) are appended only when built
+ok 19 - optional bundles (resources, survivor) are appended only when built
+  ---
+  duration_ms: 9.318167
+  type: 'test'
+  ...
+# Subtest: WeChat packaging still requires every fixed bundle
+ok 20 - WeChat packaging still requires every fixed bundle
+  ---
+  duration_ms: 1.687042
+  type: 'test'
+  ...
+# Subtest: WeChat packaging keeps the 4 MiB per-subpackage budget for survivor
+ok 21 - WeChat packaging keeps the 4 MiB per-subpackage budget for survivor
+  ---
+  duration_ms: 7.441125
+  type: 'test'
+  ...
+# Subtest: all 82 retained reference photographs have commercial licenses, source evidence and matching hashes
+ok 22 - all 82 retained reference photographs have commercial licenses, source evidence and matching hashes
+  ---
+  duration_ms: 51.77525
+  type: 'test'
+  ...
+# Subtest: release guard rejects a noncommercial photo even when its file and other metadata match
+ok 23 - release guard rejects a noncommercial photo even when its file and other metadata match
+  ---
+  duration_ms: 1.685083
+  type: 'test'
+  ...
+# Subtest: source evidence cannot be replaced by an attribution-only claim
+ok 24 - source evidence cannot be replaced by an attribution-only claim
+  ---
+  duration_ms: 0.924792
+  type: 'test'
+  ...
+# Subtest: the same-image crop and paper panels are explicitly identified and keep source license
+ok 25 - the same-image crop and paper panels are explicitly identified and keep source license
+  ---
+  duration_ms: 8.9485
+  type: 'test'
+  ...
+# Subtest: clipboard writes require consent and never read clipboard contents
+ok 26 - clipboard writes require consent and never read clipboard contents
+  ---
+  duration_ms: 1.303875
+  type: 'test'
+  ...
+# Subtest: privacy rejection and unsupported platforms leave clipboard untouched
+ok 27 - privacy rejection and unsupported platforms leave clipboard untouched
+  ---
+  duration_ms: 0.122375
+  type: 'test'
+  ...
+# Subtest: formal release cannot pass with tourist identity or unverified requirements
+ok 28 - formal release cannot pass with tourist identity or unverified requirements
+  ---
+  duration_ms: 0.329459
+  type: 'test'
+  ...
+# Subtest: advertising release requires a real placement and verified device integration
+ok 29 - advertising release requires a real placement and verified device integration
+  ---
+  duration_ms: 0.58625
+  type: 'test'
+  ...
+# Subtest: a wx-shaped test AppID is not a verified formal game account
+ok 30 - a wx-shaped test AppID is not a verified formal game account
+  ---
+  duration_ms: 0.056333
+  type: 'test'
+  ...
+# Subtest: submission permits parallel filing without bypassing privacy and age approval
+ok 31 - submission permits parallel filing without bypassing privacy and age approval
+  ---
+  duration_ms: 0.073958
+  type: 'test'
+  ...
+# Subtest: 6:58 bossWarning, 7:00 Boss spawns once straight above the player, off-screen
+ok 32 - 6:58 bossWarning, 7:00 Boss spawns once straight above the player, off-screen
+  ---
+  duration_ms: 45.339125
+  type: 'test'
+  ...
+# Subtest: Boss is exempt from far-away relocation and not counted in the caps
+ok 33 - Boss is exempt from far-away relocation and not counted in the caps
+  ---
+  duration_ms: 1.14875
+  type: 'test'
+  ...
+# Subtest: summon: 12 gnats every 8 s around the Boss, obeying the hard cap
+ok 34 - summon: 12 gnats every 8 s around the Boss, obeying the hard cap
+  ---
+  duration_ms: 20.119541
+  type: 'test'
+  ...
+# Subtest: charge: 6 s cooldown, 0.8 s windup with locked direction, then ×2.5 for 1 s
+ok 35 - charge: 6 s cooldown, 0.8 s windup with locked direction, then ×2.5 for 1 s
+  ---
+  duration_ms: 12.983834
+  type: 'test'
+  ...
+# Subtest: bubble ring only fires while hp < 50%: 8 bubbles, speed 120, damage 10, life 4
+ok 36 - bubble ring only fires while hp < 50%: 8 bubbles, speed 120, damage 10, life 4
+  ---
+  duration_ms: 10.122416
+  type: 'test'
+  ...
+# Subtest: 10:00 enrage: move speed +30%, contact and bubble damage +50%
+ok 37 - 10:00 enrage: move speed +30%, contact and bubble damage +50%
+  ---
+  duration_ms: 8.037417
+  type: 'test'
+  ...
+# Subtest: timeout fallback: fast-forward 10:00 → 17:00 matches the 01 §9.2 table
+ok 38 - timeout fallback: fast-forward 10:00 → 17:00 matches the 01 §9.2 table
+  ---
+  duration_ms: 1.001541
+  type: 'test'
+  ...
+# Subtest: bossEnrageAt: each erosion layer is its own stage; floor at full minutes; capped
+ok 39 - bossEnrageAt: each erosion layer is its own stage; floor at full minutes; capped
+  ---
+  duration_ms: 0.249542
+  type: 'test'
+  ...
+# Subtest: enrage II: skill cooldowns ×0.5 (summon 4 s, charge 3 s, ring 5 s), ring ignores hp > 50%
+ok 40 - enrage II: skill cooldowns ×0.5 (summon 4 s, charge 3 s, ring 5 s), ring ignores hp > 50%
+  ---
+  duration_ms: 24.722625
+  type: 'test'
+  ...
+# Subtest: Boss takes round(base × might × takenMul) damage, min 1; normal enemies unaffected
+ok 41 - Boss takes round(base × might × takenMul) damage, min 1; normal enemies unaffected
+  ---
+  duration_ms: 1.00875
+  type: 'test'
+  ...
+# Subtest: after 12:00 the run never times out: Boss alive at 17:00, state still playing
+ok 42 - after 12:00 the run never times out: Boss alive at 17:00, state still playing
+  ---
+  duration_ms: 1.062958
+  type: 'test'
+  ...
+# Subtest: Boss contact damages the player (Boss lives in the grid large list)
+ok 43 - Boss contact damages the player (Boss lives in the grid large list)
+  ---
+  duration_ms: 0.880917
+  type: 'test'
+  ...
+# Subtest: defeat → cleansing (1.5 s, invulnerable, field purified, no spores) → extract → 2 s inside → won
+ok 44 - defeat → cleansing (1.5 s, invulnerable, field purified, no spores) → extract → 2 s inside → won
+  ---
+  duration_ms: 6.550459
+  type: 'test'
+  ...
+# Subtest: stepping out of the extraction point resets the progress
+ok 45 - stepping out of the extraction point resets the progress
+  ---
+  duration_ms: 2.547875
+  type: 'test'
+  ...
+# Subtest: advance drives cleansing and extract like playing
+ok 46 - advance drives cleansing and extract like playing
+  ---
+  duration_ms: 1.577
+  type: 'test'
+  ...
+# Subtest: pause / resume work in playing, levelup, cleansing and extract, and not in won/lost
+ok 47 - pause / resume work in playing, levelup, cleansing and extract, and not in won/lost
+  ---
+  duration_ms: 4.637
+  type: 'test'
+  ...
+# Subtest: levelup pause still resumes to levelup (unchanged by the new states)
+ok 48 - levelup pause still resumes to levelup (unchanged by the new states)
+  ---
+  duration_ms: 1.7065
+  type: 'test'
+  ...
+# Subtest: player hp reaching 0 in the Boss fight still loses
+ok 49 - player hp reaching 0 in the Boss fight still loses
+  ---
+  duration_ms: 1.268209
+  type: 'test'
+  ...
+# Subtest: approach data matches 01 §9.2 and validate() rejects bad approach parameters
+ok 50 - approach data matches 01 §9.2 and validate() rejects bad approach parameters
+  ---
+  duration_ms: 0.319583
+  type: 'test'
+  ...
+# Subtest: 10:59 (狂暴 I): Boss 300 away keeps 58.5 and never approaches
+ok 51 - 10:59 (狂暴 I): Boss 300 away keeps 58.5 and never approaches
+  ---
+  duration_ms: 2.642333
+  type: 'test'
+  ...
+# Subtest: 11:00+: Boss 300 away approaches at 320 (one bossApproach), stops at d ≤ 90 and drops back to 72
+ok 52 - 11:00+: Boss 300 away approaches at 320 (one bossApproach), stops at d ≤ 90 and drops back to 72
+  ---
+  duration_ms: 1.473834
+  type: 'test'
+  ...
+# Subtest: K22: 60 s without damage (from spawn) starts the approach before 11:00, then latches
+ok 53 - K22: 60 s without damage (from spawn) starts the approach before 11:00, then latches
+  ---
+  duration_ms: 30.916583
+  type: 'test'
+  ...
+# Subtest: K22: a Boss that keeps taking damage (every < 60 s) never approaches before 11:00
+ok 54 - K22: a Boss that keeps taking damage (every < 60 s) never approaches before 11:00
+  ---
+  duration_ms: 41.551584
+  type: 'test'
+  ...
+# Subtest: K22: a real weapon hit on the Boss records lastHitTime (the idle timer source)
+ok 55 - K22: a real weapon hit on the Boss records lastHitTime (the idle timer source)
+  ---
+  duration_ms: 1.42075
+  type: 'test'
+  ...
+# Subtest: fleeing straight at 160: within 2 s d ≤ 120, then ≤ 120 at least once in every 3 s charge cycle
+ok 56 - fleeing straight at 160: within 2 s d ≤ 120, then ≤ 120 at least once in every 3 s charge cycle
+  ---
+  duration_ms: 11.079917
+  type: 'test'
+  ...
+# Subtest: fleeing straight at 257.6 (max build): ≤ 120 at least once in every 8 s
+ok 57 - fleeing straight at 257.6 (max build): ≤ 120 at least once in every 8 s
+  ---
+  duration_ms: 18.763083
+  type: 'test'
+  ...
+# Subtest: any movement: from 11:00 the Boss always closes the distance (circling, zig-zag, standing far away)
+ok 58 - any movement: from 11:00 the Boss always closes the distance (circling, zig-zag, standing far away)
+  ---
+  duration_ms: 41.721541
+  type: 'test'
+  ...
+# Subtest: no windup while approaching; the step after leaving the approach starts exactly one windup
+ok 59 - no windup while approaching; the step after leaving the approach starts exactly one windup
+  ---
+  duration_ms: 0.720667
+  type: 'test'
+  ...
+# Subtest: windup / charge in progress are not interrupted; charge speed is 72 × 2.5 = 180
+ok 60 - windup / charge in progress are not interrupted; charge speed is 72 × 2.5 = 180
+  ---
+  duration_ms: 0.578084
+  type: 'test'
+  ...
+# Subtest: approach speed ignores the dew-ring slow; normal chase is still slowed
+ok 61 - approach speed ignores the dew-ring slow; normal chase is still slowed
+  ---
+  duration_ms: 0.573916
+  type: 'test'
+  ...
+# Subtest: balance-15 flee + prefer:spore_shot: Boss hp falls before 12:00 (no longer stuck at 83%)
+ok 62 - balance-15 flee + prefer:spore_shot: Boss hp falls before 12:00 (no longer stuck at 83%)
+  ---
+  duration_ms: 799.614417
+  type: 'test'
+  ...
+# Subtest: a Boss fight past 11:00 with approach chasing stays deterministic
+ok 63 - a Boss fight past 11:00 with approach chasing stays deterministic
+  ---
+  duration_ms: 94.0455
+  type: 'test'
+  ...
+# Subtest: BOT-01 bot-quick-0 · flee · random：终态、不超池容量、summary 有限
+ok 64 - BOT-01 bot-quick-0 · flee · random：终态、不超池容量、summary 有限
+  ---
+  duration_ms: 1317.131625
+  type: 'test'
+  ...
+# Subtest: BOT-01 bot-quick-1 · flee · random：终态、不超池容量、summary 有限
+ok 65 - BOT-01 bot-quick-1 · flee · random：终态、不超池容量、summary 有限
+  ---
+  duration_ms: 773.440625
+  type: 'test'
+  ...
+# Subtest: BOT-01 bot-quick-2 · flee · random：终态、不超池容量、summary 有限
+ok 66 - BOT-01 bot-quick-2 · flee · random：终态、不超池容量、summary 有限
+  ---
+  duration_ms: 484.944708
+  type: 'test'
+  ...
+# Subtest: BOT-01 bot-quick-0 · spore · random：终态、不超池容量、summary 有限
+ok 67 - BOT-01 bot-quick-0 · spore · random：终态、不超池容量、summary 有限
+  ---
+  duration_ms: 448.176167
+  type: 'test'
+  ...
+# Subtest: BOT-01 bot-quick-1 · spore · random：终态、不超池容量、summary 有限
+ok 68 - BOT-01 bot-quick-1 · spore · random：终态、不超池容量、summary 有限
+  ---
+  duration_ms: 101.428667
+  type: 'test'
+  ...
+# Subtest: BOT-01 bot-quick-2 · spore · random：终态、不超池容量、summary 有限
+ok 69 - BOT-01 bot-quick-2 · spore · random：终态、不超池容量、summary 有限
+  ---
+  duration_ms: 223.474334
+  type: 'test'
+  ...
+# Subtest: survivor: full pool releases old life=5.655198531684391e-15 before actual ranged fire
+ok 70 - survivor: full pool releases old life=5.655198531684391e-15 before actual ranged fire
+  ---
+  duration_ms: 9.044666
+  type: 'test'
+  ...
+# Subtest: survivor: full pool releases old life=0.016666666666666666 before actual ranged fire
+ok 71 - survivor: full pool releases old life=0.016666666666666666 before actual ranged fire
+  ---
+  duration_ms: 2.147125
+  type: 'test'
+  ...
+# Subtest: survivor: genuinely full pool still drops; life just above DT cannot free a slot
+ok 72 - survivor: genuinely full pool still drops; life just above DT cannot free a slot
+  ---
+  duration_ms: 1.376042
+  type: 'test'
+  ...
+# Subtest: survivor: pre-fire cleanup cannot move, age or collide surviving old bubbles
+ok 73 - survivor: pre-fire cleanup cannot move, age or collide surviving old bubbles
+  ---
+  duration_ms: 2.139542
+  type: 'test'
+  ...
+# Subtest: survivor: a bubble that will collide later does not free an early firing slot
+ok 74 - survivor: a bubble that will collide later does not free an early firing slot
+  ---
+  duration_ms: 0.727333
+  type: 'test'
+  ...
+# Subtest: survivor: paused and levelup states do not run expiry cleanup
+ok 75 - survivor: paused and levelup states do not run expiry cleanup
+  ---
+  duration_ms: 0.98775
+  type: 'test'
+  ...
+# Subtest: survivor: all expiring slots are reclaimed, but newborns wait for hostile update
+ok 76 - survivor: all expiring slots are reclaimed, but newborns wait for hostile update
+  ---
+  duration_ms: 0.536125
+  type: 'test'
+  ...
+# Subtest: survivor: releasing expired entries preserves two old collision bubbles' priority
+ok 77 - survivor: releasing expired entries preserves two old collision bubbles' priority
+  ---
+  duration_ms: 1.010208
+  type: 'test'
+  ...
+# Subtest: survivor: newborn life=3 keeps priority over old bubbles unless it expires
+ok 78 - survivor: newborn life=3 keeps priority over old bubbles unless it expires
+  ---
+  duration_ms: 2.370583
+  type: 'test'
+  ...
+# Subtest: survivor: newborn life=0.008333333333333333 keeps priority over old bubbles unless it expires
+ok 79 - survivor: newborn life=0.008333333333333333 keeps priority over old bubbles unless it expires
+  ---
+  duration_ms: 0.936667
+  type: 'test'
+  ...
+# Subtest: survivor: without full-pool firing even next-tick legacy collision order stays unchanged
+ok 80 - survivor: without full-pool firing even next-tick legacy collision order stays unchanged
+  ---
+  duration_ms: 0.986125
+  type: 'test'
+  ...
+# Subtest: survivor: repeated full-pool firing cannot reclaim a short-lived same-tick newborn
+ok 81 - survivor: repeated full-pool firing cannot reclaim a short-lived same-tick newborn
+  ---
+  duration_ms: 1.308625
+  type: 'test'
+  ...
+# Subtest: xianxia: full pool releases old life=5.655198531684391e-15 before actual ranged fire
+ok 82 - xianxia: full pool releases old life=5.655198531684391e-15 before actual ranged fire
+  ---
+  duration_ms: 1.855208
+  type: 'test'
+  ...
+# Subtest: xianxia: full pool releases old life=0.016666666666666666 before actual ranged fire
+ok 83 - xianxia: full pool releases old life=0.016666666666666666 before actual ranged fire
+  ---
+  duration_ms: 2.418792
+  type: 'test'
+  ...
+# Subtest: xianxia: genuinely full pool still drops; life just above DT cannot free a slot
+ok 84 - xianxia: genuinely full pool still drops; life just above DT cannot free a slot
+  ---
+  duration_ms: 0.734792
+  type: 'test'
+  ...
+# Subtest: xianxia: pre-fire cleanup cannot move, age or collide surviving old bubbles
+ok 85 - xianxia: pre-fire cleanup cannot move, age or collide surviving old bubbles
+  ---
+  duration_ms: 1.10625
+  type: 'test'
+  ...
+# Subtest: xianxia: a bubble that will collide later does not free an early firing slot
+ok 86 - xianxia: a bubble that will collide later does not free an early firing slot
+  ---
+  duration_ms: 1.033792
+  type: 'test'
+  ...
+# Subtest: xianxia: paused and levelup states do not run expiry cleanup
+ok 87 - xianxia: paused and levelup states do not run expiry cleanup
+  ---
+  duration_ms: 0.748792
+  type: 'test'
+  ...
+# Subtest: xianxia: all expiring slots are reclaimed, but newborns wait for hostile update
+ok 88 - xianxia: all expiring slots are reclaimed, but newborns wait for hostile update
+  ---
+  duration_ms: 1.205542
+  type: 'test'
+  ...
+# Subtest: xianxia: releasing expired entries preserves two old collision bubbles' priority
+ok 89 - xianxia: releasing expired entries preserves two old collision bubbles' priority
+  ---
+  duration_ms: 1.729416
+  type: 'test'
+  ...
+# Subtest: xianxia: newborn life=3 keeps priority over old bubbles unless it expires
+ok 90 - xianxia: newborn life=3 keeps priority over old bubbles unless it expires
+  ---
+  duration_ms: 0.896708
+  type: 'test'
+  ...
+# Subtest: xianxia: newborn life=0.008333333333333333 keeps priority over old bubbles unless it expires
+ok 91 - xianxia: newborn life=0.008333333333333333 keeps priority over old bubbles unless it expires
+  ---
+  duration_ms: 0.908083
+  type: 'test'
+  ...
+# Subtest: xianxia: without full-pool firing even next-tick legacy collision order stays unchanged
+ok 92 - xianxia: without full-pool firing even next-tick legacy collision order stays unchanged
+  ---
+  duration_ms: 0.782375
+  type: 'test'
+  ...
+# Subtest: xianxia: repeated full-pool firing cannot reclaim a short-lived same-tick newborn
+ok 93 - xianxia: repeated full-pool firing cannot reclaim a short-lived same-tick newborn
+  ---
+  duration_ms: 1.373417
+  type: 'test'
+  ...
+# Subtest: survivor: independent recycle preserves live collision priority through expired-slot permutations
+ok 94 - survivor: independent recycle preserves live collision priority through expired-slot permutations
+  ---
+  duration_ms: 20.853459
+  type: 'test'
+  ...
+# Subtest: survivor: independent full-pool retry cannot reclaim a short-lived newborn
+ok 95 - survivor: independent full-pool retry cannot reclaim a short-lived newborn
+  ---
+  duration_ms: 0.946375
+  type: 'test'
+  ...
+# Subtest: survivor: independent one reclaimed slot admits one real shot, then genuinely drops the second
+ok 96 - survivor: independent one reclaimed slot admits one real shot, then genuinely drops the second
+  ---
+  duration_ms: 1.626792
+  type: 'test'
+  ...
+# Subtest: survivor: independent queued selection and pause preserve expiring slot until resume
+ok 97 - survivor: independent queued selection and pause preserve expiring slot until resume
+  ---
+  duration_ms: 4.609375
+  type: 'test'
+  ...
+# Subtest: xianxia: independent recycle preserves live collision priority through expired-slot permutations
+ok 98 - xianxia: independent recycle preserves live collision priority through expired-slot permutations
+  ---
+  duration_ms: 11.609375
+  type: 'test'
+  ...
+# Subtest: xianxia: independent full-pool retry cannot reclaim a short-lived newborn
+ok 99 - xianxia: independent full-pool retry cannot reclaim a short-lived newborn
+  ---
+  duration_ms: 0.43175
+  type: 'test'
+  ...
+# Subtest: xianxia: independent one reclaimed slot admits one real shot, then genuinely drops the second
+ok 100 - xianxia: independent one reclaimed slot admits one real shot, then genuinely drops the second
+  ---
+  duration_ms: 0.450042
+  type: 'test'
+  ...
+# Subtest: xianxia: independent queued selection and pause preserve expiring slot until resume
+ok 101 - xianxia: independent queued selection and pause preserve expiring slot until resume
+  ---
+  duration_ms: 0.5575
+  type: 'test'
+  ...
+# (node:24310) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: whole person and sword uses 96u body height and source-pixel anchor
+ok 102 - whole person and sword uses 96u body height and source-pixel anchor
+  ---
+  duration_ms: 2.326292
+  type: 'test'
+  ...
+# Subtest: invalid hover dimensions or anchors fail validation for original-player fallback
+ok 103 - invalid hover dimensions or anchors fail validation for original-player fallback
+  ---
+  duration_ms: 0.412792
+  type: 'test'
+  ...
+# (node:24311) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: hover begins level and actual horizontal displacement produces bounded lean
+ok 104 - hover begins level and actual horizontal displacement produces bounded lean
+  ---
+  duration_ms: 1.14925
+  type: 'test'
+  ...
+# Subtest: stationary hover never invents directional lean, and stops ease level
+ok 105 - stationary hover never invents directional lean, and stops ease level
+  ---
+  duration_ms: 0.0825
+  type: 'test'
+  ...
+# Subtest: same tick, pause and level-up freeze lean, bob and facing without time accumulation
+ok 106 - same tick, pause and level-up freeze lean, bob and facing without time accumulation
+  ---
+  duration_ms: 1.079042
+  type: 'test'
+  ...
+# Subtest: horizontal jitter cannot flicker facing, and vertical movement preserves the last side
+ok 107 - horizontal jitter cannot flicker facing, and vertical movement preserves the last side
+  ---
+  duration_ms: 0.096167
+  type: 'test'
+  ...
+# Subtest: bob stays within 1.5u across idle and movement; reset clears the old run
+ok 108 - bob stays within 1.5u across idle and movement; reset clears the old run
+  ---
+  duration_ms: 0.24125
+  type: 'test'
+  ...
+# Subtest: steady velocity gives the same hover pose at different render sampling rates
+ok 109 - steady velocity gives the same hover pose at different render sampling rates
+  ---
+  duration_ms: 0.110333
+  type: 'test'
+  ...
+# (node:24312) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: classic loads no new textures and keeps its original five player sprites
+ok 110 - classic loads no new textures and keeps its original five player sprites
+  ---
+  duration_ms: 6.912541
+  type: 'test'
+  ...
+# Subtest: hover image failure retains original player and no retained image reference
+ok 111 - hover image failure retains original player and no retained image reference
+  ---
+  duration_ms: 1.259708
+  type: 'test'
+  ...
+# Subtest: hover json failure retains original player and no retained image reference
+ok 112 - hover json failure retains original player and no retained image reference
+  ---
+  duration_ms: 1.268375
+  type: 'test'
+  ...
+# Subtest: hover invalid failure retains original player and no retained image reference
+ok 113 - hover invalid failure retains original player and no retained image reference
+  ---
+  duration_ms: 0.552458
+  type: 'test'
+  ...
+# Subtest: hover is enabled from level one, uses one anchored sprite, and never requests old atlases
+ok 114 - hover is enabled from level one, uses one anchored sprite, and never requests old atlases
+  ---
+  duration_ms: 5.139792
+  type: 'test'
+  ...
+# Subtest: single hover sprite retains damage tint and original invulnerability alpha
+ok 115 - single hover sprite retains damage tint and original invulnerability alpha
+  ---
+  duration_ms: 1.637333
+  type: 'test'
+  ...
+# Subtest: single crescent stays inside sector, freezes with tick, reduces opacity and clears after decay
+ok 116 - single crescent stays inside sector, freezes with tick, reduces opacity and clears after decay
+  ---
+  duration_ms: 6.858917
+  type: 'test'
+  ...
+# Subtest: strings.js 有可扫描的文案
+ok 117 - strings.js 有可扫描的文案
+  ---
+  duration_ms: 0.618417
+  type: 'test'
+  ...
+# Subtest: 无 {吃,食用,采食,美味}×{蘑菇,菌} 组合
+ok 118 - 无 {吃,食用,采食,美味}×{蘑菇,菌} 组合
+  ---
+  duration_ms: 0.166666
+  type: 'test'
+  ...
+# Subtest: 无暴力类词 {击杀,消灭,屠杀,死亡,血,尸}
+ok 119 - 无暴力类词 {击杀,消灭,屠杀,死亡,血,尸}
+  ---
+  duration_ms: 0.138417
+  type: 'test'
+  ...
+# Subtest: 结算与 HUD 计数统一用“净化数”
+ok 120 - 结算与 HUD 计数统一用“净化数”
+  ---
+  duration_ms: 0.048333
+  type: 'test'
+  ...
+# Subtest: 失败文案统一用“被浊雾笼罩”
+ok 121 - 失败文案统一用“被浊雾笼罩”
+  ---
+  duration_ms: 0.035583
+  type: 'test'
+  ...
+# Subtest: S1 界面文案齐全：HUD、三选一卡、结算、新手首条提示
+ok 122 - S1 界面文案齐全：HUD、三选一卡、结算、新手首条提示
+  ---
+  duration_ms: 0.056625
+  type: 'test'
+  ...
+# Subtest: 雨滴坠击卡面与首局提示（09 A6 / S3-D2）：提示键存在，卡面说明含“不用瞄准”
+ok 123 - 雨滴坠击卡面与首局提示（09 A6 / S3-D2）：提示键存在，卡面说明含“不用瞄准”
+  ---
+  duration_ms: 0.069083
+  type: 'test'
+  ...
+# Subtest: CMP-05 Survivor*.ts 有可扫描的文件与中文字面量
+ok 124 - CMP-05 Survivor*.ts 有可扫描的文件与中文字面量
+  ---
+  duration_ms: 0.030584
+  type: 'test'
+  ...
+# Subtest: CMP-05 Survivor*.ts 中文字面量无 {吃,食用,采食,美味}×{蘑菇,菌} 组合
+ok 125 - CMP-05 Survivor*.ts 中文字面量无 {吃,食用,采食,美味}×{蘑菇,菌} 组合
+  ---
+  duration_ms: 0.301
+  type: 'test'
+  ...
+# Subtest: CMP-05 Survivor*.ts 中文字面量无暴力类词 {击杀,消灭,屠杀,死亡,血,尸}
+ok 126 - CMP-05 Survivor*.ts 中文字面量无暴力类词 {击杀,消灭,屠杀,死亡,血,尸}
+  ---
+  duration_ms: 0.385334
+  type: 'test'
+  ...
+# Subtest: CMP-05 扫描器跳过注释与 console 日志、能识别字面量
+ok 127 - CMP-05 扫描器跳过注释与 console 日志、能识别字面量
+  ---
+  duration_ms: 0.593458
+  type: 'test'
+  ...
+# Subtest: separation keeps diagonal touching enemies able to hurt the player
+ok 128 - separation keeps diagonal touching enemies able to hurt the player
+  ---
+  duration_ms: 26.934125
+  type: 'test'
+  ...
+# Subtest: a genuinely separated enemy does not damage the player
+ok 129 - a genuinely separated enemy does not damage the player
+  ---
+  duration_ms: 3.394792
+  type: 'test'
+  ...
+# Subtest: validate() returns an empty array for the shipped data
+ok 130 - validate() returns an empty array for the shipped data
+  ---
+  duration_ms: 6.311625
+  type: 'test'
+  ...
+# Subtest: spore_shot five levels match the 01-gdd §6.1 table item by item
+ok 131 - spore_shot five levels match the 01-gdd §6.1 table item by item
+  ---
+  duration_ms: 0.204083
+  type: 'test'
+  ...
+# Subtest: umbrella_blades five levels match the 01-gdd §6.2 table
+ok 132 - umbrella_blades five levels match the 01-gdd §6.2 table
+  ---
+  duration_ms: 0.113125
+  type: 'test'
+  ...
+# Subtest: dew_ring five levels match the 01-gdd §6.3 table
+ok 133 - dew_ring five levels match the 01-gdd §6.3 table
+  ---
+  duration_ms: 0.107458
+  type: 'test'
+  ...
+# Subtest: raindrop five levels match the 01-gdd §6.4 table (08 K8)
+ok 134 - raindrop five levels match the 01-gdd §6.4 table (08 K8)
+  ---
+  duration_ms: 0.098917
+  type: 'test'
+  ...
+# Subtest: leaf_boomerang five levels match the 01-gdd §6.5 table (08 K8)
+ok 135 - leaf_boomerang five levels match the 01-gdd §6.5 table (08 K8)
+  ---
+  duration_ms: 0.234583
+  type: 'test'
+  ...
+# Subtest: all five weapons are drafted content with unique hitAt indices 0–4
+ok 136 - all five weapons are drafted content with unique hitAt indices 0–4
+  ---
+  duration_ms: 0.354042
+  type: 'test'
+  ...
+# Subtest: player pickupRadius follows 01 §5 (08 K10: 60 → 100, K18: 100 → 140)
+ok 137 - player pickupRadius follows 01 §5 (08 K10: 60 → 100, K18: 100 → 140)
+  ---
+  duration_ms: 0.0855
+  type: 'test'
+  ...
+# Subtest: new weapon cards have names and descriptions in strings (card_<id>)
+ok 138 - new weapon cards have names and descriptions in strings (card_<id>)
+  ---
+  duration_ms: 0.434416
+  type: 'test'
+  ...
+# Subtest: passives match 01-gdd §7: per-level effect and Lv5 total, all six in table order (S3 B1)
+ok 139 - passives match 01-gdd §7: per-level effect and Lv5 total, all six in table order (S3 B1)
+  ---
+  duration_ms: 0.660625
+  type: 'test'
+  ...
+# Subtest: every weapon evolves with an existing passive; 孢子罗盘 unlocks nothing (01 §7)
+ok 140 - every weapon evolves with an existing passive; 孢子罗盘 unlocks nothing (01 §7)
+  ---
+  duration_ms: 0.293375
+  type: 'test'
+  ...
+# Subtest: evolution / passive / elite strings exist (card_evolve_<id>, card_regen, card_magnet)
+ok 141 - evolution / passive / elite strings exist (card_evolve_<id>, card_regen, card_magnet)
+  ---
+  duration_ms: 0.17725
+  type: 'test'
+  ...
+# Subtest: pickups follow 01-gdd §11 (S3 B3)
+ok 142 - pickups follow 01-gdd §11 (S3 B3)
+  ---
+  duration_ms: 0.107
+  type: 'test'
+  ...
+# Subtest: all enemies match 01-gdd §9 table: hp/moveSpeed/damage/xp/radius/kbRes/firstSeen
+ok 143 - all enemies match 01-gdd §9 table: hp/moveSpeed/damage/xp/radius/kbRes/firstSeen
+  ---
+  duration_ms: 0.132417
+  type: 'test'
+  ...
+# Subtest: enemy behaviour parameters match 01-gdd §9
+ok 144 - enemy behaviour parameters match 01-gdd §9
+  ---
+  duration_ms: 0.093959
+  type: 'test'
+  ...
+# Subtest: enemies carry the §9.1 growth coefficients (Boss is fixed)
+ok 145 - enemies carry the §9.1 growth coefficients (Boss is fixed)
+  ---
+  duration_ms: 0.081625
+  type: 'test'
+  ...
+# Subtest: boss_mist_snail matches 01-gdd §9.2 stats and skills
+ok 146 - boss_mist_snail matches 01-gdd §9.2 stats and skills
+  ---
+  duration_ms: 0.145208
+  type: 'test'
+  ...
+# Subtest: extraction follows 01-gdd §9.3
+ok 147 - extraction follows 01-gdd §9.3
+  ---
+  duration_ms: 0.073208
+  type: 'test'
+  ...
+# Subtest: wave segments are contiguous and start at 0
+ok 148 - wave segments are contiguous and start at 0
+  ---
+  duration_ms: 0.0665
+  type: 'test'
+  ...
+# Subtest: each wave composition sums to 100 and references known enemies
+ok 149 - each wave composition sums to 100 and references known enemies
+  ---
+  duration_ms: 0.204709
+  type: 'test'
+  ...
+# Subtest: enemy projectile (mist bubble) caps are 60 in hardCaps / pools / nodes (S3-D1, BUG-S2-01)
+ok 150 - enemy projectile (mist bubble) caps are 60 in hardCaps / pools / nodes (S3-D1, BUG-S2-01)
+  ---
+  duration_ms: 0.059667
+  type: 'test'
+  ...
+# Subtest: wave on-screen caps stay within the hard limit
+ok 151 - wave on-screen caps stay within the hard limit
+  ---
+  duration_ms: 0.064
+  type: 'test'
+  ...
+# Subtest: only the last wave segment is open-ended (08 K2: 7:00–Boss 击败, toSec null)
+ok 152 - only the last wave segment is open-ended (08 K2: 7:00–Boss 击败, toSec null)
+  ---
+  duration_ms: 0.071458
+  type: 'test'
+  ...
+# Subtest: wave segments follow 01-gdd §10 from 0:00 to Boss 击败
+ok 153 - wave segments follow 01-gdd §10 from 0:00 to Boss 击败
+  ---
+  duration_ms: 0.159833
+  type: 'test'
+  ...
+# Subtest: each enemy first appears in the wave whose fromSec equals its firstSeenSec
+ok 154 - each enemy first appears in the wave whose fromSec equals its firstSeenSec
+  ---
+  duration_ms: 0.093792
+  type: 'test'
+  ...
+# Subtest: wave events follow 01-gdd §10 and reference known enemies
+ok 155 - wave events follow 01-gdd §10 and reference known enemies
+  ---
+  duration_ms: 0.331917
+  type: 'test'
+  ...
+# Subtest: waves.winAtSeconds is removed: timed victory is a debug option only (08 K1)
+ok 156 - waves.winAtSeconds is removed: timed victory is a debug option only (08 K1)
+  ---
+  duration_ms: 0.06125
+  type: 'test'
+  ...
+# Subtest: all data modules survive a JSON round-trip
+ok 157 - all data modules survive a JSON round-trip
+  ---
+  duration_ms: 0.691875
+  type: 'test'
+  ...
+# Subtest: player-facing strings pass the compliance word-list scan
+ok 158 - player-facing strings pass the compliance word-list scan
+  ---
+  duration_ms: 0.8275
+  type: 'test'
+  ...
+# Subtest: data modules are frozen
+ok 159 - data modules are frozen
+  ---
+  duration_ms: 0.06925
+  type: 'test'
+  ...
+# Subtest: same seed + same inputs → identical summary and per-second state hashes
+ok 160 - same seed + same inputs → identical summary and per-second state hashes
+  ---
+  duration_ms: 40.51425
+  type: 'test'
+  ...
+# Subtest: raindrop + leaf_boomerang runs are reproducible (weapon sub-stream, 03 §3.3)
+ok 161 - raindrop + leaf_boomerang runs are reproducible (weapon sub-stream, 03 §3.3)
+  ---
+  duration_ms: 45.364125
+  type: 'test'
+  ...
+# Subtest: different seeds produce different trajectories
+ok 162 - different seeds produce different trajectories
+  ---
+  duration_ms: 21.640875
+  type: 'test'
+  ...
+# Subtest: a longer run is also fully reproducible (no timed victory without the debug option)
+ok 163 - a longer run is also fully reproducible (no timed victory without the debug option)
+  ---
+  duration_ms: 197.230959
+  type: 'test'
+  ...
+# Subtest: a whole run through the Boss, cleansing and extraction is reproducible
+ok 164 - a whole run through the Boss, cleansing and extraction is reproducible
+  ---
+  duration_ms: 748.439667
+  type: 'test'
+  ...
+# Subtest: no js/survivor source uses a non-deterministic or platform API
+ok 165 - no js/survivor source uses a non-deterministic or platform API
+  ---
+  duration_ms: 2.760208
+  type: 'test'
+  ...
+# Subtest: evolutions, the 5:00 elite and drops are reproducible (S3 B1–B4)
+ok 166 - evolutions, the 5:00 elite and drops are reproducible (S3 B1–B4)
+  ---
+  duration_ms: 473.175125
+  type: 'test'
+  ...
+# Subtest: gnat / beetle / snail chase the player in a straight line at their move speed
+ok 167 - gnat / beetle / snail chase the player in a straight line at their move speed
+  ---
+  duration_ms: 12.976834
+  type: 'test'
+  ...
+# Subtest: snail is a tank: 80 hp and 80% knockback resistance
+ok 168 - snail is a tank: 80 hp and 80% knockback resistance
+  ---
+  duration_ms: 0.241125
+  type: 'test'
+  ...
+# Subtest: moth tracks with a perpendicular sway of amplitude ≈ 40 and period 1.2 s
+ok 169 - moth tracks with a perpendicular sway of amplitude ≈ 40 and period 1.2 s
+  ---
+  duration_ms: 6.175792
+  type: 'test'
+  ...
+# Subtest: sporeling approaches while > 180 and holds position within 180
+ok 170 - sporeling approaches while > 180 and holds position within 180
+  ---
+  duration_ms: 0.996375
+  type: 'test'
+  ...
+# Subtest: sporeling spits one mist bubble every 2 s while within 250, aimed at the player (08 K21)
+ok 171 - sporeling spits one mist bubble every 2 s while within 250, aimed at the player (08 K21)
+  ---
+  duration_ms: 3.324542
+  type: 'test'
+  ...
+# Subtest: sporeling does not fire beyond 250
+ok 172 - sporeling does not fire beyond 250
+  ---
+  duration_ms: 0.224792
+  type: 'test'
+  ...
+# Subtest: mist bubble expires after 3 s if it never reaches the player
+ok 173 - mist bubble expires after 3 s if it never reaches the player
+  ---
+  duration_ms: 0.322083
+  type: 'test'
+  ...
+# Subtest: mist bubble hit deals 6 damage, starts invulnerability and is consumed
+ok 174 - mist bubble hit deals 6 damage, starts invulnerability and is consumed
+  ---
+  duration_ms: 0.648875
+  type: 'test'
+  ...
+# Subtest: mist bubble during invulnerability is consumed without damage
+ok 175 - mist bubble during invulnerability is consumed without damage
+  ---
+  duration_ms: 6.213458
+  type: 'test'
+  ...
+# Subtest: player weapons do not cancel mist bubbles (裁决 L4)
+ok 176 - player weapons do not cancel mist bubbles (裁决 L4)
+  ---
+  duration_ms: 8.489583
+  type: 'test'
+  ...
+# Subtest: mist bubble pool holds 60 (S3-D1); the 61st spit is dropped and counted
+ok 177 - mist bubble pool holds 60 (S3-D1); the 61st spit is dropped and counted
+  ---
+  duration_ms: 2.613584
+  type: 'test'
+  ...
+# Subtest: SurvivorRun applies mist bubble damage and records the killer
+ok 178 - SurvivorRun applies mist bubble damage and records the killer
+  ---
+  duration_ms: 5.304167
+  type: 'test'
+  ...
+# Subtest: cross moths fly straight (no tracking) and are recycled silently off the far edge
+ok 179 - cross moths fly straight (no tracking) and are recycled silently off the far edge
+  ---
+  duration_ms: 11.852541
+  type: 'test'
+  ...
+# Subtest: cross moths are recycled by the lifetime safety net if the player keeps pace
+ok 180 - cross moths are recycled by the lifetime safety net if the player keeps pace
+  ---
+  duration_ms: 0.297792
+  type: 'test'
+  ...
+# Subtest: cross moths are exempt from far-distance relocation
+ok 181 - cross moths are exempt from far-distance relocation
+  ---
+  duration_ms: 0.176792
+  type: 'test'
+  ...
+# Subtest: elite chases at 80, then every 5 s: 0.8 s windup standing still with the direction locked, 1 s dash at ×2.5
+ok 182 - elite chases at 80, then every 5 s: 0.8 s windup standing still with the direction locked, 1 s dash at ×2.5
+  ---
+  duration_ms: 2.828625
+  type: 'test'
+  ...
+# Subtest: elite in a full run: spawned at 5:00 exactly once, never relocated, defeat drops loot and counts eliteDefeated
+ok 183 - elite in a full run: spawned at 5:00 exactly once, never relocated, defeat drops loot and counts eliteDefeated
+  ---
+  duration_ms: 1338.158916
+  type: 'test'
+  ...
+# Subtest: 500 random scenarios: grid queryCircle matches brute force exactly
+ok 184 - 500 random scenarios: grid queryCircle matches brute force exactly
+  ---
+  duration_ms: 35.367959
+  type: 'test'
+  ...
+# Subtest: large entities (r > maxCellRadius) land in the large list, not the grid
+ok 185 - large entities (r > maxCellRadius) land in the large list, not the grid
+  ---
+  duration_ms: 0.270292
+  type: 'test'
+  ...
+# Subtest: entities outside the window are clamped to edge cells and still found
+ok 186 - entities outside the window are clamped to edge cells and still found
+  ---
+  duration_ms: 0.117083
+  type: 'test'
+  ...
+# Subtest: empty grid returns no candidates
+ok 187 - empty grid returns no candidates
+  ---
+  duration_ms: 0.083208
+  type: 'test'
+  ...
+# Subtest: rebuild each step reflects moved entities
+ok 188 - rebuild each step reflects moved entities
+  ---
+  duration_ms: 0.116167
+  type: 'test'
+  ...
+# Subtest: the scene host starts the survivor game directly, with no old views
+ok 189 - the scene host starts the survivor game directly, with no old views
+  ---
+  duration_ms: 2.078458
+  type: 'test'
+  ...
+# Subtest: removed gameplay cannot reenter the build
+ok 190 - removed gameplay cannot reenter the build
+  ---
+  duration_ms: 1.146291
+  type: 'test'
+  ...
+# (node:24320) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: hover independent: ImageAsset failure retains visible legacy player
+ok 191 - hover independent: ImageAsset failure retains visible legacy player
+  ---
+  duration_ms: 19.987084
+  type: 'test'
+  ...
+# Subtest: hover independent: JsonAsset failure retains visible legacy player
+ok 192 - hover independent: JsonAsset failure retains visible legacy player
+  ---
+  duration_ms: 3.9045
+  type: 'test'
+  ...
+# Subtest: hover independent: malformed failure retains visible legacy player
+ok 193 - hover independent: malformed failure retains visible legacy player
+  ---
+  duration_ms: 6.702209
+  type: 'test'
+  ...
+# Subtest: hover independent: dimensions failure retains visible legacy player
+ok 194 - hover independent: dimensions failure retains visible legacy player
+  ---
+  duration_ms: 0.683958
+  type: 'test'
+  ...
+# Subtest: hover independent: classic never fetches hover and retains legacy motion
+ok 195 - hover independent: classic never fetches hover and retains legacy motion
+  ---
+  duration_ms: 14.148417
+  type: 'test'
+  ...
+# Subtest: hover independent: available from start, movement overrides input, freeze and reset
+ok 196 - hover independent: available from start, movement overrides input, freeze and reset
+  ---
+  duration_ms: 17.733458
+  type: 'test'
+  ...
+# Subtest: hover independent: damage tint, accessibility and terminal alpha remain intact
+ok 197 - hover independent: damage tint, accessibility and terminal alpha remain intact
+  ---
+  duration_ms: 5.425834
+  type: 'test'
+  ...
+# Subtest: hover independent: delayed load after destroy never revives view or retains assets
+ok 198 - hover independent: delayed load after destroy never revives view or retains assets
+  ---
+  duration_ms: 4.8025
+  type: 'test'
+  ...
+# Subtest: hover independent: rendering real short runs leaves all logic and RNG unchanged
+ok 199 - hover independent: rendering real short runs leaves all logic and RNG unchanged
+  ---
+  duration_ms: 44.289417
+  type: 'test'
+  ...
+# Subtest: hover independent: PNG dimensions and body-height anchor contract
+ok 200 - hover independent: PNG dimensions and body-height anchor contract
+  ---
+  duration_ms: 0.951334
+  type: 'test'
+  ...
+# Subtest: 常量符合 01 §4（死区 8 / 半径 60）
+ok 201 - 常量符合 01 §4（死区 8 / 半径 60）
+  ---
+  duration_ms: 1.482958
+  type: 'test'
+  ...
+# Subtest: 死区内归零：偏移长度 ≤ 8 输出零向量
+ok 202 - 死区内归零：偏移长度 ≤ 8 输出零向量
+  ---
+  duration_ms: 1.500709
+  type: 'test'
+  ...
+# Subtest: 线性区：8–60 之间强度线性从 0 增至 1，方向为单位向量
+ok 203 - 线性区：8–60 之间强度线性从 0 增至 1，方向为单位向量
+  ---
+  duration_ms: 0.169208
+  type: 'test'
+  ...
+# Subtest: 线性区斜向：方向归一化后乘强度
+ok 204 - 线性区斜向：方向归一化后乘强度
+  ---
+  duration_ms: 0.103625
+  type: 'test'
+  ...
+# Subtest: 超半径截断：偏移 > 60 时强度恒为 1，方向保持
+ok 205 - 超半径截断：偏移 > 60 时强度恒为 1，方向保持
+  ---
+  duration_ms: 0.202208
+  type: 'test'
+  ...
+# Subtest: 底座钳制：按下点超出可用区时底座中心内移
+ok 206 - 底座钳制：按下点超出可用区时底座中心内移
+  ---
+  duration_ms: 0.24575
+  type: 'test'
+  ...
+# Subtest: 钳制常量：无安全区信息时仅受屏幕边界与半径约束
+ok 207 - 钳制常量：无安全区信息时仅受屏幕边界与半径约束
+  ---
+  duration_ms: 0.160834
+  type: 'test'
+  ...
+# Subtest: resolve：先钳制底座再按内移后的中心算偏移
+ok 208 - resolve：先钳制底座再按内移后的中心算偏移
+  ---
+  duration_ms: 0.112584
+  type: 'test'
+  ...
+# Subtest: 非有限输入不产生 NaN（非有限坐标按 0 处理）
+ok 209 - 非有限输入不产生 NaN（非有限坐标按 0 处理）
+  ---
+  duration_ms: 0.582667
+  type: 'test'
+  ...
+# Subtest: selected crystal cards grant exactly five each through Run summary and settlement
+ok 210 - selected crystal cards grant exactly five each through Run summary and settlement
+  ---
+  duration_ms: 7.617291
+  type: 'test'
+  ...
+# Subtest: 01 §13.1 example: 3-minute loss ≈ 18 + 6 = 24
+ok 211 - 01 §13.1 example: 3-minute loss ≈ 18 + 6 = 24
+  ---
+  duration_ms: 0.10575
+  type: 'test'
+  ...
+# Subtest: 01 §13.1 example: win at ~8:10 with ~1400 purified = 49+28+5+30+20 = 132
+ok 212 - 01 §13.1 example: win at ~8:10 with ~1400 purified = 49+28+5+30+20 = 132
+  ---
+  duration_ms: 0.5685
+  type: 'test'
+  ...
+# Subtest: shiny cards ×5, elite reward is flat 5, fractions floored, bad input → 0
+ok 213 - shiny cards ×5, elite reward is flat 5, fractions floored, bad input → 0
+  ---
+  duration_ms: 0.056708
+  type: 'test'
+  ...
+# Subtest: settle adds crystals, counts runs/wins, keeps best survival, does not mutate input
+ok 214 - settle adds crystals, counts runs/wins, keeps best survival, does not mutate input
+  ---
+  duration_ms: 0.133333
+  type: 'test'
+  ...
+# Subtest: bonuses map levels to Stats bonus fields
+ok 215 - bonuses map levels to Stats bonus fields
+  ---
+  duration_ms: 0.088667
+  type: 'test'
+  ...
+# Subtest: buy deducts price per level, rejects insufficient / max / unknown without change
+ok 216 - buy deducts price per level, rejects insufficient / max / unknown without change
+  ---
+  duration_ms: 0.123542
+  type: 'test'
+  ...
+# Subtest: buying everything costs 1570; reset refunds in full
+ok 217 - buying everything costs 1570; reset refunds in full
+  ---
+  duration_ms: 0.157792
+  type: 'test'
+  ...
+# Subtest: PERF-01 满载单步 ≤ 2 ms、8 分钟堆增长 ≤ 5 MB（survivor:bench 实测）
+ok 218 - PERF-01 满载单步 ≤ 2 ms、8 分钟堆增长 ≤ 5 MB（survivor:bench 实测）
+  ---
+  duration_ms: 1211.387791
+  type: 'test'
+  ...
+# Subtest: 100 000 normal purifications: 露珠 0.5% / 林风 0.15% within 10% relative error (fixed seed)
+ok 219 - 100 000 normal purifications: 露珠 0.5% / 林风 0.15% within 10% relative error (fixed seed)
+  ---
+  duration_ms: 5.343667
+  type: 'test'
+  ...
+# Subtest: on-field caps: 露珠 ≤ 3, 林风 ≤ 1; capped rolls drop nothing and count as capSkipped
+ok 220 - on-field caps: 露珠 ≤ 3, 林风 ≤ 1; capped rolls drop nothing and count as capSkipped
+  ---
+  duration_ms: 0.980792
+  type: 'test'
+  ...
+# Subtest: elite always drops 大露珠 + 林风, ignoring caps; a full pool (5) drops the rest and counts it
+ok 221 - elite always drops 大露珠 + 林风, ignoring caps; a full pool (5) drops the rest and counts it
+  ---
+  duration_ms: 2.143125
+  type: 'test'
+  ...
+# Subtest: 露珠 / 林风 / 大露珠 vanish after 30 s; spores stay
+ok 222 - 露珠 / 林风 / 大露珠 vanish after 30 s; spores stay
+  ---
+  duration_ms: 14.535875
+  type: 'test'
+  ...
+# Subtest: 露珠 +20 and 大露珠 +50, never above max hp; pulled in from the pickup radius
+ok 223 - 露珠 +20 and 大露珠 +50, never above max hp; pulled in from the pickup radius
+  ---
+  duration_ms: 1.812167
+  type: 'test'
+  ...
+# Subtest: 一阵林风: every spore on the field flies in and is banked within a few seconds
+ok 224 - 一阵林风: every spore on the field flies in and is banked within a few seconds
+  ---
+  duration_ms: 1.583917
+  type: 'test'
+  ...
+# Subtest: combat purifications roll drops on the drop stream; same seed → same drops
+ok 225 - combat purifications roll drops on the drop stream; same seed → same drops
+  ---
+  duration_ms: 64.950458
+  type: 'test'
+  ...
+# Subtest: cleansing purification drops no pickups (08 K4)
+ok 226 - cleansing purification drops no pickups (08 K4)
+  ---
+  duration_ms: 1.308208
+  type: 'test'
+  ...
+# Subtest: the elite purified in combat drops 50 xp + 大露珠 + 林风 and counts eliteDefeated
+ok 227 - the elite purified in combat drops 50 xp + 大露珠 + 林风 and counts eliteDefeated
+  ---
+  duration_ms: 3.246209
+  type: 'test'
+  ...
+# Subtest: Pool pre-allocates capacity objects with stable slots
+ok 228 - Pool pre-allocates capacity objects with stable slots
+  ---
+  duration_ms: 0.640875
+  type: 'test'
+  ...
+# Subtest: acquire adds to the dense active table and runs reset with uid
+ok 229 - acquire adds to the dense active table and runs reset with uid
+  ---
+  duration_ms: 0.796708
+  type: 'test'
+  ...
+# Subtest: acquire returns null when the pool is full
+ok 230 - acquire returns null when the pool is full
+  ---
+  duration_ms: 0.05925
+  type: 'test'
+  ...
+# Subtest: release swap-removes: last active object moves into the freed position
+ok 231 - release swap-removes: last active object moves into the freed position
+  ---
+  duration_ms: 0.116167
+  type: 'test'
+  ...
+# Subtest: released slots are reused and keep the pool usable at capacity
+ok 232 - released slots are reused and keep the pool usable at capacity
+  ---
+  duration_ms: 0.067042
+  type: 'test'
+  ...
+# Subtest: uid never repeats across acquire/release churn
+ok 233 - uid never repeats across acquire/release churn
+  ---
+  duration_ms: 0.074667
+  type: 'test'
+  ...
+# Subtest: releaseAll clears the active table and restores full capacity
+ok 234 - releaseAll clears the active table and restores full capacity
+  ---
+  duration_ms: 0.09375
+  type: 'test'
+  ...
+# Subtest: SurvivorRandom reproduces the same sequence for the same seed
+ok 235 - SurvivorRandom reproduces the same sequence for the same seed
+  ---
+  duration_ms: 0.267583
+  type: 'test'
+  ...
+# Subtest: SurvivorRandom diverges for different seeds
+ok 236 - SurvivorRandom diverges for different seeds
+  ---
+  duration_ms: 0.235875
+  type: 'test'
+  ...
+# Subtest: range stays within [min, max) and chance is deterministic
+ok 237 - range stays within [min, max) and chance is deterministic
+  ---
+  duration_ms: 0.537584
+  type: 'test'
+  ...
+# Subtest: derive produces independent, reproducible child streams
+ok 238 - derive produces independent, reproducible child streams
+  ---
+  duration_ms: 0.130166
+  type: 'test'
+  ...
+# Subtest: xpToNext matches the 01 §15.2 sample table
+ok 239 - xpToNext matches the 01 §15.2 sample table
+  ---
+  duration_ms: 0.652792
+  type: 'test'
+  ...
+# Subtest: xpToNext follows floor(5 + 6(L−1) + 0.15(L−1)²) for every level 1..30
+ok 240 - xpToNext follows floor(5 + 6(L−1) + 0.15(L−1)²) for every level 1..30
+  ---
+  duration_ms: 0.104083
+  type: 'test'
+  ...
+# Subtest: cumulative xp to reach Lv25 matches the §15.2 table (2651 to L+1 at L=25)
+ok 241 - cumulative xp to reach Lv25 matches the §15.2 table (2651 to L+1 at L=25)
+  ---
+  duration_ms: 0.045375
+  type: 'test'
+  ...
+# Subtest: addXp levels up once when crossing a single threshold
+ok 242 - addXp levels up once when crossing a single threshold
+  ---
+  duration_ms: 0.058875
+  type: 'test'
+  ...
+# Subtest: addXp enqueues multiple level-ups when a big pickup crosses several thresholds
+ok 243 - addXp enqueues multiple level-ups when a big pickup crosses several thresholds
+  ---
+  duration_ms: 0.041167
+  type: 'test'
+  ...
+# Subtest: draftOffer always returns three distinct non-fallback cards when the pool allows
+ok 244 - draftOffer always returns three distinct non-fallback cards when the pool allows
+  ---
+  duration_ms: 2.139208
+  type: 'test'
+  ...
+# Subtest: candidate pool follows 01 §8.2 weights and excludes out-of-scope content (K3)
+ok 245 - candidate pool follows 01 §8.2 weights and excludes out-of-scope content (K3)
+  ---
+  duration_ms: 0.952791
+  type: 'test'
+  ...
+# Subtest: all six passives and all five weapons appear in offers; evolutions show up as builds mature (S3 B1/B2)
+ok 246 - all six passives and all five weapons appear in offers; evolutions show up as builds mature (S3 B1/B2)
+  ---
+  duration_ms: 17.460875
+  type: 'test'
+  ...
+# Subtest: first level-up guarantees at least one new-weapon card (首升保底)
+ok 247 - first level-up guarantees at least one new-weapon card (首升保底)
+  ---
+  duration_ms: 5.627583
+  type: 'test'
+  ...
+# Subtest: maxed weapons and passives no longer produce upgrade cards
+ok 248 - maxed weapons and passives no longer produce upgrade cards
+  ---
+  duration_ms: 2.920541
+  type: 'test'
+  ...
+# Subtest: full weapon slots stop new-weapon cards; full passive slots stop new-passive cards
+ok 249 - full weapon slots stop new-weapon cards; full passive slots stop new-passive cards
+  ---
+  duration_ms: 1.396708
+  type: 'test'
+  ...
+# Subtest: everything maxed → only fallback cards (兜底卡), still three of them
+ok 250 - everything maxed → only fallback cards (兜底卡), still three of them
+  ---
+  duration_ms: 0.356125
+  type: 'test'
+  ...
+# Subtest: one candidate left → it is offered and fallback cards fill the rest
+ok 251 - one candidate left → it is offered and fallback cards fill the rest
+  ---
+  duration_ms: 0.104667
+  type: 'test'
+  ...
+# Subtest: 10 000 draws: first-card type frequency matches the weight ratio within 5%
+ok 252 - 10 000 draws: first-card type frequency matches the weight ratio within 5%
+  ---
+  duration_ms: 36.7105
+  type: 'test'
+  ...
+# Subtest: draftOffer is deterministic for the same seed and parameters
+ok 253 - draftOffer is deterministic for the same seed and parameters
+  ---
+  duration_ms: 0.075417
+  type: 'test'
+  ...
+# Subtest: with 3 weapons owned, the 2 unowned weapons are both new-weapon candidates
+ok 254 - with 3 weapons owned, the 2 unowned weapons are both new-weapon candidates
+  ---
+  duration_ms: 0.1055
+  type: 'test'
+  ...
+# Subtest: 4 weapons owned (slots full) → no new-weapon card ever, the 5th weapon is left out
+ok 255 - 4 weapons owned (slots full) → no new-weapon card ever, the 5th weapon is left out
+  ---
+  duration_ms: 5.434666
+  type: 'test'
+  ...
+# Subtest: walking random builds: never more than 4 weapons, and every run leaves exactly one out
+ok 256 - walking random builds: never more than 4 weapons, and every run leaves exactly one out
+  ---
+  duration_ms: 17.773416
+  type: 'test'
+  ...
+# Subtest: evolution condition: weapon Lv5 AND its passive Lv ≥ 3 AND time ≥ 6:00 (2026-10 S3 平衡); otherwise no evolution card
+ok 257 - evolution condition: weapon Lv5 AND its passive Lv ≥ 3 AND time ≥ 6:00 (2026-10 S3 平衡); otherwise no evolution card
+  ---
+  duration_ms: 6.708916
+  type: 'test'
+  ...
+# Subtest: two weapons evolvable at once → only the earliest acquired gets the card (mutual exclusion)
+ok 258 - two weapons evolvable at once → only the earliest acquired gets the card (mutual exclusion)
+  ---
+  duration_ms: 2.310333
+  type: 'test'
+  ...
+# Subtest: with an evolution card, the other two cards are distinct weighted draws from the normal pool
+ok 259 - with an evolution card, the other two cards are distinct weighted draws from the normal pool
+  ---
+  duration_ms: 2.2735
+  type: 'test'
+  ...
+# Subtest: R1 站桩：replay-idle 全程 (0,0)、总选第 0 张 → lost，summary 与金标准完全相等
+ok 260 - R1 站桩：replay-idle 全程 (0,0)、总选第 0 张 → lost，summary 与金标准完全相等
+  ---
+  duration_ms: 61.965125
+  type: 'test'
+  ...
+# Subtest: R2 绕圈：replay-kite summary 相等，第 60/180/300 秒状态哈希等于金标准
+ok 261 - R2 绕圈：replay-kite summary 相等，第 60/180/300 秒状态哈希等于金标准
+  ---
+  duration_ms: 687.603666
+  type: 'test'
+  ...
+# Subtest: R3 完整通关：replay-win 固化输入 → won、bossDefeated、survivalSec ∈ [420, 600] 且与金标准相等
+ok 262 - R3 完整通关：replay-win 固化输入 → won、bossDefeated、survivalSec ∈ [420, 600] 且与金标准相等
+  ---
+  duration_ms: 328.016084
+  type: 'test'
+  ...
+# Subtest: R4 暂停穿插：第 30、120 秒与每次三选一中 pause/resume，结果与 R2 完全相同
+ok 263 - R4 暂停穿插：第 30、120 秒与每次三选一中 pause/resume，结果与 R2 完全相同
+  ---
+  duration_ms: 525.227875
+  type: 'test'
+  ...
+# Subtest: R5 帧率无关：advance(1/60)、advance(1/30)、随机 0–0.083 帧长三者 summary 与状态哈希相同
+ok 264 - R5 帧率无关：advance(1/60)、advance(1/30)、随机 0–0.083 帧长三者 summary 与状态哈希相同
+  ---
+  duration_ms: 799.025208
+  type: 'test'
+  ...
+# Subtest: R6 双次运行：3 个种子同一输入跑两次，前 3 分钟逐步状态哈希完全一致
+ok 265 - R6 双次运行：3 个种子同一输入跑两次，前 3 分钟逐步状态哈希完全一致
+  ---
+  duration_ms: 125.285042
+  type: 'test'
+  ...
+# Subtest: constructor validates seed and viewport
+ok 266 - constructor validates seed and viewport
+  ---
+  duration_ms: 26.291541
+  type: 'test'
+  ...
+# Subtest: viewport is clamped to the valid range (03 §11)
+ok 267 - viewport is clamped to the valid range (03 §11)
+  ---
+  duration_ms: 7.242625
+  type: 'test'
+  ...
+# Subtest: a run starts in the playing state with one spore_shot weapon at Lv1
+ok 268 - a run starts in the playing state with one spore_shot weapon at Lv1
+  ---
+  duration_ms: 0.55425
+  type: 'test'
+  ...
+# Subtest: setInput normalises vectors longer than 1 and ignores non-finite values
+ok 269 - setInput normalises vectors longer than 1 and ignores non-finite values
+  ---
+  duration_ms: 1.57925
+  type: 'test'
+  ...
+# Subtest: advance only runs steps while playing and reports the step count
+ok 270 - advance only runs steps while playing and reports the step count
+  ---
+  duration_ms: 6.775541
+  type: 'test'
+  ...
+# Subtest: player moves according to input and move speed
+ok 271 - player moves according to input and move speed
+  ---
+  duration_ms: 7.44225
+  type: 'test'
+  ...
+# Subtest: pause ↔ resume returns to the previous state and freezes the sim
+ok 272 - pause ↔ resume returns to the previous state and freezes the sim
+  ---
+  duration_ms: 0.441542
+  type: 'test'
+  ...
+# Subtest: abandon only works while paused and transitions to lost
+ok 273 - abandon only works while paused and transitions to lost
+  ---
+  duration_ms: 0.383958
+  type: 'test'
+  ...
+# Subtest: entering levelup freezes the sim and choose() advances the queue
+ok 274 - entering levelup freezes the sim and choose() advances the queue
+  ---
+  duration_ms: 0.984333
+  type: 'test'
+  ...
+# Subtest: multiple queued level-ups pop one after another
+ok 275 - multiple queued level-ups pop one after another
+  ---
+  duration_ms: 0.973458
+  type: 'test'
+  ...
+# Subtest: first level-up offers a new weapon; picking it adds a second weapon slot
+ok 276 - first level-up offers a new weapon; picking it adds a second weapon slot
+  ---
+  duration_ms: 1.047625
+  type: 'test'
+  ...
+# Subtest: weapon upgrade / passive cards update the right slot and recompute stats
+ok 277 - weapon upgrade / passive cards update the right slot and recompute stats
+  ---
+  duration_ms: 0.502292
+  type: 'test'
+  ...
+# Subtest: weapon slots cap at 4 and passive slots cap at 4 (01 §5)
+ok 278 - weapon slots cap at 4 and passive slots cap at 4 (01 §5)
+  ---
+  duration_ms: 0.384709
+  type: 'test'
+  ...
+# Subtest: speed passive changes the player displacement per step
+ok 279 - speed passive changes the player displacement per step
+  ---
+  duration_ms: 5.777208
+  type: 'test'
+  ...
+# Subtest: summary lists every equipped weapon and passive
+ok 280 - summary lists every equipped weapon and passive
+  ---
+  duration_ms: 2.75975
+  type: 'test'
+  ...
+# Subtest: hp reaching 0 transitions to lost with a killer recorded
+ok 281 - hp reaching 0 transitions to lost with a killer recorded
+  ---
+  duration_ms: 2.48875
+  type: 'test'
+  ...
+# Subtest: without the debug option, surviving 180 s does not win (08 K1)
+ok 282 - without the debug option, surviving 180 s does not win (08 K1)
+  ---
+  duration_ms: 1.443416
+  type: 'test'
+  ...
+# Subtest: debug.timedWinSec keeps the old timed victory as a debug switch
+ok 283 - debug.timedWinSec keeps the old timed victory as a debug switch
+  ---
+  duration_ms: 3.878084
+  type: 'test'
+  ...
+# Subtest: summary reports purified count and crystal cards
+ok 284 - summary reports purified count and crystal cards
+  ---
+  duration_ms: 0.968959
+  type: 'test'
+  ...
+# Subtest: pickup radius 140 (08 K18): a spore at 139 is attracted, one at 141 is not
+ok 285 - pickup radius 140 (08 K18): a spore at 139 is attracted, one at 141 is not
+  ---
+  duration_ms: 1.0845
+  type: 'test'
+  ...
+# Subtest: diag splits capSkipped (designed cap skips) from dropped (pool full) (08 L11)
+ok 286 - diag splits capSkipped (designed cap skips) from dropped (pool full) (08 L11)
+  ---
+  duration_ms: 29.9475
+  type: 'test'
+  ...
+# Subtest: drainEvents returns and clears the event queue
+ok 287 - drainEvents returns and clears the event queue
+  ---
+  duration_ms: 0.419
+  type: 'test'
+  ...
+# Subtest: 露水叶片: Lv1 heals 0.2 once per second, Lv5 1.0 (+局外露水祝福), never above max hp
+ok 288 - 露水叶片: Lv1 heals 0.2 once per second, Lv5 1.0 (+局外露水祝福), never above max hp
+  ---
+  duration_ms: 12.545125
+  type: 'test'
+  ...
+# Subtest: 孢子罗盘 enlarges the live pickup radius (140 × 1.2 at Lv1)
+ok 289 - 孢子罗盘 enlarges the live pickup radius (140 × 1.2 at Lv1)
+  ---
+  duration_ms: 12.05825
+  type: 'test'
+  ...
+# Subtest: evolution: Lv5 weapon + its passive Lv3 after 6:00 → next level-up card 1 is the evolution; choosing it swaps the tier in place
+ok 290 - evolution: Lv5 weapon + its passive Lv3 after 6:00 → next level-up card 1 is the evolution; choosing it swaps the tier in place
+  ---
+  duration_ms: 23.385125
+  type: 'test'
+  ...
+# Subtest: an evolution card chosen after its condition broke does nothing (defensive)
+ok 291 - an evolution card chosen after its condition broke does nothing (defensive)
+  ---
+  duration_ms: 6.347625
+  type: 'test'
+  ...
+# Subtest: six passives draftable, but once 4 are owned no new-passive card appears in a run
+ok 292 - six passives draftable, but once 4 are owned no new-passive card appears in a run
+  ---
+  duration_ms: 1.780875
+  type: 'test'
+  ...
+# Subtest: 默认值常量符合 02 §2.1（safeTop 88 / safeBottom 34 / 左右 24）
+ok 293 - 默认值常量符合 02 §2.1（safeTop 88 / safeBottom 34 / 左右 24）
+  ---
+  duration_ms: 0.538458
+  type: 'test'
+  ...
+# Subtest: 接口失败回退默认值：缺 windowInfo / capsule 时返回默认四边距
+ok 294 - 接口失败回退默认值：缺 windowInfo / capsule 时返回默认四边距
+  ---
+  duration_ms: 0.59325
+  type: 'test'
+  ...
+# Subtest: 字段非有限或 windowWidth ≤ 0 时回退默认值，不报错
+ok 295 - 字段非有限或 windowWidth ≤ 0 时回退默认值，不报错
+  ---
+  duration_ms: 0.063584
+  type: 'test'
+  ...
+# Subtest: 普通机型（scale=1，无刘海）：按 02 §2.1 公式计算四边距
+ok 296 - 普通机型（scale=1，无刘海）：按 02 §2.1 公式计算四边距
+  ---
+  duration_ms: 0.052666
+  type: 'test'
+  ...
+# Subtest: 刘海机型：capsule.bottom 下移抬高 safeTop，底部手势条抬高 safeBottom
+ok 297 - 刘海机型：capsule.bottom 下移抬高 safeTop，底部手势条抬高 safeBottom
+  ---
+  duration_ms: 0.117084
+  type: 'test'
+  ...
+# Subtest: 刘海下移对比：capsule.bottom 越大 safeTop 越大
+ok 298 - 刘海下移对比：capsule.bottom 越大 safeTop 越大
+  ---
+  duration_ms: 0.044334
+  type: 'test'
+  ...
+# Subtest: 左右缺口机型：safeArea.left / right 内缩会增大左右边距
+ok 299 - 左右缺口机型：safeArea.left / right 内缩会增大左右边距
+  ---
+  duration_ms: 0.039542
+  type: 'test'
+  ...
+# Subtest: storage stub exposes only getItem/setItem
+ok 300 - storage stub exposes only getItem/setItem
+  ---
+  duration_ms: 2.059792
+  type: 'test'
+  ...
+# Subtest: missing save → new profile with schema-1 defaults incl. three settings (D3)
+ok 301 - missing save → new profile with schema-1 defaults incl. three settings (D3)
+  ---
+  duration_ms: 0.486083
+  type: 'test'
+  ...
+# Subtest: save → load round-trip; envelope schema 1 with valid checksum
+ok 302 - save → load round-trip; envelope schema 1 with valid checksum
+  ---
+  duration_ms: 23.824375
+  type: 'test'
+  ...
+# Subtest: write order: previous good record goes to backup before main; unchanged content skipped
+ok 303 - write order: previous good record goes to backup before main; unchanged content skipped
+  ---
+  duration_ms: 0.992125
+  type: 'test'
+  ...
+# Subtest: migration fixture: schema 0 record migrates, writes original to backup, then main
+ok 304 - migration fixture: schema 0 record migrates, writes original to backup, then main
+  ---
+  duration_ms: 0.237875
+  type: 'test'
+  ...
+# Subtest: corrupt main (bad JSON / checksum) → recovered from backup, main repaired on next save
+ok 305 - corrupt main (bad JSON / checksum) → recovered from backup, main repaired on next save
+  ---
+  duration_ms: 0.146375
+  type: 'test'
+  ...
+# Subtest: main and backup both corrupt → raw main kept in .corrupt, main overwritten with new profile
+ok 306 - main and backup both corrupt → raw main kept in .corrupt, main overwritten with new profile
+  ---
+  duration_ms: 0.1935
+  type: 'test'
+  ...
+# Subtest: newer schema → locked, main never overwritten
+ok 307 - newer schema → locked, main never overwritten
+  ---
+  duration_ms: 0.193417
+  type: 'test'
+  ...
+# Subtest: getItem throws → locked as unreadable
+ok 308 - getItem throws → locked as unreadable
+  ---
+  duration_ms: 6.543166
+  type: 'test'
+  ...
+# Subtest: setItem throws → save() false, saved=false, warns once; recovers on later success
+ok 309 - setItem throws → save() false, saved=false, warns once; recovers on later success
+  ---
+  duration_ms: 0.391584
+  type: 'test'
+  ...
+# Subtest: sanitize clamps, floors, drops unknown ids and defaults bad booleans
+ok 310 - sanitize clamps, floors, drops unknown ids and defaults bad booleans
+  ---
+  duration_ms: 0.15
+  type: 'test'
+  ...
+# Subtest: loaded data is sanitized
+ok 311 - loaded data is sanitized
+  ---
+  duration_ms: 0.060083
+  type: 'test'
+  ...
+# (node:24334) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: independent host: ImageAsset failure falls back to visible legacy player
+ok 312 - independent host: ImageAsset failure falls back to visible legacy player
+  ---
+  duration_ms: 5.371666
+  type: 'test'
+  ...
+# Subtest: independent host: JsonAsset failure falls back to visible legacy player
+ok 313 - independent host: JsonAsset failure falls back to visible legacy player
+  ---
+  duration_ms: 0.871334
+  type: 'test'
+  ...
+# Subtest: independent host: malformed failure falls back to visible legacy player
+ok 314 - independent host: malformed failure falls back to visible legacy player
+  ---
+  duration_ms: 10.324417
+  type: 'test'
+  ...
+# Subtest: independent host: classic loading does not request the new resource and preserves old position/flip
+ok 315 - independent host: classic loading does not request the new resource and preserves old position/flip
+  ---
+  duration_ms: 1.641083
+  type: 'test'
+  ...
+# Subtest: independent host: actual movement, frozen states, idle and new-run reset are wired to the controller
+ok 316 - independent host: actual movement, frozen states, idle and new-run reset are wired to the controller
+  ---
+  duration_ms: 5.955458
+  type: 'test'
+  ...
+# Subtest: independent host: destruction while character resources are pending never revives the view
+ok 317 - independent host: destruction while character resources are pending never revives the view
+  ---
+  duration_ms: 3.534375
+  type: 'test'
+  ...
+# Subtest: independent host: hover uses the existing invulnerability and terminal alpha without multiplication
+ok 318 - independent host: hover uses the existing invulnerability and terminal alpha without multiplication
+  ---
+  duration_ms: 2.292125
+  type: 'test'
+  ...
+# (node:24335) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: independent hover: samples are read-only and stationary lean settles while bob stays bounded
+ok 319 - independent hover: samples are read-only and stationary lean settles while bob stays bounded
+  ---
+  duration_ms: 1.513417
+  type: 'test'
+  ...
+# Subtest: independent hover: frozen samples cannot accumulate displacement, bob time or facing
+ok 320 - independent hover: frozen samples cannot accumulate displacement, bob time or facing
+  ---
+  duration_ms: 2.385291
+  type: 'test'
+  ...
+# Subtest: independent hover: vertical motion keeps either side and does not introduce horizontal lean
+ok 321 - independent hover: vertical motion keeps either side and does not introduce horizontal lean
+  ---
+  duration_ms: 0.223334
+  type: 'test'
+  ...
+# Subtest: independent hover: presentation sampling leaves complete survivor Run state unchanged
+ok 322 - independent hover: presentation sampling leaves complete survivor Run state unchanged
+  ---
+  duration_ms: 22.184958
+  type: 'test'
+  ...
+# Subtest: independent hover: presentation sampling leaves complete xianxia Run state unchanged
+ok 323 - independent hover: presentation sampling leaves complete xianxia Run state unchanged
+  ---
+  duration_ms: 18.74525
+  type: 'test'
+  ...
+# Subtest: independent hover asset: PNG dimensions agree with pixel anchor metadata
+ok 324 - independent hover asset: PNG dimensions agree with pixel anchor metadata
+  ---
+  duration_ms: 0.612542
+  type: 'test'
+  ...
+# Subtest: spawn radius = hypot(viewW/2, viewH/2) + margin (03 §1-2)
+ok 325 - spawn radius = hypot(viewW/2, viewH/2) + margin (03 §1-2)
+  ---
+  duration_ms: 0.710125
+  type: 'test'
+  ...
+# Subtest: relocate distance = max(900, spawnRadius + 120)
+ok 326 - relocate distance = max(900, spawnRadius + 120)
+  ---
+  duration_ms: 0.137
+  type: 'test'
+  ...
+# Subtest: segmentAt returns the covering segment and null past the end
+ok 327 - segmentAt returns the covering segment and null past the end
+  ---
+  duration_ms: 0.064042
+  type: 'test'
+  ...
+# Subtest: pickComposition respects the percentage weights (statistical tolerance)
+ok 328 - pickComposition respects the percentage weights (statistical tolerance)
+  ---
+  duration_ms: 3.605583
+  type: 'test'
+  ...
+# Subtest: spawn rate produces roughly rate × seconds enemies in the first segment
+ok 329 - spawn rate produces roughly rate × seconds enemies in the first segment
+  ---
+  duration_ms: 1.463041
+  type: 'test'
+  ...
+# Subtest: all routine spawns land outside the viewport (on the spawn circle)
+ok 330 - all routine spawns land outside the viewport (on the spawn circle)
+  ---
+  duration_ms: 1.25
+  type: 'test'
+  ...
+# Subtest: on-screen cap is never exceeded
+ok 331 - on-screen cap is never exceeded
+  ---
+  duration_ms: 3.315459
+  type: 'test'
+  ...
+# Subtest: a full enemy pool counts only diag.dropped, not capSkipped (08 L11)
+ok 332 - a full enemy pool counts only diag.dropped, not capSkipped (08 L11)
+  ---
+  duration_ms: 0.822625
+  type: 'test'
+  ...
+# Subtest: enemies that drift beyond relocateDistance are moved back onto the spawn circle
+ok 333 - enemies that drift beyond relocateDistance are moved back onto the spawn circle
+  ---
+  duration_ms: 0.672292
+  type: 'test'
+  ...
+# Subtest: every wave segment spawns at its rate with its composition (statistical tolerance)
+ok 334 - every wave segment spawns at its rate with its composition (statistical tolerance)
+  ---
+  duration_ms: 443.259917
+  type: 'test'
+  ...
+# Subtest: first routine appearance: moth 2:00, snail 3:00, sporeling 4:00
+ok 335 - first routine appearance: moth 2:00, snail 3:00, sporeling 4:00
+  ---
+  duration_ms: 4.477208
+  type: 'test'
+  ...
+# Subtest: enemy growth uses the whole minute m = floor(t/60) (01 §9.1)
+ok 336 - enemy growth uses the whole minute m = floor(t/60) (01 §9.1)
+  ---
+  duration_ms: 0.160833
+  type: 'test'
+  ...
+# Subtest: 2:30 gnat ring: 24 gnats evenly spaced on a radius-350 circle around the player
+ok 337 - 2:30 gnat ring: 24 gnats evenly spaced on a radius-350 circle around the player
+  ---
+  duration_ms: 3.365583
+  type: 'test'
+  ...
+# Subtest: 2:30 ring obeys the global hard cap of 200 and counts the overflow
+ok 338 - 2:30 ring obeys the global hard cap of 200 and counts the overflow
+  ---
+  duration_ms: 0.246209
+  type: 'test'
+  ...
+# Subtest: 6:30 snail wall: exactly 14 snails at θf + 22.5° × (k + 0.5), k = 1…14, radius 400
+ok 339 - 6:30 snail wall: exactly 14 snails at θf + 22.5° × (k + 0.5), k = 1…14, radius 400
+  ---
+  duration_ms: 0.31625
+  type: 'test'
+  ...
+# Subtest: 6:30 snail wall gap faces the player: centre error < 1°, nearest snails at θf ± 33.75°
+ok 340 - 6:30 snail wall gap faces the player: centre error < 1°, nearest snails at θf ± 33.75°
+  ---
+  duration_ms: 1.054959
+  type: 'test'
+  ...
+# Subtest: 6:30 snail wall consumes no random numbers and is identical for the same state
+ok 341 - 6:30 snail wall consumes no random numbers and is identical for the same state
+  ---
+  duration_ms: 0.22325
+  type: 'test'
+  ...
+# Subtest: ringAnchorAngle reads the player facing (initial right when no direction)
+ok 342 - ringAnchorAngle reads the player facing (initial right when no direction)
+  ---
+  duration_ms: 0.044917
+  type: 'test'
+  ...
+# Subtest: 6:30 snail wall obeys the hard cap: spawns k = 1→14 in order and stops at 200
+ok 343 - 6:30 snail wall obeys the hard cap: spawns k = 1→14 in order and stops at 200
+  ---
+  duration_ms: 0.222375
+  type: 'test'
+  ...
+# Subtest: 4:30 moth cross: 16 moths in a column just off one screen edge, flying across
+ok 344 - 4:30 moth cross: 16 moths in a column just off one screen edge, flying across
+  ---
+  duration_ms: 0.180375
+  type: 'test'
+  ...
+# Subtest: 5:00 elite (S3 B4): exactly one elite_beetle off-screen, hp 1500 × (1 + 0.15 × 5), eliteSpawn event
+ok 345 - 5:00 elite (S3 B4): exactly one elite_beetle off-screen, hp 1500 × (1 + 0.15 × 5), eliteSpawn event
+  ---
+  duration_ms: 7.753458
+  type: 'test'
+  ...
+# Subtest: elite waits for a free slot when the field is at the hard cap of 200, then spawns
+ok 346 - elite waits for a free slot when the field is at the hard cap of 200, then spawns
+  ---
+  duration_ms: 0.96875
+  type: 'test'
+  ...
+# Subtest: elites are never relocated however far away (01 §9 通用规则)
+ok 347 - elites are never relocated however far away (01 §9 通用规则)
+  ---
+  duration_ms: 0.552875
+  type: 'test'
+  ...
+# Subtest: full 0–7:00 run with events never exceeds segment caps or the hard cap of 200
+ok 348 - full 0–7:00 run with events never exceeds segment caps or the hard cap of 200
+  ---
+  duration_ms: 15.806875
+  type: 'test'
+  ...
+# Subtest: 6:00–7:00 segment cap 160 (08 K19): routine spawns stop at 160, the 6:30 wall still adds 14
+ok 349 - 6:00–7:00 segment cap 160 (08 K19): routine spawns stop at 160, the 6:30 wall still adds 14
+  ---
+  duration_ms: 2.495
+  type: 'test'
+  ...
+# Subtest: 2:00–4:00 spawn rate +15% (08 K16): 2.53 / 3.22 per second, caps 80 / 110 unchanged
+ok 350 - 2:00–4:00 spawn rate +15% (08 K16): 2.53 / 3.22 per second, caps 80 / 110 unchanged
+  ---
+  duration_ms: 5.03775
+  type: 'test'
+  ...
+# Subtest: base stats with no bonuses/passives match the player data (01 §15.1)
+ok 351 - base stats with no bonuses/passives match the player data (01 §15.1)
+  ---
+  duration_ms: 0.715333
+  type: 'test'
+  ...
+# Subtest: might = (1 + 局外晨光之力) × (1 + 晨光菌丝): Lv1 +10%, Lv5 +50%
+ok 352 - might = (1 + 局外晨光之力) × (1 + 晨光菌丝): Lv1 +10%, Lv5 +50%
+  ---
+  duration_ms: 0.146583
+  type: 'test'
+  ...
+# Subtest: 移动速度 = 160 × (1 + 局外轻灵蕨步) × (1 + 蕨叶轻靴): Lv1 +8%, Lv5 +40%
+ok 353 - 移动速度 = 160 × (1 + 局外轻灵蕨步) × (1 + 蕨叶轻靴): Lv1 +8%, Lv5 +40%
+  ---
+  duration_ms: 0.098667
+  type: 'test'
+  ...
+# Subtest: 拾取半径 = 140 × (1 + 局外孢子亲和) × (1 + 孢子罗盘): Lv1 +20%, Lv5 +100% (S3 B1)
+ok 354 - 拾取半径 = 140 × (1 + 局外孢子亲和) × (1 + 孢子罗盘): Lv1 +20%, Lv5 +100% (S3 B1)
+  ---
+  duration_ms: 0.111375
+  type: 'test'
+  ...
+# Subtest: 实际冷却 = base × max(0.5, 1 − 湿润苔衣): Lv1 0.92, Lv5 0.6, never below 0.5
+ok 355 - 实际冷却 = base × max(0.5, 1 − 湿润苔衣): Lv1 0.92, Lv5 0.6, never below 0.5
+  ---
+  duration_ms: 0.09025
+  type: 'test'
+  ...
+# Subtest: 实际范围 = base × (1 + 宽檐菌帽): Lv1 1.1, Lv5 1.5
+ok 356 - 实际范围 = base × (1 + 宽檐菌帽): Lv1 1.1, Lv5 1.5
+  ---
+  duration_ms: 0.048917
+  type: 'test'
+  ...
+# Subtest: 生命回复/秒 = 局外露水祝福 + 露水叶片: Lv1 0.2, Lv5 1.0 (S3 B1, 2026-10 S3 平衡)
+ok 357 - 生命回复/秒 = 局外露水祝福 + 露水叶片: Lv1 0.2, Lv5 1.0 (S3 B1, 2026-10 S3 平衡)
+  ---
+  duration_ms: 0.062208
+  type: 'test'
+  ...
+# Subtest: passiveTerms sums every passive at its level and ignores unknown/invalid entries
+ok 358 - passiveTerms sums every passive at its level and ignores unknown/invalid entries
+  ---
+  duration_ms: 0.550833
+  type: 'test'
+  ...
+# Subtest: actualDamage rounds and floors at 1 (实际伤害 = round(武器伤害 × might)，最小 1)
+ok 359 - actualDamage rounds and floors at 1 (实际伤害 = round(武器伤害 × might)，最小 1)
+  ---
+  duration_ms: 0.191917
+  type: 'test'
+  ...
+# Subtest: enemy hp/damage scale by minute (01 §9.1 / §15.1)
+ok 360 - enemy hp/damage scale by minute (01 §9.1 / §15.1)
+  ---
+  duration_ms: 0.255917
+  type: 'test'
+  ...
+# Subtest: non-finite bonus/passive terms default to 0 (no NaN leak)
+ok 361 - non-finite bonus/passive terms default to 0 (no NaN leak)
+  ---
+  duration_ms: 0.103625
+  type: 'test'
+  ...
+# (node:24338) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: line uses fixed world footprint, freezes on tick, fades and cleans up
+ok 362 - line uses fixed world footprint, freezes on tick, fades and cleans up
+  ---
+  duration_ms: 1.498
+  type: 'test'
+  ...
+# Subtest: line rejects invalid payloads and retains at most eight casts
+ok 363 - line rejects invalid payloads and retains at most eight casts
+  ---
+  duration_ms: 0.166875
+  type: 'test'
+  ...
+# Subtest: orbit reads tier, area and phase, follows player, freezes and clears
+ok 364 - orbit reads tier, area and phase, follows player, freezes and clears
+  ---
+  duration_ms: 0.298916
+  type: 'test'
+  ...
+# (node:24339) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: shadow stays at its rune, gathers 1/2/3 swords and expires exactly at strike
+ok 365 - shadow stays at its rune, gathers 1/2/3 swords and expires exactly at strike
+  ---
+  duration_ms: 1.897958
+  type: 'test'
+  ...
+# Subtest: formation has one bounded area, two sword eyes, exclusive expiry and reduced opacity
+ok 366 - formation has one bounded area, two sword eyes, exclusive expiry and reduced opacity
+  ---
+  duration_ms: 0.264834
+  type: 'test'
+  ...
+# Subtest: formation pulses accept distinct ticks, deduplicate, and never outlive the area
+ok 367 - formation pulses accept distinct ticks, deduplicate, and never outlive the area
+  ---
+  duration_ms: 0.088875
+  type: 'test'
+  ...
+# Subtest: marks count live expiries, cap at eight and reject dead or recycled enemies
+ok 368 - marks count live expiries, cap at eight and reject dead or recycled enemies
+  ---
+  duration_ms: 0.094333
+  type: 'test'
+  ...
+# Subtest: feedback validates, bounds retention, freezes and clears on death, reset and rewind
+ok 369 - feedback validates, bounds retention, freezes and clears on death, reset and rewind
+  ---
+  duration_ms: 2.605416
+  type: 'test'
+  ...
+# Subtest: View routes all S3 events and ground renders below hostile zones and enemies
+ok 370 - View routes all S3 events and ground renders below hostile zones and enemies
+  ---
+  duration_ms: 0.449291
+  type: 'test'
+  ...
+# Subtest: rendering is read-only, removed state disappears, and death clears before state transition
+ok 371 - rendering is read-only, removed state disappears, and death clears before state transition
+  ---
+  duration_ms: 0.185459
+  type: 'test'
+  ...
+# Subtest: SYNC-02 清单覆盖全部 survivor/xianxia 模块（除已登记的占位）
+ok 372 - SYNC-02 清单覆盖全部 survivor/xianxia 模块（除已登记的占位）
+  ---
+  duration_ms: 2.549375
+  type: 'test'
+  ...
+# Subtest: SYNC-02 清单 sha256 = 当前源码；shared 副本 = 头注释 + 去 .js 后缀的源码
+ok 373 - SYNC-02 清单 sha256 = 当前源码；shared 副本 = 头注释 + 去 .js 后缀的源码
+  ---
+  duration_ms: 9.225375
+  type: 'test'
+  ...
+# Subtest: SYNC-02 shared 目录没有清单外的玩法副本；SurvivorBot / 测试夹具不进清单
+ok 374 - SYNC-02 shared 目录没有清单外的玩法副本；SurvivorBot / 测试夹具不进清单
+  ---
+  duration_ms: 2.257375
+  type: 'test'
+  ...
+# Subtest: nearestEnemy returns the closest living enemy, ties by active order
+ok 375 - nearestEnemy returns the closest living enemy, ties by active order
+  ---
+  duration_ms: 3.197542
+  type: 'test'
+  ...
+# Subtest: fanAngles centres the fan on the base angle
+ok 376 - fanAngles centres the fan on the base angle
+  ---
+  duration_ms: 1.454458
+  type: 'test'
+  ...
+# Subtest: spore_shot with no target does not consume cooldown (无目标不进入冷却)
+ok 377 - spore_shot with no target does not consume cooldown (无目标不进入冷却)
+  ---
+  duration_ms: 0.473917
+  type: 'test'
+  ...
+# Subtest: spore_shot Lv1 fires 1 projectile aimed at the nearest enemy and starts cooldown
+ok 378 - spore_shot Lv1 fires 1 projectile aimed at the nearest enemy and starts cooldown
+  ---
+  duration_ms: 0.309834
+  type: 'test'
+  ...
+# Subtest: spore_shot fan count and spread grow with weapon level
+ok 379 - spore_shot fan count and spread grow with weapon level
+  ---
+  duration_ms: 1.78075
+  type: 'test'
+  ...
+# Subtest: spore_shot does not fire again until cooldown elapses (via stepWeapons)
+ok 380 - spore_shot does not fire again until cooldown elapses (via stepWeapons)
+  ---
+  duration_ms: 0.228959
+  type: 'test'
+  ...
+# Subtest: a single projectile pierces exactly `pierce` enemies then expires
+ok 381 - a single projectile pierces exactly `pierce` enemies then expires
+  ---
+  duration_ms: 0.714083
+  type: 'test'
+  ...
+# Subtest: a projectile never hits the same enemy twice
+ok 382 - a projectile never hits the same enemy twice
+  ---
+  duration_ms: 1.749041
+  type: 'test'
+  ...
+# Subtest: umbrella_blades: blade count / orbit radius / angle = ω·t + 2πi/n per level
+ok 383 - umbrella_blades: blade count / orbit radius / angle = ω·t + 2πi/n per level
+  ---
+  duration_ms: 0.800875
+  type: 'test'
+  ...
+# Subtest: umbrella_blades: several blades touching one enemy in a step deal damage once
+ok 384 - umbrella_blades: several blades touching one enemy in a step deal damage once
+  ---
+  duration_ms: 0.355667
+  type: 'test'
+  ...
+# Subtest: umbrella_blades: no repeat damage inside the hit interval; cooldown passive shortens it
+ok 385 - umbrella_blades: no repeat damage inside the hit interval; cooldown passive shortens it
+  ---
+  duration_ms: 4.192791
+  type: 'test'
+  ...
+# Subtest: umbrella_blades: knockback pushes along player→enemy
+ok 386 - umbrella_blades: knockback pushes along player→enemy
+  ---
+  duration_ms: 0.690292
+  type: 'test'
+  ...
+# Subtest: area passive scales both the orbit and the blade radius
+ok 387 - area passive scales both the orbit and the blade radius
+  ---
+  duration_ms: 0.28875
+  type: 'test'
+  ...
+# Subtest: dew_ring: damages everything inside on each interval, nothing outside, no knockback
+ok 388 - dew_ring: damages everything inside on each interval, nothing outside, no knockback
+  ---
+  duration_ms: 5.182333
+  type: 'test'
+  ...
+# Subtest: dew_ring: slows enemies inside, restores immediately on leaving, takes the max source
+ok 389 - dew_ring: slows enemies inside, restores immediately on leaving, takes the max source
+  ---
+  duration_ms: 0.698125
+  type: 'test'
+  ...
+# Subtest: dew_ring: area passive enlarges the ring; cooldown passive shortens the interval
+ok 390 - dew_ring: area passive enlarges the ring; cooldown passive shortens the interval
+  ---
+  duration_ms: 0.2645
+  type: 'test'
+  ...
+# Subtest: dew_ring new radii (08 K17): Lv1 80 hits a gnat at 90 (80 + r10), not at 91; Lv4 115 reaches a snail at 137
+ok 391 - dew_ring new radii (08 K17): Lv1 80 hits a gnat at 90 (80 + r10), not at 91; Lv4 115 reaches a snail at 137
+  ---
+  duration_ms: 0.502541
+  type: 'test'
+  ...
+# Subtest: leaf_boomerang new range (08 K17): outbound far point is 280 at Lv1–3 and 340 at Lv4–5
+ok 392 - leaf_boomerang new range (08 K17): outbound far point is 280 at Lv1–3 and 340 at Lv4–5
+  ---
+  duration_ms: 5.809375
+  type: 'test'
+  ...
+# Subtest: all equipped weapons act in the same step (multi-weapon)
+ok 393 - all equipped weapons act in the same step (multi-weapon)
+  ---
+  duration_ms: 0.114625
+  type: 'test'
+  ...
+# Subtest: raindrop: each level drops `count` zones of `radius` and starts its cooldown
+ok 394 - raindrop: each level drops `count` zones of `radius` and starts its cooldown
+  ---
+  duration_ms: 0.432583
+  type: 'test'
+  ...
+# Subtest: raindrop: one cast targets different enemies first (同次落点不重复选敌)
+ok 395 - raindrop: one cast targets different enemies first (同次落点不重复选敌)
+  ---
+  duration_ms: 5.835208
+  type: 'test'
+  ...
+# Subtest: raindrop: only enemies within 400 are targets; none in range → lands 150–300 from the player
+ok 396 - raindrop: only enemies within 400 are targets; none in range → lands 150–300 from the player
+  ---
+  duration_ms: 1.89725
+  type: 'test'
+  ...
+# Subtest: raindrop: damage lands only after the 0.4 s shadow, at the locked point (落点不追踪)
+ok 397 - raindrop: damage lands only after the 0.4 s shadow, at the locked point (落点不追踪)
+  ---
+  duration_ms: 0.33975
+  type: 'test'
+  ...
+# Subtest: raindrop: hits every enemy inside the landing radius once; area/might passives apply
+ok 398 - raindrop: hits every enemy inside the landing radius once; area/might passives apply
+  ---
+  duration_ms: 0.2875
+  type: 'test'
+  ...
+# Subtest: raindrop: zones pool cap limits drops (少落) and counts them in diag
+ok 399 - raindrop: zones pool cap limits drops (少落) and counts them in diag
+  ---
+  duration_ms: 0.12425
+  type: 'test'
+  ...
+# Subtest: raindrop: same weapon stream → same landing points; different stream differs
+ok 400 - raindrop: same weapon stream → same landing points; different stream differs
+  ---
+  duration_ms: 0.588917
+  type: 'test'
+  ...
+# Subtest: leaf_boomerang: leaf count and 25° fan centred on the facing per level; cooldown per level
+ok 401 - leaf_boomerang: leaf count and 25° fan centred on the facing per level; cooldown per level
+  ---
+  duration_ms: 0.536625
+  type: 'test'
+  ...
+# Subtest: leaf_boomerang: flies out to max distance (× area), turns back and is recycled at the player
+ok 402 - leaf_boomerang: flies out to max distance (× area), turns back and is recycled at the player
+  ---
+  duration_ms: 2.38225
+  type: 'test'
+  ...
+# Subtest: leaf_boomerang: unlimited pierce, every enemy hit once going out and once coming back
+ok 403 - leaf_boomerang: unlimited pierce, every enemy hit once going out and once coming back
+  ---
+  duration_ms: 0.94975
+  type: 'test'
+  ...
+# Subtest: leaf_boomerang: the return leg homes on the player current position
+ok 404 - leaf_boomerang: the return leg homes on the player current position
+  ---
+  duration_ms: 1.795625
+  type: 'test'
+  ...
+# Subtest: leaf_boomerang: shares the 150-shot player projectile pool (fewer leaves when full)
+ok 405 - leaf_boomerang: shares the 150-shot player projectile pool (fewer leaves when full)
+  ---
+  duration_ms: 0.114292
+  type: 'test'
+  ...
+# Subtest: all five weapons run together through stepWeapons
+ok 406 - all five weapons run together through stepWeapons
+  ---
+  duration_ms: 0.117958
+  type: 'test'
+  ...
+# Subtest: 孢子风暴: 5 shots lock the 5 nearest distinct enemies; evolved damage / speed / pierce / cooldown
+ok 407 - 孢子风暴: 5 shots lock the 5 nearest distinct enemies; evolved damage / speed / pierce / cooldown
+  ---
+  duration_ms: 0.174917
+  type: 'test'
+  ...
+# Subtest: 孢子风暴: fewer than 5 enemies → remaining shots go to the nearest; none → no fire, no cooldown
+ok 408 - 孢子风暴: fewer than 5 enemies → remaining shots go to the nearest; none → no fire, no cooldown
+  ---
+  duration_ms: 0.1205
+  type: 'test'
+  ...
+# Subtest: evolved tiers still scale with might / cooldown / area (01 §6 通用规则)
+ok 409 - evolved tiers still scale with might / cooldown / area (01 §6 通用规则)
+  ---
+  duration_ms: 0.143125
+  type: 'test'
+  ...
+# Subtest: 菌伞华盖: 6 blades, orbit 110, 240°/s, hit interval 0.4, knockback 40
+ok 410 - 菌伞华盖: 6 blades, orbit 110, 240°/s, hit interval 0.4, knockback 40
+  ---
+  duration_ms: 0.13625
+  type: 'test'
+  ...
+# Subtest: 晨露结界: radius 145 hits a gnat at 155 (145 + r10) but not at 156, slows 40%, pulses every 0.5 s
+ok 411 - 晨露结界: radius 145 hits a gnat at 155 (145 + r10) but not at 156, slows 40%, pulses every 0.5 s
+  ---
+  duration_ms: 1.748875
+  type: 'test'
+  ...
+# Subtest: 秋风叶舞: 6 leaves 60° apart all around regardless of facing, distance 360, cooldown 1.4
+ok 412 - 秋风叶舞: 6 leaves 60° apart all around regardless of facing, distance 360, cooldown 1.4
+  ---
+  duration_ms: 0.205708
+  type: 'test'
+  ...
+# Subtest: 骤雨: 8 drops of radius 70, damage 45, prefer distinct targets
+ok 413 - 骤雨: 8 drops of radius 70, damage 45, prefer distinct targets
+  ---
+  duration_ms: 0.0725
+  type: 'test'
+  ...
+# Subtest: an un-evolved Lv5 weapon still uses its Lv5 row (evolved flag is the only switch)
+ok 414 - an un-evolved Lv5 weapon still uses its Lv5 row (evolved flag is the only switch)
+  ---
+  duration_ms: 0.0455
+  type: 'test'
+  ...
+# Subtest: playRun defaults to survivor and preserves explicit survivor results
+ok 415 - playRun defaults to survivor and preserves explicit survivor results
+  ---
+  duration_ms: 13.827209
+  type: 'test'
+  ...
+# Subtest: playRun passes xianxia into the simulation and records it deterministically
+ok 416 - playRun passes xianxia into the simulation and records it deterministically
+  ---
+  duration_ms: 5.549542
+  type: 'test'
+  ...
+# Subtest: playRun rejects invalid rulesets instead of silently using survivor
+ok 417 - playRun rejects invalid rulesets instead of silently using survivor
+  ---
+  duration_ms: 0.249125
+  type: 'test'
+  ...
+# Subtest: balance CLI preserves default moves and six picks and reports survivor
+ok 418 - balance CLI preserves default moves and six picks and reports survivor
+  ---
+  duration_ms: 114.962042
+  type: 'test'
+  ...
+# Subtest: balance CLI accepts both explicit rulesets and preserves selected options
+ok 419 - balance CLI accepts both explicit rulesets and preserves selected options
+  ---
+  duration_ms: 232.418042
+  type: 'test'
+  ...
+# Subtest: balance CLI rejects invalid or missing ruleset without writing a report
+ok 420 - balance CLI rejects invalid or missing ruleset without writing a report
+  ---
+  duration_ms: 422.529625
+  type: 'test'
+  ...
+# Subtest: current weapon and evolution IDs resolve to their xianxia names
+ok 421 - current weapon and evolution IDs resolve to their xianxia names
+  ---
+  duration_ms: 2.194833
+  type: 'test'
+  ...
+# Subtest: every current enemy ID is mapped, including elite and boss
+ok 422 - every current enemy ID is mapped, including elite and boss
+  ---
+  duration_ms: 0.402042
+  type: 'test'
+  ...
+# Subtest: passives and pickups use the latest approved display mappings
+ok 423 - passives and pickups use the latest approved display mappings
+  ---
+  duration_ms: 0.204083
+  type: 'test'
+  ...
+# Subtest: S2 sword pools exclude legacy skills and the separate class passive
+ok 424 - S2 sword pools exclude legacy skills and the separate class passive
+  ---
+  duration_ms: 0.230667
+  type: 'test'
+  ...
+# Subtest: all exported catalog data is deeply frozen and rejects mutation
+ok 425 - all exported catalog data is deeply frozen and rejects mutation
+  ---
+  duration_ms: 1.689167
+  type: 'test'
+  ...
+# Subtest: unknown IDs and kinds return the original ID, including prototype names
+ok 426 - unknown IDs and kinds return the original ID, including prototype names
+  ---
+  duration_ms: 0.160459
+  type: 'test'
+  ...
+# Subtest: combat data appends sword indices 6–11; legacy evolution pairs and standalone helpers remain valid
+ok 427 - combat data appends sword indices 6–11; legacy evolution pairs and standalone helpers remain valid
+  ---
+  duration_ms: 10.59325
+  type: 'test'
+  ...
+# Subtest: yujian applies cumulative rows from immutable base tiers and refresh never stacks
+ok 428 - yujian applies cumulative rows from immutable base tiers and refresh never stacks
+  ---
+  duration_ms: 1.267
+  type: 'test'
+  ...
+# Subtest: classic spore targeting and tiers ignore yujian and have no range restriction
+ok 429 - classic spore targeting and tiers ignore yujian and have no range restriction
+  ---
+  duration_ms: 0.68925
+  type: 'test'
+  ...
+# Subtest: yujian 1 target range 588 offset -0.001
+ok 430 - yujian 1 target range 588 offset -0.001
+  ---
+  duration_ms: 0.505708
+  type: 'test'
+  ...
+# Subtest: yujian 1 target range 588 offset 0
+ok 431 - yujian 1 target range 588 offset 0
+  ---
+  duration_ms: 0.507334
+  type: 'test'
+  ...
+# Subtest: yujian 1 target range 588 offset 0.001
+ok 432 - yujian 1 target range 588 offset 0.001
+  ---
+  duration_ms: 0.254792
+  type: 'test'
+  ...
+# Subtest: yujian 4 target range 676.2 offset -0.001
+ok 433 - yujian 4 target range 676.2 offset -0.001
+  ---
+  duration_ms: 0.36775
+  type: 'test'
+  ...
+# Subtest: yujian 4 target range 676.2 offset 0
+ok 434 - yujian 4 target range 676.2 offset 0
+  ---
+  duration_ms: 1.990333
+  type: 'test'
+  ...
+# Subtest: yujian 4 target range 676.2 offset 0.001
+ok 435 - yujian 4 target range 676.2 offset 0.001
+  ---
+  duration_ms: 0.301666
+  type: 'test'
+  ...
+# Subtest: auto refresh sees weapon/passive/evolution changes; evolved surplus shots repeat legal nearest
+ok 436 - auto refresh sees weapon/passive/evolution changes; evolved surplus shots repeat legal nearest
+  ---
+  duration_ms: 0.567666
+  type: 'test'
+  ...
+# Subtest: nearest helpers filter range and cap multi-target writes at 16
+ok 437 - nearest helpers filter range and cap multi-target writes at 16
+  ---
+  duration_ms: 0.186583
+  type: 'test'
+  ...
+# Subtest: wanjian does nothing in classic mode, even if manually equipped
+ok 438 - wanjian does nothing in classic mode, even if manually equipped
+  ---
+  duration_ms: 0.352417
+  type: 'test'
+  ...
+# Subtest: wanjian no-target stays ready; 35 steps after warn do not hit and step 36 does
+ok 439 - wanjian no-target stays ready; 35 steps after warn do not hit and step 36 does
+  ---
+  duration_ms: 0.235125
+  type: 'test'
+  ...
+# Subtest: wanjian locks cast center, evaluates live targets and current damage at strike time
+ok 440 - wanjian locks cast center, evaluates live targets and current damage at strike time
+  ---
+  duration_ms: 0.1295
+  type: 'test'
+  ...
+# Subtest: wanjian circle/rectangle boundaries include tangency, exclude corner exterior, ignore viewport and area
+ok 441 - wanjian circle/rectangle boundaries include tangency, exclude corner exterior, ignore viewport and area
+  ---
+  duration_ms: 0.181834
+  type: 'test'
+  ...
+# Subtest: wanjian scans the full 202-slot pool, skips dead targets, and handles slot reuse
+ok 442 - wanjian scans the full 202-slot pool, skips dead targets, and handles slot reuse
+  ---
+  duration_ms: 0.20225
+  type: 'test'
+  ...
+# Subtest: wanjian cooldown snapshots strike-time modifiers and takes exactly 330 ticks at Lv5/floor
+ok 443 - wanjian cooldown snapshots strike-time modifiers and takes exactly 330 ticks at Lv5/floor
+  ---
+  duration_ms: 0.192
+  type: 'test'
+  ...
+# Subtest: wanjian empty strike still starts cooldown
+ok 444 - wanjian empty strike still starts cooldown
+  ---
+  duration_ms: 2.295334
+  type: 'test'
+  ...
+# Subtest: pause/levelup freeze warning and terminal phases cancel without a delayed strike
+ok 445 - pause/levelup freeze warning and terminal phases cancel without a delayed strike
+  ---
+  duration_ms: 1.959458
+  type: 'test'
+  ...
+# Subtest: explicit cancellation immediately clears UI warning without needing another weapon tick
+ok 446 - explicit cancellation immediately clears UI warning without needing another weapon tick
+  ---
+  duration_ms: 0.191792
+  type: 'test'
+  ...
+# Subtest: wanjian hits all 202 live entities once, including enemies outside the usual grid window
+ok 447 - wanjian hits all 202 live entities once, including enemies outside the usual grid window
+  ---
+  duration_ms: 0.618666
+  type: 'test'
+  ...
+# Subtest: standalone weapon worlds without simulationTick use one internal tick per active call
+ok 448 - standalone weapon worlds without simulationTick use one internal tick per active call
+  ---
+  duration_ms: 0.298042
+  type: 'test'
+  ...
+# Subtest: yujian respects a full projectile pool and resumes with the latest cached tier
+ok 449 - yujian respects a full projectile pool and resumes with the latest cached tier
+  ---
+  duration_ms: 0.293834
+  type: 'test'
+  ...
+# Subtest: all quality/level/trait combinations use integer final additions bounded 0–18 percent
+ok 450 - all quality/level/trait combinations use integer final additions bounded 0–18 percent
+  ---
+  duration_ms: 6.924083
+  type: 'test'
+  ...
+# Subtest: invalid supplied snapshots reject atomically; classic ignores even invalid equipment
+ok 451 - invalid supplied snapshots reject atomically; classic ignores even invalid equipment
+  ---
+  duration_ms: 33.963667
+  type: 'test'
+  ...
+# Subtest: Run copies and freezes snapshot and summary; robe HP recomputes from unequipped H0
+ok 452 - Run copies and freezes snapshot and summary; robe HP recomputes from unequipped H0
+  ---
+  duration_ms: 6.05875
+  type: 'test'
+  ...
+# Subtest: sj_yujian chase: equipment once after target multiplier at real damage endpoint
+ok 453 - sj_yujian chase: equipment once after target multiplier at real damage endpoint
+  ---
+  duration_ms: 1.271083
+  type: 'test'
+  ...
+# Subtest: sj_yujian charge: equipment once after target multiplier at real damage endpoint
+ok 454 - sj_yujian charge: equipment once after target multiplier at real damage endpoint
+  ---
+  duration_ms: 2.562333
+  type: 'test'
+  ...
+# Subtest: sj_yujian boss: equipment once after target multiplier at real damage endpoint
+ok 455 - sj_yujian boss: equipment once after target multiplier at real damage endpoint
+  ---
+  duration_ms: 1.372083
+  type: 'test'
+  ...
+# Subtest: sj_arc chase: equipment once after target multiplier at real damage endpoint
+ok 456 - sj_arc chase: equipment once after target multiplier at real damage endpoint
+  ---
+  duration_ms: 1.839125
+  type: 'test'
+  ...
+# Subtest: sj_arc charge: equipment once after target multiplier at real damage endpoint
+ok 457 - sj_arc charge: equipment once after target multiplier at real damage endpoint
+  ---
+  duration_ms: 1.851875
+  type: 'test'
+  ...
+# Subtest: sj_arc boss: equipment once after target multiplier at real damage endpoint
+ok 458 - sj_arc boss: equipment once after target multiplier at real damage endpoint
+  ---
+  duration_ms: 2.367959
+  type: 'test'
+  ...
+# Subtest: spore_shot chase: equipment once after target multiplier at real damage endpoint
+ok 459 - spore_shot chase: equipment once after target multiplier at real damage endpoint
+  ---
+  duration_ms: 2.391583
+  type: 'test'
+  ...
+# Subtest: spore_shot charge: equipment once after target multiplier at real damage endpoint
+ok 460 - spore_shot charge: equipment once after target multiplier at real damage endpoint
+  ---
+  duration_ms: 1.1005
+  type: 'test'
+  ...
+# Subtest: spore_shot boss: equipment once after target multiplier at real damage endpoint
+ok 461 - spore_shot boss: equipment once after target multiplier at real damage endpoint
+  ---
+  duration_ms: 1.068958
+  type: 'test'
+  ...
+# Subtest: umbrella_blades chase: equipment once after target multiplier at real damage endpoint
+ok 462 - umbrella_blades chase: equipment once after target multiplier at real damage endpoint
+  ---
+  duration_ms: 0.587833
+  type: 'test'
+  ...
+# Subtest: umbrella_blades charge: equipment once after target multiplier at real damage endpoint
+ok 463 - umbrella_blades charge: equipment once after target multiplier at real damage endpoint
+  ---
+  duration_ms: 0.511166
+  type: 'test'
+  ...
+# Subtest: umbrella_blades boss: equipment once after target multiplier at real damage endpoint
+ok 464 - umbrella_blades boss: equipment once after target multiplier at real damage endpoint
+  ---
+  duration_ms: 0.399709
+  type: 'test'
+  ...
+# Subtest: dew_ring chase: equipment once after target multiplier at real damage endpoint
+ok 465 - dew_ring chase: equipment once after target multiplier at real damage endpoint
+  ---
+  duration_ms: 0.403459
+  type: 'test'
+  ...
+# Subtest: dew_ring charge: equipment once after target multiplier at real damage endpoint
+ok 466 - dew_ring charge: equipment once after target multiplier at real damage endpoint
+  ---
+  duration_ms: 0.370458
+  type: 'test'
+  ...
+# Subtest: dew_ring boss: equipment once after target multiplier at real damage endpoint
+ok 467 - dew_ring boss: equipment once after target multiplier at real damage endpoint
+  ---
+  duration_ms: 1.29
+  type: 'test'
+  ...
+# Subtest: raindrop chase: equipment once after target multiplier at real damage endpoint
+ok 468 - raindrop chase: equipment once after target multiplier at real damage endpoint
+  ---
+  duration_ms: 0.655458
+  type: 'test'
+  ...
+# Subtest: raindrop charge: equipment once after target multiplier at real damage endpoint
+ok 469 - raindrop charge: equipment once after target multiplier at real damage endpoint
+  ---
+  duration_ms: 0.515375
+  type: 'test'
+  ...
+# Subtest: raindrop boss: equipment once after target multiplier at real damage endpoint
+ok 470 - raindrop boss: equipment once after target multiplier at real damage endpoint
+  ---
+  duration_ms: 0.419875
+  type: 'test'
+  ...
+# Subtest: leaf_boomerang chase: equipment once after target multiplier at real damage endpoint
+ok 471 - leaf_boomerang chase: equipment once after target multiplier at real damage endpoint
+  ---
+  duration_ms: 0.516292
+  type: 'test'
+  ...
+# Subtest: leaf_boomerang charge: equipment once after target multiplier at real damage endpoint
+ok 472 - leaf_boomerang charge: equipment once after target multiplier at real damage endpoint
+  ---
+  duration_ms: 0.393125
+  type: 'test'
+  ...
+# Subtest: leaf_boomerang boss: equipment once after target multiplier at real damage endpoint
+ok 473 - leaf_boomerang boss: equipment once after target multiplier at real damage endpoint
+  ---
+  duration_ms: 1.461667
+  type: 'test'
+  ...
+# Subtest: wanjian chase: equipment once after target multiplier at real damage endpoint
+ok 474 - wanjian chase: equipment once after target multiplier at real damage endpoint
+  ---
+  duration_ms: 1.602041
+  type: 'test'
+  ...
+# Subtest: wanjian charge: equipment once after target multiplier at real damage endpoint
+ok 475 - wanjian charge: equipment once after target multiplier at real damage endpoint
+  ---
+  duration_ms: 0.548667
+  type: 'test'
+  ...
+# Subtest: wanjian boss: equipment once after target multiplier at real damage endpoint
+ok 476 - wanjian boss: equipment once after target multiplier at real damage endpoint
+  ---
+  duration_ms: 0.425875
+  type: 'test'
+  ...
+# Subtest: pooled shot reset clears S1 provenance and preserves zero damage
+ok 477 - pooled shot reset clears S1 provenance and preserves zero damage
+  ---
+  duration_ms: 0.24925
+  type: 'test'
+  ...
+# Subtest: classic equipment ignored: complete deterministic run state matches unequipped
+ok 478 - classic equipment ignored: complete deterministic run state matches unequipped
+  ---
+  duration_ms: 18.533791
+  type: 'test'
+  ...
+# Subtest: robe qualities and levels add floor(H0 * pct / 100), retaining other stats
+ok 479 - robe qualities and levels add floor(H0 * pct / 100), retaining other stats
+  ---
+  duration_ms: 14.194208
+  type: 'test'
+  ...
+# Subtest: robe preserves ordinary realm HP delta, breakthrough full heal and pill recomputes
+ok 480 - robe preserves ordinary realm HP delta, breakthrough full heal and pill recomputes
+  ---
+  duration_ms: 0.493375
+  type: 'test'
+  ...
+# Subtest: hostile Boss shots receive no outgoing equipment modifier
+ok 481 - hostile Boss shots receive no outgoing equipment modifier
+  ---
+  duration_ms: 0.569
+  type: 'test'
+  ...
+# Subtest: Zhenyue live S1 projectile gets +18 on elite/Boss and +9 on ordinary
+ok 482 - Zhenyue live S1 projectile gets +18 on elite/Boss and +9 on ordinary
+  ---
+  duration_ms: 3.425333
+  type: 'test'
+  ...
+# Subtest: quality-v3 parity, exactly three swords and one shared robe/charm
+ok 483 - quality-v3 parity, exactly three swords and one shared robe/charm
+  ---
+  duration_ms: 3.586417
+  type: 'test'
+  ...
+# Subtest: fresh profile is sanitized, metadata copied, starters blue; only TEST key touched
+ok 484 - fresh profile is sanitized, metadata copied, starters blue; only TEST key touched
+  ---
+  duration_ms: 0.941667
+  type: 'test'
+  ...
+# Subtest: unsupported actions/counts/slots and insufficient balances do not write or advance RNG
+ok 485 - unsupported actions/counts/slots and insufficient balances do not write or advance RNG
+  ---
+  duration_ms: 0.327208
+  type: 'test'
+  ...
+# Subtest: ten draws equal ten singles including RNG, pity, all rewards; one write for ten
+ok 486 - ten draws equal ten singles including RNG, pity, all rewards; one write for ten
+  ---
+  duration_ms: 1.018375
+  type: 'test'
+  ...
+# Subtest: 19 bad draws guarantee gold; early natural gold resets pity; reload continues deterministic stream
+ok 487 - 19 bad draws guarantee gold; early natural gold resets pity; reload continues deterministic stream
+  ---
+  duration_ms: 4.453708
+  type: 'test'
+  ...
+# Subtest: ordinary quality intervals and three-way identity selection use independent samples
+ok 488 - ordinary quality intervals and three-way identity selection use independent samples
+  ---
+  duration_ms: 30.039209
+  type: 'test'
+  ...
+# Subtest: all four duplicates pay drawn quality; higher quality replaces without compensation
+ok 489 - all four duplicates pay drawn quality; higher quality replaces without compensation
+  ---
+  duration_ms: 4.720333
+  type: 'test'
+  ...
+# Subtest: equip and refinement preserve slot levels, metadata and captured run snapshot
+ok 490 - equip and refinement preserve slot levels, metadata and captured run snapshot
+  ---
+  duration_ms: 0.805625
+  type: 'test'
+  ...
+# Subtest: save throws roll back ten-draw results, resources and RNG; retry matches fresh control
+ok 491 - save throws roll back ten-draw results, resources and RNG; retry matches fresh control
+  ---
+  duration_ms: 3.17625
+  type: 'test'
+  ...
+# Subtest: all mutation actions publish after saving; failed writes preserve prior state
+ok 492 - all mutation actions publish after saving; failed writes preserve prior state
+  ---
+  duration_ms: 0.84125
+  type: 'test'
+  ...
+# Subtest: corrupt, invalid and newer saves lock visibly without writes or wipe
+ok 493 - corrupt, invalid and newer saves lock visibly without writes or wipe
+  ---
+  duration_ms: 0.522459
+  type: 'test'
+  ...
+# Subtest: crystal capacity rejects entire draw/exchange/settlement, including ten-draw overflow
+ok 494 - crystal capacity rejects entire draw/exchange/settlement, including ten-draw overflow
+  ---
+  duration_ms: 0.551708
+  type: 'test'
+  ...
+# Subtest: sand and mark caps reject entire actions with explicit resource and cap
+ok 495 - sand and mark caps reject entire actions with explicit resource and cap
+  ---
+  duration_ms: 0.342583
+  type: 'test'
+  ...
+# Subtest: milestones at 120/240/360, victory and first bonuses match Meta settlement
+ok 496 - milestones at 120/240/360, victory and first bonuses match Meta settlement
+  ---
+  duration_ms: 1.758042
+  type: 'test'
+  ...
+# Subtest: failed real settlement can retry; stale/duplicate run callbacks never reward again across reload
+ok 497 - failed real settlement can retry; stale/duplicate run callbacks never reward again across reload
+  ---
+  duration_ms: 0.482375
+  type: 'test'
+  ...
+# Subtest: reload requires explicit zero-reward abandon; repeated interrupted starts cannot farm first bonuses
+ok 498 - reload requires explicit zero-reward abandon; repeated interrupted starts cannot farm first bonuses
+  ---
+  duration_ms: 0.796042
+  type: 'test'
+  ...
+# Subtest: real abandoned runs keep earned milestones; malformed summaries cannot mint rewards
+ok 499 - real abandoned runs keep earned milestones; malformed summaries cannot mint rewards
+  ---
+  duration_ms: 0.176209
+  type: 'test'
+  ...
+# Subtest: pause settings persist transactionally, validate booleans, and survive settlement/reload
+ok 500 - pause settings persist transactionally, validate booleans, and survive settlement/reload
+  ---
+  duration_ms: 0.25575
+  type: 'test'
+  ...
+# Subtest: real-end tutorial merge is monotonic, validated and atomic with rewards
+ok 501 - real-end tutorial merge is monotonic, validated and atomic with rewards
+  ---
+  duration_ms: 0.374833
+  type: 'test'
+  ...
+# Subtest: recoverAbandon accepts omitted runId and never merges placeholder tutorial flags
+ok 502 - recoverAbandon accepts omitted runId and never merges placeholder tutorial flags
+  ---
+  duration_ms: 0.103458
+  type: 'test'
+  ...
+# Subtest: survivor: contact resolves fractional incoming damage at the hit boundary
+ok 503 - survivor: contact resolves fractional incoming damage at the hit boundary
+  ---
+  duration_ms: 4.748833
+  type: 'test'
+  ...
+# Subtest: xianxia: contact resolves fractional incoming damage at the hit boundary
+ok 504 - xianxia: contact resolves fractional incoming damage at the hit boundary
+  ---
+  duration_ms: 2.191083
+  type: 'test'
+  ...
+# Subtest: survivor: bubble resolves fractional incoming damage at the hit boundary
+ok 505 - survivor: bubble resolves fractional incoming damage at the hit boundary
+  ---
+  duration_ms: 0.78675
+  type: 'test'
+  ...
+# Subtest: xianxia: bubble resolves fractional incoming damage at the hit boundary
+ok 506 - xianxia: bubble resolves fractional incoming damage at the hit boundary
+  ---
+  duration_ms: 0.441542
+  type: 'test'
+  ...
+# Subtest: independent S1: max yujian rejects legacy evolution at 360s and fires three bounded swords
+ok 507 - independent S1: max yujian rejects legacy evolution at 360s and fires three bounded swords
+  ---
+  duration_ms: 5.770667
+  type: 'test'
+  ...
+# Subtest: historical standalone wanjian: tier change during warning uses new tier but excludes power expiring on strike tick
+ok 508 - historical standalone wanjian: tier change during warning uses new tier but excludes power expiring on strike tick
+  ---
+  duration_ms: 6.565709
+  type: 'test'
+  ...
+# Subtest: independent: three pills freeze in queued selection; refresh survives shared expiry once
+ok 509 - independent: three pills freeze in queued selection; refresh survives shared expiry once
+  ---
+  duration_ms: 1.703458
+  type: 'test'
+  ...
+# Subtest: E04 CLASSIC: default and explicit survivor keep exactly the original card pools
+ok 510 - E04 CLASSIC: default and explicit survivor keep exactly the original card pools
+  ---
+  duration_ms: 7.549
+  type: 'test'
+  ...
+# Subtest: S1 CLASS: yujian is a normal weapon; passive slots do not restore old class cards
+ok 511 - S1 CLASS: yujian is a normal weapon; passive slots do not restore old class cards
+  ---
+  duration_ms: 2.039917
+  type: 'test'
+  ...
+# Subtest: E04 PILL-DRAFT: target level, not banked level, gates three pills; at most one per offer
+ok 512 - E04 PILL-DRAFT: target level, not banked level, gates three pills; at most one per offer
+  ---
+  duration_ms: 1.505667
+  type: 'test'
+  ...
+# Subtest: E04 BREAKTHROUGH: real Run offers at 10 guarantee S1 weapon growth and never a legacy evolution
+ok 513 - E04 BREAKTHROUGH: real Run offers at 10 guarantee S1 weapon growth and never a legacy evolution
+  ---
+  duration_ms: 22.056042
+  type: 'test'
+  ...
+# Subtest: E04 BREAKTHROUGH: maxed four-slot S3 build has a legal three-card fallback without a fake weapon
+ok 514 - E04 BREAKTHROUGH: maxed four-slot S3 build has a legal three-card fallback without a fake weapon
+  ---
+  duration_ms: 0.267292
+  type: 'test'
+  ...
+# Subtest: E04 EVOLVE: xianxia t=359.999 yujian=3 cooldown=5
+ok 515 - E04 EVOLVE: xianxia t=359.999 yujian=3 cooldown=5
+  ---
+  duration_ms: 0.393041
+  type: 'test'
+  ...
+# Subtest: E04 EVOLVE: xianxia t=360 yujian=2 cooldown=5
+ok 516 - E04 EVOLVE: xianxia t=360 yujian=2 cooldown=5
+  ---
+  duration_ms: 0.403583
+  type: 'test'
+  ...
+# Subtest: E04 EVOLVE: xianxia t=360 yujian=3 cooldown=0
+ok 517 - E04 EVOLVE: xianxia t=360 yujian=3 cooldown=0
+  ---
+  duration_ms: 0.330834
+  type: 'test'
+  ...
+# Subtest: E04 EVOLVE: xianxia t=360.001 yujian=3 cooldown=0
+ok 518 - E04 EVOLVE: xianxia t=360.001 yujian=3 cooldown=0
+  ---
+  duration_ms: 0.472458
+  type: 'test'
+  ...
+# Subtest: E04 EVOLVE: survivor t=359.999 yujian=0 cooldown=3
+ok 519 - E04 EVOLVE: survivor t=359.999 yujian=0 cooldown=3
+  ---
+  duration_ms: 0.566541
+  type: 'test'
+  ...
+# Subtest: E04 EVOLVE: survivor t=360 yujian=0 cooldown=2
+ok 520 - E04 EVOLVE: survivor t=360 yujian=0 cooldown=2
+  ---
+  duration_ms: 0.33875
+  type: 'test'
+  ...
+# Subtest: E04 EVOLVE: survivor t=360 yujian=0 cooldown=3
+ok 521 - E04 EVOLVE: survivor t=360 yujian=0 cooldown=3
+  ---
+  duration_ms: 0.734666
+  type: 'test'
+  ...
+# Subtest: E04 EVOLVE: survivor t=360 yujian=3 cooldown=0
+ok 522 - E04 EVOLVE: survivor t=360 yujian=3 cooldown=0
+  ---
+  duration_ms: 0.706875
+  type: 'test'
+  ...
+# Subtest: E04 PILLS: choosing all three applies stats immediately; same pill refreshes without stacking
+ok 523 - E04 PILLS: choosing all three applies stats immediately; same pill refreshes without stacking
+  ---
+  duration_ms: 4.150333
+  type: 'test'
+  ...
+# Subtest: E04 PILL-TIME: pause and levelup freeze ticks/deadlines; resume does not catch up wall time
+ok 524 - E04 PILL-TIME: pause and levelup freeze ticks/deadlines; resume does not catch up wall time
+  ---
+  duration_ms: 0.925834
+  type: 'test'
+  ...
+# Subtest: E04 PILL-EXPIRY: exact wind deadline removes speed before the same Run.step movement
+ok 525 - E04 PILL-EXPIRY: exact wind deadline removes speed before the same Run.step movement
+  ---
+  duration_ms: 8.005833
+  type: 'test'
+  ...
+# Subtest: E04 PILL-EXPIRY: body expires before contact damage on tick 1200
+ok 526 - E04 PILL-EXPIRY: body expires before contact damage on tick 1200
+  ---
+  duration_ms: 7.279834
+  type: 'test'
+  ...
+# Subtest: E04 DAMAGE: contact raw=35, vajra=0, body=false => 35
+ok 527 - E04 DAMAGE: contact raw=35, vajra=0, body=false => 35
+  ---
+  duration_ms: 1.7865
+  type: 'test'
+  ...
+# Subtest: E04 DAMAGE: contact raw=35, vajra=5, body=false => 25
+ok 528 - E04 DAMAGE: contact raw=35, vajra=5, body=false => 25
+  ---
+  duration_ms: 1.400166
+  type: 'test'
+  ...
+# Subtest: E04 DAMAGE: contact raw=35, vajra=0, body=true => 18
+ok 529 - E04 DAMAGE: contact raw=35, vajra=0, body=true => 18
+  ---
+  duration_ms: 0.48825
+  type: 'test'
+  ...
+# Subtest: E04 DAMAGE: contact raw=35, vajra=5, body=true => 12
+ok 530 - E04 DAMAGE: contact raw=35, vajra=5, body=true => 12
+  ---
+  duration_ms: 0.437959
+  type: 'test'
+  ...
+# Subtest: E04 DAMAGE: contact raw=17.5, vajra=5, body=true => 6
+ok 531 - E04 DAMAGE: contact raw=17.5, vajra=5, body=true => 6
+  ---
+  duration_ms: 0.429167
+  type: 'test'
+  ...
+# Subtest: E04 DAMAGE: contact raw=1, vajra=5, body=true => 1
+ok 532 - E04 DAMAGE: contact raw=1, vajra=5, body=true => 1
+  ---
+  duration_ms: 0.960916
+  type: 'test'
+  ...
+# Subtest: E04 CLASSIC-DAMAGE: contact preserves fractional incoming damage
+ok 533 - E04 CLASSIC-DAMAGE: contact preserves fractional incoming damage
+  ---
+  duration_ms: 0.839959
+  type: 'test'
+  ...
+# Subtest: E04 PILL-EXPIRY: body expires before bubble damage on tick 1200
+ok 534 - E04 PILL-EXPIRY: body expires before bubble damage on tick 1200
+  ---
+  duration_ms: 12.761916
+  type: 'test'
+  ...
+# Subtest: E04 DAMAGE: bubble raw=35, vajra=0, body=false => 35
+ok 535 - E04 DAMAGE: bubble raw=35, vajra=0, body=false => 35
+  ---
+  duration_ms: 1.872459
+  type: 'test'
+  ...
+# Subtest: E04 DAMAGE: bubble raw=35, vajra=5, body=false => 25
+ok 536 - E04 DAMAGE: bubble raw=35, vajra=5, body=false => 25
+  ---
+  duration_ms: 1.178792
+  type: 'test'
+  ...
+# Subtest: E04 DAMAGE: bubble raw=35, vajra=0, body=true => 18
+ok 537 - E04 DAMAGE: bubble raw=35, vajra=0, body=true => 18
+  ---
+  duration_ms: 4.185
+  type: 'test'
+  ...
+# Subtest: E04 DAMAGE: bubble raw=35, vajra=5, body=true => 12
+ok 538 - E04 DAMAGE: bubble raw=35, vajra=5, body=true => 12
+  ---
+  duration_ms: 0.906792
+  type: 'test'
+  ...
+# Subtest: E04 DAMAGE: bubble raw=17.5, vajra=5, body=true => 6
+ok 539 - E04 DAMAGE: bubble raw=17.5, vajra=5, body=true => 6
+  ---
+  duration_ms: 1.441625
+  type: 'test'
+  ...
+# Subtest: E04 DAMAGE: bubble raw=1, vajra=5, body=true => 1
+ok 540 - E04 DAMAGE: bubble raw=1, vajra=5, body=true => 1
+  ---
+  duration_ms: 1.1555
+  type: 'test'
+  ...
+# Subtest: E04 CLASSIC-DAMAGE: bubble preserves fractional incoming damage
+ok 541 - E04 CLASSIC-DAMAGE: bubble preserves fractional incoming damage
+  ---
+  duration_ms: 0.404917
+  type: 'test'
+  ...
+# Subtest: E04 WIND: marks existing spores, does not bank XP/recurse; repeated pill attracts later spores
+ok 542 - E04 WIND: marks existing spores, does not bank XP/recurse; repeated pill attracts later spores
+  ---
+  duration_ms: 0.998917
+  type: 'test'
+  ...
+# Subtest: E04 TOKEN: old token cannot consume the next queued offer or mutate any combat state
+ok 543 - E04 TOKEN: old token cannot consume the next queued offer or mutate any combat state
+  ---
+  duration_ms: 0.570166
+  type: 'test'
+  ...
+# Subtest: E04 INVALID: unknown pill does not consume an offer
+ok 544 - E04 INVALID: unknown pill does not consume an offer
+  ---
+  duration_ms: 0.463792
+  type: 'test'
+  ...
+# Subtest: E04 INVALID: unknown weapon does not consume an offer
+ok 545 - E04 INVALID: unknown weapon does not consume an offer
+  ---
+  duration_ms: 0.311792
+  type: 'test'
+  ...
+# Subtest: E04 INVALID: obsolete class passive does not consume an offer
+ok 546 - E04 INVALID: obsolete class passive does not consume an offer
+  ---
+  duration_ms: 0.281459
+  type: 'test'
+  ...
+# Subtest: E04 INVALID: stale weapon tier does not consume an offer
+ok 547 - E04 INVALID: stale weapon tier does not consume an offer
+  ---
+  duration_ms: 0.272917
+  type: 'test'
+  ...
+# Subtest: E04 INVALID: maxed normal passive does not consume an offer
+ok 548 - E04 INVALID: maxed normal passive does not consume an offer
+  ---
+  duration_ms: 0.27
+  type: 'test'
+  ...
+# Subtest: E04 INVALID: stale normal passive tier does not consume an offer
+ok 549 - E04 INVALID: stale normal passive tier does not consume an offer
+  ---
+  duration_ms: 0.271542
+  type: 'test'
+  ...
+# Subtest: E04 INVALID: lost evolution eligibility does not consume an offer
+ok 550 - E04 INVALID: lost evolution eligibility does not consume an offer
+  ---
+  duration_ms: 0.273875
+  type: 'test'
+  ...
+# Subtest: E04 INVALID: pill before target 5 and xianxia-only cards in classic mode are rejected
+ok 551 - E04 INVALID: pill before target 5 and xianxia-only cards in classic mode are rejected
+  ---
+  duration_ms: 6.108
+  type: 'test'
+  ...
+# Subtest: E04 WANJIAN: death immediately cancels a real pending warning
+ok 552 - E04 WANJIAN: death immediately cancels a real pending warning
+  ---
+  duration_ms: 0.679042
+  type: 'test'
+  ...
+# Subtest: E04 WANJIAN: abandon immediately cancels a real pending warning
+ok 553 - E04 WANJIAN: abandon immediately cancels a real pending warning
+  ---
+  duration_ms: 0.288042
+  type: 'test'
+  ...
+# Subtest: E04 WANJIAN: cleansing immediately cancels a real pending warning
+ok 554 - E04 WANJIAN: cleansing immediately cancels a real pending warning
+  ---
+  duration_ms: 0.671333
+  type: 'test'
+  ...
+# Subtest: E04 WANJIAN: won immediately cancels a real pending warning
+ok 555 - E04 WANJIAN: won immediately cancels a real pending warning
+  ---
+  duration_ms: 0.519709
+  type: 'test'
+  ...
+# Subtest: E04 WANJIAN: pause and card choice freeze, rather than cancel, a pending cast
+ok 556 - E04 WANJIAN: pause and card choice freeze, rather than cancel, a pending cast
+  ---
+  duration_ms: 1.306958
+  type: 'test'
+  ...
+# Subtest: pill take/refresh/expiry events occur exactly once, invalid callbacks emit none
+ok 557 - pill take/refresh/expiry events occur exactly once, invalid callbacks emit none
+  ---
+  duration_ms: 10.266167
+  type: 'test'
+  ...
+# Subtest: constructor can read pill modifiers before player, stats and spores exist
+ok 558 - constructor can read pill modifiers before player, stats and spores exist
+  ---
+  duration_ms: 1.377917
+  type: 'test'
+  ...
+# Subtest: classic world without pills keeps unit modifiers as simulation ticks advance
+ok 559 - classic world without pills keeps unit modifiers as simulation ticks advance
+  ---
+  duration_ms: 0.22125
+  type: 'test'
+  ...
+# Subtest: increment then expire then refresh removes mitigation before deadline-tick damage
+ok 560 - increment then expire then refresh removes mitigation before deadline-tick damage
+  ---
+  duration_ms: 0.141666
+  type: 'test'
+  ...
+# Subtest: vajra uses cumulative clamped levels only in xianxia stats
+ok 561 - vajra uses cumulative clamped levels only in xianxia stats
+  ---
+  duration_ms: 0.413792
+  type: 'test'
+  ...
+# Subtest: pill multipliers compose with realms and passives; mitigation floors at 25 percent
+ok 562 - pill multipliers compose with realms and passives; mitigation floors at 25 percent
+  ---
+  duration_ms: 0.111375
+  type: 'test'
+  ...
+# Subtest: incoming damage rounds once after mitigation; classic ignores the multiplier
+ok 563 - incoming damage rounds once after mitigation; classic ignores the multiplier
+  ---
+  duration_ms: 0.104958
+  type: 'test'
+  ...
+# Subtest: provided pill modifiers must be a complete finite positive triple
+ok 564 - provided pill modifiers must be a complete finite positive triple
+  ---
+  duration_ms: 0.20125
+  type: 'test'
+  ...
+# Subtest: pill state is independent and duration/index/effects tables are immutable
+ok 565 - pill state is independent and duration/index/effects tables are immutable
+  ---
+  duration_ms: 0.096958
+  type: 'test'
+  ...
+# Subtest: same pill refreshes from current tick without stacking duration or magnitude
+ok 566 - same pill refreshes from current tick without stacking duration or magnitude
+  ---
+  duration_ms: 0.212
+  type: 'test'
+  ...
+# Subtest: expiry uses exact simulation ticks and clears once, including simultaneous expiry
+ok 567 - expiry uses exact simulation ticks and clears once, including simultaneous expiry
+  ---
+  duration_ms: 1.2065
+  type: 'test'
+  ...
+# Subtest: paused/selection time cannot consume pills when simulationTick is unchanged
+ok 568 - paused/selection time cannot consume pills when simulationTick is unchanged
+  ---
+  duration_ms: 0.128792
+  type: 'test'
+  ...
+# Subtest: wind marks only active spores on each take; never banks XP or clears spores
+ok 569 - wind marks only active spores on each take; never banks XP or clears spores
+  ---
+  duration_ms: 0.061
+  type: 'test'
+  ...
+# Subtest: invalid pill ids and invalid ticks cannot partially mutate state
+ok 570 - invalid pill ids and invalid ticks cannot partially mutate state
+  ---
+  duration_ms: 0.053459
+  type: 'test'
+  ...
+# Subtest: realm boundaries select the correct stage and layer
+ok 571 - realm boundaries select the correct stage and layer
+  ---
+  duration_ms: 1.188958
+  type: 'test'
+  ...
+# Subtest: fractional levels floor before mapping while actual levels survive the cap
+ok 572 - fractional levels floor before mapping while actual levels survive the cap
+  ---
+  duration_ms: 0.192583
+  type: 'test'
+  ...
+# Subtest: both realm functions reject invalid levels without coercion
+ok 573 - both realm functions reject invalid levels without coercion
+  ---
+  duration_ms: 0.275459
+  type: 'test'
+  ...
+# Subtest: realm stats contain only realm bonuses and retain fractional attack growth
+ok 574 - realm stats contain only realm bonuses and retain fractional attack growth
+  ---
+  duration_ms: 0.111417
+  type: 'test'
+  ...
+# Subtest: all minute compensation tiers affect hp and damage independently
+ok 575 - all minute compensation tiers affect hp and damage independently
+  ---
+  duration_ms: 0.12375
+  type: 'test'
+  ...
+# Subtest: enemy scaling floors minutes and clamps negative minutes to zero
+ok 576 - enemy scaling floors minutes and clamps negative minutes to zero
+  ---
+  duration_ms: 0.055833
+  type: 'test'
+  ...
+# Subtest: growth continues past minute seven while compensation stays capped
+ok 577 - growth continues past minute seven while compensation stays capped
+  ---
+  duration_ms: 0.075292
+  type: 'test'
+  ...
+# Subtest: enemy values stay fractional without a minimum damage or hp floor
+ok 578 - enemy values stay fractional without a minimum damage or hp floor
+  ---
+  duration_ms: 0.041167
+  type: 'test'
+  ...
+# Subtest: boss hp uses only the tenfold scale and final K tier
+ok 579 - boss hp uses only the tenfold scale and final K tier
+  ---
+  duration_ms: 0.192291
+  type: 'test'
+  ...
+# Subtest: scaling rejects invalid numeric inputs and negative base or growth
+ok 580 - scaling rejects invalid numeric inputs and negative base or growth
+  ---
+  duration_ms: 0.528459
+  type: 'test'
+  ...
+# Subtest: exported data cannot be mutated to change subsequent results
+ok 581 - exported data cannot be mutated to change subsequent results
+  ---
+  duration_ms: 0.387667
+  type: 'test'
+  ...
+# Subtest: mutating a returned value cannot affect future calls
+ok 582 - mutating a returned value cannot affect future calls
+  ---
+  duration_ms: 0.091084
+  type: 'test'
+  ...
+# Subtest: xianxia starts at committed level 1 with matching realm and full base health
+ok 583 - xianxia starts at committed level 1 with matching realm and full base health
+  ---
+  duration_ms: 6.038542
+  type: 'test'
+  ...
+# Subtest: omitted ruleset preserves survivor behavior, including the one-argument choose API
+ok 584 - omitted ruleset preserves survivor behavior, including the one-argument choose API
+  ---
+  duration_ms: 5.715583
+  type: 'test'
+  ...
+# Subtest: banked XP alone cannot apply realm stats, heal, or grant invulnerability
+ok 585 - banked XP alone cannot apply realm stats, heal, or grant invulnerability
+  ---
+  duration_ms: 1.569125
+  type: 'test'
+  ...
+# Subtest: a real XP pickup opens an offer without prematurely committing its level
+ok 586 - a real XP pickup opens an offer without prematurely committing its level
+  ---
+  duration_ms: 1.966084
+  type: 'test'
+  ...
+# Subtest: QUEUE-01: XP from applied 9 to 12 commits offers 10, 11, 12 separately
+ok 587 - QUEUE-01: XP from applied 9 to 12 commits offers 10, 11, 12 separately
+  ---
+  duration_ms: 1.729416
+  type: 'test'
+  ...
+# Subtest: QUEUE-02: one XP batch crosses both breakthroughs and keeps leveling past 27
+ok 588 - QUEUE-02: one XP batch crosses both breakthroughs and keeps leveling past 27
+  ---
+  duration_ms: 1.901083
+  type: 'test'
+  ...
+# Subtest: QUEUE-03: ordinary 1→2 preserves missing HP, including bonuses
+ok 589 - QUEUE-03: ordinary 1→2 preserves missing HP, including bonuses
+  ---
+  duration_ms: 1.167917
+  type: 'test'
+  ...
+# Subtest: QUEUE-03: ordinary 10→11 preserves missing HP, including bonuses
+ok 590 - QUEUE-03: ordinary 10→11 preserves missing HP, including bonuses
+  ---
+  duration_ms: 1.45
+  type: 'test'
+  ...
+# Subtest: QUEUE-03: ordinary 19→20 preserves missing HP, including bonuses
+ok 591 - QUEUE-03: ordinary 19→20 preserves missing HP, including bonuses
+  ---
+  duration_ms: 1.082542
+  type: 'test'
+  ...
+# Subtest: QUEUE-03: ordinary 27→28 preserves missing HP, including bonuses
+ok 592 - QUEUE-03: ordinary 27→28 preserves missing HP, including bonuses
+  ---
+  duration_ms: 0.756583
+  type: 'test'
+  ...
+# Subtest: ordinary upgrade from full health reaches the new maximum without overflow
+ok 593 - ordinary upgrade from full health reaches the new maximum without overflow
+  ---
+  duration_ms: 0.388125
+  type: 'test'
+  ...
+# Subtest: QUEUE-03/04: breakthrough 10 heals final maximum and preserves immunity 0
+ok 594 - QUEUE-03/04: breakthrough 10 heals final maximum and preserves immunity 0
+  ---
+  duration_ms: 1.540833
+  type: 'test'
+  ...
+# Subtest: QUEUE-03/04: breakthrough 10 heals final maximum and preserves immunity 0.5
+ok 595 - QUEUE-03/04: breakthrough 10 heals final maximum and preserves immunity 0.5
+  ---
+  duration_ms: 0.681834
+  type: 'test'
+  ...
+# Subtest: QUEUE-03/04: breakthrough 10 heals final maximum and preserves immunity 2
+ok 596 - QUEUE-03/04: breakthrough 10 heals final maximum and preserves immunity 2
+  ---
+  duration_ms: 0.490834
+  type: 'test'
+  ...
+# Subtest: QUEUE-03/04: breakthrough 19 heals final maximum and preserves immunity 0
+ok 597 - QUEUE-03/04: breakthrough 19 heals final maximum and preserves immunity 0
+  ---
+  duration_ms: 0.5255
+  type: 'test'
+  ...
+# Subtest: QUEUE-03/04: breakthrough 19 heals final maximum and preserves immunity 0.5
+ok 598 - QUEUE-03/04: breakthrough 19 heals final maximum and preserves immunity 0.5
+  ---
+  duration_ms: 0.759708
+  type: 'test'
+  ...
+# Subtest: QUEUE-03/04: breakthrough 19 heals final maximum and preserves immunity 2
+ok 599 - QUEUE-03/04: breakthrough 19 heals final maximum and preserves immunity 2
+  ---
+  duration_ms: 2.098208
+  type: 'test'
+  ...
+# Subtest: QUEUE-04: breakthrough wave respects center radius, resistance, overlap, and live entities
+ok 600 - QUEUE-04: breakthrough wave respects center radius, resistance, overlap, and live entities
+  ---
+  duration_ms: 1.5475
+  type: 'test'
+  ...
+# Subtest: stale offer tokens cannot consume the next queued card or trigger its breakthrough
+ok 601 - stale offer tokens cannot consume the next queued card or trigger its breakthrough
+  ---
+  duration_ms: 2.25575
+  type: 'test'
+  ...
+# Subtest: invalid indices and foreign tokens leave the entire breakthrough transaction unchanged
+ok 602 - invalid indices and foreign tokens leave the entire breakthrough transaction unchanged
+  ---
+  duration_ms: 5.026458
+  type: 'test'
+  ...
+# Subtest: invalid card payload cannot consume pending levels, heal, or half-commit a breakthrough
+ok 603 - invalid card payload cannot consume pending levels, heal, or half-commit a breakthrough
+  ---
+  duration_ms: 1.286916
+  type: 'test'
+  ...
+# Subtest: QUEUE-05: pause freezes a queued breakthrough and resume preserves the exact offer/token
+ok 604 - QUEUE-05: pause freezes a queued breakthrough and resume preserves the exact offer/token
+  ---
+  duration_ms: 0.772875
+  type: 'test'
+  ...
+# Subtest: same seed and accepted choices produce identical offers despite rejected callbacks and pauses
+ok 605 - same seed and accepted choices produce identical offers despite rejected callbacks and pauses
+  ---
+  duration_ms: 6.312459
+  type: 'test'
+  ...
+# Subtest: QUEUE-07: lethal contact plus healing/XP pickups cannot revive player (Boss death=false)
+ok 606 - QUEUE-07: lethal contact plus healing/XP pickups cannot revive player (Boss death=false)
+  ---
+  duration_ms: 0.927917
+  type: 'test'
+  ...
+# Subtest: QUEUE-07: lethal contact plus healing/XP pickups cannot revive player (Boss death=true)
+ok 607 - QUEUE-07: lethal contact plus healing/XP pickups cannot revive player (Boss death=true)
+  ---
+  duration_ms: 0.939625
+  type: 'test'
+  ...
+# Subtest: legacy survivor retains same-step healing pickup behavior after lethal contact
+ok 608 - legacy survivor retains same-step healing pickup behavior after lethal contact
+  ---
+  duration_ms: 0.588667
+  type: 'test'
+  ...
+# Subtest: QUEUE-07: Boss ending ignores pending levels and pickups; condensation freezes movement until extraction
+ok 609 - QUEUE-07: Boss ending ignores pending levels and pickups; condensation freezes movement until extraction
+  ---
+  duration_ms: 4.284042
+  type: 'test'
+  ...
+# Subtest: legacy survivor can still move during cleansing
+ok 610 - legacy survivor can still move during cleansing
+  ---
+  duration_ms: 2.048583
+  type: 'test'
+  ...
+# (node:24358) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: classic/default ruleset does not opt into S1 text
+ok 611 - classic/default ruleset does not opt into S1 text
+  ---
+  duration_ms: 1.579417
+  type: 'test'
+  ...
+# Subtest: 御剑 five ranks retain the approved non-linear per-sword damage and whole-round sums
+ok 612 - 御剑 five ranks retain the approved non-linear per-sword damage and whole-round sums
+  ---
+  duration_ms: 1.717542
+  type: 'test'
+  ...
+# Subtest: 御剑 L2/L5 explicitly show per-sword decreases alongside round increases
+ok 613 - 御剑 L2/L5 explicitly show per-sword decreases alongside round increases
+  ---
+  duration_ms: 0.792625
+  type: 'test'
+  ...
+# Subtest: 剑气斩 all five ranks state next damage, radius, angle, cooldown and fixed wind-up
+ok 614 - 剑气斩 all five ranks state next damage, radius, angle, cooldown and fixed wind-up
+  ---
+  duration_ms: 1.413625
+  type: 'test'
+  ...
+# Subtest: new and upgraded cards distinguish acquisition from next-rank changes
+ok 615 - new and upgraded cards distinguish acquisition from next-rank changes
+  ---
+  duration_ms: 1.06675
+  type: 'test'
+  ...
+# Subtest: only S1 skills, two shared passives, pills and existing supplies are presented
+ok 616 - only S1 skills, two shared passives, pills and existing supplies are presented
+  ---
+  duration_ms: 0.303625
+  type: 'test'
+  ...
+# Subtest: 金刚 and 聚灵 describe their actual next cumulative percentages
+ok 617 - 金刚 and 聚灵 describe their actual next cumulative percentages
+  ---
+  duration_ms: 0.343375
+  type: 'test'
+  ...
+# Subtest: pill text preserves duration, immediate use, wind attraction and refresh-not-stack semantics
+ok 618 - pill text preserves duration, immediate use, wind attraction and refresh-not-stack semantics
+  ---
+  duration_ms: 0.156375
+  type: 'test'
+  ...
+# Subtest: formatting does not mutate cards or gameplay data
+ok 619 - formatting does not mutate cards or gameplay data
+  ---
+  duration_ms: 0.632958
+  type: 'test'
+  ...
+# Subtest: HUD uses S1 text and preserves original offer index after hiding unavailable cards
+ok 620 - HUD uses S1 text and preserves original offer index after hiding unavailable cards
+  ---
+  duration_ms: 1.889333
+  type: 'test'
+  ...
+# Subtest: pause omits null or stale classPassive banners and old weapon/passive names
+ok 621 - pause omits null or stale classPassive banners and old weapon/passive names
+  ---
+  duration_ms: 0.42225
+  type: 'test'
+  ...
+# Subtest: classic card text, evolution names and evolved slot badge stay intact
+ok 622 - classic card text, evolution names and evolved slot badge stay intact
+  ---
+  duration_ms: 0.325042
+  type: 'test'
+  ...
+# Subtest: S1 result slots ignore legacy evolved flags and the retired class passive
+ok 623 - S1 result slots ignore legacy evolved flags and the retired class passive
+  ---
+  duration_ms: 0.268833
+  type: 'test'
+  ...
+# Subtest: S2 catalog opens exactly four weapons, two shared passives, and unchanged pills
+ok 624 - S2 catalog opens exactly four weapons, two shared passives, and unchanged pills
+  ---
+  duration_ms: 2.740125
+  type: 'test'
+  ...
+# Subtest: S1 weapon registration supplies five ranks at indices 6 and 7
+ok 625 - S1 weapon registration supplies five ranks at indices 6 and 7
+  ---
+  duration_ms: 0.365959
+  type: 'test'
+  ...
+# Subtest: S1 starting candidate set is exact and first offer guarantees both sword directions
+ok 626 - S1 starting candidate set is exact and first offer guarantees both sword directions
+  ---
+  duration_ms: 2.202792
+  type: 'test'
+  ...
+# Subtest: S2 no stage adds unimplemented skills, class passives or evolutions, even with legacy inventory
+ok 627 - S2 no stage adds unimplemented skills, class passives or evolutions, even with legacy inventory
+  ---
+  duration_ms: 3.022
+  type: 'test'
+  ...
+# Subtest: S1 level five and full slots suppress illegal growth without inventing cards
+ok 628 - S1 level five and full slots suppress illegal growth without inventing cards
+  ---
+  duration_ms: 0.177334
+  type: 'test'
+  ...
+# Subtest: S1 drought guarantees owned growth after two misses and does not change the counter
+ok 629 - S1 drought guarantees owned growth after two misses and does not change the counter
+  ---
+  duration_ms: 1.415542
+  type: 'test'
+  ...
+# Subtest: S1 breakthrough accepts legal new weapon growth, with drought upgrade taking precedence
+ok 630 - S1 breakthrough accepts legal new weapon growth, with drought upgrade taking precedence
+  ---
+  duration_ms: 0.907834
+  type: 'test'
+  ...
+# Subtest: S1 drought and breakthrough with no eligible weapon still return three legal cards
+ok 631 - S1 drought and breakthrough with no eligible weapon still return three legal cards
+  ---
+  duration_ms: 0.088125
+  type: 'test'
+  ...
+# Subtest: S1 keeps pill unlock at level five and at most one pill per offer
+ok 632 - S1 keeps pill unlock at level five and at most one pill per offer
+  ---
+  duration_ms: 0.654125
+  type: 'test'
+  ...
+# Subtest: S1 evolution APIs reject all cultivation and disabled IDs but retain classic evolution
+ok 633 - S1 evolution APIs reject all cultivation and disabled IDs but retain classic evolution
+  ---
+  duration_ms: 0.305208
+  type: 'test'
+  ...
+# Subtest: S1 draft is repeatable and does not mutate frozen inventory or state
+ok 634 - S1 draft is repeatable and does not mutate frozen inventory or state
+  ---
+  duration_ms: 0.112708
+  type: 'test'
+  ...
+# Subtest: classic candidates ignore cultivation guarantees and contain no S1 skills or pills
+ok 635 - classic candidates ignore cultivation guarantees and contain no S1 skills or pills
+  ---
+  duration_ms: 0.067416
+  type: 'test'
+  ...
+# Subtest: sword sweep hits nearest intersected enemy, irrespective of pool order
+ok 636 - sword sweep hits nearest intersected enemy, irrespective of pool order
+  ---
+  duration_ms: 3.104375
+  type: 'test'
+  ...
+# Subtest: sword tests final partial segment and never travels beyond its range
+ok 637 - sword tests final partial segment and never travels beyond its range
+  ---
+  duration_ms: 1.16375
+  type: 'test'
+  ...
+# Subtest: piercing sword hits overlapping enemy only once across steps
+ok 638 - piercing sword hits overlapping enemy only once across steps
+  ---
+  duration_ms: 0.449333
+  type: 'test'
+  ...
+# Subtest: sword miss creates no impact effect event
+ok 639 - sword miss creates no impact effect event
+  ---
+  duration_ms: 0.57975
+  type: 'test'
+  ...
+# Subtest: independent S1 schema: live data accepts zero knockback and fractional arc damage
+ok 640 - independent S1 schema: live data accepts zero knockback and fractional arc damage
+  ---
+  duration_ms: 10.820667
+  type: 'test'
+  ...
+# Subtest: independent S1 schema rejects duplicate index
+ok 641 - independent S1 schema rejects duplicate index
+  ---
+  duration_ms: 1.163083
+  type: 'test'
+  ...
+# Subtest: independent S1 schema rejects wrong stable index
+ok 642 - independent S1 schema rejects wrong stable index
+  ---
+  duration_ms: 0.861333
+  type: 'test'
+  ...
+# Subtest: independent S1 schema rejects non-xianxia
+ok 643 - independent S1 schema rejects non-xianxia
+  ---
+  duration_ms: 0.780667
+  type: 'test'
+  ...
+# Subtest: independent S1 schema rejects unsupported evolution
+ok 644 - independent S1 schema rejects unsupported evolution
+  ---
+  duration_ms: 1.347917
+  type: 'test'
+  ...
+# Subtest: independent S1 schema rejects missing rank
+ok 645 - independent S1 schema rejects missing rank
+  ---
+  duration_ms: 2.105
+  type: 'test'
+  ...
+# Subtest: independent S1 schema rejects invalid range
+ok 646 - independent S1 schema rejects invalid range
+  ---
+  duration_ms: 2.329084
+  type: 'test'
+  ...
+# Subtest: independent S1 schema rejects negative knockback
+ok 647 - independent S1 schema rejects negative knockback
+  ---
+  duration_ms: 2.312625
+  type: 'test'
+  ...
+# Subtest: independent S1 schema rejects fractional count
+ok 648 - independent S1 schema rejects fractional count
+  ---
+  duration_ms: 2.994083
+  type: 'test'
+  ...
+# Subtest: independent S1 schema rejects nonpositive lifetime
+ok 649 - independent S1 schema rejects nonpositive lifetime
+  ---
+  duration_ms: 5.908375
+  type: 'test'
+  ...
+# Subtest: independent S1 schema rejects missing damage
+ok 650 - independent S1 schema rejects missing damage
+  ---
+  duration_ms: 2.827666
+  type: 'test'
+  ...
+# Subtest: independent S1 schema rejects zero cooldown
+ok 651 - independent S1 schema rejects zero cooldown
+  ---
+  duration_ms: 1.944458
+  type: 'test'
+  ...
+# Subtest: independent S1 schema rejects invalid radius
+ok 652 - independent S1 schema rejects invalid radius
+  ---
+  duration_ms: 1.156666
+  type: 'test'
+  ...
+# Subtest: independent S1 schema rejects invalid angle
+ok 653 - independent S1 schema rejects invalid angle
+  ---
+  duration_ms: 0.875875
+  type: 'test'
+  ...
+# Subtest: independent S1 schema rejects zero windup
+ok 654 - independent S1 schema rejects zero windup
+  ---
+  duration_ms: 1.3785
+  type: 'test'
+  ...
+# Subtest: independent S2 schema accepts all orbit and line tiers without evolutions
+ok 655 - independent S2 schema accepts all orbit and line tiers without evolutions
+  ---
+  duration_ms: 2.077041
+  type: 'test'
+  ...
+# Subtest: independent S2 schema rejects invalid sj_wanjian.damage in every tier
+ok 656 - independent S2 schema rejects invalid sj_wanjian.damage in every tier
+  ---
+  duration_ms: 39.475958
+  type: 'test'
+  ...
+# Subtest: independent S2 schema rejects invalid sj_wanjian.count in every tier
+ok 657 - independent S2 schema rejects invalid sj_wanjian.count in every tier
+  ---
+  duration_ms: 22.926333
+  type: 'test'
+  ...
+# Subtest: independent S2 schema rejects invalid sj_wanjian.orbitRadius in every tier
+ok 658 - independent S2 schema rejects invalid sj_wanjian.orbitRadius in every tier
+  ---
+  duration_ms: 34.123917
+  type: 'test'
+  ...
+# Subtest: independent S2 schema rejects invalid sj_wanjian.angularSpeedDeg in every tier
+ok 659 - independent S2 schema rejects invalid sj_wanjian.angularSpeedDeg in every tier
+  ---
+  duration_ms: 20.18725
+  type: 'test'
+  ...
+# Subtest: independent S2 schema rejects invalid sj_wanjian.hitInterval in every tier
+ok 660 - independent S2 schema rejects invalid sj_wanjian.hitInterval in every tier
+  ---
+  duration_ms: 23.408459
+  type: 'test'
+  ...
+# Subtest: independent S2 schema rejects malformed sj_wanjian registration
+ok 661 - independent S2 schema rejects malformed sj_wanjian registration
+  ---
+  duration_ms: 10.170542
+  type: 'test'
+  ...
+# Subtest: independent S2 schema rejects invalid sj_line.damage in every tier
+ok 662 - independent S2 schema rejects invalid sj_line.damage in every tier
+  ---
+  duration_ms: 24.487833
+  type: 'test'
+  ...
+# Subtest: independent S2 schema rejects invalid sj_line.cooldown in every tier
+ok 663 - independent S2 schema rejects invalid sj_line.cooldown in every tier
+  ---
+  duration_ms: 22.019375
+  type: 'test'
+  ...
+# Subtest: independent S2 schema rejects invalid sj_line.length in every tier
+ok 664 - independent S2 schema rejects invalid sj_line.length in every tier
+  ---
+  duration_ms: 18.120917
+  type: 'test'
+  ...
+# Subtest: independent S2 schema rejects invalid sj_line.width in every tier
+ok 665 - independent S2 schema rejects invalid sj_line.width in every tier
+  ---
+  duration_ms: 19.383625
+  type: 'test'
+  ...
+# Subtest: independent S2 schema rejects invalid sj_line.hitCap in every tier
+ok 666 - independent S2 schema rejects invalid sj_line.hitCap in every tier
+  ---
+  duration_ms: 21.198
+  type: 'test'
+  ...
+# Subtest: independent S2 schema rejects malformed sj_line registration
+ok 667 - independent S2 schema rejects malformed sj_line registration
+  ---
+  duration_ms: 9.585667
+  type: 'test'
+  ...
+# Subtest: independent S1: queued first offer commits exactly once and rejects stale tier and token atomically
+ok 668 - independent S1: queued first offer commits exactly once and rejects stale tier and token atomically
+  ---
+  duration_ms: 3.772667
+  type: 'test'
+  ...
+# Subtest: independent S1: Run freezes arc windup through pause and queued upgrades, strikes once after resume
+ok 669 - independent S1: Run freezes arc windup through pause and queued upgrades, strikes once after resume
+  ---
+  duration_ms: 2.501458
+  type: 'test'
+  ...
+# Subtest: S1 opens with only new sword and no legacy class multiplier
+ok 670 - S1 opens with only new sword and no legacy class multiplier
+  ---
+  duration_ms: 5.118459
+  type: 'test'
+  ...
+# Subtest: first choice learns arc once; pause and stale offer cannot spend a second level
+ok 671 - first choice learns arc once; pause and stale offer cannot spend a second level
+  ---
+  duration_ms: 3.443
+  type: 'test'
+  ...
+# Subtest: forged legacy and future cards are rejected without consuming level
+ok 672 - forged legacy and future cards are rejected without consuming level
+  ---
+  duration_ms: 1.116708
+  type: 'test'
+  ...
+# Subtest: only simulated movement updates sword aim, not paused input
+ok 673 - only simulated movement updates sword aim, not paused input
+  ---
+  duration_ms: 2.835125
+  type: 'test'
+  ...
+# Subtest: all staged choices stay valid through 27; no unimplemented skill enters pool
+ok 674 - all staged choices stay valid through 27; no unimplemented skill enters pool
+  ---
+  duration_ms: 3.613667
+  type: 'test'
+  ...
+# Subtest: S2 full five-tier tables use the approved coefficient × 10 damage scale
+ok 675 - S2 full five-tier tables use the approved coefficient × 10 damage scale
+  ---
+  duration_ms: 2.576083
+  type: 'test'
+  ...
+# Subtest: S2 line unlock uses committed level 10, never banked XP or a later queued target
+ok 676 - S2 line unlock uses committed level 10, never banked XP or a later queued target
+  ---
+  duration_ms: 0.842334
+  type: 'test'
+  ...
+# Subtest: S2 first draft guarantees arc and orbit, retains legal third-card variety and is repeatable
+ok 677 - S2 first draft guarantees arc and orbit, retains legal third-card variety and is repeatable
+  ---
+  duration_ms: 4.168042
+  type: 'test'
+  ...
+# Subtest: S2 card text displays all five rank deltas and the limits that affect positioning
+ok 678 - S2 card text displays all five rank deltas and the limits that affect positioning
+  ---
+  duration_ms: 1.22775
+  type: 'test'
+  ...
+# Subtest: S2 text rejects legacy, unimplemented, evolution and invalid-rank cards
+ok 679 - S2 text rejects legacy, unimplemented, evolution and invalid-rank cards
+  ---
+  duration_ms: 0.110208
+  type: 'test'
+  ...
+# Subtest: heart crit uses separate combat RNG and exactly one damage multiplier
+ok 680 - heart crit uses separate combat RNG and exactly one damage multiplier
+  ---
+  duration_ms: 1.917
+  type: 'test'
+  ...
+# Subtest: heart not learned consumes no random values; enemy taken multiplier rounds once
+ok 681 - heart not learned consumes no random values; enemy taken multiplier rounds once
+  ---
+  duration_ms: 0.131833
+  type: 'test'
+  ...
+# Subtest: mark has shared stacking interval and independently expiring refreshed layers
+ok 682 - mark has shared stacking interval and independently expiring refreshed layers
+  ---
+  duration_ms: 0.871708
+  type: 'test'
+  ...
+# Subtest: mark tick uses current attack and neither crits nor recursively adds layers
+ok 683 - mark tick uses current attack and neither crits nor recursively adds layers
+  ---
+  duration_ms: 0.169167
+  type: 'test'
+  ...
+# Subtest: mark death cannot trigger gate and reused pool object never inherits layers
+ok 684 - mark death cannot trigger gate and reused pool object never inherits layers
+  ---
+  duration_ms: 0.160833
+  type: 'test'
+  ...
+# Subtest: gate captures death coordinates, UID orders same-tick kills and does not recurse
+ok 685 - gate captures death coordinates, UID orders same-tick kills and does not recurse
+  ---
+  duration_ms: 0.2115
+  type: 'test'
+  ...
+# Subtest: boss death cancels all pending gate bursts before random sampling
+ok 686 - boss death cancels all pending gate bursts before random sampling
+  ---
+  duration_ms: 0.069708
+  type: 'test'
+  ...
+# Subtest: terminal/player death clears pending passives; clearing is idempotent
+ok 687 - terminal/player death clears pending passives; clearing is idempotent
+  ---
+  duration_ms: 0.064667
+  type: 'test'
+  ...
+# Subtest: bone adds to composed stats once and never leaks into classic
+ok 688 - bone adds to composed stats once and never leaks into classic
+  ---
+  duration_ms: 0.651792
+  type: 'test'
+  ...
+# Subtest: Run stage validation blocks premature shadow/formation/gate and preserves four slots
+ok 689 - Run stage validation blocks premature shadow/formation/gate and preserves four slots
+  ---
+  duration_ms: 2.460666
+  type: 'test'
+  ...
+# Subtest: real Run combat draws never change next draft or spawn stream
+ok 690 - real Run combat draws never change next draft or spawn stream
+  ---
+  duration_ms: 3.452833
+  type: 'test'
+  ...
+# Subtest: projectile critical assignment is invariant under active pool order
+ok 691 - projectile critical assignment is invariant under active pool order
+  ---
+  duration_ms: 1.618
+  type: 'test'
+  ...
+# Subtest: simultaneous boss/player death loses without cleansing surviving enemies
+ok 692 - simultaneous boss/player death loses without cleansing surviving enemies
+  ---
+  duration_ms: 1.657458
+  type: 'test'
+  ...
+# Subtest: formation slow is sampled by both enemy and Boss movement, not retained outside
+ok 693 - formation slow is sampled by both enemy and Boss movement, not retained outside
+  ---
+  duration_ms: 2.492791
+  type: 'test'
+  ...
+# Subtest: S3 real data validates and every frozen rank matches docs17 without double scaling
+ok 694 - S3 real data validates and every frozen rank matches docs17 without double scaling
+  ---
+  duration_ms: 3.190958
+  type: 'test'
+  ...
+# Subtest: S3 cumulative pools gate acquisition on committed 10; queued XP cannot unlock them
+ok 695 - S3 cumulative pools gate acquisition on committed 10; queued XP cannot unlock them
+  ---
+  duration_ms: 0.418042
+  type: 'test'
+  ...
+# Subtest: S3 offers preserve first guarantees, uniqueness, one pill, caps and disabled evolutions
+ok 696 - S3 offers preserve first guarantees, uniqueness, one pill, caps and disabled evolutions
+  ---
+  duration_ms: 5.511583
+  type: 'test'
+  ...
+# Subtest: S3 never leaks into classic candidates, even from contaminated inventory
+ok 697 - S3 never leaks into classic candidates, even from contaminated inventory
+  ---
+  duration_ms: 0.365334
+  type: 'test'
+  ...
+# Subtest: S3 shared text covers all ranks, precise percent scales, deltas and trigger limits
+ok 698 - S3 shared text covers all ranks, precise percent scales, deltas and trigger limits
+  ---
+  duration_ms: 1.201084
+  type: 'test'
+  ...
+# Subtest: S3 registry indices and independent pending arrays
+ok 699 - S3 registry indices and independent pending arrays
+  ---
+  duration_ms: 1.512083
+  type: 'test'
+  ...
+# Subtest: yujian assigns one castId per fired volley, holds it on pool failure, and resets reused shots
+ok 700 - yujian assigns one castId per fired volley, holds it on pool failure, and resets reused shots
+  ---
+  duration_ms: 2.168167
+  type: 'test'
+  ...
+# Subtest: sj_arc: shared damage resolver receives raw damage and cast provenance
+ok 701 - sj_arc: shared damage resolver receives raw damage and cast provenance
+  ---
+  duration_ms: 1.649583
+  type: 'test'
+  ...
+# Subtest: sj_line: shared damage resolver receives raw damage and cast provenance
+ok 702 - sj_line: shared damage resolver receives raw damage and cast provenance
+  ---
+  duration_ms: 0.528375
+  type: 'test'
+  ...
+# Subtest: sj_wanjian: shared damage resolver receives raw damage and cast provenance
+ok 703 - sj_wanjian: shared damage resolver receives raw damage and cast provenance
+  ---
+  duration_ms: 0.550875
+  type: 'test'
+  ...
+# Subtest: sj_shadow: shared damage resolver receives raw damage and cast provenance
+ok 704 - sj_shadow: shared damage resolver receives raw damage and cast provenance
+  ---
+  duration_ms: 0.564375
+  type: 'test'
+  ...
+# Subtest: sj_formation: shared damage resolver receives raw damage and cast provenance
+ok 705 - sj_formation: shared damage resolver receives raw damage and cast provenance
+  ---
+  duration_ms: 0.405125
+  type: 'test'
+  ...
+# Subtest: shadow rank 1: fixed player mark, 39 ticks, decorative count never multiplies damage
+ok 706 - shadow rank 1: fixed player mark, 39 ticks, decorative count never multiplies damage
+  ---
+  duration_ms: 0.237792
+  type: 'test'
+  ...
+# Subtest: shadow rank 2: fixed player mark, 39 ticks, decorative count never multiplies damage
+ok 707 - shadow rank 2: fixed player mark, 39 ticks, decorative count never multiplies damage
+  ---
+  duration_ms: 0.313333
+  type: 'test'
+  ...
+# Subtest: shadow rank 3: fixed player mark, 39 ticks, decorative count never multiplies damage
+ok 708 - shadow rank 3: fixed player mark, 39 ticks, decorative count never multiplies damage
+  ---
+  duration_ms: 0.392292
+  type: 'test'
+  ...
+# Subtest: shadow rank 4: fixed player mark, 39 ticks, decorative count never multiplies damage
+ok 709 - shadow rank 4: fixed player mark, 39 ticks, decorative count never multiplies damage
+  ---
+  duration_ms: 0.207375
+  type: 'test'
+  ...
+# Subtest: shadow rank 5: fixed player mark, 39 ticks, decorative count never multiplies damage
+ok 710 - shadow rank 5: fixed player mark, 39 ticks, decorative count never multiplies damage
+  ---
+  duration_ms: 0.647917
+  type: 'test'
+  ...
+# Subtest: sj_shadow: no target holds ready and exact range boundary is valid
+ok 711 - sj_shadow: no target holds ready and exact range boundary is valid
+  ---
+  duration_ms: 0.278208
+  type: 'test'
+  ...
+# Subtest: sj_formation: no target holds ready and exact range boundary is valid
+ok 712 - sj_formation: no target holds ready and exact range boundary is valid
+  ---
+  duration_ms: 0.2075
+  type: 'test'
+  ...
+# Subtest: shadow cap holds ready until a pending mark resolves
+ok 713 - shadow cap holds ready until a pending mark resolves
+  ---
+  duration_ms: 0.271833
+  type: 'test'
+  ...
+# Subtest: shadow reads current occupants, UID order, damage and Boss multiplier at detonation
+ok 714 - shadow reads current occupants, UID order, damage and Boss multiplier at detonation
+  ---
+  duration_ms: 0.366916
+  type: 'test'
+  ...
+# Subtest: formation rank 1: immediate first pulse, fixed 30 ticks, exclusive expiry
+ok 715 - formation rank 1: immediate first pulse, fixed 30 ticks, exclusive expiry
+  ---
+  duration_ms: 0.590958
+  type: 'test'
+  ...
+# Subtest: formation rank 2: immediate first pulse, fixed 30 ticks, exclusive expiry
+ok 716 - formation rank 2: immediate first pulse, fixed 30 ticks, exclusive expiry
+  ---
+  duration_ms: 0.343791
+  type: 'test'
+  ...
+# Subtest: formation rank 3: immediate first pulse, fixed 30 ticks, exclusive expiry
+ok 717 - formation rank 3: immediate first pulse, fixed 30 ticks, exclusive expiry
+  ---
+  duration_ms: 0.268708
+  type: 'test'
+  ...
+# Subtest: formation rank 4: immediate first pulse, fixed 30 ticks, exclusive expiry
+ok 718 - formation rank 4: immediate first pulse, fixed 30 ticks, exclusive expiry
+  ---
+  duration_ms: 0.261459
+  type: 'test'
+  ...
+# Subtest: formation rank 5: immediate first pulse, fixed 30 ticks, exclusive expiry
+ok 719 - formation rank 5: immediate first pulse, fixed 30 ticks, exclusive expiry
+  ---
+  duration_ms: 0.283666
+  type: 'test'
+  ...
+# Subtest: formation targets nearest by UID and stays fixed when target and player move
+ok 720 - formation targets nearest by UID and stays fixed when target and player move
+  ---
+  duration_ms: 0.16575
+  type: 'test'
+  ...
+# Subtest: third formation replaces oldest without cashing out pending pulses
+ok 721 - third formation replaces oldest without cashing out pending pulses
+  ---
+  duration_ms: 0.196833
+  type: 'test'
+  ...
+# Subtest: formation slow is a current-position query with normal/Boss caps and no sticky state
+ok 722 - formation slow is a current-position query with normal/Boss caps and no sticky state
+  ---
+  duration_ms: 0.733666
+  type: 'test'
+  ...
+# Subtest: sj_shadow: pause/levelup freeze and termination clears pending instances
+ok 723 - sj_shadow: pause/levelup freeze and termination clears pending instances
+  ---
+  duration_ms: 0.255042
+  type: 'test'
+  ...
+# Subtest: sj_shadow: large tick gap does not burst catch-up or damage after exclusive expiry
+ok 724 - sj_shadow: large tick gap does not burst catch-up or damage after exclusive expiry
+  ---
+  duration_ms: 0.12725
+  type: 'test'
+  ...
+# Subtest: sj_shadow: classic rules remain inert
+ok 725 - sj_shadow: classic rules remain inert
+  ---
+  duration_ms: 0.153042
+  type: 'test'
+  ...
+# Subtest: sj_formation: pause/levelup freeze and termination clears pending instances
+ok 726 - sj_formation: pause/levelup freeze and termination clears pending instances
+  ---
+  duration_ms: 0.165792
+  type: 'test'
+  ...
+# Subtest: sj_formation: large tick gap does not burst catch-up or damage after exclusive expiry
+ok 727 - sj_formation: large tick gap does not burst catch-up or damage after exclusive expiry
+  ---
+  duration_ms: 0.103334
+  type: 'test'
+  ...
+# Subtest: sj_formation: classic rules remain inert
+ok 728 - sj_formation: classic rules remain inert
+  ---
+  duration_ms: 0.164333
+  type: 'test'
+  ...
+# Subtest: committed realm levels scale legacy weapon units without premature rounding
+ok 729 - committed realm levels scale legacy weapon units without premature rounding
+  ---
+  duration_ms: 0.968208
+  type: 'test'
+  ...
+# Subtest: realm cooldown divides before flooring and bonuses compose in their own units
+ok 730 - realm cooldown divides before flooring and bonuses compose in their own units
+  ---
+  duration_ms: 0.270125
+  type: 'test'
+  ...
+# Subtest: only the exact xianxia ruleset changes legacy stats or spawns
+ok 731 - only the exact xianxia ruleset changes legacy stats or spawns
+  ---
+  duration_ms: 3.972791
+  type: 'test'
+  ...
+# Subtest: enemy births use stepped K/D and lock existing HP and contact damage
+ok 732 - enemy births use stepped K/D and lock existing HP and contact damage
+  ---
+  duration_ms: 0.614
+  type: 'test'
+  ...
+# Subtest: delayed elite uses actual birth minute when the cap clears
+ok 733 - delayed elite uses actual birth minute when the cap clears
+  ---
+  duration_ms: 1.122
+  type: 'test'
+  ...
+# Subtest: ordinary ranged bubbles use fire-time D only and keep damage in flight
+ok 734 - ordinary ranged bubbles use fire-time D only and keep damage in flight
+  ---
+  duration_ms: 0.476708
+  type: 'test'
+  ...
+# Subtest: Boss HP, contact and ring scale once through enrage and erosion
+ok 735 - Boss HP, contact and ring scale once through enrage and erosion
+  ---
+  duration_ms: 1.316208
+  type: 'test'
+  ...
+# Subtest: S1 independent IDs have five ranks, unique indices and twelve enemy hit slots
+ok 736 - S1 independent IDs have five ranks, unique indices and twelve enemy hit slots
+  ---
+  duration_ms: 2.378042
+  type: 'test'
+  ...
+# Subtest: new yujian rank 1 uses its own damage, count, pierce and cooldown, never old passive
+ok 737 - new yujian rank 1 uses its own damage, count, pierce and cooldown, never old passive
+  ---
+  duration_ms: 0.646417
+  type: 'test'
+  ...
+# Subtest: new yujian rank 2 uses its own damage, count, pierce and cooldown, never old passive
+ok 738 - new yujian rank 2 uses its own damage, count, pierce and cooldown, never old passive
+  ---
+  duration_ms: 0.179417
+  type: 'test'
+  ...
+# Subtest: new yujian rank 3 uses its own damage, count, pierce and cooldown, never old passive
+ok 739 - new yujian rank 3 uses its own damage, count, pierce and cooldown, never old passive
+  ---
+  duration_ms: 0.102833
+  type: 'test'
+  ...
+# Subtest: new yujian rank 4 uses its own damage, count, pierce and cooldown, never old passive
+ok 740 - new yujian rank 4 uses its own damage, count, pierce and cooldown, never old passive
+  ---
+  duration_ms: 0.172541
+  type: 'test'
+  ...
+# Subtest: new yujian rank 5 uses its own damage, count, pierce and cooldown, never old passive
+ok 741 - new yujian rank 5 uses its own damage, count, pierce and cooldown, never old passive
+  ---
+  duration_ms: 0.15025
+  type: 'test'
+  ...
+# Subtest: yujian chooses UID tie, distinct targets, then repeats nearest independently of active order
+ok 742 - yujian chooses UID tie, distinct targets, then repeats nearest independently of active order
+  ---
+  duration_ms: 0.15875
+  type: 'test'
+  ...
+# Subtest: yujian exact range includes boundary and excludes dead and beyond-range enemies
+ok 743 - yujian exact range includes boundary and excludes dead and beyond-range enemies
+  ---
+  duration_ms: 0.119875
+  type: 'test'
+  ...
+# Subtest: full shot pool preserves readiness, reports losses, and partial volley consumes one cooldown
+ok 744 - full shot pool preserves readiness, reports losses, and partial volley consumes one cooldown
+  ---
+  duration_ms: 0.307167
+  type: 'test'
+  ...
+# Subtest: arc rank 1 warns, waits eight ticks and hits once
+ok 745 - arc rank 1 warns, waits eight ticks and hits once
+  ---
+  duration_ms: 0.651625
+  type: 'test'
+  ...
+# Subtest: arc rank 2 warns, waits eight ticks and hits once
+ok 746 - arc rank 2 warns, waits eight ticks and hits once
+  ---
+  duration_ms: 0.901833
+  type: 'test'
+  ...
+# Subtest: arc rank 3 warns, waits eight ticks and hits once
+ok 747 - arc rank 3 warns, waits eight ticks and hits once
+  ---
+  duration_ms: 0.216208
+  type: 'test'
+  ...
+# Subtest: arc rank 4 warns, waits eight ticks and hits once
+ok 748 - arc rank 4 warns, waits eight ticks and hits once
+  ---
+  duration_ms: 0.298542
+  type: 'test'
+  ...
+# Subtest: arc rank 5 warns, waits eight ticks and hits once
+ok 749 - arc rank 5 warns, waits eight ticks and hits once
+  ---
+  duration_ms: 0.245417
+  type: 'test'
+  ...
+# Subtest: arc waits when no live target intersects its reach, without consuming cooldown
+ok 750 - arc waits when no live target intersects its reach, without consuming cooldown
+  ---
+  duration_ms: 0.222417
+  type: 'test'
+  ...
+# Subtest: arc automatically aims at nearest enemy, tie by UID, even after moving away
+ok 751 - arc automatically aims at nearest enemy, tie by UID, even after moving away
+  ---
+  duration_ms: 0.19025
+  type: 'test'
+  ...
+# Subtest: arc freezes aim and geometry but releases at current player origin with current damage
+ok 752 - arc freezes aim and geometry but releases at current player origin with current damage
+  ---
+  duration_ms: 0.23025
+  type: 'test'
+  ...
+# Subtest: circle-sector geometry includes radial/side tangencies and origin, rejects outside
+ok 753 - circle-sector geometry includes radial/side tangencies and origin, rejects outside
+  ---
+  duration_ms: 0.2065
+  type: 'test'
+  ...
+# Subtest: arc applies hits in UID order once including lethal targets and ignores dead targets
+ok 754 - arc applies hits in UID order once including lethal targets and ignores dead targets
+  ---
+  duration_ms: 1.193333
+  type: 'test'
+  ...
+# Subtest: new skills freeze on paused/levelup and explicit cancellation prevents later arc release
+ok 755 - new skills freeze on paused/levelup and explicit cancellation prevents later arc release
+  ---
+  duration_ms: 0.1385
+  type: 'test'
+  ...
+# Subtest: arc cancellation in lost
+ok 756 - arc cancellation in lost
+  ---
+  duration_ms: 0.095375
+  type: 'test'
+  ...
+# Subtest: arc cancellation in won
+ok 757 - arc cancellation in won
+  ---
+  duration_ms: 0.0625
+  type: 'test'
+  ...
+# Subtest: arc cancellation in cleansing
+ok 758 - arc cancellation in cleansing
+  ---
+  duration_ms: 0.054417
+  type: 'test'
+  ...
+# Subtest: arc cancellation in extract
+ok 759 - arc cancellation in extract
+  ---
+  duration_ms: 0.05475
+  type: 'test'
+  ...
+# Subtest: hp zero cancels even before state transition and new skills are inert in classic
+ok 760 - hp zero cancels even before state transition and new skills are inert in classic
+  ---
+  duration_ms: 0.563958
+  type: 'test'
+  ...
+# Subtest: cooldown multiplier is floored at .5 and large tick gaps never burst-catch-up
+ok 761 - cooldown multiplier is floored at .5 and large tick gaps never burst-catch-up
+  ---
+  duration_ms: 0.152041
+  type: 'test'
+  ...
+# Subtest: sword shots use generic projectile hit accounting and never hit the same UID twice
+ok 762 - sword shots use generic projectile hit accounting and never hit the same UID twice
+  ---
+  duration_ms: 0.49375
+  type: 'test'
+  ...
+# Subtest: arc rechecks live enemies at release, hits new occupants and ignores recycled origin target
+ok 763 - arc rechecks live enemies at release, hits new occupants and ignores recycled origin target
+  ---
+  duration_ms: 0.08075
+  type: 'test'
+  ...
+# Subtest: arc locks warned radius, scales damage once, honors Boss taken multiplier and never pushes
+ok 764 - arc locks warned radius, scales damage once, honors Boss taken multiplier and never pushes
+  ---
+  duration_ms: 0.083375
+  type: 'test'
+  ...
+# Subtest: arc cooldown begins after release and an empty sector remains ready once elapsed
+ok 765 - arc cooldown begins after release and an empty sector remains ready once elapsed
+  ---
+  duration_ms: 0.214042
+  type: 'test'
+  ...
+# Subtest: death cancels a pending arc even while paused, and 200-target release visits each UID once
+ok 766 - death cancels a pending arc even while paused, and 200-target release visits each UID once
+  ---
+  duration_ms: 0.358042
+  type: 'test'
+  ...
+# Subtest: arc casts behind a moving player and hits after the warning
+ok 767 - arc casts behind a moving player and hits after the warning
+  ---
+  duration_ms: 0.16675
+  type: 'test'
+  ...
+# Subtest: arc chooses nearest reachable live target and keeps warning direction locked
+ok 768 - arc chooses nearest reachable live target and keeps warning direction locked
+  ---
+  duration_ms: 0.184459
+  type: 'test'
+  ...
+# Subtest: orbit rank 1 hits outer circle once and leaves center safe
+ok 769 - orbit rank 1 hits outer circle once and leaves center safe
+  ---
+  duration_ms: 0.453667
+  type: 'test'
+  ...
+# Subtest: orbit rank 2 hits outer circle once and leaves center safe
+ok 770 - orbit rank 2 hits outer circle once and leaves center safe
+  ---
+  duration_ms: 0.217791
+  type: 'test'
+  ...
+# Subtest: orbit rank 3 hits outer circle once and leaves center safe
+ok 771 - orbit rank 3 hits outer circle once and leaves center safe
+  ---
+  duration_ms: 0.22425
+  type: 'test'
+  ...
+# Subtest: orbit rank 4 hits outer circle once and leaves center safe
+ok 772 - orbit rank 4 hits outer circle once and leaves center safe
+  ---
+  duration_ms: 0.225375
+  type: 'test'
+  ...
+# Subtest: orbit rank 5 hits outer circle once and leaves center safe
+ok 773 - orbit rank 5 hits outer circle once and leaves center safe
+  ---
+  duration_ms: 0.236375
+  type: 'test'
+  ...
+# Subtest: orbit swept path catches between angular endpoints and freezes on pause
+ok 774 - orbit swept path catches between angular endpoints and freezes on pause
+  ---
+  duration_ms: 0.213292
+  type: 'test'
+  ...
+# Subtest: orbit shared interval reopens and does not follow cooldown reduction
+ok 775 - orbit shared interval reopens and does not follow cooldown reduction
+  ---
+  duration_ms: 0.223042
+  type: 'test'
+  ...
+# Subtest: line rank 1 has finite sorted cap and fixed cast origin
+ok 776 - line rank 1 has finite sorted cap and fixed cast origin
+  ---
+  duration_ms: 1.330334
+  type: 'test'
+  ...
+# Subtest: line rank 2 has finite sorted cap and fixed cast origin
+ok 777 - line rank 2 has finite sorted cap and fixed cast origin
+  ---
+  duration_ms: 0.628792
+  type: 'test'
+  ...
+# Subtest: line rank 3 has finite sorted cap and fixed cast origin
+ok 778 - line rank 3 has finite sorted cap and fixed cast origin
+  ---
+  duration_ms: 0.509333
+  type: 'test'
+  ...
+# Subtest: line rank 4 has finite sorted cap and fixed cast origin
+ok 779 - line rank 4 has finite sorted cap and fixed cast origin
+  ---
+  duration_ms: 0.243292
+  type: 'test'
+  ...
+# Subtest: line rank 5 has finite sorted cap and fixed cast origin
+ok 780 - line rank 5 has finite sorted cap and fixed cast origin
+  ---
+  duration_ms: 0.227083
+  type: 'test'
+  ...
+# Subtest: line prefers reachable elite but does not chase it during windup
+ok 781 - line prefers reachable elite but does not chase it during windup
+  ---
+  duration_ms: 0.147875
+  type: 'test'
+  ...
+# Subtest: line no target stays ready; pause preserves cast, terminal state cancels it
+ok 782 - line no target stays ready; pause preserves cast, terminal state cancels it
+  ---
+  duration_ms: 0.099792
+  type: 'test'
+  ...
+# Subtest: line rectangle has closed finite edges and no radial overreach
+ok 783 - line rectangle has closed finite edges and no radial overreach
+  ---
+  duration_ms: 0.052292
+  type: 'test'
+  ...
+1..783
+# tests 783
+# suites 0
+# pass 783
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 3471.069417

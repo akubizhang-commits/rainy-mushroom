@@ -15,7 +15,7 @@ test('rank one waits a full second before producing each replacement with compen
  const p=r.state.player;r.state.enemies=[{id:'target',x:p.x+200,y:p.y,hp:1e9,radius:8}]
  tick(r,.999);assert.equal(r.state.casts.length,0)
  tick(r,1);tick(r,r.state.casts[0].releaseAt)
- assert.equal(r.state.projectiles.length,1);near(r.state.projectiles[0].damage,127.2)
+ assert.equal(r.state.projectiles.length,1);near(r.state.projectiles[0].damage,139.92*.5)
  tick(r,1.999);assert.equal(r.state.projectiles.length,1)
  tick(r,2);tick(r,r.state.casts[0].releaseAt)
  assert.equal(r.state.projectiles.length,2)

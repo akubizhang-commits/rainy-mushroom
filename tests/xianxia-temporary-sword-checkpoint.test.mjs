@@ -8,7 +8,10 @@ import { fixture } from '../scripts/verify-monster-mechanics-balance.mjs'
 // their real runtime controllers. This is a save-integrity test, not a balance run.
 function hitSummonedActor() {
  const f=fixture(4,'qi')
- const run=new TowerRun({attemptId:1,floor:2,seed:17,hp:f.stats.maxHp,xp:f.xp,loadout:f.loadout,arenaVersion:1})
+ // Explicit projectile skill: sj_arc is now a local sector, not a flying blade.
+ // This fixture verifies summon receipts, not skill acquisition or build balance.
+ const loadout={...f.loadout,active:{...f.loadout.active,sj_moon_triple:1}}
+ const run=new TowerRun({attemptId:1,floor:2,seed:17,hp:f.stats.maxHp,xp:f.xp,loadout,arenaVersion:1})
  run.setPlaytestAssist(true)
  for(let i=0;i<30000&&run.state.wave<20;i++){
   for(const e of run.state.enemies)run._damageEnemy({target:e.id,damage:1e12,direct:false,scaled:true,source:'fixture'})
@@ -25,7 +28,7 @@ function hitSummonedActor() {
  s.player.x=33;s.player.y=-60
  for(const e of s.enemies){e.x=400;e.y=300}
  actor.x=200;actor.y=-60
- s.cooldowns.sj_arc=0
+ s.cooldowns.sj_moon_triple=0
  let shot
  for(let i=0;i<120&&!shot;i++){
   run.advance(1/60)

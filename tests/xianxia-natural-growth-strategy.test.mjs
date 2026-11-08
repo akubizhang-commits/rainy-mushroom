@@ -9,16 +9,16 @@ import { growthSummary } from '../js/xianxia/TowerGrowth.js'
 import { checksum } from '../js/xianxia/Checksum.js'
 
 const evolutions = ['evo_wuwo', 'evo_sixiang']
-// Legal late-game fixture: 38 of 80 earned SP are already allocated and only the
+// Legal late-game fixture: 25 of 35 earned SP are already allocated and only the
 // two 2400-stone books are affordable. No test grants are used by the harness.
 function fixture(patch = {}) {
   let raw = null
   const disk = { getItem: () => raw, setItem: (_, value) => { raw = value } }
   const fresh = new TowerCampaignStore(disk, 0)
   const data = JSON.stringify({ ...fresh.state, xp: TOWER_XP_CAP, clearedFloor: 9,
-    researchPurchases: 3, spiritStones: 4800, books: ['sj_formation', 'sj_bone'],
+    researchPurchases: 0, spiritStones: 4800, books: ['sj_formation'],
     skills: { sj_arc: 1, sj_wanjian: 10, sj_formation: 6, sj_bone: 4,
-      sj_heart: 4, vajra: 2, sj_yujian: 2 }, ...patch })
+      sj_heart: 2, vajra: 2, sj_yujian: 1 }, ...patch })
   raw = JSON.stringify({ format: 'xianxia-sect-tower-campaign', schema: currentCampaignSchema, data, checksum: checksum(data) })
   const store = new TowerCampaignStore(disk, 0)
   assert.equal(store.readOnly, false, store.error)
@@ -34,7 +34,7 @@ function apply(store, actions) {
 
 test('array learns incremental evolutions and retains both base investments', () => {
   const { store, disk } = fixture()
-  assert.equal(growthSummary(store.state).available, 42)
+  assert.equal(growthSummary(store.state).available, 10)
   const actions = planNaturalGrowth(store.state, [['sj_wanjian', 10], ['sj_formation', 6]], evolutions)
   apply(store, actions)
   assert.ok(store.state.evolutionRanks.evo_wuwo >= 1)
@@ -56,7 +56,7 @@ test('unaffordable or locked evolution never dismantles its parent', () => {
 test('tower strategy saves points for the next evolution and never refunds in battle', () => {
   const { store } = fixture()
   const state = { ...store.state, books: [...store.state.books, 'sj_line', 'sj_shadow'],
-    skills: { ...store.state.skills, sj_yujian: 1, sj_line: 7, sj_cross: 9, sj_shadow: 9, sj_spirit: 1 }, activeRun: {} }
+    skills: { ...store.state.skills, sj_yujian: 1, sj_line: 5, sj_shadow: 4 }, activeRun: {} }
   assert.equal(growthSummary(state).available, 1)
   const actions = planNaturalGrowth(state, [['sj_yujian', 2]], evolutions)
   assert.deepEqual(actions, [], 'the one available point must not go to an ordinary skill')
@@ -65,7 +65,7 @@ test('tower strategy saves points for the next evolution and never refunds in ba
 test('insufficient points never dismantle the parent to purchase an evolution', () => {
   const { store } = fixture()
   const state = { ...store.state, books: [...store.state.books, 'sj_line', 'sj_shadow'],
-    skills: { sj_arc: 10, sj_line: 10, sj_formation: 10, sj_wanjian: 1, sj_shadow: 10, sj_cross: 9 } }
+    skills: { sj_arc: 10, sj_line: 10, sj_formation: 10, sj_wanjian: 1, sj_shadow: 3, sj_cross: 1 } }
   // Exercise the actual earned-point accounting with a focused unaffordable parent.
   const available = growthSummary(state).available
   assert.equal(available, 1)
@@ -84,7 +84,7 @@ test('an affordable tower evolution uses saved points without dismantling its pa
   const { store } = fixture()
   const skills = { ...store.state.skills, sj_heart: 1 }
   const state = { ...store.state, skills, activeRun: {} }
-  assert.equal(growthSummary(state).available, 45)
+  assert.equal(growthSummary(state).available, 11)
   const actions = planNaturalGrowth(state, [], evolutions)
   assert.ok(actions.some(a => a.id === 'evo_wuwo'))
   assert.ok(actions.some(a => a.id === 'evo_sixiang'))
@@ -102,7 +102,7 @@ test('an affordable tower evolution uses saved points without dismantling its pa
  assert.equal(store.state.skills.sj_formation,7)
  })
 
-test('pursuit split baseline buys real ranks and books, retains parents and leaves one earned point', () => {
+test('pursuit split baseline retains parents and respects the 35-point tradeoff', () => {
   const {store,disk}=fixture({researchPurchases:0,spiritStones:10000,books:[],skills:{sj_arc:1}})
   const priorities=pursuitGrowthPriorities('split').flatMap(([id,n])=>id==='sj_yujian'&&n>=4
     ?[['sj_spirit',Math.ceil((n-3)/3)],[id,n]]:[[id,n]])
@@ -110,13 +110,14 @@ test('pursuit split baseline buys real ranks and books, retains parents and leav
   const actions=planNaturalGrowth(store.state,priorities,['evo_wanjian'])
   assert.deepEqual(store.state,before,'planning is read-only')
   apply(store,actions)
-  assert.equal(store.state.skills.sj_arc,6)
+  // 35点悟道点：前缀在御剑8/剑影6处用尽，万剑归宗仍保留1级且父技能不拆。
+  assert.equal(store.state.skills.sj_arc,3)
   assert.equal(store.state.skills.sj_cross,3)
-  assert.equal(store.state.skills.sj_yujian,10)
-  assert.equal(store.state.skills.sj_shadow,10)
-  assert.equal(store.state.evolutionRanks.evo_wanjian,2)
-  assert.equal(growthSummary(store.state).spent,67)
-  assert.equal(growthSummary(store.state).available,1)
+  assert.equal(store.state.skills.sj_yujian,8)
+  assert.equal(store.state.skills.sj_shadow,6)
+  assert.equal(store.state.evolutionRanks.evo_wanjian,1)
+  assert.equal(growthSummary(store.state).spent,35)
+  assert.equal(growthSummary(store.state).available,0)
   assert.ok(store.state.spiritStones<before.spiritStones,'books are actually paid')
   assert.deepEqual(planNaturalGrowth(store.state,priorities,['evo_wanjian']),[])
   assert.deepEqual(new TowerCampaignStore(disk,0).state,store.state)

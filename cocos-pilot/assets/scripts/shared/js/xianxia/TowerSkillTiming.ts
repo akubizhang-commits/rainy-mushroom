@@ -46,19 +46,19 @@ export function skillCastTime(seconds, loadout, scalable = false) {
 // Only character-owned phases belong here. Zone pulses and projectile clocks
 // remain in the form data and never pass through this table.
 export const CAST_ACTIONS = Object.freeze({
-  sj_yujian: [.20, .08], sj_arc: [.18, .06], sj_cross: [.30, .08],
+  sj_yujian: [.20, .08], sj_arc: [.18, .06], sj_moon: [.18, .06], sj_moon_triple: [.18, .08], sj_cross: [.30, .08],
   sj_wanjian: [.18, .06], sj_line: [.35, .08], sj_shadow: [.15, .05],
-  sj_formation: [.35, .08], evo_wanjian: [.35, .10],
+  sj_sancai: [.25, .05], sj_formation: [.35, .08], evo_wanjian: [.35, .10],
   evo_wuwo: [.20, .05], evo_tiandi: [.45, .10], evo_sixiang: [.45, .10],
 })
 export function equipmentCastSpeed(loadout, xp=0) {
-  return (characterAwareness(loadout,xp)-100)/100 + (loadout?.armor ? armorModifiers(loadout.armor).castSpeed : 0)
+  return Math.max(0,(characterAwareness(loadout,xp)-100)/100) + (loadout?.armor ? armorModifiers(loadout.armor).castSpeed : 0)
 }
 export function castActionTiming(id, hits = 1, speed = 0) {
   if (!CAST_ACTIONS[id] || !Number.isInteger(hits) || hits < 1
     || !Number.isFinite(speed) || speed < 0) throw new RangeError('Invalid cast timing')
   const [windup, recovery] = CAST_ACTIONS[id]
-  const count = ['sj_arc', 'sj_line'].includes(id) ? hits : 1
+  const count = ['sj_arc', 'sj_moon', 'sj_moon_triple', 'sj_line'].includes(id) ? hits : 1
   const ticks = seconds => Math.max(1, Math.ceil(seconds / (1 + speed) * 60 - 1e-9))
   const releases = []
   for (let i = 0; i < count; i++)

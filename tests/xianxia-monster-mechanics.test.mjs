@@ -1,12 +1,12 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import { ARCHETYPES } from '../js/xianxia/TowerContent.js'
-import { towerEnemyStats } from '../js/xianxia/TowerEnemyStats.js'
+import { towerEnemyStats, towerEnemyRadius } from '../js/xianxia/TowerEnemyStats.js'
 const mod = await import('../js/xianxia/TowerMonsterMechanics.js').catch(() => ({}))
 const ids = Array.from({length:24}, (_,i)=>`M${String(i+1).padStart(2,'0')}`)
 function fixture(floor=1) {
  const s={time:0,floor,wave:20,arenaVersion:1,player:{x:33,y:-60,radius:18,moveSpeed:180},enemies:[],projectiles:[],zones:[],monsterMechanics:{version:1,zones:[],sequence:0,nextMajorAt:0}}
- const run={state:s,_visible:()=>true,_enemy(u){const authored=towerEnemyStats(ARCHETYPES.find(a=>a.id===u.archetype),floor,20);return {...u,name:'monster',family:'boar',role:'normal',rank:1,x:u.x,y:u.y,hp:authored.hp,maxHp:authored.hp,radius:22,damage:authored.damage,moveSpeed:authored.moveSpeed,woundBudget:0,woundUntil:0,orbitNextAt:0,ai:{mode:'approach',attack:null,readyAt:0,graceUntil:0,until:0,eligibleSince:-1,sequence:0,cooldowns:{},faceX:1,faceY:0,orbitSign:1,offset:0,phase:1,transitionUntil:0,transitionPending:false,entryUntil:0}}}}
+ const run={state:s,_visible:()=>true,_enemy(u){const authored=towerEnemyStats(ARCHETYPES.find(a=>a.id===u.archetype),floor,20);return {...u,name:'monster',family:'boar',role:'normal',rank:1,x:u.x,y:u.y,hp:authored.hp,maxHp:authored.hp,radius:towerEnemyRadius(u.archetype),damage:authored.damage,moveSpeed:authored.moveSpeed,woundBudget:0,woundUntil:0,orbitNextAt:0,ai:{mode:'approach',attack:null,readyAt:0,graceUntil:0,until:0,eligibleSince:-1,sequence:0,cooldowns:{},faceX:1,faceY:0,orbitSign:1,offset:0,phase:1,transitionUntil:0,transitionPending:false,entryUntil:0}}}}
  const e={...run._enemy({id:'boss',archetype:'boar_boss',x:150,y:-60}),role:'boss',rank:3,hp:10000,maxHp:10000,damage:20}
  s.enemies.push(e); mod.initializeMonsterMechanics?.(run,e); return {run,s,e}
 }
@@ -73,4 +73,30 @@ test('enrage begins after windup, expires on simulation time, survives reload, a
 test('death immediately ends enrage even before its timer expires',()=>{
  const f=fixture();f.e.hp=1900;tick(f,2);assert.equal(f.e.mechanic.enraged,true);
  f.e.hp=0;mod.onMonsterDeaths(f.run,[f.e]);assert.equal(f.e.mechanic.enraged,false);assert.equal(mod.monsterMovementMultiplier(f.run,f.e),1);
+});
+
+test('M24 triggers at ten percent once and preserves safe-gate damage semantics',()=>{
+ const f=fixture(6),m=f.e.mechanic;Object.assign(m,{skills:['M24'],uses:{M24:0},cooldowns:{M24:0}});f.e.hp=1001;tick(f,.5);assert.equal(m.uses.M24,0);
+ f.e.hp=1000;tick(f,1/60);assert.equal(m.uses.M24,1);const z=f.s.monsterMechanics.zones[0];assert.equal(z.skillId,'M24');assert.equal(z.safeZones.length,2);
+ const outside=structuredClone(f.s);f.s.player.x=z.safeZones[0].x;f.s.player.y=z.safeZones[0].y;assert.equal(tick(f,3.5).length,0);
+ const out=fixture(6);out.run.state=outside;out.s=outside;out.e=outside.enemies[0];assert.ok(tick(out,3.5).length>0);
+ tick(f,8);assert.equal(m.uses.M24,1);assert.equal(f.s.monsterMechanics.zones.length,0);
+});
+
+test('M22 emits a shell only after successful living-egg hatch, never a kill or blocked spawn',()=>{
+ for(const reason of ['hatch','dead-egg','dead-owner','cap']){
+ const f=fixture(3);f.s.time=20;f.e.mechanic.cooldowns=Object.fromEntries(ids.map(id=>[id,999]));
+ f.s.enemies.push({...f.e,id:'test-egg',mechanic:undefined,hp:reason==='dead-egg'?0:10,x:50,y:20,temporary:{kind:'egg',ownerId:f.e.id,expiresAt:20}});
+ if(reason==='dead-owner')f.e.hp=0;
+ if(reason==='cap')for(let i=0;i<4;i++)f.s.enemies.push({...f.e,id:'young'+i,mechanic:undefined,temporary:{kind:'hatchling',ownerId:f.e.id,expiresAt:99}});
+ mod.tickMonsterMechanics(f.run,[]);const events=(f.s.effects||[]).filter(e=>e.kind==='monster_egg_hatched');assert.equal(events.length,reason==='hatch'?1:0);
+ if(events.length){assert.equal(events[0].sourceEggId,'test-egg');assert.equal(events[0].x,50);assert.equal(events[0].expiresAt,21.2);mod.tickMonsterMechanics(f.run,[]);assert.equal(f.s.effects.length,1);}
+ }
+});
+
+test('crystal death emits one break per crystal while only the last removes armor',()=>{
+ const f=fixture(6);f.e.mechanic.armor=.8;f.e.mechanic.skillId='M04';f.e.mechanic.batch=1;f.e.mechanic.rewardedBatch=0;
+ const a={id:'c1',x:50,y:20,radius:22,hp:0,temporary:{kind:'crystal',ownerId:f.e.id,batch:1}},b={...a,id:'c2',hp:10};f.s.enemies.push(b);
+ mod.onMonsterDeaths(f.run,[a]);assert.equal(f.s.effects.length,1);assert.equal(f.e.mechanic.armor,.8);mod.onMonsterDeaths(f.run,[a]);assert.equal(f.s.effects.length,1);
+ b.hp=0;mod.onMonsterDeaths(f.run,[b]);assert.equal(f.s.effects.length,2);assert.equal(f.e.mechanic.armor,0);assert.equal(f.e.mechanic.skillId,'M23');
 });

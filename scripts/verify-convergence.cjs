@@ -86,7 +86,7 @@ async function main(){
     await page.waitForTimeout(3000);const playEnd=await page.evaluate(()=>{const h=window.__towerTest.host;h.run.pause();return {time:h.run.state.time,wall:performance.now()}});
     await page.screenshot({path:path.join(OUT,`${c.id}-${viewport.width}.png`)});segments.push({id:c.id,ms:Date.now()-start,relativeStart:start-recordingStart,simulationSeconds:playEnd.time-playStart.time,wallSeconds:(playEnd.wall-playStart.wall)/1000});
    }
-   const cleanup=await page.evaluate(()=>{const h=window.__towerTest.host;h.withdraw();return {swords:h.convergenceArt?.actors.size||0,poses:h.hitArt?.poses.length||0,bodies:h.hitArt?.bodies.size||0,writes:window.__lineWrites,unchanged:JSON.stringify(localStorage)===window.__lineInitial.storage}});
+   const cleanup=await page.evaluate(()=>{const h=window.__towerTest.host;h.withdraw();const walk=n=>[n,...n.children.flatMap(walk)];const confirm=h.overlay&&walk(h.overlay).find(n=>n.name==='确认'&&n.getComponent('cc.Button'));if(confirm)confirm.emit('click');return {swords:h.convergenceArt?.actors.size||0,poses:h.hitArt?.poses.length||0,bodies:h.hitArt?.bodies.size||0,writes:window.__lineWrites,unchanged:JSON.stringify(localStorage)===window.__lineInitial.storage}});
    assert.equal(cleanup.swords,0);assert.equal(cleanup.poses,0);assert.equal(cleanup.bodies,0);assert.deepEqual(cleanup.writes,[]);assert.ok(cleanup.unchanged);
    const video=page.video();await context.close();await video.saveAs(path.join(OUT,`raw-${viewport.width}.webm`));report[`segments${viewport.width}`]=segments;
   }

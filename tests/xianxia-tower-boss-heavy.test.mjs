@@ -58,6 +58,8 @@ for (const role of ['normal', 'elite']) {
   for (const [family, distance, kind] of cases.filter(c => c[3])) {
     test(`${role} ${family} ${kind} retains role damage even with a heavy action kind`, () => {
       const { run, enemy } = fixture(2, family, role, distance)
+      // 83号：普通怪出生4秒后才可首次放技能；这里只测伤害归属，直接跳过等待。
+      enemy.ai.cooldowns = {}
       const spec = run._baseAttackSpec(enemy)
       assert.equal(spec.kind, kind)
       assert.equal(spec.damage, towerEnemyStats(ARCHETYPES.find(a => a.id === enemy.archetype), 2).damage)

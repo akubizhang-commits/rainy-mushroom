@@ -1,0 +1,1465 @@
+{
+  "host": {
+    "screen": "battle",
+    "landscape": true,
+    "size": {
+      "width": 1280,
+      "height": 560
+    },
+    "stick": {
+      "x": -492,
+      "y": -122,
+      "dx": 0,
+      "dy": 0
+    },
+    "touch": null,
+    "keys": [],
+    "phase": "playing",
+    "input": {
+      "x": 0,
+      "y": 0
+    },
+    "camera": {
+      "x": 33,
+      "y": -48
+    },
+    "tools": {
+      "speed": 3,
+      "invincible": true
+    }
+  },
+  "scene": [
+    {
+      "name": "栖云宗·功能版",
+      "ancestors": [
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "",
+      "box": {
+        "left": 685.7142857142857,
+        "right": 3154.285714285714,
+        "top": 0,
+        "bottom": 1080
+      },
+      "clip": {
+        "left": 0,
+        "right": 3840,
+        "top": 0,
+        "bottom": 1080
+      },
+      "x": 1920,
+      "y": 540,
+      "logicalSize": {
+        "width": 1280,
+        "height": 560
+      },
+      "local": {
+        "x": 0,
+        "y": 0
+      },
+      "graphics": false,
+      "graphicsPathCount": null,
+      "scroll": null
+    },
+    {
+      "name": "锁妖塔战场",
+      "ancestors": [
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "",
+      "box": {
+        "left": 685.7142857142857,
+        "right": 3154.285714285714,
+        "top": 0,
+        "bottom": 1080
+      },
+      "clip": {
+        "left": 0,
+        "right": 3840,
+        "top": 0,
+        "bottom": 1080
+      },
+      "x": 1920,
+      "y": 540,
+      "logicalSize": {
+        "width": 1280,
+        "height": 560
+      },
+      "local": {
+        "x": 0,
+        "y": 0
+      },
+      "graphics": false,
+      "graphicsPathCount": null,
+      "scroll": null
+    },
+    {
+      "name": "场地与妖兽",
+      "ancestors": [
+        "锁妖塔战场",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "",
+      "box": {
+        "left": 1919.0357142857142,
+        "right": 1920.9642857142858,
+        "top": 539.0357142857143,
+        "bottom": 540.9642857142856
+      },
+      "clip": {
+        "left": 0,
+        "right": 3840,
+        "top": 0,
+        "bottom": 1080
+      },
+      "x": 1920,
+      "y": 540,
+      "logicalSize": {
+        "width": 1,
+        "height": 1
+      },
+      "local": {
+        "x": 0,
+        "y": 0
+      },
+      "graphics": true,
+      "graphicsPathCount": 65,
+      "scroll": null
+    },
+    {
+      "name": "移动摇杆",
+      "ancestors": [
+        "锁妖塔战场",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "",
+      "box": {
+        "left": 755.1428571428569,
+        "right": 1187.142857142857,
+        "top": 559.2857142857142,
+        "bottom": 991.2857142857143
+      },
+      "clip": {
+        "left": 0,
+        "right": 3840,
+        "top": 0,
+        "bottom": 1080
+      },
+      "x": 971.142857142857,
+      "y": 775.2857142857143,
+      "logicalSize": {
+        "width": 224,
+        "height": 224
+      },
+      "local": {
+        "x": -492,
+        "y": -122
+      },
+      "graphics": false,
+      "graphicsPathCount": null,
+      "scroll": null
+    },
+    {
+      "name": "妖兽名牌",
+      "ancestors": [
+        "锁妖塔战场",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "",
+      "box": {
+        "left": 1919.0357142857142,
+        "right": 1920.9642857142858,
+        "top": 539.0357142857143,
+        "bottom": 540.9642857142856
+      },
+      "clip": {
+        "left": 0,
+        "right": 3840,
+        "top": 0,
+        "bottom": 1080
+      },
+      "x": 1920,
+      "y": 540,
+      "logicalSize": {
+        "width": 1,
+        "height": 1
+      },
+      "local": {
+        "x": 0,
+        "y": 0
+      },
+      "graphics": false,
+      "graphicsPathCount": null,
+      "scroll": null
+    },
+    {
+      "name": "战斗信息",
+      "ancestors": [
+        "锁妖塔战场",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "",
+      "box": {
+        "left": 1919.0357142857142,
+        "right": 1920.9642857142858,
+        "top": 539.0357142857143,
+        "bottom": 540.9642857142856
+      },
+      "clip": {
+        "left": 0,
+        "right": 3840,
+        "top": 0,
+        "bottom": 1080
+      },
+      "x": 1920,
+      "y": 540,
+      "logicalSize": {
+        "width": 1,
+        "height": 1
+      },
+      "local": {
+        "x": 0,
+        "y": 0
+      },
+      "graphics": true,
+      "graphicsPathCount": 16,
+      "scroll": null
+    },
+    {
+      "name": "动态文字",
+      "ancestors": [
+        "锁妖塔战场",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "体验档 ×3 · 无敌 · 1/20波",
+      "box": {
+        "left": 772.4999999999998,
+        "right": 2836.071428571429,
+        "top": 21.214285714285758,
+        "bottom": 109.92857142857152
+      },
+      "clip": {
+        "left": 0,
+        "right": 3840,
+        "top": 0,
+        "bottom": 1080
+      },
+      "x": 1804.2857142857142,
+      "y": 65.57142857142858,
+      "logicalSize": {
+        "width": 1070,
+        "height": 46
+      },
+      "local": {
+        "x": -60,
+        "y": 246
+      },
+      "graphics": false,
+      "graphicsPathCount": null,
+      "scroll": null
+    },
+    {
+      "name": "动态文字",
+      "ancestors": [
+        "锁妖塔战场",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "生命 120/120　金丹 9重　本次修为 +0",
+      "box": {
+        "left": 839.9999999999998,
+        "right": 3000,
+        "top": 115.71428571428578,
+        "bottom": 181.28571428571436
+      },
+      "clip": {
+        "left": 0,
+        "right": 3840,
+        "top": 0,
+        "bottom": 1080
+      },
+      "x": 1920,
+      "y": 148.49999999999994,
+      "logicalSize": {
+        "width": 1120,
+        "height": 34
+      },
+      "local": {
+        "x": 0,
+        "y": 203
+      },
+      "graphics": false,
+      "graphicsPathCount": null,
+      "scroll": null
+    },
+    {
+      "name": "动态文字",
+      "ancestors": [
+        "锁妖塔战场",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "3功法自动 · 1心法常驻 · 32点待修习\n左下摇杆 / WASD 移动 · 技能树修习",
+      "box": {
+        "left": 1110,
+        "right": 2915.1428571428573,
+        "top": 948.8571428571429,
+        "bottom": 1068.4285714285716
+      },
+      "clip": {
+        "left": 0,
+        "right": 3840,
+        "top": 0,
+        "bottom": 1080
+      },
+      "x": 2012.5714285714287,
+      "y": 1008.6428571428571,
+      "logicalSize": {
+        "width": 936,
+        "height": 62
+      },
+      "local": {
+        "x": 48,
+        "y": -243
+      },
+      "graphics": false,
+      "graphicsPathCount": null,
+      "scroll": null
+    },
+    {
+      "name": "暂停",
+      "ancestors": [
+        "锁妖塔战场",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": true,
+      "enabled": true,
+      "text": "",
+      "box": {
+        "left": 2932.5,
+        "right": 3125.357142857143,
+        "top": 1.9285714285713018,
+        "bottom": 171.64285714285714
+      },
+      "clip": {
+        "left": 0,
+        "right": 3840,
+        "top": 0,
+        "bottom": 1080
+      },
+      "x": 3028.9285714285716,
+      "y": 86.78571428571422,
+      "logicalSize": {
+        "width": 100,
+        "height": 88
+      },
+      "local": {
+        "x": 575,
+        "y": 235
+      },
+      "graphics": true,
+      "graphicsPathCount": 1,
+      "scroll": null
+    },
+    {
+      "name": "暂停",
+      "ancestors": [
+        "暂停",
+        "锁妖塔战场",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "暂停",
+      "box": {
+        "left": 2951.785714285714,
+        "right": 3106.071428571429,
+        "top": 13.499999999999952,
+        "bottom": 160.0714285714286
+      },
+      "clip": {
+        "left": 0,
+        "right": 3840,
+        "top": 0,
+        "bottom": 1080
+      },
+      "x": 3028.9285714285716,
+      "y": 86.78571428571422,
+      "logicalSize": {
+        "width": 80,
+        "height": 76
+      },
+      "local": {
+        "x": 0,
+        "y": 0
+      },
+      "graphics": false,
+      "graphicsPathCount": null,
+      "scroll": null
+    },
+    {
+      "name": "技能树",
+      "ancestors": [
+        "锁妖塔战场",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": true,
+      "enabled": true,
+      "text": "",
+      "box": {
+        "left": 2838.0000000000005,
+        "right": 3119.571428571429,
+        "top": 894.8571428571428,
+        "bottom": 1064.5714285714287
+      },
+      "clip": {
+        "left": 0,
+        "right": 3840,
+        "top": 0,
+        "bottom": 1080
+      },
+      "x": 2978.785714285714,
+      "y": 979.7142857142857,
+      "logicalSize": {
+        "width": 146,
+        "height": 88
+      },
+      "local": {
+        "x": 549,
+        "y": -228
+      },
+      "graphics": true,
+      "graphicsPathCount": 1,
+      "scroll": null
+    },
+    {
+      "name": "技能树",
+      "ancestors": [
+        "技能树",
+        "锁妖塔战场",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "技能树",
+      "box": {
+        "left": 2857.285714285714,
+        "right": 3100.2857142857147,
+        "top": 906.4285714285714,
+        "bottom": 1053
+      },
+      "clip": {
+        "left": 0,
+        "right": 3840,
+        "top": 0,
+        "bottom": 1080
+      },
+      "x": 2978.785714285714,
+      "y": 979.7142857142857,
+      "logicalSize": {
+        "width": 126,
+        "height": 76
+      },
+      "local": {
+        "x": 0,
+        "y": 0
+      },
+      "graphics": false,
+      "graphicsPathCount": null,
+      "scroll": null
+    }
+  ],
+  "beforeSnapshot": {
+    "schema": 1,
+    "attemptId": 1,
+    "floor": 9,
+    "phase": "playing",
+    "training": false,
+    "time": 0.9666666666666667,
+    "ticks": 58,
+    "remainder": 0.004133333315,
+    "wave": 1,
+    "waveStartedAt": 0,
+    "waveKilled": 0,
+    "wavePlanned": 26,
+    "nextId": 1,
+    "player": {
+      "x": 33,
+      "y": -60,
+      "hp": 120,
+      "xp": 10920,
+      "maxHp": 120,
+      "attack": 127.2,
+      "moveSpeed": 220,
+      "radius": 18,
+      "faceX": 1,
+      "faceY": 0
+    },
+    "enemies": [
+      {
+        "id": "a1:f9:w1:u1",
+        "archetype": "tiger_normal",
+        "name": "斑纹妖虎",
+        "family": "tiger",
+        "role": "normal",
+        "rank": 3,
+        "x": 603,
+        "y": 660,
+        "hp": 135,
+        "maxHp": 135,
+        "radius": 28,
+        "damage": 10,
+        "moveSpeed": 198,
+        "woundBudget": 0,
+        "woundUntil": 0,
+        "orbitNextAt": 0,
+        "ai": {
+          "mode": "approach",
+          "attack": null,
+          "readyAt": 1.7166666666666668,
+          "graceUntil": 1.7166666666666668,
+          "until": 0,
+          "eligibleSince": -1,
+          "sequence": 0,
+          "cooldowns": {},
+          "faceX": 0,
+          "faceY": -1,
+          "orbitSign": -1,
+          "offset": 0.37010976718596045,
+          "phase": 1,
+          "transitionUntil": 0,
+          "transitionPending": false,
+          "entryUntil": 1.7166666666666668
+        }
+      }
+    ],
+    "projectiles": [],
+    "zones": [],
+    "drops": [],
+    "effects": [],
+    "pending": [
+      {
+        "localId": "u6",
+        "archetype": "tiger_normal",
+        "portal": "N",
+        "at": 1.1,
+        "trigger": "start",
+        "warning": 0.9,
+        "id": "a1:f9:w1:u6",
+        "retryAt": 0,
+        "waitingSince": 0
+      },
+      {
+        "localId": "u7",
+        "archetype": "tiger_normal",
+        "portal": "SE",
+        "at": 1.32,
+        "trigger": "start",
+        "warning": 0.9,
+        "id": "a1:f9:w1:u7",
+        "retryAt": 0,
+        "waitingSince": 0
+      },
+      {
+        "localId": "u8",
+        "archetype": "tiger_normal",
+        "portal": "W",
+        "at": 1.54,
+        "trigger": "start",
+        "warning": 0.9,
+        "id": "a1:f9:w1:u8",
+        "retryAt": 0,
+        "waitingSince": 0
+      },
+      {
+        "localId": "u9",
+        "archetype": "tiger_normal",
+        "portal": "NE",
+        "at": 1.76,
+        "trigger": "start",
+        "warning": 0.9,
+        "id": "a1:f9:w1:u9",
+        "retryAt": 0,
+        "waitingSince": 0
+      },
+      {
+        "localId": "u10",
+        "archetype": "tiger_normal",
+        "portal": "S",
+        "at": 1.98,
+        "trigger": "start",
+        "warning": 0.9,
+        "id": "a1:f9:w1:u10",
+        "retryAt": 0,
+        "waitingSince": 0
+      },
+      {
+        "localId": "u11",
+        "archetype": "falcon_normal",
+        "portal": "NW",
+        "at": 2.2,
+        "trigger": "start",
+        "warning": 0.9,
+        "id": "a1:f9:w1:u11",
+        "retryAt": 0,
+        "waitingSince": 0
+      },
+      {
+        "localId": "u12",
+        "archetype": "falcon_normal",
+        "portal": "E",
+        "at": 2.42,
+        "trigger": "start",
+        "warning": 0.9,
+        "id": "a1:f9:w1:u12",
+        "retryAt": 0,
+        "waitingSince": 0
+      },
+      {
+        "localId": "u13",
+        "archetype": "falcon_normal",
+        "portal": "SW",
+        "at": 2.64,
+        "trigger": "start",
+        "warning": 0.9,
+        "id": "a1:f9:w1:u13",
+        "retryAt": 0,
+        "waitingSince": 0
+      },
+      {
+        "localId": "u14",
+        "archetype": "falcon_normal",
+        "portal": "N",
+        "at": 2.86,
+        "trigger": "start",
+        "warning": 0.9,
+        "id": "a1:f9:w1:u14",
+        "retryAt": 0,
+        "waitingSince": 0
+      },
+      {
+        "localId": "u15",
+        "archetype": "falcon_normal",
+        "portal": "SE",
+        "at": 3.08,
+        "trigger": "start",
+        "warning": 0.9,
+        "id": "a1:f9:w1:u15",
+        "retryAt": 0,
+        "waitingSince": 0
+      },
+      {
+        "localId": "u16",
+        "archetype": "falcon_normal",
+        "portal": "W",
+        "at": 3.3,
+        "trigger": "start",
+        "warning": 0.9,
+        "id": "a1:f9:w1:u16",
+        "retryAt": 0,
+        "waitingSince": 0
+      },
+      {
+        "localId": "u17",
+        "archetype": "falcon_normal",
+        "portal": "NE",
+        "at": 3.52,
+        "trigger": "start",
+        "warning": 0.9,
+        "id": "a1:f9:w1:u17",
+        "retryAt": 0,
+        "waitingSince": 0
+      },
+      {
+        "localId": "u18",
+        "archetype": "falcon_normal",
+        "portal": "S",
+        "at": 3.74,
+        "trigger": "start",
+        "warning": 0.9,
+        "id": "a1:f9:w1:u18",
+        "retryAt": 0,
+        "waitingSince": 0
+      },
+      {
+        "localId": "u19",
+        "archetype": "falcon_normal",
+        "portal": "NW",
+        "at": 3.96,
+        "trigger": "start",
+        "warning": 0.9,
+        "id": "a1:f9:w1:u19",
+        "retryAt": 0,
+        "waitingSince": 0
+      },
+      {
+        "localId": "u20",
+        "archetype": "falcon_normal",
+        "portal": "E",
+        "at": 4.18,
+        "trigger": "start",
+        "warning": 0.9,
+        "id": "a1:f9:w1:u20",
+        "retryAt": 0,
+        "waitingSince": 0
+      },
+      {
+        "localId": "u21",
+        "archetype": "falcon_normal",
+        "portal": "SW",
+        "at": 4.4,
+        "trigger": "start",
+        "warning": 0.9,
+        "id": "a1:f9:w1:u21",
+        "retryAt": 0,
+        "waitingSince": 0
+      },
+      {
+        "localId": "u22",
+        "archetype": "falcon_normal",
+        "portal": "N",
+        "at": 4.62,
+        "trigger": "start",
+        "warning": 0.9,
+        "id": "a1:f9:w1:u22",
+        "retryAt": 0,
+        "waitingSince": 0
+      },
+      {
+        "localId": "u23",
+        "archetype": "falcon_normal",
+        "portal": "SE",
+        "at": 4.84,
+        "trigger": "start",
+        "warning": 0.9,
+        "id": "a1:f9:w1:u23",
+        "retryAt": 0,
+        "waitingSince": 0
+      },
+      {
+        "localId": "u24",
+        "archetype": "falcon_normal",
+        "portal": "W",
+        "at": 5.06,
+        "trigger": "start",
+        "warning": 0.9,
+        "id": "a1:f9:w1:u24",
+        "retryAt": 0,
+        "waitingSince": 0
+      },
+      {
+        "localId": "u25",
+        "archetype": "falcon_normal",
+        "portal": "NE",
+        "at": 5.28,
+        "trigger": "start",
+        "warning": 0.9,
+        "id": "a1:f9:w1:u25",
+        "retryAt": 0,
+        "waitingSince": 0
+      },
+      {
+        "localId": "u26",
+        "archetype": "falcon_normal",
+        "portal": "S",
+        "at": 5.5,
+        "trigger": "start",
+        "warning": 0.9,
+        "id": "a1:f9:w1:u26",
+        "retryAt": 0,
+        "waitingSince": 0
+      }
+    ],
+    "reserved": [
+      {
+        "localId": "u2",
+        "archetype": "tiger_normal",
+        "portal": "S",
+        "at": 0.22,
+        "trigger": "start",
+        "warning": 0.9,
+        "id": "a1:f9:w1:u2",
+        "retryAt": 0,
+        "waitingSince": 0,
+        "x": 33,
+        "y": -990,
+        "radius": 28,
+        "readyAt": 1.1333333333333333
+      },
+      {
+        "localId": "u3",
+        "archetype": "tiger_normal",
+        "portal": "NW",
+        "at": 0.44,
+        "trigger": "start",
+        "warning": 0.9,
+        "id": "a1:f9:w1:u3",
+        "retryAt": 0,
+        "waitingSince": 0,
+        "x": -537,
+        "y": 660,
+        "radius": 28,
+        "readyAt": 1.35
+      },
+      {
+        "localId": "u4",
+        "archetype": "tiger_normal",
+        "portal": "E",
+        "at": 0.66,
+        "trigger": "start",
+        "warning": 0.9,
+        "id": "a1:f9:w1:u4",
+        "retryAt": 0,
+        "waitingSince": 0,
+        "x": 828,
+        "y": -60,
+        "radius": 28,
+        "readyAt": 1.5666666666666667
+      },
+      {
+        "localId": "u5",
+        "archetype": "tiger_normal",
+        "portal": "SW",
+        "at": 0.88,
+        "trigger": "start",
+        "warning": 0.9,
+        "id": "a1:f9:w1:u5",
+        "retryAt": 0,
+        "waitingSince": 0,
+        "x": -537,
+        "y": -780,
+        "radius": 28,
+        "readyAt": 1.7833333333333332
+      }
+    ],
+    "earned": {
+      "xp": 0,
+      "cores": 0,
+      "contribution": 0
+    },
+    "rawKillXp": 0,
+    "normalCoreCounter": 0,
+    "loadout": {
+      "active": {
+        "sj_yujian": 1,
+        "sj_arc": 1,
+        "sj_wanjian": 1
+      },
+      "passive": {
+        "vajra": 1
+      },
+      "evolutions": [],
+      "growthVersion": 1,
+      "evolutionLevels": {},
+      "tutorialWaves": 3,
+      "weaponId": "eq_sword_suwen",
+      "weaponQuality": 1,
+      "weaponRefine": 0
+    },
+    "rng": 252994185,
+    "base": {
+      "xp": 10920,
+      "hp": 120,
+      "normalCoreCounter": 0,
+      "tutorialWaves": 3
+    },
+    "input": {
+      "x": 0,
+      "y": 0
+    },
+    "cooldowns": {
+      "sj_yujian": 0,
+      "sj_arc": 0,
+      "sj_wanjian": 0
+    },
+    "casts": [],
+    "killLedger": [],
+    "clearedWaves": [],
+    "gateEntries": [],
+    "gateReadyAt": 0,
+    "hurtUntil": 0,
+    "nextWindupAt": 0,
+    "supportReleased": false,
+    "supportAt": -1,
+    "view": {
+      "xmin": -599,
+      "xmax": 665,
+      "ymin": -248,
+      "ymax": 116,
+      "followPlayer": true
+    },
+    "trainingResetAt": 0,
+    "arenaVersion": 1,
+    "loot": {
+      "version": 1,
+      "seed": 522251644
+    }
+  },
+  "afterSnapshot": {
+    "schema": 1,
+    "attemptId": 1,
+    "floor": 9,
+    "phase": "playing",
+    "training": false,
+    "time": 1.9333333333333333,
+    "ticks": 116,
+    "remainder": 0.000166666665,
+    "wave": 1,
+    "waveStartedAt": 0,
+    "waveKilled": 0,
+    "wavePlanned": 26,
+    "nextId": 1,
+    "player": {
+      "x": 33,
+      "y": -60,
+      "hp": 120,
+      "xp": 10920,
+      "maxHp": 120,
+      "attack": 127.2,
+      "moveSpeed": 220,
+      "radius": 18,
+      "faceX": 1,
+      "faceY": 0
+    },
+    "enemies": [
+      {
+        "id": "a1:f9:w1:u1",
+        "archetype": "tiger_normal",
+        "name": "斑纹妖虎",
+        "family": "tiger",
+        "role": "normal",
+        "rank": 3,
+        "x": 576.3718436867174,
+        "y": 626.3644341305906,
+        "hp": 135,
+        "maxHp": 135,
+        "radius": 28,
+        "damage": 10,
+        "moveSpeed": 198,
+        "woundBudget": 0,
+        "woundUntil": 0,
+        "orbitNextAt": 0,
+        "ai": {
+          "mode": "approach",
+          "attack": null,
+          "readyAt": 1.7166666666666668,
+          "graceUntil": 1.7166666666666668,
+          "until": 0,
+          "eligibleSince": -1,
+          "sequence": 0,
+          "cooldowns": {},
+          "faceX": -0.6207029443655611,
+          "faceY": -0.7840458244617614,
+          "orbitSign": -1,
+          "offset": 0.37010976718596045,
+          "phase": 1,
+          "transitionUntil": 0,
+          "transitionPending": false,
+          "entryUntil": 1.7166666666666668
+        }
+      },
+      {
+        "id": "a1:f9:w1:u2",
+        "archetype": "tiger_normal",
+        "name": "斑纹妖虎",
+        "family": "tiger",
+        "role": "normal",
+        "rank": 3,
+        "x": 33,
+        "y": -986.7,
+        "hp": 135,
+        "maxHp": 135,
+        "radius": 28,
+        "damage": 10,
+        "moveSpeed": 198,
+        "woundBudget": 0,
+        "woundUntil": 0,
+        "orbitNextAt": 0,
+        "ai": {
+          "mode": "approach",
+          "attack": null,
+          "readyAt": 1.9333333333333333,
+          "graceUntil": 1.9333333333333333,
+          "until": 0,
+          "eligibleSince": -1,
+          "sequence": 0,
+          "cooldowns": {},
+          "faceX": 0,
+          "faceY": 1,
+          "orbitSign": 1,
+          "offset": 3.9922443554476112,
+          "phase": 1,
+          "transitionUntil": 0,
+          "transitionPending": false,
+          "entryUntil": 1.9333333333333333
+        }
+      },
+      {
+        "id": "a1:f9:w1:u3",
+        "archetype": "tiger_normal",
+        "name": "斑纹妖虎",
+        "family": "tiger",
+        "role": "normal",
+        "rank": 3,
+        "x": -537,
+        "y": 660,
+        "hp": 135,
+        "maxHp": 135,
+        "radius": 28,
+        "damage": 10,
+        "moveSpeed": 198,
+        "woundBudget": 0,
+        "woundUntil": 0,
+        "orbitNextAt": 0,
+        "ai": {
+          "mode": "approach",
+          "attack": null,
+          "readyAt": 2.1500000000000004,
+          "graceUntil": 2.1500000000000004,
+          "until": 0,
+          "eligibleSince": -1,
+          "sequence": 0,
+          "cooldowns": {},
+          "faceX": 0,
+          "faceY": -1,
+          "orbitSign": 1,
+          "offset": 4.1029482087646,
+          "phase": 1,
+          "transitionUntil": 0,
+          "transitionPending": false,
+          "entryUntil": 2.1500000000000004
+        }
+      },
+      {
+        "id": "a1:f9:w1:u4",
+        "archetype": "tiger_normal",
+        "name": "斑纹妖虎",
+        "family": "tiger",
+        "role": "normal",
+        "rank": 3,
+        "x": 828,
+        "y": -60,
+        "hp": 135,
+        "maxHp": 135,
+        "radius": 28,
+        "damage": 10,
+        "moveSpeed": 198,
+        "woundBudget": 0,
+        "woundUntil": 0,
+        "orbitNextAt": 0,
+        "ai": {
+          "mode": "approach",
+          "attack": null,
+          "readyAt": 2.3666666666666667,
+          "graceUntil": 2.3666666666666667,
+          "until": 0,
+          "eligibleSince": -1,
+          "sequence": 0,
+          "cooldowns": {},
+          "faceX": 0,
+          "faceY": -1,
+          "orbitSign": -1,
+          "offset": 4.992401764589668,
+          "phase": 1,
+          "transitionUntil": 0,
+          "transitionPending": false,
+          "entryUntil": 2.3666666666666667
+        }
+      },
+      {
+        "id": "a1:f9:w1:u5",
+        "archetype": "tiger_normal",
+        "name": "斑纹妖虎",
+        "family": "tiger",
+        "role": "normal",
+        "rank": 3,
+        "x": -537,
+        "y": -780,
+        "hp": 135,
+        "maxHp": 135,
+        "radius": 28,
+        "damage": 10,
+        "moveSpeed": 198,
+        "woundBudget": 0,
+        "woundUntil": 0,
+        "orbitNextAt": 0,
+        "ai": {
+          "mode": "approach",
+          "attack": null,
+          "readyAt": 2.5833333333333335,
+          "graceUntil": 2.5833333333333335,
+          "until": 0,
+          "eligibleSince": -1,
+          "sequence": 0,
+          "cooldowns": {},
+          "faceX": 0,
+          "faceY": -1,
+          "orbitSign": -1,
+          "offset": 0.06467492071290387,
+          "phase": 1,
+          "transitionUntil": 0,
+          "transitionPending": false,
+          "entryUntil": 2.5833333333333335
+        }
+      }
+    ],
+    "projectiles": [],
+    "zones": [],
+    "drops": [],
+    "effects": [],
+    "pending": [
+      {
+        "localId": "u10",
+        "archetype": "tiger_normal",
+        "portal": "S",
+        "at": 1.98,
+        "trigger": "start",
+        "warning": 0.9,
+        "id": "a1:f9:w1:u10",
+        "retryAt": 0,
+        "waitingSince": 0
+      },
+      {
+        "localId": "u11",
+        "archetype": "falcon_normal",
+        "portal": "NW",
+        "at": 2.2,
+        "trigger": "start",
+        "warning": 0.9,
+        "id": "a1:f9:w1:u11",
+        "retryAt": 0,
+        "waitingSince": 0
+      },
+      {
+        "localId": "u12",
+        "archetype": "falcon_normal",
+        "portal": "E",
+        "at": 2.42,
+        "trigger": "start",
+        "warning": 0.9,
+        "id": "a1:f9:w1:u12",
+        "retryAt": 0,
+        "waitingSince": 0
+      },
+      {
+        "localId": "u13",
+        "archetype": "falcon_normal",
+        "portal": "SW",
+        "at": 2.64,
+        "trigger": "start",
+        "warning": 0.9,
+        "id": "a1:f9:w1:u13",
+        "retryAt": 0,
+        "waitingSince": 0
+      },
+      {
+        "localId": "u14",
+        "archetype": "falcon_normal",
+        "portal": "N",
+        "at": 2.86,
+        "trigger": "start",
+        "warning": 0.9,
+        "id": "a1:f9:w1:u14",
+        "retryAt": 0,
+        "waitingSince": 0
+      },
+      {
+        "localId": "u15",
+        "archetype": "falcon_normal",
+        "portal": "SE",
+        "at": 3.08,
+        "trigger": "start",
+        "warning": 0.9,
+        "id": "a1:f9:w1:u15",
+        "retryAt": 0,
+        "waitingSince": 0
+      },
+      {
+        "localId": "u16",
+        "archetype": "falcon_normal",
+        "portal": "W",
+        "at": 3.3,
+        "trigger": "start",
+        "warning": 0.9,
+        "id": "a1:f9:w1:u16",
+        "retryAt": 0,
+        "waitingSince": 0
+      },
+      {
+        "localId": "u17",
+        "archetype": "falcon_normal",
+        "portal": "NE",
+        "at": 3.52,
+        "trigger": "start",
+        "warning": 0.9,
+        "id": "a1:f9:w1:u17",
+        "retryAt": 0,
+        "waitingSince": 0
+      },
+      {
+        "localId": "u18",
+        "archetype": "falcon_normal",
+        "portal": "S",
+        "at": 3.74,
+        "trigger": "start",
+        "warning": 0.9,
+        "id": "a1:f9:w1:u18",
+        "retryAt": 0,
+        "waitingSince": 0
+      },
+      {
+        "localId": "u19",
+        "archetype": "falcon_normal",
+        "portal": "NW",
+        "at": 3.96,
+        "trigger": "start",
+        "warning": 0.9,
+        "id": "a1:f9:w1:u19",
+        "retryAt": 0,
+        "waitingSince": 0
+      },
+      {
+        "localId": "u20",
+        "archetype": "falcon_normal",
+        "portal": "E",
+        "at": 4.18,
+        "trigger": "start",
+        "warning": 0.9,
+        "id": "a1:f9:w1:u20",
+        "retryAt": 0,
+        "waitingSince": 0
+      },
+      {
+        "localId": "u21",
+        "archetype": "falcon_normal",
+        "portal": "SW",
+        "at": 4.4,
+        "trigger": "start",
+        "warning": 0.9,
+        "id": "a1:f9:w1:u21",
+        "retryAt": 0,
+        "waitingSince": 0
+      },
+      {
+        "localId": "u22",
+        "archetype": "falcon_normal",
+        "portal": "N",
+        "at": 4.62,
+        "trigger": "start",
+        "warning": 0.9,
+        "id": "a1:f9:w1:u22",
+        "retryAt": 0,
+        "waitingSince": 0
+      },
+      {
+        "localId": "u23",
+        "archetype": "falcon_normal",
+        "portal": "SE",
+        "at": 4.84,
+        "trigger": "start",
+        "warning": 0.9,
+        "id": "a1:f9:w1:u23",
+        "retryAt": 0,
+        "waitingSince": 0
+      },
+      {
+        "localId": "u24",
+        "archetype": "falcon_normal",
+        "portal": "W",
+        "at": 5.06,
+        "trigger": "start",
+        "warning": 0.9,
+        "id": "a1:f9:w1:u24",
+        "retryAt": 0,
+        "waitingSince": 0
+      },
+      {
+        "localId": "u25",
+        "archetype": "falcon_normal",
+        "portal": "NE",
+        "at": 5.28,
+        "trigger": "start",
+        "warning": 0.9,
+        "id": "a1:f9:w1:u25",
+        "retryAt": 0,
+        "waitingSince": 0
+      },
+      {
+        "localId": "u26",
+        "archetype": "falcon_normal",
+        "portal": "S",
+        "at": 5.5,
+        "trigger": "start",
+        "warning": 0.9,
+        "id": "a1:f9:w1:u26",
+        "retryAt": 0,
+        "waitingSince": 0
+      }
+    ],
+    "reserved": [
+      {
+        "localId": "u6",
+        "archetype": "tiger_normal",
+        "portal": "N",
+        "at": 1.1,
+        "trigger": "start",
+        "warning": 0.9,
+        "id": "a1:f9:w1:u6",
+        "retryAt": 0,
+        "waitingSince": 0,
+        "x": 33,
+        "y": 870,
+        "radius": 28,
+        "readyAt": 2
+      },
+      {
+        "localId": "u7",
+        "archetype": "tiger_normal",
+        "portal": "SE",
+        "at": 1.32,
+        "trigger": "start",
+        "warning": 0.9,
+        "id": "a1:f9:w1:u7",
+        "retryAt": 0,
+        "waitingSince": 0,
+        "x": 603,
+        "y": -780,
+        "radius": 28,
+        "readyAt": 2.2333333333333334
+      },
+      {
+        "localId": "u8",
+        "archetype": "tiger_normal",
+        "portal": "W",
+        "at": 1.54,
+        "trigger": "start",
+        "warning": 0.9,
+        "id": "a1:f9:w1:u8",
+        "retryAt": 0,
+        "waitingSince": 0,
+        "x": -762,
+        "y": -60,
+        "radius": 28,
+        "readyAt": 2.45
+      },
+      {
+        "localId": "u9",
+        "archetype": "tiger_normal",
+        "portal": "NE",
+        "at": 1.76,
+        "trigger": "start",
+        "warning": 0.9,
+        "id": "a1:f9:w1:u9",
+        "retryAt": 0,
+        "waitingSince": 0,
+        "x": 695,
+        "y": 568,
+        "radius": 28,
+        "readyAt": 2.6666666666666665
+      }
+    ],
+    "earned": {
+      "xp": 0,
+      "cores": 0,
+      "contribution": 0
+    },
+    "rawKillXp": 0,
+    "normalCoreCounter": 0,
+    "loadout": {
+      "active": {
+        "sj_yujian": 1,
+        "sj_arc": 1,
+        "sj_wanjian": 1
+      },
+      "passive": {
+        "vajra": 1
+      },
+      "evolutions": [],
+      "growthVersion": 1,
+      "evolutionLevels": {},
+      "tutorialWaves": 3,
+      "weaponId": "eq_sword_suwen",
+      "weaponQuality": 1,
+      "weaponRefine": 0
+    },
+    "rng": 44209530,
+    "base": {
+      "xp": 10920,
+      "hp": 120,
+      "normalCoreCounter": 0,
+      "tutorialWaves": 3
+    },
+    "input": {
+      "x": 0,
+      "y": 0
+    },
+    "cooldowns": {
+      "sj_yujian": 0,
+      "sj_arc": 0,
+      "sj_wanjian": 0
+    },
+    "casts": [],
+    "killLedger": [],
+    "clearedWaves": [],
+    "gateEntries": [],
+    "gateReadyAt": 0,
+    "hurtUntil": 0,
+    "nextWindupAt": 0,
+    "supportReleased": false,
+    "supportAt": -1,
+    "view": {
+      "xmin": -599,
+      "xmax": 665,
+      "ymin": -248,
+      "ymax": 116,
+      "followPlayer": true
+    },
+    "trainingResetAt": 0,
+    "arenaVersion": 1,
+    "loot": {
+      "version": 1,
+      "seed": 522251644
+    }
+  }
+}

@@ -3,18 +3,16 @@ from pathlib import Path
 import hashlib
 import json
 import math
+import re
 import uuid
 import numpy as np
 from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[2]
 OUT = ROOT / "cocos-pilot/assets/resources/tower-held-weapons-v2"
-REPORT = ROOT / "reports/held-weapons-clarity-2026-11-03"
+REPORT = ROOT / "reports/held-weapons-2026-11-05"
 # Hand-measured guard centers and blade tips in the approved 512px illustrations.
-SWORDS = {
-    "eq_sword_suwen": ((148, 355), (504, 19), 74),
-    "eq_sword_zhenyue": ((128, 376), (505, 8), 72),
-}
+SWORDS = json.loads(Path(__file__).with_name("held_weapon_specs.json").read_text())
 
 def pad_for_mipmaps(image):
     """Keep visible pixels intact; POT storage also supports WebGL 1 mipmaps."""
@@ -49,7 +47,8 @@ def main():
     OUT.mkdir(exist_ok=True)
     REPORT.mkdir(exist_ok=True, parents=True)
     records = {}
-    for name, (guard, tip, display_length) in SWORDS.items():
+    for name, spec in SWORDS.items():
+        guard, tip, display_length = spec["guard"], spec["tip"], spec["bladeLength"]
         source = ROOT / f"cocos-pilot/assets/resources/tower-library-items/{name}.png"
         im = Image.open(source).convert("RGBA")
         length = math.dist(guard, tip)
@@ -77,7 +76,21 @@ def main():
             old, new = original["uuid"], str(uuid.uuid4())
             meta.write_text(json.dumps(json.loads(json.dumps(original).replace(old,new)), indent=2)+"\n")
     (REPORT / "asset-manifest.json").write_text(json.dumps(records, indent=2)+"\n")
-    print(json.dumps(records, indent=2))
+    # Keep one authoritative calibration source; tests loading the rendering class
+    # also exercise the generated catalog without a separate runtime resource load.
+    catalog = "const HELD_WEAPONS:Record<string,{guard:Pair;bladePixels:number;bladeLength:number}>={\n"
+    for name, record in records.items():
+        catalog += " " + name + ":" + json.dumps({
+            "guard": [round(n) for n in record["guard"]],
+            "bladePixels": record["bladePixels"], "bladeLength": record["bladeLength"],
+        }, separators=(",", ":")) + ",\n"
+    catalog += "};"
+    target = ROOT / "cocos-pilot/assets/scripts/TowerCharacterArt.ts"
+    content, count = re.subn(r"const HELD_WEAPONS:Record[\s\S]*?\n};", lambda _: catalog, target.read_text())
+    if count != 1:
+        raise ValueError("Expected exactly one held weapon catalog")
+    target.write_text(content)
+    print(f"Prepared {len(records)} held weapons; manifest: {REPORT / 'asset-manifest.json'}")
 
 
 if __name__ == "__main__":

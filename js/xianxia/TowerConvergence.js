@@ -15,7 +15,7 @@ export function convergencePoses(state) {
     const age = Math.max(0,time-(z.startedAt ?? z.nextAt-form.initialDelay))
     for (let i = fired; i < form.swords; i++) {
       const remaining = z.nextAt + (i-fired)*form.interval-time
-      const t = clamp(1-remaining/.15), launch=t*t*t
+      const t = clamp(1-remaining/form.interval), launch=t*t*t
       for (let j=0;j<4;j++) {
         const span=j===0?144:96, layer=j<2?0:1
         const offset=[0,.17,-.16,.29][j]
@@ -46,5 +46,5 @@ export function convergencePoses(state) {
     poses.push({id:e.id,x:e.toX-dx/length*span,y:e.toY-dy/length*span+lift,
       angle:Math.atan2(dy,dx),span,alpha:255*(1-age/.25)**1.4,terminal:!!e.terminal,flight:0})
   }
-  return poses.slice(0,80)
+  return poses.slice(0,128)
 }

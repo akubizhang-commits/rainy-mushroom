@@ -25,3 +25,16 @@ test('owner death, cancelled zones and destroyed view cannot leave patches or la
  const late=setup();late.art.draw(state(0),{x:0,y:0});late.art.destroy();late.load();assert.equal(late.image.refs,0);
  const failed=setup();failed.art.draw(state(0),{x:0,y:0});failed.load(Error('missing'));failed.art.draw(state(1.3),{x:0,y:0});assert.equal(failed.art.patches.size,0);
 });
+
+test('M21 uses its own ground-centered bounds, warning opacity and does not mutate charge',()=>{
+ const f=setup(),s=state(0);Object.assign(s.monsterMechanics.zones[0],{skillId:'M21',radius:55,safeZones:[]});
+ f.art.draw(s,{x:0,y:0});f.load();f.art.draw(s,{x:10,y:20});const w=f.art.patches.get('z:0');assert.equal(f.art.patches.size,1);assert.equal(w.sprite.color.a,140);assert.equal(w.node.position.x,40);assert.equal(w.node.position.y,-20);assert.ok(Math.abs(w.transform.width*435.2/512-110)<1e-8);
+ s.time=1.4;s.enemies[0].mechanic={pulses:45};const before=JSON.stringify(s);f.art.draw(s,{x:10,y:20});assert.equal(w.sprite.color.a,255);assert.equal(JSON.stringify(s),before);
+ s.monsterMechanics.zones=[];f.art.draw(s,{x:0,y:0});assert.equal(f.art.patches.size,0);f.art.destroy();assert.equal(f.image.refs,0);
+});
+
+test('M24 retains both full-opacity safety seals until expiry',()=>{
+ const f=setup(),s=state(0);s.monsterMechanics.zones[0].skillId='M24';f.art.draw(s,{x:0,y:0});f.load();
+ for(const time of [0,1.3,7.29]){s.time=time;f.art.draw(s,{x:0,y:0});assert.equal(f.art.patches.size,2);for(const p of f.art.patches.values()){assert.equal(p.sprite.color.a,255);assert.ok(Math.abs(p.transform.width*435.2/512-110)<1e-8);}}
+ s.time=7.3;f.art.draw(s,{x:0,y:0});assert.equal(f.art.patches.size,0);f.art.destroy();
+});

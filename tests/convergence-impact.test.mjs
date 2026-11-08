@@ -8,14 +8,14 @@ const source=stripTypeScriptTypes(readFileSync(new URL('../cocos-pilot/assets/sc
   .replace(/^import .*$/gm,''),{mode:'transform'}).replace(/^export /gm,'')
 const Art=runInNewContext(`${source};ConvergenceArt`,{convergencePoses})
 test('only positive terminal hits shake; same-frame hits do not stack, pause is stable',()=>{
- const art=new Art(),hit={kind:'hit',damage:1,startedAt:1,impact:{skill:'evo_wanjian',pulseIndex:9,pulseCount:9}}
+ const art=new Art(),hit={kind:'hit',damage:1,startedAt:1,impact:{skill:'evo_wanjian',pulseIndex:25,pulseCount:25}}
  const s={time:1.03,player:{hp:10},effects:[hit]}
  const before=JSON.stringify(s),kick=art.cameraKick(s)
  assert.ok(Math.hypot(kick.x,kick.y)>0)
  assert.deepEqual(art.cameraKick(s),kick);assert.equal(JSON.stringify(s),before)
  s.effects.push({...hit});assert.deepEqual(art.cameraKick(s),kick)
  s.time=1.2;assert.equal(Math.hypot(...Object.values(art.cameraKick(s))),0)
- for(const change of [{damage:0},{hostile:true},{impact:{skill:'evo_wanjian',pulseIndex:1,pulseCount:9}}]){
+ for(const change of [{damage:0},{hostile:true},{impact:{skill:'evo_wanjian',pulseIndex:1,pulseCount:25}}]){
   s.time=1.03;s.effects=[{...hit,...change}]
   assert.equal(Math.hypot(...Object.values(art.cameraKick(s))),0)
  }
@@ -23,10 +23,10 @@ test('only positive terminal hits shake; same-frame hits do not stack, pause is 
 })
 test('decorative swords remain finite and capped with overlapping casts',()=>{
  const zone={kind:'sword_rain',formId:'evo_wanjian',formLevel:2,parentLevel:10,x:0,y:0,
-  dirX:0,dirY:1,nextAt:1.2,startedAt:1,pulseIndex:0,ticks:9}
+  dirX:0,dirY:1,nextAt:1.2,startedAt:1,pulseIndex:0,ticks:25}
  const state={time:1.12,player:{hp:1},zones:Array.from({length:10},(_,i)=>({...zone,id:i}))}
  const poses=convergencePoses(state)
- assert.equal(poses.length,80)
+ assert.equal(poses.length,128)
  assert.equal(new Set(poses.map(p=>p.id)).size,poses.length)
  assert.ok(poses.every(p=>[p.x,p.y,p.angle,p.alpha,p.span].every(Number.isFinite)))
 })

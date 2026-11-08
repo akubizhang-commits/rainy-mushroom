@@ -11,22 +11,23 @@ test('passives use realm-scaled costs and preserve all terminal effects', () => 
   const caps = {
     sj_spirit: { reach_bonus: .12, pickup_bonus: .5 },
     sj_heart: { crit_chance: .28 },
-    sj_mark: { dot_bonus: .5 },
+    sj_mark: { vulnerability: .2, icd:10 },
     sj_bone: { damage_bonus: .25, speed_bonus: .08 },
     sj_gate: { proc_damage: 1.2, radius: 110 },
     vajra: { reduction: .15 },
   }
   for (const [id, effects] of Object.entries(caps)) {
     const skill = GROWTH_SKILLS.find(s => s.id === id)
-    assert.equal(skill.maxLevel, id === 'sj_spirit' ? 3 : 4)
-    assert.deepEqual(skill.pointCosts, id === 'sj_spirit' ? [1,1,1] : ['sj_heart','sj_bone','sj_gate','vajra'].includes(id) ? [1,1,1,1] : [2,2,2,2])
+    assert.equal(skill.maxLevel, id === 'sj_gate' ? 2 : id === 'sj_mark' ? 1 : id === 'sj_spirit' ? 3 : 4)
+    assert.deepEqual(skill.pointCosts, id === 'sj_gate' ? [1,1] : id === 'sj_mark' ? [1] : id === 'sj_spirit' ? [1,1,1] : ['sj_heart','sj_bone','sj_gate','vajra'].includes(id) ? [1,1,1,1] : [2,2,2,2])
     for (const [key, cap] of Object.entries(effects)) {
+      if(id==='sj_mark'){assert.equal(skill[key],cap);continue}
       assert.equal(skill[key].length, skill.maxLevel)
       assert.equal(skill[key].at(-1), cap)
-      assert.ok(skill[key].every((value, i, array) => value > (array[i - 1] || 0)))
+      assert.ok(skill[key].every((value, i, array) => id==='sj_gate'&&key==='radius' ? value === 110 : value > (array[i - 1] || 0)))
     }
   }
-  assert.equal(GROWTH_SKILLS.find(s=>s.id==='sj_gate').trigger_cooldown,4)
+  assert.equal(GROWTH_SKILLS.find(s=>s.id==='sj_gate').trigger_cooldown,10)
   assert.ok(!GROWTH_SKILLS.some(s => s.id === 'magnet'))
   assert.ok(!GROWTH_STAGES.some(s => s.skillIds.includes('magnet')))
   assert.equal(skillRequirement(new TowerCampaignStore({ getItem: () => null, setItem() {} }, 0).state, 'magnet').ok, false)

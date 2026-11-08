@@ -22,10 +22,6 @@ export const FIXED_EQUIPMENT=freeze({
     },
     "affixes": []
   },
-  "eq_sword_qingfeng": {
-    "base": {"physicalAttack": 24, "magicAttack": 24, "strength": 6, "intelligence": 6, "awareness": 2},
-    "affixes": [{"type":"physical","value":6},{"type":"magic","value":6},{"type":"attackSpeed","value":4},{"type":"onHit","value":2}]
-  },
   "eq_sword_suwen": {
     "base": {
       "physicalAttack": 16,
@@ -46,6 +42,33 @@ export const FIXED_EQUIPMENT=freeze({
       {
         "type": "attackSpeed",
         "value": 3
+      },
+      {
+        "type": "onHit",
+        "value": 2
+      }
+    ]
+  },
+  "eq_sword_qingfeng": {
+    "base": {
+      "physicalAttack": 24,
+      "magicAttack": 24,
+      "strength": 6,
+      "intelligence": 6,
+      "awareness": 2
+    },
+    "affixes": [
+      {
+        "type": "physical",
+        "value": 6
+      },
+      {
+        "type": "magic",
+        "value": 6
+      },
+      {
+        "type": "attackSpeed",
+        "value": 4
       },
       {
         "type": "onHit",
@@ -134,9 +157,9 @@ export const FIXED_EQUIPMENT=freeze({
         "value": 2
       },
       {
-        "type": "flow",
+        "type": "skill",
         "value": 6,
-        "target": "formation"
+        "target": "sj_arc"
       }
     ]
   },
@@ -225,9 +248,9 @@ export const FIXED_EQUIPMENT=freeze({
         "value": 2
       },
       {
-        "type": "flow",
+        "type": "skill",
         "value": 6,
-        "target": "formation"
+        "target": "sj_arc"
       }
     ]
   },
@@ -320,27 +343,27 @@ export const FIXED_EQUIPMENT=freeze({
         "value": 2
       },
       {
-        "type": "flow",
+        "type": "skill",
         "value": 6,
-        "target": "formation"
+        "target": "sj_arc"
       }
     ]
   },
   "eq_sword_zhaodan": {
     "base": {
-      "physicalAttack": 83,
-      "magicAttack": 83,
+      "physicalAttack": 104,
+      "magicAttack": 104,
       "strength": 24,
       "intelligence": 24
     },
     "affixes": [
       {
         "type": "physical",
-        "value": 12
+        "value": 22
       },
       {
         "type": "magic",
-        "value": 12
+        "value": 22
       },
       {
         "type": "attackSpeed",
@@ -349,6 +372,11 @@ export const FIXED_EQUIPMENT=freeze({
       {
         "type": "onHit",
         "value": 2
+      },
+      {
+        "type": "flow",
+        "value": 3,
+        "target": "qi"
       },
       {
         "type": "skillLevel",
@@ -367,11 +395,11 @@ export const FIXED_EQUIPMENT=freeze({
     "affixes": [
       {
         "type": "physical",
-        "value": 34
+        "value": 32
       },
       {
         "type": "magic",
-        "value": 34
+        "value": 32
       },
       {
         "type": "attackSpeed",
@@ -382,9 +410,9 @@ export const FIXED_EQUIPMENT=freeze({
         "value": 2
       },
       {
-        "type": "flow",
+        "type": "skill",
         "value": 6,
-        "target": "formation"
+        "target": "sj_arc"
       }
     ]
   },
@@ -708,19 +736,19 @@ export const FIXED_EQUIPMENT=freeze({
   },
   "eq_sword_chengming": {
     "base": {
-      "physicalAttack": 212,
-      "magicAttack": 85,
+      "physicalAttack": 252,
+      "magicAttack": 101,
       "strength": 63,
       "intelligence": 21
     },
     "affixes": [
       {
         "type": "physical",
-        "value": 34
+        "value": 44
       },
       {
         "type": "magic",
-        "value": 34
+        "value": 44
       },
       {
         "type": "attackSpeed",
@@ -744,8 +772,8 @@ export const FIXED_EQUIPMENT=freeze({
   },
   "eq_sword_kunwu": {
     "base": {
-      "physicalAttack": 189,
-      "magicAttack": 315,
+      "physicalAttack": 237,
+      "magicAttack": 395,
       "intelligence": 87,
       "awareness": 11
     },

@@ -14,7 +14,7 @@
     canvas:any;airCanvas:any;assets:any;g:any;a:any;ringRadius:number;last:any;
     static canvasSize=512;
     static worldDiameterFactor=2.24;
-    static visualEnd=5.68;
+    static visualEnd=8.68;
     static airWidth=768;
     static airHeight=1024;
     static airWorldWidthFactor=3;
@@ -91,14 +91,14 @@
     draw(info){
       this.clear();
       const age=Number(info.age),r=Number(info.radius);
-      if(!Number.isFinite(age+r)||age<0||age>=5.68||r<=0){
+      if(!Number.isFinite(age+r)||age<0||age>=8.68||r<=0){
         this.last={visible:false,age};return this.last;
       }
       const pulse=Math.max(0,Number(info.pulseIndex)||0),count=Number(info.pulseCount)||6;
       const pulseAge=pulse>0?Math.max(0,age-Number(info.pulseAt)):999;
-      const terminal=count===7&&pulse===7,active=pulse?(pulse-1)%2:-1;
+      const terminal=count>=7&&pulse===count,active=pulse?(pulse-1)%2:-1;
       const flash=pulseAge<.26?(pulseAge<.045?1:Math.pow(1-clamp((pulseAge-.045)/.215),1.6)):0;
-      const fade=Math.pow(1-clamp((age-5.10)/.58),1.15),intro=ease(age/.3);
+      const fade=Math.pow(1-clamp((age-8.10)/.58),1.15),intro=ease(age/.3);
       const color=SILVER;
       const baseRotation=age*TAU/20;
       const g=this.g,a=this.a,scale=512/2.24;
@@ -143,13 +143,13 @@
       }
       g.restore();
 
-      const nextAt=Number.isFinite(info.nextPulseAt)?info.nextPulseAt:.5+pulse*2.5/(count-1);
-      const nextFinal=count===7&&pulse+1===7;
+      const nextAt=Number.isFinite(info.nextPulseAt)?info.nextPulseAt:.5+pulse*7.5/(count-1);
+      const nextFinal=count>=7&&pulse+1===count;
       const pending=pulse<count&&age>=nextAt-(nextFinal?.30:.26);
       let rainPhase='idle',rainPulse=0,rainPoints=[],rainTones=[],rainLength=0,rainProgress=0;
       let landingOffsets=[],rainSwords=[];
       const drawRain=(n,elapsed)=>{
-        const isFinal=count===7&&n===7,points=isFinal?FINAL_POINTS:POINTS,length=isFinal?.87:.67;
+        const isFinal=count>=7&&n===count,points=isFinal?FINAL_POINTS:POINTS,length=isFinal?.87:.67;
         rainPhase=elapsed<0?'anticipation':'impact';rainPulse=n;rainLength=length*r;
         rainProgress=clamp((elapsed+.18)/.18);
         rainPoints=points.map(([x,y])=>({x:x*r,y:y*r}));
@@ -181,8 +181,8 @@
           }
         }
       };
-      if(pending)drawRain(pulse+1,age-nextAt);
       if(pulse>0&&pulseAge<(terminal?.25:.33))drawRain(pulse,pulseAge);
+      if(pending)drawRain(pulse+1,age-nextAt);
       const hitPoints=(info.hitPoints||[]).filter(p=>Number.isFinite(p.x+p.y+p.radius));
       if(pulseAge<.22){
         for(const hit of hitPoints){
@@ -200,13 +200,13 @@
       }
       this.last={
         visible:fade>0,age,radius:r,eyes,baseRotation,pulseIndex:pulse,pulseCount:count,pulseAge,flash,terminal,fade,
-        logicalCircleRadiusPx:scale,worldDiameter:r*2.24,visualOnlyAfter:5,visualEnd:5.68,
+        logicalCircleRadiusPx:scale,worldDiameter:r*2.24,visualOnlyAfter:8,visualEnd:8.68,
         layers:{
           ground:{canvasWidth:512,canvasHeight:512,worldWidth:2.24*r,worldHeight:2.24*r,anchorX:.5,anchorY:.5},
           air:{canvasWidth:768,canvasHeight:1024,worldWidth:3*r,worldHeight:4*r,anchorX:.5,anchorY:.3125},
         },
         swordRain:{phase:rainPhase,pulseIndex:rainPulse,points:rainPoints,tones:rainTones,bodyLength:rainLength,
-          dropHeight:1.13*r,progress:rainProgress,leadSeconds:count===7&&rainPulse===7?.30:.26,impactHeldSeconds:.05,
+          dropHeight:1.13*r,progress:rainProgress,leadSeconds:count>=7&&rainPulse===count?.30:.26,impactHeldSeconds:.05,
           landingOffsets,swords:rainSwords,staggerSeconds:.04,finaleHoverSeconds:.12},
         actualHitPoints:hitPoints.map(p=>({...p})),
       };

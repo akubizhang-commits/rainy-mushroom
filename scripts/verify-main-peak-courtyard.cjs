@@ -16,7 +16,7 @@ async function main(){
  for(const viewport of [{width:1280,height:720},{width:844,height:390}]){
  const {context,page}=await open(viewport,10920);
  await page.evaluate(()=>window.__towerTest.host.goto('hall'));
- await click(page,'宗门入口-落云主峰');
+ await click(page,'宗门入口-霁云主峰');
  await page.waitForFunction(()=>window.__towerTest.host.menu.towerImages.get('sect-scene/main-peak-courtyard')?.frame);
  await page.screenshot({path:path.join(OUT,`courtyard-${viewport.width}.png`)});
  const before=await page.evaluate(()=>JSON.stringify(window.__towerTest.host.store.state));
@@ -34,7 +34,7 @@ async function main(){
  assert.equal(await page.evaluate(()=>window.__towerTest.host.menu.homeDetailsOpen),true);
  await click(page,'← 宗门');
  assert.equal(await page.evaluate(()=>window.__towerTest.host.menu.currentPage),'hall');
- await click(page,'宗门入口-落云主峰');
+ await click(page,'宗门入口-霁云主峰');
  assert.equal(await page.evaluate(()=>window.__towerTest.host.menu.homeDetailsOpen),false);
  assert.equal(await page.evaluate(()=>JSON.stringify(window.__towerTest.host.store.state)),before);
  report.cases.push({viewport,scene:true,affairs:true,navigation:true,stateUnchanged:true});await context.close();

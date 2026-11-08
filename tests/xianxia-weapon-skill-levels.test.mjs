@@ -16,7 +16,7 @@ test('fixed identity validation rejects spreading the rare affix to other weapon
  assert.equal(validateWeapon(chosen),false)
 })
 test('realm belongs to skill unlock realm, unlearned skills never appear, all applies once',()=>{
- const qi=applyEquipmentSkillLevels(loadout('eq_sword_zhaodan'));assert.equal(qi.active.sj_arc,11);assert.equal(qi.active.sj_line,10);assert.equal(qi.passive.sj_heart,5);assert.equal(qi.active.sj_yujian,undefined)
+ const qi=applyEquipmentSkillLevels(loadout('eq_sword_zhaodan'));assert.equal(qi.active.sj_arc,11);assert.equal(qi.active.sj_line,10);assert.equal(qi.passive.sj_heart,4);assert.equal(qi.active.sj_yujian,undefined)
  const goldInput=loadout('eq_sword_taiheng');goldInput.weapon.affixes.find(a=>a.type==='skillLevel').target='金丹';const gold=applyEquipmentSkillLevels(goldInput);assert.equal(gold.evolutionLevels.evo_tiandi,3);assert.equal(gold.active.sj_line,10)
  const all=applyEquipmentSkillLevels(loadout('eq_sword_taiheng'));assert.equal(all.active.sj_arc,11);assert.equal(all.active.sj_line,11);assert.equal(all.evolutionLevels.evo_tiandi,3);assert.equal(all.passive.sj_bone,5)
  assert.deepEqual(applyEquipmentSkillLevels(all),all);assert.ok(validEquipmentSkillLevels(all))
@@ -48,6 +48,7 @@ test('six real combat routes accept boosted ranks and deterministically restore 
  const fixtures=JSON.parse(readFileSync(new URL('../reports/flow-equal-budget-2026-11-02/controlled.json',import.meta.url))).fixtures
  for(const f of fixtures){
   const l=structuredClone(f.loadout),w=createFixedWeapon('eq_sword_taiheng','rare')
+  if(l.passive.sj_mark)l.passive.sj_mark=1
   Object.assign(l,{weapon:w,weaponId:w.id,weaponQuality:w.quality})
   const {createFixedEquipment}=await import('../js/xianxia/TowerEquipment.js')
   for(const slot of ['armor','ring'])if(l[slot])l[slot]=createFixedEquipment(l[slot].definitionId,l[slot].id)

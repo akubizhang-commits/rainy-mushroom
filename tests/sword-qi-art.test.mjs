@@ -3,7 +3,7 @@ import assert from 'node:assert/strict'
 import {readFileSync} from 'node:fs'
 import {stripTypeScriptTypes} from 'node:module'
 import {runInNewContext} from 'node:vm'
-import {swordQiReleaseOffset,swordQiSegments,swordQiVisualLift} from '../js/xianxia/TowerSwordQi.js'
+import {swordQiReleaseOffset,swordQiSegments,swordQiVisualLift,swordQiPoseIndex} from '../js/xianxia/TowerSwordQi.js'
 import {skillForm} from '../js/xianxia/TowerSkillForms.js'
 
 function fixture() {
@@ -21,7 +21,7 @@ function fixture() {
  class Texture2D {static Filter={LINEAR:1};setFilters(){}destroy(){this.dead=true}}
  class SpriteFrame {destroy(){this.dead=true}}
  class Color {constructor(r,g,b,a){Object.assign(this,{r,g,b,a})}}
- const context={Node,UITransform,Sprite,Texture2D,SpriteFrame,Color,swordQiVisualLift,
+ const context={Node,UITransform,Sprite,Texture2D,SpriteFrame,Color,swordQiVisualLift,swordQiPoseIndex,
   ImageAsset:class{},isValid:n=>!!n?.isValid,
   resources:{load:(path,type,callback)=>{requested.push(path);pending.push({path,callback})}},
   console:{warn:s=>warnings.push(s)}}
@@ -31,16 +31,16 @@ function fixture() {
  const art=new context.Art(),parent=new Node('qi'),images=[]
  return {art,parent,Node,pending,requested,warnings,images,load(kind,error=null,size){
   const i=pending.findIndex(item=>item.path.includes(kind)),{callback,path}=pending.splice(i,1)[0]
-  const image={path,width:size?.[0]??(kind==='crescent'&&!path.includes('ice')?384:512),height:size?.[1]??512,refs:0,addRef(){this.refs++},decRef(){this.refs--}}
+  const image={path,width:size?.[0]??(path.includes('moon-sweep')?1024:kind==='crescent'&&!path.includes('ice')?384:512),height:size?.[1]??(path.includes('moon-sweep')?1024:512),refs:0,addRef(){this.refs++},decRef(){this.refs--}}
   images.push(image);callback(error,error?null:image);return image
  }}
 }
 const camera={x:0,y:0}
-const crescent={id:'moon',source:'sj_arc',shape:'crescent-projectile',bladeKind:'crescent',
+const crescent={id:'moon',source:'sj_moon_triple',shape:'crescent-projectile',bladeKind:'crescent',
  x:100,y:200,dirX:1,dirY:0,vx:960,vy:0,width:180,bladeWidth:12,startedAt:0,dissolveAt:null,expiresAt:10}
 const cross={...crescent,id:'cross',source:'sj_cross',shape:'cross-projectile',bladeKind:'cross'}
 const melee={...cross,id:'near',kind:'cross',shape:'cross',expiresAt:.25}
-function ready(){const f=fixture();f.art.preload();while(f.pending.length)f.load(f.pending[0].path.includes('ice')?f.pending[0].path:f.pending[0].path.includes('crescent')?'crescent':'cross');return f}
+function ready(){const f=fixture();f.art.preload();while(f.pending.length)f.load(f.pending[0].path);return f}
 
 test('three releases use distinct approved paintings and disable duplicate crescent trails',()=>{
  const {art,parent}=ready()
@@ -173,3 +173,26 @@ test('reset, rewind, parent loss and destruction clean pools and balance both im
  const late=fixture();late.art.preload();late.art.destroy();late.load('crescent');late.load('cross')
  assert.ok(late.images.every(image=>image.refs===0))
 })
+
+test('triple preserves original flight visuals',()=>{
+ for(const source of ['sj_moon_triple'])for(const pulseIndex of [1,2,3]){
+  const {art,parent}=ready();
+  const original={...crescent,id:'original',source:'sj_arc',pulseIndex,dissolveAt:1,expiresAt:1.36};
+  const split={...original,id:'split',source};
+  for(const time of [.02,.2,.6,1.18]){
+   art.syncTower(parent,[original,split],[],time,camera);
+   const a=art.actors.get('original'),b=art.actors.get('split');
+   if(source==='sj_moon')assert.equal(b.parts[0].sprite.spriteFrame,art.assets.moonWhite.frame);else assert.equal(a.parts[0].sprite.spriteFrame,b.parts[0].sprite.spriteFrame);
+   assert.deepEqual(a.node.position,b.node.position);
+   assert.equal(a.node.angle,b.node.angle);
+   assert.equal(a.parts[0].ui.width,b.parts[0].ui.width);
+   assert.deepEqual(a.parts[0].sprite.color,b.parts[0].sprite.color);
+  }
+ }
+})
+
+test('stationary moon renders wide centered arc and retires at expiry',()=>{
+ const {art,parent}=ready();const fx={id:'sweep',kind:'cross',source:'sj_moon',shape:'sector',x:100,y:200,dirX:1,dirY:0,width:skillForm('sj_moon',1).width,startedAt:0,expiresAt:.42};
+ for(const t of [.04,.15,.3]){art.syncTower(parent,[],[fx],t,camera);const a=art.actors.get('sweep');assert.ok(a);assert.equal(a.node.x,100);assert.equal(a.node.y,264);assert.equal(a.parts[0].ui.anchorX,.5);assert.ok(Math.abs(a.parts[0].ui.width-460*1024/880)<1e-6);assert.equal(a.parts[0].sprite.spriteFrame,art.assets.moonWhite.frame)}
+ art.syncTower(parent,[],[fx],.43,camera);assert.equal(art.actors.size,0);
+});

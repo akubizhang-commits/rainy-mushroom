@@ -1,3 +1,4 @@
+import { cultivationAt, TOWER_XP_CAP } from '../js/xianxia/TowerProfile.js'
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import { newAttackActions } from '../js/xianxia/TowerAttackActions.js'
@@ -36,11 +37,14 @@ function healingEnemies(run, count = 1) {
   for (let i = 0; i < 3000 && run.state.enemies.length < count; i++) healingTick(run)
   assert.ok(run.state.enemies.length >= count)
   assert.ok(validateTowerSnapshot(run.snapshot()))
+  // Spawn waiting can cross natural regeneration pulses; begin the isolated
+  // level-heal measurement at the requested entry HP.
+  run.state.player.hp = run.state.base.hp
   return run.state.enemies.slice(0, count)
 }
 function healingKill(run, enemies) {
   for (const enemy of enemies) run._damageEnemy({
-    target: enemy.id, damage: enemy.hp, direct: false, scaled: true, source: 'fixture',
+    target: enemy.id, damage: enemy.hp * 100, direct: false, scaled: true, source: 'fixture',
   })
   healingTick(run)
   assert.ok(validateTowerSnapshot(run.snapshot()))
@@ -50,11 +54,11 @@ for (const [xp, hp, expectedXp, expectedHp, maxHp] of [
   [0, 10, 1, 10, 100],
   [44, 10, 45, 42.4, 108],
   [44, 99, 45, 108, 108],
-  [1484, 10, 1485, 100 * 1.08 ** 8 * 1.35, 100 * 1.08 ** 8 * 1.35],
-  [5399, 10, 5400, 100 * 1.08 ** 16 * 1.35 ** 2, 100 * 1.08 ** 16 * 1.35 ** 2],
+  [1484, 10, 1485, 10 + cultivationAt(1485).maxHp * .3, cultivationAt(1485).maxHp],
+  [5399, 10, 5400, 10 + cultivationAt(5400).maxHp * .3, cultivationAt(5400).maxHp],
   [10124, 10, 10125, 10 + 30 * 1.08 ** 23 * 1.35 ** 2, 100 * 1.08 ** 23 * 1.35 ** 2],
   [10919, 10, 10920, 10 + 30 * 1.08 ** 24 * 1.35 ** 2, 100 * 1.08 ** 24 * 1.35 ** 2],
-  [10920, 10, 10920, 10, 100 * 1.08 ** 24 * 1.35 ** 2],
+  [TOWER_XP_CAP, 10, TOWER_XP_CAP, 10, cultivationAt(TOWER_XP_CAP).maxHp],
 ]) {
   test(`real kill XP ${xp}→${expectedXp} at ${hp} HP heals only newly crossed levels`, () => {
     const run = make({ xp, hp })
@@ -94,18 +98,18 @@ test('same-tick authored kills cross two small levels using each new max HP and 
     close(run.state.player.hp, expectedHp)
     assert.equal(run.state.earned.xp, 77)
     assert.deepEqual(run.state.clearedWaves, [1])
-    assert.equal(run.state.earned.contribution, 2, 'wave reward does not add XP or another heal')
+    assert.equal(run.state.earned.contribution, 0, 'ordinary waves do not award point vouchers')
   }
 })
 
 test('level healing uses the equipped player’s actual post-level max HP', () => {
   const loadout = { ...growth({}, maxSkills('passive')), weaponQuality: 4, weaponRefine: 4 }
-  for (const [xp, fullHeal] of [[44, false], [1484, true], [5399, true]]) {
+  for (const xp of [44, 1484, 5399]) {
     const run = make({ xp, hp: 10, loadout })
     const equipment = clone(run.state.loadout)
     healingKill(run, healingEnemies(run))
     const player = run.state.player
-    close(player.hp, fullHeal ? player.maxHp : 10 + player.maxHp * .3)
+    close(player.hp, 10 + player.maxHp * .3)
     assert.deepEqual(run.state.loadout, equipment)
     assert.ok(player.attack > 100, 'real equipped stats are in effect')
     assert.ok(player.moveSpeed > 220, 'real passive stats are in effect')
@@ -134,20 +138,20 @@ test('same-tick lethal damage and a level-up kill retain XP but cannot revive th
   close(run.state.player.maxHp, 108)
 })
 
-test('full floor rewards and restoring a victory never add healing without a new level', () => {
-  const run = make({ xp: 10920, hp: 10 })
+test('at XP cap only natural regeneration heals during a full floor; rewards and restore do not', () => {
+  const run = make({ xp: TOWER_XP_CAP, hp: 10 })
   for (let i = 0; i < 30000 && run.state.phase === 'playing'; i++) {
     const enemies = [...run.state.enemies]
     if (enemies.length) healingKill(run, enemies)
     else healingTick(run)
     // Healing drops are a separate mechanic and must not enter this probe.
     run.state.drops = run.state.drops.filter(d => d.kind !== 'heal')
-    assert.equal(run.state.player.hp, 10)
+    close(run.state.player.hp, Math.min(run.state.player.maxHp, 10 + Math.floor(run.state.ticks / 180) * run.state.player.maxHp / 60))
   }
   assert.equal(run.state.phase, 'won')
   assert.equal(run.state.clearedWaves.length, 20)
   assert.equal(run.state.earned.xp, 0)
-  assert.ok(run.state.earned.contribution > 0)
+  assert.equal(run.state.earned.contribution, 0)
   const restored = TowerRun.restore(run.snapshot())
   restored.advance(60)
   assert.deepEqual(restored.snapshot(), run.snapshot())
@@ -189,6 +193,7 @@ function target(run, range = 100) {
     e.x = i === 0 ? run.state.player.x + range : -800
     e.y = i === 0 ? run.state.player.y : -1000
     e.hp = 100000
+    e.physicalDefense = e.magicDefense = 0
     e.moveSpeed = 0
     e.orbitNextAt = 0
     e.ai.graceUntil = 99999
@@ -198,9 +203,9 @@ function target(run, range = 100) {
   return run.state.enemies[0]
 }
 
-test('growth loadouts accept all 7+7+4, cap ranks including one-rank flight, and retain legacy validation', () => {
+test('growth loadouts accept all current skills, cap ranks including one-rank flight, and retain legacy validation', () => {
   const run = make({ xp: 10920, loadout: growth(maxSkills('active'), maxSkills('passive'), maxEvolutions, 3) })
-  assert.equal(Object.keys(run.state.loadout.active).length, 7)
+  assert.equal(Object.keys(run.state.loadout.active).length, 10)
   assert.equal(Object.keys(run.state.loadout.passive).length, 7)
   assert.equal(run.state.loadout.evolutions.length, 4)
   assert.equal(run.state.base.tutorialWaves, 3)
@@ -266,33 +271,54 @@ test('paused growth updates preserve HP and ledgers while scaling remaining swor
   assert.ok(validateTowerSnapshot(after))
 })
 
-test('each evolution uses the actual parent rank budget once, with no old level-five constants', () => {
-  for (const rank of [1, 2]) {
-    for (const parentLevel of [rank === 1 ? 6 : 8, 10]) {
-      for (const [parent, evolution, duration] of [
-        ['sj_yujian', 'evo_wanjian', 1.85],
-        ['sj_wanjian', 'evo_wuwo', .1],
-        ['sj_line', 'evo_tiandi', 1],
-        ['sj_formation', 'evo_sixiang', 6.55],
-      ]) {
-        const run = make({ loadout: growth({ [parent]: parentLevel }, {}, { [evolution]: rank }) })
-        const skill = GROWTH_SKILLS.find(s => s.id === parent)
-        const range = evolution === 'evo_wuwo' ? skill.radius[parentLevel - 1] + (rank === 1 ? 24 : 48) : 90
-        const enemy = target(run, range)
-        run.state.cooldowns[parent] = 0
-        if (evolution === 'evo_wanjian') run.state.cooldowns.evo_wanjian = 0
-        run.advance(.4)
-        run.state.cooldowns[parent] = 99999
-        if (duration > .4) run.advance(duration - .4)
-        const coefficient = skill.damage[parentLevel - 1]
-        const budget = {
-          evo_wanjian: [1.30, 1.69], evo_wuwo: [1.20, 1.44],
-          evo_tiandi: [1.40, 1.82], evo_sixiang: [2.0, 2.3],
-        }[evolution][rank - 1]
-        const expected = evolution === 'evo_wanjian' ? coefficient * ((budget - 1) * 8 + (rank === 1 ? 1.1 : 1.4))
-          : evolution === 'evo_tiandi' ? coefficient * 10 / 6 * budget
-            : evolution === 'evo_sixiang' ? coefficient * budget * 9 : coefficient * budget
-        close(100000 - enemy.hp, 106 * expected)
+// Budget fixtures isolate one authored release from basic attacks, automatic
+// sword replenishment and unrelated skills; cadence/replay is covered below.
+function emittedBudget(parent, parentLevel, evolution, evolutionRank = 1) {
+  const loadout = { ...growth({}, {}, evolution ? { [evolution]: evolutionRank } : {}),
+    active: { [parent]: parentLevel } }
+  const run = make({ xp: TOWER_XP_CAP, loadout })
+  const enemy = target(run, 85), output = []
+  run._startBasic = () => {}
+  const original = run._damageEnemy.bind(run)
+  run._damageEnemy = hit => { if (hit.target === enemy.id) output.push(hit); original(hit) }
+  run.state.cooldowns[parent] = 0
+  if (evolution === 'evo_wanjian') run.state.cooldowns.evo_wanjian = 0
+  for (let frame = 0; frame < 600; frame++) {
+    run.advance(STEP)
+    if (frame === 0) {
+      run.state.cooldowns[parent] = 99999
+      if (evolution) run.state.cooldowns[evolution] = 99999
+    }
+    if (run.state.zones.length || run.state.projectiles.length || output.length) return { run, output }
+  }
+  assert.fail(`${evolution || parent}: no authored damage release`)
+}
+
+test('each evolution inherits its actual parent rank and current per-window budget', () => {
+  for (const rank of [1, 2]) for (const parentLevel of [6, 10]) {
+    for (const [parent, evolution] of [['sj_yujian','evo_wanjian'], ['sj_wanjian','evo_wuwo'],
+      ['sj_line','evo_tiandi'], ['sj_formation','evo_sixiang']]) {
+      const {run, output} = emittedBudget(parent, parentLevel, evolution, rank)
+      const skill = GROWTH_SKILLS.find(s => s.id === parent)
+      const definition = GROWTH_EVOLUTIONS.find(s => s.id === evolution)
+      const base = run.state.player.attack * skill.damage[parentLevel - 1]
+      if (evolution === 'evo_wanjian') {
+        const zone = run.state.zones.find(z => z.formId === evolution)
+        assert.ok(zone)
+        const multiplier = (definition.budgetMultipliers[rank-1] - 1) * 8 / skill.cooldown
+          + definition.rainDamageDurationByRank[rank-1] / skill.cooldown
+        close(zone.damage * zone.pulseCount, base * multiplier)
+        assert.equal(zone.pulseCount, rank === 1 ? 19 : 25)
+      } else if (evolution === 'evo_sixiang') {
+        const zone = run.state.zones.find(z => z.formId === evolution)
+        assert.ok(zone)
+        close(zone.damage * zone.pulseCount, base * 6 * definition.budgetMultipliers[rank-1] * 15 / 12)
+        assert.equal(zone.pulseCount, rank === 1 ? 16 : 20)
+      } else {
+        const hit = output.find(h => h.source === evolution)
+        assert.ok(hit, evolution)
+        close(hit.damage, base * definition.budgetMultipliers[rank-1]
+          * (evolution === 'evo_tiandi' ? 10 / skill.cooldown : 1))
       }
     }
   }
@@ -316,52 +342,50 @@ test('all active skills share the action slot and evolutions replace parent rele
   for(let i=1;i<starts.length;i++)assert.ok(starts[i].startedAt>=starts[i-1].endsAt-1e-8)
 })
 
-test('new active damage at ranks 1 and 10 stays a per-cast total rather than multiplying decorative swords or eyes', () => {
-  for (const rank of [1, 10]) {
-    for (const [id, seconds, multiplier] of [
-      ['sj_yujian', .5, .5], ['sj_arc', .7, 1], ['sj_wanjian', .4, 10 / 7],
-      ['sj_line', .5, 1], ['sj_shadow', 1.5, 1], ['sj_formation', 5.3, 6],
-    ]) {
-      const run = make({ loadout: growth({ [id]: rank }) })
-      const e = target(run, 85)
-      run.state.cooldowns[id] = 0
-      run.advance(.4)
-      run.state.cooldowns[id] = 99999
-      if (seconds > .4) run.advance(seconds - .4)
-      const skill = GROWTH_SKILLS.find(s => s.id === id)
-      close(100000 - e.hp, 106 * skill.damage[rank - 1] * multiplier)
+test('active releases preserve per-sword, per-window and whole-field damage units', () => {
+  for (const rank of [1, 10]) for (const id of ['sj_yujian','sj_arc','sj_wanjian','sj_line','sj_shadow','sj_formation']) {
+    const {run, output} = emittedBudget(id, rank)
+    const skill = GROWTH_SKILLS.find(s => s.id === id), base = run.state.player.attack * skill.damage[rank-1]
+    if (id === 'sj_yujian') {
+      assert.equal(run.state.projectiles.length, 1)
+      close(run.state.projectiles[0].damage, base * skill.sword_damage_share[rank-1])
+    } else if (id === 'sj_shadow' || id === 'sj_formation') {
+      const zone = run.state.zones[0]
+      close(zone.damage * zone.pulseCount, base * (id === 'sj_formation' ? 6 : 1))
+    } else {
+      const hit = output.find(h => h.source === id)
+      assert.ok(hit, id)
+      close(hit.damage, base * (id === 'sj_arc' ? .25 : id === 'sj_wanjian' ? 10/7 : rank === 1 ? 1 : 1/3))
     }
   }
 })
 
-test('growth passive rank-eight effects retain crit, wound and single-trigger burst rules and HP/pickup rules', () => {
+test('current passives apply multiplicative crit, direct-only vulnerability and heavy-hit bursts', () => {
   const crit = make({ loadout: growth({}, { sj_heart: 4, sj_bone: 4 }) })
   const e = target(crit)
-  crit.state.cooldowns.sj_yujian = 0
   crit.state.rng = 1
-  // Allow the gathered sword to complete its homing flight before checking damage.
-  crit.advance(.8)
-  close(100000 - e.hp, 106 * .6 * (1 + .25 + .5))
-  const wound = make({ loadout: growth({}, { sj_mark: 4 }) })
-  const marked = target(wound)
-  wound.state.cooldowns.sj_yujian = 0
-  wound.advance(.1)
-  wound.state.cooldowns.sj_yujian = 99999
-  wound.advance(.7)
-  wound.advance(3)
-  close(100000 - marked.hp, 106 * .6 * 1.15)
-  const gate = make({ loadout: growth({}, { sj_gate: 4 }) })
+  crit._damageEnemy({target:e.id,source:'sj_yujian',damage:100,direct:true})
+  close(100000-e.hp,100*1.25*1.5)
+  const markedRun = make({ loadout: growth({}, { sj_mark:1 }) })
+  const marked = target(markedRun)
+  markedRun._damageEnemy({target:marked.id,source:'sj_yujian',damage:100,direct:true})
+  close(100000-marked.hp,100)
+  markedRun._damageEnemy({target:marked.id,source:'sj_yujian',damage:100,direct:true})
+  close(100000-marked.hp,220)
+  assert.equal(marked.scarDebuff.vulnerability,.2)
+  assert.equal(marked.qingpingDot,undefined)
+  const gate = make({ loadout: growth({sj_line:1}, { sj_gate: 2 }) })
   const first = target(gate)
-  first.hp = 1
-  // Add a second authored unit for the budget recipient, since the first spawn
-  // instant can contain only one unit.
-  const normal = { ...gate.state.enemies[0], id: 'budget-target', hp: 100000,
-    ai: clone(first.ai), x: first.x + 40, woundBudget: 0 }
-  gate.state.enemies.push(normal)
-  gate.state.cooldowns.sj_yujian = 99999
-  gate._damageEnemy({target:first.id,source:"sj_yujian",damage:10,direct:true})
-  gate.advance(.5)
-  close(100000 - normal.hp, 106 * 1.2) // One killing hit triggers one delayed burst.
+  gate._startBasic=()=>{}
+  gate._damageEnemy({target:first.id,source:'sj_yujian',damage:10,direct:true})
+  assert.equal(gate.state.swordBursts?.length??0,0,'ordinary swords do not spend heavy-hit burst')
+  gate._damageEnemy({target:first.id,source:'sj_line',damage:10,direct:true,weaponCastId:'heavy-one'})
+  assert.equal(gate.state.swordBursts.length,1)
+  const before=first.hp, burstDamage=gate.state.swordBursts[0].damage
+  close(burstDamage,gate.state.player.attack*1.2)
+  gate.advance(.3)
+  close(before-first.hp,burstDamage*(gate.state.player.attack+gate.state.player.magicAttack)/(2*gate.state.player.attack))
+  assert.equal(gate.state.swordBursts.length,0,'burst cannot trigger itself')
   for (const spirit of [0, 3]) {
     const defended = make({ loadout: growth({}, { vajra: 4, ...(spirit ? { sj_spirit: spirit } : {}) }) })
     defended.state.projectiles.push({ id: 'incoming', x: 33, y: -60, vx: 0, vy: 0,
@@ -369,7 +393,7 @@ test('growth passive rank-eight effects retain crit, wound and single-trigger bu
     defended.state.drops.push({ id: 'healing', x: 83, y: -60, radius: 9,
       kind: 'heal', amount: 10, expiresAt: 10 })
     defended.advance(STEP)
-    close(defended.state.player.hp, 37.5 - 8.5 + (spirit ? 10 : 0))
+    close(defended.state.player.hp, 37.5 - 17 + (spirit ? 10 : 0))
     assert.ok(validateTowerSnapshot(defended.snapshot()))
   }
 })
@@ -398,7 +422,7 @@ test('paused rank changes keep windup, projectile and delayed-zone contexts unch
     run.pause()
     const before = run.snapshot(), unchanged = TowerRun.restore(before)
     assert.ok(before.casts.length + before.projectiles.length + before.zones.filter(z => !z.hostile).length > 0)
-    const updatedLoadout = growth({ [skill]: 3 }, { sj_bone: 3, sj_mark: 3, sj_gate: 1 })
+    const updatedLoadout = growth({ [skill]: 3 }, { sj_bone: 3, sj_mark:1, sj_gate: 1 })
     const result = run.setGrowthLoadout(updatedLoadout)
     for (const key of ['casts', 'projectiles', 'zones', 'cooldowns', 'killLedger', 'gateEntries',
       'earned', 'base', 'time', 'ticks', 'remainder', 'rng', 'loot', 'enemies']) assert.deepEqual(result[key], before[key], key)
@@ -467,7 +491,7 @@ test('growth training loops with real kills but never teaches, pays rewards, or 
   assert.equal(resets, 2)
   assert.ok(killsSeen >= 16)
   assert.deepEqual(selected, original)
-  assert.deepEqual(run.state.loadout, selected)
+  assert.deepEqual(run.state.loadout, {...selected, classId: 'sword'})
   assert.deepEqual(run.state.earned, { xp: 0, cores: 0, contribution: 0 })
   assert.equal(run.state.player.xp, 0)
   assert.equal(run.state.normalCoreCounter, 19)
@@ -477,7 +501,7 @@ test('growth training loops with real kills but never teaches, pays rewards, or 
   assert.ok(validateTowerSnapshot(run.snapshot()))
 })
 
-test('all nine growth floors preserve 180 waves, 4770 deaths and bounded grade sums across live JSON replay', () => {
+test('all nine growth floors preserve 180 waves, 4772 deaths and bounded grade sums across live JSON replay', () => {
   const totals = { xp: 0, cores: 0, contribution: 0, deaths: 0 }, families = new Set()
   let counter = 0, replays = 0
   for (let floor = 1; floor <= 9; floor++) {
@@ -516,12 +540,12 @@ test('all nine growth floors preserve 180 waves, 4770 deaths and bounded grade s
     totals.deaths += run.state.killLedger.length
     counter = run.state.normalCoreCounter
   }
-  assert.deepEqual([totals.xp, totals.contribution, totals.deaths], [10920, 1080, 4770])
+  assert.deepEqual([totals.xp, totals.contribution, totals.deaths], [10920, 0, 4772])
   const rules = Object.values(CORE_DROP_RULES)
   assert.ok(totals.cores >= 180 + rules.reduce((sum, rule) => sum + rule.minValue, 0))
   assert.ok(totals.cores <= 180 + rules.reduce((sum, rule) => sum + rule.maxValue, 0))
   assert.equal(counter, 0, 'new loot never advances the legacy normal counter')
-  assert.equal(families.size, 14)
+  assert.equal(families.size, 11)
   assert.ok(replays > 180)
 })
 

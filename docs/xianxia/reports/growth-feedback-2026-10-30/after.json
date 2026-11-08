@@ -1,0 +1,939 @@
+{
+  "assumptions": [
+    "Fresh campaign; clear each authored floor once; no pills, repeat runs or playtest bonuses.",
+    "Milestone wave is exact under full prior waves; within-wave kill order is not modeled.",
+    "Damage probes use real release/settlement on stationary targets with guaranteed hits, no crit ring.",
+    "Two-target round count assumes both remain available; not a full encounter time prediction."
+  ],
+  "source_sha256": {
+    "TowerRun.js": "7958fd51aca04afcb64d789243c170df8be0b462018be9c9e858e1290b6000b7",
+    "TowerGrowth.js": "eb8a550d9ac80893f7fe58db16a25c31abb6f8f2096fb18b412cbba7c0375cd1",
+    "TowerProfile.js": "0090c5fd1156bfb9fd4b6dd3d7c8d5d50949c8c70e908c2394c58cbcdc13dc6b",
+    "TowerWeapons.js": "4cb50ec0408d8bec609d41f2aab80a90d40c980009677c4f6a13a9a97abc059c",
+    "TowerEquipment.js": "fbe43dff5aa69c42b3660d5b7fd15fa8c0ae4bb34b7e81c7d6ffa492dd71bc55",
+    "TowerCampaign.js": "f98dcdaf0f90bf6448b61d33d4ee33b00588b7c18c49ae81742351d98a8e7c17",
+    "TowerContent.js": "f55fbf68cc37958bcd0ef2d43c08070147cf122f09024e7b7b120ed14cce31a5",
+    "TowerEnemyStats.js": "eea1804ef7d12375c215f2a76714d29ded21381a4646a0f78f70a3f8e09bcf86",
+    "TowerCultivationRewards.js": "e92b74acf33191d18591b8b58f38ad41402b0a44b4719dffee4e36bb4dd0ce3b",
+    "TowerSkillForms.js": "3f5ce183eaf0b83032b96c9b38de9422cc47b272e2a34a9841d5e7f9573f78a6",
+    "TowerEconomy.js": "e6b750f79d7ba238c8f34e8b564886aa79c9d62cbb925471c81a3ada78647e8f",
+    "TowerSkillTiming.js": "6e285f94721859ea07e3843dedb423610ef7f61b7f4bfed6eab1f67cfd265a08"
+  },
+  "floors": [
+    {
+      "floor": 1,
+      "xp": 180,
+      "cumulativeXp": 180,
+      "level": 3
+    },
+    {
+      "floor": 2,
+      "xp": 450,
+      "cumulativeXp": 630,
+      "level": 6
+    },
+    {
+      "floor": 3,
+      "xp": 720,
+      "cumulativeXp": 1350,
+      "level": 9
+    },
+    {
+      "floor": 4,
+      "xp": 950,
+      "cumulativeXp": 2300,
+      "level": 12
+    },
+    {
+      "floor": 5,
+      "xp": 1176,
+      "cumulativeXp": 3476,
+      "level": 15
+    },
+    {
+      "floor": 6,
+      "xp": 1561,
+      "cumulativeXp": 5037,
+      "level": 18
+    },
+    {
+      "floor": 7,
+      "xp": 1563,
+      "cumulativeXp": 6600,
+      "level": 21
+    },
+    {
+      "floor": 8,
+      "xp": 2025,
+      "cumulativeXp": 8625,
+      "level": 24
+    },
+    {
+      "floor": 9,
+      "xp": 2295,
+      "cumulativeXp": 10920,
+      "level": 27
+    }
+  ],
+  "firstFloorWaves": [
+    {
+      "wave": 1,
+      "units": 10,
+      "waveXp": 4,
+      "cumulativeXp": 4,
+      "level": 1,
+      "earnedSkillPoints": 0,
+      "giftedSkills": [
+        "sj_yujian"
+      ],
+      "enemies": [
+        {
+          "id": "boar_normal",
+          "hp": 172.5,
+          "damage": 11.66,
+          "moveSpeed": 138.6
+        }
+      ]
+    },
+    {
+      "wave": 2,
+      "units": 12,
+      "waveXp": 5,
+      "cumulativeXp": 9,
+      "level": 1,
+      "earnedSkillPoints": 0,
+      "giftedSkills": [
+        "sj_yujian"
+      ],
+      "enemies": [
+        {
+          "id": "wolf_normal",
+          "hp": 135,
+          "damage": 11.66,
+          "moveSpeed": 231
+        }
+      ]
+    },
+    {
+      "wave": 3,
+      "units": 14,
+      "waveXp": 6,
+      "cumulativeXp": 15,
+      "level": 1,
+      "earnedSkillPoints": 0,
+      "giftedSkills": [
+        "sj_yujian"
+      ],
+      "enemies": [
+        {
+          "id": "spider_normal",
+          "hp": 150,
+          "damage": 11.66,
+          "moveSpeed": 143
+        }
+      ]
+    },
+    {
+      "wave": 4,
+      "units": 16,
+      "waveXp": 6,
+      "cumulativeXp": 21,
+      "level": 1,
+      "earnedSkillPoints": 0,
+      "giftedSkills": [
+        "sj_yujian"
+      ],
+      "enemies": [
+        {
+          "id": "boar_normal",
+          "hp": 172.5,
+          "damage": 11.66,
+          "moveSpeed": 138.6
+        },
+        {
+          "id": "wolf_normal",
+          "hp": 135,
+          "damage": 11.66,
+          "moveSpeed": 231
+        }
+      ]
+    },
+    {
+      "wave": 5,
+      "units": 11,
+      "waveXp": 8,
+      "cumulativeXp": 29,
+      "level": 1,
+      "earnedSkillPoints": 0,
+      "giftedSkills": [
+        "sj_yujian"
+      ],
+      "enemies": [
+        {
+          "id": "boar_elite",
+          "hp": 1035,
+          "damage": 19.83,
+          "moveSpeed": 138.6
+        },
+        {
+          "id": "boar_normal",
+          "hp": 172.5,
+          "damage": 11.66,
+          "moveSpeed": 138.6
+        },
+        {
+          "id": "spider_normal",
+          "hp": 150,
+          "damage": 11.66,
+          "moveSpeed": 143
+        }
+      ]
+    },
+    {
+      "wave": 6,
+      "units": 16,
+      "waveXp": 7,
+      "cumulativeXp": 36,
+      "level": 1,
+      "earnedSkillPoints": 0,
+      "giftedSkills": [
+        "sj_yujian"
+      ],
+      "enemies": [
+        {
+          "id": "boar_normal",
+          "hp": 172.5,
+          "damage": 11.66,
+          "moveSpeed": 138.6
+        },
+        {
+          "id": "wolf_normal",
+          "hp": 135,
+          "damage": 11.66,
+          "moveSpeed": 231
+        }
+      ]
+    },
+    {
+      "wave": 7,
+      "units": 18,
+      "waveXp": 7,
+      "cumulativeXp": 43,
+      "level": 1,
+      "earnedSkillPoints": 0,
+      "giftedSkills": [
+        "sj_yujian"
+      ],
+      "enemies": [
+        {
+          "id": "boar_normal",
+          "hp": 172.5,
+          "damage": 11.66,
+          "moveSpeed": 138.6
+        },
+        {
+          "id": "spider_normal",
+          "hp": 150,
+          "damage": 11.66,
+          "moveSpeed": 143
+        }
+      ]
+    },
+    {
+      "wave": 8,
+      "units": 20,
+      "waveXp": 8,
+      "cumulativeXp": 51,
+      "level": 2,
+      "earnedSkillPoints": 1,
+      "giftedSkills": [
+        "sj_yujian",
+        "sj_arc"
+      ],
+      "enemies": [
+        {
+          "id": "boar_normal",
+          "hp": 172.5,
+          "damage": 11.66,
+          "moveSpeed": 138.6
+        },
+        {
+          "id": "wolf_normal",
+          "hp": 135,
+          "damage": 11.66,
+          "moveSpeed": 231
+        }
+      ]
+    },
+    {
+      "wave": 9,
+      "units": 22,
+      "waveXp": 8,
+      "cumulativeXp": 59,
+      "level": 2,
+      "earnedSkillPoints": 1,
+      "giftedSkills": [
+        "sj_yujian",
+        "sj_arc"
+      ],
+      "enemies": [
+        {
+          "id": "boar_normal",
+          "hp": 172.5,
+          "damage": 11.66,
+          "moveSpeed": 138.6
+        },
+        {
+          "id": "spider_normal",
+          "hp": 150,
+          "damage": 11.66,
+          "moveSpeed": 143
+        }
+      ]
+    },
+    {
+      "wave": 10,
+      "units": 14,
+      "waveXp": 13,
+      "cumulativeXp": 72,
+      "level": 2,
+      "earnedSkillPoints": 1,
+      "giftedSkills": [
+        "sj_yujian",
+        "sj_arc"
+      ],
+      "enemies": [
+        {
+          "id": "wolf_elite",
+          "hp": 810,
+          "damage": 19.83,
+          "moveSpeed": 231
+        },
+        {
+          "id": "boar_normal",
+          "hp": 172.5,
+          "damage": 11.66,
+          "moveSpeed": 138.6
+        },
+        {
+          "id": "wolf_normal",
+          "hp": 135,
+          "damage": 11.66,
+          "moveSpeed": 231
+        }
+      ]
+    },
+    {
+      "wave": 11,
+      "units": 20,
+      "waveXp": 8,
+      "cumulativeXp": 80,
+      "level": 2,
+      "earnedSkillPoints": 1,
+      "giftedSkills": [
+        "sj_yujian",
+        "sj_arc"
+      ],
+      "enemies": [
+        {
+          "id": "boar_normal",
+          "hp": 172.5,
+          "damage": 11.66,
+          "moveSpeed": 138.6
+        },
+        {
+          "id": "spider_normal",
+          "hp": 150,
+          "damage": 11.66,
+          "moveSpeed": 143
+        },
+        {
+          "id": "wolf_normal",
+          "hp": 135,
+          "damage": 11.66,
+          "moveSpeed": 231
+        }
+      ]
+    },
+    {
+      "wave": 12,
+      "units": 22,
+      "waveXp": 9,
+      "cumulativeXp": 89,
+      "level": 2,
+      "earnedSkillPoints": 1,
+      "giftedSkills": [
+        "sj_yujian",
+        "sj_arc"
+      ],
+      "enemies": [
+        {
+          "id": "boar_normal",
+          "hp": 172.5,
+          "damage": 11.66,
+          "moveSpeed": 138.6
+        },
+        {
+          "id": "wolf_normal",
+          "hp": 135,
+          "damage": 11.66,
+          "moveSpeed": 231
+        },
+        {
+          "id": "spider_normal",
+          "hp": 150,
+          "damage": 11.66,
+          "moveSpeed": 143
+        }
+      ]
+    },
+    {
+      "wave": 13,
+      "units": 24,
+      "waveXp": 9,
+      "cumulativeXp": 98,
+      "level": 2,
+      "earnedSkillPoints": 1,
+      "giftedSkills": [
+        "sj_yujian",
+        "sj_arc"
+      ],
+      "enemies": [
+        {
+          "id": "boar_normal",
+          "hp": 172.5,
+          "damage": 11.66,
+          "moveSpeed": 138.6
+        },
+        {
+          "id": "spider_normal",
+          "hp": 150,
+          "damage": 11.66,
+          "moveSpeed": 143
+        },
+        {
+          "id": "wolf_normal",
+          "hp": 135,
+          "damage": 11.66,
+          "moveSpeed": 231
+        }
+      ]
+    },
+    {
+      "wave": 14,
+      "units": 26,
+      "waveXp": 11,
+      "cumulativeXp": 109,
+      "level": 2,
+      "earnedSkillPoints": 1,
+      "giftedSkills": [
+        "sj_yujian",
+        "sj_arc"
+      ],
+      "enemies": [
+        {
+          "id": "boar_normal",
+          "hp": 172.5,
+          "damage": 11.66,
+          "moveSpeed": 138.6
+        },
+        {
+          "id": "wolf_normal",
+          "hp": 135,
+          "damage": 11.66,
+          "moveSpeed": 231
+        },
+        {
+          "id": "spider_normal",
+          "hp": 150,
+          "damage": 11.66,
+          "moveSpeed": 143
+        }
+      ]
+    },
+    {
+      "wave": 15,
+      "units": 16,
+      "waveXp": 13,
+      "cumulativeXp": 122,
+      "level": 3,
+      "earnedSkillPoints": 2,
+      "giftedSkills": [
+        "sj_yujian",
+        "sj_arc"
+      ],
+      "enemies": [
+        {
+          "id": "spider_elite",
+          "hp": 900,
+          "damage": 19.83,
+          "moveSpeed": 143
+        },
+        {
+          "id": "boar_normal",
+          "hp": 172.5,
+          "damage": 11.66,
+          "moveSpeed": 138.6
+        },
+        {
+          "id": "spider_normal",
+          "hp": 150,
+          "damage": 11.66,
+          "moveSpeed": 143
+        },
+        {
+          "id": "wolf_normal",
+          "hp": 135,
+          "damage": 11.66,
+          "moveSpeed": 231
+        }
+      ]
+    },
+    {
+      "wave": 16,
+      "units": 24,
+      "waveXp": 10,
+      "cumulativeXp": 132,
+      "level": 3,
+      "earnedSkillPoints": 2,
+      "giftedSkills": [
+        "sj_yujian",
+        "sj_arc"
+      ],
+      "enemies": [
+        {
+          "id": "boar_normal",
+          "hp": 172.5,
+          "damage": 11.66,
+          "moveSpeed": 138.6
+        },
+        {
+          "id": "wolf_normal",
+          "hp": 135,
+          "damage": 11.66,
+          "moveSpeed": 231
+        },
+        {
+          "id": "spider_normal",
+          "hp": 150,
+          "damage": 11.66,
+          "moveSpeed": 143
+        }
+      ]
+    },
+    {
+      "wave": 17,
+      "units": 26,
+      "waveXp": 10,
+      "cumulativeXp": 142,
+      "level": 3,
+      "earnedSkillPoints": 2,
+      "giftedSkills": [
+        "sj_yujian",
+        "sj_arc"
+      ],
+      "enemies": [
+        {
+          "id": "boar_normal",
+          "hp": 172.5,
+          "damage": 11.66,
+          "moveSpeed": 138.6
+        },
+        {
+          "id": "spider_normal",
+          "hp": 150,
+          "damage": 11.66,
+          "moveSpeed": 143
+        },
+        {
+          "id": "wolf_normal",
+          "hp": 135,
+          "damage": 11.66,
+          "moveSpeed": 231
+        }
+      ]
+    },
+    {
+      "wave": 18,
+      "units": 28,
+      "waveXp": 11,
+      "cumulativeXp": 153,
+      "level": 3,
+      "earnedSkillPoints": 2,
+      "giftedSkills": [
+        "sj_yujian",
+        "sj_arc"
+      ],
+      "enemies": [
+        {
+          "id": "wolf_normal",
+          "hp": 135,
+          "damage": 11.66,
+          "moveSpeed": 231
+        },
+        {
+          "id": "boar_normal",
+          "hp": 172.5,
+          "damage": 11.66,
+          "moveSpeed": 138.6
+        },
+        {
+          "id": "spider_normal",
+          "hp": 150,
+          "damage": 11.66,
+          "moveSpeed": 143
+        }
+      ]
+    },
+    {
+      "wave": 19,
+      "units": 30,
+      "waveXp": 12,
+      "cumulativeXp": 165,
+      "level": 3,
+      "earnedSkillPoints": 2,
+      "giftedSkills": [
+        "sj_yujian",
+        "sj_arc"
+      ],
+      "enemies": [
+        {
+          "id": "boar_normal",
+          "hp": 172.5,
+          "damage": 11.66,
+          "moveSpeed": 138.6
+        },
+        {
+          "id": "spider_normal",
+          "hp": 150,
+          "damage": 11.66,
+          "moveSpeed": 143
+        },
+        {
+          "id": "wolf_normal",
+          "hp": 135,
+          "damage": 11.66,
+          "moveSpeed": 231
+        }
+      ]
+    },
+    {
+      "wave": 20,
+      "units": 9,
+      "waveXp": 15,
+      "cumulativeXp": 180,
+      "level": 3,
+      "earnedSkillPoints": 2,
+      "giftedSkills": [
+        "sj_yujian",
+        "sj_arc"
+      ],
+      "enemies": [
+        {
+          "id": "boar_boss",
+          "hp": 9200,
+          "damage": 23.33,
+          "moveSpeed": 138.6
+        },
+        {
+          "id": "boar_normal",
+          "hp": 172.5,
+          "damage": 11.66,
+          "moveSpeed": 138.6
+        },
+        {
+          "id": "wolf_normal",
+          "hp": 135,
+          "damage": 11.66,
+          "moveSpeed": 231
+        },
+        {
+          "id": "spider_normal",
+          "hp": 150,
+          "damage": 11.66,
+          "moveSpeed": 143
+        }
+      ]
+    }
+  ],
+  "milestones": [
+    {
+      "level": 1,
+      "threshold": 0,
+      "floor": 1,
+      "wave": 1
+    },
+    {
+      "level": 2,
+      "threshold": 45,
+      "floor": 1,
+      "wave": 8
+    },
+    {
+      "level": 3,
+      "threshold": 120,
+      "floor": 1,
+      "wave": 15
+    },
+    {
+      "level": 4,
+      "threshold": 225,
+      "floor": 2,
+      "wave": 4
+    },
+    {
+      "level": 5,
+      "threshold": 360,
+      "floor": 2,
+      "wave": 10
+    },
+    {
+      "level": 6,
+      "threshold": 525,
+      "floor": 2,
+      "wave": 17
+    },
+    {
+      "level": 7,
+      "threshold": 720,
+      "floor": 3,
+      "wave": 4
+    },
+    {
+      "level": 8,
+      "threshold": 945,
+      "floor": 3,
+      "wave": 11
+    },
+    {
+      "level": 9,
+      "threshold": 1200,
+      "floor": 3,
+      "wave": 17
+    },
+    {
+      "level": 10,
+      "threshold": 1485,
+      "floor": 4,
+      "wave": 5
+    },
+    {
+      "level": 11,
+      "threshold": 1800,
+      "floor": 4,
+      "wave": 12
+    },
+    {
+      "level": 12,
+      "threshold": 2145,
+      "floor": 4,
+      "wave": 18
+    },
+    {
+      "level": 13,
+      "threshold": 2520,
+      "floor": 5,
+      "wave": 5
+    },
+    {
+      "level": 14,
+      "threshold": 2925,
+      "floor": 5,
+      "wave": 12
+    },
+    {
+      "level": 15,
+      "threshold": 3360,
+      "floor": 5,
+      "wave": 19
+    },
+    {
+      "level": 16,
+      "threshold": 3825,
+      "floor": 6,
+      "wave": 5
+    },
+    {
+      "level": 17,
+      "threshold": 4320,
+      "floor": 6,
+      "wave": 12
+    },
+    {
+      "level": 18,
+      "threshold": 4845,
+      "floor": 6,
+      "wave": 18
+    },
+    {
+      "level": 19,
+      "threshold": 5400,
+      "floor": 7,
+      "wave": 6
+    },
+    {
+      "level": 20,
+      "threshold": 5985,
+      "floor": 7,
+      "wave": 13
+    },
+    {
+      "level": 21,
+      "threshold": 6600,
+      "floor": 7,
+      "wave": 20
+    },
+    {
+      "level": 22,
+      "threshold": 7245,
+      "floor": 8,
+      "wave": 8
+    },
+    {
+      "level": 23,
+      "threshold": 7920,
+      "floor": 8,
+      "wave": 15
+    },
+    {
+      "level": 24,
+      "threshold": 8625,
+      "floor": 8,
+      "wave": 20
+    },
+    {
+      "level": 25,
+      "threshold": 9360,
+      "floor": 9,
+      "wave": 8
+    },
+    {
+      "level": 26,
+      "threshold": 10125,
+      "floor": 9,
+      "wave": 14
+    },
+    {
+      "level": 27,
+      "threshold": 10920,
+      "floor": 9,
+      "wave": 20
+    }
+  ],
+  "probes": [
+    {
+      "level": 1,
+      "skillRank": 1,
+      "targets": 1,
+      "weapon": "empty",
+      "projectiles": 1,
+      "damageByTarget": [
+        120
+      ],
+      "boarHp": 172.5,
+      "roundsToKillFirstBoar": 2
+    },
+    {
+      "level": 1,
+      "skillRank": 1,
+      "targets": 1,
+      "weapon": "iron",
+      "projectiles": 1,
+      "damageByTarget": [
+        126
+      ],
+      "boarHp": 172.5,
+      "roundsToKillFirstBoar": 2
+    },
+    {
+      "level": 1,
+      "skillRank": 1,
+      "targets": 1,
+      "weapon": "audit-general",
+      "projectiles": 1,
+      "damageByTarget": [
+        228.9
+      ],
+      "boarHp": 172.5,
+      "roundsToKillFirstBoar": 1
+    },
+    {
+      "level": 1,
+      "skillRank": 1,
+      "targets": 1,
+      "weapon": "audit-qi",
+      "projectiles": 1,
+      "damageByTarget": [
+        216.3
+      ],
+      "boarHp": 172.5,
+      "roundsToKillFirstBoar": 1
+    },
+    {
+      "level": 2,
+      "skillRank": 2,
+      "targets": 1,
+      "weapon": "iron",
+      "projectiles": 1,
+      "damageByTarget": [
+        169.5
+      ],
+      "boarHp": 172.5,
+      "roundsToKillFirstBoar": 2
+    },
+    {
+      "level": 5,
+      "skillRank": 1,
+      "targets": 1,
+      "weapon": "iron",
+      "projectiles": 1,
+      "damageByTarget": [
+        169.25868
+      ],
+      "boarHp": 172.5,
+      "roundsToKillFirstBoar": 2
+    },
+    {
+      "level": 4,
+      "skillRank": 2,
+      "targets": 2,
+      "weapon": "iron",
+      "projectiles": 1,
+      "damageByTarget": [
+        196.4568,
+        0
+      ],
+      "boarHp": 172.5,
+      "roundsToKillFirstBoar": 1
+    },
+    {
+      "level": 4,
+      "skillRank": 3,
+      "targets": 2,
+      "weapon": "iron",
+      "projectiles": 2,
+      "damageByTarget": [
+        235.74816,
+        70.72445
+      ],
+      "boarHp": 172.5,
+      "roundsToKillFirstBoar": 1
+    },
+    {
+      "level": 4,
+      "skillRank": 3,
+      "targets": 1,
+      "weapon": "iron",
+      "projectiles": 1,
+      "damageByTarget": [
+        235.74816
+      ],
+      "boarHp": 172.5,
+      "roundsToKillFirstBoar": 1
+    }
+  ],
+  "repeatFloorOne": {
+    "level25FullClearEquivalents": 52,
+    "level27FullClearEquivalents": 61
+  }
+}

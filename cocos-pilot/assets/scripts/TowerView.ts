@@ -44,7 +44,7 @@ import {Node,UITransform,Graphics,Color,Label,LabelOutline,Button,BlockInputEven
 import {TowerCampaignStore,combatLoadout,TOWER_CAMPAIGN_KEY} from './shared/js/xianxia/TowerCampaign';
 import {TowerRun,stats as combatStats} from './shared/js/xianxia/TowerRun';
 import {ningshenSurgeMultiplier} from './shared/js/xianxia/TowerSpirit';
-import {FIRST_CLEAR_REWARDS,formatSpiritStones,legacyRewardToStones,spiritStoneLootSummary,splitSpiritStones,STONE_CAP} from './shared/js/xianxia/TowerEconomy';
+import {FIRST_CLEAR_REWARDS,FIRST_CLEAR_MATERIALS,formatSpiritStones,legacyRewardToStones,spiritStoneLootSummary,splitSpiritStones,STONE_CAP} from './shared/js/xianxia/TowerEconomy';
 import {FLOORS,SKILLS,ECONOMY} from './shared/js/xianxia/TowerContent';
 import {cultivationAt} from './shared/js/xianxia/TowerProfile';
 import {GROWTH_SKILLS,GROWTH_EVOLUTIONS,growthSummary,growthStageAt,realmPoints} from './shared/js/xianxia/TowerGrowth';
@@ -63,7 +63,7 @@ const FAMILY:any={rhino:['犀','#87928A'],yak:['牦','#554C41'],boar:['猪','#b5
 const STONE_COLORS=['#A4C6D4','#8ED5C4','#B4A4E3','#F1D58A'];
 // Back-to-front pile layout, reused each frame; at most five sprites per denomination.
 const STONE_GRADES=['下品','中品','上品','极品'];
-const ERROR:any={'wrong-realm':'境界不符，无法服用此突破物品。','drop-only':'此材料仅由Boss掉落。','breakthrough-required':'已达大圆满，请查看角色信息中的突破条件。','breakthrough-not-ready':'需达到当前境界十层满修为才能突破。','already-zhuji':'已经筑基，无需再次服用筑基丹。','cultivation-allowance':'本境修为丹6颗共享额度已用尽。','cultivation-stock-confirmation':'操作后库存将超过本境剩余服用额度，请确认。','cultivation-overflow-confirmation':'药力将超出本境瓶颈，请确认实际收益与浪费。','insufficient-materials':'炼丹材料不足，请查看来源。','not-usable':'此材料不可直接服用，可用于炼丹或出售。','save-failed':'保存失败，本次操作未提交。请重试。','stale-save':'另一游戏窗口已更新存档，请刷新此窗口后继续。','insufficient':'所需资源不足','floor-locked':'尚未通关前置塔层','in-tower':'请先结束当前塔内挑战','max-refine':'已达到最高强化等级','insufficient-contribution':'点眷不足','insufficient-cores':'灵石不足','insufficient-spirit-stones':'灵石不足','insufficient-stones':'灵石不足','insufficient-points':'功法点不足，提升境界可获得功法点','realm-locked':'当前境界尚未达到修习要求','stage-locked':'当前境界尚未达到修习要求','library-only':'此项修习需要返回宗门藏经阁','research-capped':'本阶段三次道悟研习已完成','full-health':'当前气血已满','cultivation-capped':'已到金丹大圆满','active-run':'请先结束本次塔内挑战','locked':'通塔进度尚未满足','invalid-loadout':'装备配装无效','refinement-disabled':'当前版本暂未开放强化','capacity':'装备仓库或资源已满','unowned-equipment':'尚未拥有此装备','locked-equipment':'请先解除装备锁定','equipped-equipment':'请先从所有配装卸下此装备','starter-equipment':'基础装备不能分解','locked-weapon':'请先解除武器锁定','equipped-weapon':'请先从所有配装卸下此武器','starter-weapon':'普通铁剑不能分解','max-level':'已经达到最高等级','no-pill':'丹药数量不足','unreadable':'无法读取存档，请检查浏览器存储后刷新','corrupt':'存档校验未通过，已停止写入，避免覆盖原数据'};
+const ERROR:any={'wrong-realm':'境界不符，无法服用此突破物品。','drop-only':'此材料仅由Boss掉落。','breakthrough-required':'已达大圆满，请查看角色信息中的突破条件。','breakthrough-not-ready':'需达到当前境界十层满修为才能突破。','already-zhuji':'已经筑基，无需再次服用筑基丹。','cultivation-allowance':'本境修为丹6颗共享额度已用尽。','cultivation-stock-confirmation':'操作后库存将超过本境剩余服用额度，请确认。','cultivation-overflow-confirmation':'药力将超出本境瓶颈，请确认实际收益与浪费。','insufficient-materials':'炼丹材料不足，请查看来源。','not-usable':'此材料不可直接服用，可用于炼丹或出售。','save-failed':'保存失败，本次操作未提交。请重试。','stale-save':'另一游戏窗口已更新存档，请刷新此窗口后继续。','insufficient':'所需资源不足','floor-locked':'尚未通关前置塔层','in-tower':'请先结束当前塔内挑战','max-refine':'已达到最高强化等级','insufficient-contribution':'点眷不足','insufficient-cores':'灵石不足','insufficient-spirit-stones':'灵石不足','insufficient-stones':'灵石不足','insufficient-points':'悟道点不足，提升境界可获得悟道点','realm-locked':'当前境界尚未达到修习要求','stage-locked':'当前境界尚未达到修习要求','library-only':'此项修习需要返回宗门藏经阁','research-capped':'本阶段三次道悟研习已完成','full-health':'当前气血已满','cultivation-capped':'已到金丹大圆满','active-run':'请先结束本次塔内挑战','locked':'通塔进度尚未满足','invalid-loadout':'装备配装无效','refinement-disabled':'当前版本暂未开放强化','capacity':'装备仓库或资源已满','unowned-equipment':'尚未拥有此装备','locked-equipment':'请先解除装备锁定','equipped-equipment':'请先从所有配装卸下此装备','starter-equipment':'基础装备不能分解','locked-weapon':'请先解除武器锁定','equipped-weapon':'请先从所有配装卸下此武器','starter-weapon':'普通铁剑不能分解','max-level':'已经达到最高等级','no-pill':'丹药数量不足','unreadable':'无法读取存档，请检查浏览器存储后刷新','corrupt':'存档校验未通过，已停止写入，避免覆盖原数据'};
 
 /** Current sect/tower game host. */
 export class TowerView {
@@ -165,7 +165,7 @@ export class TowerView {
  constructor(private host:any){
   this.measureViewport();
   this.platform=new TowerPlatform(host);const size=view.getVisibleSize();this.width=size.width;this.height=size.height;
-  this.root=this.node('落云宗·功能版',host.canvas,this.width,this.height);
+  this.root=this.node('霁云宗·功能版',host.canvas,this.width,this.height);
   // SHOW_ALL reserves letterbox space but does not clip world-space Graphics.
   // Constrain the complete UI/world tree to the same logical input viewport.
   this.root.addComponent(Mask);
@@ -248,7 +248,7 @@ export class TowerView {
     this.notice=`已出售${r.count}份材料，获得${r.gained}下品灵石。`;
    }else if(action.type==='decreaseSkill'){
     const names=(r.changes||[]).map((c:any)=>`${(GROWTH_SKILLS as any[]).find(s=>s.id===c.id)?.name||(SKILLS as any[]).find(s=>s.id===c.id)?.name||c.id} ${c.from}→${c.to}`);
-    this.notice=`已返还${r.returned}功法点${names.length>1?'，关联功法同步退点':''}；经卷保留。`;
+    this.notice=`已返还${r.returned}悟道点${names.length>1?'，关联功法同步退点':''}；经卷保留。`;
    }else this.notice=action.type==='usePill'?'丹药已服用':['buyBook','learnSkill'].includes(action.type)?'修习已保存，进入战斗后自动生效':action.type==='respecSkills'?'已重修：实际投入点数已返还，经卷和教学领悟保留':['setLoadout','equipEquipment'].includes(action.type)?'装备配装已保存':'已保存';
    if(this.store.state.activeRun&&(this.screen==='skills'||['setLoadout','selectLoadout','equipEquipment'].includes(action.type))){
     // Campaign commits both permanent allocation and the paused combat snapshot.
@@ -375,7 +375,8 @@ export class TowerView {
   const materials=this.store.state.lastResult.materials || [];
   const overflow=this.store.state.lastResult.materialOverflow;
   const overflowText=overflow?.items?.length ? `\n材料库存已满，${overflow.items.map((i:any)=>`${(CAMP_PILLS as any)[i.id]?.name || i.id}×${i.count}`).join('、')}自动出售，到账${overflow.convertedStones}下品灵石${overflow.lostStones ? `，灵石已满损失${overflow.lostStones}` : ''}。` : '';
-  const summary=`${first&&prize.kind!=='none'?'首通奖励已包含在收获中':''}${overflowText}\n${snapshot.phase==='lost'?'以1点气血苏醒，可在丹霞峰购丹后从背包服用。':'气血继承，可回宗整备后再次挑战。'}`.trim();
+  const firstPack=(FIRST_CLEAR_MATERIALS as any)[snapshot.floor];
+  const summary=`${first&&(prize.kind!=='none'||firstPack)?'首通奖励已包含在收获中':''}${overflowText}\n${snapshot.phase==='lost'?'以1点气血苏醒，可在丹霞峰购丹后从背包服用。':'气血继承，可回宗整备后再次挑战。'}`.trim();
   const choices=[{text:'返回宗门',fn:()=>this.goto('hall'),primary:false}];
   if(won&&snapshot.floor<9)choices.push({text:`继续第${snapshot.floor+1}层`,fn:()=>this.enterFloor(snapshot.floor+1),primary:true});
   else choices.push({text:'前往丹霞峰',fn:()=>this.goto('pills'),primary:true});
@@ -858,7 +859,7 @@ export class TowerView {
    ()=>this.changeTools({invincible:!this.tools.invincible}),false,buttonHeight);
   const grant=PLAYTEST_RESOURCE_ACTIONS[0];
   this.button(grant.label,box,0,rowY(2),cell,()=>this.editPlaytest(grant.action.type,grant.action),false,buttonHeight);
-  this.button('+999功法点',box,0,rowY(3),cell,()=>this.editPlaytest('playtestAddSkillPoints'),false,buttonHeight);
+  this.button('+999悟道点',box,0,rowY(3),cell,()=>this.editPlaytest('playtestAddSkillPoints'),false,buttonHeight);
   this.button('提升一小境界',box,0,rowY(4),cell,()=>this.editPlaytest('playtestNextStage'),false,buttonHeight);
   this.button('重置游戏进度',box,0,rowY(5),cell,()=>this.resetProgress(),false,buttonHeight);
  }
@@ -953,7 +954,7 @@ export class TowerView {
     this.ritualAudio.play(this.root,'minor');
    }
    if(after.realm!==before.realm){
-    this.enqueueNotice(`突破${after.realm}！\n攻击、气血上限跃升 · 获得${realmPoints(this.run.state.player.xp)-beforePoints}功法点`,3);
+    this.enqueueNotice(`突破${after.realm}！\n攻击、气血上限跃升 · 获得${realmPoints(this.run.state.player.xp)-beforePoints}悟道点`,3);
    }
    const learned=Object.keys(this.run.state.loadout.active).filter(id=>!known.has(id));
    if(learned.length){

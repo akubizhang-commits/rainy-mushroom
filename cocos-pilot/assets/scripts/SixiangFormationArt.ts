@@ -170,7 +170,7 @@ export class SixiangFormationArt {
     }
     this.drawn.add(t.id);
     for(const e of effects)if(base(e)&&sameCenter(e,t)&&e.startedAt>=t.startedAt
-     &&e.startedAt<=t.startedAt+6.01)this.drawn.add(e.id);
+     &&e.startedAt<=t.startedAt+8.01)this.drawn.add(e.id);
    }
   }catch(error){this.fail(error)}
   return this.drawn;

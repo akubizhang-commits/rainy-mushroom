@@ -131,11 +131,11 @@ test('schema11 owns both basic items and ring-only counters, with isolated empty
 })
 
 for (const category of categories) {
-  test(`${category} purchases cost15 stones/9 contribution, retain affixes and never auto-equip`, () => {
+  test(`${category} purchases cost24 stones and no vouchers, retain affixes and never auto-equip`, () => {
     const { store, disk } = fixture()
     const before = clone(store.state), item = draw(store, category)
-    assert.equal(store.state.spiritStones, before.spiritStones - 15)
-    assert.equal(store.state.contribution, before.contribution - 9)
+    assert.equal(store.state.spiritStones, before.spiritStones - 24)
+    assert.equal(store.state.contribution, before.contribution)
     assert.deepEqual(store.state.loadouts, before.loadouts)
     assert.deepEqual(store.state.weapons, before.weapons)
     assert.equal(store.state.rng, before.rng)
@@ -160,11 +160,11 @@ for (const category of categories) {
       if(invalid!=='weapon')reject(high.store, high.disk, forgeAction(high.store,invalid))
       reject(high.store, high.disk, { type: 'equipEquipment', category: invalid, id: 'gear-1' })
     }
-    for (const patch of [{ spiritStones: 14 }, { contribution: 8 }]) {
+    for (const patch of [{ spiritStones: 23 }]) {
       const poor = fixture(patch)
       reject(poor.store, poor.disk, forgeAction(poor.store,category))
     }
-    const exact = fixture({ spiritStones: 15, contribution: 9 })
+    const exact = fixture({ spiritStones: 24, contribution: 0 })
     draw(exact.store, category)
     assert.equal(exact.store.state.spiritStones, 0)
     assert.equal(exact.store.state.contribution, 0)
@@ -228,8 +228,8 @@ for (const category of categories) {
     const { store, disk } = fixture({ ...clone(initial.store.state), equipmentRng: { armor: 1, ring: 1 } })
     const duplicate = draw(store, category)
     assert.deepEqual(duplicate, { ...first, id: 'gear-2' })
-    assert.equal(store.state.contribution, 282, 'two purchases cost18 contribution with no duplicate rebate')
-    assert.equal(store.state.spiritStones, 470)
+    assert.equal(store.state.contribution, 1000, 'purchases do not spend or refund vouchers')
+    assert.equal(store.state.spiritStones, 452)
     assert.deepEqual(store.state.equipment[first.id], first)
     assert.deepEqual(store.state.equipment[duplicate.id], { ...first, id: 'gear-2' })
     reject(store, disk, { type: 'refineEquipment', id: duplicate.id }, 'refinement-disabled')
@@ -448,7 +448,7 @@ test('per-ring counters survive swapping, entering, checkpointing, reloading and
     }
     run.advance(1 / 30)
   }
-  assert.ok(run.state.weaponState.effectiveCasts > 0, 'fixture must land a real direct cast')
+  assert.equal(run.state.weaponState.effectiveCasts,0, 'current fixed rings have no fifth-hit proc')
   run.pause()
   const checkpoint = run.snapshot(), count = checkpoint.weaponState.focusCount
   assert.equal(validateTowerSnapshot(checkpoint), true)

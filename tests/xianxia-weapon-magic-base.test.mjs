@@ -39,18 +39,20 @@ test('real hybrid hit and crit use the captured magic base; pure physical ignore
   assert.equal(typeof context.weaponMagicAttack,'number')
   context.weaponAttack=4;context.weaponMagicAttack=6
   const hit=source=>{
-    enemy.hp=enemy.maxHp=10000
-    run._damageEnemy({target:enemy.id,source,damage:104,direct:true,castContext:context})
+    enemy.hp=enemy.maxHp=10000;enemy.physicalDefense=enemy.magicDefense=0
+    run._damageEnemy({target:enemy.id,source,damage:114,direct:true,castContext:context})
     return run.state.effects.at(-1)
   }
   const mixed=hit('sj_shadow')
   assert.equal(mixed.damage,105)
-  assert.deepEqual(mixed.damageParts,{physical:52,magic:53})
-  assert.equal(hit('basic_attack').damage,104)
+  assert.ok(Math.abs(mixed.damageParts.physical-57)<1e-8)
+  assert.ok(Math.abs(mixed.damageParts.magic-48)<1e-8)
+  assert.equal(hit('basic_attack').damage,114)
   context.loadout.passive.sj_heart=1;run._random=()=>0
   const critical=hit('sj_shadow')
   assert.equal(critical.damage,157.5)
-  assert.deepEqual(critical.damageParts,{physical:78,magic:79.5})
+  assert.ok(Math.abs(critical.damageParts.physical-85.5)<1e-8)
+  assert.ok(Math.abs(critical.damageParts.magic-72)<1e-8)
 })
 test('pending swing stores magic sampling and rejects missing or out-of-range values',()=>{
   const {run}=fixture()

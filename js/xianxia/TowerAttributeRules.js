@@ -1,4 +1,5 @@
 import {armorEffectValue} from './TowerArmorEffects.js'
+import { resonanceDamageFactor } from './TowerResonance.js'
 // Shared arithmetic for the character sheet, combat and authored descriptions.
 import { weaponDamageModifiers } from './TowerWeapons.js'
 import { COMBAT_SKILLS as GROWTH_SKILLS } from './TowerCombatSkills.js'
@@ -27,9 +28,10 @@ export function outgoingDamageFactor(loadout, skillId, type, isSkill, element) {
   const bonuses = ['weapon', 'armor', 'ring'].map(slot => {
     const item = loadout?.[slot]
     return (slot === 'weapon' ? weaponBonus : 0) + (isSkill && item
-      ? item.affixes.filter(a => a.type === 'skillDamage'||a.type==='formationDamage'&&['sj_wanjian','sj_formation','evo_wuwo','evo_sixiang'].includes(skillId)).reduce((n,a) => n + a.value / 100, 0) : 0)
+      ? item.affixes.filter(a => a.type === 'skillDamage'||a.type==='formationDamage'&&['sj_wanjian','sj_sancai','sj_formation','evo_wuwo','evo_sixiang'].includes(skillId)).reduce((n,a) => n + a.value / 100, 0) : 0)
   })
-  return multipliedEquipmentBonus(bonuses, passiveDamageBonus(loadout))
+  // 85号：主修流派共鸣只乘一次，只作用于该流派的功法。
+  return multipliedEquipmentBonus(bonuses, passiveDamageBonus(loadout)) * (isSkill ? resonanceDamageFactor(loadout, skillId) : 1)
 }
 export function criticalMultiplier(extraBonuses = []) {
   return 1.5 + extraBonuses.reduce((sum, bonus) => sum + bonus, 0)

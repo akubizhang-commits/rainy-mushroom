@@ -1,0 +1,4086 @@
+{
+  "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/index.html?ruleset=xianxia&tower=1",
+  "status": "FAILED",
+  "selection": {
+    "cases": [
+      "playtest-isolation"
+    ],
+    "sizes": []
+  },
+  "startedAt": "2026-10-28T03:17:10.928Z",
+  "results": [
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "label": "playtest-isolation",
+      "kind": "ISOLATED ASSISTED PLAYTEST — real clock/Run/Store; NOT normal progression or balance evidence",
+      "fixture": null,
+      "checks": [
+        {
+          "name": "实际浏览器clock ×1/×3",
+          "passed": true,
+          "normalSpeed": {
+            "wallSeconds": 1.4055,
+            "simulationSeconds": 1.4333333333333333,
+            "phase": "playing",
+            "speed": 1,
+            "rate": 1.0198031542748724
+          },
+          "tripleSpeed": {
+            "wallSeconds": 1.4107999999970198,
+            "simulationSeconds": 4.15,
+            "phase": "playing",
+            "speed": 3,
+            "rate": 2.9415934221780318
+          },
+          "ratio": 2.884471782468296
+        },
+        {
+          "name": "URL体验直开、刷新工具与暂停快照保留、普通档raw不变",
+          "passed": true
+        },
+        {
+          "name": "无伤与真实满血Boss秒杀抽样，快照校验通过",
+          "passed": true,
+          "bossKills": [
+            {
+              "before": {
+                "id": "a1:f1:w20:f01w20b01u01",
+                "hp": 3800,
+                "maxHp": 3800,
+                "x": 188.6889860449488,
+                "y": 548.9962709426281
+              },
+              "receipt": {
+                "id": "a1:f1:w20:f01w20b01u01",
+                "archetype": "boar_boss",
+                "wave": 20
+              },
+              "timeBefore": 282.73333333333335,
+              "timeAfter": 282.75,
+              "effectiveHitEffects": [
+                {
+                  "id": "fx1251",
+                  "kind": "hit",
+                  "x": 189.80905069275417,
+                  "y": 546.6868915968917,
+                  "radius": 12,
+                  "hostile": false,
+                  "expiresAt": 283,
+                  "damage": 3800
+                }
+              ]
+            }
+          ],
+          "hazardTicks": 805
+        }
+      ],
+      "actions": [
+        "丹鼎阁",
+        "购买一颗 · 20贡献",
+        "服用一颗",
+        "宗门",
+        "体验工具",
+        "进入独立体验档",
+        "游戏速度 ×2",
+        "游戏速度 ×1",
+        "无敌秒杀：关闭",
+        "返回宗门",
+        "锁妖塔",
+        "继续挑战第1层",
+        "暂停",
+        "体验工具",
+        "游戏速度 ×3",
+        "返回战斗",
+        "暂停",
+        "体验工具",
+        "返回战斗",
+        "体验工具",
+        "切回普通档"
+      ],
+      "screenshots": [
+        "ui-390x844-playtest-isolation-normal-tool-entry.png",
+        "ui-390x844-playtest-isolation-triple-clock.png",
+        "ui-390x844-playtest-isolation-reload-tools.png",
+        "ui-390x844-playtest-isolation-boss-sample.png",
+        "ui-390x844-playtest-isolation-FAIL.png"
+      ],
+      "errors": [],
+      "consoleErrors": [],
+      "httpErrors": [],
+      "ok": false,
+      "build": {
+        "scripts": [
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/polyfills.bundle.5adbf.js",
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/system.bundle.cc789.js",
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/import-map.14612.json"
+        ],
+        "growthVersion": null
+      },
+      "assistSample": {
+        "bossKills": [
+          {
+            "before": {
+              "id": "a1:f1:w20:f01w20b01u01",
+              "hp": 3800,
+              "maxHp": 3800,
+              "x": 188.6889860449488,
+              "y": 548.9962709426281
+            },
+            "receipt": {
+              "id": "a1:f1:w20:f01w20b01u01",
+              "archetype": "boar_boss",
+              "wave": 20
+            },
+            "timeBefore": 282.73333333333335,
+            "timeAfter": 282.75,
+            "effectiveHitEffects": [
+              {
+                "id": "fx1251",
+                "kind": "hit",
+                "x": 189.80905069275417,
+                "y": 546.6868915968917,
+                "radius": 12,
+                "hostile": false,
+                "expiresAt": 283,
+                "damage": 3800
+              }
+            ]
+          }
+        ],
+        "hpLoss": [],
+        "hazardTicks": 805,
+        "steps": 16503,
+        "snapshot": {
+          "schema": 1,
+          "attemptId": 1,
+          "floor": 1,
+          "phase": "playing",
+          "training": false,
+          "time": 282.75,
+          "ticks": 16965,
+          "remainder": 0.001399999995,
+          "wave": 20,
+          "waveStartedAt": 278.01666666666665,
+          "waveKilled": 3,
+          "wavePlanned": 9,
+          "nextId": 1253,
+          "player": {
+            "x": 260.51564442925405,
+            "y": 400.9021393485301,
+            "hp": 101,
+            "xp": 496,
+            "maxHp": 101,
+            "attack": 107.06,
+            "moveSpeed": 220,
+            "radius": 18,
+            "faceX": -0.43638882382027727,
+            "faceY": 0.8997581866505884
+          },
+          "enemies": [
+            {
+              "id": "a1:f1:w20:f01w20b02u01",
+              "archetype": "boar_normal",
+              "name": "铁鬃妖猪",
+              "family": "boar",
+              "role": "normal",
+              "rank": 1,
+              "x": -312.2976922549085,
+              "y": 26.880877046101673,
+              "hp": 50,
+              "maxHp": 50,
+              "radius": 26,
+              "damage": 6,
+              "moveSpeed": 154,
+              "woundBudget": 0,
+              "woundUntil": 0,
+              "orbitNextAt": 0,
+              "ai": {
+                "mode": "approach",
+                "attack": null,
+                "readyAt": 279.73333333333335,
+                "graceUntil": 279.73333333333335,
+                "until": 0,
+                "eligibleSince": -1,
+                "sequence": 0,
+                "cooldowns": {},
+                "faceX": 0.837311268044852,
+                "faceY": 0.5467264767734612,
+                "orbitSign": -1,
+                "offset": 3.407917723783685,
+                "phase": 1,
+                "transitionUntil": 0,
+                "transitionPending": false,
+                "entryUntil": 279.73333333333335
+              }
+            },
+            {
+              "id": "a1:f1:w20:f01w20b02u02",
+              "archetype": "boar_normal",
+              "name": "铁鬃妖猪",
+              "family": "boar",
+              "role": "normal",
+              "rank": 1,
+              "x": -433.44816675747126,
+              "y": 18.55701417226755,
+              "hp": 50,
+              "maxHp": 50,
+              "radius": 26,
+              "damage": 6,
+              "moveSpeed": 154,
+              "woundBudget": 0,
+              "woundUntil": 0,
+              "orbitNextAt": 0,
+              "ai": {
+                "mode": "approach",
+                "attack": null,
+                "readyAt": 279.95,
+                "graceUntil": 279.95,
+                "until": 0,
+                "eligibleSince": -1,
+                "sequence": 0,
+                "cooldowns": {},
+                "faceX": 0.8758612469606543,
+                "faceY": 0.48256302808288953,
+                "orbitSign": 1,
+                "offset": 5.672747919692159,
+                "phase": 1,
+                "transitionUntil": 0,
+                "transitionPending": false,
+                "entryUntil": 279.95
+              }
+            }
+          ],
+          "projectiles": [],
+          "zones": [],
+          "drops": [
+            {
+              "id": "h1085",
+              "kind": "heal",
+              "x": -102.92142082518957,
+              "y": -26.748292816055006,
+              "radius": 9,
+              "amount": 10,
+              "expiresAt": 294.95
+            },
+            {
+              "id": "h1127",
+              "kind": "heal",
+              "x": -200.86587352454464,
+              "y": 608.5499237490445,
+              "radius": 9,
+              "amount": 10,
+              "expiresAt": 300.08333333333337
+            },
+            {
+              "id": "h1162",
+              "kind": "heal",
+              "x": 122.33662549145818,
+              "y": 946.8328702521658,
+              "radius": 9,
+              "amount": 10,
+              "expiresAt": 307.15
+            },
+            {
+              "id": "h1230",
+              "kind": "heal",
+              "x": 828,
+              "y": 32,
+              "radius": 9,
+              "amount": 10,
+              "expiresAt": 321.51666666666665
+            },
+            {
+              "id": "d1252",
+              "kind": "resource",
+              "x": 189.80905069275417,
+              "y": 546.6868915968917,
+              "radius": 5,
+              "amount": 30,
+              "expiresAt": 283.25
+            }
+          ],
+          "effects": [
+            {
+              "id": "fx1251",
+              "kind": "hit",
+              "x": 189.80905069275417,
+              "y": 546.6868915968917,
+              "radius": 12,
+              "hostile": false,
+              "expiresAt": 283,
+              "damage": 3800
+            }
+          ],
+          "pending": [
+            {
+              "localId": "f01w20b05u02",
+              "archetype": "boar_normal",
+              "portal": "NW",
+              "at": 0.22,
+              "trigger": "half",
+              "warning": 0.9,
+              "id": "a1:f1:w20:f01w20b05u02",
+              "retryAt": 278.01666666666665,
+              "waitingSince": 278.01666666666665
+            }
+          ],
+          "reserved": [
+            {
+              "localId": "f01w20b05u01",
+              "archetype": "boar_normal",
+              "portal": "NW",
+              "at": 0,
+              "trigger": "half",
+              "warning": 0.9,
+              "id": "a1:f1:w20:f01w20b05u01",
+              "retryAt": 278.01666666666665,
+              "waitingSince": 278.01666666666665,
+              "x": -629,
+              "y": 660,
+              "radius": 26,
+              "readyAt": 283.65
+            },
+            {
+              "localId": "f01w20b06u01",
+              "archetype": "wolf_normal",
+              "portal": "E",
+              "at": 0,
+              "trigger": "half",
+              "warning": 0.9,
+              "id": "a1:f1:w20:f01w20b06u01",
+              "retryAt": 278.01666666666665,
+              "waitingSince": 278.01666666666665,
+              "x": 828,
+              "y": -60,
+              "radius": 22,
+              "readyAt": 283.65
+            },
+            {
+              "localId": "f01w20b07u01",
+              "archetype": "spider_normal",
+              "portal": "NE",
+              "at": 0,
+              "trigger": "half",
+              "warning": 0.9,
+              "id": "a1:f1:w20:f01w20b07u01",
+              "retryAt": 278.01666666666665,
+              "waitingSince": 278.01666666666665,
+              "x": 695,
+              "y": 660,
+              "radius": 24,
+              "readyAt": 283.65
+            }
+          ],
+          "earned": {
+            "xp": 446,
+            "cores": 63,
+            "contribution": 53
+          },
+          "rawKillXp": 446,
+          "normalCoreCounter": 6,
+          "loadout": {
+            "active": {
+              "sj_yujian": 1,
+              "sj_arc": 1,
+              "sj_wanjian": 1
+            },
+            "passive": {},
+            "evolutions": [],
+            "growthVersion": 1,
+            "evolutionLevels": {},
+            "tutorialWaves": 3,
+            "weaponId": "eq_sword_suwen",
+            "weaponQuality": 1,
+            "weaponRefine": 0
+          },
+          "rng": 2674391391,
+          "base": {
+            "xp": 50,
+            "hp": 100.02257295833333,
+            "normalCoreCounter": 0,
+            "tutorialWaves": 0
+          },
+          "input": {
+            "x": -0.43638882382027727,
+            "y": 0.8997581866505884
+          },
+          "cooldowns": {
+            "sj_yujian": 283.3666666666667,
+            "sj_arc": 285.2,
+            "sj_wanjian": 0
+          },
+          "casts": [
+            {
+              "skill": "sj_arc",
+              "level": 1,
+              "x": 265.31592149127715,
+              "y": 391.0047992953737,
+              "targetX": 186.44885674933803,
+              "targetY": 553.6150296341011,
+              "dirX": -0.43638882382027755,
+              "dirY": 0.8997581866505882,
+              "releaseAt": 282.88,
+              "castContext": {
+                "loadout": {
+                  "active": {
+                    "sj_yujian": 1,
+                    "sj_arc": 1,
+                    "sj_wanjian": 1
+                  },
+                  "passive": {},
+                  "evolutions": [],
+                  "growthVersion": 1,
+                  "evolutionLevels": {},
+                  "tutorialWaves": 3,
+                  "weaponId": "eq_sword_suwen",
+                  "weaponQuality": 1,
+                  "weaponRefine": 0
+                },
+                "xp": 466
+              }
+            }
+          ],
+          "killLedger": [
+            {
+              "id": "a1:f1:w1:f01w01b01u03",
+              "archetype": "boar_normal",
+              "wave": 1
+            },
+            {
+              "id": "a1:f1:w1:f01w01b01u01",
+              "archetype": "boar_normal",
+              "wave": 1
+            },
+            {
+              "id": "a1:f1:w1:f01w01b01u04",
+              "archetype": "boar_normal",
+              "wave": 1
+            },
+            {
+              "id": "a1:f1:w1:f01w01b01u02",
+              "archetype": "boar_normal",
+              "wave": 1
+            },
+            {
+              "id": "a1:f1:w1:f01w01b01u05",
+              "archetype": "boar_normal",
+              "wave": 1
+            },
+            {
+              "id": "a1:f1:w1:f01w01b02u01",
+              "archetype": "boar_normal",
+              "wave": 1
+            },
+            {
+              "id": "a1:f1:w1:f01w01b02u02",
+              "archetype": "boar_normal",
+              "wave": 1
+            },
+            {
+              "id": "a1:f1:w1:f01w01b02u05",
+              "archetype": "boar_normal",
+              "wave": 1
+            },
+            {
+              "id": "a1:f1:w1:f01w01b02u03",
+              "archetype": "boar_normal",
+              "wave": 1
+            },
+            {
+              "id": "a1:f1:w1:f01w01b02u04",
+              "archetype": "boar_normal",
+              "wave": 1
+            },
+            {
+              "id": "a1:f1:w2:f01w02b01u01",
+              "archetype": "wolf_normal",
+              "wave": 2
+            },
+            {
+              "id": "a1:f1:w2:f01w02b01u02",
+              "archetype": "wolf_normal",
+              "wave": 2
+            },
+            {
+              "id": "a1:f1:w2:f01w02b01u04",
+              "archetype": "wolf_normal",
+              "wave": 2
+            },
+            {
+              "id": "a1:f1:w2:f01w02b01u03",
+              "archetype": "wolf_normal",
+              "wave": 2
+            },
+            {
+              "id": "a1:f1:w2:f01w02b01u05",
+              "archetype": "wolf_normal",
+              "wave": 2
+            },
+            {
+              "id": "a1:f1:w2:f01w02b01u06",
+              "archetype": "wolf_normal",
+              "wave": 2
+            },
+            {
+              "id": "a1:f1:w2:f01w02b02u02",
+              "archetype": "wolf_normal",
+              "wave": 2
+            },
+            {
+              "id": "a1:f1:w2:f01w02b02u01",
+              "archetype": "wolf_normal",
+              "wave": 2
+            },
+            {
+              "id": "a1:f1:w2:f01w02b02u03",
+              "archetype": "wolf_normal",
+              "wave": 2
+            },
+            {
+              "id": "a1:f1:w2:f01w02b02u04",
+              "archetype": "wolf_normal",
+              "wave": 2
+            },
+            {
+              "id": "a1:f1:w2:f01w02b02u05",
+              "archetype": "wolf_normal",
+              "wave": 2
+            },
+            {
+              "id": "a1:f1:w2:f01w02b02u06",
+              "archetype": "wolf_normal",
+              "wave": 2
+            },
+            {
+              "id": "a1:f1:w3:f01w03b01u02",
+              "archetype": "spider_normal",
+              "wave": 3
+            },
+            {
+              "id": "a1:f1:w3:f01w03b01u01",
+              "archetype": "spider_normal",
+              "wave": 3
+            },
+            {
+              "id": "a1:f1:w3:f01w03b01u03",
+              "archetype": "spider_normal",
+              "wave": 3
+            },
+            {
+              "id": "a1:f1:w3:f01w03b01u04",
+              "archetype": "spider_normal",
+              "wave": 3
+            },
+            {
+              "id": "a1:f1:w3:f01w03b01u06",
+              "archetype": "spider_normal",
+              "wave": 3
+            },
+            {
+              "id": "a1:f1:w3:f01w03b01u05",
+              "archetype": "spider_normal",
+              "wave": 3
+            },
+            {
+              "id": "a1:f1:w3:f01w03b02u01",
+              "archetype": "spider_normal",
+              "wave": 3
+            },
+            {
+              "id": "a1:f1:w3:f01w03b02u02",
+              "archetype": "spider_normal",
+              "wave": 3
+            },
+            {
+              "id": "a1:f1:w3:f01w03b02u03",
+              "archetype": "spider_normal",
+              "wave": 3
+            },
+            {
+              "id": "a1:f1:w3:f01w03b02u04",
+              "archetype": "spider_normal",
+              "wave": 3
+            },
+            {
+              "id": "a1:f1:w3:f01w03b02u06",
+              "archetype": "spider_normal",
+              "wave": 3
+            },
+            {
+              "id": "a1:f1:w3:f01w03b02u05",
+              "archetype": "spider_normal",
+              "wave": 3
+            },
+            {
+              "id": "a1:f1:w3:f01w03b02u07",
+              "archetype": "spider_normal",
+              "wave": 3
+            },
+            {
+              "id": "a1:f1:w3:f01w03b01u07",
+              "archetype": "spider_normal",
+              "wave": 3
+            },
+            {
+              "id": "a1:f1:w4:f01w04b01u03",
+              "archetype": "boar_normal",
+              "wave": 4
+            },
+            {
+              "id": "a1:f1:w4:f01w04b01u01",
+              "archetype": "boar_normal",
+              "wave": 4
+            },
+            {
+              "id": "a1:f1:w4:f01w04b01u04",
+              "archetype": "boar_normal",
+              "wave": 4
+            },
+            {
+              "id": "a1:f1:w4:f01w04b01u02",
+              "archetype": "boar_normal",
+              "wave": 4
+            },
+            {
+              "id": "a1:f1:w4:f01w04b01u05",
+              "archetype": "boar_normal",
+              "wave": 4
+            },
+            {
+              "id": "a1:f1:w4:f01w04b02u01",
+              "archetype": "wolf_normal",
+              "wave": 4
+            },
+            {
+              "id": "a1:f1:w4:f01w04b02u02",
+              "archetype": "wolf_normal",
+              "wave": 4
+            },
+            {
+              "id": "a1:f1:w4:f01w04b02u04",
+              "archetype": "wolf_normal",
+              "wave": 4
+            },
+            {
+              "id": "a1:f1:w4:f01w04b02u03",
+              "archetype": "wolf_normal",
+              "wave": 4
+            },
+            {
+              "id": "a1:f1:w4:f01w04b02u05",
+              "archetype": "wolf_normal",
+              "wave": 4
+            },
+            {
+              "id": "a1:f1:w4:f01w04b02u07",
+              "archetype": "wolf_normal",
+              "wave": 4
+            },
+            {
+              "id": "a1:f1:w4:f01w04b02u06",
+              "archetype": "wolf_normal",
+              "wave": 4
+            },
+            {
+              "id": "a1:f1:w4:f01w04b03u03",
+              "archetype": "boar_normal",
+              "wave": 4
+            },
+            {
+              "id": "a1:f1:w4:f01w04b03u01",
+              "archetype": "boar_normal",
+              "wave": 4
+            },
+            {
+              "id": "a1:f1:w4:f01w04b03u02",
+              "archetype": "boar_normal",
+              "wave": 4
+            },
+            {
+              "id": "a1:f1:w4:f01w04b03u04",
+              "archetype": "boar_normal",
+              "wave": 4
+            },
+            {
+              "id": "a1:f1:w5:f01w05b01u01",
+              "archetype": "boar_elite",
+              "wave": 5
+            },
+            {
+              "id": "a1:f1:w5:f01w05b02u01",
+              "archetype": "boar_normal",
+              "wave": 5
+            },
+            {
+              "id": "a1:f1:w5:f01w05b02u03",
+              "archetype": "boar_normal",
+              "wave": 5
+            },
+            {
+              "id": "a1:f1:w5:f01w05b02u02",
+              "archetype": "boar_normal",
+              "wave": 5
+            },
+            {
+              "id": "a1:f1:w5:f01w05b03u02",
+              "archetype": "spider_normal",
+              "wave": 5
+            },
+            {
+              "id": "a1:f1:w5:f01w05b03u01",
+              "archetype": "spider_normal",
+              "wave": 5
+            },
+            {
+              "id": "a1:f1:w5:f01w05b03u04",
+              "archetype": "spider_normal",
+              "wave": 5
+            },
+            {
+              "id": "a1:f1:w5:f01w05b03u03",
+              "archetype": "spider_normal",
+              "wave": 5
+            },
+            {
+              "id": "a1:f1:w5:f01w05b04u03",
+              "archetype": "boar_normal",
+              "wave": 5
+            },
+            {
+              "id": "a1:f1:w5:f01w05b04u01",
+              "archetype": "boar_normal",
+              "wave": 5
+            },
+            {
+              "id": "a1:f1:w5:f01w05b04u02",
+              "archetype": "boar_normal",
+              "wave": 5
+            },
+            {
+              "id": "a1:f1:w6:f01w06b01u03",
+              "archetype": "boar_normal",
+              "wave": 6
+            },
+            {
+              "id": "a1:f1:w6:f01w06b01u01",
+              "archetype": "boar_normal",
+              "wave": 6
+            },
+            {
+              "id": "a1:f1:w6:f01w06b01u04",
+              "archetype": "boar_normal",
+              "wave": 6
+            },
+            {
+              "id": "a1:f1:w6:f01w06b01u02",
+              "archetype": "boar_normal",
+              "wave": 6
+            },
+            {
+              "id": "a1:f1:w6:f01w06b01u05",
+              "archetype": "boar_normal",
+              "wave": 6
+            },
+            {
+              "id": "a1:f1:w6:f01w06b02u02",
+              "archetype": "wolf_normal",
+              "wave": 6
+            },
+            {
+              "id": "a1:f1:w6:f01w06b02u01",
+              "archetype": "wolf_normal",
+              "wave": 6
+            },
+            {
+              "id": "a1:f1:w6:f01w06b02u04",
+              "archetype": "wolf_normal",
+              "wave": 6
+            },
+            {
+              "id": "a1:f1:w6:f01w06b02u03",
+              "archetype": "wolf_normal",
+              "wave": 6
+            },
+            {
+              "id": "a1:f1:w6:f01w06b03u03",
+              "archetype": "boar_normal",
+              "wave": 6
+            },
+            {
+              "id": "a1:f1:w6:f01w06b03u01",
+              "archetype": "boar_normal",
+              "wave": 6
+            },
+            {
+              "id": "a1:f1:w6:f01w06b03u02",
+              "archetype": "boar_normal",
+              "wave": 6
+            },
+            {
+              "id": "a1:f1:w6:f01w06b03u04",
+              "archetype": "boar_normal",
+              "wave": 6
+            },
+            {
+              "id": "a1:f1:w6:f01w06b04u02",
+              "archetype": "wolf_normal",
+              "wave": 6
+            },
+            {
+              "id": "a1:f1:w6:f01w06b04u01",
+              "archetype": "wolf_normal",
+              "wave": 6
+            },
+            {
+              "id": "a1:f1:w6:f01w06b04u03",
+              "archetype": "wolf_normal",
+              "wave": 6
+            },
+            {
+              "id": "a1:f1:w7:f01w07b01u02",
+              "archetype": "boar_normal",
+              "wave": 7
+            },
+            {
+              "id": "a1:f1:w7:f01w07b01u01",
+              "archetype": "boar_normal",
+              "wave": 7
+            },
+            {
+              "id": "a1:f1:w7:f01w07b01u04",
+              "archetype": "boar_normal",
+              "wave": 7
+            },
+            {
+              "id": "a1:f1:w7:f01w07b01u03",
+              "archetype": "boar_normal",
+              "wave": 7
+            },
+            {
+              "id": "a1:f1:w7:f01w07b01u05",
+              "archetype": "boar_normal",
+              "wave": 7
+            },
+            {
+              "id": "a1:f1:w7:f01w07b02u01",
+              "archetype": "spider_normal",
+              "wave": 7
+            },
+            {
+              "id": "a1:f1:w7:f01w07b02u04",
+              "archetype": "spider_normal",
+              "wave": 7
+            },
+            {
+              "id": "a1:f1:w7:f01w07b02u03",
+              "archetype": "spider_normal",
+              "wave": 7
+            },
+            {
+              "id": "a1:f1:w7:f01w07b02u02",
+              "archetype": "spider_normal",
+              "wave": 7
+            },
+            {
+              "id": "a1:f1:w7:f01w07b03u02",
+              "archetype": "boar_normal",
+              "wave": 7
+            },
+            {
+              "id": "a1:f1:w7:f01w07b03u01",
+              "archetype": "boar_normal",
+              "wave": 7
+            },
+            {
+              "id": "a1:f1:w7:f01w07b03u03",
+              "archetype": "boar_normal",
+              "wave": 7
+            },
+            {
+              "id": "a1:f1:w7:f01w07b03u04",
+              "archetype": "boar_normal",
+              "wave": 7
+            },
+            {
+              "id": "a1:f1:w7:f01w07b03u05",
+              "archetype": "boar_normal",
+              "wave": 7
+            },
+            {
+              "id": "a1:f1:w7:f01w07b04u03",
+              "archetype": "spider_normal",
+              "wave": 7
+            },
+            {
+              "id": "a1:f1:w7:f01w07b04u01",
+              "archetype": "spider_normal",
+              "wave": 7
+            },
+            {
+              "id": "a1:f1:w7:f01w07b04u04",
+              "archetype": "spider_normal",
+              "wave": 7
+            },
+            {
+              "id": "a1:f1:w7:f01w07b04u02",
+              "archetype": "spider_normal",
+              "wave": 7
+            },
+            {
+              "id": "a1:f1:w8:f01w08b01u03",
+              "archetype": "boar_normal",
+              "wave": 8
+            },
+            {
+              "id": "a1:f1:w8:f01w08b01u01",
+              "archetype": "boar_normal",
+              "wave": 8
+            },
+            {
+              "id": "a1:f1:w8:f01w08b01u02",
+              "archetype": "boar_normal",
+              "wave": 8
+            },
+            {
+              "id": "a1:f1:w8:f01w08b01u04",
+              "archetype": "boar_normal",
+              "wave": 8
+            },
+            {
+              "id": "a1:f1:w8:f01w08b01u06",
+              "archetype": "boar_normal",
+              "wave": 8
+            },
+            {
+              "id": "a1:f1:w8:f01w08b01u05",
+              "archetype": "boar_normal",
+              "wave": 8
+            },
+            {
+              "id": "a1:f1:w8:f01w08b02u02",
+              "archetype": "wolf_normal",
+              "wave": 8
+            },
+            {
+              "id": "a1:f1:w8:f01w08b02u01",
+              "archetype": "wolf_normal",
+              "wave": 8
+            },
+            {
+              "id": "a1:f1:w8:f01w08b02u03",
+              "archetype": "wolf_normal",
+              "wave": 8
+            },
+            {
+              "id": "a1:f1:w8:f01w08b02u04",
+              "archetype": "wolf_normal",
+              "wave": 8
+            },
+            {
+              "id": "a1:f1:w8:f01w08b03u01",
+              "archetype": "boar_normal",
+              "wave": 8
+            },
+            {
+              "id": "a1:f1:w8:f01w08b03u04",
+              "archetype": "boar_normal",
+              "wave": 8
+            },
+            {
+              "id": "a1:f1:w8:f01w08b03u03",
+              "archetype": "boar_normal",
+              "wave": 8
+            },
+            {
+              "id": "a1:f1:w8:f01w08b03u02",
+              "archetype": "boar_normal",
+              "wave": 8
+            },
+            {
+              "id": "a1:f1:w8:f01w08b03u05",
+              "archetype": "boar_normal",
+              "wave": 8
+            },
+            {
+              "id": "a1:f1:w8:f01w08b03u06",
+              "archetype": "boar_normal",
+              "wave": 8
+            },
+            {
+              "id": "a1:f1:w8:f01w08b04u02",
+              "archetype": "wolf_normal",
+              "wave": 8
+            },
+            {
+              "id": "a1:f1:w8:f01w08b04u01",
+              "archetype": "wolf_normal",
+              "wave": 8
+            },
+            {
+              "id": "a1:f1:w8:f01w08b04u03",
+              "archetype": "wolf_normal",
+              "wave": 8
+            },
+            {
+              "id": "a1:f1:w8:f01w08b04u04",
+              "archetype": "wolf_normal",
+              "wave": 8
+            },
+            {
+              "id": "a1:f1:w9:f01w09b01u03",
+              "archetype": "boar_normal",
+              "wave": 9
+            },
+            {
+              "id": "a1:f1:w9:f01w09b01u01",
+              "archetype": "boar_normal",
+              "wave": 9
+            },
+            {
+              "id": "a1:f1:w9:f01w09b01u04",
+              "archetype": "boar_normal",
+              "wave": 9
+            },
+            {
+              "id": "a1:f1:w9:f01w09b01u02",
+              "archetype": "boar_normal",
+              "wave": 9
+            },
+            {
+              "id": "a1:f1:w9:f01w09b01u05",
+              "archetype": "boar_normal",
+              "wave": 9
+            },
+            {
+              "id": "a1:f1:w9:f01w09b01u07",
+              "archetype": "boar_normal",
+              "wave": 9
+            },
+            {
+              "id": "a1:f1:w9:f01w09b01u06",
+              "archetype": "boar_normal",
+              "wave": 9
+            },
+            {
+              "id": "a1:f1:w9:f01w09b02u02",
+              "archetype": "spider_normal",
+              "wave": 9
+            },
+            {
+              "id": "a1:f1:w9:f01w09b02u01",
+              "archetype": "spider_normal",
+              "wave": 9
+            },
+            {
+              "id": "a1:f1:w9:f01w09b02u04",
+              "archetype": "spider_normal",
+              "wave": 9
+            },
+            {
+              "id": "a1:f1:w9:f01w09b02u05",
+              "archetype": "spider_normal",
+              "wave": 9
+            },
+            {
+              "id": "a1:f1:w9:f01w09b02u03",
+              "archetype": "spider_normal",
+              "wave": 9
+            },
+            {
+              "id": "a1:f1:w9:f01w09b03u03",
+              "archetype": "boar_normal",
+              "wave": 9
+            },
+            {
+              "id": "a1:f1:w9:f01w09b03u01",
+              "archetype": "boar_normal",
+              "wave": 9
+            },
+            {
+              "id": "a1:f1:w9:f01w09b03u02",
+              "archetype": "boar_normal",
+              "wave": 9
+            },
+            {
+              "id": "a1:f1:w9:f01w09b03u04",
+              "archetype": "boar_normal",
+              "wave": 9
+            },
+            {
+              "id": "a1:f1:w9:f01w09b03u06",
+              "archetype": "boar_normal",
+              "wave": 9
+            },
+            {
+              "id": "a1:f1:w9:f01w09b03u05",
+              "archetype": "boar_normal",
+              "wave": 9
+            },
+            {
+              "id": "a1:f1:w9:f01w09b04u02",
+              "archetype": "spider_normal",
+              "wave": 9
+            },
+            {
+              "id": "a1:f1:w9:f01w09b04u01",
+              "archetype": "spider_normal",
+              "wave": 9
+            },
+            {
+              "id": "a1:f1:w9:f01w09b04u04",
+              "archetype": "spider_normal",
+              "wave": 9
+            },
+            {
+              "id": "a1:f1:w9:f01w09b04u03",
+              "archetype": "spider_normal",
+              "wave": 9
+            },
+            {
+              "id": "a1:f1:w10:f01w10b01u01",
+              "archetype": "wolf_elite",
+              "wave": 10
+            },
+            {
+              "id": "a1:f1:w10:f01w10b02u03",
+              "archetype": "boar_normal",
+              "wave": 10
+            },
+            {
+              "id": "a1:f1:w10:f01w10b02u01",
+              "archetype": "boar_normal",
+              "wave": 10
+            },
+            {
+              "id": "a1:f1:w10:f01w10b02u02",
+              "archetype": "boar_normal",
+              "wave": 10
+            },
+            {
+              "id": "a1:f1:w10:f01w10b02u04",
+              "archetype": "boar_normal",
+              "wave": 10
+            },
+            {
+              "id": "a1:f1:w10:f01w10b03u02",
+              "archetype": "wolf_normal",
+              "wave": 10
+            },
+            {
+              "id": "a1:f1:w10:f01w10b03u01",
+              "archetype": "wolf_normal",
+              "wave": 10
+            },
+            {
+              "id": "a1:f1:w10:f01w10b03u04",
+              "archetype": "wolf_normal",
+              "wave": 10
+            },
+            {
+              "id": "a1:f1:w10:f01w10b03u03",
+              "archetype": "wolf_normal",
+              "wave": 10
+            },
+            {
+              "id": "a1:f1:w10:f01w10b03u05",
+              "archetype": "wolf_normal",
+              "wave": 10
+            },
+            {
+              "id": "a1:f1:w10:f01w10b04u01",
+              "archetype": "wolf_elite",
+              "wave": 10
+            },
+            {
+              "id": "a1:f1:w10:f01w10b05u03",
+              "archetype": "boar_normal",
+              "wave": 10
+            },
+            {
+              "id": "a1:f1:w10:f01w10b05u01",
+              "archetype": "boar_normal",
+              "wave": 10
+            },
+            {
+              "id": "a1:f1:w10:f01w10b05u02",
+              "archetype": "boar_normal",
+              "wave": 10
+            },
+            {
+              "id": "a1:f1:w11:f01w11b01u01",
+              "archetype": "boar_normal",
+              "wave": 11
+            },
+            {
+              "id": "a1:f1:w11:f01w11b01u03",
+              "archetype": "boar_normal",
+              "wave": 11
+            },
+            {
+              "id": "a1:f1:w11:f01w11b01u02",
+              "archetype": "boar_normal",
+              "wave": 11
+            },
+            {
+              "id": "a1:f1:w11:f01w11b01u04",
+              "archetype": "boar_normal",
+              "wave": 11
+            },
+            {
+              "id": "a1:f1:w11:f01w11b01u05",
+              "archetype": "boar_normal",
+              "wave": 11
+            },
+            {
+              "id": "a1:f1:w11:f01w11b02u02",
+              "archetype": "spider_normal",
+              "wave": 11
+            },
+            {
+              "id": "a1:f1:w11:f01w11b02u01",
+              "archetype": "spider_normal",
+              "wave": 11
+            },
+            {
+              "id": "a1:f1:w11:f01w11b02u04",
+              "archetype": "spider_normal",
+              "wave": 11
+            },
+            {
+              "id": "a1:f1:w11:f01w11b02u03",
+              "archetype": "spider_normal",
+              "wave": 11
+            },
+            {
+              "id": "a1:f1:w11:f01w11b02u05",
+              "archetype": "spider_normal",
+              "wave": 11
+            },
+            {
+              "id": "a1:f1:w11:f01w11b02u06",
+              "archetype": "spider_normal",
+              "wave": 11
+            },
+            {
+              "id": "a1:f1:w11:f01w11b03u02",
+              "archetype": "wolf_normal",
+              "wave": 11
+            },
+            {
+              "id": "a1:f1:w11:f01w11b03u01",
+              "archetype": "wolf_normal",
+              "wave": 11
+            },
+            {
+              "id": "a1:f1:w11:f01w11b03u03",
+              "archetype": "wolf_normal",
+              "wave": 11
+            },
+            {
+              "id": "a1:f1:w11:f01w11b03u04",
+              "archetype": "wolf_normal",
+              "wave": 11
+            },
+            {
+              "id": "a1:f1:w11:f01w11b04u03",
+              "archetype": "boar_normal",
+              "wave": 11
+            },
+            {
+              "id": "a1:f1:w11:f01w11b04u01",
+              "archetype": "boar_normal",
+              "wave": 11
+            },
+            {
+              "id": "a1:f1:w11:f01w11b04u04",
+              "archetype": "boar_normal",
+              "wave": 11
+            },
+            {
+              "id": "a1:f1:w11:f01w11b04u02",
+              "archetype": "boar_normal",
+              "wave": 11
+            },
+            {
+              "id": "a1:f1:w11:f01w11b04u05",
+              "archetype": "boar_normal",
+              "wave": 11
+            },
+            {
+              "id": "a1:f1:w12:f01w12b01u02",
+              "archetype": "boar_normal",
+              "wave": 12
+            },
+            {
+              "id": "a1:f1:w12:f01w12b01u01",
+              "archetype": "boar_normal",
+              "wave": 12
+            },
+            {
+              "id": "a1:f1:w12:f01w12b01u05",
+              "archetype": "boar_normal",
+              "wave": 12
+            },
+            {
+              "id": "a1:f1:w12:f01w12b01u03",
+              "archetype": "boar_normal",
+              "wave": 12
+            },
+            {
+              "id": "a1:f1:w12:f01w12b01u06",
+              "archetype": "boar_normal",
+              "wave": 12
+            },
+            {
+              "id": "a1:f1:w12:f01w12b01u04",
+              "archetype": "boar_normal",
+              "wave": 12
+            },
+            {
+              "id": "a1:f1:w12:f01w12b02u02",
+              "archetype": "wolf_normal",
+              "wave": 12
+            },
+            {
+              "id": "a1:f1:w12:f01w12b02u01",
+              "archetype": "wolf_normal",
+              "wave": 12
+            },
+            {
+              "id": "a1:f1:w12:f01w12b02u03",
+              "archetype": "wolf_normal",
+              "wave": 12
+            },
+            {
+              "id": "a1:f1:w12:f01w12b02u06",
+              "archetype": "wolf_normal",
+              "wave": 12
+            },
+            {
+              "id": "a1:f1:w12:f01w12b02u04",
+              "archetype": "wolf_normal",
+              "wave": 12
+            },
+            {
+              "id": "a1:f1:w12:f01w12b02u05",
+              "archetype": "wolf_normal",
+              "wave": 12
+            },
+            {
+              "id": "a1:f1:w12:f01w12b04u01",
+              "archetype": "boar_normal",
+              "wave": 12
+            },
+            {
+              "id": "a1:f1:w12:f01w12b04u03",
+              "archetype": "boar_normal",
+              "wave": 12
+            },
+            {
+              "id": "a1:f1:w12:f01w12b04u02",
+              "archetype": "boar_normal",
+              "wave": 12
+            },
+            {
+              "id": "a1:f1:w12:f01w12b04u05",
+              "archetype": "boar_normal",
+              "wave": 12
+            },
+            {
+              "id": "a1:f1:w12:f01w12b03u01",
+              "archetype": "spider_normal",
+              "wave": 12
+            },
+            {
+              "id": "a1:f1:w12:f01w12b03u02",
+              "archetype": "spider_normal",
+              "wave": 12
+            },
+            {
+              "id": "a1:f1:w12:f01w12b03u03",
+              "archetype": "spider_normal",
+              "wave": 12
+            },
+            {
+              "id": "a1:f1:w12:f01w12b03u04",
+              "archetype": "spider_normal",
+              "wave": 12
+            },
+            {
+              "id": "a1:f1:w12:f01w12b03u05",
+              "archetype": "spider_normal",
+              "wave": 12
+            },
+            {
+              "id": "a1:f1:w12:f01w12b04u04",
+              "archetype": "boar_normal",
+              "wave": 12
+            },
+            {
+              "id": "a1:f1:w13:f01w13b01u01",
+              "archetype": "boar_normal",
+              "wave": 13
+            },
+            {
+              "id": "a1:f1:w13:f01w13b01u03",
+              "archetype": "boar_normal",
+              "wave": 13
+            },
+            {
+              "id": "a1:f1:w13:f01w13b01u04",
+              "archetype": "boar_normal",
+              "wave": 13
+            },
+            {
+              "id": "a1:f1:w13:f01w13b01u02",
+              "archetype": "boar_normal",
+              "wave": 13
+            },
+            {
+              "id": "a1:f1:w13:f01w13b01u05",
+              "archetype": "boar_normal",
+              "wave": 13
+            },
+            {
+              "id": "a1:f1:w13:f01w13b01u06",
+              "archetype": "boar_normal",
+              "wave": 13
+            },
+            {
+              "id": "a1:f1:w13:f01w13b02u01",
+              "archetype": "spider_normal",
+              "wave": 13
+            },
+            {
+              "id": "a1:f1:w13:f01w13b02u02",
+              "archetype": "spider_normal",
+              "wave": 13
+            },
+            {
+              "id": "a1:f1:w13:f01w13b02u03",
+              "archetype": "spider_normal",
+              "wave": 13
+            },
+            {
+              "id": "a1:f1:w13:f01w13b02u04",
+              "archetype": "spider_normal",
+              "wave": 13
+            },
+            {
+              "id": "a1:f1:w13:f01w13b02u06",
+              "archetype": "spider_normal",
+              "wave": 13
+            },
+            {
+              "id": "a1:f1:w13:f01w13b02u07",
+              "archetype": "spider_normal",
+              "wave": 13
+            },
+            {
+              "id": "a1:f1:w13:f01w13b02u05",
+              "archetype": "spider_normal",
+              "wave": 13
+            },
+            {
+              "id": "a1:f1:w13:f01w13b03u01",
+              "archetype": "wolf_normal",
+              "wave": 13
+            },
+            {
+              "id": "a1:f1:w13:f01w13b03u02",
+              "archetype": "wolf_normal",
+              "wave": 13
+            },
+            {
+              "id": "a1:f1:w13:f01w13b03u04",
+              "archetype": "wolf_normal",
+              "wave": 13
+            },
+            {
+              "id": "a1:f1:w13:f01w13b03u03",
+              "archetype": "wolf_normal",
+              "wave": 13
+            },
+            {
+              "id": "a1:f1:w13:f01w13b03u05",
+              "archetype": "wolf_normal",
+              "wave": 13
+            },
+            {
+              "id": "a1:f1:w13:f01w13b04u01",
+              "archetype": "boar_normal",
+              "wave": 13
+            },
+            {
+              "id": "a1:f1:w13:f01w13b04u04",
+              "archetype": "boar_normal",
+              "wave": 13
+            },
+            {
+              "id": "a1:f1:w13:f01w13b04u02",
+              "archetype": "boar_normal",
+              "wave": 13
+            },
+            {
+              "id": "a1:f1:w13:f01w13b04u03",
+              "archetype": "boar_normal",
+              "wave": 13
+            },
+            {
+              "id": "a1:f1:w13:f01w13b04u05",
+              "archetype": "boar_normal",
+              "wave": 13
+            },
+            {
+              "id": "a1:f1:w13:f01w13b04u06",
+              "archetype": "boar_normal",
+              "wave": 13
+            },
+            {
+              "id": "a1:f1:w14:f01w14b01u03",
+              "archetype": "boar_normal",
+              "wave": 14
+            },
+            {
+              "id": "a1:f1:w14:f01w14b01u01",
+              "archetype": "boar_normal",
+              "wave": 14
+            },
+            {
+              "id": "a1:f1:w14:f01w14b01u02",
+              "archetype": "boar_normal",
+              "wave": 14
+            },
+            {
+              "id": "a1:f1:w14:f01w14b01u04",
+              "archetype": "boar_normal",
+              "wave": 14
+            },
+            {
+              "id": "a1:f1:w14:f01w14b01u06",
+              "archetype": "boar_normal",
+              "wave": 14
+            },
+            {
+              "id": "a1:f1:w14:f01w14b01u07",
+              "archetype": "boar_normal",
+              "wave": 14
+            },
+            {
+              "id": "a1:f1:w14:f01w14b01u05",
+              "archetype": "boar_normal",
+              "wave": 14
+            },
+            {
+              "id": "a1:f1:w14:f01w14b02u02",
+              "archetype": "wolf_normal",
+              "wave": 14
+            },
+            {
+              "id": "a1:f1:w14:f01w14b02u01",
+              "archetype": "wolf_normal",
+              "wave": 14
+            },
+            {
+              "id": "a1:f1:w14:f01w14b02u04",
+              "archetype": "wolf_normal",
+              "wave": 14
+            },
+            {
+              "id": "a1:f1:w14:f01w14b02u03",
+              "archetype": "wolf_normal",
+              "wave": 14
+            },
+            {
+              "id": "a1:f1:w14:f01w14b02u05",
+              "archetype": "wolf_normal",
+              "wave": 14
+            },
+            {
+              "id": "a1:f1:w14:f01w14b02u07",
+              "archetype": "wolf_normal",
+              "wave": 14
+            },
+            {
+              "id": "a1:f1:w14:f01w14b02u06",
+              "archetype": "wolf_normal",
+              "wave": 14
+            },
+            {
+              "id": "a1:f1:w14:f01w14b03u02",
+              "archetype": "spider_normal",
+              "wave": 14
+            },
+            {
+              "id": "a1:f1:w14:f01w14b03u01",
+              "archetype": "spider_normal",
+              "wave": 14
+            },
+            {
+              "id": "a1:f1:w14:f01w14b03u03",
+              "archetype": "spider_normal",
+              "wave": 14
+            },
+            {
+              "id": "a1:f1:w14:f01w14b03u04",
+              "archetype": "spider_normal",
+              "wave": 14
+            },
+            {
+              "id": "a1:f1:w14:f01w14b03u06",
+              "archetype": "spider_normal",
+              "wave": 14
+            },
+            {
+              "id": "a1:f1:w14:f01w14b03u05",
+              "archetype": "spider_normal",
+              "wave": 14
+            },
+            {
+              "id": "a1:f1:w14:f01w14b04u03",
+              "archetype": "boar_normal",
+              "wave": 14
+            },
+            {
+              "id": "a1:f1:w14:f01w14b04u01",
+              "archetype": "boar_normal",
+              "wave": 14
+            },
+            {
+              "id": "a1:f1:w14:f01w14b04u02",
+              "archetype": "boar_normal",
+              "wave": 14
+            },
+            {
+              "id": "a1:f1:w14:f01w14b04u04",
+              "archetype": "boar_normal",
+              "wave": 14
+            },
+            {
+              "id": "a1:f1:w14:f01w14b04u06",
+              "archetype": "boar_normal",
+              "wave": 14
+            },
+            {
+              "id": "a1:f1:w14:f01w14b04u05",
+              "archetype": "boar_normal",
+              "wave": 14
+            },
+            {
+              "id": "a1:f1:w15:f01w15b01u01",
+              "archetype": "spider_elite",
+              "wave": 15
+            },
+            {
+              "id": "a1:f1:w15:f01w15b02u01",
+              "archetype": "boar_normal",
+              "wave": 15
+            },
+            {
+              "id": "a1:f1:w15:f01w15b02u02",
+              "archetype": "boar_normal",
+              "wave": 15
+            },
+            {
+              "id": "a1:f1:w15:f01w15b02u04",
+              "archetype": "boar_normal",
+              "wave": 15
+            },
+            {
+              "id": "a1:f1:w15:f01w15b02u03",
+              "archetype": "boar_normal",
+              "wave": 15
+            },
+            {
+              "id": "a1:f1:w15:f01w15b03u01",
+              "archetype": "spider_normal",
+              "wave": 15
+            },
+            {
+              "id": "a1:f1:w15:f01w15b03u03",
+              "archetype": "spider_normal",
+              "wave": 15
+            },
+            {
+              "id": "a1:f1:w15:f01w15b03u02",
+              "archetype": "spider_normal",
+              "wave": 15
+            },
+            {
+              "id": "a1:f1:w15:f01w15b03u04",
+              "archetype": "spider_normal",
+              "wave": 15
+            },
+            {
+              "id": "a1:f1:w15:f01w15b04u01",
+              "archetype": "spider_elite",
+              "wave": 15
+            },
+            {
+              "id": "a1:f1:w15:f01w15b06u03",
+              "archetype": "boar_normal",
+              "wave": 15
+            },
+            {
+              "id": "a1:f1:w15:f01w15b06u01",
+              "archetype": "boar_normal",
+              "wave": 15
+            },
+            {
+              "id": "a1:f1:w15:f01w15b06u02",
+              "archetype": "boar_normal",
+              "wave": 15
+            },
+            {
+              "id": "a1:f1:w15:f01w15b05u02",
+              "archetype": "wolf_normal",
+              "wave": 15
+            },
+            {
+              "id": "a1:f1:w15:f01w15b05u01",
+              "archetype": "wolf_normal",
+              "wave": 15
+            },
+            {
+              "id": "a1:f1:w15:f01w15b05u03",
+              "archetype": "wolf_normal",
+              "wave": 15
+            },
+            {
+              "id": "a1:f1:w16:f01w16b01u01",
+              "archetype": "boar_normal",
+              "wave": 16
+            },
+            {
+              "id": "a1:f1:w16:f01w16b02u01",
+              "archetype": "wolf_normal",
+              "wave": 16
+            },
+            {
+              "id": "a1:f1:w16:f01w16b02u04",
+              "archetype": "wolf_normal",
+              "wave": 16
+            },
+            {
+              "id": "a1:f1:w16:f01w16b02u02",
+              "archetype": "wolf_normal",
+              "wave": 16
+            },
+            {
+              "id": "a1:f1:w16:f01w16b02u03",
+              "archetype": "wolf_normal",
+              "wave": 16
+            },
+            {
+              "id": "a1:f1:w16:f01w16b02u05",
+              "archetype": "wolf_normal",
+              "wave": 16
+            },
+            {
+              "id": "a1:f1:w16:f01w16b02u07",
+              "archetype": "wolf_normal",
+              "wave": 16
+            },
+            {
+              "id": "a1:f1:w16:f01w16b02u06",
+              "archetype": "wolf_normal",
+              "wave": 16
+            },
+            {
+              "id": "a1:f1:w16:f01w16b01u06",
+              "archetype": "boar_normal",
+              "wave": 16
+            },
+            {
+              "id": "a1:f1:w16:f01w16b01u04",
+              "archetype": "boar_normal",
+              "wave": 16
+            },
+            {
+              "id": "a1:f1:w16:f01w16b01u02",
+              "archetype": "boar_normal",
+              "wave": 16
+            },
+            {
+              "id": "a1:f1:w16:f01w16b01u03",
+              "archetype": "boar_normal",
+              "wave": 16
+            },
+            {
+              "id": "a1:f1:w16:f01w16b01u05",
+              "archetype": "boar_normal",
+              "wave": 16
+            },
+            {
+              "id": "a1:f1:w16:f01w16b03u01",
+              "archetype": "spider_normal",
+              "wave": 16
+            },
+            {
+              "id": "a1:f1:w16:f01w16b03u02",
+              "archetype": "spider_normal",
+              "wave": 16
+            },
+            {
+              "id": "a1:f1:w16:f01w16b03u03",
+              "archetype": "spider_normal",
+              "wave": 16
+            },
+            {
+              "id": "a1:f1:w16:f01w16b03u04",
+              "archetype": "spider_normal",
+              "wave": 16
+            },
+            {
+              "id": "a1:f1:w16:f01w16b03u05",
+              "archetype": "spider_normal",
+              "wave": 16
+            },
+            {
+              "id": "a1:f1:w16:f01w16b04u03",
+              "archetype": "boar_normal",
+              "wave": 16
+            },
+            {
+              "id": "a1:f1:w16:f01w16b04u05",
+              "archetype": "boar_normal",
+              "wave": 16
+            },
+            {
+              "id": "a1:f1:w16:f01w16b04u06",
+              "archetype": "boar_normal",
+              "wave": 16
+            },
+            {
+              "id": "a1:f1:w16:f01w16b04u04",
+              "archetype": "boar_normal",
+              "wave": 16
+            },
+            {
+              "id": "a1:f1:w16:f01w16b04u01",
+              "archetype": "boar_normal",
+              "wave": 16
+            },
+            {
+              "id": "a1:f1:w16:f01w16b04u02",
+              "archetype": "boar_normal",
+              "wave": 16
+            },
+            {
+              "id": "a1:f1:w17:f01w17b01u01",
+              "archetype": "boar_normal",
+              "wave": 17
+            },
+            {
+              "id": "a1:f1:w17:f01w17b01u02",
+              "archetype": "boar_normal",
+              "wave": 17
+            },
+            {
+              "id": "a1:f1:w17:f01w17b01u03",
+              "archetype": "boar_normal",
+              "wave": 17
+            },
+            {
+              "id": "a1:f1:w17:f01w17b01u04",
+              "archetype": "boar_normal",
+              "wave": 17
+            },
+            {
+              "id": "a1:f1:w17:f01w17b01u06",
+              "archetype": "boar_normal",
+              "wave": 17
+            },
+            {
+              "id": "a1:f1:w17:f01w17b01u05",
+              "archetype": "boar_normal",
+              "wave": 17
+            },
+            {
+              "id": "a1:f1:w17:f01w17b01u07",
+              "archetype": "boar_normal",
+              "wave": 17
+            },
+            {
+              "id": "a1:f1:w17:f01w17b02u03",
+              "archetype": "spider_normal",
+              "wave": 17
+            },
+            {
+              "id": "a1:f1:w17:f01w17b02u01",
+              "archetype": "spider_normal",
+              "wave": 17
+            },
+            {
+              "id": "a1:f1:w17:f01w17b02u04",
+              "archetype": "spider_normal",
+              "wave": 17
+            },
+            {
+              "id": "a1:f1:w17:f01w17b02u02",
+              "archetype": "spider_normal",
+              "wave": 17
+            },
+            {
+              "id": "a1:f1:w17:f01w17b02u05",
+              "archetype": "spider_normal",
+              "wave": 17
+            },
+            {
+              "id": "a1:f1:w17:f01w17b02u07",
+              "archetype": "spider_normal",
+              "wave": 17
+            },
+            {
+              "id": "a1:f1:w17:f01w17b02u06",
+              "archetype": "spider_normal",
+              "wave": 17
+            },
+            {
+              "id": "a1:f1:w17:f01w17b03u02",
+              "archetype": "wolf_normal",
+              "wave": 17
+            },
+            {
+              "id": "a1:f1:w17:f01w17b03u01",
+              "archetype": "wolf_normal",
+              "wave": 17
+            },
+            {
+              "id": "a1:f1:w17:f01w17b03u04",
+              "archetype": "wolf_normal",
+              "wave": 17
+            },
+            {
+              "id": "a1:f1:w17:f01w17b03u03",
+              "archetype": "wolf_normal",
+              "wave": 17
+            },
+            {
+              "id": "a1:f1:w17:f01w17b03u05",
+              "archetype": "wolf_normal",
+              "wave": 17
+            },
+            {
+              "id": "a1:f1:w17:f01w17b03u06",
+              "archetype": "wolf_normal",
+              "wave": 17
+            },
+            {
+              "id": "a1:f1:w17:f01w17b04u03",
+              "archetype": "boar_normal",
+              "wave": 17
+            },
+            {
+              "id": "a1:f1:w17:f01w17b04u01",
+              "archetype": "boar_normal",
+              "wave": 17
+            },
+            {
+              "id": "a1:f1:w17:f01w17b04u02",
+              "archetype": "boar_normal",
+              "wave": 17
+            },
+            {
+              "id": "a1:f1:w17:f01w17b04u04",
+              "archetype": "boar_normal",
+              "wave": 17
+            },
+            {
+              "id": "a1:f1:w17:f01w17b04u06",
+              "archetype": "boar_normal",
+              "wave": 17
+            },
+            {
+              "id": "a1:f1:w17:f01w17b04u05",
+              "archetype": "boar_normal",
+              "wave": 17
+            },
+            {
+              "id": "a1:f1:w18:f01w18b02u03",
+              "archetype": "boar_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w18:f01w18b02u01",
+              "archetype": "boar_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w18:f01w18b02u04",
+              "archetype": "boar_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w18:f01w18b02u02",
+              "archetype": "boar_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w18:f01w18b02u05",
+              "archetype": "boar_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w18:f01w18b02u07",
+              "archetype": "boar_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w18:f01w18b01u02",
+              "archetype": "wolf_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w18:f01w18b01u01",
+              "archetype": "wolf_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w18:f01w18b01u04",
+              "archetype": "wolf_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w18:f01w18b01u03",
+              "archetype": "wolf_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w18:f01w18b02u06",
+              "archetype": "boar_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w18:f01w18b03u02",
+              "archetype": "spider_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w18:f01w18b03u01",
+              "archetype": "spider_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w18:f01w18b03u04",
+              "archetype": "spider_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w18:f01w18b03u03",
+              "archetype": "spider_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w18:f01w18b03u05",
+              "archetype": "spider_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w18:f01w18b04u03",
+              "archetype": "boar_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w18:f01w18b04u01",
+              "archetype": "boar_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w18:f01w18b04u04",
+              "archetype": "boar_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w18:f01w18b04u02",
+              "archetype": "boar_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w18:f01w18b04u05",
+              "archetype": "boar_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w18:f01w18b04u07",
+              "archetype": "boar_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w18:f01w18b03u06",
+              "archetype": "spider_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w18:f01w18b04u06",
+              "archetype": "boar_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w18:f01w18b05u02",
+              "archetype": "wolf_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w18:f01w18b05u01",
+              "archetype": "wolf_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w18:f01w18b05u03",
+              "archetype": "wolf_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w18:f01w18b05u04",
+              "archetype": "wolf_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w19:f01w19b01u04",
+              "archetype": "boar_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b01u01",
+              "archetype": "boar_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b01u03",
+              "archetype": "boar_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b01u02",
+              "archetype": "boar_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b01u07",
+              "archetype": "boar_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b01u05",
+              "archetype": "boar_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b01u06",
+              "archetype": "boar_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b02u02",
+              "archetype": "spider_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b02u01",
+              "archetype": "spider_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b02u03",
+              "archetype": "spider_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b02u04",
+              "archetype": "spider_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b02u05",
+              "archetype": "spider_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b03u01",
+              "archetype": "wolf_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b03u02",
+              "archetype": "wolf_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b03u03",
+              "archetype": "wolf_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b03u04",
+              "archetype": "wolf_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b03u06",
+              "archetype": "wolf_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b03u05",
+              "archetype": "wolf_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b04u01",
+              "archetype": "boar_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b04u04",
+              "archetype": "boar_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b04u02",
+              "archetype": "boar_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b04u03",
+              "archetype": "boar_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b06u02",
+              "archetype": "boar_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b06u03",
+              "archetype": "boar_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b06u01",
+              "archetype": "boar_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b06u04",
+              "archetype": "boar_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b05u01",
+              "archetype": "spider_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b05u03",
+              "archetype": "spider_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b05u02",
+              "archetype": "spider_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b05u04",
+              "archetype": "spider_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w20:f01w20b03u01",
+              "archetype": "wolf_normal",
+              "wave": 20
+            },
+            {
+              "id": "a1:f1:w20:f01w20b04u01",
+              "archetype": "spider_normal",
+              "wave": 20
+            },
+            {
+              "id": "a1:f1:w20:f01w20b01u01",
+              "archetype": "boar_boss",
+              "wave": 20
+            }
+          ],
+          "clearedWaves": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "gateEntries": [],
+          "gateReadyAt": 0,
+          "hurtUntil": 0,
+          "nextWindupAt": 128.31666666666666,
+          "supportReleased": true,
+          "supportAt": 282.75,
+          "view": {
+            "xmin": 201.33254521266394,
+            "xmax": 905.332545212664,
+            "ymin": -708.8356038940126,
+            "ymax": 308.16439610598735
+          },
+          "trainingResetAt": 0
+        },
+        "note": "真实逐tick模拟抽样，非自然养成、非实际clock测量；未改统计/敌人/血量/奖励。"
+      },
+      "isolation": {
+        "keys": {
+          "normal": "xianxia.sect-tower.campaign.v1",
+          "playtest": "xianxia.sect-tower.playtest.v1",
+          "tools": "xianxia.sect-tower.playtest-tools.v1"
+        },
+        "ordinaryBeforeHash": "7dea1943b5212b67450fedd44226622f8d699ee49058dc4c75feaaf5ae4f1700",
+        "ordinaryAfterHash": "f5dacb267e942ce7486d2a17a4cd9f6a3a0c8bd1411063bf3738e82c8dcbccb1",
+        "ordinaryRawUnchanged": false,
+        "experienceHash": "cedab7b1bd639573a03e169a638b9a89f516a0b8dcb9c54097fe219e83f208c7",
+        "prefs": {
+          "speed": 3,
+          "invincible": true
+        },
+        "changedOrdinaryFields": [
+          "hp",
+          "restAt"
+        ]
+      },
+      "error": "AssertionError [ERR_ASSERTION]: normal raw unchanged across complete assisted roundtrip\n+ actual - expected\n\n+ '{\"format\":\"xianxia-sect-tower-campaign\",\"schema\":3,\"data\":\"{\\\\\"xp\\\\\":50,\\\\\"hp\\\\\":100.13615620833333,\\\\\"cores\\\\\":20,\\\\\"contribution\\\\\":280,\\\\\"pills\\\\\":{\\\\\"huichun\\\\\":3,\\\\\"peiyuan\\\\\":0},\\\\\"skills\\\\\":{\\\\\"sj_yujian\\\\\":1},\\\\\"evolutions\\\\\":[],\\\\\"books\\\\\":[],\\\\\"evolutionRanks\\\\\":{},\\\\\"researchPurchases\\\\\":0,\\\\\"tutorialWaves\\\\\":0,\\\\\"weapons\\\\\":{\\\\\"eq_sword_suwen\\\\\":{\\\\\"quality\\\\\":1,\\\\\"refine\\\\\":0}},\\\\\"loadouts\\\\\":[{\\\\\"name\\\\\":\\\\\"配装一\\\\\",\\\\\"weaponId\\\\\":\\\\\"eq_sword_suwen\\\\\",\\\\\"active\\\\\":[\\\\\"sj_yujian\\\\\"],\\\\\"passive\\\\\":[],\\\\\"evolutions\\\\\":[]},{\\\\\"name\\\\\":\\\\\"配装二\\\\\",\\\\\"weaponId\\\\\":\\\\\"eq_sword_suwen\\\\\",\\\\\"active\\\\\":[\\\\\"sj_yujian\\\\\"],\\\\\"passive\\\\\":[],\\\\\"evolutions\\\\\":[]},{\\\\\"name\\\\\":\\\\\"配装三\\\\\",\\\\\"weaponId\\\\\":\\\\\"eq_sword_suwen\\\\\",\\\\\"active\\\\\":[\\\\\"sj_yujian\\\\\"],\\\\\"passive\\\\\":[],\\\\\"evolutions\\\\\":[]}],\\\\\"selectedLoadout\\\\\":0,\\\\\"clearedFloor\\\\\":0,\\\\\"normalCoreCounter\\\\\":0,\\\\\"weaponPity\\\\\":0,\\\\\"rng\\\\\":3987242609,\\\\\"restAt\\\\\":1793157442560,\\\\\"attemptSequence\\\\\":0,\\\\\"activeRun\\\\\":null,\\\\\"tutorialDone\\\\\":false,\\\\\"lastResult\\\\\":null}\",\"checksum\":\"186ff523\"}'\n- '{\"format\":\"xianxia-sect-tower-campaign\",\"schema\":3,\"data\":\"{\\\\\"xp\\\\\":50,\\\\\"hp\\\\\":100,\\\\\"cores\\\\\":20,\\\\\"contribution\\\\\":280,\\\\\"pills\\\\\":{\\\\\"huichun\\\\\":3,\\\\\"peiyuan\\\\\":0},\\\\\"skills\\\\\":{\\\\\"sj_yujian\\\\\":1},\\\\\"evolutions\\\\\":[],\\\\\"books\\\\\":[],\\\\\"evolutionRanks\\\\\":{},\\\\\"researchPurchases\\\\\":0,\\\\\"tutorialWaves\\\\\":0,\\\\\"weapons\\\\\":{\\\\\"eq_sword_suwen\\\\\":{\\\\\"quality\\\\\":1,\\\\\"refine\\\\\":0}},\\\\\"loadouts\\\\\":[{\\\\\"name\\\\\":\\\\\"配装一\\\\\",\\\\\"weaponId\\\\\":\\\\\"eq_sword_suwen\\\\\",\\\\\"active\\\\\":[\\\\\"sj_yujian\\\\\"],\\\\\"passive\\\\\":[],\\\\\"evolutions\\\\\":[]},{\\\\\"name\\\\\":\\\\\"配装二\\\\\",\\\\\"weaponId\\\\\":\\\\\"eq_sword_suwen\\\\\",\\\\\"active\\\\\":[\\\\\"sj_yujian\\\\\"],\\\\\"passive\\\\\":[],\\\\\"evolutions\\\\\":[]},{\\\\\"name\\\\\":\\\\\"配装三\\\\\",\\\\\"weaponId\\\\\":\\\\\"eq_sword_suwen\\\\\",\\\\\"active\\\\\":[\\\\\"sj_yujian\\\\\"],\\\\\"passive\\\\\":[],\\\\\"evolutions\\\\\":[]}],\\\\\"selectedLoadout\\\\\":0,\\\\\"clearedFloor\\\\\":0,\\\\\"normalCoreCounter\\\\\":0,\\\\\"weaponPity\\\\\":0,\\\\\"rng\\\\\":3987242609,\\\\\"restAt\\\\\":1793157434411,\\\\\"attemptSequence\\\\\":0,\\\\\"activeRun\\\\\":null,\\\\\"tutorialDone\\\\\":false,\\\\\"lastResult\\\\\":null}\",\"checksum\":\"915df9b2\"}'\n\n    at /Users/zhangnu/WeChatProjects/rainy-mushroom/scripts/verify-tower-growth-ui.cjs:539:11\n    at async scenario (/Users/zhangnu/WeChatProjects/rainy-mushroom/scripts/verify-tower-growth-ui.cjs:237:4)\n    at async main (/Users/zhangnu/WeChatProjects/rainy-mushroom/scripts/verify-tower-growth-ui.cjs:411:3)",
+      "failureScene": [
+        {
+          "name": "栖云宗·功能版",
+          "ancestors": [
+            "Survivor Canvas",
+            "PinePilot"
+          ],
+          "button": false,
+          "enabled": false,
+          "text": "",
+          "x": 195,
+          "y": 422,
+          "box": {
+            "left": 0,
+            "right": 390,
+            "top": 75.33333333333334,
+            "bottom": 768.6666666666666
+          },
+          "clip": {
+            "left": 0,
+            "right": 390,
+            "top": 0,
+            "bottom": 844
+          }
+        },
+        {
+          "name": "TowerMenu",
+          "ancestors": [
+            "栖云宗·功能版",
+            "Survivor Canvas",
+            "PinePilot"
+          ],
+          "button": false,
+          "enabled": false,
+          "text": "",
+          "x": 195,
+          "y": 422,
+          "box": {
+            "left": 0,
+            "right": 390,
+            "top": 75.33333333333334,
+            "bottom": 768.6666666666666
+          },
+          "clip": {
+            "left": 0,
+            "right": 390,
+            "top": 0,
+            "bottom": 844
+          }
+        },
+        {
+          "name": "宗门",
+          "ancestors": [
+            "TowerMenu",
+            "栖云宗·功能版",
+            "Survivor Canvas",
+            "PinePilot"
+          ],
+          "button": true,
+          "enabled": true,
+          "text": "",
+          "x": 36.833333333333336,
+          "y": 109.99999999999997,
+          "box": {
+            "left": 12.999999999999996,
+            "right": 60.666666666666664,
+            "top": 86.16666666666667,
+            "bottom": 133.83333333333334
+          },
+          "clip": {
+            "left": 0,
+            "right": 390,
+            "top": 0,
+            "bottom": 844
+          }
+        },
+        {
+          "name": "宗门",
+          "ancestors": [
+            "宗门",
+            "TowerMenu",
+            "栖云宗·功能版",
+            "Survivor Canvas",
+            "PinePilot"
+          ],
+          "button": false,
+          "enabled": false,
+          "text": "宗门",
+          "x": 36.833333333333336,
+          "y": 109.99999999999997,
+          "box": {
+            "left": 23.29166666666667,
+            "right": 50.37499999999999,
+            "top": 98.39750000000019,
+            "bottom": 121.60249999999992
+          },
+          "clip": {
+            "left": 0,
+            "right": 390,
+            "top": 0,
+            "bottom": 844
+          }
+        },
+        {
+          "name": "栖云宗",
+          "ancestors": [
+            "TowerMenu",
+            "栖云宗·功能版",
+            "Survivor Canvas",
+            "PinePilot"
+          ],
+          "button": false,
+          "enabled": false,
+          "text": "栖云宗",
+          "x": 221,
+          "y": 106.75000000000004,
+          "box": {
+            "left": 188.5,
+            "right": 253.5,
+            "top": 88.32249999999998,
+            "bottom": 125.17750000000002
+          },
+          "clip": {
+            "left": 0,
+            "right": 390,
+            "top": 0,
+            "bottom": 844
+          }
+        },
+        {
+          "name": "炼气 · Lv.2",
+          "ancestors": [
+            "TowerMenu",
+            "栖云宗·功能版",
+            "Survivor Canvas",
+            "PinePilot"
+          ],
+          "button": false,
+          "enabled": false,
+          "text": "炼气 · Lv.2",
+          "x": 104.54166666666666,
+          "y": 145.75000000000006,
+          "box": {
+            "left": 67.59103393554688,
+            "right": 141.49229939778647,
+            "top": 132.0999999999999,
+            "bottom": 159.39999999999998
+          },
+          "clip": {
+            "left": 0,
+            "right": 390,
+            "top": 0,
+            "bottom": 844
+          }
+        },
+        {
+          "name": "生命 100.1 / 100.3",
+          "ancestors": [
+            "TowerMenu",
+            "栖云宗·功能版",
+            "Survivor Canvas",
+            "PinePilot"
+          ],
+          "button": false,
+          "enabled": false,
+          "text": "生命 100.1 / 100.3",
+          "x": 287.08333333333337,
+          "y": 145.75000000000006,
+          "box": {
+            "left": 227.73354085286456,
+            "right": 346.43312581380206,
+            "top": 133.1237500000001,
+            "bottom": 158.37625
+          },
+          "clip": {
+            "left": 0,
+            "right": 390,
+            "top": 0,
+            "bottom": 844
+          }
+        },
+        {
+          "name": "生命条",
+          "ancestors": [
+            "TowerMenu",
+            "栖云宗·功能版",
+            "Survivor Canvas",
+            "PinePilot"
+          ],
+          "button": false,
+          "enabled": false,
+          "text": "",
+          "x": 195,
+          "y": 162.54166666666666,
+          "box": {
+            "left": 15.166666666666655,
+            "right": 374.83333333333337,
+            "top": 159.8333333333333,
+            "bottom": 165.24999999999994
+          },
+          "clip": {
+            "left": 0,
+            "right": 390,
+            "top": 0,
+            "bottom": 844
+          }
+        },
+        {
+          "name": "妖丹 20     宗门贡献 280",
+          "ancestors": [
+            "TowerMenu",
+            "栖云宗·功能版",
+            "Survivor Canvas",
+            "PinePilot"
+          ],
+          "button": false,
+          "enabled": false,
+          "text": "妖丹 20     宗门贡献 280",
+          "x": 195,
+          "y": 182.04166666666669,
+          "box": {
+            "left": 110.75946044921874,
+            "right": 279.24053955078125,
+            "top": 168.39166666666665,
+            "bottom": 195.6916666666667
+          },
+          "clip": {
+            "left": 0,
+            "right": 390,
+            "top": 0,
+            "bottom": 844
+          }
+        },
+        {
+          "name": "事务卷轴",
+          "ancestors": [
+            "TowerMenu",
+            "栖云宗·功能版",
+            "Survivor Canvas",
+            "PinePilot"
+          ],
+          "button": false,
+          "enabled": false,
+          "text": "",
+          "x": 195,
+          "y": 452.3333333333333,
+          "box": {
+            "left": 12.999999999999996,
+            "right": 377,
+            "top": 202.08333333333323,
+            "bottom": 702.5833333333334
+          },
+          "clip": {
+            "left": 0,
+            "right": 390,
+            "top": 0,
+            "bottom": 844
+          }
+        },
+        {
+          "name": "卷轴内容",
+          "ancestors": [
+            "事务卷轴",
+            "TowerMenu",
+            "栖云宗·功能版",
+            "Survivor Canvas",
+            "PinePilot"
+          ],
+          "button": false,
+          "enabled": false,
+          "text": "",
+          "x": 195,
+          "y": 202.08333333333323,
+          "box": {
+            "left": 12.999999999999996,
+            "right": 377,
+            "top": 202.08333333333323,
+            "bottom": 1056.8333333333333
+          },
+          "clip": {
+            "left": 12.999999999999996,
+            "right": 377,
+            "top": 202.08333333333323,
+            "bottom": 702.5833333333334
+          }
+        },
+        {
+          "name": "下一站 · 第1层獠牙石坪",
+          "ancestors": [
+            "卷轴内容",
+            "事务卷轴",
+            "TowerMenu",
+            "栖云宗·功能版",
+            "Survivor Canvas",
+            "PinePilot"
+          ],
+          "button": false,
+          "enabled": false,
+          "text": "",
+          "x": 195,
+          "y": 279.5416666666666,
+          "box": {
+            "left": 15.166666666666655,
+            "right": 374.83333333333337,
+            "top": 204.24999999999997,
+            "bottom": 354.8333333333333
+          },
+          "clip": {
+            "left": 12.999999999999996,
+            "right": 377,
+            "top": 202.08333333333323,
+            "bottom": 702.5833333333334
+          }
+        },
+        {
+          "name": "下一站 · 第1层獠牙石坪",
+          "ancestors": [
+            "下一站 · 第1层獠牙石坪",
+            "卷轴内容",
+            "事务卷轴",
+            "TowerMenu",
+            "栖云宗·功能版",
+            "Survivor Canvas",
+            "PinePilot"
+          ],
+          "button": false,
+          "enabled": false,
+          "text": "下一站 · 第1层獠牙石坪",
+          "x": 195,
+          "y": 228.08333333333334,
+          "box": {
+            "left": 104.47819010416666,
+            "right": 285.52180989583337,
+            "top": 213.06833333333344,
+            "bottom": 243.09833333333336
+          },
+          "clip": {
+            "left": 12.999999999999996,
+            "right": 377,
+            "top": 202.08333333333323,
+            "bottom": 702.5833333333334
+          }
+        },
+        {
+          "name": "境界提升获得技能点，学会的功法自动施放。整备后带着当前生命入塔。",
+          "ancestors": [
+            "下一站 · 第1层獠牙石坪",
+            "卷轴内容",
+            "事务卷轴",
+            "TowerMenu",
+            "栖云宗·功能版",
+            "Survivor Canvas",
+            "PinePilot"
+          ],
+          "button": false,
+          "enabled": false,
+          "text": "境界提升获得技能点，学会的功法自动施放。整备后带\n着当前生命入塔。",
+          "x": 195,
+          "y": 269.25,
+          "box": {
+            "left": 32.49999999999999,
+            "right": 357.50000000000006,
+            "top": 248.43916666666664,
+            "bottom": 290.0608333333334
+          },
+          "clip": {
+            "left": 12.999999999999996,
+            "right": 377,
+            "top": 202.08333333333323,
+            "bottom": 702.5833333333334
+          }
+        },
+        {
+          "name": "体验工具",
+          "ancestors": [
+            "下一站 · 第1层獠牙石坪",
+            "卷轴内容",
+            "事务卷轴",
+            "TowerMenu",
+            "栖云宗·功能版",
+            "Survivor Canvas",
+            "PinePilot"
+          ],
+          "button": true,
+          "enabled": true,
+          "text": "",
+          "x": 195,
+          "y": 320.1666666666667,
+          "box": {
+            "left": 25.999999999999993,
+            "right": 364,
+            "top": 296.3333333333332,
+            "bottom": 344
+          },
+          "clip": {
+            "left": 12.999999999999996,
+            "right": 377,
+            "top": 202.08333333333323,
+            "bottom": 702.5833333333334
+          }
+        },
+        {
+          "name": "体验工具",
+          "ancestors": [
+            "体验工具",
+            "下一站 · 第1层獠牙石坪",
+            "卷轴内容",
+            "事务卷轴",
+            "TowerMenu",
+            "栖云宗·功能版",
+            "Survivor Canvas",
+            "PinePilot"
+          ],
+          "button": false,
+          "enabled": false,
+          "text": "体验工具",
+          "x": 195,
+          "y": 320.1666666666667,
+          "box": {
+            "left": 167.91666666666669,
+            "right": 222.08333333333331,
+            "top": 308.56416666666667,
+            "bottom": 331.76916666666676
+          },
+          "clip": {
+            "left": 12.999999999999996,
+            "right": 377,
+            "top": 202.08333333333323,
+            "bottom": 702.5833333333334
+          }
+        },
+        {
+          "name": "锁妖塔",
+          "ancestors": [
+            "卷轴内容",
+            "事务卷轴",
+            "TowerMenu",
+            "栖云宗·功能版",
+            "Survivor Canvas",
+            "PinePilot"
+          ],
+          "button": true,
+          "enabled": true,
+          "text": "",
+          "x": 102.91666666666664,
+          "y": 407.9166666666667,
+          "box": {
+            "left": 15.166666666666655,
+            "right": 190.66666666666666,
+            "top": 364.58333333333337,
+            "bottom": 451.24999999999994
+          },
+          "clip": {
+            "left": 12.999999999999996,
+            "right": 377,
+            "top": 202.08333333333323,
+            "bottom": 702.5833333333334
+          }
+        },
+        {
+          "name": "锁妖塔",
+          "ancestors": [
+            "锁妖塔",
+            "卷轴内容",
+            "事务卷轴",
+            "TowerMenu",
+            "栖云宗·功能版",
+            "Survivor Canvas",
+            "PinePilot"
+          ],
+          "button": false,
+          "enabled": false,
+          "text": "锁妖塔",
+          "x": 115.91666666666667,
+          "y": 386.25,
+          "box": {
+            "left": 89.91666666666667,
+            "right": 141.91666666666666,
+            "top": 371.235,
+            "bottom": 401.26500000000004
+          },
+          "clip": {
+            "left": 12.999999999999996,
+            "right": 377,
+            "top": 202.08333333333323,
+            "bottom": 702.5833333333334
+          }
+        },
+        {
+          "name": "九层镇妖 · 选层与继续",
+          "ancestors": [
+            "锁妖塔",
+            "卷轴内容",
+            "事务卷轴",
+            "TowerMenu",
+            "栖云宗·功能版",
+            "Survivor Canvas",
+            "PinePilot"
+          ],
+          "button": false,
+          "enabled": false,
+          "text": "九层镇妖 · 选层与继续",
+          "x": 102.91666666666664,
+          "y": 423.08333333333326,
+          "box": {
+            "left": 38.64029947916665,
+            "right": 167.19303385416666,
+            "top": 411.8220833333333,
+            "bottom": 434.34458333333333
+          },
+          "clip": {
+            "left": 12.999999999999996,
+            "right": 377,
+            "top": 202.08333333333323,
+            "bottom": 702.5833333333334
+          }
+        },
+        {
+          "name": "宗门大殿",
+          "ancestors": [
+            "卷轴内容",
+            "事务卷轴",
+            "TowerMenu",
+            "栖云宗·功能版",
+            "Survivor Canvas",
+            "PinePilot"
+          ],
+          "button": true,
+          "enabled": true,
+          "text": "",
+          "x": 287.08333333333337,
+          "y": 407.9166666666667,
+          "box": {
+            "left": 199.33333333333331,
+            "right": 374.83333333333337,
+            "top": 364.58333333333337,
+            "bottom": 451.24999999999994
+          },
+          "clip": {
+            "left": 12.999999999999996,
+            "right": 377,
+            "top": 202.08333333333323,
+            "bottom": 702.5833333333334
+          }
+        },
+        {
+          "name": "宗门大殿",
+          "ancestors": [
+            "宗门大殿",
+            "卷轴内容",
+            "事务卷轴",
+            "TowerMenu",
+            "栖云宗·功能版",
+            "Survivor Canvas",
+            "PinePilot"
+          ],
+          "button": false,
+          "enabled": false,
+          "text": "宗门大殿",
+          "x": 300.0833333333333,
+          "y": 386.25,
+          "box": {
+            "left": 265.4166666666667,
+            "right": 334.75,
+            "top": 371.235,
+            "bottom": 401.26500000000004
+          },
+          "clip": {
+            "left": 12.999999999999996,
+            "right": 377,
+            "top": 202.08333333333323,
+            "bottom": 702.5833333333334
+          }
+        },
+        {
+          "name": "修行目标 · 镇妖成果",
+          "ancestors": [
+            "宗门大殿",
+            "卷轴内容",
+            "事务卷轴",
+            "TowerMenu",
+            "栖云宗·功能版",
+            "Survivor Canvas",
+            "PinePilot"
+          ],
+          "button": false,
+          "enabled": false,
+          "text": "修行目标 · 镇妖成果",
+          "x": 287.08333333333337,
+          "y": 423.08333333333326,
+          "box": {
+            "left": 229.30696614583334,
+            "right": 344.85970052083337,
+            "top": 411.8220833333333,
+            "bottom": 434.34458333333333
+          },
+          "clip": {
+            "left": 12.999999999999996,
+            "right": 377,
+            "top": 202.08333333333323,
+            "bottom": 702.5833333333334
+          }
+        },
+        {
+          "name": "藏经阁",
+          "ancestors": [
+            "卷轴内容",
+            "事务卷轴",
+            "TowerMenu",
+            "栖云宗·功能版",
+            "Survivor Canvas",
+            "PinePilot"
+          ],
+          "button": true,
+          "enabled": true,
+          "text": "",
+          "x": 102.91666666666664,
+          "y": 503.25,
+          "box": {
+            "left": 15.166666666666655,
+            "right": 190.66666666666666,
+            "top": 459.91666666666674,
+            "bottom": 546.5833333333334
+          },
+          "clip": {
+            "left": 12.999999999999996,
+            "right": 377,
+            "top": 202.08333333333323,
+            "bottom": 702.5833333333334
+          }
+        },
+        {
+          "name": "藏经阁",
+          "ancestors": [
+            "藏经阁",
+            "卷轴内容",
+            "事务卷轴",
+            "TowerMenu",
+            "栖云宗·功能版",
+            "Survivor Canvas",
+            "PinePilot"
+          ],
+          "button": false,
+          "enabled": false,
+          "text": "藏经阁",
+          "x": 115.91666666666667,
+          "y": 481.58333333333337,
+          "box": {
+            "left": 89.91666666666667,
+            "right": 141.91666666666666,
+            "top": 466.5683333333334,
+            "bottom": 496.5983333333334
+          },
+          "clip": {
+            "left": 12.999999999999996,
+            "right": 377,
+            "top": 202.08333333333323,
+            "bottom": 702.5833333333334
+          }
+        },
+        {
+          "name": "全技能树 · 加点与重修",
+          "ancestors": [
+            "藏经阁",
+            "卷轴内容",
+            "事务卷轴",
+            "TowerMenu",
+            "栖云宗·功能版",
+            "Survivor Canvas",
+            "PinePilot"
+          ],
+          "button": false,
+          "enabled": false,
+          "text": "全技能树 · 加点与重修",
+          "x": 102.91666666666664,
+          "y": 518.4166666666666,
+          "box": {
+            "left": 38.64029947916665,
+            "right": 167.19303385416666,
+            "top": 507.15541666666667,
+            "bottom": 529.6779166666666
+          },
+          "clip": {
+            "left": 12.999999999999996,
+            "right": 377,
+            "top": 202.08333333333323,
+            "bottom": 702.5833333333334
+          }
+        },
+        {
+          "name": "天工坊",
+          "ancestors": [
+            "卷轴内容",
+            "事务卷轴",
+            "TowerMenu",
+            "栖云宗·功能版",
+            "Survivor Canvas",
+            "PinePilot"
+          ],
+          "button": true,
+          "enabled": true,
+          "text": "",
+          "x": 287.08333333333337,
+          "y": 503.25,
+          "box": {
+            "left": 199.33333333333331,
+            "right": 374.83333333333337,
+            "top": 459.91666666666674,
+            "bottom": 546.5833333333334
+          },
+          "clip": {
+            "left": 12.999999999999996,
+            "right": 377,
+            "top": 202.08333333333323,
+            "bottom": 702.5833333333334
+          }
+        },
+        {
+          "name": "天工坊",
+          "ancestors": [
+            "天工坊",
+            "卷轴内容",
+            "事务卷轴",
+            "TowerMenu",
+            "栖云宗·功能版",
+            "Survivor Canvas",
+            "PinePilot"
+          ],
+          "button": false,
+          "enabled": false,
+          "text": "天工坊",
+          "x": 300.0833333333333,
+          "y": 481.58333333333337,
+          "box": {
+            "left": 274.0833333333333,
+            "right": 326.08333333333337,
+            "top": 466.5683333333334,
+            "bottom": 496.5983333333334
+          },
+          "clip": {
+            "left": 12.999999999999996,
+            "right": 377,
+            "top": 202.08333333333323,
+            "bottom": 702.5833333333334
+          }
+        },
+        {
+          "name": "三剑寻器 · 武器强化",
+          "ancestors": [
+            "天工坊",
+            "卷轴内容",
+            "事务卷轴",
+            "TowerMenu",
+            "栖云宗·功能版",
+            "Survivor Canvas",
+            "PinePilot"
+          ],
+          "button": false,
+          "enabled": false,
+          "text": "三剑寻器 · 武器强化",
+          "x": 287.08333333333337,
+          "y": 518.4166666666666,
+          "box": {
+            "left": 229.30696614583334,
+            "right": 344.85970052083337,
+            "top": 507.15541666666667,
+            "bottom": 529.6779166666666
+          },
+          "clip": {
+            "left": 12.999999999999996,
+            "right": 377,
+            "top": 202.08333333333323,
+            "bottom": 702.5833333333334
+          }
+        },
+        {
+          "name": "丹鼎阁",
+          "ancestors": [
+            "卷轴内容",
+            "事务卷轴",
+            "TowerMenu",
+            "栖云宗·功能版",
+            "Survivor Canvas",
+            "PinePilot"
+          ],
+          "button": true,
+          "enabled": true,
+          "text": "",
+          "x": 102.91666666666664,
+          "y": 598.5833333333333,
+          "box": {
+            "left": 15.166666666666655,
+            "right": 190.66666666666666,
+            "top": 555.25,
+            "bottom": 641.9166666666667
+          },
+          "clip": {
+            "left": 12.999999999999996,
+            "right": 377,
+            "top": 202.08333333333323,
+            "bottom": 702.5833333333334
+          }
+        },
+        {
+          "name": "丹鼎阁",
+          "ancestors": [
+            "丹鼎阁",
+            "卷轴内容",
+            "事务卷轴",
+            "TowerMenu",
+            "栖云宗·功能版",
+            "Survivor Canvas",
+            "PinePilot"
+          ],
+          "button": false,
+          "enabled": false,
+          "text": "丹鼎阁",
+          "x": 115.91666666666667,
+          "y": 576.9166666666666,
+          "box": {
+            "left": 89.91666666666667,
+            "right": 141.91666666666666,
+            "top": 561.9016666666666,
+            "bottom": 591.9316666666666
+          },
+          "clip": {
+            "left": 12.999999999999996,
+            "right": 377,
+            "top": 202.08333333333323,
+            "bottom": 702.5833333333334
+          }
+        },
+        {
+          "name": "购丹与服丹 · 场外恢复",
+          "ancestors": [
+            "丹鼎阁",
+            "卷轴内容",
+            "事务卷轴",
+            "TowerMenu",
+            "栖云宗·功能版",
+            "Survivor Canvas",
+            "PinePilot"
+          ],
+          "button": false,
+          "enabled": false,
+          "text": "购丹与服丹 · 场外恢复",
+          "x": 102.91666666666664,
+          "y": 613.75,
+          "box": {
+            "left": 38.64029947916665,
+            "right": 167.19303385416666,
+            "top": 602.48875,
+            "bottom": 625.01125
+          },
+          "clip": {
+            "left": 12.999999999999996,
+            "right": 377,
+            "top": 202.08333333333323,
+            "bottom": 702.5833333333334
+          }
+        },
+        {
+          "name": "洞府",
+          "ancestors": [
+            "卷轴内容",
+            "事务卷轴",
+            "TowerMenu",
+            "栖云宗·功能版",
+            "Survivor Canvas",
+            "PinePilot"
+          ],
+          "button": true,
+          "enabled": true,
+          "text": "",
+          "x": 287.08333333333337,
+          "y": 598.5833333333333,
+          "box": {
+            "left": 199.33333333333331,
+            "right": 374.83333333333337,
+            "top": 555.25,
+            "bottom": 641.9166666666667
+          },
+          "clip": {
+            "left": 12.999999999999996,
+            "right": 377,
+            "top": 202.08333333333323,
+            "bottom": 702.5833333333334
+          }
+        },
+        {
+          "name": "洞府",
+          "ancestors": [
+            "洞府",
+            "卷轴内容",
+            "事务卷轴",
+            "TowerMenu",
+            "栖云宗·功能版",
+            "Survivor Canvas",
+            "PinePilot"
+          ],
+          "button": false,
+          "enabled": false,
+          "text": "洞府",
+          "x": 300.0833333333333,
+          "y": 576.9166666666666,
+          "box": {
+            "left": 282.75,
+            "right": 317.4166666666667,
+            "top": 561.9016666666666,
+            "bottom": 591.9316666666666
+          },
+          "clip": {
+            "left": 12.999999999999996,
+            "right": 377,
+            "top": 202.08333333333323,
+            "bottom": 702.5833333333334
+          }
+        },
+        {
+          "name": "三套武器配装",
+          "ancestors": [
+            "洞府",
+            "卷轴内容",
+            "事务卷轴",
+            "TowerMenu",
+            "栖云宗·功能版",
+            "Survivor Canvas",
+            "PinePilot"
+          ],
+          "button": false,
+          "enabled": false,
+          "text": "三套武器配装",
+          "x": 287.08333333333337,
+          "y": 613.75,
+          "box": {
+            "left": 248.08333333333331,
+            "right": 326.08333333333337,
+            "top": 602.48875,
+            "bottom": 625.01125
+          },
+          "clip": {
+            "left": 12.999999999999996,
+            "right": 377,
+            "top": 202.08333333333323,
+            "bottom": 702.5833333333334
+          }
+        },
+        {
+          "name": "演武场",
+          "ancestors": [
+            "卷轴内容",
+            "事务卷轴",
+            "TowerMenu",
+            "栖云宗·功能版",
+            "Survivor Canvas",
+            "PinePilot"
+          ],
+          "button": true,
+          "enabled": true,
+          "text": "",
+          "x": 102.91666666666664,
+          "y": 693.9166666666666,
+          "box": {
+            "left": 15.166666666666655,
+            "right": 190.66666666666666,
+            "top": 650.5833333333333,
+            "bottom": 737.25
+          },
+          "clip": {
+            "left": 12.999999999999996,
+            "right": 377,
+            "top": 202.08333333333323,
+            "bottom": 702.5833333333334
+          }
+        },
+        {
+          "name": "演武场",
+          "ancestors": [
+            "演武场",
+            "卷轴内容",
+            "事务卷轴",
+            "TowerMenu",
+            "栖云宗·功能版",
+            "Survivor Canvas",
+            "PinePilot"
+          ],
+          "button": false,
+          "enabled": false,
+          "text": "演武场",
+          "x": 115.91666666666667,
+          "y": 672.25,
+          "box": {
+            "left": 89.91666666666667,
+            "right": 141.91666666666666,
+            "top": 657.235,
+            "bottom": 687.265
+          },
+          "clip": {
+            "left": 12.999999999999996,
+            "right": 377,
+            "top": 202.08333333333323,
+            "bottom": 702.5833333333334
+          }
+        },
+        {
+          "name": "试剑演练 · 无损训练",
+          "ancestors": [
+            "演武场",
+            "卷轴内容",
+            "事务卷轴",
+            "TowerMenu",
+            "栖云宗·功能版",
+            "Survivor Canvas",
+            "PinePilot"
+          ],
+          "button": false,
+          "enabled": false,
+          "text": "试剑演练 · 无损训练",
+          "x": 102.91666666666664,
+          "y": 709.0833333333334,
+          "box": {
+            "left": 45.14029947916665,
+            "right": 160.69303385416666,
+            "top": 697.8220833333334,
+            "bottom": 720.3445833333333
+          },
+          "clip": {
+            "left": 12.999999999999996,
+            "right": 377,
+            "top": 202.08333333333323,
+            "bottom": 702.5833333333334
+          }
+        },
+        {
+          "name": "山门",
+          "ancestors": [
+            "卷轴内容",
+            "事务卷轴",
+            "TowerMenu",
+            "栖云宗·功能版",
+            "Survivor Canvas",
+            "PinePilot"
+          ],
+          "button": true,
+          "enabled": true,
+          "text": "",
+          "x": 287.08333333333337,
+          "y": 693.9166666666666,
+          "box": {
+            "left": 199.33333333333331,
+            "right": 374.83333333333337,
+            "top": 650.5833333333333,
+            "bottom": 737.25
+          },
+          "clip": {
+            "left": 12.999999999999996,
+            "right": 377,
+            "top": 202.08333333333323,
+            "bottom": 702.5833333333334
+          }
+        },
+        {
+          "name": "山门",
+          "ancestors": [
+            "山门",
+            "卷轴内容",
+            "事务卷轴",
+            "TowerMenu",
+            "栖云宗·功能版",
+            "Survivor Canvas",
+            "PinePilot"
+          ],
+          "button": false,
+          "enabled": false,
+          "text": "山门",
+          "x": 300.0833333333333,
+          "y": 672.25,
+          "box": {
+            "left": 282.75,
+            "right": 317.4166666666667,
+            "top": 657.235,
+            "bottom": 687.265
+          },
+          "clip": {
+            "left": 12.999999999999996,
+            "right": 377,
+            "top": 202.08333333333323,
+            "bottom": 702.5833333333334
+          }
+        },
+        {
+          "name": "入宗记事 · 玩法指引",
+          "ancestors": [
+            "山门",
+            "卷轴内容",
+            "事务卷轴",
+            "TowerMenu",
+            "栖云宗·功能版",
+            "Survivor Canvas",
+            "PinePilot"
+          ],
+          "button": false,
+          "enabled": false,
+          "text": "入宗记事 · 玩法指引",
+          "x": 287.08333333333337,
+          "y": 709.0833333333334,
+          "box": {
+            "left": 229.30696614583334,
+            "right": 344.85970052083337,
+            "top": 697.8220833333334,
+            "bottom": 720.3445833333333
+          },
+          "clip": {
+            "left": 12.999999999999996,
+            "right": 377,
+            "top": 202.08333333333323,
+            "bottom": 702.5833333333334
+          }
+        },
+        {
+          "name": "灵兽园",
+          "ancestors": [
+            "卷轴内容",
+            "事务卷轴",
+            "TowerMenu",
+            "栖云宗·功能版",
+            "Survivor Canvas",
+            "PinePilot"
+          ],
+          "button": true,
+          "enabled": false,
+          "text": "",
+          "x": 102.91666666666664,
+          "y": 789.2499999999999,
+          "box": {
+            "left": 15.166666666666655,
+            "right": 190.66666666666666,
+            "top": 745.9166666666666,
+            "bottom": 832.5833333333334
+          },
+          "clip": {
+            "left": 12.999999999999996,
+            "right": 377,
+            "top": 202.08333333333323,
+            "bottom": 702.5833333333334
+          }
+        },
+        {
+          "name": "灵兽园",
+          "ancestors": [
+            "灵兽园",
+            "卷轴内容",
+            "事务卷轴",
+            "TowerMenu",
+            "栖云宗·功能版",
+            "Survivor Canvas",
+            "PinePilot"
+          ],
+          "button": false,
+          "enabled": false,
+          "text": "灵兽园",
+          "x": 115.91666666666667,
+          "y": 767.5833333333333,
+          "box": {
+            "left": 89.91666666666667,
+            "right": 141.91666666666666,
+            "top": 752.5683333333333,
+            "bottom": 782.5983333333332
+          },
+          "clip": {
+            "left": 12.999999999999996,
+            "right": 377,
+            "top": 202.08333333333323,
+            "bottom": 702.5833333333334
+          }
+        },
+        {
+          "name": "御兽师后续开放",
+          "ancestors": [
+            "灵兽园",
+            "卷轴内容",
+            "事务卷轴",
+            "TowerMenu",
+            "栖云宗·功能版",
+            "Survivor Canvas",
+            "PinePilot"
+          ],
+          "button": false,
+          "enabled": false,
+          "text": "御兽师后续开放",
+          "x": 102.91666666666664,
+          "y": 804.4166666666666,
+          "box": {
+            "left": 57.41666666666666,
+            "right": 148.41666666666666,
+            "top": 793.1554166666667,
+            "bottom": 815.6779166666666
+          },
+          "clip": {
+            "left": 12.999999999999996,
+            "right": 377,
+            "top": 202.08333333333323,
+            "bottom": 702.5833333333334
+          }
+        },
+        {
+          "name": "灵符堂",
+          "ancestors": [
+            "卷轴内容",
+            "事务卷轴",
+            "TowerMenu",
+            "栖云宗·功能版",
+            "Survivor Canvas",
+            "PinePilot"
+          ],
+          "button": true,
+          "enabled": false,
+          "text": "",
+          "x": 287.08333333333337,
+          "y": 789.2499999999999,
+          "box": {
+            "left": 199.33333333333331,
+            "right": 374.83333333333337,
+            "top": 745.9166666666666,
+            "bottom": 832.5833333333334
+          },
+          "clip": {
+            "left": 12.999999999999996,
+            "right": 377,
+            "top": 202.08333333333323,
+            "bottom": 702.5833333333334
+          }
+        },
+        {
+          "name": "灵符堂",
+          "ancestors": [
+            "灵符堂",
+            "卷轴内容",
+            "事务卷轴",
+            "TowerMenu",
+            "栖云宗·功能版",
+            "Survivor Canvas",
+            "PinePilot"
+          ],
+          "button": false,
+          "enabled": false,
+          "text": "灵符堂",
+          "x": 300.0833333333333,
+          "y": 767.5833333333333,
+          "box": {
+            "left": 274.0833333333333,
+            "right": 326.08333333333337,
+            "top": 752.5683333333333,
+            "bottom": 782.5983333333332
+          },
+          "clip": {
+            "left": 12.999999999999996,
+            "right": 377,
+            "top": 202.08333333333323,
+            "bottom": 702.5833333333334
+          }
+        },
+        {
+          "name": "符师后续开放",
+          "ancestors": [
+            "灵符堂",
+            "卷轴内容",
+            "事务卷轴",
+            "TowerMenu",
+            "栖云宗·功能版",
+            "Survivor Canvas",
+            "PinePilot"
+          ],
+          "button": false,
+          "enabled": false,
+          "text": "符师后续开放",
+          "x": 287.08333333333337,
+          "y": 804.4166666666666,
+          "box": {
+            "left": 248.08333333333331,
+            "right": 326.08333333333337,
+            "top": 793.1554166666667,
+            "bottom": 815.6779166666666
+          },
+          "clip": {
+            "left": 12.999999999999996,
+            "right": 377,
+            "top": 202.08333333333323,
+            "bottom": 702.5833333333334
+          }
+        },
+        {
+          "name": "第一次入宗",
+          "ancestors": [
+            "卷轴内容",
+            "事务卷轴",
+            "TowerMenu",
+            "栖云宗·功能版",
+            "Survivor Canvas",
+            "PinePilot"
+          ],
+          "button": false,
+          "enabled": false,
+          "text": "",
+          "x": 195,
+          "y": 944.1666666666666,
+          "box": {
+            "left": 15.166666666666655,
+            "right": 374.83333333333337,
+            "top": 841.25,
+            "bottom": 1047.0833333333333
+          },
+          "clip": {
+            "left": 12.999999999999996,
+            "right": 377,
+            "top": 202.08333333333323,
+            "bottom": 702.5833333333334
+          }
+        },
+        {
+          "name": "第一次入宗",
+          "ancestors": [
+            "第一次入宗",
+            "卷轴内容",
+            "事务卷轴",
+            "TowerMenu",
+            "栖云宗·功能版",
+            "Survivor Canvas",
+            "PinePilot"
+          ],
+          "button": false,
+          "enabled": false,
+          "text": "第一次入宗",
+          "x": 195,
+          "y": 865.0833333333334,
+          "box": {
+            "left": 151.66666666666666,
+            "right": 238.33333333333334,
+            "top": 850.0683333333334,
+            "bottom": 880.0983333333332
+          },
+          "clip": {
+            "left": 12.999999999999996,
+            "right": 377,
+            "top": 202.08333333333323,
+            "bottom": 702.5833333333334
+          }
+        },
+        {
+          "name": "认识领悟、技能点、恢复与登塔。可随时跳过，不影响入门赠礼和清波教学。",
+          "ancestors": [
+            "第一次入宗",
+            "卷轴内容",
+            "事务卷轴",
+            "TowerMenu",
+            "栖云宗·功能版",
+            "Survivor Canvas",
+            "PinePilot"
+          ],
+          "button": false,
+          "enabled": false,
+          "text": "认识领悟、技能点、恢复与登塔。可随时跳过，不影响\n入门赠礼和清波教学。",
+          "x": 195,
+          "y": 906.25,
+          "box": {
+            "left": 32.49999999999999,
+            "right": 357.50000000000006,
+            "top": 885.4391666666666,
+            "bottom": 927.0608333333333
+          },
+          "clip": {
+            "left": 12.999999999999996,
+            "right": 377,
+            "top": 202.08333333333323,
+            "bottom": 702.5833333333334
+          }
+        },
+        {
+          "name": "查看入宗指引",
+          "ancestors": [
+            "第一次入宗",
+            "卷轴内容",
+            "事务卷轴",
+            "TowerMenu",
+            "栖云宗·功能版",
+            "Survivor Canvas",
+            "PinePilot"
+          ],
+          "button": true,
+          "enabled": true,
+          "text": "",
+          "x": 195,
+          "y": 957.1666666666665,
+          "box": {
+            "left": 25.999999999999993,
+            "right": 364,
+            "top": 933.3333333333334,
+            "bottom": 980.9999999999999
+          },
+          "clip": {
+            "left": 12.999999999999996,
+            "right": 377,
+            "top": 202.08333333333323,
+            "bottom": 702.5833333333334
+          }
+        },
+        {
+          "name": "查看入宗指引",
+          "ancestors": [
+            "查看入宗指引",
+            "第一次入宗",
+            "卷轴内容",
+            "事务卷轴",
+            "TowerMenu",
+            "栖云宗·功能版",
+            "Survivor Canvas",
+            "PinePilot"
+          ],
+          "button": false,
+          "enabled": false,
+          "text": "查看入宗指引",
+          "x": 195,
+          "y": 957.1666666666665,
+          "box": {
+            "left": 154.375,
+            "right": 235.62499999999997,
+            "top": 945.5641666666667,
+            "bottom": 968.7691666666666
+          },
+          "clip": {
+            "left": 12.999999999999996,
+            "right": 377,
+            "top": 202.08333333333323,
+            "bottom": 702.5833333333334
+          }
+        },
+        {
+          "name": "跳过引导",
+          "ancestors": [
+            "第一次入宗",
+            "卷轴内容",
+            "事务卷轴",
+            "TowerMenu",
+            "栖云宗·功能版",
+            "Survivor Canvas",
+            "PinePilot"
+          ],
+          "button": true,
+          "enabled": true,
+          "text": "",
+          "x": 195,
+          "y": 1012.4166666666666,
+          "box": {
+            "left": 25.999999999999993,
+            "right": 364,
+            "top": 988.5833333333333,
+            "bottom": 1036.25
+          },
+          "clip": {
+            "left": 12.999999999999996,
+            "right": 377,
+            "top": 202.08333333333323,
+            "bottom": 702.5833333333334
+          }
+        },
+        {
+          "name": "跳过引导",
+          "ancestors": [
+            "跳过引导",
+            "第一次入宗",
+            "卷轴内容",
+            "事务卷轴",
+            "TowerMenu",
+            "栖云宗·功能版",
+            "Survivor Canvas",
+            "PinePilot"
+          ],
+          "button": false,
+          "enabled": false,
+          "text": "跳过引导",
+          "x": 195,
+          "y": 1012.4166666666666,
+          "box": {
+            "left": 167.91666666666669,
+            "right": 222.08333333333331,
+            "top": 1000.8141666666666,
+            "bottom": 1024.0191666666667
+          },
+          "clip": {
+            "left": 12.999999999999996,
+            "right": 377,
+            "top": 202.08333333333323,
+            "bottom": 702.5833333333334
+          }
+        },
+        {
+          "name": "宗门",
+          "ancestors": [
+            "TowerMenu",
+            "栖云宗·功能版",
+            "Survivor Canvas",
+            "PinePilot"
+          ],
+          "button": true,
+          "enabled": true,
+          "text": "",
+          "x": 55.25,
+          "y": 735.0833333333333,
+          "box": {
+            "left": 12.999999999999996,
+            "right": 97.5,
+            "top": 711.2499999999999,
+            "bottom": 758.9166666666667
+          },
+          "clip": {
+            "left": 0,
+            "right": 390,
+            "top": 0,
+            "bottom": 844
+          }
+        },
+        {
+          "name": "宗门",
+          "ancestors": [
+            "宗门",
+            "TowerMenu",
+            "栖云宗·功能版",
+            "Survivor Canvas",
+            "PinePilot"
+          ],
+          "button": false,
+          "enabled": false,
+          "text": "宗门",
+          "x": 55.25,
+          "y": 735.0833333333333,
+          "box": {
+            "left": 40.624999999999986,
+            "right": 69.87499999999999,
+            "top": 722.4570833333333,
+            "bottom": 747.7095833333334
+          },
+          "clip": {
+            "left": 0,
+            "right": 390,
+            "top": 0,
+            "bottom": 844
+          }
+        },
+        {
+          "name": "锁妖塔",
+          "ancestors": [
+            "TowerMenu",
+            "栖云宗·功能版",
+            "Survivor Canvas",
+            "PinePilot"
+          ],
+          "button": true,
+          "enabled": true,
+          "text": "",
+          "x": 148.41666666666666,
+          "y": 735.0833333333333,
+          "box": {
+            "left": 106.16666666666669,
+            "right": 190.66666666666666,
+            "top": 711.2499999999999,
+            "bottom": 758.9166666666667
+          },
+          "clip": {
+            "left": 0,
+            "right": 390,
+            "top": 0,
+            "bottom": 844
+          }
+        },
+        {
+          "name": "锁妖塔",
+          "ancestors": [
+            "锁妖塔",
+            "TowerMenu",
+            "栖云宗·功能版",
+            "Survivor Canvas",
+            "PinePilot"
+          ],
+          "button": false,
+          "enabled": false,
+          "text": "锁妖塔",
+          "x": 148.41666666666666,
+          "y": 735.0833333333333,
+          "box": {
+            "left": 126.47916666666666,
+            "right": 170.35416666666666,
+            "top": 722.4570833333333,
+            "bottom": 747.7095833333334
+          },
+          "clip": {
+            "left": 0,
+            "right": 390,
+            "top": 0,
+            "bottom": 844
+          }
+        },
+        {
+          "name": "技能树",
+          "ancestors": [
+            "TowerMenu",
+            "栖云宗·功能版",
+            "Survivor Canvas",
+            "PinePilot"
+          ],
+          "button": true,
+          "enabled": true,
+          "text": "",
+          "x": 241.58333333333334,
+          "y": 735.0833333333333,
+          "box": {
+            "left": 199.33333333333331,
+            "right": 283.8333333333333,
+            "top": 711.2499999999999,
+            "bottom": 758.9166666666667
+          },
+          "clip": {
+            "left": 0,
+            "right": 390,
+            "top": 0,
+            "bottom": 844
+          }
+        },
+        {
+          "name": "技能树",
+          "ancestors": [
+            "技能树",
+            "TowerMenu",
+            "栖云宗·功能版",
+            "Survivor Canvas",
+            "PinePilot"
+          ],
+          "button": false,
+          "enabled": false,
+          "text": "技能树",
+          "x": 241.58333333333334,
+          "y": 735.0833333333333,
+          "box": {
+            "left": 219.64583333333334,
+            "right": 263.52083333333337,
+            "top": 722.4570833333333,
+            "bottom": 747.7095833333334
+          },
+          "clip": {
+            "left": 0,
+            "right": 390,
+            "top": 0,
+            "bottom": 844
+          }
+        },
+        {
+          "name": "武器",
+          "ancestors": [
+            "TowerMenu",
+            "栖云宗·功能版",
+            "Survivor Canvas",
+            "PinePilot"
+          ],
+          "button": true,
+          "enabled": true,
+          "text": "",
+          "x": 334.75,
+          "y": 735.0833333333333,
+          "box": {
+            "left": 292.5,
+            "right": 377,
+            "top": 711.2499999999999,
+            "bottom": 758.9166666666667
+          },
+          "clip": {
+            "left": 0,
+            "right": 390,
+            "top": 0,
+            "bottom": 844
+          }
+        },
+        {
+          "name": "武器",
+          "ancestors": [
+            "武器",
+            "TowerMenu",
+            "栖云宗·功能版",
+            "Survivor Canvas",
+            "PinePilot"
+          ],
+          "button": false,
+          "enabled": false,
+          "text": "武器",
+          "x": 334.75,
+          "y": 735.0833333333333,
+          "box": {
+            "left": 320.125,
+            "right": 349.375,
+            "top": 722.4570833333333,
+            "bottom": 747.7095833333334
+          },
+          "clip": {
+            "left": 0,
+            "right": 390,
+            "top": 0,
+            "bottom": 844
+          }
+        }
+      ]
+    }
+  ],
+  "evidencePolicy": "自然路径仅购丹/真实模拟/Store事务；高进度fixture单列，不写用户存档。光环截图需人工视觉复核。",
+  "sourceHashes": {
+    "js/xianxia/TowerGrowth.js": "24543c0059d60a64c80fca40ac976b7055bd3783d5402cefd5c0900119ab38d0",
+    "js/xianxia/TowerCampaign.js": "b7ed35b634fd14c3a48d7fa4b9baa43fe778e7eace859972ad83e260350be592",
+    "js/xianxia/TowerRun.js": "274ca5e3fa962bdbc2583f45a4340112f06db46cad581c932c71a606b8d57e2a",
+    "js/xianxia/TowerPlaytest.js": "2b4af1b3700e8f298c5e921d25a13fd2b50b808a03393368b225a03bb111f4b6",
+    "cocos-pilot/assets/scripts/TowerMenu.ts": "43f845ab406c6ef4153cb104decf8937c22ca25d02a53453c4e99c60a2bea4ac",
+    "cocos-pilot/assets/scripts/TowerView.ts": "c334b2e7df6005557cd8c5c2bca586e09d67a2d324e604434976d7a01e0a79d5"
+  },
+  "finishedAt": "2026-10-28T03:17:22.857Z",
+  "failures": 1
+}

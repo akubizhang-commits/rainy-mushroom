@@ -1,0 +1,440 @@
+{
+  "status": "ready-runtime-frozen",
+  "designRevision": "denomination-v1",
+  "rankValues": [
+    0,
+    1,
+    6,
+    24,
+    30,
+    36,
+    42,
+    48
+  ],
+  "runtimeSha256": "f2eeb5dca0ee913fc30250ef46e9515fe58f4d1318855431e55408d2d1cd9761",
+  "tests": {
+    "passed": 8,
+    "failed": 0,
+    "report": "drop-tests.tap"
+  },
+  "numericPlans": 900000,
+  "seedsPerFloor": 100000,
+  "prefixWorst": {
+    "floor": 9,
+    "wave": 1,
+    "old": 1.3,
+    "new": 1.23072,
+    "relative": -0.05329230769230775
+  },
+  "prefixMaximumIncrease": {
+    "floor": 2,
+    "wave": 3,
+    "old": 2.1,
+    "new": 2.14903,
+    "relative": 0.023347619047619173
+  },
+  "fullWorst": {
+    "floor": 6,
+    "old": 108,
+    "new": 105.64032,
+    "relative": -0.021848888888888918
+  },
+  "fullMaximumIncrease": {
+    "floor": 1,
+    "old": 63,
+    "new": 63.91421,
+    "relative": 0.014511269841269714
+  },
+  "rules": [
+    {
+      "floor": 1,
+      "minCount": 11,
+      "maxCount": 36,
+      "minValue": 57,
+      "maxValue": 69,
+      "chancesByRole": {
+        "normal": [
+          0,
+          0.052983194626,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "elite": [
+          0,
+          0,
+          0.874370124364,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "boss": [
+          0,
+          0,
+          0,
+          0.267608641521,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "normalChance": 0.05298319462600033,
+      "eliteChance": 0.8743701243640001,
+      "bossChance": 0.267608641521,
+      "targetValue": 63
+    },
+    {
+      "floor": 2,
+      "minCount": 12,
+      "maxCount": 39,
+      "minValue": 59,
+      "maxValue": 71,
+      "chancesByRole": {
+        "normal": [
+          0,
+          0.052799497447,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "elite": [
+          0,
+          0,
+          0.871424772994,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "boss": [
+          0,
+          0,
+          0,
+          0.292009915877,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "normalChance": 0.05279949744700014,
+      "eliteChance": 0.871424772994,
+      "bossChance": 0.292009915877,
+      "targetValue": 65
+    },
+    {
+      "floor": 3,
+      "minCount": 11,
+      "maxCount": 35,
+      "minValue": 71,
+      "maxValue": 85,
+      "chancesByRole": {
+        "normal": [
+          0,
+          0.049642085354,
+          0.007333211459,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "elite": [
+          0,
+          0,
+          0.843462803178,
+          0.389331701977,
+          0,
+          0,
+          0,
+          0
+        ],
+        "boss": [
+          0,
+          0,
+          0,
+          0,
+          0.756169654068,
+          0,
+          0,
+          0
+        ]
+      },
+      "normalChance": 0.04180361094934605,
+      "eliteChance": 0.6618103626976,
+      "bossChance": 0.756169654068,
+      "targetValue": 78
+    },
+    {
+      "floor": 4,
+      "minCount": 8,
+      "maxCount": 26,
+      "minValue": 79,
+      "maxValue": 95,
+      "chancesByRole": {
+        "normal": [
+          0,
+          0.050478842806,
+          0.009275620053,
+          0.002627180132,
+          0,
+          0,
+          0,
+          0
+        ],
+        "elite": [
+          0,
+          0,
+          0.82802441143,
+          0.32627815071,
+          0.338053058016,
+          0,
+          0,
+          0
+        ],
+        "boss": [
+          0,
+          0,
+          0,
+          0,
+          0.76705969941,
+          0,
+          0,
+          0
+        ]
+      },
+      "normalChance": 0.028003610652094474,
+      "eliteChance": 0.5316866179204001,
+      "bossChance": 0.76705969941,
+      "targetValue": 87
+    },
+    {
+      "floor": 5,
+      "minCount": 7,
+      "maxCount": 22,
+      "minValue": 81,
+      "maxValue": 99,
+      "chancesByRole": {
+        "normal": [
+          0,
+          0.050257270119,
+          0.008644929235,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "elite": [
+          0,
+          0,
+          0.832102239521,
+          0.351222358409,
+          0,
+          0,
+          0,
+          0
+        ],
+        "boss": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.752009242,
+          0,
+          0
+        ]
+      },
+      "normalChance": 0.021589226113038276,
+      "eliteChance": 0.5435743108538,
+      "bossChance": 0.752009242,
+      "targetValue": 90
+    },
+    {
+      "floor": 6,
+      "minCount": 4,
+      "maxCount": 14,
+      "minValue": 98,
+      "maxValue": 118,
+      "chancesByRole": {
+        "normal": [
+          0,
+          0.049980847015,
+          0.007119740176,
+          0.00283795742,
+          0,
+          0,
+          0,
+          0
+        ],
+        "elite": [
+          0,
+          0,
+          0,
+          0,
+          0.337775853817,
+          0,
+          0,
+          0
+        ],
+        "boss": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.769676998684,
+          0,
+          0
+        ]
+      },
+      "normalChance": 0.011935077196451907,
+      "eliteChance": 0.337775853817,
+      "bossChance": 0.769676998684,
+      "targetValue": 108
+    },
+    {
+      "floor": 7,
+      "minCount": 6,
+      "maxCount": 21,
+      "minValue": 95,
+      "maxValue": 115,
+      "chancesByRole": {
+        "normal": [
+          0,
+          0.04979288819,
+          0.00743642458,
+          0.002142665724,
+          0,
+          0,
+          0,
+          0
+        ],
+        "elite": [
+          0,
+          0,
+          0.83677780307,
+          0,
+          0.348616656353,
+          0,
+          0,
+          0
+        ],
+        "boss": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.802969802775,
+          0
+        ]
+      },
+      "normalChance": 0.01717005708141982,
+      "eliteChance": 0.5438811150398,
+      "bossChance": 0.802969802775,
+      "targetValue": 105
+    },
+    {
+      "floor": 8,
+      "minCount": 11,
+      "maxCount": 36,
+      "minValue": 99,
+      "maxValue": 121,
+      "chancesByRole": {
+        "normal": [
+          0,
+          0.050229996669,
+          0.008416445294,
+          0.002273482009,
+          0,
+          0,
+          0,
+          0
+        ],
+        "elite": [
+          0,
+          0,
+          0,
+          0.332861922291,
+          0.352636697899,
+          0,
+          0,
+          0
+        ],
+        "boss": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.785313783274,
+          0
+        ]
+      },
+      "normalChance": 0.03382304660130376,
+      "eliteChance": 0.34077183253419996,
+      "bossChance": 0.785313783274,
+      "targetValue": 110
+    },
+    {
+      "floor": 9,
+      "minCount": 3,
+      "maxCount": 7,
+      "minValue": 108,
+      "maxValue": 130,
+      "chancesByRole": {
+        "normal": [
+          0,
+          0,
+          0.008044133968,
+          0.002367126583,
+          0,
+          0,
+          0,
+          0
+        ],
+        "elite": [
+          0,
+          0,
+          0,
+          0.348793060644,
+          0.353771604917,
+          0,
+          0,
+          0
+        ],
+        "boss": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.787362135295
+        ]
+      },
+      "normalChance": 0.0033328896736435185,
+      "eliteChance": 0.35178018720779997,
+      "bossChance": 0.787362135295,
+      "targetValue": 119
+    }
+  ],
+  "scope": "Pure module/tests/numeric script/docs/reports only; no Run/Campaign/UI edits; no full suite or build.",
+  "historicalPrototypeStatus": "rejected; original evidence retained in drop-linear-*",
+  "limitation": "Expected tempo and full-floor bounds verified; residual bias, short-run variance, purchase overshoot and actual player difficulty are not claimed unchanged."
+}

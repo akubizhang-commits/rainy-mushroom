@@ -1,0 +1,4804 @@
+{
+  "breakthrough": {
+    "safe": false,
+    "requested": false,
+    "ignoredGate": 0,
+    "sequence": 0,
+    "lastResult": null,
+    "events": []
+  },
+  "schema": 1,
+  "attemptId": 10,
+  "floor": 9,
+  "phase": "won",
+  "training": false,
+  "time": 521.65,
+  "ticks": 31299,
+  "remainder": 0,
+  "wave": 20,
+  "waveStartedAt": 386.6,
+  "waveKilled": 9,
+  "wavePlanned": 9,
+  "nextId": 8394,
+  "player": {
+    "x": -350.2829767143787,
+    "y": 537.2286387220616,
+    "hp": 1715.8242027015986,
+    "xp": 14400,
+    "mana": 179,
+    "strength": 1673.4066229717585,
+    "intelligence": 1445.2417824314387,
+    "vitality": 171.58242027015984,
+    "awareness": 179,
+    "maxMana": 179,
+    "manaRegen": 7.16,
+    "maxHp": 1715.8242027015986,
+    "attack": 1876.4066229717585,
+    "magicAttack": 1783.2417824314387,
+    "moveSpeed": 237.60000000000002,
+    "radius": 18,
+    "faceX": -0.7071067811865479,
+    "faceY": -0.7071067811865471
+  },
+  "enemies": [],
+  "projectiles": [],
+  "zones": [
+    {
+      "id": "z8300",
+      "kind": "sword_rain",
+      "x": -140.9328831400098,
+      "y": 720.9360980974936,
+      "radius": 160,
+      "damage": 2234.8521271162053,
+      "hostile": false,
+      "direct": true,
+      "phase": "active",
+      "nextAt": 521.6666666666673,
+      "ticks": 1,
+      "interval": 0.1,
+      "targetCap": 6,
+      "expiresAt": 521.8666666666668,
+      "renderOnly": false,
+      "source": "evo_wanjian",
+      "shape": "line",
+      "reach": 440,
+      "width": 28,
+      "angle": 0,
+      "eyes": 0,
+      "hits": 25,
+      "pulseIndex": 24,
+      "pulseCount": 25,
+      "startedAt": 519.0666666666667,
+      "formId": "evo_wanjian",
+      "formLevel": 2,
+      "parentLevel": 10,
+      "originX": -283.61826254892,
+      "originY": 591.9092862986708,
+      "dirX": 0.741715449305722,
+      "dirY": 0.6707146876736867,
+      "faceX": 0.741715449305722,
+      "faceY": 0.6707146876736867,
+      "castContext": {
+        "loadout": {
+          "classId": "sword",
+          "active": {
+            "sj_yujian": 10,
+            "sj_arc": 10,
+            "sj_line": 10
+          },
+          "passive": {
+            "sj_spirit": 3,
+            "sj_heart": 4,
+            "sj_mark": 4,
+            "sj_bone": 4,
+            "vajra": 2
+          },
+          "evolutions": [
+            "evo_wanjian"
+          ],
+          "growthVersion": 1,
+          "evolutionLevels": {
+            "evo_wanjian": 2
+          },
+          "tutorialWaves": 0,
+          "weaponId": "weapon-4",
+          "weaponQuality": 1,
+          "weaponRefine": 0,
+          "weapon": {
+            "id": "weapon-4",
+            "definitionId": "eq_sword_qiyao",
+            "tier": "ling",
+            "quality": 1,
+            "refine": 0,
+            "locked": false,
+            "affixes": [
+              {
+                "type": "physical",
+                "value": 26
+              },
+              {
+                "type": "magic",
+                "value": 26
+              },
+              {
+                "type": "attackSpeed",
+                "value": 8
+              },
+              {
+                "type": "onHit",
+                "value": 5
+              },
+              {
+                "type": "flow",
+                "value": 12,
+                "target": "formation"
+              },
+              {
+                "type": "element",
+                "value": 4,
+                "target": "all"
+              }
+            ]
+          },
+          "weaponFocusCount": 0,
+          "weaponEquipped": true,
+          "armorId": "gear-7",
+          "armor": {
+            "id": "gear-7",
+            "definitionId": "eq_armor_wuyin",
+            "category": "armor",
+            "tier": "ling",
+            "quality": 1,
+            "refine": 0,
+            "locked": false,
+            "affixes": [
+              {
+                "type": "castSpeed",
+                "value": 14
+              },
+              {
+                "type": "healthRegen",
+                "value": 0.5
+              }
+            ]
+          },
+          "ringId": "gear-8",
+          "ring": {
+            "id": "gear-8",
+            "definitionId": "eq_ring_taihe",
+            "category": "ring",
+            "tier": "ling",
+            "quality": 1,
+            "refine": 0,
+            "locked": false,
+            "affixes": [
+              {
+                "type": "critChance",
+                "value": 8
+              },
+              {
+                "type": "critBonus",
+                "value": 17
+              },
+              {
+                "type": "skillDamage",
+                "value": 9
+              }
+            ]
+          }
+        },
+        "xp": 14400,
+        "weaponAttack": 233.2,
+        "weaponMagicAttack": 388
+      }
+    }
+  ],
+  "drops": [
+    {
+      "id": "d8393",
+      "kind": "resource",
+      "x": -274.3459237758239,
+      "y": 607.9723793759414,
+      "radius": 5,
+      "amount": 51,
+      "expiresAt": 522.15
+    }
+  ],
+  "effects": [
+    {
+      "id": "fx8386",
+      "kind": "convergence",
+      "x": 15.499399310388213,
+      "y": 754.5358154677172,
+      "radius": 160,
+      "hostile": false,
+      "startedAt": 521.4666666666667,
+      "expiresAt": 521.7166666666667,
+      "source": "evo_wanjian",
+      "shape": "line",
+      "reach": 160,
+      "width": 28,
+      "angle": 0,
+      "eyes": 0,
+      "hits": 25,
+      "pulseIndex": 23,
+      "pulseCount": 25,
+      "targetCap": 6,
+      "dirX": -0.9777017653149876,
+      "dirY": -0.20999823356389696,
+      "faceX": -0.9777017653149876,
+      "faceY": -0.20999823356389696,
+      "toX": -140.9328831400098,
+      "toY": 720.9360980974936,
+      "terminal": false,
+      "targetIds": []
+    },
+    {
+      "id": "fx8387",
+      "kind": "convergence",
+      "x": 1.4728517787000044,
+      "y": 793.8785868284257,
+      "radius": 160,
+      "hostile": false,
+      "startedAt": 521.5666666666667,
+      "expiresAt": 521.8166666666667,
+      "source": "evo_wanjian",
+      "shape": "line",
+      "reach": 159.99999999999997,
+      "width": 28,
+      "angle": 0,
+      "eyes": 0,
+      "hits": 25,
+      "pulseIndex": 24,
+      "pulseCount": 25,
+      "targetCap": 6,
+      "dirX": -0.8900358432419365,
+      "dirY": -0.45589055456832533,
+      "faceX": -0.8900358432419365,
+      "faceY": -0.45589055456832533,
+      "toX": -140.9328831400098,
+      "toY": 720.9360980974936,
+      "terminal": false,
+      "targetIds": []
+    },
+    {
+      "id": "fx8388",
+      "kind": "hit",
+      "x": -274.3459237758239,
+      "y": 607.9723793759414,
+      "radius": 12,
+      "hostile": false,
+      "startedAt": 521.65,
+      "expiresAt": 521.9,
+      "damage": 6597.8790095154545,
+      "damageParts": {
+        "physical": 6597.8790095154545,
+        "magic": 0
+      },
+      "source": "wound",
+      "targetId": "a10:f9:w20:u1",
+      "targetRadius": 42
+    }
+  ],
+  "pending": [],
+  "reserved": [],
+  "earned": {
+    "xp": 1373,
+    "cores": 160,
+    "contribution": 0
+  },
+  "rawKillXp": 2295,
+  "normalCoreCounter": 0,
+  "loadout": {
+    "classId": "sword",
+    "active": {
+      "sj_yujian": 10,
+      "sj_arc": 10,
+      "sj_line": 10
+    },
+    "passive": {
+      "sj_spirit": 3,
+      "sj_heart": 4,
+      "sj_mark": 4,
+      "sj_bone": 4,
+      "vajra": 2
+    },
+    "evolutions": [
+      "evo_wanjian"
+    ],
+    "growthVersion": 1,
+    "evolutionLevels": {
+      "evo_wanjian": 2
+    },
+    "tutorialWaves": 0,
+    "weaponId": "weapon-4",
+    "weaponQuality": 1,
+    "weaponRefine": 0,
+    "weapon": {
+      "id": "weapon-4",
+      "definitionId": "eq_sword_qiyao",
+      "tier": "ling",
+      "quality": 1,
+      "refine": 0,
+      "locked": false,
+      "affixes": [
+        {
+          "type": "physical",
+          "value": 26
+        },
+        {
+          "type": "magic",
+          "value": 26
+        },
+        {
+          "type": "attackSpeed",
+          "value": 8
+        },
+        {
+          "type": "onHit",
+          "value": 5
+        },
+        {
+          "type": "flow",
+          "value": 12,
+          "target": "formation"
+        },
+        {
+          "type": "element",
+          "value": 4,
+          "target": "all"
+        }
+      ]
+    },
+    "weaponFocusCount": 0,
+    "weaponEquipped": true,
+    "armorId": "gear-7",
+    "armor": {
+      "id": "gear-7",
+      "definitionId": "eq_armor_wuyin",
+      "category": "armor",
+      "tier": "ling",
+      "quality": 1,
+      "refine": 0,
+      "locked": false,
+      "affixes": [
+        {
+          "type": "castSpeed",
+          "value": 14
+        },
+        {
+          "type": "healthRegen",
+          "value": 0.5
+        }
+      ]
+    },
+    "ringId": "gear-8",
+    "ring": {
+      "id": "gear-8",
+      "definitionId": "eq_ring_taihe",
+      "category": "ring",
+      "tier": "ling",
+      "quality": 1,
+      "refine": 0,
+      "locked": false,
+      "affixes": [
+        {
+          "type": "critChance",
+          "value": 8
+        },
+        {
+          "type": "critBonus",
+          "value": 17
+        },
+        {
+          "type": "skillDamage",
+          "value": 9
+        }
+      ]
+    }
+  },
+  "rng": 3822320729,
+  "base": {
+    "xp": 13027,
+    "hp": 1607.9853728718504,
+    "mana": 178,
+    "normalCoreCounter": 0,
+    "tutorialWaves": 0
+  },
+  "manaState": {
+    "spent": 673,
+    "recovered": 673.999999999915
+  },
+  "input": {
+    "x": -0.7071067811865479,
+    "y": -0.7071067811865471
+  },
+  "cooldowns": {
+    "sj_yujian": 522.6666666666666,
+    "sj_arc": 523.3166666666667,
+    "sj_line": 532.45,
+    "evo_wanjian": 533.8833333333333
+  },
+  "casts": [],
+  "killLedger": [
+    {
+      "id": "a10:f9:w1:u4",
+      "archetype": "tiger_normal_r4",
+      "wave": 1,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w1:u1",
+      "archetype": "tiger_normal_r4",
+      "wave": 1,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w1:u9",
+      "archetype": "tiger_normal_r4",
+      "wave": 1,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w1:u3",
+      "archetype": "tiger_normal_r4",
+      "wave": 1,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w1:u6",
+      "archetype": "tiger_normal_r4",
+      "wave": 1,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w1:u12",
+      "archetype": "falcon_normal_r4",
+      "wave": 1,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w1:u20",
+      "archetype": "falcon_normal_r4",
+      "wave": 1,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w1:u22",
+      "archetype": "falcon_normal_r4",
+      "wave": 1,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w1:u14",
+      "archetype": "falcon_normal_r4",
+      "wave": 1,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w1:u15",
+      "archetype": "falcon_normal_r4",
+      "wave": 1,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w1:u2",
+      "archetype": "tiger_normal_r4",
+      "wave": 1,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w1:u7",
+      "archetype": "tiger_normal_r4",
+      "wave": 1,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w1:u11",
+      "archetype": "falcon_normal_r4",
+      "wave": 1,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w1:u8",
+      "archetype": "tiger_normal_r4",
+      "wave": 1,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w1:u17",
+      "archetype": "falcon_normal_r4",
+      "wave": 1,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w1:u5",
+      "archetype": "tiger_normal_r4",
+      "wave": 1,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w1:u10",
+      "archetype": "tiger_normal_r4",
+      "wave": 1,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w1:u25",
+      "archetype": "falcon_normal_r4",
+      "wave": 1,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w1:u23",
+      "archetype": "falcon_normal_r4",
+      "wave": 1,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w1:u18",
+      "archetype": "falcon_normal_r4",
+      "wave": 1,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w1:u13",
+      "archetype": "falcon_normal_r4",
+      "wave": 1,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w1:u16",
+      "archetype": "falcon_normal_r4",
+      "wave": 1,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w1:u26",
+      "archetype": "falcon_normal_r4",
+      "wave": 1,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w1:u21",
+      "archetype": "falcon_normal_r4",
+      "wave": 1,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w1:u24",
+      "archetype": "falcon_normal_r4",
+      "wave": 1,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w1:u19",
+      "archetype": "falcon_normal_r4",
+      "wave": 1,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w2:u1",
+      "archetype": "falcon_normal_r4",
+      "wave": 2,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w2:u6",
+      "archetype": "falcon_normal_r4",
+      "wave": 2,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w2:u9",
+      "archetype": "falcon_normal_r4",
+      "wave": 2,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w2:u3",
+      "archetype": "falcon_normal_r4",
+      "wave": 2,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w2:u14",
+      "archetype": "falcon_normal_r4",
+      "wave": 2,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w2:u22",
+      "archetype": "falcon_normal_r4",
+      "wave": 2,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w2:u5",
+      "archetype": "falcon_normal_r4",
+      "wave": 2,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w2:u13",
+      "archetype": "falcon_normal_r4",
+      "wave": 2,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w2:u2",
+      "archetype": "falcon_normal_r4",
+      "wave": 2,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w2:u19",
+      "archetype": "falcon_normal_r4",
+      "wave": 2,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w2:u11",
+      "archetype": "falcon_normal_r4",
+      "wave": 2,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w2:u7",
+      "archetype": "falcon_normal_r4",
+      "wave": 2,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w2:u4",
+      "archetype": "falcon_normal_r4",
+      "wave": 2,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w2:u10",
+      "archetype": "falcon_normal_r4",
+      "wave": 2,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w2:u18",
+      "archetype": "falcon_normal_r4",
+      "wave": 2,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w2:u24",
+      "archetype": "falcon_normal_r4",
+      "wave": 2,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w2:u23",
+      "archetype": "falcon_normal_r4",
+      "wave": 2,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w2:u20",
+      "archetype": "falcon_normal_r4",
+      "wave": 2,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w2:u15",
+      "archetype": "falcon_normal_r4",
+      "wave": 2,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w2:u28",
+      "archetype": "falcon_normal_r4",
+      "wave": 2,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w2:u12",
+      "archetype": "falcon_normal_r4",
+      "wave": 2,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w2:u8",
+      "archetype": "falcon_normal_r4",
+      "wave": 2,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w2:u27",
+      "archetype": "falcon_normal_r4",
+      "wave": 2,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w2:u16",
+      "archetype": "falcon_normal_r4",
+      "wave": 2,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w2:u17",
+      "archetype": "falcon_normal_r4",
+      "wave": 2,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w2:u25",
+      "archetype": "falcon_normal_r4",
+      "wave": 2,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w2:u26",
+      "archetype": "falcon_normal_r4",
+      "wave": 2,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w2:u21",
+      "archetype": "falcon_normal_r4",
+      "wave": 2,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w3:u2",
+      "archetype": "wolf_normal_r4",
+      "wave": 3,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w3:u10",
+      "archetype": "wolf_normal_r4",
+      "wave": 3,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w3:u5",
+      "archetype": "wolf_normal_r4",
+      "wave": 3,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w3:u13",
+      "archetype": "falcon_normal_r4",
+      "wave": 3,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w3:u18",
+      "archetype": "falcon_normal_r4",
+      "wave": 3,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w3:u7",
+      "archetype": "wolf_normal_r4",
+      "wave": 3,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w3:u4",
+      "archetype": "wolf_normal_r4",
+      "wave": 3,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w3:u1",
+      "archetype": "wolf_normal_r4",
+      "wave": 3,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w3:u8",
+      "archetype": "wolf_normal_r4",
+      "wave": 3,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w3:u12",
+      "archetype": "wolf_normal_r4",
+      "wave": 3,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w3:u11",
+      "archetype": "wolf_normal_r4",
+      "wave": 3,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w3:u21",
+      "archetype": "falcon_normal_r4",
+      "wave": 3,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w3:u16",
+      "archetype": "falcon_normal_r4",
+      "wave": 3,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w3:u6",
+      "archetype": "wolf_normal_r4",
+      "wave": 3,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w3:u9",
+      "archetype": "wolf_normal_r4",
+      "wave": 3,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w3:u3",
+      "archetype": "wolf_normal_r4",
+      "wave": 3,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w3:u15",
+      "archetype": "falcon_normal_r4",
+      "wave": 3,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w3:u26",
+      "archetype": "falcon_normal_r4",
+      "wave": 3,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w3:u23",
+      "archetype": "falcon_normal_r4",
+      "wave": 3,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w3:u20",
+      "archetype": "falcon_normal_r4",
+      "wave": 3,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w3:u17",
+      "archetype": "falcon_normal_r4",
+      "wave": 3,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w3:u14",
+      "archetype": "falcon_normal_r4",
+      "wave": 3,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w3:u28",
+      "archetype": "falcon_normal_r4",
+      "wave": 3,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w3:u25",
+      "archetype": "falcon_normal_r4",
+      "wave": 3,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w3:u22",
+      "archetype": "falcon_normal_r4",
+      "wave": 3,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w3:u30",
+      "archetype": "falcon_normal_r4",
+      "wave": 3,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w3:u27",
+      "archetype": "falcon_normal_r4",
+      "wave": 3,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w3:u29",
+      "archetype": "falcon_normal_r4",
+      "wave": 3,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w3:u24",
+      "archetype": "falcon_normal_r4",
+      "wave": 3,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w3:u19",
+      "archetype": "falcon_normal_r4",
+      "wave": 3,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w4:u1",
+      "archetype": "tiger_normal_r4",
+      "wave": 4,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w4:u4",
+      "archetype": "tiger_normal_r4",
+      "wave": 4,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w4:u12",
+      "archetype": "tiger_normal_r4",
+      "wave": 4,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w4:u3",
+      "archetype": "tiger_normal_r4",
+      "wave": 4,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w4:u9",
+      "archetype": "tiger_normal_r4",
+      "wave": 4,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w4:u2",
+      "archetype": "tiger_normal_r4",
+      "wave": 4,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w4:u17",
+      "archetype": "falcon_normal_r4",
+      "wave": 4,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w4:u14",
+      "archetype": "falcon_normal_r4",
+      "wave": 4,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w4:u23",
+      "archetype": "falcon_normal_r4",
+      "wave": 4,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w4:u6",
+      "archetype": "tiger_normal_r4",
+      "wave": 4,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w4:u7",
+      "archetype": "tiger_normal_r4",
+      "wave": 4,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w4:u10",
+      "archetype": "tiger_normal_r4",
+      "wave": 4,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w4:u15",
+      "archetype": "falcon_normal_r4",
+      "wave": 4,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w4:u25",
+      "archetype": "falcon_normal_r4",
+      "wave": 4,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w4:u5",
+      "archetype": "tiger_normal_r4",
+      "wave": 4,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w4:u11",
+      "archetype": "tiger_normal_r4",
+      "wave": 4,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w4:u8",
+      "archetype": "tiger_normal_r4",
+      "wave": 4,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w4:u16",
+      "archetype": "falcon_normal_r4",
+      "wave": 4,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w4:u19",
+      "archetype": "falcon_normal_r4",
+      "wave": 4,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w4:u27",
+      "archetype": "falcon_normal_r4",
+      "wave": 4,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w4:u30",
+      "archetype": "falcon_normal_r4",
+      "wave": 4,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w4:u13",
+      "archetype": "falcon_normal_r4",
+      "wave": 4,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w4:u22",
+      "archetype": "falcon_normal_r4",
+      "wave": 4,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w4:u20",
+      "archetype": "falcon_normal_r4",
+      "wave": 4,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w4:u28",
+      "archetype": "falcon_normal_r4",
+      "wave": 4,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w4:u31",
+      "archetype": "falcon_normal_r4",
+      "wave": 4,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w4:u18",
+      "archetype": "falcon_normal_r4",
+      "wave": 4,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w4:u21",
+      "archetype": "falcon_normal_r4",
+      "wave": 4,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w4:u26",
+      "archetype": "falcon_normal_r4",
+      "wave": 4,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w4:u29",
+      "archetype": "falcon_normal_r4",
+      "wave": 4,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w4:u24",
+      "archetype": "falcon_normal_r4",
+      "wave": 4,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w4:u32",
+      "archetype": "falcon_normal_r4",
+      "wave": 4,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w5:u1",
+      "archetype": "tiger_normal_r4",
+      "wave": 5,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w5:u6",
+      "archetype": "tiger_normal_r4",
+      "wave": 5,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w5:u9",
+      "archetype": "tiger_normal_r4",
+      "wave": 5,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w5:u4",
+      "archetype": "tiger_normal_r4",
+      "wave": 5,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w5:u3",
+      "archetype": "tiger_normal_r4",
+      "wave": 5,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w5:u14",
+      "archetype": "falcon_normal_r4",
+      "wave": 5,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w5:u7",
+      "archetype": "tiger_normal_r4",
+      "wave": 5,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w5:u17",
+      "archetype": "falcon_normal_r4",
+      "wave": 5,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w5:u2",
+      "archetype": "tiger_normal_r4",
+      "wave": 5,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w5:u11",
+      "archetype": "falcon_normal_r4",
+      "wave": 5,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w5:u20",
+      "archetype": "falcon_normal_r4",
+      "wave": 5,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w5:u12",
+      "archetype": "falcon_normal_r4",
+      "wave": 5,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w5:u15",
+      "archetype": "falcon_normal_r4",
+      "wave": 5,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w5:u10",
+      "archetype": "tiger_normal_r4",
+      "wave": 5,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w5:u16",
+      "archetype": "falcon_normal_r4",
+      "wave": 5,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w5:u23",
+      "archetype": "falcon_normal_r4",
+      "wave": 5,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w5:u8",
+      "archetype": "tiger_normal_r4",
+      "wave": 5,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w5:u5",
+      "archetype": "tiger_normal_r4",
+      "wave": 5,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w5:u18",
+      "archetype": "falcon_normal_r4",
+      "wave": 5,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w5:u26",
+      "archetype": "falcon_normal_r4",
+      "wave": 5,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w5:u13",
+      "archetype": "falcon_normal_r4",
+      "wave": 5,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w5:u22",
+      "archetype": "falcon_normal_r4",
+      "wave": 5,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w5:u19",
+      "archetype": "falcon_normal_r4",
+      "wave": 5,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w5:u25",
+      "archetype": "falcon_normal_r4",
+      "wave": 5,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w5:u24",
+      "archetype": "falcon_normal_r4",
+      "wave": 5,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w5:u21",
+      "archetype": "falcon_normal_r4",
+      "wave": 5,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w5:u27",
+      "archetype": "tiger_elite_f9_w5_n1",
+      "wave": 5,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w6:u1",
+      "archetype": "tiger_normal_r4",
+      "wave": 6,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w6:u4",
+      "archetype": "tiger_normal_r4",
+      "wave": 6,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w6:u12",
+      "archetype": "tiger_normal_r4",
+      "wave": 6,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w6:u9",
+      "archetype": "tiger_normal_r4",
+      "wave": 6,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w6:u17",
+      "archetype": "falcon_normal_r4",
+      "wave": 6,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w6:u7",
+      "archetype": "tiger_normal_r4",
+      "wave": 6,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w6:u20",
+      "archetype": "falcon_normal_r4",
+      "wave": 6,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w6:u6",
+      "archetype": "tiger_normal_r4",
+      "wave": 6,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w6:u2",
+      "archetype": "tiger_normal_r4",
+      "wave": 6,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w6:u14",
+      "archetype": "falcon_normal_r4",
+      "wave": 6,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w6:u3",
+      "archetype": "tiger_normal_r4",
+      "wave": 6,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w6:u5",
+      "archetype": "tiger_normal_r4",
+      "wave": 6,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w6:u25",
+      "archetype": "falcon_normal_r4",
+      "wave": 6,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w6:u8",
+      "archetype": "tiger_normal_r4",
+      "wave": 6,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w6:u22",
+      "archetype": "falcon_normal_r4",
+      "wave": 6,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w6:u11",
+      "archetype": "tiger_normal_r4",
+      "wave": 6,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w6:u30",
+      "archetype": "falcon_normal_r4",
+      "wave": 6,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w6:u19",
+      "archetype": "falcon_normal_r4",
+      "wave": 6,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w6:u15",
+      "archetype": "falcon_normal_r4",
+      "wave": 6,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w6:u28",
+      "archetype": "falcon_normal_r4",
+      "wave": 6,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w6:u10",
+      "archetype": "tiger_normal_r4",
+      "wave": 6,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w6:u23",
+      "archetype": "falcon_normal_r4",
+      "wave": 6,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w6:u18",
+      "archetype": "falcon_normal_r4",
+      "wave": 6,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w6:u31",
+      "archetype": "falcon_normal_r4",
+      "wave": 6,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w6:u13",
+      "archetype": "falcon_normal_r4",
+      "wave": 6,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w6:u29",
+      "archetype": "falcon_normal_r4",
+      "wave": 6,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w6:u26",
+      "archetype": "falcon_normal_r4",
+      "wave": 6,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w6:u32",
+      "archetype": "falcon_normal_r4",
+      "wave": 6,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w6:u16",
+      "archetype": "falcon_normal_r4",
+      "wave": 6,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w6:u21",
+      "archetype": "falcon_normal_r4",
+      "wave": 6,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w6:u27",
+      "archetype": "falcon_normal_r4",
+      "wave": 6,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w6:u24",
+      "archetype": "falcon_normal_r4",
+      "wave": 6,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w7:u6",
+      "archetype": "tiger_normal_r4",
+      "wave": 7,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w7:u1",
+      "archetype": "tiger_normal_r4",
+      "wave": 7,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w7:u9",
+      "archetype": "tiger_normal_r4",
+      "wave": 7,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w7:u14",
+      "archetype": "wolf_normal_r4",
+      "wave": 7,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w7:u17",
+      "archetype": "wolf_normal_r4",
+      "wave": 7,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w7:u4",
+      "archetype": "tiger_normal_r4",
+      "wave": 7,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w7:u12",
+      "archetype": "tiger_normal_r4",
+      "wave": 7,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w7:u20",
+      "archetype": "wolf_normal_r4",
+      "wave": 7,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w7:u7",
+      "archetype": "tiger_normal_r4",
+      "wave": 7,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w7:u15",
+      "archetype": "wolf_normal_r4",
+      "wave": 7,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w7:u2",
+      "archetype": "tiger_normal_r4",
+      "wave": 7,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w7:u3",
+      "archetype": "tiger_normal_r4",
+      "wave": 7,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w7:u28",
+      "archetype": "wolf_normal_r4",
+      "wave": 7,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w7:u23",
+      "archetype": "wolf_normal_r4",
+      "wave": 7,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w7:u10",
+      "archetype": "tiger_normal_r4",
+      "wave": 7,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w7:u22",
+      "archetype": "wolf_normal_r4",
+      "wave": 7,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w7:u5",
+      "archetype": "tiger_normal_r4",
+      "wave": 7,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w7:u25",
+      "archetype": "wolf_normal_r4",
+      "wave": 7,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w7:u33",
+      "archetype": "wolf_normal_r4",
+      "wave": 7,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w7:u11",
+      "archetype": "tiger_normal_r4",
+      "wave": 7,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w7:u18",
+      "archetype": "wolf_normal_r4",
+      "wave": 7,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w7:u26",
+      "archetype": "wolf_normal_r4",
+      "wave": 7,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w7:u31",
+      "archetype": "wolf_normal_r4",
+      "wave": 7,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w7:u8",
+      "archetype": "tiger_normal_r4",
+      "wave": 7,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w7:u13",
+      "archetype": "tiger_normal_r4",
+      "wave": 7,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w7:u16",
+      "archetype": "wolf_normal_r4",
+      "wave": 7,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w7:u21",
+      "archetype": "wolf_normal_r4",
+      "wave": 7,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w7:u29",
+      "archetype": "wolf_normal_r4",
+      "wave": 7,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w7:u34",
+      "archetype": "wolf_normal_r4",
+      "wave": 7,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w7:u19",
+      "archetype": "wolf_normal_r4",
+      "wave": 7,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w7:u27",
+      "archetype": "wolf_normal_r4",
+      "wave": 7,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w7:u24",
+      "archetype": "wolf_normal_r4",
+      "wave": 7,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w7:u30",
+      "archetype": "wolf_normal_r4",
+      "wave": 7,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w7:u32",
+      "archetype": "wolf_normal_r4",
+      "wave": 7,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w8:u1",
+      "archetype": "tiger_normal_r4",
+      "wave": 8,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w8:u4",
+      "archetype": "tiger_normal_r4",
+      "wave": 8,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w8:u12",
+      "archetype": "tiger_normal_r4",
+      "wave": 8,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w8:u7",
+      "archetype": "tiger_normal_r4",
+      "wave": 8,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w8:u9",
+      "archetype": "tiger_normal_r4",
+      "wave": 8,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w8:u17",
+      "archetype": "falcon_normal_r4",
+      "wave": 8,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w8:u15",
+      "archetype": "falcon_normal_r4",
+      "wave": 8,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w8:u2",
+      "archetype": "tiger_normal_r4",
+      "wave": 8,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w8:u23",
+      "archetype": "falcon_normal_r4",
+      "wave": 8,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w8:u10",
+      "archetype": "tiger_normal_r4",
+      "wave": 8,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w8:u28",
+      "archetype": "falcon_normal_r4",
+      "wave": 8,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w8:u20",
+      "archetype": "falcon_normal_r4",
+      "wave": 8,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w8:u6",
+      "archetype": "tiger_normal_r4",
+      "wave": 8,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w8:u3",
+      "archetype": "tiger_normal_r4",
+      "wave": 8,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w8:u5",
+      "archetype": "tiger_normal_r4",
+      "wave": 8,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w8:u14",
+      "archetype": "tiger_normal_r4",
+      "wave": 8,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w8:u8",
+      "archetype": "tiger_normal_r4",
+      "wave": 8,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w8:u25",
+      "archetype": "falcon_normal_r4",
+      "wave": 8,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w8:u11",
+      "archetype": "tiger_normal_r4",
+      "wave": 8,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w8:u36",
+      "archetype": "falcon_normal_r4",
+      "wave": 8,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w8:u13",
+      "archetype": "tiger_normal_r4",
+      "wave": 8,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w8:u31",
+      "archetype": "falcon_normal_r4",
+      "wave": 8,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w8:u18",
+      "archetype": "falcon_normal_r4",
+      "wave": 8,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w8:u26",
+      "archetype": "falcon_normal_r4",
+      "wave": 8,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w8:u34",
+      "archetype": "falcon_normal_r4",
+      "wave": 8,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w8:u29",
+      "archetype": "falcon_normal_r4",
+      "wave": 8,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w8:u21",
+      "archetype": "falcon_normal_r4",
+      "wave": 8,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w8:u16",
+      "archetype": "falcon_normal_r4",
+      "wave": 8,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w8:u27",
+      "archetype": "falcon_normal_r4",
+      "wave": 8,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w8:u30",
+      "archetype": "falcon_normal_r4",
+      "wave": 8,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w8:u33",
+      "archetype": "falcon_normal_r4",
+      "wave": 8,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w8:u22",
+      "archetype": "falcon_normal_r4",
+      "wave": 8,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w8:u24",
+      "archetype": "falcon_normal_r4",
+      "wave": 8,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w8:u19",
+      "archetype": "falcon_normal_r4",
+      "wave": 8,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w8:u35",
+      "archetype": "falcon_normal_r4",
+      "wave": 8,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w8:u32",
+      "archetype": "falcon_normal_r4",
+      "wave": 8,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w9:u4",
+      "archetype": "tiger_normal_r4",
+      "wave": 9,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w9:u1",
+      "archetype": "tiger_normal_r4",
+      "wave": 9,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w9:u9",
+      "archetype": "tiger_normal_r4",
+      "wave": 9,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w9:u12",
+      "archetype": "tiger_normal_r4",
+      "wave": 9,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w9:u2",
+      "archetype": "tiger_normal_r4",
+      "wave": 9,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w9:u7",
+      "archetype": "tiger_normal_r4",
+      "wave": 9,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w9:u15",
+      "archetype": "tiger_normal_r4",
+      "wave": 9,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w9:u10",
+      "archetype": "tiger_normal_r4",
+      "wave": 9,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w9:u23",
+      "archetype": "falcon_normal_r4",
+      "wave": 9,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w9:u5",
+      "archetype": "tiger_normal_r4",
+      "wave": 9,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w9:u6",
+      "archetype": "tiger_normal_r4",
+      "wave": 9,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w9:u18",
+      "archetype": "falcon_normal_r4",
+      "wave": 9,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w9:u8",
+      "archetype": "tiger_normal_r4",
+      "wave": 9,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w9:u13",
+      "archetype": "tiger_normal_r4",
+      "wave": 9,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w9:u17",
+      "archetype": "falcon_normal_r4",
+      "wave": 9,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w9:u3",
+      "archetype": "tiger_normal_r4",
+      "wave": 9,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w9:u11",
+      "archetype": "tiger_normal_r4",
+      "wave": 9,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w9:u26",
+      "archetype": "falcon_normal_r4",
+      "wave": 9,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w9:u21",
+      "archetype": "falcon_normal_r4",
+      "wave": 9,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w9:u19",
+      "archetype": "falcon_normal_r4",
+      "wave": 9,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w9:u16",
+      "archetype": "falcon_normal_r4",
+      "wave": 9,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w9:u27",
+      "archetype": "falcon_normal_r4",
+      "wave": 9,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w9:u22",
+      "archetype": "falcon_normal_r4",
+      "wave": 9,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w9:u14",
+      "archetype": "tiger_normal_r4",
+      "wave": 9,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w9:u30",
+      "archetype": "falcon_normal_r4",
+      "wave": 9,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w9:u35",
+      "archetype": "falcon_normal_r4",
+      "wave": 9,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w9:u38",
+      "archetype": "falcon_normal_r4",
+      "wave": 9,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w9:u28",
+      "archetype": "falcon_normal_r4",
+      "wave": 9,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w9:u20",
+      "archetype": "falcon_normal_r4",
+      "wave": 9,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w9:u25",
+      "archetype": "falcon_normal_r4",
+      "wave": 9,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w9:u31",
+      "archetype": "falcon_normal_r4",
+      "wave": 9,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w9:u36",
+      "archetype": "falcon_normal_r4",
+      "wave": 9,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w9:u34",
+      "archetype": "falcon_normal_r4",
+      "wave": 9,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w9:u29",
+      "archetype": "falcon_normal_r4",
+      "wave": 9,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w9:u33",
+      "archetype": "falcon_normal_r4",
+      "wave": 9,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w9:u37",
+      "archetype": "falcon_normal_r4",
+      "wave": 9,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w9:u24",
+      "archetype": "falcon_normal_r4",
+      "wave": 9,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w9:u32",
+      "archetype": "falcon_normal_r4",
+      "wave": 9,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w10:u1",
+      "archetype": "tiger_normal_r4",
+      "wave": 10,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w10:u9",
+      "archetype": "tiger_normal_r4",
+      "wave": 10,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w10:u4",
+      "archetype": "tiger_normal_r4",
+      "wave": 10,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w10:u12",
+      "archetype": "falcon_normal_r4",
+      "wave": 10,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w10:u20",
+      "archetype": "falcon_normal_r4",
+      "wave": 10,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w10:u3",
+      "archetype": "tiger_normal_r4",
+      "wave": 10,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w10:u6",
+      "archetype": "tiger_normal_r4",
+      "wave": 10,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w10:u14",
+      "archetype": "falcon_normal_r4",
+      "wave": 10,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w10:u2",
+      "archetype": "tiger_normal_r4",
+      "wave": 10,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w10:u28",
+      "archetype": "falcon_normal_r4",
+      "wave": 10,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w10:u7",
+      "archetype": "tiger_normal_r4",
+      "wave": 10,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w10:u5",
+      "archetype": "tiger_normal_r4",
+      "wave": 10,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w10:u15",
+      "archetype": "falcon_normal_r4",
+      "wave": 10,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w10:u17",
+      "archetype": "falcon_normal_r4",
+      "wave": 10,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w10:u22",
+      "archetype": "falcon_normal_r4",
+      "wave": 10,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w10:u11",
+      "archetype": "tiger_normal_r4",
+      "wave": 10,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w10:u8",
+      "archetype": "tiger_normal_r4",
+      "wave": 10,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w10:u19",
+      "archetype": "falcon_normal_r4",
+      "wave": 10,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w10:u25",
+      "archetype": "falcon_normal_r4",
+      "wave": 10,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w10:u10",
+      "archetype": "tiger_normal_r4",
+      "wave": 10,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w10:u23",
+      "archetype": "falcon_normal_r4",
+      "wave": 10,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w10:u18",
+      "archetype": "falcon_normal_r4",
+      "wave": 10,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w10:u13",
+      "archetype": "falcon_normal_r4",
+      "wave": 10,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w10:u16",
+      "archetype": "falcon_normal_r4",
+      "wave": 10,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w10:u21",
+      "archetype": "falcon_normal_r4",
+      "wave": 10,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w10:u26",
+      "archetype": "falcon_normal_r4",
+      "wave": 10,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w10:u29",
+      "archetype": "falcon_elite_f9_w10_n2",
+      "wave": 10,
+      "coreRank": 5
+    },
+    {
+      "id": "a10:f9:w10:u24",
+      "archetype": "falcon_normal_r4",
+      "wave": 10,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w10:u27",
+      "archetype": "falcon_normal_r4",
+      "wave": 10,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w10:u30",
+      "archetype": "falcon_elite_f9_w10_n3",
+      "wave": 10,
+      "coreRank": 5
+    },
+    {
+      "id": "a10:f9:w11:u3",
+      "archetype": "tiger_normal_r4",
+      "wave": 11,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w11:u8",
+      "archetype": "tiger_normal_r4",
+      "wave": 11,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w11:u11",
+      "archetype": "tiger_normal_r4",
+      "wave": 11,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w11:u16",
+      "archetype": "wolf_normal_r4",
+      "wave": 11,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w11:u5",
+      "archetype": "tiger_normal_r4",
+      "wave": 11,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w11:u19",
+      "archetype": "wolf_normal_r4",
+      "wave": 11,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w11:u13",
+      "archetype": "tiger_normal_r4",
+      "wave": 11,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w11:u2",
+      "archetype": "tiger_normal_r4",
+      "wave": 11,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w11:u6",
+      "archetype": "tiger_normal_r4",
+      "wave": 11,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w11:u21",
+      "archetype": "wolf_normal_r4",
+      "wave": 11,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w11:u10",
+      "archetype": "tiger_normal_r4",
+      "wave": 11,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w11:u24",
+      "archetype": "wolf_normal_r4",
+      "wave": 11,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w11:u18",
+      "archetype": "wolf_normal_r4",
+      "wave": 11,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w11:u7",
+      "archetype": "tiger_normal_r4",
+      "wave": 11,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w11:u4",
+      "archetype": "tiger_normal_r4",
+      "wave": 11,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w11:u29",
+      "archetype": "wolf_normal_r4",
+      "wave": 11,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w11:u26",
+      "archetype": "wolf_normal_r4",
+      "wave": 11,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w11:u1",
+      "archetype": "tiger_normal_r4",
+      "wave": 11,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w11:u17",
+      "archetype": "wolf_normal_r4",
+      "wave": 11,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w11:u32",
+      "archetype": "wolf_normal_r4",
+      "wave": 11,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w11:u27",
+      "archetype": "wolf_normal_r4",
+      "wave": 11,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w11:u35",
+      "archetype": "wolf_normal_r4",
+      "wave": 11,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w11:u12",
+      "archetype": "tiger_normal_r4",
+      "wave": 11,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w11:u15",
+      "archetype": "wolf_normal_r4",
+      "wave": 11,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w11:u20",
+      "archetype": "wolf_normal_r4",
+      "wave": 11,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w11:u23",
+      "archetype": "wolf_normal_r4",
+      "wave": 11,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w11:u28",
+      "archetype": "wolf_normal_r4",
+      "wave": 11,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w11:u22",
+      "archetype": "wolf_normal_r4",
+      "wave": 11,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w11:u34",
+      "archetype": "wolf_normal_r4",
+      "wave": 11,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w11:u14",
+      "archetype": "tiger_normal_r4",
+      "wave": 11,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w11:u9",
+      "archetype": "tiger_normal_r4",
+      "wave": 11,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w11:u30",
+      "archetype": "wolf_normal_r4",
+      "wave": 11,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w11:u25",
+      "archetype": "wolf_normal_r4",
+      "wave": 11,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w11:u31",
+      "archetype": "wolf_normal_r4",
+      "wave": 11,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w11:u33",
+      "archetype": "wolf_normal_r4",
+      "wave": 11,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w11:u36",
+      "archetype": "wolf_normal_r4",
+      "wave": 11,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w12:u2",
+      "archetype": "tiger_normal_r4",
+      "wave": 12,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w12:u5",
+      "archetype": "tiger_normal_r4",
+      "wave": 12,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w12:u10",
+      "archetype": "tiger_normal_r4",
+      "wave": 12,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w12:u7",
+      "archetype": "tiger_normal_r4",
+      "wave": 12,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w12:u15",
+      "archetype": "tiger_normal_r4",
+      "wave": 12,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w12:u4",
+      "archetype": "tiger_normal_r4",
+      "wave": 12,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w12:u18",
+      "archetype": "wolf_normal_r4",
+      "wave": 12,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w12:u1",
+      "archetype": "tiger_normal_r4",
+      "wave": 12,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w12:u12",
+      "archetype": "tiger_normal_r4",
+      "wave": 12,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w12:u26",
+      "archetype": "wolf_normal_r4",
+      "wave": 12,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w12:u20",
+      "archetype": "wolf_normal_r4",
+      "wave": 12,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w12:u31",
+      "archetype": "falcon_normal_r4",
+      "wave": 12,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w12:u3",
+      "archetype": "tiger_normal_r4",
+      "wave": 12,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w12:u6",
+      "archetype": "tiger_normal_r4",
+      "wave": 12,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w12:u17",
+      "archetype": "wolf_normal_r4",
+      "wave": 12,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w12:u9",
+      "archetype": "tiger_normal_r4",
+      "wave": 12,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w12:u8",
+      "archetype": "tiger_normal_r4",
+      "wave": 12,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w12:u13",
+      "archetype": "tiger_normal_r4",
+      "wave": 12,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w12:u21",
+      "archetype": "wolf_normal_r4",
+      "wave": 12,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w12:u25",
+      "archetype": "wolf_normal_r4",
+      "wave": 12,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w12:u14",
+      "archetype": "tiger_normal_r4",
+      "wave": 12,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w12:u22",
+      "archetype": "wolf_normal_r4",
+      "wave": 12,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w12:u24",
+      "archetype": "wolf_normal_r4",
+      "wave": 12,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w12:u11",
+      "archetype": "tiger_normal_r4",
+      "wave": 12,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w12:u28",
+      "archetype": "wolf_normal_r4",
+      "wave": 12,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w12:u16",
+      "archetype": "wolf_normal_r4",
+      "wave": 12,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w12:u27",
+      "archetype": "wolf_normal_r4",
+      "wave": 12,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w12:u19",
+      "archetype": "wolf_normal_r4",
+      "wave": 12,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w12:u30",
+      "archetype": "wolf_normal_r4",
+      "wave": 12,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w12:u36",
+      "archetype": "falcon_normal_r4",
+      "wave": 12,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w12:u29",
+      "archetype": "wolf_normal_r4",
+      "wave": 12,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w12:u33",
+      "archetype": "falcon_normal_r4",
+      "wave": 12,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w12:u38",
+      "archetype": "falcon_normal_r4",
+      "wave": 12,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w12:u32",
+      "archetype": "falcon_normal_r4",
+      "wave": 12,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w12:u37",
+      "archetype": "falcon_normal_r4",
+      "wave": 12,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w12:u23",
+      "archetype": "wolf_normal_r4",
+      "wave": 12,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w12:u35",
+      "archetype": "falcon_normal_r4",
+      "wave": 12,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w12:u34",
+      "archetype": "falcon_normal_r4",
+      "wave": 12,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w13:u4",
+      "archetype": "tiger_normal_r4",
+      "wave": 13,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w13:u1",
+      "archetype": "tiger_normal_r4",
+      "wave": 13,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w13:u9",
+      "archetype": "tiger_normal_r4",
+      "wave": 13,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w13:u12",
+      "archetype": "tiger_normal_r4",
+      "wave": 13,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w13:u17",
+      "archetype": "falcon_normal_r4",
+      "wave": 13,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w13:u6",
+      "archetype": "tiger_normal_r4",
+      "wave": 13,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w13:u25",
+      "archetype": "falcon_normal_r4",
+      "wave": 13,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w13:u3",
+      "archetype": "tiger_normal_r4",
+      "wave": 13,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w13:u14",
+      "archetype": "tiger_normal_r4",
+      "wave": 13,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w13:u2",
+      "archetype": "tiger_normal_r4",
+      "wave": 13,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w13:u8",
+      "archetype": "tiger_normal_r4",
+      "wave": 13,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w13:u22",
+      "archetype": "falcon_normal_r4",
+      "wave": 13,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w13:u7",
+      "archetype": "tiger_normal_r4",
+      "wave": 13,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w13:u33",
+      "archetype": "falcon_normal_r4",
+      "wave": 13,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w13:u11",
+      "archetype": "tiger_normal_r4",
+      "wave": 13,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w13:u15",
+      "archetype": "tiger_normal_r4",
+      "wave": 13,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w13:u28",
+      "archetype": "falcon_normal_r4",
+      "wave": 13,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w13:u20",
+      "archetype": "falcon_normal_r4",
+      "wave": 13,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w13:u36",
+      "archetype": "falcon_normal_r4",
+      "wave": 13,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w13:u31",
+      "archetype": "falcon_normal_r4",
+      "wave": 13,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w13:u10",
+      "archetype": "tiger_normal_r4",
+      "wave": 13,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w13:u5",
+      "archetype": "tiger_normal_r4",
+      "wave": 13,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w13:u39",
+      "archetype": "falcon_normal_r4",
+      "wave": 13,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w13:u13",
+      "archetype": "tiger_normal_r4",
+      "wave": 13,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w13:u26",
+      "archetype": "falcon_normal_r4",
+      "wave": 13,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w13:u16",
+      "archetype": "tiger_normal_r4",
+      "wave": 13,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w13:u34",
+      "archetype": "falcon_normal_r4",
+      "wave": 13,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w13:u37",
+      "archetype": "falcon_normal_r4",
+      "wave": 13,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w13:u29",
+      "archetype": "falcon_normal_r4",
+      "wave": 13,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w13:u40",
+      "archetype": "falcon_normal_r4",
+      "wave": 13,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w13:u21",
+      "archetype": "falcon_normal_r4",
+      "wave": 13,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w13:u24",
+      "archetype": "falcon_normal_r4",
+      "wave": 13,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w13:u32",
+      "archetype": "falcon_normal_r4",
+      "wave": 13,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w13:u35",
+      "archetype": "falcon_normal_r4",
+      "wave": 13,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w13:u38",
+      "archetype": "falcon_normal_r4",
+      "wave": 13,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w13:u27",
+      "archetype": "falcon_normal_r4",
+      "wave": 13,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w13:u30",
+      "archetype": "falcon_normal_r4",
+      "wave": 13,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w13:u19",
+      "archetype": "falcon_normal_r4",
+      "wave": 13,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w13:u23",
+      "archetype": "falcon_normal_r4",
+      "wave": 13,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w13:u18",
+      "archetype": "falcon_normal_r4",
+      "wave": 13,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w14:u1",
+      "archetype": "tiger_normal_r4",
+      "wave": 14,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w14:u4",
+      "archetype": "tiger_normal_r4",
+      "wave": 14,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w14:u9",
+      "archetype": "falcon_normal_r4",
+      "wave": 14,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w14:u12",
+      "archetype": "falcon_normal_r4",
+      "wave": 14,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w14:u20",
+      "archetype": "falcon_normal_r4",
+      "wave": 14,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w14:u6",
+      "archetype": "tiger_normal_r4",
+      "wave": 14,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w14:u14",
+      "archetype": "falcon_normal_r4",
+      "wave": 14,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w14:u7",
+      "archetype": "tiger_normal_r4",
+      "wave": 14,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w14:u3",
+      "archetype": "tiger_normal_r4",
+      "wave": 14,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w14:u2",
+      "archetype": "tiger_normal_r4",
+      "wave": 14,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w14:u5",
+      "archetype": "tiger_normal_r4",
+      "wave": 14,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w14:u11",
+      "archetype": "falcon_normal_r4",
+      "wave": 14,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w14:u22",
+      "archetype": "falcon_normal_r4",
+      "wave": 14,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w14:u33",
+      "archetype": "falcon_normal_r4",
+      "wave": 14,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w14:u25",
+      "archetype": "falcon_normal_r4",
+      "wave": 14,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w14:u30",
+      "archetype": "falcon_normal_r4",
+      "wave": 14,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w14:u8",
+      "archetype": "falcon_normal_r4",
+      "wave": 14,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w14:u38",
+      "archetype": "wolf_normal_r4",
+      "wave": 14,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w14:u19",
+      "archetype": "falcon_normal_r4",
+      "wave": 14,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w14:u28",
+      "archetype": "falcon_normal_r4",
+      "wave": 14,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w14:u36",
+      "archetype": "wolf_normal_r4",
+      "wave": 14,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w14:u41",
+      "archetype": "wolf_normal_r4",
+      "wave": 14,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w14:u23",
+      "archetype": "falcon_normal_r4",
+      "wave": 14,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w14:u31",
+      "archetype": "falcon_normal_r4",
+      "wave": 14,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w14:u17",
+      "archetype": "falcon_normal_r4",
+      "wave": 14,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w14:u39",
+      "archetype": "wolf_normal_r4",
+      "wave": 14,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w14:u34",
+      "archetype": "wolf_normal_r4",
+      "wave": 14,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w14:u35",
+      "archetype": "wolf_normal_r4",
+      "wave": 14,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w14:u37",
+      "archetype": "wolf_normal_r4",
+      "wave": 14,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w14:u42",
+      "archetype": "wolf_normal_r4",
+      "wave": 14,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w14:u40",
+      "archetype": "wolf_normal_r4",
+      "wave": 14,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w14:u10",
+      "archetype": "falcon_normal_r4",
+      "wave": 14,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w14:u15",
+      "archetype": "falcon_normal_r4",
+      "wave": 14,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w14:u16",
+      "archetype": "falcon_normal_r4",
+      "wave": 14,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w14:u18",
+      "archetype": "falcon_normal_r4",
+      "wave": 14,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w14:u26",
+      "archetype": "falcon_normal_r4",
+      "wave": 14,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w14:u27",
+      "archetype": "falcon_normal_r4",
+      "wave": 14,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w14:u29",
+      "archetype": "falcon_normal_r4",
+      "wave": 14,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w14:u24",
+      "archetype": "falcon_normal_r4",
+      "wave": 14,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w14:u32",
+      "archetype": "falcon_normal_r4",
+      "wave": 14,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w14:u13",
+      "archetype": "falcon_normal_r4",
+      "wave": 14,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w14:u21",
+      "archetype": "falcon_normal_r4",
+      "wave": 14,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w15:u1",
+      "archetype": "tiger_normal_r4",
+      "wave": 15,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w15:u6",
+      "archetype": "wolf_normal_r4",
+      "wave": 15,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w15:u4",
+      "archetype": "wolf_normal_r4",
+      "wave": 15,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w15:u14",
+      "archetype": "falcon_normal_r5",
+      "wave": 15,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w15:u3",
+      "archetype": "tiger_normal_r4",
+      "wave": 15,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w15:u11",
+      "archetype": "wolf_normal_r5",
+      "wave": 15,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w15:u9",
+      "archetype": "wolf_normal_r5",
+      "wave": 15,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w15:u22",
+      "archetype": "falcon_normal_r5",
+      "wave": 15,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w15:u17",
+      "archetype": "falcon_normal_r5",
+      "wave": 15,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w15:u8",
+      "archetype": "wolf_normal_r4",
+      "wave": 15,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w15:u12",
+      "archetype": "wolf_normal_r5",
+      "wave": 15,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w15:u5",
+      "archetype": "wolf_normal_r4",
+      "wave": 15,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w15:u7",
+      "archetype": "wolf_normal_r4",
+      "wave": 15,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w15:u2",
+      "archetype": "tiger_normal_r4",
+      "wave": 15,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w15:u10",
+      "archetype": "wolf_normal_r5",
+      "wave": 15,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w15:u28",
+      "archetype": "falcon_normal_r5",
+      "wave": 15,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w15:u25",
+      "archetype": "falcon_normal_r5",
+      "wave": 15,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w15:u30",
+      "archetype": "falcon_normal_r5",
+      "wave": 15,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w15:u16",
+      "archetype": "falcon_normal_r5",
+      "wave": 15,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w15:u19",
+      "archetype": "falcon_normal_r5",
+      "wave": 15,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w15:u20",
+      "archetype": "falcon_normal_r5",
+      "wave": 15,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w15:u13",
+      "archetype": "falcon_normal_r5",
+      "wave": 15,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w15:u21",
+      "archetype": "falcon_normal_r5",
+      "wave": 15,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w15:u15",
+      "archetype": "falcon_normal_r5",
+      "wave": 15,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w15:u23",
+      "archetype": "falcon_normal_r5",
+      "wave": 15,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w15:u27",
+      "archetype": "falcon_normal_r5",
+      "wave": 15,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w15:u31",
+      "archetype": "wolf_elite_f9_w15_n4",
+      "wave": 15,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w15:u24",
+      "archetype": "falcon_normal_r5",
+      "wave": 15,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w15:u26",
+      "archetype": "falcon_normal_r5",
+      "wave": 15,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w15:u29",
+      "archetype": "falcon_normal_r5",
+      "wave": 15,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w15:u18",
+      "archetype": "falcon_normal_r5",
+      "wave": 15,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w15:u32",
+      "archetype": "wolf_elite_f9_w15_n5",
+      "wave": 15,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w16:u3",
+      "archetype": "tiger_normal_r5",
+      "wave": 16,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w16:u8",
+      "archetype": "tiger_normal_r5",
+      "wave": 16,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w16:u11",
+      "archetype": "tiger_normal_r5",
+      "wave": 16,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w16:u6",
+      "archetype": "tiger_normal_r5",
+      "wave": 16,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w16:u1",
+      "archetype": "tiger_normal_r5",
+      "wave": 16,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w16:u14",
+      "archetype": "tiger_normal_r5",
+      "wave": 16,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w16:u19",
+      "archetype": "wolf_normal_r5",
+      "wave": 16,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w16:u5",
+      "archetype": "tiger_normal_r5",
+      "wave": 16,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w16:u16",
+      "archetype": "tiger_normal_r5",
+      "wave": 16,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w16:u2",
+      "archetype": "tiger_normal_r5",
+      "wave": 16,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w16:u22",
+      "archetype": "wolf_normal_r5",
+      "wave": 16,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w16:u24",
+      "archetype": "wolf_normal_r5",
+      "wave": 16,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w16:u30",
+      "archetype": "wolf_normal_r5",
+      "wave": 16,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w16:u9",
+      "archetype": "tiger_normal_r5",
+      "wave": 16,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w16:u13",
+      "archetype": "tiger_normal_r5",
+      "wave": 16,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w16:u17",
+      "archetype": "wolf_normal_r5",
+      "wave": 16,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w16:u4",
+      "archetype": "tiger_normal_r5",
+      "wave": 16,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w16:u12",
+      "archetype": "tiger_normal_r5",
+      "wave": 16,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w16:u18",
+      "archetype": "wolf_normal_r5",
+      "wave": 16,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w16:u7",
+      "archetype": "tiger_normal_r5",
+      "wave": 16,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w16:u20",
+      "archetype": "wolf_normal_r5",
+      "wave": 16,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w16:u21",
+      "archetype": "wolf_normal_r5",
+      "wave": 16,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w16:u25",
+      "archetype": "wolf_normal_r5",
+      "wave": 16,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w16:u32",
+      "archetype": "wolf_normal_r5",
+      "wave": 16,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w16:u10",
+      "archetype": "tiger_normal_r5",
+      "wave": 16,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w16:u15",
+      "archetype": "tiger_normal_r5",
+      "wave": 16,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w16:u38",
+      "archetype": "wolf_normal_r5",
+      "wave": 16,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w16:u29",
+      "archetype": "wolf_normal_r5",
+      "wave": 16,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w16:u26",
+      "archetype": "wolf_normal_r5",
+      "wave": 16,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w16:u40",
+      "archetype": "wolf_normal_r5",
+      "wave": 16,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w16:u31",
+      "archetype": "wolf_normal_r5",
+      "wave": 16,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w16:u33",
+      "archetype": "wolf_normal_r5",
+      "wave": 16,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w16:u34",
+      "archetype": "wolf_normal_r5",
+      "wave": 16,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w16:u28",
+      "archetype": "wolf_normal_r5",
+      "wave": 16,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w16:u36",
+      "archetype": "wolf_normal_r5",
+      "wave": 16,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w16:u23",
+      "archetype": "wolf_normal_r5",
+      "wave": 16,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w16:u37",
+      "archetype": "wolf_normal_r5",
+      "wave": 16,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w16:u39",
+      "archetype": "wolf_normal_r5",
+      "wave": 16,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w16:u35",
+      "archetype": "wolf_normal_r5",
+      "wave": 16,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w16:u27",
+      "archetype": "wolf_normal_r5",
+      "wave": 16,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w17:u6",
+      "archetype": "tiger_normal_r5",
+      "wave": 17,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w17:u1",
+      "archetype": "tiger_normal_r5",
+      "wave": 17,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w17:u3",
+      "archetype": "tiger_normal_r5",
+      "wave": 17,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w17:u11",
+      "archetype": "tiger_normal_r5",
+      "wave": 17,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w17:u14",
+      "archetype": "tiger_normal_r5",
+      "wave": 17,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w17:u9",
+      "archetype": "tiger_normal_r5",
+      "wave": 17,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w17:u17",
+      "archetype": "wolf_normal_r5",
+      "wave": 17,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w17:u4",
+      "archetype": "tiger_normal_r5",
+      "wave": 17,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w17:u8",
+      "archetype": "tiger_normal_r5",
+      "wave": 17,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w17:u19",
+      "archetype": "wolf_normal_r5",
+      "wave": 17,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w17:u27",
+      "archetype": "wolf_normal_r5",
+      "wave": 17,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w17:u16",
+      "archetype": "tiger_normal_r5",
+      "wave": 17,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w17:u20",
+      "archetype": "wolf_normal_r5",
+      "wave": 17,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w17:u24",
+      "archetype": "wolf_normal_r5",
+      "wave": 17,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w17:u25",
+      "archetype": "wolf_normal_r5",
+      "wave": 17,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w17:u5",
+      "archetype": "tiger_normal_r5",
+      "wave": 17,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w17:u7",
+      "archetype": "tiger_normal_r5",
+      "wave": 17,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w17:u28",
+      "archetype": "wolf_normal_r5",
+      "wave": 17,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w17:u33",
+      "archetype": "wolf_normal_r5",
+      "wave": 17,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w17:u22",
+      "archetype": "wolf_normal_r5",
+      "wave": 17,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w17:u12",
+      "archetype": "tiger_normal_r5",
+      "wave": 17,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w17:u15",
+      "archetype": "tiger_normal_r5",
+      "wave": 17,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w17:u2",
+      "archetype": "tiger_normal_r5",
+      "wave": 17,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w17:u29",
+      "archetype": "wolf_normal_r5",
+      "wave": 17,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w17:u13",
+      "archetype": "tiger_normal_r5",
+      "wave": 17,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w17:u35",
+      "archetype": "falcon_normal_r5",
+      "wave": 17,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w17:u32",
+      "archetype": "wolf_normal_r5",
+      "wave": 17,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w17:u23",
+      "archetype": "wolf_normal_r5",
+      "wave": 17,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w17:u21",
+      "archetype": "wolf_normal_r5",
+      "wave": 17,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w17:u31",
+      "archetype": "wolf_normal_r5",
+      "wave": 17,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w17:u18",
+      "archetype": "wolf_normal_r5",
+      "wave": 17,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w17:u10",
+      "archetype": "tiger_normal_r5",
+      "wave": 17,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w17:u26",
+      "archetype": "wolf_normal_r5",
+      "wave": 17,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w17:u30",
+      "archetype": "wolf_normal_r5",
+      "wave": 17,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w17:u42",
+      "archetype": "falcon_normal_r5",
+      "wave": 17,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w17:u34",
+      "archetype": "falcon_normal_r5",
+      "wave": 17,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w17:u37",
+      "archetype": "falcon_normal_r5",
+      "wave": 17,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w17:u41",
+      "archetype": "falcon_normal_r5",
+      "wave": 17,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w17:u40",
+      "archetype": "falcon_normal_r5",
+      "wave": 17,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w17:u38",
+      "archetype": "falcon_normal_r5",
+      "wave": 17,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w17:u36",
+      "archetype": "falcon_normal_r5",
+      "wave": 17,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w17:u39",
+      "archetype": "falcon_normal_r5",
+      "wave": 17,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w18:u3",
+      "archetype": "tiger_normal_r5",
+      "wave": 18,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w18:u8",
+      "archetype": "tiger_normal_r5",
+      "wave": 18,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w18:u13",
+      "archetype": "tiger_normal_r5",
+      "wave": 18,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w18:u2",
+      "archetype": "tiger_normal_r5",
+      "wave": 18,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w18:u5",
+      "archetype": "tiger_normal_r5",
+      "wave": 18,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w18:u6",
+      "archetype": "tiger_normal_r5",
+      "wave": 18,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w18:u19",
+      "archetype": "falcon_normal_r5",
+      "wave": 18,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w18:u10",
+      "archetype": "tiger_normal_r5",
+      "wave": 18,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w18:u21",
+      "archetype": "falcon_normal_r5",
+      "wave": 18,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w18:u1",
+      "archetype": "tiger_normal_r5",
+      "wave": 18,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w18:u11",
+      "archetype": "tiger_normal_r5",
+      "wave": 18,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w18:u7",
+      "archetype": "tiger_normal_r5",
+      "wave": 18,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w18:u4",
+      "archetype": "tiger_normal_r5",
+      "wave": 18,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w18:u29",
+      "archetype": "falcon_normal_r5",
+      "wave": 18,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w18:u15",
+      "archetype": "tiger_normal_r5",
+      "wave": 18,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w18:u12",
+      "archetype": "tiger_normal_r5",
+      "wave": 18,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w18:u16",
+      "archetype": "tiger_normal_r5",
+      "wave": 18,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w18:u37",
+      "archetype": "falcon_normal_r5",
+      "wave": 18,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w18:u17",
+      "archetype": "tiger_normal_r5",
+      "wave": 18,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w18:u9",
+      "archetype": "tiger_normal_r5",
+      "wave": 18,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w18:u14",
+      "archetype": "tiger_normal_r5",
+      "wave": 18,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w18:u42",
+      "archetype": "falcon_normal_r5",
+      "wave": 18,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w18:u39",
+      "archetype": "falcon_normal_r5",
+      "wave": 18,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w18:u36",
+      "archetype": "falcon_normal_r5",
+      "wave": 18,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w18:u18",
+      "archetype": "falcon_normal_r5",
+      "wave": 18,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w18:u26",
+      "archetype": "falcon_normal_r5",
+      "wave": 18,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w18:u41",
+      "archetype": "falcon_normal_r5",
+      "wave": 18,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w18:u22",
+      "archetype": "falcon_normal_r5",
+      "wave": 18,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w18:u33",
+      "archetype": "falcon_normal_r5",
+      "wave": 18,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w18:u44",
+      "archetype": "falcon_normal_r5",
+      "wave": 18,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w18:u30",
+      "archetype": "falcon_normal_r5",
+      "wave": 18,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w18:u35",
+      "archetype": "falcon_normal_r5",
+      "wave": 18,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w18:u40",
+      "archetype": "falcon_normal_r5",
+      "wave": 18,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w18:u24",
+      "archetype": "falcon_normal_r5",
+      "wave": 18,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w18:u32",
+      "archetype": "falcon_normal_r5",
+      "wave": 18,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w18:u25",
+      "archetype": "falcon_normal_r5",
+      "wave": 18,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w18:u20",
+      "archetype": "falcon_normal_r5",
+      "wave": 18,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w18:u38",
+      "archetype": "falcon_normal_r5",
+      "wave": 18,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w18:u28",
+      "archetype": "falcon_normal_r5",
+      "wave": 18,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w18:u31",
+      "archetype": "falcon_normal_r5",
+      "wave": 18,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w18:u43",
+      "archetype": "falcon_normal_r5",
+      "wave": 18,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w18:u27",
+      "archetype": "falcon_normal_r5",
+      "wave": 18,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w18:u23",
+      "archetype": "falcon_normal_r5",
+      "wave": 18,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w18:u34",
+      "archetype": "falcon_normal_r5",
+      "wave": 18,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w18:u45",
+      "archetype": "tiger_elite_f9_w18_n6",
+      "wave": 18,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w19:u1",
+      "archetype": "tiger_normal_r5",
+      "wave": 19,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w19:u9",
+      "archetype": "falcon_normal_r5",
+      "wave": 19,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w19:u4",
+      "archetype": "tiger_normal_r5",
+      "wave": 19,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w19:u6",
+      "archetype": "tiger_normal_r5",
+      "wave": 19,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w19:u2",
+      "archetype": "tiger_normal_r5",
+      "wave": 19,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w19:u7",
+      "archetype": "tiger_normal_r5",
+      "wave": 19,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w19:u20",
+      "archetype": "falcon_normal_r5",
+      "wave": 19,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w19:u3",
+      "archetype": "tiger_normal_r5",
+      "wave": 19,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w19:u12",
+      "archetype": "falcon_normal_r5",
+      "wave": 19,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w19:u28",
+      "archetype": "falcon_normal_r5",
+      "wave": 19,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w19:u36",
+      "archetype": "falcon_normal_r5",
+      "wave": 19,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w19:u5",
+      "archetype": "tiger_normal_r5",
+      "wave": 19,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w19:u8",
+      "archetype": "tiger_normal_r5",
+      "wave": 19,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w19:u11",
+      "archetype": "falcon_normal_r5",
+      "wave": 19,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w19:u14",
+      "archetype": "falcon_normal_r5",
+      "wave": 19,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w19:u22",
+      "archetype": "falcon_normal_r5",
+      "wave": 19,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w19:u25",
+      "archetype": "falcon_normal_r5",
+      "wave": 19,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w19:u41",
+      "archetype": "wolf_normal_r5",
+      "wave": 19,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w19:u30",
+      "archetype": "falcon_normal_r5",
+      "wave": 19,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w19:u38",
+      "archetype": "wolf_normal_r5",
+      "wave": 19,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w19:u46",
+      "archetype": "wolf_normal_r5",
+      "wave": 19,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w19:u27",
+      "archetype": "falcon_normal_r5",
+      "wave": 19,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w19:u43",
+      "archetype": "wolf_normal_r5",
+      "wave": 19,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w19:u44",
+      "archetype": "wolf_normal_r5",
+      "wave": 19,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w19:u39",
+      "archetype": "wolf_normal_r5",
+      "wave": 19,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w19:u40",
+      "archetype": "wolf_normal_r5",
+      "wave": 19,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w19:u37",
+      "archetype": "wolf_normal_r5",
+      "wave": 19,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w19:u42",
+      "archetype": "wolf_normal_r5",
+      "wave": 19,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w19:u35",
+      "archetype": "falcon_normal_r5",
+      "wave": 19,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w19:u45",
+      "archetype": "wolf_normal_r5",
+      "wave": 19,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w19:u10",
+      "archetype": "falcon_normal_r5",
+      "wave": 19,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w19:u15",
+      "archetype": "falcon_normal_r5",
+      "wave": 19,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w19:u16",
+      "archetype": "falcon_normal_r5",
+      "wave": 19,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w19:u19",
+      "archetype": "falcon_normal_r5",
+      "wave": 19,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w19:u26",
+      "archetype": "falcon_normal_r5",
+      "wave": 19,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w19:u17",
+      "archetype": "falcon_normal_r5",
+      "wave": 19,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w19:u13",
+      "archetype": "falcon_normal_r5",
+      "wave": 19,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w19:u21",
+      "archetype": "falcon_normal_r5",
+      "wave": 19,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w19:u31",
+      "archetype": "falcon_normal_r5",
+      "wave": 19,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w19:u23",
+      "archetype": "falcon_normal_r5",
+      "wave": 19,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w19:u33",
+      "archetype": "falcon_normal_r5",
+      "wave": 19,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w19:u24",
+      "archetype": "falcon_normal_r5",
+      "wave": 19,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w19:u18",
+      "archetype": "falcon_normal_r5",
+      "wave": 19,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w19:u29",
+      "archetype": "falcon_normal_r5",
+      "wave": 19,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w19:u32",
+      "archetype": "falcon_normal_r5",
+      "wave": 19,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w19:u34",
+      "archetype": "falcon_normal_r5",
+      "wave": 19,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w20:u3",
+      "archetype": "falcon_normal_r5",
+      "wave": 20,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w20:u5",
+      "archetype": "wolf_normal_r5",
+      "wave": 20,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w20:u2",
+      "archetype": "tiger_normal_r5",
+      "wave": 20,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w20:u4",
+      "archetype": "falcon_normal_r5",
+      "wave": 20,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w20:u8",
+      "archetype": "wolf_normal_r5",
+      "wave": 20,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w20:u7",
+      "archetype": "falcon_normal_r5",
+      "wave": 20,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w20:u9",
+      "archetype": "falcon_normal_r5",
+      "wave": 20,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w20:u6",
+      "archetype": "falcon_normal_r5",
+      "wave": 20,
+      "coreRank": 0
+    },
+    {
+      "id": "a10:f9:w20:u1",
+      "archetype": "tiger_boss_zhenyan",
+      "wave": 20,
+      "coreRank": 7
+    }
+  ],
+  "clearedWaves": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+  ],
+  "gateEntries": [],
+  "gateReadyAt": 0,
+  "hurtUntil": 0,
+  "nextWindupAt": 518.5333333333333,
+  "supportReleased": true,
+  "supportAt": 454.23333333333335,
+  "view": {
+    "xmin": -907.48283386088,
+    "xmax": 212.51716613912004,
+    "ymin": 225.0287815755604,
+    "ymax": 855.0287815755604
+  },
+  "trainingResetAt": 0,
+  "monsterMechanics": {
+    "version": 1,
+    "zones": [],
+    "summons": [
+      {
+        "id": "temporary:a10:f9:w15:u32:5",
+        "ownerId": "a10:f9:w15:u32",
+        "sequence": 5,
+        "kind": "minion",
+        "batch": 1,
+        "spawnedAt": 286.98333333333335
+      },
+      {
+        "id": "temporary:a10:f9:w15:u32:6",
+        "ownerId": "a10:f9:w15:u32",
+        "sequence": 6,
+        "kind": "minion",
+        "batch": 1,
+        "spawnedAt": 286.98333333333335
+      },
+      {
+        "id": "temporary:a10:f9:w15:u32:7",
+        "ownerId": "a10:f9:w15:u32",
+        "sequence": 7,
+        "kind": "minion",
+        "batch": 1,
+        "spawnedAt": 286.98333333333335
+      },
+      {
+        "id": "temporary:a10:f9:w20:u1:15",
+        "ownerId": "a10:f9:w20:u1",
+        "sequence": 15,
+        "kind": "clone",
+        "batch": 4,
+        "spawnedAt": 439.05
+      },
+      {
+        "id": "temporary:a10:f9:w20:u1:16",
+        "ownerId": "a10:f9:w20:u1",
+        "sequence": 16,
+        "kind": "clone",
+        "batch": 4,
+        "spawnedAt": 439.05
+      },
+      {
+        "id": "temporary:a10:f9:w20:u1:21",
+        "ownerId": "a10:f9:w20:u1",
+        "sequence": 21,
+        "kind": "clone",
+        "batch": 6,
+        "spawnedAt": 480.5833333333333
+      },
+      {
+        "id": "temporary:a10:f9:w20:u1:22",
+        "ownerId": "a10:f9:w20:u1",
+        "sequence": 22,
+        "kind": "clone",
+        "batch": 6,
+        "spawnedAt": 480.5833333333333
+      }
+    ],
+    "sequence": 26,
+    "nextMajorAt": 518.7833333333333
+  },
+  "monsterControl": {
+    "rootUntil": 0,
+    "immuneUntil": 0,
+    "slowUntil": 0,
+    "slowFraction": 0
+  },
+  "arenaVersion": 1,
+  "loot": {
+    "version": 1,
+    "seed": 774553732
+  },
+  "pickups": {
+    "version": 1,
+    "forgePity": {
+      "fa": 2,
+      "bao": 0,
+      "ling": 0
+    },
+    "collected": [
+      "material:a10:f9:w1:u1:forge_lingsi",
+      "material:a10:f9:w1:u2:forge_lingmu",
+      "material:a10:f9:w1:u3:forge_xuantie",
+      "material:a10:f9:w1:u12:huangjing",
+      "material:a10:f9:w1:u26:forge_lingmu",
+      "material:a10:f9:w2:u8:forge_yaopi",
+      "material:a10:f9:w2:u18:ningluzhi",
+      "material:a10:f9:w3:u18:forge_lingyu",
+      "material:a10:f9:w3:u23:forge_lingsi",
+      "material:a10:f9:w3:u20:forge_xuantie",
+      "material:a10:f9:w3:u27:huangjing",
+      "material:a10:f9:w4:u28:forge_xuantie",
+      "material:a10:f9:w4:u8:forge_lingsi",
+      "material:a10:f9:w4:u9:forge_yaopi",
+      "material:a10:f9:w5:u7:forge_xuantie",
+      "material:a10:f9:w4:u23:linglu",
+      "material:a10:f9:w3:u3:ningluzhi",
+      "material:a10:f9:w3:u11:forge_lingmu",
+      "material:a10:f9:w3:u6:forge_lingmu",
+      "material:a10:f9:w5:u27:jinsuiguo",
+      "material:a10:f9:w5:u27:forge_zijingsui",
+      "material:a10:f9:w6:u1:huichuncao",
+      "material:a10:f9:w7:u9:forge_lingyu",
+      "material:a10:f9:w7:u4:forge_lingmu",
+      "material:a10:f9:w7:u17:forge_xuantie",
+      "material:a10:f9:w7:u30:forge_yaopi",
+      "material:a10:f9:w7:u27:forge_xuantie",
+      "material:a10:f9:w7:u24:forge_lingyu",
+      "material:a10:f9:w8:u7:ningluzhi",
+      "material:a10:f9:w8:u3:forge_lingyu",
+      "material:a10:f9:w8:u15:forge_lingmu",
+      "material:a10:f9:w8:u10:forge_lingmu",
+      "material:a10:f9:w2:u1:ningluzhi",
+      "material:a10:f9:w1:u4:forge_lingyu",
+      "material:a10:f9:w8:u18:linglu",
+      "material:a10:f9:w2:u25:ningluzhi",
+      "material:a10:f9:w8:u30:ningluzhi",
+      "material:a10:f9:w8:u11:forge_lingmu",
+      "material:a10:f9:w9:u4:forge_lingmu",
+      "material:a10:f9:w9:u16:forge_xuantie",
+      "material:a10:f9:w9:u16:linglu",
+      "material:a10:f9:w10:u1:bailuhua",
+      "material:a10:f9:w9:u6:forge_xuantie",
+      "material:a10:f9:w10:u5:forge_lingmu",
+      "material:a10:f9:w9:u9:forge_lingyu",
+      "stone:a10:f9:w10:u30",
+      "material:a10:f9:w8:u1:forge_lingsi",
+      "material:a10:f9:w10:u30:forge_zijingsui",
+      "material:a10:f9:w11:u5:forge_lingmu",
+      "material:a10:f9:w7:u16:ningluzhi",
+      "material:a10:f9:w11:u2:forge_lingyu",
+      "material:a10:f9:w7:u20:forge_lingsi",
+      "material:a10:f9:w11:u9:forge_yaopi",
+      "material:a10:f9:w11:u26:bailuhua",
+      "material:a10:f9:w12:u15:forge_lingmu",
+      "material:a10:f9:w12:u12:forge_lingsi",
+      "material:a10:f9:w6:u9:forge_xuantie",
+      "material:a10:f9:w12:u17:forge_xuantie",
+      "material:a10:f9:w12:u6:forge_lingsi",
+      "material:a10:f9:w6:u8:forge_xuantie",
+      "material:a10:f9:w12:u32:ningluzhi",
+      "material:a10:f9:w13:u6:forge_lingmu",
+      "material:a10:f9:w12:u11:forge_lingmu",
+      "material:a10:f9:w13:u39:forge_lingyu",
+      "material:a10:f9:w13:u34:forge_yaopi",
+      "material:a10:f9:w12:u35:ningluzhi",
+      "material:a10:f9:w14:u9:huichuncao",
+      "material:a10:f9:w14:u3:forge_lingmu",
+      "material:a10:f9:w14:u25:forge_lingmu",
+      "material:a10:f9:w14:u25:ningluzhi",
+      "material:a10:f9:w15:u17:forge_lingmu",
+      "material:a10:f9:w12:u18:forge_lingmu",
+      "material:a10:f9:w12:u18:huangjing",
+      "material:a10:f9:w15:u30:forge_yaopi",
+      "material:a10:f9:w15:u7:forge_yaopi",
+      "material:a10:f9:w13:u15:ningluzhi",
+      "material:a10:f9:w13:u8:forge_xuantie",
+      "material:a10:f9:w15:u32:jinsuiguo",
+      "material:a10:f9:w15:u32:forge_zijingsui",
+      "material:a10:f9:w16:u3:forge_lingmu",
+      "material:a10:f9:w16:u4:forge_lingmu",
+      "material:a10:f9:w16:u12:huichuncao",
+      "material:a10:f9:w15:u31:forge_zijingsui",
+      "material:a10:f9:w15:u31:jinsuiguo",
+      "material:a10:f9:w16:u35:huichuncao",
+      "material:a10:f9:w17:u4:forge_lingyu",
+      "material:a10:f9:w17:u19:forge_lingyu",
+      "material:a10:f9:w17:u3:forge_yaopi",
+      "material:a10:f9:w14:u2:forge_xuantie",
+      "material:a10:f9:w17:u30:huichuncao",
+      "material:a10:f9:w17:u32:linglu",
+      "material:a10:f9:w16:u15:forge_yaopi",
+      "material:a10:f9:w18:u29:forge_yaopi",
+      "material:a10:f9:w10:u29:jinsuiguo",
+      "material:a10:f9:w10:u29:forge_zijingsui",
+      "stone:a10:f9:w10:u29",
+      "material:a10:f9:w18:u30:linglu",
+      "material:a10:f9:w18:u38:forge_lingsi",
+      "material:a10:f9:w18:u34:lingshenxu",
+      "material:a10:f9:w18:u45:forge_zijingsui",
+      "material:a10:f9:w9:u28:ningluzhi",
+      "material:a10:f9:w9:u20:forge_xuantie",
+      "material:a10:f9:w9:u25:forge_lingsi",
+      "material:a10:f9:w10:u20:forge_xuantie",
+      "material:a10:f9:w19:u6:linglu",
+      "material:a10:f9:w19:u15:forge_lingsi",
+      "material:a10:f9:w19:u10:linglu",
+      "material:a10:f9:w19:u15:linglu",
+      "material:a10:f9:w19:u31:ningluzhi",
+      "material:a10:f9:w19:u45:forge_xuantie",
+      "material:a10:f9:w19:u41:linglu",
+      "material:a10:f9:w19:u25:forge_lingmu",
+      "material:a10:f9:w8:u14:forge_lingmu",
+      "material:a10:f9:w7:u29:forge_yaopi",
+      "material:a10:f9:w7:u29:lingshenxu",
+      "material:a10:f9:w17:u15:forge_xuantie",
+      "material:a10:f9:w20:u8:ningluzhi",
+      "material:a10:f9:w9:u21:huichuncao",
+      "material:a10:f9:w13:u25:forge_lingmu",
+      "material:a10:f9:w13:u14:huichuncao",
+      "material:a10:f9:w19:u12:forge_lingmu",
+      "material:a10:f9:w20:u4:forge_lingmu",
+      "stone:a10:f9:w20:u1",
+      "material:a10:f9:w20:u1:forge_zijingsui",
+      "material:a10:f9:w20:u1:forge_ninglingjing",
+      "material:a10:f9:w20:u1:jinsuiguo"
+    ]
+  },
+  "yujian": {
+    "version": 3,
+    "head": 9,
+    "ready": 1,
+    "nextAt": 519.4166666666666,
+    "face": -1,
+    "from": 0,
+    "to": 3.141592653589793,
+    "at": 521.0166666666667,
+    "x": -344.51127186034535,
+    "y": 543.000343576095
+  },
+  "weaponState": {
+    "ringId": "gear-8",
+    "focusCount": 0,
+    "effectiveCasts": 0,
+    "nextCastId": 1132,
+    "casts": [],
+    "entryMaxHp": 1607.9853728718504
+  },
+  "actions": {
+    "version": 2,
+    "readyAt": 521.775925925926,
+    "busyUntil": 521.65,
+    "bypasses": 0,
+    "lastSkill": "sj_line",
+    "basic": null,
+    "orbit": null,
+    "waiting": {},
+    "current": null
+  },
+  "armorState": {
+    "armorId": "gear-7",
+    "healedTotal": 0
+  }
+}

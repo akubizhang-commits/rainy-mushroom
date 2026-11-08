@@ -26,18 +26,16 @@ export function skillHitShare(id, level, pulse = 1) {
     }
     return shares[pulse - 1]
   }
-  if (id !== 'sj_arc' || form.hits <= 1) return 1 / Math.max(1, form.hits)
-  const skill = SKILLS[id], anchorRank = 6
-  const first = Math.min(1, at(skill, 'damage', anchorRank) / at(skill, 'damage', level))
-  return pulse === 1 ? first : (1 - first) / (form.hits - 1)
+  if (id === 'sj_arc') return [.25, .33, .42][pulse - 1]
+  return 1 / Math.max(1, form.hits)
 }
 
-export function skillForm(id, level = 1, parentLevel = 1) {
+export function skillForm(id, level = 1, parentLevel = 1, trainedLevel = level) {
   const parent = PARENTS[id], skill = SKILLS[parent ?? id]
   if (!skill) throw new RangeError(`Unknown tower skill: ${id}`)
   // Keep accepted VFX/collision geometry stable. Damage uses the actual parent
   // rank in Run and Presentation, independently of this visual template.
-  const lv = rank(parent ? EVOLUTIONS[id].visualRank : level, skill.maxLevel)
+  const lv = rank(parent ? EVOLUTIONS[id].visualRank : id === 'sj_sancai' ? trainedLevel : level, skill.maxLevel)
   const evolution = parent ? rank(level, 2) : 0
   const key = `${id}:${lv}:${evolution}`
   if (cache.has(key)) return cache.get(key)
@@ -53,13 +51,20 @@ export function skillForm(id, level = 1, parentLevel = 1) {
           swords: at(skill, 'swords', lv) })
         break
       case 'sj_arc':
-        Object.assign(form, { shape: lv < 4 ? 'sector' : 'crescent-projectile',
-          hits: lv < 7 ? 1 : 3, interval: lv < 7 ? 0 : .16,
+        Object.assign(form, { shape: 'sector', hits: 3, interval: .16,
+          bladeKind: 'crescent', bladeWidth: at(skill, 'bladeWidth', lv, 12) })
+        break
+      case 'sj_moon':
+        Object.assign(form, { shape: 'sector', hits: 1, interval: 0, duration: .42 })
+        break
+      case 'sj_moon_triple':
+        Object.assign(form, { shape: 'crescent-projectile',
+          hits: id === 'sj_moon' ? 1 : 3, interval: id === 'sj_moon' ? 0 : .16,
           bladeKind: 'crescent', bladeWidth: at(skill, 'bladeWidth', lv, 12),
           width: at(skill, 'width', lv, form.radius * 1.2), speed: at(skill, 'speed', lv, 960) })
         break
       case 'sj_cross':
-        Object.assign(form, { shape: 'cross-burst', hits: 1,
+        Object.assign(form, { shape: 'cross-burst', hits: 1, angle: 180,
           bladeKind: 'cross', bladeWidth: at(skill, 'bladeWidth', lv), speed: at(skill, 'speed', lv) })
         break
       case 'sj_line':
@@ -69,8 +74,12 @@ export function skillForm(id, level = 1, parentLevel = 1) {
         Object.assign(form, { shape: 'shadow', hits: [1, 2, 3, 4][node],
           width: 30, interval: .08, initialDelay: at(skill, 'delay', lv) })
         break
+      case 'sj_sancai':
+        Object.assign(form, { shape: 'triangle', hits: 3, eyes: 3,
+          initialDelay: .35, interval: 1, duration: 3 })
+        break
       case 'sj_formation':
-        Object.assign(form, { shape: 'circle', hits: [6, 6, 6, 7][node], eyes: 2,
+        Object.assign(form, { shape: 'circle', hits: at(skill, 'pulseCount', lv), eyes: 2,
           initialDelay: .5, duration: skill.duration })
         form.interval = (form.duration - form.initialDelay) / (form.hits - 1)
         break
@@ -92,14 +101,14 @@ export function skillForm(id, level = 1, parentLevel = 1) {
       innerRadius: (oldRadius - form.bladeLength / 2) * 1.25, motionSpeed: 2.6 })
   }
   if (id === 'evo_sixiang') {
-    Object.assign(form, { shape: 'diamond', hits: evolution === 1 ? 7 : 9, eyes: 4,
+    Object.assign(form, { shape: 'diamond', hits: EVOLUTIONS.evo_sixiang.pulseCount[evolution - 1], eyes: 4,
       duration: EVOLUTIONS.evo_sixiang.duration,
       radius: EVOLUTIONS.evo_sixiang.radiusByRank[evolution - 1] })
     form.interval = (form.duration - form.initialDelay) / (form.hits - 1)
   }
-  if (id === 'evo_wanjian') Object.assign(form, { shape: 'line', hits: evolution === 1 ? 7 : 9,
-    swords: evolution === 1 ? 6 : 8, radius: 160, reach: 440, width: 28,
-    targetCap: 6, initialDelay: .2, interval: .15 })
+  if (id === 'evo_wanjian') Object.assign(form, { shape: 'line', hits: evolution === 1 ? 19 : 25,
+    swords: evolution === 1 ? 18 : 24, radius: 160, reach: 440, width: 28,
+    targetCap: 6, initialDelay: .2, interval: .1 })
   if (!form.duration && form.hits) form.duration = form.initialDelay
     + Math.max(0, form.hits - 1) * form.interval
   const result = Object.freeze(form)
@@ -124,8 +133,8 @@ export function orbitSwordPose(form, time, index) {
 export function convergenceRainMultiplier(rank) {
   const evo = GROWTH_EVOLUTIONS.find(row => row.id === 'evo_wanjian')
   const parent = SKILLS.sj_yujian
-  const form = skillForm(evo.id, rank)
-  const skipped = form.duration / parent.cooldown
+  // Keep the approved damage budget when the visual volley is lengthened.
+  const skipped = evo.rainDamageDurationByRank[rank - 1] / parent.cooldown
   return (evo.budgetMultipliers[rank - 1] - evo.regularMultiplier)
-    * evo.rainCooldown / parent.cooldown + skipped
+    * evo.rainDamageBudgetSeconds / parent.cooldown + skipped
 }

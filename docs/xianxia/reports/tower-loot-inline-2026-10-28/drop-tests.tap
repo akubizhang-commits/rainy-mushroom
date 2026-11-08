@@ -1,0 +1,58 @@
+TAP version 13
+# Subtest: graded core plans expose immutable rank values, floor rules and drop-only entries
+ok 1 - graded core plans expose immutable rank values, floor rules and drop-only entries
+  ---
+  duration_ms: 4.501541
+  type: 'test'
+  ...
+# Subtest: role and rank probabilities retain old budgets without shifting rare rewards to normals
+ok 2 - role and rank probabilities retain old budgets without shifting rare rewards to normals
+  ---
+  duration_ms: 3.303292
+  type: 'test'
+  ...
+# Subtest: every authored entity matches TowerRun registration, including boss-first local IDs
+ok 3 - every authored entity matches TowerRun registration, including boss-first local IDs
+  ---
+  duration_ms: 812.561875
+  type: 'test'
+  ...
+# Subtest: many full-floor seeds respect both budgets and preserve credible conditional role/rank rates
+ok 4 - many full-floor seeds respect both budgets and preserve credible conditional role/rank rates
+  ---
+  duration_ms: 1683.85075
+  type: 'test'
+  ...
+# Subtest: uint32 boundaries, cache eviction and JSON reload reproduce the same plan without global RNG
+ok 5 - uint32 boundaries, cache eviction and JSON reload reproduce the same plan without global RNG
+  ---
+  duration_ms: 9.3815
+  type: 'test'
+  ...
+# Subtest: version-one saved seed fixtures stay stable and plan queries leave combat RNG untouched
+ok 6 - version-one saved seed fixtures stay stable and plan queries leave combat RNG untouched
+  ---
+  duration_ms: 13.600167
+  type: 'test'
+  ...
+# Subtest: arbitrary partial kills only earn their own one-core entries, without budget top-ups
+ok 7 - arbitrary partial kills only earn their own one-core entries, without budget top-ups
+  ---
+  duration_ms: 7.907042
+  type: 'test'
+  ...
+# Subtest: exhausted rejection has a finite deterministic fallback even when every random draw is zero
+ok 8 - exhausted rejection has a finite deterministic fallback even when every random draw is zero
+  ---
+  duration_ms: 35.097666
+  type: 'test'
+  ...
+1..8
+# tests 8
+# suites 0
+# pass 8
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2666.497542

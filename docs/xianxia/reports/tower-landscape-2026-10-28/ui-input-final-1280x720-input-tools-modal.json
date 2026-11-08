@@ -1,0 +1,3007 @@
+{
+  "host": {
+    "screen": "camp",
+    "landscape": true,
+    "size": {
+      "width": 1280,
+      "height": 720
+    },
+    "selected": "",
+    "menuPage": "hall",
+    "treePan": {
+      "x": 0,
+      "y": 0
+    },
+    "stick": {
+      "x": 0,
+      "y": 0,
+      "dx": 0,
+      "dy": 0
+    },
+    "touch": null,
+    "keys": []
+  },
+  "scene": [
+    {
+      "name": "栖云宗·功能版",
+      "ancestors": [
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "",
+      "box": {
+        "left": 0,
+        "right": 1280,
+        "top": 0,
+        "bottom": 720
+      },
+      "clip": {
+        "left": 0,
+        "right": 1280,
+        "top": 0,
+        "bottom": 720
+      },
+      "x": 640,
+      "y": 360,
+      "logicalSize": {
+        "width": 1280,
+        "height": 720
+      },
+      "local": {
+        "x": 0,
+        "y": 0
+      },
+      "graphics": false,
+      "graphicsPathCount": null,
+      "scroll": null
+    },
+    {
+      "name": "TowerMenu",
+      "ancestors": [
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "",
+      "box": {
+        "left": 0,
+        "right": 1280,
+        "top": 0,
+        "bottom": 720
+      },
+      "clip": {
+        "left": 0,
+        "right": 1280,
+        "top": 0,
+        "bottom": 720
+      },
+      "x": 640,
+      "y": 360,
+      "logicalSize": {
+        "width": 1280,
+        "height": 720
+      },
+      "local": {
+        "x": 0,
+        "y": 0
+      },
+      "graphics": true,
+      "graphicsPathCount": 1,
+      "scroll": null
+    },
+    {
+      "name": "宗门",
+      "ancestors": [
+        "TowerMenu",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": true,
+      "enabled": true,
+      "text": "",
+      "box": {
+        "left": 23.999999999999986,
+        "right": 120,
+        "top": 12.000000000000037,
+        "bottom": 92
+      },
+      "clip": {
+        "left": 0,
+        "right": 1280,
+        "top": 0,
+        "bottom": 720
+      },
+      "x": 71.99999999999996,
+      "y": 51.99999999999997,
+      "logicalSize": {
+        "width": 96,
+        "height": 80
+      },
+      "local": {
+        "x": -568,
+        "y": 308
+      },
+      "graphics": true,
+      "graphicsPathCount": 2,
+      "scroll": null
+    },
+    {
+      "name": "宗门",
+      "ancestors": [
+        "宗门",
+        "TowerMenu",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "宗门",
+      "box": {
+        "left": 45,
+        "right": 98.99999999999999,
+        "top": 28.689999999999944,
+        "bottom": 75.31000000000009
+      },
+      "clip": {
+        "left": 0,
+        "right": 1280,
+        "top": 0,
+        "bottom": 720
+      },
+      "x": 71.99999999999996,
+      "y": 51.99999999999997,
+      "logicalSize": {
+        "width": 54,
+        "height": 46.62
+      },
+      "local": {
+        "x": 0,
+        "y": 0
+      },
+      "graphics": false,
+      "graphicsPathCount": null,
+      "scroll": null
+    },
+    {
+      "name": "栖云宗 · 体验档",
+      "ancestors": [
+        "TowerMenu",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "栖云宗 · 体验档",
+      "box": {
+        "left": 158.892578125,
+        "right": 393.107421875,
+        "top": 9.02000000000002,
+        "bottom": 66.97999999999988
+      },
+      "clip": {
+        "left": 0,
+        "right": 1280,
+        "top": 0,
+        "bottom": 720
+      },
+      "x": 276,
+      "y": 38.00000000000003,
+      "logicalSize": {
+        "width": 234.21484375,
+        "height": 57.96
+      },
+      "local": {
+        "x": -364,
+        "y": 322
+      },
+      "graphics": false,
+      "graphicsPathCount": null,
+      "scroll": null
+    },
+    {
+      "name": "金丹 · 圆满",
+      "ancestors": [
+        "TowerMenu",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "金丹 · 圆满",
+      "box": {
+        "left": 489.55859375,
+        "right": 626.44140625,
+        "top": 14.060000000000024,
+        "bottom": 61.940000000000026
+      },
+      "clip": {
+        "left": 0,
+        "right": 1280,
+        "top": 0,
+        "bottom": 720
+      },
+      "x": 558,
+      "y": 38.00000000000003,
+      "logicalSize": {
+        "width": 136.8828125,
+        "height": 47.88
+      },
+      "local": {
+        "x": -82,
+        "y": 322
+      },
+      "graphics": false,
+      "graphicsPathCount": null,
+      "scroll": null
+    },
+    {
+      "name": "生命 120 / 120",
+      "ancestors": [
+        "TowerMenu",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "生命 120 / 120",
+      "box": {
+        "left": 198.94873046875,
+        "right": 373.05126953125,
+        "top": 58.690000000000076,
+        "bottom": 105.30999999999997
+      },
+      "clip": {
+        "left": 0,
+        "right": 1280,
+        "top": 0,
+        "bottom": 720
+      },
+      "x": 286,
+      "y": 82.00000000000003,
+      "logicalSize": {
+        "width": 174.1025390625,
+        "height": 46.62
+      },
+      "local": {
+        "x": -354,
+        "y": 278
+      },
+      "graphics": false,
+      "graphicsPathCount": null,
+      "scroll": null
+    },
+    {
+      "name": "生命条",
+      "ancestors": [
+        "TowerMenu",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "",
+      "box": {
+        "left": 130,
+        "right": 442,
+        "top": 105.00000000000003,
+        "bottom": 114.99999999999999
+      },
+      "clip": {
+        "left": 0,
+        "right": 1280,
+        "top": 0,
+        "bottom": 720
+      },
+      "x": 286,
+      "y": 110.00000000000001,
+      "logicalSize": {
+        "width": 312,
+        "height": 10
+      },
+      "local": {
+        "x": -354,
+        "y": 250
+      },
+      "graphics": true,
+      "graphicsPathCount": 2,
+      "scroll": null
+    },
+    {
+      "name": "妖丹值 2000     宗门贡献 300",
+      "ancestors": [
+        "TowerMenu",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "妖丹值 2000     宗门贡献 300",
+      "box": {
+        "left": 798.26953125,
+        "right": 1157.73046875,
+        "top": 14.060000000000024,
+        "bottom": 61.940000000000026
+      },
+      "clip": {
+        "left": 0,
+        "right": 1280,
+        "top": 0,
+        "bottom": 720
+      },
+      "x": 978.0000000000001,
+      "y": 38.00000000000003,
+      "logicalSize": {
+        "width": 359.4609375,
+        "height": 47.88
+      },
+      "local": {
+        "x": 338,
+        "y": 322
+      },
+      "graphics": false,
+      "graphicsPathCount": null,
+      "scroll": null
+    },
+    {
+      "name": "妖丹按阶位折合一阶计价；掉落颗数另列",
+      "ancestors": [
+        "TowerMenu",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "妖丹按阶位折合一阶计价；掉落颗数另列",
+      "box": {
+        "left": 614,
+        "right": 1082,
+        "top": 65.31999999999995,
+        "bottom": 110.67999999999999
+      },
+      "clip": {
+        "left": 0,
+        "right": 1280,
+        "top": 0,
+        "bottom": 720
+      },
+      "x": 848,
+      "y": 88,
+      "logicalSize": {
+        "width": 468,
+        "height": 45.36
+      },
+      "local": {
+        "x": 208,
+        "y": 272
+      },
+      "graphics": false,
+      "graphicsPathCount": null,
+      "scroll": null
+    },
+    {
+      "name": "事务卷轴",
+      "ancestors": [
+        "TowerMenu",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "",
+      "box": {
+        "left": 23.999999999999986,
+        "right": 1256,
+        "top": 119.99999999999997,
+        "bottom": 628
+      },
+      "clip": {
+        "left": 0,
+        "right": 1280,
+        "top": 0,
+        "bottom": 720
+      },
+      "x": 640,
+      "y": 373.99999999999994,
+      "logicalSize": {
+        "width": 1232,
+        "height": 508
+      },
+      "local": {
+        "x": 0,
+        "y": -14
+      },
+      "graphics": true,
+      "graphicsPathCount": 1,
+      "scroll": {
+        "horizontal": false,
+        "vertical": true,
+        "offset": {
+          "x": 0,
+          "y": 0
+        }
+      }
+    },
+    {
+      "name": "卷轴内容",
+      "ancestors": [
+        "事务卷轴",
+        "TowerMenu",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "",
+      "box": {
+        "left": 23.999999999999986,
+        "right": 1256,
+        "top": 119.99999999999997,
+        "bottom": 1286.0000000000002
+      },
+      "clip": {
+        "left": 23.999999999999986,
+        "right": 1256,
+        "top": 119.99999999999997,
+        "bottom": 628
+      },
+      "x": 640,
+      "y": 119.99999999999997,
+      "logicalSize": {
+        "width": 1232,
+        "height": 1166
+      },
+      "local": {
+        "x": 0,
+        "y": 254
+      },
+      "graphics": false,
+      "graphicsPathCount": null,
+      "scroll": null
+    },
+    {
+      "name": "九重封印已修复",
+      "ancestors": [
+        "卷轴内容",
+        "事务卷轴",
+        "TowerMenu",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "",
+      "box": {
+        "left": 27.99999999999997,
+        "right": 1252,
+        "top": 124.00000000000004,
+        "bottom": 371.99999999999994
+      },
+      "clip": {
+        "left": 23.999999999999986,
+        "right": 1256,
+        "top": 119.99999999999997,
+        "bottom": 628
+      },
+      "x": 640,
+      "y": 248,
+      "logicalSize": {
+        "width": 1224,
+        "height": 248
+      },
+      "local": {
+        "x": 0,
+        "y": -128
+      },
+      "graphics": true,
+      "graphicsPathCount": 2,
+      "scroll": null
+    },
+    {
+      "name": "九重封印已修复",
+      "ancestors": [
+        "九重封印已修复",
+        "卷轴内容",
+        "事务卷轴",
+        "TowerMenu",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "九重封印已修复",
+      "box": {
+        "left": 528,
+        "right": 752,
+        "top": 140.27999999999997,
+        "bottom": 195.72000000000003
+      },
+      "clip": {
+        "left": 23.999999999999986,
+        "right": 1256,
+        "top": 119.99999999999997,
+        "bottom": 628
+      },
+      "x": 640,
+      "y": 167.99999999999997,
+      "logicalSize": {
+        "width": 224,
+        "height": 55.44
+      },
+      "local": {
+        "x": 0,
+        "y": 80
+      },
+      "graphics": false,
+      "graphicsPathCount": null,
+      "scroll": null
+    },
+    {
+      "name": "九层已通，可重访各层、重新分配技能点与尝试三套武器配装。",
+      "ancestors": [
+        "九重封印已修复",
+        "卷轴内容",
+        "事务卷轴",
+        "TowerMenu",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "九层已通，可重访各层、重新分配技能点与尝试三套武器配装。",
+      "box": {
+        "left": 247.99999999999997,
+        "right": 1032,
+        "top": 205.05999999999997,
+        "bottom": 252.94
+      },
+      "clip": {
+        "left": 23.999999999999986,
+        "right": 1256,
+        "top": 119.99999999999997,
+        "bottom": 628
+      },
+      "x": 640,
+      "y": 229,
+      "logicalSize": {
+        "width": 784,
+        "height": 47.88
+      },
+      "local": {
+        "x": 0,
+        "y": 19
+      },
+      "graphics": false,
+      "graphicsPathCount": null,
+      "scroll": null
+    },
+    {
+      "name": "体验工具",
+      "ancestors": [
+        "九重封印已修复",
+        "卷轴内容",
+        "事务卷轴",
+        "TowerMenu",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": true,
+      "enabled": true,
+      "text": "",
+      "box": {
+        "left": 47.99999999999997,
+        "right": 1232,
+        "top": 264,
+        "bottom": 352
+      },
+      "clip": {
+        "left": 23.999999999999986,
+        "right": 1256,
+        "top": 119.99999999999997,
+        "bottom": 628
+      },
+      "x": 640,
+      "y": 308,
+      "logicalSize": {
+        "width": 1184,
+        "height": 88
+      },
+      "local": {
+        "x": 0,
+        "y": -60
+      },
+      "graphics": true,
+      "graphicsPathCount": 2,
+      "scroll": null
+    },
+    {
+      "name": "体验工具",
+      "ancestors": [
+        "体验工具",
+        "九重封印已修复",
+        "卷轴内容",
+        "事务卷轴",
+        "TowerMenu",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "体验工具",
+      "box": {
+        "left": 590,
+        "right": 690,
+        "top": 286.58,
+        "bottom": 329.41999999999996
+      },
+      "clip": {
+        "left": 23.999999999999986,
+        "right": 1256,
+        "top": 119.99999999999997,
+        "bottom": 628
+      },
+      "x": 640,
+      "y": 308,
+      "logicalSize": {
+        "width": 100,
+        "height": 42.84
+      },
+      "local": {
+        "x": 0,
+        "y": 0
+      },
+      "graphics": false,
+      "graphicsPathCount": null,
+      "scroll": null
+    },
+    {
+      "name": "锁妖塔",
+      "ancestors": [
+        "卷轴内容",
+        "事务卷轴",
+        "TowerMenu",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": true,
+      "enabled": true,
+      "text": "",
+      "box": {
+        "left": 27.99999999999997,
+        "right": 322,
+        "top": 390.00000000000006,
+        "bottom": 550
+      },
+      "clip": {
+        "left": 23.999999999999986,
+        "right": 1256,
+        "top": 119.99999999999997,
+        "bottom": 628
+      },
+      "x": 175,
+      "y": 470,
+      "logicalSize": {
+        "width": 294,
+        "height": 160
+      },
+      "local": {
+        "x": -465,
+        "y": -350
+      },
+      "graphics": true,
+      "graphicsPathCount": 3,
+      "scroll": null
+    },
+    {
+      "name": "锁妖塔",
+      "ancestors": [
+        "锁妖塔",
+        "卷轴内容",
+        "事务卷轴",
+        "TowerMenu",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "锁妖塔",
+      "box": {
+        "left": 150.99999999999994,
+        "right": 246.99999999999994,
+        "top": 402.2800000000001,
+        "bottom": 457.71999999999997
+      },
+      "clip": {
+        "left": 23.999999999999986,
+        "right": 1256,
+        "top": 119.99999999999997,
+        "bottom": 628
+      },
+      "x": 199,
+      "y": 430,
+      "logicalSize": {
+        "width": 96,
+        "height": 55.44
+      },
+      "local": {
+        "x": 24,
+        "y": 40
+      },
+      "graphics": false,
+      "graphicsPathCount": null,
+      "scroll": null
+    },
+    {
+      "name": "九层镇妖 · 选层与继续",
+      "ancestors": [
+        "锁妖塔",
+        "卷轴内容",
+        "事务卷轴",
+        "TowerMenu",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "九层镇妖 · 选层与继\n续",
+      "box": {
+        "left": 68.33593749999999,
+        "right": 281.6640625,
+        "top": 460.71,
+        "bottom": 535.29
+      },
+      "clip": {
+        "left": 23.999999999999986,
+        "right": 1256,
+        "top": 119.99999999999997,
+        "bottom": 628
+      },
+      "x": 175,
+      "y": 498,
+      "logicalSize": {
+        "width": 213.328125,
+        "height": 74.58
+      },
+      "local": {
+        "x": 0,
+        "y": -28
+      },
+      "graphics": false,
+      "graphicsPathCount": null,
+      "scroll": null
+    },
+    {
+      "name": "宗门大殿",
+      "ancestors": [
+        "卷轴内容",
+        "事务卷轴",
+        "TowerMenu",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": true,
+      "enabled": true,
+      "text": "",
+      "box": {
+        "left": 338,
+        "right": 632,
+        "top": 390.00000000000006,
+        "bottom": 550
+      },
+      "clip": {
+        "left": 23.999999999999986,
+        "right": 1256,
+        "top": 119.99999999999997,
+        "bottom": 628
+      },
+      "x": 485,
+      "y": 470,
+      "logicalSize": {
+        "width": 294,
+        "height": 160
+      },
+      "local": {
+        "x": -155,
+        "y": -350
+      },
+      "graphics": true,
+      "graphicsPathCount": 3,
+      "scroll": null
+    },
+    {
+      "name": "宗门大殿",
+      "ancestors": [
+        "宗门大殿",
+        "卷轴内容",
+        "事务卷轴",
+        "TowerMenu",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "宗门大殿",
+      "box": {
+        "left": 445,
+        "right": 573,
+        "top": 402.2800000000001,
+        "bottom": 457.71999999999997
+      },
+      "clip": {
+        "left": 23.999999999999986,
+        "right": 1256,
+        "top": 119.99999999999997,
+        "bottom": 628
+      },
+      "x": 509,
+      "y": 430,
+      "logicalSize": {
+        "width": 128,
+        "height": 55.44
+      },
+      "local": {
+        "x": 24,
+        "y": 40
+      },
+      "graphics": false,
+      "graphicsPathCount": null,
+      "scroll": null
+    },
+    {
+      "name": "修行目标 · 镇妖成果",
+      "ancestors": [
+        "宗门大殿",
+        "卷轴内容",
+        "事务卷轴",
+        "TowerMenu",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "修行目标 · 镇妖成果",
+      "box": {
+        "left": 378.3359375,
+        "right": 591.6640625,
+        "top": 477.21,
+        "bottom": 518.79
+      },
+      "clip": {
+        "left": 23.999999999999986,
+        "right": 1256,
+        "top": 119.99999999999997,
+        "bottom": 628
+      },
+      "x": 485,
+      "y": 498,
+      "logicalSize": {
+        "width": 213.328125,
+        "height": 41.58
+      },
+      "local": {
+        "x": 0,
+        "y": -28
+      },
+      "graphics": false,
+      "graphicsPathCount": null,
+      "scroll": null
+    },
+    {
+      "name": "藏经阁",
+      "ancestors": [
+        "卷轴内容",
+        "事务卷轴",
+        "TowerMenu",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": true,
+      "enabled": true,
+      "text": "",
+      "box": {
+        "left": 648,
+        "right": 942,
+        "top": 390.00000000000006,
+        "bottom": 550
+      },
+      "clip": {
+        "left": 23.999999999999986,
+        "right": 1256,
+        "top": 119.99999999999997,
+        "bottom": 628
+      },
+      "x": 795,
+      "y": 470,
+      "logicalSize": {
+        "width": 294,
+        "height": 160
+      },
+      "local": {
+        "x": 155,
+        "y": -350
+      },
+      "graphics": true,
+      "graphicsPathCount": 3,
+      "scroll": null
+    },
+    {
+      "name": "藏经阁",
+      "ancestors": [
+        "藏经阁",
+        "卷轴内容",
+        "事务卷轴",
+        "TowerMenu",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "藏经阁",
+      "box": {
+        "left": 771,
+        "right": 867,
+        "top": 402.2800000000001,
+        "bottom": 457.71999999999997
+      },
+      "clip": {
+        "left": 23.999999999999986,
+        "right": 1256,
+        "top": 119.99999999999997,
+        "bottom": 628
+      },
+      "x": 819,
+      "y": 430,
+      "logicalSize": {
+        "width": 96,
+        "height": 55.44
+      },
+      "local": {
+        "x": 24,
+        "y": 40
+      },
+      "graphics": false,
+      "graphicsPathCount": null,
+      "scroll": null
+    },
+    {
+      "name": "全技能树 · 加点与重修",
+      "ancestors": [
+        "藏经阁",
+        "卷轴内容",
+        "事务卷轴",
+        "TowerMenu",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "全技能树 · 加点与重\n修",
+      "box": {
+        "left": 688.3359375,
+        "right": 901.6640625,
+        "top": 460.71,
+        "bottom": 535.29
+      },
+      "clip": {
+        "left": 23.999999999999986,
+        "right": 1256,
+        "top": 119.99999999999997,
+        "bottom": 628
+      },
+      "x": 795,
+      "y": 498,
+      "logicalSize": {
+        "width": 213.328125,
+        "height": 74.58
+      },
+      "local": {
+        "x": 0,
+        "y": -28
+      },
+      "graphics": false,
+      "graphicsPathCount": null,
+      "scroll": null
+    },
+    {
+      "name": "天工坊",
+      "ancestors": [
+        "卷轴内容",
+        "事务卷轴",
+        "TowerMenu",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": true,
+      "enabled": true,
+      "text": "",
+      "box": {
+        "left": 958,
+        "right": 1252,
+        "top": 390.00000000000006,
+        "bottom": 550
+      },
+      "clip": {
+        "left": 23.999999999999986,
+        "right": 1256,
+        "top": 119.99999999999997,
+        "bottom": 628
+      },
+      "x": 1105,
+      "y": 470,
+      "logicalSize": {
+        "width": 294,
+        "height": 160
+      },
+      "local": {
+        "x": 465,
+        "y": -350
+      },
+      "graphics": true,
+      "graphicsPathCount": 3,
+      "scroll": null
+    },
+    {
+      "name": "天工坊",
+      "ancestors": [
+        "天工坊",
+        "卷轴内容",
+        "事务卷轴",
+        "TowerMenu",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "天工坊",
+      "box": {
+        "left": 1081,
+        "right": 1177,
+        "top": 402.2800000000001,
+        "bottom": 457.71999999999997
+      },
+      "clip": {
+        "left": 23.999999999999986,
+        "right": 1256,
+        "top": 119.99999999999997,
+        "bottom": 628
+      },
+      "x": 1129,
+      "y": 430,
+      "logicalSize": {
+        "width": 96,
+        "height": 55.44
+      },
+      "local": {
+        "x": 24,
+        "y": 40
+      },
+      "graphics": false,
+      "graphicsPathCount": null,
+      "scroll": null
+    },
+    {
+      "name": "三剑寻器 · 武器强化",
+      "ancestors": [
+        "天工坊",
+        "卷轴内容",
+        "事务卷轴",
+        "TowerMenu",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "三剑寻器 · 武器强化",
+      "box": {
+        "left": 998.3359375,
+        "right": 1211.6640625,
+        "top": 477.21,
+        "bottom": 518.79
+      },
+      "clip": {
+        "left": 23.999999999999986,
+        "right": 1256,
+        "top": 119.99999999999997,
+        "bottom": 628
+      },
+      "x": 1105,
+      "y": 498,
+      "logicalSize": {
+        "width": 213.328125,
+        "height": 41.58
+      },
+      "local": {
+        "x": 0,
+        "y": -28
+      },
+      "graphics": false,
+      "graphicsPathCount": null,
+      "scroll": null
+    },
+    {
+      "name": "丹鼎阁",
+      "ancestors": [
+        "卷轴内容",
+        "事务卷轴",
+        "TowerMenu",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": true,
+      "enabled": true,
+      "text": "",
+      "box": {
+        "left": 27.99999999999997,
+        "right": 322,
+        "top": 566.0000000000001,
+        "bottom": 726
+      },
+      "clip": {
+        "left": 23.999999999999986,
+        "right": 1256,
+        "top": 119.99999999999997,
+        "bottom": 628
+      },
+      "x": 175,
+      "y": 646,
+      "logicalSize": {
+        "width": 294,
+        "height": 160
+      },
+      "local": {
+        "x": -465,
+        "y": -526
+      },
+      "graphics": true,
+      "graphicsPathCount": 3,
+      "scroll": null
+    },
+    {
+      "name": "丹鼎阁",
+      "ancestors": [
+        "丹鼎阁",
+        "卷轴内容",
+        "事务卷轴",
+        "TowerMenu",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "丹鼎阁",
+      "box": {
+        "left": 150.99999999999994,
+        "right": 246.99999999999994,
+        "top": 578.28,
+        "bottom": 633.72
+      },
+      "clip": {
+        "left": 23.999999999999986,
+        "right": 1256,
+        "top": 119.99999999999997,
+        "bottom": 628
+      },
+      "x": 199,
+      "y": 606,
+      "logicalSize": {
+        "width": 96,
+        "height": 55.44
+      },
+      "local": {
+        "x": 24,
+        "y": 40
+      },
+      "graphics": false,
+      "graphicsPathCount": null,
+      "scroll": null
+    },
+    {
+      "name": "购丹与服丹 · 场外恢复",
+      "ancestors": [
+        "丹鼎阁",
+        "卷轴内容",
+        "事务卷轴",
+        "TowerMenu",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "购丹与服丹 · 场外恢\n复",
+      "box": {
+        "left": 68.33593749999999,
+        "right": 281.6640625,
+        "top": 636.71,
+        "bottom": 711.29
+      },
+      "clip": {
+        "left": 23.999999999999986,
+        "right": 1256,
+        "top": 119.99999999999997,
+        "bottom": 628
+      },
+      "x": 175,
+      "y": 674,
+      "logicalSize": {
+        "width": 213.328125,
+        "height": 74.58
+      },
+      "local": {
+        "x": 0,
+        "y": -28
+      },
+      "graphics": false,
+      "graphicsPathCount": null,
+      "scroll": null
+    },
+    {
+      "name": "洞府",
+      "ancestors": [
+        "卷轴内容",
+        "事务卷轴",
+        "TowerMenu",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": true,
+      "enabled": true,
+      "text": "",
+      "box": {
+        "left": 338,
+        "right": 632,
+        "top": 566.0000000000001,
+        "bottom": 726
+      },
+      "clip": {
+        "left": 23.999999999999986,
+        "right": 1256,
+        "top": 119.99999999999997,
+        "bottom": 628
+      },
+      "x": 485,
+      "y": 646,
+      "logicalSize": {
+        "width": 294,
+        "height": 160
+      },
+      "local": {
+        "x": -155,
+        "y": -526
+      },
+      "graphics": true,
+      "graphicsPathCount": 3,
+      "scroll": null
+    },
+    {
+      "name": "洞府",
+      "ancestors": [
+        "洞府",
+        "卷轴内容",
+        "事务卷轴",
+        "TowerMenu",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "洞府",
+      "box": {
+        "left": 477,
+        "right": 541,
+        "top": 578.28,
+        "bottom": 633.72
+      },
+      "clip": {
+        "left": 23.999999999999986,
+        "right": 1256,
+        "top": 119.99999999999997,
+        "bottom": 628
+      },
+      "x": 509,
+      "y": 606,
+      "logicalSize": {
+        "width": 64,
+        "height": 55.44
+      },
+      "local": {
+        "x": 24,
+        "y": 40
+      },
+      "graphics": false,
+      "graphicsPathCount": null,
+      "scroll": null
+    },
+    {
+      "name": "三套武器配装",
+      "ancestors": [
+        "洞府",
+        "卷轴内容",
+        "事务卷轴",
+        "TowerMenu",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "三套武器配装",
+      "box": {
+        "left": 413,
+        "right": 557,
+        "top": 653.21,
+        "bottom": 694.79
+      },
+      "clip": {
+        "left": 23.999999999999986,
+        "right": 1256,
+        "top": 119.99999999999997,
+        "bottom": 628
+      },
+      "x": 485,
+      "y": 674,
+      "logicalSize": {
+        "width": 144,
+        "height": 41.58
+      },
+      "local": {
+        "x": 0,
+        "y": -28
+      },
+      "graphics": false,
+      "graphicsPathCount": null,
+      "scroll": null
+    },
+    {
+      "name": "演武场",
+      "ancestors": [
+        "卷轴内容",
+        "事务卷轴",
+        "TowerMenu",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": true,
+      "enabled": true,
+      "text": "",
+      "box": {
+        "left": 648,
+        "right": 942,
+        "top": 566.0000000000001,
+        "bottom": 726
+      },
+      "clip": {
+        "left": 23.999999999999986,
+        "right": 1256,
+        "top": 119.99999999999997,
+        "bottom": 628
+      },
+      "x": 795,
+      "y": 646,
+      "logicalSize": {
+        "width": 294,
+        "height": 160
+      },
+      "local": {
+        "x": 155,
+        "y": -526
+      },
+      "graphics": true,
+      "graphicsPathCount": 3,
+      "scroll": null
+    },
+    {
+      "name": "演武场",
+      "ancestors": [
+        "演武场",
+        "卷轴内容",
+        "事务卷轴",
+        "TowerMenu",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "演武场",
+      "box": {
+        "left": 771,
+        "right": 867,
+        "top": 578.28,
+        "bottom": 633.72
+      },
+      "clip": {
+        "left": 23.999999999999986,
+        "right": 1256,
+        "top": 119.99999999999997,
+        "bottom": 628
+      },
+      "x": 819,
+      "y": 606,
+      "logicalSize": {
+        "width": 96,
+        "height": 55.44
+      },
+      "local": {
+        "x": 24,
+        "y": 40
+      },
+      "graphics": false,
+      "graphicsPathCount": null,
+      "scroll": null
+    },
+    {
+      "name": "试剑演练 · 无损训练",
+      "ancestors": [
+        "演武场",
+        "卷轴内容",
+        "事务卷轴",
+        "TowerMenu",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "试剑演练 · 无损训练",
+      "box": {
+        "left": 688.3359375,
+        "right": 901.6640625,
+        "top": 653.21,
+        "bottom": 694.79
+      },
+      "clip": {
+        "left": 23.999999999999986,
+        "right": 1256,
+        "top": 119.99999999999997,
+        "bottom": 628
+      },
+      "x": 795,
+      "y": 674,
+      "logicalSize": {
+        "width": 213.328125,
+        "height": 41.58
+      },
+      "local": {
+        "x": 0,
+        "y": -28
+      },
+      "graphics": false,
+      "graphicsPathCount": null,
+      "scroll": null
+    },
+    {
+      "name": "山门",
+      "ancestors": [
+        "卷轴内容",
+        "事务卷轴",
+        "TowerMenu",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": true,
+      "enabled": true,
+      "text": "",
+      "box": {
+        "left": 958,
+        "right": 1252,
+        "top": 566.0000000000001,
+        "bottom": 726
+      },
+      "clip": {
+        "left": 23.999999999999986,
+        "right": 1256,
+        "top": 119.99999999999997,
+        "bottom": 628
+      },
+      "x": 1105,
+      "y": 646,
+      "logicalSize": {
+        "width": 294,
+        "height": 160
+      },
+      "local": {
+        "x": 465,
+        "y": -526
+      },
+      "graphics": true,
+      "graphicsPathCount": 3,
+      "scroll": null
+    },
+    {
+      "name": "山门",
+      "ancestors": [
+        "山门",
+        "卷轴内容",
+        "事务卷轴",
+        "TowerMenu",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "山门",
+      "box": {
+        "left": 1097,
+        "right": 1161,
+        "top": 578.28,
+        "bottom": 633.72
+      },
+      "clip": {
+        "left": 23.999999999999986,
+        "right": 1256,
+        "top": 119.99999999999997,
+        "bottom": 628
+      },
+      "x": 1129,
+      "y": 606,
+      "logicalSize": {
+        "width": 64,
+        "height": 55.44
+      },
+      "local": {
+        "x": 24,
+        "y": 40
+      },
+      "graphics": false,
+      "graphicsPathCount": null,
+      "scroll": null
+    },
+    {
+      "name": "入宗记事 · 玩法指引",
+      "ancestors": [
+        "山门",
+        "卷轴内容",
+        "事务卷轴",
+        "TowerMenu",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "入宗记事 · 玩法指引",
+      "box": {
+        "left": 998.3359375,
+        "right": 1211.6640625,
+        "top": 653.21,
+        "bottom": 694.79
+      },
+      "clip": {
+        "left": 23.999999999999986,
+        "right": 1256,
+        "top": 119.99999999999997,
+        "bottom": 628
+      },
+      "x": 1105,
+      "y": 674,
+      "logicalSize": {
+        "width": 213.328125,
+        "height": 41.58
+      },
+      "local": {
+        "x": 0,
+        "y": -28
+      },
+      "graphics": false,
+      "graphicsPathCount": null,
+      "scroll": null
+    },
+    {
+      "name": "灵兽园",
+      "ancestors": [
+        "卷轴内容",
+        "事务卷轴",
+        "TowerMenu",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": true,
+      "enabled": false,
+      "text": "",
+      "box": {
+        "left": 27.99999999999997,
+        "right": 322,
+        "top": 741.9999999999999,
+        "bottom": 902
+      },
+      "clip": {
+        "left": 23.999999999999986,
+        "right": 1256,
+        "top": 119.99999999999997,
+        "bottom": 628
+      },
+      "x": 175,
+      "y": 822,
+      "logicalSize": {
+        "width": 294,
+        "height": 160
+      },
+      "local": {
+        "x": -465,
+        "y": -702
+      },
+      "graphics": true,
+      "graphicsPathCount": 3,
+      "scroll": null
+    },
+    {
+      "name": "灵兽园",
+      "ancestors": [
+        "灵兽园",
+        "卷轴内容",
+        "事务卷轴",
+        "TowerMenu",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "灵兽园",
+      "box": {
+        "left": 150.99999999999994,
+        "right": 246.99999999999994,
+        "top": 754.28,
+        "bottom": 809.72
+      },
+      "clip": {
+        "left": 23.999999999999986,
+        "right": 1256,
+        "top": 119.99999999999997,
+        "bottom": 628
+      },
+      "x": 199,
+      "y": 782.0000000000001,
+      "logicalSize": {
+        "width": 96,
+        "height": 55.44
+      },
+      "local": {
+        "x": 24,
+        "y": 40
+      },
+      "graphics": false,
+      "graphicsPathCount": null,
+      "scroll": null
+    },
+    {
+      "name": "御兽师后续开放",
+      "ancestors": [
+        "灵兽园",
+        "卷轴内容",
+        "事务卷轴",
+        "TowerMenu",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "御兽师后续开放",
+      "box": {
+        "left": 90.99999999999994,
+        "right": 259,
+        "top": 829.21,
+        "bottom": 870.79
+      },
+      "clip": {
+        "left": 23.999999999999986,
+        "right": 1256,
+        "top": 119.99999999999997,
+        "bottom": 628
+      },
+      "x": 175,
+      "y": 850,
+      "logicalSize": {
+        "width": 168,
+        "height": 41.58
+      },
+      "local": {
+        "x": 0,
+        "y": -28
+      },
+      "graphics": false,
+      "graphicsPathCount": null,
+      "scroll": null
+    },
+    {
+      "name": "灵符堂",
+      "ancestors": [
+        "卷轴内容",
+        "事务卷轴",
+        "TowerMenu",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": true,
+      "enabled": false,
+      "text": "",
+      "box": {
+        "left": 338,
+        "right": 632,
+        "top": 741.9999999999999,
+        "bottom": 902
+      },
+      "clip": {
+        "left": 23.999999999999986,
+        "right": 1256,
+        "top": 119.99999999999997,
+        "bottom": 628
+      },
+      "x": 485,
+      "y": 822,
+      "logicalSize": {
+        "width": 294,
+        "height": 160
+      },
+      "local": {
+        "x": -155,
+        "y": -702
+      },
+      "graphics": true,
+      "graphicsPathCount": 3,
+      "scroll": null
+    },
+    {
+      "name": "灵符堂",
+      "ancestors": [
+        "灵符堂",
+        "卷轴内容",
+        "事务卷轴",
+        "TowerMenu",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "灵符堂",
+      "box": {
+        "left": 460.99999999999994,
+        "right": 557,
+        "top": 754.28,
+        "bottom": 809.72
+      },
+      "clip": {
+        "left": 23.999999999999986,
+        "right": 1256,
+        "top": 119.99999999999997,
+        "bottom": 628
+      },
+      "x": 509,
+      "y": 782.0000000000001,
+      "logicalSize": {
+        "width": 96,
+        "height": 55.44
+      },
+      "local": {
+        "x": 24,
+        "y": 40
+      },
+      "graphics": false,
+      "graphicsPathCount": null,
+      "scroll": null
+    },
+    {
+      "name": "符师后续开放",
+      "ancestors": [
+        "灵符堂",
+        "卷轴内容",
+        "事务卷轴",
+        "TowerMenu",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "符师后续开放",
+      "box": {
+        "left": 413,
+        "right": 557,
+        "top": 829.21,
+        "bottom": 870.79
+      },
+      "clip": {
+        "left": 23.999999999999986,
+        "right": 1256,
+        "top": 119.99999999999997,
+        "bottom": 628
+      },
+      "x": 485,
+      "y": 850,
+      "logicalSize": {
+        "width": 144,
+        "height": 41.58
+      },
+      "local": {
+        "x": 0,
+        "y": -28
+      },
+      "graphics": false,
+      "graphicsPathCount": null,
+      "scroll": null
+    },
+    {
+      "name": "第一次入宗",
+      "ancestors": [
+        "卷轴内容",
+        "事务卷轴",
+        "TowerMenu",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "",
+      "box": {
+        "left": 27.99999999999997,
+        "right": 1252,
+        "top": 917.9999999999999,
+        "bottom": 1268
+      },
+      "clip": {
+        "left": 23.999999999999986,
+        "right": 1256,
+        "top": 119.99999999999997,
+        "bottom": 628
+      },
+      "x": 640,
+      "y": 1093,
+      "logicalSize": {
+        "width": 1224,
+        "height": 350
+      },
+      "local": {
+        "x": 0,
+        "y": -973
+      },
+      "graphics": true,
+      "graphicsPathCount": 2,
+      "scroll": null
+    },
+    {
+      "name": "第一次入宗",
+      "ancestors": [
+        "第一次入宗",
+        "卷轴内容",
+        "事务卷轴",
+        "TowerMenu",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "第一次入宗",
+      "box": {
+        "left": 560,
+        "right": 720,
+        "top": 934.28,
+        "bottom": 989.72
+      },
+      "clip": {
+        "left": 23.999999999999986,
+        "right": 1256,
+        "top": 119.99999999999997,
+        "bottom": 628
+      },
+      "x": 640,
+      "y": 962.0000000000001,
+      "logicalSize": {
+        "width": 160,
+        "height": 55.44
+      },
+      "local": {
+        "x": 0,
+        "y": 131
+      },
+      "graphics": false,
+      "graphicsPathCount": null,
+      "scroll": null
+    },
+    {
+      "name": "认识领悟、技能点、恢复与登塔。可随时跳过，不影响入门赠礼和清波教学。",
+      "ancestors": [
+        "第一次入宗",
+        "卷轴内容",
+        "事务卷轴",
+        "TowerMenu",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "认识领悟、技能点、恢复与登塔。可随时跳过，不影响入门赠礼和清波教学。",
+      "box": {
+        "left": 164,
+        "right": 1116,
+        "top": 999.0599999999998,
+        "bottom": 1046.94
+      },
+      "clip": {
+        "left": 23.999999999999986,
+        "right": 1256,
+        "top": 119.99999999999997,
+        "bottom": 628
+      },
+      "x": 640,
+      "y": 1023,
+      "logicalSize": {
+        "width": 952,
+        "height": 47.88
+      },
+      "local": {
+        "x": 0,
+        "y": 70
+      },
+      "graphics": false,
+      "graphicsPathCount": null,
+      "scroll": null
+    },
+    {
+      "name": "查看入宗指引",
+      "ancestors": [
+        "第一次入宗",
+        "卷轴内容",
+        "事务卷轴",
+        "TowerMenu",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": true,
+      "enabled": true,
+      "text": "",
+      "box": {
+        "left": 47.99999999999997,
+        "right": 1232,
+        "top": 1058,
+        "bottom": 1146
+      },
+      "clip": {
+        "left": 23.999999999999986,
+        "right": 1256,
+        "top": 119.99999999999997,
+        "bottom": 628
+      },
+      "x": 640,
+      "y": 1102,
+      "logicalSize": {
+        "width": 1184,
+        "height": 88
+      },
+      "local": {
+        "x": 0,
+        "y": -9
+      },
+      "graphics": true,
+      "graphicsPathCount": 1,
+      "scroll": null
+    },
+    {
+      "name": "查看入宗指引",
+      "ancestors": [
+        "查看入宗指引",
+        "第一次入宗",
+        "卷轴内容",
+        "事务卷轴",
+        "TowerMenu",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "查看入宗指引",
+      "box": {
+        "left": 565,
+        "right": 715,
+        "top": 1080.5800000000002,
+        "bottom": 1123.42
+      },
+      "clip": {
+        "left": 23.999999999999986,
+        "right": 1256,
+        "top": 119.99999999999997,
+        "bottom": 628
+      },
+      "x": 640,
+      "y": 1102,
+      "logicalSize": {
+        "width": 150,
+        "height": 42.84
+      },
+      "local": {
+        "x": 0,
+        "y": 0
+      },
+      "graphics": false,
+      "graphicsPathCount": null,
+      "scroll": null
+    },
+    {
+      "name": "跳过引导",
+      "ancestors": [
+        "第一次入宗",
+        "卷轴内容",
+        "事务卷轴",
+        "TowerMenu",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": true,
+      "enabled": true,
+      "text": "",
+      "box": {
+        "left": 47.99999999999997,
+        "right": 1232,
+        "top": 1160,
+        "bottom": 1248
+      },
+      "clip": {
+        "left": 23.999999999999986,
+        "right": 1256,
+        "top": 119.99999999999997,
+        "bottom": 628
+      },
+      "x": 640,
+      "y": 1204,
+      "logicalSize": {
+        "width": 1184,
+        "height": 88
+      },
+      "local": {
+        "x": 0,
+        "y": -111
+      },
+      "graphics": true,
+      "graphicsPathCount": 2,
+      "scroll": null
+    },
+    {
+      "name": "跳过引导",
+      "ancestors": [
+        "跳过引导",
+        "第一次入宗",
+        "卷轴内容",
+        "事务卷轴",
+        "TowerMenu",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "跳过引导",
+      "box": {
+        "left": 590,
+        "right": 690,
+        "top": 1182.5800000000002,
+        "bottom": 1225.42
+      },
+      "clip": {
+        "left": 23.999999999999986,
+        "right": 1256,
+        "top": 119.99999999999997,
+        "bottom": 628
+      },
+      "x": 640,
+      "y": 1204,
+      "logicalSize": {
+        "width": 100,
+        "height": 42.84
+      },
+      "local": {
+        "x": 0,
+        "y": 0
+      },
+      "graphics": false,
+      "graphicsPathCount": null,
+      "scroll": null
+    },
+    {
+      "name": "宗门",
+      "ancestors": [
+        "TowerMenu",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": true,
+      "enabled": true,
+      "text": "",
+      "box": {
+        "left": 40,
+        "right": 328,
+        "top": 632,
+        "bottom": 712
+      },
+      "clip": {
+        "left": 0,
+        "right": 1280,
+        "top": 0,
+        "bottom": 720
+      },
+      "x": 184,
+      "y": 672,
+      "logicalSize": {
+        "width": 288,
+        "height": 80
+      },
+      "local": {
+        "x": -456,
+        "y": -312
+      },
+      "graphics": true,
+      "graphicsPathCount": 1,
+      "scroll": null
+    },
+    {
+      "name": "宗门",
+      "ancestors": [
+        "宗门",
+        "TowerMenu",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "宗门",
+      "box": {
+        "left": 156.99999999999994,
+        "right": 210.99999999999994,
+        "top": 648.69,
+        "bottom": 695.3100000000001
+      },
+      "clip": {
+        "left": 0,
+        "right": 1280,
+        "top": 0,
+        "bottom": 720
+      },
+      "x": 184,
+      "y": 672,
+      "logicalSize": {
+        "width": 54,
+        "height": 46.62
+      },
+      "local": {
+        "x": 0,
+        "y": 0
+      },
+      "graphics": false,
+      "graphicsPathCount": null,
+      "scroll": null
+    },
+    {
+      "name": "锁妖塔",
+      "ancestors": [
+        "TowerMenu",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": true,
+      "enabled": true,
+      "text": "",
+      "box": {
+        "left": 344,
+        "right": 632,
+        "top": 632,
+        "bottom": 712
+      },
+      "clip": {
+        "left": 0,
+        "right": 1280,
+        "top": 0,
+        "bottom": 720
+      },
+      "x": 488,
+      "y": 672,
+      "logicalSize": {
+        "width": 288,
+        "height": 80
+      },
+      "local": {
+        "x": -152,
+        "y": -312
+      },
+      "graphics": true,
+      "graphicsPathCount": 2,
+      "scroll": null
+    },
+    {
+      "name": "锁妖塔",
+      "ancestors": [
+        "锁妖塔",
+        "TowerMenu",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "锁妖塔",
+      "box": {
+        "left": 447.5,
+        "right": 528.5,
+        "top": 648.69,
+        "bottom": 695.3100000000001
+      },
+      "clip": {
+        "left": 0,
+        "right": 1280,
+        "top": 0,
+        "bottom": 720
+      },
+      "x": 488,
+      "y": 672,
+      "logicalSize": {
+        "width": 81,
+        "height": 46.62
+      },
+      "local": {
+        "x": 0,
+        "y": 0
+      },
+      "graphics": false,
+      "graphicsPathCount": null,
+      "scroll": null
+    },
+    {
+      "name": "技能树",
+      "ancestors": [
+        "TowerMenu",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": true,
+      "enabled": true,
+      "text": "",
+      "box": {
+        "left": 648,
+        "right": 936,
+        "top": 632,
+        "bottom": 712
+      },
+      "clip": {
+        "left": 0,
+        "right": 1280,
+        "top": 0,
+        "bottom": 720
+      },
+      "x": 792,
+      "y": 672,
+      "logicalSize": {
+        "width": 288,
+        "height": 80
+      },
+      "local": {
+        "x": 152,
+        "y": -312
+      },
+      "graphics": true,
+      "graphicsPathCount": 2,
+      "scroll": null
+    },
+    {
+      "name": "技能树",
+      "ancestors": [
+        "技能树",
+        "TowerMenu",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "技能树",
+      "box": {
+        "left": 751.5,
+        "right": 832.5,
+        "top": 648.69,
+        "bottom": 695.3100000000001
+      },
+      "clip": {
+        "left": 0,
+        "right": 1280,
+        "top": 0,
+        "bottom": 720
+      },
+      "x": 792,
+      "y": 672,
+      "logicalSize": {
+        "width": 81,
+        "height": 46.62
+      },
+      "local": {
+        "x": 0,
+        "y": 0
+      },
+      "graphics": false,
+      "graphicsPathCount": null,
+      "scroll": null
+    },
+    {
+      "name": "武器",
+      "ancestors": [
+        "TowerMenu",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": true,
+      "enabled": true,
+      "text": "",
+      "box": {
+        "left": 952,
+        "right": 1240,
+        "top": 632,
+        "bottom": 712
+      },
+      "clip": {
+        "left": 0,
+        "right": 1280,
+        "top": 0,
+        "bottom": 720
+      },
+      "x": 1096,
+      "y": 672,
+      "logicalSize": {
+        "width": 288,
+        "height": 80
+      },
+      "local": {
+        "x": 456,
+        "y": -312
+      },
+      "graphics": true,
+      "graphicsPathCount": 2,
+      "scroll": null
+    },
+    {
+      "name": "武器",
+      "ancestors": [
+        "武器",
+        "TowerMenu",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "武器",
+      "box": {
+        "left": 1069,
+        "right": 1123,
+        "top": 648.69,
+        "bottom": 695.3100000000001
+      },
+      "clip": {
+        "left": 0,
+        "right": 1280,
+        "top": 0,
+        "bottom": 720
+      },
+      "x": 1096,
+      "y": 672,
+      "logicalSize": {
+        "width": 54,
+        "height": 46.62
+      },
+      "local": {
+        "x": 0,
+        "y": 0
+      },
+      "graphics": false,
+      "graphicsPathCount": null,
+      "scroll": null
+    },
+    {
+      "name": "对话面板",
+      "ancestors": [
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "",
+      "box": {
+        "left": 0,
+        "right": 1280,
+        "top": 0,
+        "bottom": 720
+      },
+      "clip": {
+        "left": 0,
+        "right": 1280,
+        "top": 0,
+        "bottom": 720
+      },
+      "x": 640,
+      "y": 360,
+      "logicalSize": {
+        "width": 1280,
+        "height": 720
+      },
+      "local": {
+        "x": 0,
+        "y": 0
+      },
+      "graphics": true,
+      "graphicsPathCount": 2,
+      "scroll": null
+    },
+    {
+      "name": "独立体验工具",
+      "ancestors": [
+        "对话面板",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "独立体验工具",
+      "box": {
+        "left": 125,
+        "right": 1155,
+        "top": 116.99999999999999,
+        "bottom": 184.99999999999997
+      },
+      "clip": {
+        "left": 0,
+        "right": 1280,
+        "top": 0,
+        "bottom": 720
+      },
+      "x": 640,
+      "y": 151.00000000000003,
+      "logicalSize": {
+        "width": 1030,
+        "height": 68
+      },
+      "local": {
+        "x": 0,
+        "y": 209
+      },
+      "graphics": false,
+      "graphicsPathCount": null,
+      "scroll": null
+    },
+    {
+      "name": "当前×1 · 正常伤害\n只加快战斗；不改变场外恢复时钟。体验进度单独保存。",
+      "ancestors": [
+        "对话面板",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "当前×1 · 正常伤害\n只加快战斗；不改变场外恢复时钟。体验进度单独保存。",
+      "box": {
+        "left": 135,
+        "right": 1145,
+        "top": 199,
+        "bottom": 315
+      },
+      "clip": {
+        "left": 0,
+        "right": 1280,
+        "top": 0,
+        "bottom": 720
+      },
+      "x": 640,
+      "y": 256.99999999999994,
+      "logicalSize": {
+        "width": 1010,
+        "height": 116
+      },
+      "local": {
+        "x": 0,
+        "y": 103
+      },
+      "graphics": false,
+      "graphicsPathCount": null,
+      "scroll": null
+    },
+    {
+      "name": "游戏速度 ×1 · 当前",
+      "ancestors": [
+        "对话面板",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": true,
+      "enabled": true,
+      "text": "",
+      "box": {
+        "left": 136.99999999999994,
+        "right": 631,
+        "top": 335,
+        "bottom": 423
+      },
+      "clip": {
+        "left": 0,
+        "right": 1280,
+        "top": 0,
+        "bottom": 720
+      },
+      "x": 384,
+      "y": 379,
+      "logicalSize": {
+        "width": 494,
+        "height": 88
+      },
+      "local": {
+        "x": -256,
+        "y": -19
+      },
+      "graphics": true,
+      "graphicsPathCount": 1,
+      "scroll": null
+    },
+    {
+      "name": "游戏速度 ×1 · 当前",
+      "ancestors": [
+        "游戏速度 ×1 · 当前",
+        "对话面板",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "游戏速度 ×1 · 当前",
+      "box": {
+        "left": 146.99999999999994,
+        "right": 621,
+        "top": 341,
+        "bottom": 416.99999999999994
+      },
+      "clip": {
+        "left": 0,
+        "right": 1280,
+        "top": 0,
+        "bottom": 720
+      },
+      "x": 384,
+      "y": 379,
+      "logicalSize": {
+        "width": 474,
+        "height": 76
+      },
+      "local": {
+        "x": 0,
+        "y": 0
+      },
+      "graphics": false,
+      "graphicsPathCount": null,
+      "scroll": null
+    },
+    {
+      "name": "游戏速度 ×2",
+      "ancestors": [
+        "对话面板",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": true,
+      "enabled": true,
+      "text": "",
+      "box": {
+        "left": 649,
+        "right": 1143,
+        "top": 335,
+        "bottom": 423
+      },
+      "clip": {
+        "left": 0,
+        "right": 1280,
+        "top": 0,
+        "bottom": 720
+      },
+      "x": 896,
+      "y": 379,
+      "logicalSize": {
+        "width": 494,
+        "height": 88
+      },
+      "local": {
+        "x": 256,
+        "y": -19
+      },
+      "graphics": true,
+      "graphicsPathCount": 1,
+      "scroll": null
+    },
+    {
+      "name": "游戏速度 ×2",
+      "ancestors": [
+        "游戏速度 ×2",
+        "对话面板",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "游戏速度 ×2",
+      "box": {
+        "left": 659,
+        "right": 1133,
+        "top": 341,
+        "bottom": 416.99999999999994
+      },
+      "clip": {
+        "left": 0,
+        "right": 1280,
+        "top": 0,
+        "bottom": 720
+      },
+      "x": 896,
+      "y": 379,
+      "logicalSize": {
+        "width": 474,
+        "height": 76
+      },
+      "local": {
+        "x": 0,
+        "y": 0
+      },
+      "graphics": false,
+      "graphicsPathCount": null,
+      "scroll": null
+    },
+    {
+      "name": "游戏速度 ×3",
+      "ancestors": [
+        "对话面板",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": true,
+      "enabled": true,
+      "text": "",
+      "box": {
+        "left": 136.99999999999994,
+        "right": 631,
+        "top": 425,
+        "bottom": 513
+      },
+      "clip": {
+        "left": 0,
+        "right": 1280,
+        "top": 0,
+        "bottom": 720
+      },
+      "x": 384,
+      "y": 469,
+      "logicalSize": {
+        "width": 494,
+        "height": 88
+      },
+      "local": {
+        "x": -256,
+        "y": -109
+      },
+      "graphics": true,
+      "graphicsPathCount": 1,
+      "scroll": null
+    },
+    {
+      "name": "游戏速度 ×3",
+      "ancestors": [
+        "游戏速度 ×3",
+        "对话面板",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "游戏速度 ×3",
+      "box": {
+        "left": 146.99999999999994,
+        "right": 621,
+        "top": 431,
+        "bottom": 506.99999999999994
+      },
+      "clip": {
+        "left": 0,
+        "right": 1280,
+        "top": 0,
+        "bottom": 720
+      },
+      "x": 384,
+      "y": 469,
+      "logicalSize": {
+        "width": 474,
+        "height": 76
+      },
+      "local": {
+        "x": 0,
+        "y": 0
+      },
+      "graphics": false,
+      "graphicsPathCount": null,
+      "scroll": null
+    },
+    {
+      "name": "无敌秒杀：关闭",
+      "ancestors": [
+        "对话面板",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": true,
+      "enabled": true,
+      "text": "",
+      "box": {
+        "left": 649,
+        "right": 1143,
+        "top": 425,
+        "bottom": 513
+      },
+      "clip": {
+        "left": 0,
+        "right": 1280,
+        "top": 0,
+        "bottom": 720
+      },
+      "x": 896,
+      "y": 469,
+      "logicalSize": {
+        "width": 494,
+        "height": 88
+      },
+      "local": {
+        "x": 256,
+        "y": -109
+      },
+      "graphics": true,
+      "graphicsPathCount": 1,
+      "scroll": null
+    },
+    {
+      "name": "无敌秒杀：关闭",
+      "ancestors": [
+        "无敌秒杀：关闭",
+        "对话面板",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "无敌秒杀：关闭",
+      "box": {
+        "left": 659,
+        "right": 1133,
+        "top": 431,
+        "bottom": 506.99999999999994
+      },
+      "clip": {
+        "left": 0,
+        "right": 1280,
+        "top": 0,
+        "bottom": 720
+      },
+      "x": 896,
+      "y": 469,
+      "logicalSize": {
+        "width": 474,
+        "height": 76
+      },
+      "local": {
+        "x": 0,
+        "y": 0
+      },
+      "graphics": false,
+      "graphicsPathCount": null,
+      "scroll": null
+    },
+    {
+      "name": "返回宗门",
+      "ancestors": [
+        "对话面板",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": true,
+      "enabled": true,
+      "text": "",
+      "box": {
+        "left": 136.99999999999994,
+        "right": 631,
+        "top": 515,
+        "bottom": 603
+      },
+      "clip": {
+        "left": 0,
+        "right": 1280,
+        "top": 0,
+        "bottom": 720
+      },
+      "x": 384,
+      "y": 559,
+      "logicalSize": {
+        "width": 494,
+        "height": 88
+      },
+      "local": {
+        "x": -256,
+        "y": -199
+      },
+      "graphics": true,
+      "graphicsPathCount": 1,
+      "scroll": null
+    },
+    {
+      "name": "返回宗门",
+      "ancestors": [
+        "返回宗门",
+        "对话面板",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "返回宗门",
+      "box": {
+        "left": 146.99999999999994,
+        "right": 621,
+        "top": 521,
+        "bottom": 597
+      },
+      "clip": {
+        "left": 0,
+        "right": 1280,
+        "top": 0,
+        "bottom": 720
+      },
+      "x": 384,
+      "y": 559,
+      "logicalSize": {
+        "width": 474,
+        "height": 76
+      },
+      "local": {
+        "x": 0,
+        "y": 0
+      },
+      "graphics": false,
+      "graphicsPathCount": null,
+      "scroll": null
+    },
+    {
+      "name": "切回普通档",
+      "ancestors": [
+        "对话面板",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": true,
+      "enabled": true,
+      "text": "",
+      "box": {
+        "left": 649,
+        "right": 1143,
+        "top": 515,
+        "bottom": 603
+      },
+      "clip": {
+        "left": 0,
+        "right": 1280,
+        "top": 0,
+        "bottom": 720
+      },
+      "x": 896,
+      "y": 559,
+      "logicalSize": {
+        "width": 494,
+        "height": 88
+      },
+      "local": {
+        "x": 256,
+        "y": -199
+      },
+      "graphics": true,
+      "graphicsPathCount": 1,
+      "scroll": null
+    },
+    {
+      "name": "切回普通档",
+      "ancestors": [
+        "切回普通档",
+        "对话面板",
+        "栖云宗·功能版",
+        "Survivor Canvas",
+        "PinePilot"
+      ],
+      "button": false,
+      "enabled": false,
+      "text": "切回普通档",
+      "box": {
+        "left": 659,
+        "right": 1133,
+        "top": 521,
+        "bottom": 597
+      },
+      "clip": {
+        "left": 0,
+        "right": 1280,
+        "top": 0,
+        "bottom": 720
+      },
+      "x": 896,
+      "y": 559,
+      "logicalSize": {
+        "width": 474,
+        "height": 76
+      },
+      "local": {
+        "x": 0,
+        "y": 0
+      },
+      "graphics": false,
+      "graphicsPathCount": null,
+      "scroll": null
+    }
+  ]
+}

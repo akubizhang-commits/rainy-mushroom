@@ -1,0 +1,2223 @@
+{
+  "status": "AUTOMATED_PASS_VISUAL_REVIEW_PENDING",
+  "startedAt": "2026-10-28T05:22:51.969Z",
+  "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/index.html?ruleset=xianxia&tower=1",
+  "preparation": {
+    "status": "PREPARED_WAITING_FOR_BUILD_READY",
+    "browserExecuted": false,
+    "preparedAt": "2026-10-28T05:22:51.317Z",
+    "sizes": [
+      {
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "width": 844,
+        "height": 390
+      },
+      {
+        "width": 1024,
+        "height": 768
+      },
+      {
+        "width": 390,
+        "height": 844
+      }
+    ],
+    "contract": {
+      "selectors": {
+        "treePanel": "技能树面板",
+        "treeScroll": "技能树二维卷轴",
+        "treeContent": "境界技能树内容",
+        "detail": "技能详情固定栏",
+        "detailScroll": "技能详情独立卷轴",
+        "detailContent": "技能详情栏内容",
+        "name": "技能节点-<id>",
+        "icon": "技能图标-<id>",
+        "level": "技能等级-<id>",
+        "plus": "learnSkill-<id>",
+        "minus": "decreaseSkill-<id>",
+        "joystick": "移动摇杆"
+      },
+      "expectedRealmRows": {
+        "炼气": 12,
+        "金丹": 4
+      },
+      "handoff844LogicalViewports": {
+        "tree": {
+          "width": 820,
+          "height": 297.47
+        },
+        "detail": {
+          "width": 364,
+          "height": 281.47
+        }
+      },
+      "cdMeaning": "Current source displays authored cooldown / hit interval / 常驻, not a live countdown.",
+      "sourceHashes": {
+        "cocos-pilot/assets/scripts/TowerMenu.ts": "195a4db6ea11414fbcd8ab49e45aeb46a0b92feec7b16b5e7269f60f415f5390",
+        "cocos-pilot/assets/scripts/TowerView.ts": "6b37e9f6ebab068c6a37372ae2145e9b55a1717a5990cff5544d9331089d720b",
+        "cocos-pilot/assets/scripts/PinePilot.ts": "2159b0491dde3dcf1e770ec226876e601b944c5f946e833e3fedfd44259dff60",
+        "js/xianxia/TowerCampaign.js": "37fbd24596caeeaa04e72b5109769e91284e019f29e0fc70c23562c9fa039337",
+        "js/xianxia/TowerGrowth.js": "6d380a236d33043757b7525c628b0da0e5bad491c3f503e2aefbce417462ba92",
+        "js/xianxia/TowerRun.js": "893ec5a691dbd606992144edbd9cbe5385f3d0d77866860b1034eea93aa016fe",
+        "js/xianxia/TowerLoot.js": "f2eeb5dca0ee913fc30250ef46e9515fe58f4d1318855431e55408d2d1cd9761"
+      }
+    },
+    "fixtures": [
+      {
+        "kind": "ARTIFICIAL CAMPAIGN-VALIDATED UI FIXTURE — NOT NATURAL PROGRESSION/BALANCE",
+        "name": "tree",
+        "sources": {
+          "xp": 10920,
+          "hp": 120,
+          "cores": 2000,
+          "clearedFloor": 9,
+          "tutorialWaves": 3
+        },
+        "transactions": [
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_arc"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_arc",
+              "level": 2,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_line"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_line",
+              "level": 1,
+              "cost": 2,
+              "bookCost": 20
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_yujian"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_yujian",
+              "level": 2,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_yujian"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_yujian",
+              "level": 3,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_yujian"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_yujian",
+              "level": 4,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_yujian"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_yujian",
+              "level": 5,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_yujian"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_yujian",
+              "level": 6,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_yujian"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_yujian",
+              "level": 7,
+              "cost": 2,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_yujian"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_yujian",
+              "level": 8,
+              "cost": 2,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_heart"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_heart",
+              "level": 1,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_heart"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_heart",
+              "level": 2,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_heart"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_heart",
+              "level": 3,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_heart"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_heart",
+              "level": 4,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_heart"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_heart",
+              "level": 5,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "evo_wanjian"
+            },
+            "result": {
+              "ok": true,
+              "id": "evo_wanjian",
+              "level": 1,
+              "cost": 3,
+              "bookCost": 240
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "evo_wanjian"
+            },
+            "result": {
+              "ok": true,
+              "id": "evo_wanjian",
+              "level": 2,
+              "cost": 4,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "sync"
+            },
+            "result": {
+              "ok": true,
+              "hp": 120
+            }
+          }
+        ],
+        "rawHash": "a112cfed3fa8c9311faa57091223eeeb085df36ce601f7493aa93446ac97174d",
+        "growth": {
+          "total": 33,
+          "spent": 24,
+          "available": 9,
+          "realm": 30,
+          "firstClear": 3,
+          "research": 0,
+          "cap": 36
+        },
+        "skills": {
+          "sj_yujian": 8,
+          "sj_arc": 2,
+          "sj_wanjian": 1,
+          "sj_line": 1,
+          "sj_heart": 5
+        },
+        "evolutionRanks": {
+          "evo_wanjian": 2
+        }
+      },
+      {
+        "kind": "ARTIFICIAL CAMPAIGN-VALIDATED UI FIXTURE — NOT NATURAL PROGRESSION/BALANCE",
+        "name": "input",
+        "sources": {
+          "xp": 10920,
+          "hp": 120,
+          "cores": 2000,
+          "clearedFloor": 9,
+          "tutorialWaves": 3
+        },
+        "transactions": [
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "vajra"
+            },
+            "result": {
+              "ok": true,
+              "id": "vajra",
+              "level": 1,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "sync"
+            },
+            "result": {
+              "ok": true,
+              "hp": 120
+            }
+          }
+        ],
+        "rawHash": "ed73acc9737718bb2a24708d88f62c051114b95a838b4ff0a5668e7ccc02bfa0",
+        "growth": {
+          "total": 33,
+          "spent": 1,
+          "available": 32,
+          "realm": 30,
+          "firstClear": 3,
+          "research": 0,
+          "cap": 36
+        },
+        "skills": {
+          "sj_yujian": 1,
+          "sj_arc": 1,
+          "sj_wanjian": 1,
+          "vajra": 1
+        },
+        "evolutionRanks": {}
+      }
+    ]
+  },
+  "browser": {
+    "version": "155.0.8059.12",
+    "module": "/Users/zhangnu/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright",
+    "executablePath": "/Users/zhangnu/Library/Caches/ms-playwright/chromium_headless_shell-1247/chrome-headless-shell-mac-arm64/chrome-headless-shell"
+  },
+  "results": [
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "kind": "input",
+      "fixtureHash": "ed73acc9737718bb2a24708d88f62c051114b95a838b4ff0a5668e7ccc02bfa0",
+      "ok": true,
+      "checks": [
+        {
+          "name": "Modal stays inside viewport: playtest entry",
+          "passed": true,
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "box": {
+            "left": 0,
+            "right": 1280,
+            "top": 0,
+            "bottom": 720
+          },
+          "controls": [
+            "进入独立体验档",
+            "返回"
+          ]
+        },
+        {
+          "name": "Modal stays inside viewport: playtest tools",
+          "passed": true,
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "box": {
+            "left": 0,
+            "right": 1280,
+            "top": 0,
+            "bottom": 720
+          },
+          "controls": [
+            "游戏速度 ×1 · 当前",
+            "游戏速度 ×2",
+            "游戏速度 ×3",
+            "无敌秒杀：关闭",
+            "返回宗门",
+            "切回普通档"
+          ]
+        },
+        {
+          "name": "Actual fixed joystick drag/hold moves; release resets input and stops player",
+          "passed": true,
+          "p0": {
+            "x": 33,
+            "y": -60,
+            "hp": 120,
+            "xp": 10920,
+            "maxHp": 120,
+            "attack": 127.2,
+            "moveSpeed": 220,
+            "radius": 18,
+            "faceX": 1,
+            "faceY": 0
+          },
+          "p1": {
+            "x": 202.3287037037034,
+            "y": -60,
+            "hp": 120,
+            "xp": 10920,
+            "maxHp": 120,
+            "attack": 127.2,
+            "moveSpeed": 220,
+            "radius": 18,
+            "faceX": 1,
+            "faceY": 0
+          },
+          "released": {
+            "screen": "battle",
+            "landscape": true,
+            "size": {
+              "width": 1280,
+              "height": 720
+            },
+            "stick": {
+              "x": -492,
+              "y": -202,
+              "dx": 0,
+              "dy": 0
+            },
+            "touch": null,
+            "keys": [],
+            "phase": "playing",
+            "input": {
+              "x": 0,
+              "y": 0
+            }
+          }
+        },
+        {
+          "name": "Right-side empty battlefield drag neither moves player nor relocates joystick",
+          "passed": true
+        },
+        {
+          "name": "Modal stays inside viewport: battle pause",
+          "passed": true,
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "box": {
+            "left": 0,
+            "right": 1280,
+            "top": 0,
+            "bottom": 720
+          },
+          "controls": [
+            "继续挑战",
+            "技能树 · 可用32点",
+            "体验工具",
+            "返回宗门"
+          ]
+        },
+        {
+          "name": "Held-pointer pause clears host controls and freezes historical input sample",
+          "passed": true,
+          "historicalInput": {
+            "x": 0,
+            "y": 0.625
+          },
+          "hostControls": {
+            "screen": "battle",
+            "landscape": true,
+            "size": {
+              "width": 1280,
+              "height": 720
+            },
+            "stick": {
+              "x": -492,
+              "y": -202,
+              "dx": 0,
+              "dy": 0
+            },
+            "touch": null,
+            "keys": [],
+            "phase": "paused",
+            "input": {
+              "x": 0,
+              "y": 0.625
+            }
+          }
+        },
+        {
+          "name": "Pause cancels held pointer; skill entry cancels held key and freezes full snapshot",
+          "passed": true
+        },
+        {
+          "name": "Orientation roundtrip preserves exact HP/RNG/progress/loot/cooldowns and active save",
+          "passed": true,
+          "before": {
+            "snapshotHash": "a85f4cfc67a8f58be50fe15cb39f0528901e0acbd4b7e189485b556d3844e6c4",
+            "activeRunHash": "cb5b2ca47184279115c316a84997f75738011465efc1e4be5f11a4539c2a9b1a",
+            "hp": 120,
+            "rng": 3805522390,
+            "time": 3.466666666666667,
+            "floor": 9,
+            "wave": 1,
+            "clearedWaves": [],
+            "earned": {
+              "xp": 0,
+              "cores": 0,
+              "contribution": 0
+            }
+          },
+          "resized": [
+            {
+              "size": {
+                "width": 390,
+                "height": 844
+              },
+              "snapshotHash": "a85f4cfc67a8f58be50fe15cb39f0528901e0acbd4b7e189485b556d3844e6c4",
+              "activeRunHash": "cb5b2ca47184279115c316a84997f75738011465efc1e4be5f11a4539c2a9b1a",
+              "host": {
+                "screen": "skills",
+                "landscape": false,
+                "size": {
+                  "width": 720,
+                  "height": 1558.1538461538462
+                },
+                "selected": "sj_yujian",
+                "menuPage": "library",
+                "treePan": {
+                  "x": 0,
+                  "y": 0
+                },
+                "detailPan": {
+                  "x": 0,
+                  "y": 0
+                },
+                "stick": {
+                  "x": -492,
+                  "y": -202,
+                  "dx": 0,
+                  "dy": 0
+                },
+                "touch": null,
+                "keys": [],
+                "phase": "paused",
+                "input": {
+                  "x": 1,
+                  "y": 0
+                }
+              }
+            },
+            {
+              "size": {
+                "width": 1280,
+                "height": 720
+              },
+              "snapshotHash": "a85f4cfc67a8f58be50fe15cb39f0528901e0acbd4b7e189485b556d3844e6c4",
+              "activeRunHash": "cb5b2ca47184279115c316a84997f75738011465efc1e4be5f11a4539c2a9b1a",
+              "host": {
+                "screen": "skills",
+                "landscape": true,
+                "size": {
+                  "width": 1280,
+                  "height": 720
+                },
+                "selected": "sj_yujian",
+                "menuPage": "library",
+                "treePan": {
+                  "x": 0,
+                  "y": 0
+                },
+                "detailPan": {
+                  "x": 0,
+                  "y": 0
+                },
+                "stick": {
+                  "x": -492,
+                  "y": -202,
+                  "dx": 0,
+                  "dy": 0
+                },
+                "touch": null,
+                "keys": [],
+                "phase": "paused",
+                "input": {
+                  "x": 1,
+                  "y": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "Modal stays inside viewport: reload pause",
+          "passed": true,
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "box": {
+            "left": 0,
+            "right": 1280,
+            "top": 0,
+            "bottom": 720
+          },
+          "controls": [
+            "继续挑战",
+            "技能树 · 可用32点",
+            "体验工具",
+            "返回宗门"
+          ]
+        },
+        {
+          "name": "Reload/resume remains playable and ordinary raw save was untouched",
+          "passed": true
+        }
+      ],
+      "actions": [
+        {
+          "type": "pointer-click",
+          "target": "体验工具",
+          "x": 640,
+          "y": 308,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "进入独立体验档",
+          "x": 384,
+          "y": 505.99999999999994,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "无敌秒杀：关闭",
+          "x": 896,
+          "y": 469,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "返回宗门",
+          "x": 384,
+          "y": 559,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "锁妖塔",
+          "x": 488,
+          "y": 672,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "重访第9层",
+          "x": 640,
+          "y": 345.99999999999994,
+          "enabled": true
+        },
+        {
+          "type": "pointer-drag",
+          "label": "joystick right hold",
+          "from": {
+            "x": 147.99999999999997,
+            "y": 562
+          },
+          "to": {
+            "x": 208,
+            "y": 562
+          },
+          "holdMs": 600,
+          "release": false
+        },
+        {
+          "type": "pointer-release",
+          "target": "移动摇杆"
+        },
+        {
+          "type": "pointer-drag",
+          "label": "right-side blank drag",
+          "from": {
+            "x": 1024,
+            "y": 360
+          },
+          "to": {
+            "x": 974,
+            "y": 385
+          },
+          "holdMs": 250,
+          "release": true
+        },
+        {
+          "type": "pointer-drag",
+          "label": "held joystick before pause",
+          "from": {
+            "x": 147.99999999999997,
+            "y": 562
+          },
+          "to": {
+            "x": 147.99999999999997,
+            "y": 517
+          },
+          "holdMs": 100,
+          "release": false
+        },
+        {
+          "type": "key-down",
+          "key": "Escape"
+        },
+        {
+          "type": "key-up",
+          "key": "Escape"
+        },
+        {
+          "type": "pointer-release",
+          "target": "old joystick after pause"
+        },
+        {
+          "type": "pointer-click",
+          "target": "继续挑战",
+          "x": 384,
+          "y": 432,
+          "enabled": true
+        },
+        {
+          "type": "key-down",
+          "key": "d"
+        },
+        {
+          "type": "pointer-click",
+          "target": "技能树",
+          "x": 1189,
+          "y": 668,
+          "enabled": true
+        },
+        {
+          "type": "key-up",
+          "key": "d"
+        },
+        {
+          "type": "viewport-resize",
+          "size": {
+            "width": 390,
+            "height": 844
+          }
+        },
+        {
+          "type": "viewport-resize",
+          "size": {
+            "width": 1280,
+            "height": 720
+          }
+        },
+        {
+          "type": "pointer-click",
+          "target": "继续挑战",
+          "x": 384,
+          "y": 432,
+          "enabled": true
+        }
+      ],
+      "screenshots": [
+        "ui-input-final-1280x720-input-tools-modal.png",
+        "ui-input-final-1280x720-input-fixed-joystick.png",
+        "ui-input-final-1280x720-input-pause-modal.png",
+        "ui-input-final-1280x720-input-skills-paused.png",
+        "ui-input-final-1280x720-input-orientation-390x844.png",
+        "ui-input-final-1280x720-input-orientation-1280x720.png",
+        "ui-input-final-1280x720-input-reload-pause.png"
+      ],
+      "pageErrors": [],
+      "console": [
+        {
+          "type": "warning",
+          "text": "[.WebGL-0x11400437800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+        },
+        {
+          "type": "warning",
+          "text": "[.WebGL-0x11400437800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+        },
+        {
+          "type": "warning",
+          "text": "[.WebGL-0x11400437800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+        },
+        {
+          "type": "warning",
+          "text": "[.WebGL-0x11400437800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (setting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.setFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "Setting window size is not supported."
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (setting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.setFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "Setting window size is not supported."
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (setting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.setFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "Setting window size is not supported."
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (setting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.setFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "Setting window size is not supported."
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        }
+      ],
+      "httpErrors": [],
+      "requestFailures": [],
+      "assets": [
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/polyfills.bundle.5adbf.js",
+          "status": 200,
+          "sha256": "f1e4ced3322168d6b9915e782e4c1cf1055d75f66f2b38e7fcd60f48cf89082b"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/system.bundle.cc789.js",
+          "status": 200,
+          "sha256": "5d1a25de07cc11276a6b1d6479cac7f12c0c561dd06941b8339e568c9d94f900"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/index.6ce8c.js",
+          "status": 200,
+          "sha256": "021f254debe3760acdb1715ee0ff88cbe17b685434b206bda473fa9bc23a783b"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/application.f82c6.js",
+          "status": 200,
+          "sha256": "b24db6b02a8fc281cc7c3d2f22f7a71dbf387e64640b44d93a0fded053273c77"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/cocos-js/cc.c2df8.js",
+          "status": 200,
+          "sha256": "a670bba566ce7e3a2c25e17b7eb104efc0463a62d85c3d4974d2be9b586eee89"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/chunks/bundle.e2cd5.js",
+          "status": 200,
+          "sha256": "c0ab1af06c40484eba8e9d40042b2162a8355e8d8d1d914ea5a21d4d420dc1d5"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/assets/internal/index.4e53f.js",
+          "status": 200,
+          "sha256": "d842bf596127320ad8cd42ce506a2817cd8a6402fbec6735e6b13af359a40757"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/assets/main/index.4b436.js",
+          "status": 200,
+          "sha256": "e26afe867fd2aba74053be7d7c3de765c5170a4a6c5cf0563fa73c831ea26438"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/polyfills.bundle.5adbf.js",
+          "status": 200,
+          "sha256": "f1e4ced3322168d6b9915e782e4c1cf1055d75f66f2b38e7fcd60f48cf89082b"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/system.bundle.cc789.js",
+          "status": 200,
+          "sha256": "5d1a25de07cc11276a6b1d6479cac7f12c0c561dd06941b8339e568c9d94f900"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/index.6ce8c.js",
+          "status": 200,
+          "sha256": "021f254debe3760acdb1715ee0ff88cbe17b685434b206bda473fa9bc23a783b"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/application.f82c6.js",
+          "status": 200,
+          "sha256": "b24db6b02a8fc281cc7c3d2f22f7a71dbf387e64640b44d93a0fded053273c77"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/cocos-js/cc.c2df8.js",
+          "status": 200,
+          "sha256": "a670bba566ce7e3a2c25e17b7eb104efc0463a62d85c3d4974d2be9b586eee89"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/chunks/bundle.e2cd5.js",
+          "status": 200,
+          "sha256": "c0ab1af06c40484eba8e9d40042b2162a8355e8d8d1d914ea5a21d4d420dc1d5"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/assets/internal/index.4e53f.js",
+          "status": 200,
+          "sha256": "d842bf596127320ad8cd42ce506a2817cd8a6402fbec6735e6b13af359a40757"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/assets/main/index.4b436.js",
+          "status": 200,
+          "sha256": "e26afe867fd2aba74053be7d7c3de765c5170a4a6c5cf0563fa73c831ea26438"
+        }
+      ],
+      "invalidLabels": []
+    },
+    {
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "kind": "input",
+      "fixtureHash": "ed73acc9737718bb2a24708d88f62c051114b95a838b4ff0a5668e7ccc02bfa0",
+      "ok": true,
+      "checks": [
+        {
+          "name": "Modal stays inside viewport: playtest entry",
+          "passed": true,
+          "viewport": {
+            "width": 1024,
+            "height": 768
+          },
+          "box": {
+            "left": 0,
+            "right": 1024,
+            "top": 0,
+            "bottom": 768
+          },
+          "controls": [
+            "进入独立体验档",
+            "返回"
+          ]
+        },
+        {
+          "name": "Modal stays inside viewport: playtest tools",
+          "passed": true,
+          "viewport": {
+            "width": 1024,
+            "height": 768
+          },
+          "box": {
+            "left": 0,
+            "right": 1024,
+            "top": 0,
+            "bottom": 768
+          },
+          "controls": [
+            "游戏速度 ×1 · 当前",
+            "游戏速度 ×2",
+            "游戏速度 ×3",
+            "无敌秒杀：关闭",
+            "返回宗门",
+            "切回普通档"
+          ]
+        },
+        {
+          "name": "Actual fixed joystick drag/hold moves; release resets input and stops player",
+          "passed": true,
+          "p0": {
+            "x": 33,
+            "y": -60,
+            "hp": 120,
+            "xp": 10920,
+            "maxHp": 120,
+            "attack": 127.2,
+            "moveSpeed": 220,
+            "radius": 18,
+            "faceX": 1,
+            "faceY": 0
+          },
+          "p1": {
+            "x": 200.8009259259257,
+            "y": -57.70833333333343,
+            "hp": 120,
+            "xp": 10920,
+            "maxHp": 120,
+            "attack": 127.2,
+            "moveSpeed": 220,
+            "radius": 18,
+            "faceX": 0.9999205659235385,
+            "faceY": 0.01260404074693536
+          },
+          "released": {
+            "screen": "battle",
+            "landscape": true,
+            "size": {
+              "width": 1280,
+              "height": 960
+            },
+            "stick": {
+              "x": -492,
+              "y": -322,
+              "dx": 0,
+              "dy": 0
+            },
+            "touch": null,
+            "keys": [],
+            "phase": "playing",
+            "input": {
+              "x": 0,
+              "y": 0
+            }
+          }
+        },
+        {
+          "name": "Right-side empty battlefield drag neither moves player nor relocates joystick",
+          "passed": true
+        },
+        {
+          "name": "Modal stays inside viewport: battle pause",
+          "passed": true,
+          "viewport": {
+            "width": 1024,
+            "height": 768
+          },
+          "box": {
+            "left": 0,
+            "right": 1024,
+            "top": 0,
+            "bottom": 768
+          },
+          "controls": [
+            "继续挑战",
+            "技能树 · 可用32点",
+            "体验工具",
+            "返回宗门"
+          ]
+        },
+        {
+          "name": "Held-pointer pause clears host controls and freezes historical input sample",
+          "passed": true,
+          "historicalInput": {
+            "x": -0.006944444444444444,
+            "y": 0.6354166666666666
+          },
+          "hostControls": {
+            "screen": "battle",
+            "landscape": true,
+            "size": {
+              "width": 1280,
+              "height": 960
+            },
+            "stick": {
+              "x": -492,
+              "y": -322,
+              "dx": 0,
+              "dy": 0
+            },
+            "touch": null,
+            "keys": [],
+            "phase": "paused",
+            "input": {
+              "x": -0.006944444444444444,
+              "y": 0.6354166666666666
+            }
+          }
+        },
+        {
+          "name": "Pause cancels held pointer; skill entry cancels held key and freezes full snapshot",
+          "passed": true
+        },
+        {
+          "name": "Orientation roundtrip preserves exact HP/RNG/progress/loot/cooldowns and active save",
+          "passed": true,
+          "before": {
+            "snapshotHash": "19d19456cad87ec215c2838e02142003221ffe7e1fadaa099e581df18e65276f",
+            "activeRunHash": "24f91a21bc41b190e26b17980a77107a56c75da72049c652ba730a44cfa52708",
+            "hp": 120,
+            "rng": 1444548253,
+            "time": 3.2,
+            "floor": 9,
+            "wave": 1,
+            "clearedWaves": [],
+            "earned": {
+              "xp": 0,
+              "cores": 0,
+              "contribution": 0
+            }
+          },
+          "resized": [
+            {
+              "size": {
+                "width": 390,
+                "height": 844
+              },
+              "snapshotHash": "19d19456cad87ec215c2838e02142003221ffe7e1fadaa099e581df18e65276f",
+              "activeRunHash": "24f91a21bc41b190e26b17980a77107a56c75da72049c652ba730a44cfa52708",
+              "host": {
+                "screen": "skills",
+                "landscape": false,
+                "size": {
+                  "width": 720,
+                  "height": 1558.1538461538462
+                },
+                "selected": "sj_yujian",
+                "menuPage": "library",
+                "treePan": {
+                  "x": 0,
+                  "y": 0
+                },
+                "detailPan": {
+                  "x": 0,
+                  "y": 0
+                },
+                "stick": {
+                  "x": -492,
+                  "y": -322,
+                  "dx": 0,
+                  "dy": 0
+                },
+                "touch": null,
+                "keys": [],
+                "phase": "paused",
+                "input": {
+                  "x": 1,
+                  "y": 0
+                }
+              }
+            },
+            {
+              "size": {
+                "width": 1024,
+                "height": 768
+              },
+              "snapshotHash": "19d19456cad87ec215c2838e02142003221ffe7e1fadaa099e581df18e65276f",
+              "activeRunHash": "24f91a21bc41b190e26b17980a77107a56c75da72049c652ba730a44cfa52708",
+              "host": {
+                "screen": "skills",
+                "landscape": true,
+                "size": {
+                  "width": 1280,
+                  "height": 960
+                },
+                "selected": "sj_yujian",
+                "menuPage": "library",
+                "treePan": {
+                  "x": 0,
+                  "y": 0
+                },
+                "detailPan": {
+                  "x": 0,
+                  "y": 0
+                },
+                "stick": {
+                  "x": -492,
+                  "y": -322,
+                  "dx": 0,
+                  "dy": 0
+                },
+                "touch": null,
+                "keys": [],
+                "phase": "paused",
+                "input": {
+                  "x": 1,
+                  "y": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "Modal stays inside viewport: reload pause",
+          "passed": true,
+          "viewport": {
+            "width": 1024,
+            "height": 768
+          },
+          "box": {
+            "left": 0,
+            "right": 1024,
+            "top": 0,
+            "bottom": 768
+          },
+          "controls": [
+            "继续挑战",
+            "技能树 · 可用32点",
+            "体验工具",
+            "返回宗门"
+          ]
+        },
+        {
+          "name": "Reload/resume remains playable and ordinary raw save was untouched",
+          "passed": true
+        }
+      ],
+      "actions": [
+        {
+          "type": "pointer-click",
+          "target": "体验工具",
+          "x": 512,
+          "y": 246.39999999999998,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "进入独立体验档",
+          "x": 307.2,
+          "y": 500.8,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "无敌秒杀：关闭",
+          "x": 716.8,
+          "y": 471.2,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "返回宗门",
+          "x": 307.2,
+          "y": 543.2,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "锁妖塔",
+          "x": 390.4,
+          "y": 729.5999999999999,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "重访第9层",
+          "x": 512,
+          "y": 276.79999999999995,
+          "enabled": true
+        },
+        {
+          "type": "pointer-drag",
+          "label": "joystick right hold",
+          "from": {
+            "x": 118.39999999999998,
+            "y": 641.6
+          },
+          "to": {
+            "x": 166.39999999999998,
+            "y": 641.6
+          },
+          "holdMs": 600,
+          "release": false
+        },
+        {
+          "type": "pointer-release",
+          "target": "移动摇杆"
+        },
+        {
+          "type": "pointer-drag",
+          "label": "right-side blank drag",
+          "from": {
+            "x": 819.2,
+            "y": 384
+          },
+          "to": {
+            "x": 769.2,
+            "y": 409
+          },
+          "holdMs": 250,
+          "release": true
+        },
+        {
+          "type": "pointer-drag",
+          "label": "held joystick before pause",
+          "from": {
+            "x": 118.39999999999998,
+            "y": 641.6
+          },
+          "to": {
+            "x": 118.39999999999998,
+            "y": 605.6
+          },
+          "holdMs": 100,
+          "release": false
+        },
+        {
+          "type": "key-down",
+          "key": "Escape"
+        },
+        {
+          "type": "key-up",
+          "key": "Escape"
+        },
+        {
+          "type": "pointer-release",
+          "target": "old joystick after pause"
+        },
+        {
+          "type": "pointer-click",
+          "target": "继续挑战",
+          "x": 307.2,
+          "y": 441.59999999999997,
+          "enabled": true
+        },
+        {
+          "type": "key-down",
+          "key": "d"
+        },
+        {
+          "type": "pointer-click",
+          "target": "技能树",
+          "x": 951.2,
+          "y": 726.4,
+          "enabled": true
+        },
+        {
+          "type": "key-up",
+          "key": "d"
+        },
+        {
+          "type": "viewport-resize",
+          "size": {
+            "width": 390,
+            "height": 844
+          }
+        },
+        {
+          "type": "viewport-resize",
+          "size": {
+            "width": 1024,
+            "height": 768
+          }
+        },
+        {
+          "type": "pointer-click",
+          "target": "继续挑战",
+          "x": 307.2,
+          "y": 441.59999999999997,
+          "enabled": true
+        }
+      ],
+      "screenshots": [
+        "ui-input-final-1024x768-input-tools-modal.png",
+        "ui-input-final-1024x768-input-fixed-joystick.png",
+        "ui-input-final-1024x768-input-pause-modal.png",
+        "ui-input-final-1024x768-input-skills-paused.png",
+        "ui-input-final-1024x768-input-orientation-390x844.png",
+        "ui-input-final-1024x768-input-orientation-1024x768.png",
+        "ui-input-final-1024x768-input-reload-pause.png"
+      ],
+      "pageErrors": [],
+      "console": [
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (setting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.setFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "Setting window size is not supported."
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (setting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.setFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "Setting window size is not supported."
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (setting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.setFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "Setting window size is not supported."
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (setting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.setFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "Setting window size is not supported."
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        }
+      ],
+      "httpErrors": [],
+      "requestFailures": [],
+      "assets": [
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/polyfills.bundle.5adbf.js",
+          "status": 200,
+          "sha256": "f1e4ced3322168d6b9915e782e4c1cf1055d75f66f2b38e7fcd60f48cf89082b"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/system.bundle.cc789.js",
+          "status": 200,
+          "sha256": "5d1a25de07cc11276a6b1d6479cac7f12c0c561dd06941b8339e568c9d94f900"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/index.6ce8c.js",
+          "status": 200,
+          "sha256": "021f254debe3760acdb1715ee0ff88cbe17b685434b206bda473fa9bc23a783b"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/application.f82c6.js",
+          "status": 200,
+          "sha256": "b24db6b02a8fc281cc7c3d2f22f7a71dbf387e64640b44d93a0fded053273c77"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/cocos-js/cc.c2df8.js",
+          "status": 200,
+          "sha256": "a670bba566ce7e3a2c25e17b7eb104efc0463a62d85c3d4974d2be9b586eee89"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/chunks/bundle.e2cd5.js",
+          "status": 200,
+          "sha256": "c0ab1af06c40484eba8e9d40042b2162a8355e8d8d1d914ea5a21d4d420dc1d5"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/assets/internal/index.4e53f.js",
+          "status": 200,
+          "sha256": "d842bf596127320ad8cd42ce506a2817cd8a6402fbec6735e6b13af359a40757"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/assets/main/index.4b436.js",
+          "status": 200,
+          "sha256": "e26afe867fd2aba74053be7d7c3de765c5170a4a6c5cf0563fa73c831ea26438"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/polyfills.bundle.5adbf.js",
+          "status": 200,
+          "sha256": "f1e4ced3322168d6b9915e782e4c1cf1055d75f66f2b38e7fcd60f48cf89082b"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/system.bundle.cc789.js",
+          "status": 200,
+          "sha256": "5d1a25de07cc11276a6b1d6479cac7f12c0c561dd06941b8339e568c9d94f900"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/index.6ce8c.js",
+          "status": 200,
+          "sha256": "021f254debe3760acdb1715ee0ff88cbe17b685434b206bda473fa9bc23a783b"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/application.f82c6.js",
+          "status": 200,
+          "sha256": "b24db6b02a8fc281cc7c3d2f22f7a71dbf387e64640b44d93a0fded053273c77"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/cocos-js/cc.c2df8.js",
+          "status": 200,
+          "sha256": "a670bba566ce7e3a2c25e17b7eb104efc0463a62d85c3d4974d2be9b586eee89"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/chunks/bundle.e2cd5.js",
+          "status": 200,
+          "sha256": "c0ab1af06c40484eba8e9d40042b2162a8355e8d8d1d914ea5a21d4d420dc1d5"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/assets/internal/index.4e53f.js",
+          "status": 200,
+          "sha256": "d842bf596127320ad8cd42ce506a2817cd8a6402fbec6735e6b13af359a40757"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/assets/main/index.4b436.js",
+          "status": 200,
+          "sha256": "e26afe867fd2aba74053be7d7c3de765c5170a4a6c5cf0563fa73c831ea26438"
+        }
+      ],
+      "invalidLabels": []
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "kind": "input",
+      "fixtureHash": "ed73acc9737718bb2a24708d88f62c051114b95a838b4ff0a5668e7ccc02bfa0",
+      "ok": true,
+      "checks": [
+        {
+          "name": "Modal stays inside viewport: playtest entry",
+          "passed": true,
+          "viewport": {
+            "width": 390,
+            "height": 844
+          },
+          "box": {
+            "left": 0,
+            "right": 390,
+            "top": 0,
+            "bottom": 844
+          },
+          "controls": [
+            "进入独立体验档",
+            "返回"
+          ]
+        },
+        {
+          "name": "Modal stays inside viewport: playtest tools",
+          "passed": true,
+          "viewport": {
+            "width": 390,
+            "height": 844
+          },
+          "box": {
+            "left": 0,
+            "right": 390,
+            "top": 0,
+            "bottom": 844
+          },
+          "controls": [
+            "游戏速度 ×1 · 当前",
+            "游戏速度 ×2",
+            "游戏速度 ×3",
+            "无敌秒杀：关闭",
+            "返回宗门",
+            "切回普通档"
+          ]
+        },
+        {
+          "name": "Actual fixed joystick drag/hold moves; release resets input and stops player",
+          "passed": true,
+          "p0": {
+            "x": 33,
+            "y": -60,
+            "hp": 120,
+            "xp": 10920,
+            "maxHp": 120,
+            "attack": 127.2,
+            "moveSpeed": 220,
+            "radius": 18,
+            "faceX": 1,
+            "faceY": 0
+          },
+          "p1": {
+            "x": 192.76638176638164,
+            "y": -57.72792022792032,
+            "hp": 120,
+            "xp": 10920,
+            "maxHp": 120,
+            "attack": 127.2,
+            "moveSpeed": 220,
+            "radius": 18,
+            "faceX": 0.9999143499761179,
+            "faceY": 0.01308788416199018
+          },
+          "released": {
+            "screen": "battle",
+            "landscape": false,
+            "size": {
+              "width": 720,
+              "height": 1558.1538461538462
+            },
+            "stick": {
+              "x": -212,
+              "y": -621.0769230769231,
+              "dx": 0,
+              "dy": 0
+            },
+            "touch": null,
+            "keys": [],
+            "phase": "playing",
+            "input": {
+              "x": 0,
+              "y": 0
+            }
+          }
+        },
+        {
+          "name": "Right-side empty battlefield drag neither moves player nor relocates joystick",
+          "passed": true
+        },
+        {
+          "name": "Modal stays inside viewport: battle pause",
+          "passed": true,
+          "viewport": {
+            "width": 390,
+            "height": 844
+          },
+          "box": {
+            "left": 0,
+            "right": 390,
+            "top": 0,
+            "bottom": 844
+          },
+          "controls": [
+            "继续挑战",
+            "技能树 · 可用32点",
+            "体验工具",
+            "返回宗门"
+          ]
+        },
+        {
+          "name": "Held-pointer pause clears host controls and freezes historical input sample",
+          "passed": true,
+          "historicalInput": {
+            "x": -0.0042735042735040606,
+            "y": 0.6260683760683763
+          },
+          "hostControls": {
+            "screen": "battle",
+            "landscape": false,
+            "size": {
+              "width": 720,
+              "height": 1558.1538461538462
+            },
+            "stick": {
+              "x": -212,
+              "y": -621.0769230769231,
+              "dx": 0,
+              "dy": 0
+            },
+            "touch": null,
+            "keys": [],
+            "phase": "paused",
+            "input": {
+              "x": -0.0042735042735040606,
+              "y": 0.6260683760683763
+            }
+          }
+        },
+        {
+          "name": "Pause cancels held pointer; skill entry cancels held key and freezes full snapshot",
+          "passed": true
+        },
+        {
+          "name": "Orientation roundtrip preserves exact HP/RNG/progress/loot/cooldowns and active save",
+          "passed": true,
+          "before": {
+            "snapshotHash": "5bc194371cd3d8b49b5a16d2c8a5a6bd1d682664c65db23298205e6e1410fdb3",
+            "activeRunHash": "de36420f60f50859418f362835941a55a4784fdd9587f43323a2b2a82f5f4d85",
+            "hp": 120,
+            "rng": 3208855436,
+            "time": 3.0166666666666666,
+            "floor": 9,
+            "wave": 1,
+            "clearedWaves": [],
+            "earned": {
+              "xp": 0,
+              "cores": 0,
+              "contribution": 0
+            }
+          },
+          "resized": [
+            {
+              "size": {
+                "width": 844,
+                "height": 390
+              },
+              "snapshotHash": "5bc194371cd3d8b49b5a16d2c8a5a6bd1d682664c65db23298205e6e1410fdb3",
+              "activeRunHash": "de36420f60f50859418f362835941a55a4784fdd9587f43323a2b2a82f5f4d85",
+              "host": {
+                "screen": "skills",
+                "landscape": true,
+                "size": {
+                  "width": 1280,
+                  "height": 591.4691943127962
+                },
+                "selected": "sj_yujian",
+                "menuPage": "library",
+                "treePan": {
+                  "x": 0,
+                  "y": 0
+                },
+                "detailPan": {
+                  "x": 0,
+                  "y": 1.1368683772161603e-13
+                },
+                "stick": {
+                  "x": -212,
+                  "y": -621.0769230769231,
+                  "dx": 0,
+                  "dy": 0
+                },
+                "touch": null,
+                "keys": [],
+                "phase": "paused",
+                "input": {
+                  "x": 1,
+                  "y": 0
+                }
+              }
+            },
+            {
+              "size": {
+                "width": 390,
+                "height": 844
+              },
+              "snapshotHash": "5bc194371cd3d8b49b5a16d2c8a5a6bd1d682664c65db23298205e6e1410fdb3",
+              "activeRunHash": "de36420f60f50859418f362835941a55a4784fdd9587f43323a2b2a82f5f4d85",
+              "host": {
+                "screen": "skills",
+                "landscape": false,
+                "size": {
+                  "width": 720,
+                  "height": 1558.1538461538462
+                },
+                "selected": "sj_yujian",
+                "menuPage": "library",
+                "treePan": {
+                  "x": 0,
+                  "y": 0
+                },
+                "detailPan": {
+                  "x": 0,
+                  "y": 0
+                },
+                "stick": {
+                  "x": -212,
+                  "y": -621.0769230769231,
+                  "dx": 0,
+                  "dy": 0
+                },
+                "touch": null,
+                "keys": [],
+                "phase": "paused",
+                "input": {
+                  "x": 1,
+                  "y": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "Modal stays inside viewport: reload pause",
+          "passed": true,
+          "viewport": {
+            "width": 390,
+            "height": 844
+          },
+          "box": {
+            "left": 0,
+            "right": 390,
+            "top": 0,
+            "bottom": 844
+          },
+          "controls": [
+            "继续挑战",
+            "技能树 · 可用32点",
+            "体验工具",
+            "返回宗门"
+          ]
+        },
+        {
+          "name": "Reload/resume remains playable and ordinary raw save was untouched",
+          "passed": true
+        }
+      ],
+      "actions": [
+        {
+          "type": "pointer-click",
+          "target": "体验工具",
+          "x": 195,
+          "y": 268.66666666666663,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "进入独立体验档",
+          "x": 115.91666666666667,
+          "y": 501.08333333333326,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "无敌秒杀：关闭",
+          "x": 195,
+          "y": 505.4166666666667,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "返回宗门",
+          "x": 195,
+          "y": 554.1666666666666,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "锁妖塔",
+          "x": 148.41666666666666,
+          "y": 810.4166666666666,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "重访第9层",
+          "x": 195,
+          "y": 268.66666666666663,
+          "enabled": true
+        },
+        {
+          "type": "pointer-drag",
+          "label": "joystick right hold",
+          "from": {
+            "x": 80.16666666666666,
+            "y": 758.4166666666666
+          },
+          "to": {
+            "x": 112.66666666666666,
+            "y": 758.4166666666666
+          },
+          "holdMs": 600,
+          "release": false
+        },
+        {
+          "type": "pointer-release",
+          "target": "移动摇杆"
+        },
+        {
+          "type": "pointer-drag",
+          "label": "right-side blank drag",
+          "from": {
+            "x": 312,
+            "y": 422
+          },
+          "to": {
+            "x": 262,
+            "y": 447
+          },
+          "holdMs": 250,
+          "release": true
+        },
+        {
+          "type": "pointer-drag",
+          "label": "held joystick before pause",
+          "from": {
+            "x": 80.16666666666666,
+            "y": 758.4166666666666
+          },
+          "to": {
+            "x": 80.16666666666666,
+            "y": 734.0416666666666
+          },
+          "holdMs": 100,
+          "release": false
+        },
+        {
+          "type": "key-down",
+          "key": "Escape"
+        },
+        {
+          "type": "key-up",
+          "key": "Escape"
+        },
+        {
+          "type": "pointer-release",
+          "target": "old joystick after pause"
+        },
+        {
+          "type": "pointer-click",
+          "target": "继续挑战",
+          "x": 195,
+          "y": 412.25000000000006,
+          "enabled": true
+        },
+        {
+          "type": "key-down",
+          "key": "d"
+        },
+        {
+          "type": "pointer-click",
+          "target": "暂停",
+          "x": 354.7916666666667,
+          "y": 24.375000000000025,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "技能树 · 可用32点",
+          "x": 195,
+          "y": 461,
+          "enabled": true
+        },
+        {
+          "type": "key-up",
+          "key": "d"
+        },
+        {
+          "type": "viewport-resize",
+          "size": {
+            "width": 844,
+            "height": 390
+          }
+        },
+        {
+          "type": "viewport-resize",
+          "size": {
+            "width": 390,
+            "height": 844
+          }
+        },
+        {
+          "type": "pointer-click",
+          "target": "继续挑战",
+          "x": 195,
+          "y": 412.25000000000006,
+          "enabled": true
+        }
+      ],
+      "screenshots": [
+        "ui-input-final-390x844-input-tools-modal.png",
+        "ui-input-final-390x844-input-fixed-joystick.png",
+        "ui-input-final-390x844-input-pause-modal.png",
+        "ui-input-final-390x844-input-skills-paused.png",
+        "ui-input-final-390x844-input-orientation-844x390.png",
+        "ui-input-final-390x844-input-orientation-390x844.png",
+        "ui-input-final-390x844-input-reload-pause.png"
+      ],
+      "pageErrors": [],
+      "console": [
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (setting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.setFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "Setting window size is not supported."
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (setting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.setFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "Setting window size is not supported."
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (setting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.setFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "Setting window size is not supported."
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (setting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.setFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "Setting window size is not supported."
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        }
+      ],
+      "httpErrors": [],
+      "requestFailures": [],
+      "assets": [
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/system.bundle.cc789.js",
+          "status": 200,
+          "sha256": "5d1a25de07cc11276a6b1d6479cac7f12c0c561dd06941b8339e568c9d94f900"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/polyfills.bundle.5adbf.js",
+          "status": 200,
+          "sha256": "f1e4ced3322168d6b9915e782e4c1cf1055d75f66f2b38e7fcd60f48cf89082b"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/index.6ce8c.js",
+          "status": 200,
+          "sha256": "021f254debe3760acdb1715ee0ff88cbe17b685434b206bda473fa9bc23a783b"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/application.f82c6.js",
+          "status": 200,
+          "sha256": "b24db6b02a8fc281cc7c3d2f22f7a71dbf387e64640b44d93a0fded053273c77"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/cocos-js/cc.c2df8.js",
+          "status": 200,
+          "sha256": "a670bba566ce7e3a2c25e17b7eb104efc0463a62d85c3d4974d2be9b586eee89"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/chunks/bundle.e2cd5.js",
+          "status": 200,
+          "sha256": "c0ab1af06c40484eba8e9d40042b2162a8355e8d8d1d914ea5a21d4d420dc1d5"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/assets/internal/index.4e53f.js",
+          "status": 200,
+          "sha256": "d842bf596127320ad8cd42ce506a2817cd8a6402fbec6735e6b13af359a40757"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/assets/main/index.4b436.js",
+          "status": 200,
+          "sha256": "e26afe867fd2aba74053be7d7c3de765c5170a4a6c5cf0563fa73c831ea26438"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/polyfills.bundle.5adbf.js",
+          "status": 200,
+          "sha256": "f1e4ced3322168d6b9915e782e4c1cf1055d75f66f2b38e7fcd60f48cf89082b"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/system.bundle.cc789.js",
+          "status": 200,
+          "sha256": "5d1a25de07cc11276a6b1d6479cac7f12c0c561dd06941b8339e568c9d94f900"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/index.6ce8c.js",
+          "status": 200,
+          "sha256": "021f254debe3760acdb1715ee0ff88cbe17b685434b206bda473fa9bc23a783b"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/application.f82c6.js",
+          "status": 200,
+          "sha256": "b24db6b02a8fc281cc7c3d2f22f7a71dbf387e64640b44d93a0fded053273c77"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/cocos-js/cc.c2df8.js",
+          "status": 200,
+          "sha256": "a670bba566ce7e3a2c25e17b7eb104efc0463a62d85c3d4974d2be9b586eee89"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/chunks/bundle.e2cd5.js",
+          "status": 200,
+          "sha256": "c0ab1af06c40484eba8e9d40042b2162a8355e8d8d1d914ea5a21d4d420dc1d5"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/assets/internal/index.4e53f.js",
+          "status": 200,
+          "sha256": "d842bf596127320ad8cd42ce506a2817cd8a6402fbec6735e6b13af359a40757"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/assets/main/index.4b436.js",
+          "status": 200,
+          "sha256": "e26afe867fd2aba74053be7d7c3de765c5170a4a6c5cf0563fa73c831ea26438"
+        }
+      ],
+      "invalidLabels": []
+    }
+  ],
+  "failures": 0,
+  "visualReview": "PENDING: actual circle geometry, row labels, fixed pane, joystick and modal images.",
+  "finishedAt": "2026-10-28T05:23:36.666Z"
+}

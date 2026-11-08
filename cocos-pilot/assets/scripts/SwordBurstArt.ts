@@ -1,84 +1,78 @@
-import { presentationPreferences } from './TowerPreferences';
+import {presentationPreferences} from './TowerPreferences';
 import {towerResources as resources} from './TowerResources';
-import {Color,Graphics,ImageAsset,isValid,Node,Sprite,SpriteFrame,Texture2D,UITransform,AudioSource,AudioClip} from 'cc';
-/** One windup, four staggered inward stabs, one finite layered explosion. */
+import {Color,Graphics,isValid,Node,AudioSource,AudioClip} from 'cc';
+/** Approved v4: a body fracture followed by staggered white, pointed jian silhouettes. */
 export class SwordBurstArt {
- private frame:SpriteFrame|null=null;private texture:Texture2D|null=null;private image:ImageAsset|null=null;
  private clip:AudioClip|null=null;private sound:AudioSource|null=null;private requested=false;private dead=false;
- private actors=new Map<string,{node:Node;ui:UITransform;sprite:Sprite}>();
  private bursts=new Map<string,any>();private sounded=new Set<string>();private state:any=null;private time=-1;private lastSound=-1;
+ private actors=new Map<string,{x:number;y:number}>();
  readonly covered=new Set<string>();
- preload(){
-  if(this.requested||this.dead)return;this.requested=true;
-  resources.load('tower-skill-fx/tiandi-solid-sword-v2',ImageAsset,(err,img)=>{if(this.dead||err||!img)return;img.addRef();this.image=img;this.texture=new Texture2D();this.texture.image=img;this.frame=new SpriteFrame();this.frame.texture=this.texture});
+ preload(){if(this.requested||this.dead)return;this.requested=true;
   resources.load('tower-skill-fx/sword-burst',AudioClip,(err,clip)=>{if(this.dead||err||!clip)return;clip.addRef();this.clip=clip});
  }
- cameraKick(s:any){
-  let age=1;if(s.player?.hp<=0)return {x:0,y:0};
-  for(const e of s.effects||[])if(e.kind==='sword_burst'&&e.targetIds?.length&&Math.hypot(e.x-s.player.x,e.y-s.player.y)<600){const a=s.time-e.startedAt;if(a>=0)age=Math.min(age,a)}
-  const f=Math.max(0,1-age/.16);return {x:Math.sin(age*145)*4*f,y:Math.sin(age*110)*5*f};
+ cameraKick(s:any){let age=1;if(s.player?.hp<=0)return {x:0,y:0};
+  for(const e of s.effects||[])if(e.kind==='sword_burst'&&Math.hypot(e.x-s.player.x,e.y-s.player.y)<600){const a=s.time-e.startedAt;if(a>=0)age=Math.min(age,a)}
+  const f=Math.max(0,1-age/.105);return {x:Math.sin(age*158)*3.8*f,y:-Math.sin(age*158)*1.52*f};
  }
  sync(parent:Node,g:Graphics,s:any,camera:{x:number;y:number}){
-  this.preload();if(this.state!==s||s.time<this.time){this.reset();this.state=s}this.time=s.time;this.covered.clear();
+  this.preload();if(this.state!==s||s.time<this.time){this.reset();this.state=s}this.time=s.time;this.covered.clear();this.actors.clear();
   if(s.player?.hp<=0){this.reset();return}
-  if(!this.sound&&isValid(parent,true)){this.sound=parent.addComponent(AudioSource);this.sound.playOnAwake=false;this.sound.volume=.55}
+  if(!this.sound&&isValid(parent,true)){this.sound=parent.addComponent(AudioSource);this.sound.playOnAwake=false}
   if(this.sound)this.sound.volume=.55*presentationPreferences().soundVolume;
   if(s.phase!=='playing')this.sound?.stop();
-  const seen=new Set<string>(),lift=(r:number)=>Math.min(80,Math.max(34,r*1.4));
-  const sword=(id:string,x:number,y:number,angle:number,span:number,alpha:number,gold=false)=>{
-   if(!this.frame||!isValid(parent,true)||seen.size>=128)return;
-   let a=this.actors.get(id);if(!a){const node=new Node(`爆裂剑气-${id}`);node.layer=parent.layer;parent.addChild(node);const ui=node.addComponent(UITransform);ui.setAnchorPoint(12/1280,.5);const sprite=node.addComponent(Sprite);sprite.sizeMode=Sprite.SizeMode.CUSTOM;sprite.trim=false;sprite.spriteFrame=this.frame;a={node,ui,sprite};this.actors.set(id,a)}
-   a.node.setPosition(x-camera.x,y-camera.y);a.node.angle=angle*180/Math.PI;a.ui.setContentSize(span*1280/1256,span*224/1256);a.sprite.color=new Color(255,gold?237:255,gold?170:255,Math.round(Math.max(0,alpha)));seen.add(id);
-   const dx=Math.cos(angle),dy=Math.sin(angle),bx=x-camera.x,by=y-camera.y;
-   g.strokeColor=gold?new Color(255,213,123,Math.round(alpha*.42)):new Color(106,220,255,Math.round(alpha*.42));g.lineWidth=7;
-   g.moveTo(bx+dx*span*.18,by+dy*span*.18);g.lineTo(bx+dx*span,by+dy*span);g.stroke();
-   g.fillColor=gold?new Color(255,251,218,Math.round(alpha)):new Color(224,253,255,Math.round(alpha));
-   g.moveTo(bx+dx*span,by+dy*span);g.lineTo(bx+dx*span*.24-dy*2.2,by+dy*span*.24+dx*2.2);
-   g.lineTo(bx+dx*span*.24+dy*2.2,by+dy*span*.24-dx*2.2);g.close();g.fill();
+  const clamp=(x:number)=>Math.max(0,Math.min(1,x)),ease=(x:number)=>1-(1-clamp(x))**3;
+  const rand=(i:number)=>{const x=Math.sin(i*127.17+73.13)*43758.54;return x-Math.floor(x)};
+  const lift=(r:number)=>Math.min(80,Math.max(34,r*1.4));
+  const poly=(pts:number[][],color:Color)=>{g.fillColor=color;pts.forEach(([x,y],i)=>i?g.lineTo(x,y):g.moveTo(x,y));g.close();g.fill()};
+  const line=(pts:number[][],width:number,color:Color)=>{g.lineWidth=width;g.strokeColor=color;pts.forEach(([x,y],i)=>i?g.lineTo(x,y):g.moveTo(x,y));g.stroke()};
+  const sword=(id:string,x:number,y:number,a:number,len:number,alpha:number,small=false)=>{
+   if(alpha<=0||this.actors.size>=128)return;this.actors.set(id,{x,y});
+   const w=small?2.1:3.2,tail=-len*.48,tip=len*.52,guard=tail+len*.17,c=Math.cos(a),d=Math.sin(a);
+   const shape=(pts:number[][],col:Color)=>poly(pts.map(([u,v])=>[x-camera.x+c*u-d*v,y-camera.y+d*u+c*v]),col);
+   shape([[guard,-w*.55],[tail-len*.65,0],[guard,w*.55]],new Color(232,246,255,Math.round(alpha*.18)));
+   shape([[tip,0],[guard+len*.17,-w],[guard,-w*.7],[guard,w*.7],[guard+len*.17,w]],new Color(255,255,255,Math.round(alpha)));
+   shape([[tip,0],[guard+len*.17,w],[guard,w*.7],[guard,0]],new Color(217,230,237,Math.round(alpha*.85)));
+   shape([[guard+1.5,-w*1.8],[guard-1.5,-w*1.8],[guard-2,w*1.8],[guard+1.5,w*1.8]],new Color(255,255,255,Math.round(alpha)));
+   shape([[guard,-w*.5],[tail,-w*.35],[tail-2,0],[tail,w*.35],[guard,w*.5]],new Color(245,250,255,Math.round(alpha)));
   };
-  // Queue timing survives save/restore and does not depend on short-lived effect events.
   for(const e of s.swordBursts||[]){
-   const age=s.time-e.startedAt,y=e.y+lift(e.targetRadius||24);
-   for(let i=0;i<4;i++){
-    const a=i*Math.PI/2+Math.PI/4,local=age-(.07+i*.08),t=Math.max(0,Math.min(1,local/.055));
-    const span=68,r=112-58*(1-(1-t)**3),alpha=local<0?130:255;
-    sword(`${e.id}:in:${i}`,e.x+Math.cos(a)*r,y+Math.sin(a)*r,a+Math.PI,span,alpha,local>=0);
-    if(local>=0&&local<.085){
-     const f=1-local/.085,cx=e.x-camera.x,cy=y-camera.y;
-     g.strokeColor=new Color(255,249,205,Math.round(255*f));g.lineWidth=3*f;
-     for(let j=0;j<5;j++){const q=a+(j-2)*.4,rr=16+20*f;g.moveTo(cx+Math.cos(q)*8,cy+Math.sin(q)*8);g.lineTo(cx+Math.cos(q)*rr,cy+Math.sin(q)*rr);g.stroke()}
-    }
+   const p=clamp((s.time-e.startedAt)/.2),cx=e.x-camera.x,cy=e.y+lift(e.targetRadius||24)-camera.y;
+   for(let i=0;i<7;i++){const a=i*2.399+.26,r=(18+rand(i)*24)*ease(p);
+    const pts=[[cx,cy],[cx+Math.cos(a+.18)*r*.33,cy+Math.sin(a+.18)*r*.33],[cx+Math.cos(a-.12)*r*.62,cy+Math.sin(a-.12)*r*.62],[cx+Math.cos(a)*r,cy+Math.sin(a)*r]];
+    line(pts,3,new Color(98,221,255,Math.round(150*p*p)));line(pts,1,new Color(255,255,255,Math.round(255*p*p)));
    }
   }
   for(const e of s.effects||[])if(e.kind==='sword_burst'&&!this.bursts.has(e.id))this.bursts.set(e.id,{...e});
   for(const [id,e] of this.bursts){
-   const age=s.time-e.startedAt;if(age<0||age>=.55){this.bursts.delete(id);this.sounded.delete(id);continue}this.covered.add(id);
-   const target=s.enemies.find((t:any)=>t.id===e.targetId),y=e.y+lift(target?.radius||e.targetRadius||24),x=e.x,fade=(1-age/.55)**1.4,t=Math.min(1,age/.18);
-   if(s.phase==='playing'&&!this.sounded.has(id)){this.sounded.add(id);if(e.targetIds?.length&&this.clip&&this.sound&&s.time-this.lastSound>.09){this.sound.stop();this.sound.clip=this.clip;this.sound.play();this.lastSound=s.time}}
-   const r=e.radius*(.12+.88*(1-(1-t)**3));
-   for(const [width,alpha] of [[14,95],[4,230]]){g.strokeColor=new Color(255,232,163,Math.round(alpha*fade));g.lineWidth=width*fade;for(let i=0;i<8;i++){const a=i*Math.PI/4+.06;g.arc(x-camera.x,y-camera.y,r,a,a+.62,false);g.stroke()}}
-   if(age<.09){const f=1-age/.09;g.fillColor=new Color(220,245,255,Math.round(95*f));g.circle(x-camera.x,y-camera.y,42*f);g.fill();g.fillColor=new Color(255,254,233,Math.round(255*f));for(let i=0;i<16;i++){const a=i*Math.PI/8,rr=(i%2?13:54)*f,xx=x-camera.x+Math.cos(a)*rr,yy=y-camera.y+Math.sin(a)*rr;if(i===0)g.moveTo(xx,yy);else g.lineTo(xx,yy)}g.close();g.fill()}
-   // A jagged corona, crossed cutting arcs and two speeds of fragments break the circular silhouette.
-   const cx=x-camera.x,cy=y-camera.y,p=Math.min(1,age/.24),out=1-(1-p)**3;
-   for(let layer=0;layer<2;layer++){
-    g.fillColor=new Color(layer?255:94,layer?235:206,layer?170:255,Math.round((layer?100:65)*fade));
-    for(let i=0;i<48;i++){const a=i*Math.PI/24+layer*.065,rr=(i%2?(.18+(i%5)*.025):(.64+(i%7)*.055))*e.radius*(.3+.7*out)*(layer?.84:1.12);const xx=cx+Math.cos(a)*rr,yy=cy+Math.sin(a)*rr;if(i===0)g.moveTo(xx,yy);else g.lineTo(xx,yy)}g.close();g.fill();
+   const age=s.time-e.startedAt;if(age<0||age>=.65){this.bursts.delete(id);this.sounded.delete(id);continue}this.covered.add(id);
+   const x=e.x,y=e.y+lift(e.targetRadius||24),cx=x-camera.x,cy=y-camera.y;
+   if(s.phase==='playing'&&!this.sounded.has(id)){this.sounded.add(id);if(this.clip&&this.sound&&s.time-this.lastSound>.09){this.sound.stop();this.sound.clip=this.clip;this.sound.play();this.lastSound=s.time}}
+   const fade=(1-clamp(age/.52))**1.6,open=ease(age/.16),pts:number[][]=[];
+   for(let i=0;i<40;i++){const a=i*Math.PI/20,r=(i%2?11+rand(i)*16:38+rand(i)*36)*(.4+.6*open);pts.push([cx+Math.cos(a)*r,cy+Math.sin(a)*r*.8])}
+   poly(pts,new Color(23,61,80,Math.round(120*fade)));poly(pts.map(([u,v])=>[cx+(u-cx)*.87,cy+(v-cy)*.87]),new Color(186,242,255,Math.round(85*fade)));
+   if(age<.085){const star:number[][]=[];for(let i=0;i<24;i++){const a=i*Math.PI/12,r=(i%2?8+rand(i)*7:23+rand(i)*35)*(.7+.3*open);star.push([cx+Math.cos(a)*r,cy+Math.sin(a)*r*.77])}poly(star,new Color(255,255,250,Math.round(255*(1-age/.085))))}
+   if(age<.28){const f=1-age/.28,r=17+72*ease(age/.2);for(let k=0;k<3;k++){const arc:number[][]=[];for(let j=0;j<15;j++){const a=k*2.17+.3+j*.055,rr=r*(.95+.055*Math.sin(j*2+k));arc.push([cx+Math.cos(a)*rr,cy+Math.sin(a)*rr*.73])}line(arc,1.4*f,new Color(225,250,255,Math.round(170*f)))}}
+   // Twelve visual short swords: staggered starts and distances, no gameplay hits.
+   for(let i=0;i<12;i++){const a=i*2.399+.19,launch=.026+rand(i+90)*.064,duration=.16+rand(i+53)*.07,local=age-launch;
+    if(local<0||local>=duration)continue;const p=clamp(local/duration),dist=(88+rand(i+40)*68)*(1-(1-p)**1.12);
+    sword(`${id}:short:${i}`,x+Math.cos(a)*dist,y+Math.sin(a)*dist,a,(31+rand(i+6)*16)*(.65+.35*ease(local/.025)),255*clamp(local/.008)*clamp((duration-local)/.045),true);
    }
-   for(let k=0;k<4;k++){
-    const angle=k*Math.PI/2+.35,spread=e.radius*(.35+.7*out);
-    for(let pass=0;pass<2;pass++){
-     g.strokeColor=new Color(255,pass?252:199,pass?230:95,Math.round((pass?245:90)*fade));g.lineWidth=(pass?2.5:10)*fade;
-     for(let j=0;j<=18;j++){const q=j/18,a=angle+(q-.5)*1.8,rr=spread*(.8+.2*Math.sin(q*Math.PI));const xx=cx+Math.cos(a)*rr,yy=cy+Math.sin(a)*rr*.62;if(j===0)g.moveTo(xx,yy);else g.lineTo(xx,yy)}g.stroke();
-    }
+   for(let i=0;i<24;i++){const a=i*2.399,r=(24+rand(i)*72)*ease(age/(.17+rand(i+3)*.2)),u=cx+Math.cos(a)*r,v=cy+Math.sin(a)*r*.8-age*age*43,l=(2+rand(i+9)*5)*fade;
+    poly([[u+Math.cos(a)*l,v+Math.sin(a)*l],[u-Math.sin(a),v+Math.cos(a)],[u-Math.cos(a)*l*.55,v-Math.sin(a)*l*.55]],new Color(225,246,255,Math.round(180*fade)));
    }
-   if(age<.12){const f=1-age/.12;for(let i=0;i<4;i++){const a=i*Math.PI/2+.35,dx=Math.cos(a),dy=Math.sin(a),len=e.radius*1.12;g.fillColor=new Color(255,255,231,Math.round(245*f));g.moveTo(cx+dx*len,cy+dy*len);g.lineTo(cx-dy*9*f,cy+dx*9*f);g.lineTo(cx-dx*len*.4,cy-dy*len*.4);g.lineTo(cx+dy*9*f,cy-dx*9*f);g.close();g.fill()}}
-   for(let i=0;i<24;i++){const a=i*Math.PI/12+.13,span=15+(i%4)*7,travel=(e.radius-span)*(1-(1-Math.min(1,age/(i%2?.32:.19)))**3);sword(`${id}:shard:${i}`,x+Math.cos(a)*travel,y+Math.sin(a)*travel,a,span,230*fade,true)}
-   for(let i=0;i<28;i++){const a=i*2.399,rr=e.radius*(.25+.85*out)*( .6+(i%5)*.1),f=fade*(i%3?.7:1);g.fillColor=new Color(255,231,164,Math.round(230*f));g.circle(cx+Math.cos(a)*rr,cy+Math.sin(a)*rr-age*age*70,1+(i%3)*.6);g.fill()}
-
   }
-  for(const [id,a] of this.actors)if(!seen.has(id)){a.node.destroy();this.actors.delete(id)}
+  for(const b of s.swordBurstShots||[]){
+   const age=s.time-b.launchAt;if(age<0)continue;const target=s.enemies.find((e:any)=>e.id===b.targetId&&e.hp>0);if(!target)continue;
+   const distance=Math.hypot(b.x-b.originX,b.y-b.originY),remaining=Math.hypot(target.x-b.x,target.y-b.y),p=distance/Math.max(1,distance+remaining);
+   const y=b.y+lift(b.originRadius)*(1-p)+lift(target.radius||24)*p;
+   sword(b.id,b.x,y,Math.atan2(target.y+lift(target.radius||24)-y,target.x-b.x),(51+rand(b.index)*10)*(.65+.35*ease(age/.025)),255*clamp(age/.008));
+  }
+  for(const e of s.effects||[])if(e.kind==='sword_burst_hit'){
+   const age=s.time-e.startedAt;if(age<0||age>.25)continue;this.covered.add(e.id);const f=1-age/.25,a=e.angle+.85,len=28*ease(age/.035),x=e.x-camera.x,y=e.y+lift(e.targetRadius||24)-camera.y;
+   line([[x-Math.cos(a)*len,y-Math.sin(a)*len],[x+Math.cos(a)*len,y+Math.sin(a)*len]],3*f,new Color(240,252,255,Math.round(255*f)));
+  }
  }
- clearBindings(){for(const a of this.actors.values())a.node.destroy();this.actors.clear();this.sound?.stop();this.sound?.destroy();this.sound=null}
+ clearBindings(){this.actors.clear();this.sound?.stop();this.sound?.destroy();this.sound=null}
  reset(){this.clearBindings();this.bursts.clear();this.sounded.clear();this.lastSound=-1;this.time=-1;this.state=null;this.covered.clear()}
- destroy(){this.dead=true;this.reset();this.frame?.destroy();this.texture?.destroy();this.image?.decRef();this.clip?.decRef()}
+ destroy(){this.dead=true;this.reset();this.clip?.decRef()}
 }

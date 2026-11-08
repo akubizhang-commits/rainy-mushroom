@@ -1,3 +1,4 @@
+import {monsterHealthMultiplier} from '../js/xianxia/TowerMonsterAttributes.js'
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import { FLOORS, ARCHETYPES } from '../js/xianxia/TowerContent.js'
@@ -16,7 +17,8 @@ test('seven and eight deploy rhino and yak bosses without replacing their normal
     const boss=run._enemy({id:'boss-test',archetype:id,x:0,y:0});
     assert.equal(boss.family,family);
     assert.equal(boss.name,name);
-    assert.equal(boss.maxHp, config.floor_stat_scale.boss_hp*ARCHETYPES.find(a=>a.id===id).floor_hp_factor);
+    const growthBalanceHp = floor === 7 ? 1.2 : 1.65;
+    assert.equal(boss.maxHp, config.floor_stat_scale.boss_hp*ARCHETYPES.find(a=>a.id===id).floor_hp_factor*growthBalanceHp*monsterHealthMultiplier(boss));
     assert.equal(ARCHETYPES.find(a=>a.id===id).role,'boss');
   }
   assert.equal(FLOORS[1].boss_id,'wolf_boss');

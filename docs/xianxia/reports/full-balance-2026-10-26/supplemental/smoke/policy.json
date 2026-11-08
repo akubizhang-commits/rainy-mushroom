@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "scope": "Robot supplemental experiments, not human playtests or the main A/B matrix.",
+  "common": "Same seeds across groups/moves; 720x1560; firstRun=true; xianxia; 60Hz; no HP reset, reroll, injected card, speedup or runtime mutation.",
+  "wanjian": "Unmodified makePicker(prefer:wanjian): evolution first, then existing preference ranking.",
+  "max_meta": "Unmodified makePicker(prefer:spore_shot); defaultProfile funded to CRYSTAL_CAP, then Meta.buy until Meta.nextPrice is null for each real PERMANENT entry; use Meta.bonuses.",
+  "active_pills": {
+    "base": "Evolution always first. Eligible pills outrank ordinary upgrades: body > power > wind. Otherwise use makePicker(prefer:spore_shot) on non-pill cards, retaining original indices.",
+    "refresh": "Only eligible when same pill remaining <= 3 simulation seconds.",
+    "body": "HP <= 55% and danger: >=3 living enemies within center distance 200, >=2 approaching bubbles within 180, or a charging/windup Boss within 240.",
+    "power": "Living Boss within 650 OR >=8 living enemies within center distance 360.",
+    "wind": "XP currently outside pickup radius >= 2 * progression.needed, OR HP <=35% and the same danger criterion.",
+    "ties": "First eligible card in original offer order within the fixed body/power/wind priority.",
+    "noReroll": true
+  },
+  "coverage": "Before each real step, test endTick > next simulation tick (expiry occurs at step start). Combat denominator counts steps starting in playing; Boss denominator additionally requires living Boss. Total-simulation coverage includes cleansing/extract. Paused/levelup choices contribute no ticks.",
+  "limits": "Three supplementary groups are not a single-factor causal comparison. Flee/spore are bot algorithms, not measured human skill. Victory duration excludes losses/timeouts. Sample maxima/zero drops do not prove device performance or universal safety."
+}

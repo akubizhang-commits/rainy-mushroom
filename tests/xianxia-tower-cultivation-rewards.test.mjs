@@ -32,8 +32,9 @@ test('white tiger has an independent resource used by both tower and battle view
   assert.notDeepEqual(read(`${base}tiger.png`), read(`${base}white-tiger.png`))
   assert.notEqual(JSON.parse(read(`${base}tiger.png.meta`)).uuid,
     JSON.parse(read(`${base}white-tiger.png.meta`)).uuid)
+  assert.match(read('cocos-pilot/assets/scripts/TowerMonsterArt.ts').toString(), /white-tiger/)
   for (const name of ['TowerMenu', 'TowerView']) {
     assert.match(read(`cocos-pilot/assets/scripts/${name}.ts`).toString(),
-      /tiger_boss_zhenyan['"]\s*\?\s*['"]white-tiger/)
+      /TowerMonsterArt\.artFamily\(/)
   }
 })

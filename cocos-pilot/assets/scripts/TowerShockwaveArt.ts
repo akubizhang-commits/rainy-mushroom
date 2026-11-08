@@ -23,7 +23,7 @@ export class TowerShockwaveArt {
   if(this.dead)return;
   for(const w of this.waves.values())w.seen=false;
   for(const z of state.monsterMechanics?.zones||[]){
-   if(!['M15','M07'].includes(z.skillId)||state.time>=z.expiresAt||![z.x,z.y,z.radius,z.innerRadius,z.angle,z.faceX,z.faceY,z.activatesAt,z.expiresAt].every(Number.isFinite))continue;
+   if(!['M15','M07','M08'].includes(z.skillId)||state.time>=z.expiresAt||![z.x,z.y,z.radius,z.innerRadius,z.angle,z.faceX,z.faceY,z.activatesAt,z.expiresAt].every(Number.isFinite))continue;
    if(!state.enemies.some((e:any)=>e.id===z.ownerId&&e.hp>0))continue;
    this.load();if(!this.frames.length||state.time<z.activatesAt)continue;
    let w=this.waves.get(z.id);
@@ -42,8 +42,8 @@ export class TowerShockwaveArt {
    }
    w.seen=true;w.node.setPosition(z.x-camera.x,z.y-camera.y);w.node.angle=Math.atan2(z.faceY,z.faceX)*180/Math.PI;
    // M07 dust is cosmetic inside the unchanged full-disk damage zone.
-   const stomp=z.skillId==='M07',progress=Math.max(0,Math.min(1,(state.time-z.activatesAt)/(z.expiresAt-z.activatesAt)));
-   const outer=Math.max(0,z.radius)*(stomp?.45+.55*progress:1),inner=stomp?Math.max(0,outer-35):Math.max(0,Math.min(outer,z.innerRadius));
+   const stomp=z.skillId==='M07',sweep=z.skillId==='M08',progress=Math.max(0,Math.min(1,(state.time-z.activatesAt)/(z.expiresAt-z.activatesAt)));
+   const outer=Math.max(0,z.radius)*(stomp?.45+.55*progress:1),inner=(stomp||sweep)?Math.max(0,outer-35):Math.max(0,Math.min(outer,z.innerRadius));
    const angle=stomp?Math.PI*2:z.angle,half=angle/2,step=angle/72,mid=(outer+inner)/2;
    // Stencil clips tangent strips to the exact simulation band and safe opening.
    const g=w.mask;g.clear();g.moveTo(Math.cos(-half)*inner,Math.sin(-half)*inner);

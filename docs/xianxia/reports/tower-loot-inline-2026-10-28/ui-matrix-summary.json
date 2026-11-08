@@ -1,0 +1,158 @@
+{
+  "status": "UI_MATRIX_PASS_FINAL_LOOT_TABLE_PENDING",
+  "report": "ui-browser-final-build.json",
+  "startedAt": "2026-10-28T04:30:46.289Z",
+  "finishedAt": "2026-10-28T04:37:25.819Z",
+  "counts": {
+    "cases": 20,
+    "passed": 20,
+    "pointerClicks": 245,
+    "screenshots": 75,
+    "runtimeExceptions": 0,
+    "consoleErrors": 0,
+    "httpErrors": 0,
+    "requestFailures": 0,
+    "invalidProductionLabels": 0,
+    "productionRefundTextChecks": 30
+  },
+  "bundleSha256": "c30a7466543cc1e7a02a119bbb29fe08157a697bce0ea22e9f8da99dd18d9944",
+  "bundle": "assets/main/index.de4c8.js",
+  "browser": {
+    "version": "155.0.8059.12",
+    "playwrightModule": "/Users/zhangnu/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright",
+    "executablePath": "/Users/zhangnu/Library/Caches/ms-playwright/chromium_headless_shell-1247/chrome-headless-shell-mac-arm64/chrome-headless-shell"
+  },
+  "viewports": [
+    {
+      "width": 390,
+      "height": 844
+    },
+    {
+      "width": 360,
+      "height": 640
+    },
+    {
+      "width": 1280,
+      "height": 800
+    },
+    {
+      "width": 720,
+      "height": 1280
+    },
+    {
+      "width": 1080,
+      "height": 2400
+    }
+  ],
+  "reviewedScreenshots": [
+    "ui-final-build-390x844-camp-tree-top.png",
+    "ui-final-build-390x844-refunds-special-dependency-cascade.png",
+    "ui-final-build-360x640-camp-inline-details.png",
+    "ui-final-build-1280x800-camp-parent-connections.png",
+    "ui-final-build-390x844-loot-graded-drop-battlefield.png",
+    "ui-final-build-1280x800-loot-graded-drop-battlefield.png",
+    "ui-final-build-720x1280-refunds-evolution-dependency-cascade.png",
+    "ui-final-build-1080x2400-paused-paused-inline-rules.png"
+  ],
+  "visualReview": "PASS for inspected images: refund names/ranks and feedback correct, inline details remain in tree, connections visible, disabled controls clear, graded cores labeled. Tall tree/details scroll. New denomination header and cap summary pending next build.",
+  "lootEvidenceStatus": "Valid for this artifact only; targeted loot/label rerun required after pending nonlinear denomination and cap-summary rebuild.",
+  "loot": [
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "count": 38,
+      "value": 114,
+      "byRank": [
+        0,
+        6,
+        29,
+        2,
+        0,
+        0,
+        1
+      ],
+      "credited": 164
+    },
+    {
+      "viewport": {
+        "width": 360,
+        "height": 640
+      },
+      "count": 37,
+      "value": 108,
+      "byRank": [
+        0,
+        8,
+        27,
+        1,
+        0,
+        0,
+        1
+      ],
+      "credited": 158
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "count": 37,
+      "value": 108,
+      "byRank": [
+        0,
+        8,
+        27,
+        1,
+        0,
+        0,
+        1
+      ],
+      "credited": 158
+    },
+    {
+      "viewport": {
+        "width": 720,
+        "height": 1280
+      },
+      "count": 40,
+      "value": 120,
+      "byRank": [
+        0,
+        6,
+        31,
+        2,
+        0,
+        0,
+        1
+      ],
+      "credited": 170
+    },
+    {
+      "viewport": {
+        "width": 1080,
+        "height": 2400
+      },
+      "count": 42,
+      "value": 128,
+      "byRank": [
+        0,
+        4,
+        35,
+        2,
+        0,
+        0,
+        1
+      ],
+      "credited": 178
+    }
+  ],
+  "consoleWarnings": [
+    "[.WebGL-context]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[.WebGL-context]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)",
+    "'%s' is deprecated. (setting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.setFrameSize",
+    "Setting window size is not supported."
+  ],
+  "oldEvidence": "First-build failures, diagnostic and harness rerun files retained as superseded. Current matrix was already running when next loot-table change was announced."
+}

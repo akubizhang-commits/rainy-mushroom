@@ -155,12 +155,12 @@ for (const phase of ['camp', 'playing', 'paused']) {
   const { storage, original, adapter, store: initial } = setupTools()
   putTrial(storage, {
    ...initial.state,
-   xp: 10920, hp: 37.5, clearedFloor: 9, researchPurchases: 3, tutorialWaves: 3,
-   skills: { sj_arc: 3, sj_arc: 1, sj_wanjian: 1, sj_line: 1 },
+   xp: 10920, hp: 37.5, clearedFloor: 9, researchPurchases: 0, tutorialWaves: 3,
+   skills: { sj_arc: 3, sj_yujian: 1, sj_wanjian: 1, sj_line: 1 },
    books: ['sj_line'], spiritStones: 40000, contribution: 8000,
-   pills: { zhuji: 0, huichun: 17, peiyuan: 24 }, tutorialDone: true,
+   pills: { ...initial.state.pills, zhuji: 0, huichun: 17, peiyuan: 24 }, tutorialDone: true,
    normalCoreCounter: 13, weaponPity: 8, selectedLoadout: 1, attemptSequence: 7,
-   weapons: { ...initial.state.weapons, 'weapon-1': {...rollWeapon('fan',4,()=>0,'weapon-1'), refine:0} },
+   weapons: { ...initial.state.weapons, 'weapon-1': {...rollWeapon('fa',4,()=>0,'weapon-1'), refine:0} },
    weaponSequence:8, weaponCounters:{iron:0,'weapon-1':0},
    lastResult: { outcome: 'won', floor: 9, firstClear: true, earned: { xp: 12, spiritStones: 400, contribution: 50 } },
   })
@@ -182,8 +182,8 @@ for (const phase of ['camp', 'playing', 'paused']) {
   assert.equal(store.state.xp, 0)
   assert.deepEqual(store.state.skills, { sj_arc: 1 })
   assert.equal(store.state.spiritStones, 500)
-  assert.equal(store.state.contribution, 300)
-  assert.deepEqual(store.state.pills, { huichun: 3, peiyuan: 0 })
+  assert.equal(store.state.contribution, 1000)
+  assert.deepEqual(store.state.pills, new TowerCampaignStore(disk(),12345).state.pills)
   assert.equal(storage.getItem(TOWER_CAMPAIGN_KEY), original)
   assert.equal(storage.getItem(TOWER_PLAYTEST_TOOLS_KEY), prefs)
  })
@@ -223,8 +223,8 @@ test('normal stores reject bonus-bearing records and normal overspends remain co
  store = gainCultivation(store, 5)
  assert.ok(store.act({ type: 'playtestSkillPoints' }, 0).ok)
  assert.ok(store.act({ type: 'learnSkill', id: 'sj_arc' }, 0).ok)
- for (const id of ['vajra', 'sj_spirit', 'sj_wanjian']) assert.ok(store.act({ type: 'learnSkill', id }, 0).ok)
- assert.equal(growthSummary(store.state).spent, 4)
+ for (const id of ['sj_arc', 'sj_yujian', 'sj_bone', 'sj_yujian', 'sj_arc', 'sj_yujian']) assert.ok(store.act({ type: 'learnSkill', id }, 0).ok)
+ assert.equal(growthSummary(store.state).spent, 7)
  assert.equal(growthSummary(store.state).realm, 3, 'all ranks are legal but require the bonus to fund them')
  const trial = storage.getItem(TOWER_PLAYTEST_KEY)
  storage.setItem(TOWER_CAMPAIGN_KEY, trial)

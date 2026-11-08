@@ -216,7 +216,7 @@ test('version-one saved seed fixtures stay stable and plan queries leave combat 
     "063d6ff1a9b2b04500477ae20480be02b7cf488ca6ad89fae0647e0d1563df27",
     "e48d0a2203340503dcee534dcb5957e3d5c3c8d94884cd8780b34607120d174b",
     "326b95fa457f56389160846a179870d6d25c332d5e1ac42b8ba7d1370f06bcbc",
-    "2c384e15f3f89c17c818904912a7db3545212dda42c656d0a06fa16cdc7e4515"
+    "06b9b36e2c021915b162fb82dd25c5ff394474fc2ba4c0c5668dfa59b4dd3fdc"
 ]
 
   for (let floor = 1; floor <= 9; floor++) {

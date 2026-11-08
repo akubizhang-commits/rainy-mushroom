@@ -14,17 +14,34 @@ export const STONE_NAMES = Object.freeze(['下品', '中品', '上品', '极品'
 // Point vouchers are finite campaign rewards, never repeatable combat income.
 export const DIANJUAN_DRAW_COST = 100
 export const DIANJUAN_STARTER = 10 * DIANJUAN_DRAW_COST
-export const DIANJUAN_CAMPAIGN_TOTAL = 3000
+// 2026-11-06: 点眷合并为第1/4/7层首通各2000。第1层对应炼气起步，第4、7层首通时
+// 角色正好突破到筑基、金丹，可立即抽新阶装备。总额仍为6000。
+export const DIANJUAN_CAMPAIGN_TOTAL = 6000
+// 2026-11-06: 首通炼器材料。第2/5/8层在器心之外补齐一把上品武器所需的关键材料；
+// 第3/6/9层（大境界最后一层）先发下一阶的器心与部分玄铁，提前为极品攒料。
+// 估算见 scripts/audit-first-clear-forge-packs.mjs。
+const pack = rows => Object.freeze(rows.map(([id, count]) => Object.freeze({ id: 'forge_' + id, count })))
+export const FIRST_CLEAR_MATERIALS = Object.freeze({
+  2: pack([['core_fa', 1], ['hanjingsha', 14], ['xuantie', 14], ['lingmu', 6], ['lingyu', 6]]),
+  3: pack([['ninglingjing', 2], ['xuantie', 20]]),
+  5: pack([['core_bao', 1], ['chitongjing', 12], ['xuantie', 20], ['lingmu', 16], ['lingyu', 16]]),
+  6: pack([['ninglingjing', 2], ['xuantie', 30]]),
+  8: pack([['core_ling', 1], ['xuantie', 26], ['lingmu', 20], ['lingyu', 20]]),
+  9: pack([['ninglingjing', 2], ['zijingsui', 10], ['xuantie', 32], ['lingmu', 16], ['lingyu', 16]]),
+})
 export const FIRST_CLEAR_REWARDS = Object.freeze([
-  { kind: 'skillPoints', name: '功法点', quantity: 4, amount: 4 },
+  { kind: 'contribution', name: '点眷', quantity: 2000, amount: 2000 },
   { kind: 'spiritStones', name: '下品灵石', quantity: 100, amount: 100, grade: 0 },
-  { kind: 'contribution', name: '点眷', quantity: 1000, amount: 1000 },
-  { kind: 'skillPoints', name: '功法点', quantity: 7, amount: 7 },
+  // 2026-11-06：第3/6/9层是每个大境界的最后一层，主奖励是下一阶极品装备的器心：
+  // 第3层赤曜器心（宝器极品）、第6层紫宸器心（灵器极品需2枚，与第8层合成一对）、
+  // 第9层再给紫宸器心，供第二件灵器极品。不发成品丹药。
+  { kind: 'item', id: 'forge_core_bao', name: '赤曜器心', quantity: 1, amount: 1 },
+  { kind: 'contribution', name: '点眷', quantity: 2000, amount: 2000 },
   { kind: 'spiritStones', name: '中品灵石', quantity: 3, amount: 300, grade: 1 },
-  { kind: 'contribution', name: '点眷', quantity: 1000, amount: 1000 },
-  { kind: 'skillPoints', name: '功法点', quantity: 9, amount: 9 },
+  { kind: 'item', id: 'forge_core_ling', name: '紫宸器心', quantity: 1, amount: 1 },
+  { kind: 'contribution', name: '点眷', quantity: 2000, amount: 2000 },
   { kind: 'spiritStones', name: '中品灵石', quantity: 4, amount: 400, grade: 1 },
-  { kind: 'contribution', name: '点眷', quantity: 1000, amount: 1000 },
+  { kind: 'item', id: 'forge_core_ling', name: '紫宸器心', quantity: 1, amount: 1 },
 ].map(Object.freeze))
 
 const uint = value => {

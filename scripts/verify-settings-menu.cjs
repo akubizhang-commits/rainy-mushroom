@@ -50,7 +50,7 @@ const ROOT=path.resolve(__dirname,'..'),OUT=path.join(ROOT,'docs/xianxia/reports
    assert.deepEqual(await buttons(),['返回设置','关闭开发者工具','游戏速度 ×1','无敌：关闭','+999灵石、贡献','+999功法点','提升一小境界','重置游戏进度']);
    await click('返回设置');
    assert.equal(await page.evaluate(()=>!!window.qaFind('宗门设置遮罩')),true);
-   assert.equal(await page.evaluate(()=>window.qaWalk(window.qaFind('宗门设置遮罩')).some(n=>n.getComponent('cc.Label')?.string==='落云宗')),false);
+   assert.equal(await page.evaluate(()=>window.qaWalk(window.qaFind('宗门设置遮罩')).some(n=>n.getComponent('cc.Label')?.string==='霁云宗')),false);
    await click('开发者工具');
    const before=await read();
    await click('+999灵石、贡献');await click('+999灵石、贡献');

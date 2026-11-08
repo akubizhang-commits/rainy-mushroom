@@ -1,3 +1,4 @@
+import {currentCampaignSchema} from './helpers/tower-schema.mjs'
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import {TowerRun} from '../js/xianxia/TowerRun.js'
@@ -13,7 +14,8 @@ function shotBudget(rank){
  return s.projectiles[0].damage/p.attack/interval
 }
 test('released swords retain early budgets and carry the approved high-rank growth',()=>{
- for(const [rank,budget] of [[1,1.2],[2,1.5],[3,1.8],[4,2.034],[10,4.234689864803]] )near(shotBudget(rank),budget)
+ // 2026-11-06：1–9级按 [.5,.5,.52,.65,…] 压低，10级不变。
+ for(const [rank,budget] of [[1,1.2*.5],[2,1.5*.5],[3,1.8*.52],[4,2.034*.65],[10,4.234689864803]] )near(shotBudget(rank),budget)
 })
 test('schema60 resets only this mode and failed replacement keeps the old save intact',()=>{
  const data=new Map([['other-game','keep']]);let fail=false
@@ -23,6 +25,6 @@ test('schema60 resets only this mode and failed replacement keeps the old save i
  const old=JSON.stringify(env);data.set(TOWER_CAMPAIGN_KEY,old);fail=true
  const blocked=new TowerCampaignStore(disk,0);assert.equal(blocked.error,'save-failed');assert.equal(data.get(TOWER_CAMPAIGN_KEY),old)
  fail=false;const reset=new TowerCampaignStore(disk,0);assert.equal(reset.migrationReport.reset,true)
- assert.equal(JSON.parse(data.get(TOWER_CAMPAIGN_KEY)).schema,61);assert.equal(data.get('other-game'),'keep')
+ assert.equal(JSON.parse(data.get(TOWER_CAMPAIGN_KEY)).schema,currentCampaignSchema);assert.equal(data.get('other-game'),'keep')
  assert.deepEqual(new TowerCampaignStore(disk,0).state,reset.state)
 })

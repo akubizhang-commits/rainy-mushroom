@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict'
 import fs from 'node:fs'
-import {definitions,envelope,baseAttack} from './lib/equipment-budget.mjs'
+import {definitions,envelope} from './lib/equipment-budget.mjs'
+import {primaryAttributes} from '../js/xianxia/TowerCharacterStats.js'
 import {WEAPON_TUNING} from '../js/xianxia/TowerWeaponTuning.js'
 import * as weapons from '../js/xianxia/TowerWeapons.js'
 import * as equipment from '../js/xianxia/TowerEquipment.js'
@@ -73,7 +74,9 @@ for(const tier of ['fa','bao','ling']){
    const ds=defs(q),level={fa:7,bao:15,ling:25}[tier],l={...Object.fromEntries(ds.map(d=>[d.category,make(d)])),passive:{}},s=stats(cultivationLevelXp(level),l)
    const id=martial?'sj_arc':'sj_formation',damage=martial?s.attack*outgoingDamageFactor(l,id,'physical',true):
     (s.attack*outgoingDamageFactor(l,id,'physical',true)+s.magicAttack*outgoingDamageFactor(l,id,'magic',true))/2
-   reference.push({tier,q,martial,level,meanHitRatio:damage/(baseAttack(level)+5),ids:ds.map(d=>d.id)})
+   const base=primaryAttributes(cultivationLevelXp(level),null)
+   const baseline=martial?base.strength:(base.strength+base.intelligence)/2
+   reference.push({tier,q,martial,level,meanHitRatio:damage/(baseline+5),ids:ds.map(d=>d.id)})
   }
  }
 }

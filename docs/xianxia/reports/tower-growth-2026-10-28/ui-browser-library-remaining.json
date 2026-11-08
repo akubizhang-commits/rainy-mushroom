@@ -1,0 +1,449 @@
+{
+  "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/index.html?ruleset=xianxia&tower=1",
+  "status": "AUTOMATED_CHECKS_PASSED_VISUAL_REVIEW_PENDING",
+  "selection": {
+    "cases": [
+      "library-fixture"
+    ],
+    "sizes": [
+      "360x640",
+      "1280x800"
+    ]
+  },
+  "startedAt": "2026-10-28T03:19:04.855Z",
+  "results": [
+    {
+      "viewport": {
+        "width": 360,
+        "height": 640
+      },
+      "label": "library-fixture",
+      "kind": "ARTIFICIAL VALIDATED CAMP FIXTURE — NOT NATURAL PROGRESSION",
+      "fixture": {
+        "sources": {
+          "xp": 10920,
+          "clearedFloor": 9,
+          "cores": 2000,
+          "tutorialWaves": 3,
+          "hp": 120
+        },
+        "transactions": [
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_yujian"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_yujian",
+              "level": 2,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_yujian"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_yujian",
+              "level": 3,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_yujian"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_yujian",
+              "level": 4,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_yujian"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_yujian",
+              "level": 5,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_yujian"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_yujian",
+              "level": 6,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_heart"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_heart",
+              "level": 1,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_heart"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_heart",
+              "level": 2,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_heart"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_heart",
+              "level": 3,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_heart"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_heart",
+              "level": 4,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "evo_wanjian"
+            },
+            "result": {
+              "ok": true,
+              "id": "evo_wanjian",
+              "level": 1,
+              "cost": 3,
+              "bookCost": 240
+            }
+          }
+        ]
+      },
+      "checks": [
+        {
+          "name": "场外秘传经卷与技能点原子扣除",
+          "passed": true,
+          "quote": {
+            "ok": true,
+            "nextLevel": 1,
+            "cost": 2,
+            "bookCost": 20
+          },
+          "before": {
+            "total": 33,
+            "spent": 14,
+            "available": 19,
+            "realm": 30,
+            "firstClear": 3,
+            "research": 0,
+            "cap": 36
+          },
+          "after": {
+            "total": 33,
+            "spent": 16,
+            "available": 17,
+            "realm": 30,
+            "firstClear": 3,
+            "research": 0,
+            "cap": 36
+          }
+        },
+        {
+          "name": "重修只退实际SP，教学与经卷保留",
+          "passed": true
+        }
+      ],
+      "actions": [
+        "藏经阁",
+        "技能节点-sj_yujian",
+        "修习至7级 · 2技能点",
+        "关闭",
+        "技能节点-sj_shadow",
+        "解锁并修习1级 · 2技能点＋20妖丹经卷费",
+        "关闭",
+        "藏经阁",
+        "查看全洗退款明细",
+        "确认全洗 · 返还16点"
+      ],
+      "screenshots": [
+        "ui-360x640-library-fixture-special-book.png",
+        "ui-360x640-library-fixture-respec-preview.png"
+      ],
+      "errors": [],
+      "consoleErrors": [],
+      "httpErrors": [],
+      "ok": true,
+      "build": {
+        "scripts": [
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/polyfills.bundle.5adbf.js",
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/system.bundle.cc789.js",
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/import-map.14612.json"
+        ],
+        "growthVersion": null
+      }
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "label": "library-fixture",
+      "kind": "ARTIFICIAL VALIDATED CAMP FIXTURE — NOT NATURAL PROGRESSION",
+      "fixture": {
+        "sources": {
+          "xp": 10920,
+          "clearedFloor": 9,
+          "cores": 2000,
+          "tutorialWaves": 3,
+          "hp": 120
+        },
+        "transactions": [
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_yujian"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_yujian",
+              "level": 2,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_yujian"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_yujian",
+              "level": 3,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_yujian"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_yujian",
+              "level": 4,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_yujian"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_yujian",
+              "level": 5,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_yujian"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_yujian",
+              "level": 6,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_heart"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_heart",
+              "level": 1,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_heart"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_heart",
+              "level": 2,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_heart"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_heart",
+              "level": 3,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_heart"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_heart",
+              "level": 4,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "evo_wanjian"
+            },
+            "result": {
+              "ok": true,
+              "id": "evo_wanjian",
+              "level": 1,
+              "cost": 3,
+              "bookCost": 240
+            }
+          }
+        ]
+      },
+      "checks": [
+        {
+          "name": "场外秘传经卷与技能点原子扣除",
+          "passed": true,
+          "quote": {
+            "ok": true,
+            "nextLevel": 1,
+            "cost": 2,
+            "bookCost": 20
+          },
+          "before": {
+            "total": 33,
+            "spent": 14,
+            "available": 19,
+            "realm": 30,
+            "firstClear": 3,
+            "research": 0,
+            "cap": 36
+          },
+          "after": {
+            "total": 33,
+            "spent": 16,
+            "available": 17,
+            "realm": 30,
+            "firstClear": 3,
+            "research": 0,
+            "cap": 36
+          }
+        },
+        {
+          "name": "重修只退实际SP，教学与经卷保留",
+          "passed": true
+        }
+      ],
+      "actions": [
+        "藏经阁",
+        "技能节点-sj_yujian",
+        "修习至7级 · 2技能点",
+        "关闭",
+        "技能节点-sj_shadow",
+        "解锁并修习1级 · 2技能点＋20妖丹经卷费",
+        "关闭",
+        "藏经阁",
+        "查看全洗退款明细",
+        "确认全洗 · 返还16点"
+      ],
+      "screenshots": [
+        "ui-1280x800-library-fixture-special-book.png",
+        "ui-1280x800-library-fixture-respec-preview.png"
+      ],
+      "errors": [],
+      "consoleErrors": [],
+      "httpErrors": [],
+      "ok": true,
+      "build": {
+        "scripts": [
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/polyfills.bundle.5adbf.js",
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/system.bundle.cc789.js",
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/import-map.14612.json"
+        ],
+        "growthVersion": null
+      }
+    }
+  ],
+  "evidencePolicy": "自然路径仅购丹/真实模拟/Store事务；高进度fixture单列，不写用户存档。光环截图需人工视觉复核。",
+  "sourceHashes": {
+    "js/xianxia/TowerGrowth.js": "24543c0059d60a64c80fca40ac976b7055bd3783d5402cefd5c0900119ab38d0",
+    "js/xianxia/TowerCampaign.js": "b7ed35b634fd14c3a48d7fa4b9baa43fe778e7eace859972ad83e260350be592",
+    "js/xianxia/TowerRun.js": "274ca5e3fa962bdbc2583f45a4340112f06db46cad581c932c71a606b8d57e2a",
+    "js/xianxia/TowerPlaytest.js": "2b4af1b3700e8f298c5e921d25a13fd2b50b808a03393368b225a03bb111f4b6",
+    "cocos-pilot/assets/scripts/TowerMenu.ts": "43f845ab406c6ef4153cb104decf8937c22ca25d02a53453c4e99c60a2bea4ac",
+    "cocos-pilot/assets/scripts/TowerView.ts": "c334b2e7df6005557cd8c5c2bca586e09d67a2d324e604434976d7a01e0a79d5"
+  },
+  "finishedAt": "2026-10-28T03:19:32.242Z",
+  "failures": 0
+}

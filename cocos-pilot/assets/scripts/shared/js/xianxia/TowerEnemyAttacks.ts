@@ -16,6 +16,81 @@ function projectileElement(family) {
   }
 }
 
+// 83号文档：普通攻击是按身体部位的一次小扇形近身动作；其余都是技能。
+// 普通怪只有1个低频、范围受限的族技能，冷却由 TowerRun 按楼层给出。
+export const NORMAL_ATTACK_NAMES = Object.freeze({
+  boar: '獠牙拱', wolf: '撕咬', spider: '撕咬', bear: '熊掌抓', ape: '挥拳',
+  tiger: '虎爪', crocodile: '撕咬', centipede: '撕咬', snake: '撕咬',
+  scorpion: '钳夹', bat: '撕咬', falcon: '爪抓', rhino: '犀角顶', yak: '牛角顶',
+})
+export const NORMAL_SKILL_NAMES = Object.freeze({
+  boar: '冲锋', wolf: '扑咬', bear: '掌扫', ape: '抡臂', tiger: '扑抓横扫',
+  crocodile: '甩尾', centipede: '毒颚横扫', snake: '吐毒', scorpion: '毒刺',
+  bat: '音波', falcon: '羽刃',
+})
+export const NORMAL_SKILL_MAX_ANGLE = 130
+export const NORMAL_SKILL_MAX_REACH = 90
+export const NORMAL_CHARGE_RANGE = 240
+export const NORMAL_SHOT_MIN_DISTANCE = 150
+
+/** The single family skill kind of a normal enemy, or null when it has none. */
+export function normalSkillKind(family) {
+  if (['boar', 'rhino'].includes(family)) return 'charge'
+  if (projectileElement(family) !== null) return 'shot'
+  if (['bear', 'ape', 'yak'].includes(family)) return 'slam'
+  if (['wolf', 'tiger', 'crocodile', 'centipede'].includes(family)) return 'sweep'
+  return null
+}
+
+// The ordinary attack keeps each family's previous normal-attack rhythm; only its
+// area shrinks to the standard bite. A faster bite would raise unavoidable damage.
+function normalAttackTiming(family) {
+  if (family === 'wolf') return [.7, .16, .65]
+  if (family === 'ape') return [1.05, .18, .9]
+  if (['bear', 'tiger', 'crocodile', 'rhino', 'yak'].includes(family)) return [1, .18, .9]
+  if (family === 'centipede') return [.8, .18, .75]
+  if (projectileElement(family) !== null) return [.85, .12, .7]
+  return [.65, .12, .6]
+}
+
+function normalAttackSpec(enemy, distance, ready, skillBlocked) {
+  const range0 = enemy.radius + 54
+  const [windup, active, recovery] = normalAttackTiming(enemy.family)
+  const base = { kind: 'bite', damageType: 'physical', shape: 'sector', windup,
+    active, recovery, cooldown: 1.2, range: range0, radius: range0, width: 0, angle: 100,
+    damage: enemy.damage, lock: .15, speed: 0, cost: 1, segments: 1 }
+  const kind = normalSkillKind(enemy.family)
+  if (kind && !skillBlocked && ready(kind)) {
+    if (kind === 'charge' && distance >= 130 && distance <= NORMAL_CHARGE_RANGE) {
+      return { ...base, kind, shape: 'capsule', windup: .85, active: .6, recovery: .85,
+        cooldown: 5, range: NORMAL_CHARGE_RANGE, radius: enemy.radius,
+        width: enemy.radius * 2, angle: 0, lock: .2, speed: 460 }
+    }
+    // A ready shot means "pull back, then shoot"; do not bite while backing off.
+    if (kind === 'shot' && (distance < NORMAL_SHOT_MIN_DISTANCE || distance > 480)) return null
+    if (kind === 'shot') {
+      const element = projectileElement(enemy.family)
+      return { ...base, kind, shape: 'capsule', element,
+        damageType: element === 'feather' ? 'physical' : 'magic',
+        windup: .85, active: .1, recovery: .7, cooldown: 2.8, range: 480,
+        radius: 12, width: 24, angle: 0, speed: 270 }
+    }
+    if (kind === 'slam' || kind === 'sweep') {
+      const reach = enemy.family === 'wolf' ? 82 : enemy.family === 'centipede' ? 78 : NORMAL_SKILL_MAX_REACH
+      const range = enemy.radius + reach
+      const angle = enemy.family === 'wolf' || enemy.family === 'ape' ? 120 : NORMAL_SKILL_MAX_ANGLE
+      const windup = enemy.family === 'wolf' ? .7 : enemy.family === 'centipede' ? .8
+        : enemy.family === 'ape' ? 1.05 : 1
+      const spec = { ...base, kind, shape: 'sector', range, radius: range, angle,
+        windup, active: enemy.family === 'wolf' ? .16 : .18,
+        recovery: enemy.family === 'wolf' ? .65 : enemy.family === 'centipede' ? .75 : .9,
+        cooldown: 1.8 }
+      if (distance <= range + PLAYER_RADIUS) return spec
+    }
+  }
+  return distance <= base.range + PLAYER_RADIUS && ready('bite') ? base : null
+}
+
 /**
  * Spacing preference, independent of attack readiness. In approach mode the
  * caller should retreat below preferredMin, approach above preferredMax and
@@ -35,7 +110,7 @@ export function enemyCombatStyle(enemy) {
  * Callers write time + spec.cooldown at the end of recovery, never at selection.
  * `element` labels a direct projectile; poison does not imply damage over time.
  */
-export function enemyAttackSpec(enemy, distance, time, cooldowns = {}) {
+export function enemyAttackSpec(enemy, distance, time, cooldowns = {}, { skillBlocked = false } = {}) {
   if (!enemy || !nonnegative(enemy.radius) || !nonnegative(enemy.damage)
     || !nonnegative(distance) || !nonnegative(time)
     || !cooldowns || typeof cooldowns !== 'object' || Array.isArray(cooldowns)) return null
@@ -45,6 +120,9 @@ export function enemyAttackSpec(enemy, distance, time, cooldowns = {}) {
     return nonnegative(at) && time >= at
   }
   const role = roleIndex(enemy.role)
+  // A corrupt cooldown on any kind must not let a normal enemy fall through to another kind.
+  if (role === 0 && !Object.values(cooldowns).every(nonnegative)) return null
+  if (role === 0) return normalAttackSpec(enemy, distance, ready, skillBlocked)
   const baseRange = enemy.radius + 54
   const base = { kind: 'bite', damageType: 'physical', shape: 'sector', windup: [.65, .75, .85][role],
     active: .12, recovery: .6, cooldown: [1.2, 1.8, 2][role],

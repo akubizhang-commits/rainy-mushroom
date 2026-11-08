@@ -1,0 +1,32 @@
+const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
+const {createServer}=require('node:http');const {chromium}=require('/Users/zhangnu/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright');
+const ROOT=path.resolve(__dirname,'..'),OUT=path.resolve(ROOT,process.env.M21_REVIEW_OUT||'design/xianxia-monster-armor-trap-2026-11-04/game-review');
+(async()=>{fs.mkdirSync(OUT,{recursive:true});
+const server=createServer((req,res)=>{const file=path.resolve(ROOT,'.'+new URL(req.url,'http://localhost').pathname);if(!file.startsWith(ROOT+path.sep)){res.writeHead(403).end();return;}fs.readFile(file,(e,b)=>{if(e){res.writeHead(404).end();return;}res.setHeader('Content-Type',({'.html':'text/html','.js':'text/javascript','.json':'application/json','.png':'image/png','.wasm':'application/wasm','.css':'text/css'})[path.extname(file)]||'application/octet-stream');res.end(b);});});await new Promise(r=>server.listen(0,'127.0.0.1',r));
+const browser=await chromium.launch({headless:true,executablePath:'/Users/zhangnu/Library/Caches/ms-playwright/chromium_headless_shell-1247/chrome-headless-shell-mac-arm64/chrome-headless-shell'});const report={results:[],errors:[]};
+try{for(const viewport of [{width:1280,height:720},{width:844,height:390}]){
+ const page=await browser.newPage({viewport});page.on('pageerror',e=>report.errors.push(e.message));
+ await page.goto(`http://127.0.0.1:${server.address().port}/cocos-pilot/build/web-mobile/index.html?ruleset=xianxia&tower=1&smoke=1`);
+ await page.waitForFunction(()=>window.__towerTest?.host?.menu&&!window.__towerTest.host.host.assetLoading?.blocked,null,{timeout:90000});
+ await page.evaluate(()=>{
+  const h=window.__towerTest.host;h.enterTraining();h.run.pause();const s=h.run.state;
+  Object.assign(s,{floor:6,arenaVersion:1,time:10,ticks:600,effects:[],drops:[],pending:[],reserved:[],zones:[],projectiles:[],killLedger:[],monsterMechanics:{version:1,sequence:0,zones:[],nextMajorAt:0}});Object.assign(s.player,{x:0,y:0,hp:10000,maxHp:10000});
+  const e=h.run._enemy({id:'trap-owner',archetype:'bear_boss',x:160,y:0});e.maxHp=100000;e.hp=40000;e.mechanic.skills=['M21'];e.mechanic.uses={M21:0};e.mechanic.cooldowns={M21:10};s.enemies=[e];h.camera={x:0,y:0};h.run.resume();
+  for(let i=0;i<180&&!s.monsterMechanics.zones.length;i++)h.run.advance(1/60);h.run.pause();h.draw();window.trapZone=JSON.parse(JSON.stringify(s.monsterMechanics.zones[0]));
+ });
+ await page.waitForFunction(()=>window.__towerTest.host.monsterMechanics.safeSealArt.frame&&!window.__towerTest.host.host.assetLoading?.blocked);
+ const snap=async(stage)=>{const r=await page.evaluate(()=>{const h=window.__towerTest.host;h.draw();const s=h.run.state,z=window.trapZone,a=[...h.monsterMechanics.safeSealArt.patches.values()][0];return {pulses:s.enemies[0].mechanic.pulses,count:h.monsterMechanics.safeSealArt.patches.size,labels:h.monsterMechanics.labels.filter(l=>l.node.active).map(l=>l.string),frame:a?[a.sprite.spriteFrame.rect.width,a.sprite.spriteFrame.rect.height]:null,size:a?.transform.width,x:a?.node.position.x,y:a?.node.position.y,expectedX:z.x-h.camera.x,expectedY:z.y-h.camera.y};});await page.screenshot({path:path.join(OUT,`${stage}-${viewport.width}.png`)});return r;};
+ const warning=await snap('warning');assert.equal(warning.count,1);assert.deepEqual(warning.frame,[512,512]);assert.ok(Math.abs(warning.size*435.2/512-110)<1e-6);assert.equal(warning.x,warning.expectedX);assert.equal(warning.y,warning.expectedY);assert.ok(warning.labels.some(t=>t.includes('凝成')));
+ await page.evaluate(()=>{const h=window.__towerTest.host,s=h.run.state,z=window.trapZone;h.run.resume();while(s.time<z.activatesAt+.03){s.player.x=z.x-180;s.player.y=z.y;s.enemies[0].x=z.x+240;s.enemies[0].y=z.y;h.run.advance(1/60);}h.run.pause();h.draw();});
+ const empty=await snap('empty');assert.equal(empty.pulses,0);assert.ok(empty.labels.some(t=>t.includes('入阵蓄能 0%')));
+ const charge=async(steps,inside)=>page.evaluate(({steps,inside})=>{const h=window.__towerTest.host,s=h.run.state,z=window.trapZone;h.run.resume();for(let i=0;i<steps;i++){s.player.x=z.x+(inside?0:-180);s.player.y=z.y;s.enemies[0].x=z.x+240;s.enemies[0].y=z.y;h.run.advance(1/60);}h.run.pause();h.draw();return s.enemies[0].mechanic.pulses;},{steps,inside});
+ assert.equal(await charge(45,true),45);const half=await snap('half');assert.ok(half.labels.some(t=>t.includes('50%')));
+ const before=await page.evaluate(()=>JSON.stringify(window.__towerTest.host.run.state));await page.waitForTimeout(150);assert.equal(await page.evaluate(()=>JSON.stringify(window.__towerTest.host.run.state)),before);
+ assert.equal(await charge(15,false),45);assert.equal(await charge(45,true),90);const ready=await snap('ready');assert.ok(ready.labels.some(t=>t.includes('引妖入阵')));assert.ok(!ready.labels.some(t=>t.includes('安全门')));
+ const result=await page.evaluate(()=>{const h=window.__towerTest.host,s=h.run.state,z=window.trapZone;window.trapSnapshot=JSON.parse(JSON.stringify(s));s.enemies[0].x=z.x;s.enemies[0].y=z.y;h.run.resume();h.run.advance(1/60);h.run.pause();h.draw();const m=s.enemies[0].mechanic;return {count:h.monsterMechanics.safeSealArt.patches.size,skill:m.skillId,vulnerability:m.vulnerability,remaining:m.vulnerableUntil-s.time};});
+ assert.equal(result.count,0);assert.equal(result.skill,'M23');assert.equal(result.vulnerability,.2);assert.ok(result.remaining>5.9);await snap('triggered');
+ const cleanup=await page.evaluate(()=>{const h=window.__towerTest.host;h.run.state=JSON.parse(JSON.stringify(window.trapSnapshot));h.run.state.enemies[0].hp=0;h.draw();const death=h.monsterMechanics.safeSealArt.patches.size;h.run.state=JSON.parse(JSON.stringify(window.trapSnapshot));h.run.state.time=window.trapZone.expiresAt;h.draw();return {death,expiry:h.monsterMechanics.safeSealArt.patches.size};});assert.deepEqual(cleanup,{death:0,expiry:0});
+ report.results.push({viewport,warning,empty,half,ready,result,cleanup,paused:true,exitPreservesCharge:true});await page.close();
+ }assert.deepEqual(report.errors,[]);report.status='PASS';
+}catch(e){report.status='FAIL';report.error=String(e);throw e;}finally{fs.writeFileSync(path.join(OUT,'report.json'),JSON.stringify(report,null,2)+'\n');await browser.close();await new Promise(r=>server.close(r));}console.log('PASS: fixture-only M21, cumulative charge, lure trigger, pause, cleanup, two landscape sizes');
+})().catch(e=>{console.error(e);process.exitCode=1});

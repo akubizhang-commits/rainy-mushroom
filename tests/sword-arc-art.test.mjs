@@ -27,8 +27,8 @@ function fixture(profile) {
  runInNewContext(stripTypeScriptTypes(source.replace(/^import .*$/gm,'').replace(/\bexport /g,''),{mode:'transform'})+
   '\nglobalThis.Art=SwordArcArt',context)
  const art=new context.Art(profile),parent=new Node('fx')
- const image={width:profile==='tower-ice'?512:1024,height:profile==='tower-ice'?512:1024,refs:0,addRef(){this.refs++},decRef(){this.refs--}}
- return {art,parent,pending,image,requested,load(){pending.shift()(null,image)}}
+ const image={width:profile==='tower-liuyun'?2048:profile==='tower-ice'?512:1024,height:profile==='tower-liuyun'?2048:profile==='tower-ice'?512:1024,refs:0,addRef(){this.refs++},decRef(){this.refs--}}
+ return {art,parent,pending,image,requested,load(){if(['tower-ice','tower-liuyun'].includes(profile)){while(pending.length)pending.shift()(null,image)}else pending.shift()(null,image)}}
 }
 const effect={id:'fx1',kind:'arc',x:10,y:20,radius:140,faceX:0,faceY:1,expiresAt:10.25}
 
@@ -174,3 +174,24 @@ test('expired sprite bindings release capacity before a new cast on the same tic
  assert.equal(drawn.has('new'),true)
  assert.equal(art.actors.size,1);assert.equal(art.tracks.size,1)
 })
+
+test('melee three strokes reuse distinct existing ice paintings and release all references',()=>{
+ const f=fixture('tower-ice');f.art.preload();f.load();
+ const effects=[1,2,3].map(pulseIndex=>({...effect,id:`cut-${pulseIndex}`,source:'sj_arc',pulseIndex,startedAt:10}));
+ f.art.syncTower(f.parent,effects,10.1,{x:0,y:0});
+ assert.equal(new Set(effects.map(e=>f.art.actors.get(e.id).sprite.spriteFrame)).size,3);
+ assert.equal(f.image.refs,3);f.art.destroy();assert.equal(f.image.refs,0);
+});
+
+test('approved white three-cut atlas uses distinct animated frames and per-cut lifetime',()=>{
+ const f=fixture('tower-liuyun');f.art.preload();f.load();assert.equal(f.art.ready,true);
+ const effects=[1,2,3].map(pulseIndex=>({...effect,id:'cut'+pulseIndex,startedAt:10,dirX:1,dirY:0,pulseIndex}));
+ f.art.syncTower(f.parent,effects,10.05,{x:0,y:0});assert.equal(f.art.actors.size,3);
+ const a=f.art.actors.get('cut1');assert.equal(a.node.x,10);assert.equal(a.node.y,84);assert.equal(a.ui.anchorX,.25);assert.equal(a.ui.width,256);
+ assert.equal(new Set([...f.art.actors.values()].map(a=>a.sprite.spriteFrame)).size,3);
+ const frame=a.sprite.spriteFrame;f.art.syncTower(f.parent,[],10.05,{x:0,y:0});assert.equal(a.sprite.spriteFrame,frame);
+ f.art.syncTower(f.parent,[],10.20,{x:0,y:0});assert.notEqual(a.sprite.spriteFrame,frame);
+ f.art.syncTower(f.parent,[],10.26,{x:0,y:0});assert.equal(f.art.actors.size,1);assert.ok(f.art.actors.has('cut3'));
+ f.art.syncTower(f.parent,[],10.32,{x:0,y:0});assert.equal(f.art.actors.size,0);
+ f.art.destroy();assert.equal(f.image.refs,0);
+});

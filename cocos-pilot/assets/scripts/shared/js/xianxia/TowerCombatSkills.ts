@@ -10,7 +10,14 @@ function extend(d){
   // Preserve accepted geometry/cadence above trained cap. Numeric power advances.
   let next=last
   if(key==='damage')next=previous>0?last*last/previous:last
-  if(['crit_chance','damage_bonus','speed_bonus','reduction','cast_speed','reach_bonus','pickup_bonus','dot_bonus','proc_damage','budgetMultipliers','innerMultiplier'].includes(key))next=last+(last-previous)
+  // Liangyi's trained-rank transition bonus stops growing at ten. Preserve
+  // the existing +15% equipment rank rather than extrapolating that bonus.
+  if(key==='damage'&&d.id==='sj_formation')next=last*1.15
+  // 2026-11-06：御剑9级被压低到95%，装备11级仍按原13%增幅外推，不放大成19%。
+  if(key==='damage'&&d.id==='sj_yujian')next=last*1.13
+  // 玄月斩7–10级倍率收窄后，装备11级仍按原15%增幅外推。
+  if(key==='damage'&&d.id==='sj_moon')next=last*1.15
+  if(['crit_chance','damage_bonus','speed_bonus','reduction','cast_speed','reach_bonus','pickup_bonus','dot_bonus','dot_tick','proc_damage','budgetMultipliers','innerMultiplier'].includes(key))next=last+(last-previous)
   if(d.id==='sj_flight'&&key==='speed_bonus')next=.30
   if(d.id==='sj_yujian'&&key==='swords')next=10
   result[key]=Object.freeze([...v,next])

@@ -1,0 +1,570 @@
+{
+  "seed": "sword-balance-1",
+  "route": "orbit",
+  "arm": "move-only",
+  "outcome": "lost",
+  "time": 314.100000000043,
+  "level": 18,
+  "killer": "moth",
+  "lastHit": {
+    "type": "playerHurt",
+    "sourceKind": "moth",
+    "attackerKind": "moth",
+    "sourceUid": 800,
+    "hpBefore": 3,
+    "hpAfter": -7,
+    "amount": 10,
+    "effectiveAmount": 3,
+    "tick": 18847
+  },
+  "bossAt": null,
+  "bossDead": null,
+  "bossSnapshot": null,
+  "final": {
+    "level": 18,
+    "xp": 142,
+    "needed": 150,
+    "fieldXp": 1,
+    "nearXp": 0,
+    "primary": "sj_wanjian",
+    "flags": {
+      "missingWeapon": false,
+      "weaponNotMax": false,
+      "passiveNotReady": true,
+      "levelNotReady": true,
+      "timeNotReady": true,
+      "capReached": false,
+      "evolved": false
+    },
+    "pendingLevels": 0,
+    "offeredEvolution": null,
+    "lastEvolutionOfferedId": null,
+    "eligible": false,
+    "bossHp": null
+  },
+  "damage": {
+    "sj_yujian/base/ordinary": {
+      "nominal": 145502,
+      "effective": 127132.09999999953,
+      "overkill": 18369.899999999972,
+      "hits": 1301
+    },
+    "sj_wanjian/base/ordinary": {
+      "nominal": 108873,
+      "effective": 101021.17499999993,
+      "overkill": 7851.825000000015,
+      "hits": 1261
+    },
+    "sj_arc/base/ordinary": {
+      "nominal": 62429,
+      "effective": 46873.550000000054,
+      "overkill": 15555.450000000015,
+      "hits": 275
+    },
+    "sj_mark/base/ordinary": {
+      "nominal": 992,
+      "effective": 992,
+      "overkill": 0,
+      "hits": 302
+    }
+  },
+  "hurt": {
+    "2/moth/moth": {
+      "amount": 7,
+      "effective": 7,
+      "hits": 1
+    },
+    "2/beetle/beetle": {
+      "amount": 9,
+      "effective": 9,
+      "hits": 1
+    },
+    "3/moth/moth": {
+      "amount": 18,
+      "effective": 18,
+      "hits": 2
+    },
+    "3/beetle/beetle": {
+      "amount": 24,
+      "effective": 24,
+      "hits": 2
+    },
+    "4/mist_bubble/sporeling": {
+      "amount": 42,
+      "effective": 42,
+      "hits": 6
+    },
+    "4/moth/moth": {
+      "amount": 9,
+      "effective": 9,
+      "hits": 1
+    },
+    "4/gnat/gnat": {
+      "amount": 7,
+      "effective": 7,
+      "hits": 1
+    },
+    "4/beetle/beetle": {
+      "amount": 24,
+      "effective": 24,
+      "hits": 2
+    },
+    "5/mist_bubble/sporeling": {
+      "amount": 46,
+      "effective": 46,
+      "hits": 6
+    },
+    "5/gnat/gnat": {
+      "amount": 9,
+      "effective": 9,
+      "hits": 1
+    },
+    "5/moth/moth": {
+      "amount": 10,
+      "effective": 3,
+      "hits": 1
+    }
+  },
+  "choices": [
+    {
+      "time": 11.666666666666826,
+      "level": 2,
+      "picked": {
+        "kind": "weapon",
+        "id": "sj_wanjian",
+        "level": 1,
+        "isNew": true,
+        "evolution": false
+      },
+      "offer": [
+        "weapon:sj_arc",
+        "weapon:sj_wanjian",
+        "weapon:sj_yujian"
+      ]
+    },
+    {
+      "time": 19.333333333333517,
+      "level": 3,
+      "picked": {
+        "kind": "weapon",
+        "id": "sj_yujian",
+        "level": 2,
+        "isNew": false,
+        "evolution": false
+      },
+      "offer": [
+        "weapon:sj_yujian",
+        "weapon:sj_arc",
+        "passive:vajra"
+      ]
+    },
+    {
+      "time": 34.98333333333263,
+      "level": 4,
+      "picked": {
+        "kind": "weapon",
+        "id": "sj_arc",
+        "level": 1,
+        "isNew": true,
+        "evolution": false
+      },
+      "offer": [
+        "passive:sj_bone",
+        "passive:vajra",
+        "weapon:sj_arc"
+      ]
+    },
+    {
+      "time": 50.94999999999839,
+      "level": 5,
+      "picked": {
+        "kind": "weapon",
+        "id": "sj_yujian",
+        "level": 3,
+        "isNew": false,
+        "evolution": false
+      },
+      "offer": [
+        "weapon:sj_yujian",
+        "passive:sj_bone",
+        "weapon:sj_arc"
+      ]
+    },
+    {
+      "time": 78.13333333333019,
+      "level": 6,
+      "picked": {
+        "kind": "weapon",
+        "id": "sj_wanjian",
+        "level": 2,
+        "isNew": false,
+        "evolution": false
+      },
+      "offer": [
+        "weapon:sj_wanjian",
+        "weapon:sj_yujian",
+        "weapon:sj_arc"
+      ]
+    },
+    {
+      "time": 92.23333333332938,
+      "level": 7,
+      "picked": {
+        "kind": "weapon",
+        "id": "sj_yujian",
+        "level": 4,
+        "isNew": false,
+        "evolution": false
+      },
+      "offer": [
+        "weapon:sj_yujian",
+        "weapon:sj_arc",
+        "passive:magnet"
+      ]
+    },
+    {
+      "time": 114.96666666666142,
+      "level": 8,
+      "picked": {
+        "kind": "weapon",
+        "id": "sj_yujian",
+        "level": 5,
+        "isNew": false,
+        "evolution": false
+      },
+      "offer": [
+        "passive:sj_heart",
+        "passive:vajra",
+        "weapon:sj_yujian"
+      ]
+    },
+    {
+      "time": 135.4666666666666,
+      "level": 9,
+      "picked": {
+        "kind": "passive",
+        "id": "sj_heart",
+        "level": 1,
+        "isNew": true,
+        "evolution": false
+      },
+      "offer": [
+        "passive:magnet",
+        "pill:pill_body",
+        "passive:sj_heart"
+      ]
+    },
+    {
+      "time": 150.81666666667883,
+      "level": 10,
+      "picked": {
+        "kind": "weapon",
+        "id": "sj_wanjian",
+        "level": 3,
+        "isNew": false,
+        "evolution": false
+      },
+      "offer": [
+        "weapon:sj_line",
+        "weapon:sj_wanjian",
+        "pill:pill_wind"
+      ]
+    },
+    {
+      "time": 161.78333333335422,
+      "level": 11,
+      "picked": {
+        "kind": "weapon",
+        "id": "sj_arc",
+        "level": 2,
+        "isNew": false,
+        "evolution": false
+      },
+      "offer": [
+        "weapon:sj_line",
+        "weapon:sj_arc",
+        "passive:sj_bone"
+      ]
+    },
+    {
+      "time": 185.08333333337276,
+      "level": 12,
+      "picked": {
+        "kind": "weapon",
+        "id": "sj_arc",
+        "level": 3,
+        "isNew": false,
+        "evolution": false
+      },
+      "offer": [
+        "weapon:sj_shadow",
+        "pill:pill_wind",
+        "weapon:sj_arc"
+      ]
+    },
+    {
+      "time": 205.7333333333892,
+      "level": 13,
+      "picked": {
+        "kind": "weapon",
+        "id": "sj_wanjian",
+        "level": 4,
+        "isNew": false,
+        "evolution": false
+      },
+      "offer": [
+        "passive:sj_heart",
+        "weapon:sj_wanjian",
+        "pill:pill_power"
+      ]
+    },
+    {
+      "time": 219.91666666673382,
+      "level": 14,
+      "picked": {
+        "kind": "passive",
+        "id": "sj_heart",
+        "level": 2,
+        "isNew": false,
+        "evolution": false
+      },
+      "offer": [
+        "passive:sj_heart",
+        "pill:pill_body",
+        "weapon:sj_shadow"
+      ]
+    },
+    {
+      "time": 237.50000000008114,
+      "level": 15,
+      "picked": {
+        "kind": "weapon",
+        "id": "sj_wanjian",
+        "level": 5,
+        "isNew": false,
+        "evolution": false
+      },
+      "offer": [
+        "passive:sj_heart",
+        "weapon:sj_arc",
+        "weapon:sj_wanjian"
+      ]
+    },
+    {
+      "time": 258.56666666676017,
+      "level": 16,
+      "picked": {
+        "kind": "passive",
+        "id": "vajra",
+        "level": 1,
+        "isNew": true,
+        "evolution": false
+      },
+      "offer": [
+        "passive:vajra",
+        "weapon:sj_formation",
+        "weapon:sj_line"
+      ]
+    },
+    {
+      "time": 278.36666666674216,
+      "level": 17,
+      "picked": {
+        "kind": "weapon",
+        "id": "sj_arc",
+        "level": 4,
+        "isNew": false,
+        "evolution": false
+      },
+      "offer": [
+        "passive:vajra",
+        "weapon:sj_arc",
+        "weapon:sj_line"
+      ]
+    },
+    {
+      "time": 300.5500000000553,
+      "level": 18,
+      "picked": {
+        "kind": "passive",
+        "id": "sj_mark",
+        "level": 1,
+        "isNew": true,
+        "evolution": false
+      },
+      "offer": [
+        "passive:sj_mark",
+        "weapon:sj_shadow",
+        "passive:vajra"
+      ]
+    }
+  ],
+  "evolutions": [],
+  "snapshots": [
+    {
+      "sec": 0,
+      "level": 1,
+      "xp": 0,
+      "needed": 5,
+      "fieldXp": 0,
+      "nearXp": 0,
+      "primary": "sj_wanjian",
+      "flags": {
+        "missingWeapon": true,
+        "weaponNotMax": false,
+        "passiveNotReady": true,
+        "levelNotReady": true,
+        "timeNotReady": true,
+        "capReached": false,
+        "evolved": false
+      },
+      "pendingLevels": 0,
+      "offeredEvolution": null,
+      "lastEvolutionOfferedId": null,
+      "eligible": false,
+      "bossHp": null
+    },
+    {
+      "sec": 60,
+      "level": 5,
+      "xp": 11,
+      "needed": 31,
+      "fieldXp": 2,
+      "nearXp": 2,
+      "primary": "sj_wanjian",
+      "flags": {
+        "missingWeapon": false,
+        "weaponNotMax": true,
+        "passiveNotReady": true,
+        "levelNotReady": true,
+        "timeNotReady": true,
+        "capReached": false,
+        "evolved": false
+      },
+      "pendingLevels": 0,
+      "offeredEvolution": null,
+      "lastEvolutionOfferedId": null,
+      "eligible": false,
+      "bossHp": null
+    },
+    {
+      "sec": 120,
+      "level": 8,
+      "xp": 7,
+      "needed": 54,
+      "fieldXp": 2,
+      "nearXp": 2,
+      "primary": "sj_wanjian",
+      "flags": {
+        "missingWeapon": false,
+        "weaponNotMax": true,
+        "passiveNotReady": true,
+        "levelNotReady": true,
+        "timeNotReady": true,
+        "capReached": false,
+        "evolved": false
+      },
+      "pendingLevels": 0,
+      "offeredEvolution": null,
+      "lastEvolutionOfferedId": null,
+      "eligible": false,
+      "bossHp": null
+    },
+    {
+      "sec": 180,
+      "level": 11,
+      "xp": 66,
+      "needed": 80,
+      "fieldXp": 0,
+      "nearXp": 0,
+      "primary": "sj_wanjian",
+      "flags": {
+        "missingWeapon": false,
+        "weaponNotMax": true,
+        "passiveNotReady": true,
+        "levelNotReady": true,
+        "timeNotReady": true,
+        "capReached": false,
+        "evolved": false
+      },
+      "pendingLevels": 0,
+      "offeredEvolution": null,
+      "lastEvolutionOfferedId": null,
+      "eligible": false,
+      "bossHp": null
+    },
+    {
+      "sec": 240,
+      "level": 15,
+      "xp": 18,
+      "needed": 118,
+      "fieldXp": 1,
+      "nearXp": 1,
+      "primary": "sj_wanjian",
+      "flags": {
+        "missingWeapon": false,
+        "weaponNotMax": false,
+        "passiveNotReady": true,
+        "levelNotReady": true,
+        "timeNotReady": true,
+        "capReached": false,
+        "evolved": false
+      },
+      "pendingLevels": 0,
+      "offeredEvolution": null,
+      "lastEvolutionOfferedId": null,
+      "eligible": false,
+      "bossHp": null
+    },
+    {
+      "sec": 300,
+      "level": 17,
+      "xp": 138,
+      "needed": 139,
+      "fieldXp": 28,
+      "nearXp": 6,
+      "primary": "sj_wanjian",
+      "flags": {
+        "missingWeapon": false,
+        "weaponNotMax": false,
+        "passiveNotReady": true,
+        "levelNotReady": true,
+        "timeNotReady": true,
+        "capReached": false,
+        "evolved": false
+      },
+      "pendingLevels": 0,
+      "offeredEvolution": null,
+      "lastEvolutionOfferedId": null,
+      "eligible": false,
+      "bossHp": null
+    }
+  ],
+  "eligibilitySampleCount": {
+    "missingWeapon": 12,
+    "passiveNotReady": 315,
+    "levelNotReady": 315,
+    "timeNotReady": 315,
+    "weaponNotMax": 226
+  },
+  "exposureTicks": {
+    "sj_yujian/base": 18847,
+    "sj_wanjian/base": 18147,
+    "sj_arc/base": 16748
+  },
+  "diag": {
+    "capSkipped": {
+      "enemies": 0,
+      "pickups": 0
+    },
+    "dropped": {
+      "enemies": 0,
+      "shots": 0,
+      "bubbles": 0,
+      "zones": 0,
+      "pickups": 0
+    },
+    "droppedTime": 0
+  },
+  "steps": 18847
+}

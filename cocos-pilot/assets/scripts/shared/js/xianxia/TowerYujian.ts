@@ -14,7 +14,7 @@ export function retimeYujian(state, time, before, after) {
     ? Math.max(0, Math.min(1, (state.nextAt - time) / yujianGenerationInterval(before))) : 1
   state.nextAt = time + remaining * yujianGenerationInterval(after)
 }
-// Fixed shoulder slots, scaled from the 158px preview actor to the 108px game actor.
+// Shoulder slots, scaled from the 158px preview actor to the 108px game actor.
 // Simulation time only: pause, restore and replay cannot move these swords.
 const SCALE = 108 / 158
 const TAU = Math.PI * 2
@@ -33,8 +33,13 @@ const SHOULDER_LIFT = 26
 export function yujianHoverPose(index, time, center) {
   const side = index % 2, rank = Math.floor(index / 2)
   const [x,y] = SHOULDER_SLOTS[side][rank]
+  // One soft breath, then rest. Stagger slots without consuming combat RNG.
+  // The envelope reaches zero with zero velocity at both ends of the breath.
+  const phase = ((time + index * .73) % 6.4 + 6.4) % 6.4
+  const u = clamp((phase - 2.8) / 3.6, 0, 1)
+  const bob = 4 * Math.sin(TAU * u) * Math.sin(Math.PI * u) ** 2
   return { x: center.x + (side ? 1 : -1)*x*SCALE,
-    y: center.y + y*SCALE + SHOULDER_LIFT }
+    y: center.y + y*SCALE + SHOULDER_LIFT + bob }
 }
 export function newYujianState(player, time, loadout) {
   const face = player.faceX < 0 ? -1 : 1, angle = face < 0 ? Math.PI : 0

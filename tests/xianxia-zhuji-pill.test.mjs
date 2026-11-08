@@ -30,11 +30,12 @@ test('ten Qi layers include a full XP barrier before Foundation; gates stay lock
  assert.equal(skillRequirement(store.state,'sj_line').reason,'stage-locked')
  assert.equal(inventoryQuote(store.state,'peiyuan','use').ok,false)
 })
-test('Zhuji costs 60 contribution; failed save rolls back purchase',()=>{
+test('Zhuji costs 60 spirit stones; failed save rolls back purchase',()=>{
  const {disk,store}=fixture();assert.equal(CAMP_PILLS.zhuji.price,60)
+ const before=store.state.spiritStones,contribution=store.state.contribution
  disk.fail=true;assert.equal(store.act({type:'buyPill',id:'zhuji',count:1},0).reason,'save-failed')
  disk.fail=false;assert.equal(store.act({type:'buyPill',id:'zhuji',count:2},0).ok,true)
- assert.equal(store.state.contribution,180);assert.equal(store.state.pills.zhuji,2)
+ assert.equal(store.state.contribution,contribution);assert.equal(store.state.spiritStones,before-120);assert.equal(store.state.pills.zhuji,2)
 })
 test('premature, already promoted, and absent pills do not consume or roll',()=>{
  for(const [xp,stock,reason] of [[1799,1,'breakthrough-not-ready'],[1801,1,'already-zhuji'],[1800,0,'no-pill']]){

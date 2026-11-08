@@ -1,0 +1,73 @@
+{
+  "type": "survivor-smoke",
+  "ok": false,
+  "results": [
+    "survivor view created by PinePilot",
+    "survivor bundle and battle atlas loaded",
+    "camp page shown before battle",
+    "start run from camp",
+    "logic clock advanced 28.4s in 30s real time",
+    "scripted input moves the traveler",
+    "spore_shot purified enemies (31)",
+    "phase 1 states: playing,levelup",
+    "new weapon on field: umbrella_blades,raindrop (rendered umbrella-blade,raindrop)",
+    "phase 1 HUD slots 3/0 = run 3/0",
+    "fast-forward to 165.0s",
+    "2:30 ring event fired (nextEvent 1)",
+    "enemy pool filled to 200",
+    "full-screen enemies sustained (max 200)",
+    "phase 2 states: playing,levelup → playing",
+    "ring event banner shown",
+    "phase 2 HUD slots 4/1 = run 4/1",
+    "fast-forward to 330.0s",
+    "new enemies rendered: sporeling,moth,snail",
+    "mist bubbles fired (logic max 22, rendered max 22)",
+    "cross event banner shown",
+    "phase 3 HUD slots 4/1 = run 4/1",
+    "5:00 elite spawned (eliteSpawn event)",
+    "elite rendered (alive)",
+    "dew drop injected",
+    "dew drop rendered and picked up, heal event (hp 60 → 80)",
+    "wind drop injected",
+    "wind drop rendered, picked up, banner shown"
+  ],
+  "errors": [],
+  "metrics": {
+    "raindropHint": false,
+    "maxNodes": 323,
+    "maxDrawCalls": 8,
+    "maxModalDrawCalls": 11,
+    "maxEnemies": 200,
+    "maxMist": 34,
+    "maxMistShown": 31,
+    "states": [
+      "playing",
+      "levelup"
+    ],
+    "events": [
+      "weaponFired",
+      "purified",
+      "pickup",
+      "levelUp",
+      "levelUpOffer",
+      "levelUpPick",
+      "playerHurt",
+      "raindropWarn",
+      "eliteSpawn",
+      "eliteCharge",
+      "heal"
+    ],
+    "dcByState": {
+      "playing/": 8,
+      "levelup/levelup": 11
+    },
+    "dcHist": {
+      "6": 1082,
+      "7": 455,
+      "8": 52,
+      "9": 1,
+      "11": 98
+    }
+  },
+  "error": "Error: wind pulled in far spores"
+}

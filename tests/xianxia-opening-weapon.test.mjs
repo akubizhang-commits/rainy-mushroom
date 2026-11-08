@@ -50,12 +50,12 @@ test('purchase survives save failure, retry and reload without duplicate gear or
   const stones=reload.state.spiritStones;assert.equal(reload.act(action,0).duplicate,true);assert.equal(reload.state.spiritStones,stones)
  }
 })
-test('new weapon cannot be equipped below its own gate even though other fan weapons can',()=>{
+test('held qingfeng equips at level one while its purchase gate remains level two',()=>{
  const {disk,store}=fixture(0),gear=createFixedWeapon('eq_sword_qingfeng','weapon-1')
  const e=JSON.parse(disk.raw);e.data=JSON.stringify({...store.state,weapons:{...store.state.weapons,[gear.id]:gear},weaponSequence:1,weaponCounters:{...store.state.weaponCounters,[gear.id]:0}});e.checksum=checksum(e.data);disk.raw=JSON.stringify(e)
  const reload=new TowerCampaignStore(disk,0);assert.equal(reload.readOnly,false)
- const before=reload.state;assert.equal(reload.act({type:'setLoadout',index:0,loadout:{...before.loadouts[0],weaponId:gear.id}},0).ok,false)
- assert.equal(reload.state,before)
+ const before=reload.state;assert.equal(reload.act({type:'setLoadout',index:0,loadout:{...before.loadouts[0],weaponId:gear.id}},0).ok,true)
+ assert.equal(new TowerCampaignStore(disk,0).state.loadouts[0].weaponId,gear.id)
 })
 test('transition base attack stays between starter shop weapon and formal general weapon',()=>{
  for(const value of [weaponFlatAttack,weaponFlatMagicAttack]){
@@ -81,6 +81,6 @@ test('combat damage and inventory requirement preserve the intended progression'
  assert.deepEqual(EQUIPMENT_RANGES['fan:2'].weapon.general,[[24,24],[24,24]])
  const result=store.act({type:'buyGear',id:recipeId,count:1,sequence:1,requestId:'inspect'},0)
  const row=inventoryEntries(store.state).find(row=>row.id===result.ids[0]),detail=inventoryDetail(store.state,row)
- assert.equal(detail.requirement,'炼气·二层');assert.equal(detail.requirementMet,true)
- assert.equal(inventoryDetail({...store.state,xp:44},row).requirementMet,false)
+ assert.equal(detail.requirement,'炼气');assert.equal(detail.requirementMet,true)
+ assert.equal(inventoryDetail({...store.state,xp:44},row).requirementMet,true)
 })

@@ -1,4 +1,5 @@
 import test from 'node:test'
+import { resonanceDamageFactor } from '../js/xianxia/TowerResonance.js'
 import assert from 'node:assert/strict'
 import fs from 'node:fs'
 import {createFixedWeapon,weaponSummary,WEAPONS} from '../js/xianxia/TowerWeapons.js'
@@ -13,7 +14,7 @@ const gear=(id)=>createFixedEquipment(id,id)
 const weapon=id=>createFixedWeapon(id,id)
 const fixture=()=>structuredClone(JSON.parse(fs.readFileSync('reports/flow-equal-budget-2026-11-02/controlled.json')).fixtures[0])
 function make(armorId='eq_armor_wugou',ringId='eq_ring_dingwei'){
- const f=fixture(),l=f.loadout;l.weapon=weapon('eq_sword_taiheng');l.armor=gear(armorId);l.ring=gear(ringId)
+ const f=fixture(),l=f.loadout;if(l.passive.sj_mark)l.passive.sj_mark=1;l.weapon=weapon('eq_sword_taiheng');l.armor=gear(armorId);l.ring=gear(ringId)
  for(const k of ['weapon','armor','ring'])l[k+'Id']=l[k].id
  l.weaponQuality=4;l.weaponRefine=0
  return new TowerRun({attemptId:1,floor:9,seed:101,xp:f.xp,hp:stats(f.xp,l).maxHp,loadout:l,arenaVersion:1})
@@ -50,8 +51,9 @@ test('safe recovery waits four simulation seconds, resets on damage and respects
 })
 test('formation ring applies only to its family; funded common skill damage is lower',()=>{
  const l=make().state.loadout;assert.equal(value(l.ring,'skillDamage'),10)
- const base=outgoingDamageFactor(l,'sj_arc','physical',true)
- assert.ok(outgoingDamageFactor(l,'sj_formation','physical',true)>base)
+ // 85号：去掉主修共鸣，只比较戒指词条。
+ const base=outgoingDamageFactor(l,'sj_arc','physical',true)/resonanceDamageFactor(l,'sj_arc')
+ assert.ok(outgoingDamageFactor(l,'sj_formation','physical',true)/resonanceDamageFactor(l,'sj_formation')>base)
  assert.equal(outgoingDamageFactor(l,'evo_sixiang','physical',true),outgoingDamageFactor(l,'sj_formation','physical',true))
 })
 test('both armor effects run through actual battle updates and deterministic snapshot restoration',()=>{
@@ -85,17 +87,14 @@ test('paused equipment refresh preserves the full authored shield and never rest
  assert.equal(r.state.armorState.shield,remainder)
  assert.ok(validateTowerSnapshot(r.snapshot()))
 })
-test('DOT ring boosts only converted budget and never grants a missing damage source',()=>{
- const r=make('eq_armor_chengxiao','eq_ring_weiming');for(let i=0;i<300&&!r.state.enemies.length;i++)r.advance(1/60)
+test('DOT ring does not turn the current vulnerability mark into periodic damage',()=>{
+ const r=make('eq_armor_chengxiao','eq_ring_weiming')
+ for(let i=0;i<300&&!r.state.enemies.length;i++)r.advance(1/60)
  const e=r.state.enemies[0];e.hp=e.maxHp=1e7;r._random=()=>.99
- const before=e.hp;r._damageEnemy({target:e.id,source:'sj_arc',damage:100,direct:true})
- const direct=100*outgoingDamageFactor(r.state.loadout,'sj_arc','physical',true)*.5
- // Taiheng boosts learned mark 4 -> 5 (20%); the ring adds 12 percentage points.
- assert.ok(Math.abs(e.qingpingDot.remaining/direct-1.32)<1e-8)
- const t=make('eq_armor_chengxiao','eq_ring_weiming');delete t.state.loadout.passive.sj_mark;delete t.state.loadout.trainedSkills.passive.sj_mark
- for(let i=0;i<300&&!t.state.enemies.length;i++)t.advance(1/60)
- const enemy=t.state.enemies[0];enemy.hp=1e7;t._random=()=>.99;t._damageEnemy({target:enemy.id,source:'sj_arc',damage:100,direct:true})
- assert.equal(enemy.qingpingDot,undefined);assert.equal(enemy.weaponBleed,undefined)
+ r._damageEnemy({target:e.id,source:'sj_arc',damage:100,direct:true})
+ assert.ok(e.scarDebuff,'current Qingping applies a vulnerability mark')
+ assert.equal(e.qingpingDot,undefined)
+ assert.equal(e.weaponBleed,undefined,'a DOT bonus cannot grant a missing conversion source')
 })
 test('safe-recovery pulse heals the authored amount below the cap and only two armor identities have conditional effects',()=>{
  const r=make('eq_armor_chengxiao'),s=r.state;s.player.hp=s.player.maxHp*.5;s.time=6;s.ticks=360

@@ -79,7 +79,7 @@ test('fresh and restored instances default to normal damage; disabling assist re
   assert.deepEqual(run.snapshot(), restored.snapshot())
   const surviving = run.state.enemies.find(e => e.id === boss.id)
   assert.ok(surviving)
-  close(boss.maxHp - surviving.hp, original.player.attack * .2)
+  close(boss.maxHp - surviving.hp, (original.player.attack*500/(500+surviving.physicalDefense) + original.player.magicAttack*500/(500+surviving.magicDefense)) / 2 * .2)
   assert.ok(validateTowerSnapshot(restored.snapshot()))
 
   const fresh = make({ floor: 9 })
@@ -88,7 +88,7 @@ test('fresh and restored instances default to normal damage; disabling assist re
   enemy.x = fresh.state.player.x + 60; enemy.y = fresh.state.player.y
   enemy.ai.graceUntil = 99999
   fresh.advance(STEP)
-  close(enemy.maxHp - enemy.hp, fresh.state.player.attack * .2)
+  close(enemy.maxHp - enemy.hp, (fresh.state.player.attack*500/(500+enemy.physicalDefense) + fresh.state.player.magicAttack*500/(500+enemy.magicDefense)) / 2 * .2)
   assert.ok(enemy.hp > 0)
 })
 
@@ -107,19 +107,19 @@ test('assist ignores missiles and repeated hostile ground damage; disabling and 
   run.setPlaytestAssist(true)
   run.advance(.5); normal.advance(.5)
   assert.equal(run.state.player.hp, 37.5)
-  assert.equal(normal.state.player.hp, 29.5)
+  assert.equal(normal.state.player.hp, 21.5)
   assert.equal(run.state.hurtUntil, 0, 'blocked hits do not bank a damage-immunity timer')
   const original = run.snapshot(), restored = TowerRun.restore(original)
   assert.equal(restored.state.player.hp, 37.5)
   restored.advance(1)
-  assert.equal(restored.state.player.hp, 31.5, 'restoration never inherits assist')
+  assert.equal(restored.state.player.hp, 25.5, 'restoration never inherits assist')
   run.advance(1)
   assert.equal(run.state.player.hp, 37.5)
   assert.ok(validateTowerSnapshot(run.snapshot()))
   run.setPlaytestAssist(false)
   assert.equal(run.state.player.hp, 37.5)
   run.advance(1)
-  assert.equal(run.state.player.hp, 31.5, 'the next remaining DOT tick damages normally')
+  assert.equal(run.state.player.hp, 25.5, 'the next remaining DOT tick damages normally')
   assert.ok(validateTowerSnapshot(run.snapshot()))
 })
 

@@ -1,0 +1,4421 @@
+{
+  "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/index.html?ruleset=xianxia&tower=1",
+  "status": "AUTOMATED_CHECKS_PASSED_VISUAL_REVIEW_PENDING",
+  "selection": {
+    "cases": [
+      "library-fixture",
+      "aura",
+      "research",
+      "playtest-isolation",
+      "startup-isolation",
+      "camp-recovery"
+    ],
+    "sizes": []
+  },
+  "startedAt": "2026-10-28T03:27:46.282Z",
+  "results": [
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "label": "library-fixture",
+      "kind": "ARTIFICIAL VALIDATED CAMP FIXTURE — NOT NATURAL PROGRESSION",
+      "fixture": {
+        "sources": {
+          "xp": 10920,
+          "clearedFloor": 9,
+          "cores": 2000,
+          "tutorialWaves": 3,
+          "hp": 120
+        },
+        "transactions": [
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_yujian"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_yujian",
+              "level": 2,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_yujian"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_yujian",
+              "level": 3,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_yujian"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_yujian",
+              "level": 4,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_yujian"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_yujian",
+              "level": 5,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_yujian"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_yujian",
+              "level": 6,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_heart"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_heart",
+              "level": 1,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_heart"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_heart",
+              "level": 2,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_heart"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_heart",
+              "level": 3,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_heart"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_heart",
+              "level": 4,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "evo_wanjian"
+            },
+            "result": {
+              "ok": true,
+              "id": "evo_wanjian",
+              "level": 1,
+              "cost": 3,
+              "bookCost": 240
+            }
+          }
+        ]
+      },
+      "checks": [
+        {
+          "name": "场外秘传经卷与技能点原子扣除",
+          "passed": true,
+          "quote": {
+            "ok": true,
+            "nextLevel": 1,
+            "cost": 2,
+            "bookCost": 20
+          },
+          "before": {
+            "total": 33,
+            "spent": 14,
+            "available": 19,
+            "realm": 30,
+            "firstClear": 3,
+            "research": 0,
+            "cap": 36
+          },
+          "after": {
+            "total": 33,
+            "spent": 16,
+            "available": 17,
+            "realm": 30,
+            "firstClear": 3,
+            "research": 0,
+            "cap": 36
+          }
+        },
+        {
+          "name": "重修只退实际SP，教学与经卷保留",
+          "passed": true
+        }
+      ],
+      "actions": [
+        "藏经阁",
+        "技能节点-sj_yujian",
+        "修习至7级 · 2技能点",
+        "关闭",
+        "技能节点-sj_shadow",
+        "解锁并修习1级 · 2技能点＋20妖丹经卷费",
+        "关闭",
+        "藏经阁",
+        "查看全洗退款明细",
+        "确认全洗 · 返还16点"
+      ],
+      "screenshots": [
+        "ui-final-390x844-library-fixture-special-book.png",
+        "ui-final-390x844-library-fixture-respec-preview.png"
+      ],
+      "errors": [],
+      "consoleErrors": [],
+      "httpErrors": [],
+      "ok": true,
+      "build": {
+        "scripts": [
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/polyfills.bundle.5adbf.js",
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/system.bundle.cc789.js",
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/import-map.14612.json"
+        ],
+        "growthVersion": null
+      }
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "label": "aura1-fixture",
+      "kind": "ARTIFICIAL VALIDATED CAMP FIXTURE — NOT NATURAL PROGRESSION",
+      "fixture": {
+        "sources": {
+          "xp": 10920,
+          "clearedFloor": 9,
+          "cores": 2000,
+          "tutorialWaves": 3,
+          "hp": 120
+        },
+        "transactions": [
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_heart"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_heart",
+              "level": 1,
+              "cost": 1,
+              "bookCost": 0
+            }
+          }
+        ]
+      },
+      "checks": [
+        {
+          "name": "暂停快照完全静止",
+          "passed": true,
+          "passiveCount": 1
+        },
+        {
+          "name": "真实不走位死亡模拟",
+          "phase": "lost",
+          "clearedWaves": [
+            1
+          ],
+          "earned": {
+            "xp": 0,
+            "cores": 1,
+            "contribution": 2
+          },
+          "time": 25.733333333333334,
+          "passed": true
+        }
+      ],
+      "actions": [
+        "锁妖塔",
+        "重访第9层",
+        "暂停",
+        "继续挑战"
+      ],
+      "screenshots": [
+        "ui-final-390x844-aura1-fixture-playing.png",
+        "ui-final-390x844-aura1-fixture-paused-a.png",
+        "ui-final-390x844-aura1-fixture-paused-b.png",
+        "ui-final-390x844-aura1-fixture-dead.png"
+      ],
+      "errors": [],
+      "consoleErrors": [],
+      "httpErrors": [],
+      "ok": true,
+      "build": {
+        "scripts": [
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/polyfills.bundle.5adbf.js",
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/system.bundle.cc789.js",
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/import-map.14612.json"
+        ],
+        "growthVersion": null
+      },
+      "visualReview": {
+        "status": "REQUIRES_IMAGE_REVIEW",
+        "expectedRings": 1,
+        "checks": [
+          "实际显示对应1/6种光环",
+          "暂停光环不动",
+          "真实死亡后光环消失"
+        ],
+        "deathEvidence": "宿主真实死亡后立即返回结算页；此截图只能证明结算页无残留光环，不声称捕获了独立死亡战斗帧。"
+      }
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "label": "aura6-fixture",
+      "kind": "ARTIFICIAL VALIDATED CAMP FIXTURE — NOT NATURAL PROGRESSION",
+      "fixture": {
+        "sources": {
+          "xp": 10920,
+          "clearedFloor": 9,
+          "cores": 2000,
+          "tutorialWaves": 3,
+          "hp": 120
+        },
+        "transactions": [
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_heart"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_heart",
+              "level": 1,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "vajra"
+            },
+            "result": {
+              "ok": true,
+              "id": "vajra",
+              "level": 1,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "magnet"
+            },
+            "result": {
+              "ok": true,
+              "id": "magnet",
+              "level": 1,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_mark"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_mark",
+              "level": 1,
+              "cost": 1,
+              "bookCost": 10
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_bone"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_bone",
+              "level": 1,
+              "cost": 1,
+              "bookCost": 10
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_gate"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_gate",
+              "level": 1,
+              "cost": 1,
+              "bookCost": 10
+            }
+          }
+        ]
+      },
+      "checks": [
+        {
+          "name": "暂停快照完全静止",
+          "passed": true,
+          "passiveCount": 6
+        },
+        {
+          "name": "真实不走位死亡模拟",
+          "phase": "lost",
+          "clearedWaves": [
+            1
+          ],
+          "earned": {
+            "xp": 0,
+            "cores": 1,
+            "contribution": 2
+          },
+          "time": 26.566666666666666,
+          "passed": true
+        }
+      ],
+      "actions": [
+        "锁妖塔",
+        "重访第9层",
+        "暂停",
+        "继续挑战"
+      ],
+      "screenshots": [
+        "ui-final-390x844-aura6-fixture-playing.png",
+        "ui-final-390x844-aura6-fixture-paused-a.png",
+        "ui-final-390x844-aura6-fixture-paused-b.png",
+        "ui-final-390x844-aura6-fixture-dead.png"
+      ],
+      "errors": [],
+      "consoleErrors": [],
+      "httpErrors": [],
+      "ok": true,
+      "build": {
+        "scripts": [
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/polyfills.bundle.5adbf.js",
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/system.bundle.cc789.js",
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/import-map.14612.json"
+        ],
+        "growthVersion": null
+      },
+      "visualReview": {
+        "status": "REQUIRES_IMAGE_REVIEW",
+        "expectedRings": 6,
+        "checks": [
+          "实际显示对应1/6种光环",
+          "暂停光环不动",
+          "真实死亡后光环消失"
+        ],
+        "deathEvidence": "宿主真实死亡后立即返回结算页；此截图只能证明结算页无残留光环，不声称捕获了独立死亡战斗帧。"
+      }
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "label": "startup-isolation",
+      "kind": "NATURAL: fresh storage, paid pills, real simulation",
+      "fixture": null,
+      "checks": [
+        {
+          "name": "playtest启动seed失败保持隔离只读，真实重试与购买仅写体验档",
+          "passed": true,
+          "faultAttempts": 1
+        }
+      ],
+      "actions": [
+        "丹鼎阁",
+        "购买一颗 · 20贡献",
+        "丹鼎阁",
+        "宗门",
+        "体验工具",
+        "重试打开体验档",
+        "返回宗门",
+        "丹鼎阁",
+        "购买一颗 · 20贡献"
+      ],
+      "screenshots": [
+        "ui-final-390x844-startup-isolation-readonly-seed-failure.png",
+        "ui-final-390x844-startup-isolation-retry-isolated-success.png"
+      ],
+      "errors": [],
+      "consoleErrors": [],
+      "httpErrors": [],
+      "ok": true,
+      "build": {
+        "scripts": [
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/polyfills.bundle.5adbf.js",
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/system.bundle.cc789.js",
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/import-map.14612.json"
+        ],
+        "growthVersion": null
+      }
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "label": "camp-recovery",
+      "kind": "VALIDATED HIGH-PROGRESS CAMP FIXTURE + injected storage failure; NOT natural damage/progression",
+      "fixture": {
+        "sources": {
+          "xp": 10920,
+          "clearedFloor": 9,
+          "cores": 2000,
+          "tutorialWaves": 3,
+          "hp": 119.96
+        },
+        "transactions": []
+      },
+      "checks": [
+        {
+          "name": "camp自动sync失败→恢复重新启用真实消费按钮，全程保留体验标识且普通raw不变",
+          "passed": true
+        }
+      ],
+      "actions": [
+        "体验工具",
+        "进入独立体验档",
+        "返回宗门",
+        "丹鼎阁",
+        "购买一颗 · 20贡献"
+      ],
+      "screenshots": [
+        "ui-final-390x844-camp-recovery-vitals-full-marker.png",
+        "ui-final-390x844-camp-recovery-sync-failed-disabled.png",
+        "ui-final-390x844-camp-recovery-sync-recovered-purchase.png"
+      ],
+      "errors": [],
+      "consoleErrors": [],
+      "httpErrors": [],
+      "ok": true,
+      "build": {
+        "scripts": [
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/polyfills.bundle.5adbf.js",
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/system.bundle.cc789.js",
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/import-map.14612.json"
+        ],
+        "growthVersion": null
+      }
+    },
+    {
+      "viewport": {
+        "width": 360,
+        "height": 640
+      },
+      "label": "library-fixture",
+      "kind": "ARTIFICIAL VALIDATED CAMP FIXTURE — NOT NATURAL PROGRESSION",
+      "fixture": {
+        "sources": {
+          "xp": 10920,
+          "clearedFloor": 9,
+          "cores": 2000,
+          "tutorialWaves": 3,
+          "hp": 120
+        },
+        "transactions": [
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_yujian"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_yujian",
+              "level": 2,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_yujian"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_yujian",
+              "level": 3,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_yujian"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_yujian",
+              "level": 4,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_yujian"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_yujian",
+              "level": 5,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_yujian"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_yujian",
+              "level": 6,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_heart"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_heart",
+              "level": 1,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_heart"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_heart",
+              "level": 2,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_heart"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_heart",
+              "level": 3,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_heart"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_heart",
+              "level": 4,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "evo_wanjian"
+            },
+            "result": {
+              "ok": true,
+              "id": "evo_wanjian",
+              "level": 1,
+              "cost": 3,
+              "bookCost": 240
+            }
+          }
+        ]
+      },
+      "checks": [
+        {
+          "name": "场外秘传经卷与技能点原子扣除",
+          "passed": true,
+          "quote": {
+            "ok": true,
+            "nextLevel": 1,
+            "cost": 2,
+            "bookCost": 20
+          },
+          "before": {
+            "total": 33,
+            "spent": 14,
+            "available": 19,
+            "realm": 30,
+            "firstClear": 3,
+            "research": 0,
+            "cap": 36
+          },
+          "after": {
+            "total": 33,
+            "spent": 16,
+            "available": 17,
+            "realm": 30,
+            "firstClear": 3,
+            "research": 0,
+            "cap": 36
+          }
+        },
+        {
+          "name": "重修只退实际SP，教学与经卷保留",
+          "passed": true
+        }
+      ],
+      "actions": [
+        "藏经阁",
+        "技能节点-sj_yujian",
+        "修习至7级 · 2技能点",
+        "关闭",
+        "技能节点-sj_shadow",
+        "解锁并修习1级 · 2技能点＋20妖丹经卷费",
+        "关闭",
+        "藏经阁",
+        "查看全洗退款明细",
+        "确认全洗 · 返还16点"
+      ],
+      "screenshots": [
+        "ui-final-360x640-library-fixture-special-book.png",
+        "ui-final-360x640-library-fixture-respec-preview.png"
+      ],
+      "errors": [],
+      "consoleErrors": [],
+      "httpErrors": [],
+      "ok": true,
+      "build": {
+        "scripts": [
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/polyfills.bundle.5adbf.js",
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/system.bundle.cc789.js",
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/import-map.14612.json"
+        ],
+        "growthVersion": null
+      }
+    },
+    {
+      "viewport": {
+        "width": 360,
+        "height": 640
+      },
+      "label": "aura1-fixture",
+      "kind": "ARTIFICIAL VALIDATED CAMP FIXTURE — NOT NATURAL PROGRESSION",
+      "fixture": {
+        "sources": {
+          "xp": 10920,
+          "clearedFloor": 9,
+          "cores": 2000,
+          "tutorialWaves": 3,
+          "hp": 120
+        },
+        "transactions": [
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_heart"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_heart",
+              "level": 1,
+              "cost": 1,
+              "bookCost": 0
+            }
+          }
+        ]
+      },
+      "checks": [
+        {
+          "name": "暂停快照完全静止",
+          "passed": true,
+          "passiveCount": 1
+        },
+        {
+          "name": "真实不走位死亡模拟",
+          "phase": "lost",
+          "clearedWaves": [
+            1
+          ],
+          "earned": {
+            "xp": 0,
+            "cores": 1,
+            "contribution": 2
+          },
+          "time": 27.766666666666666,
+          "passed": true
+        }
+      ],
+      "actions": [
+        "锁妖塔",
+        "重访第9层",
+        "暂停",
+        "继续挑战"
+      ],
+      "screenshots": [
+        "ui-final-360x640-aura1-fixture-playing.png",
+        "ui-final-360x640-aura1-fixture-paused-a.png",
+        "ui-final-360x640-aura1-fixture-paused-b.png",
+        "ui-final-360x640-aura1-fixture-dead.png"
+      ],
+      "errors": [],
+      "consoleErrors": [],
+      "httpErrors": [],
+      "ok": true,
+      "build": {
+        "scripts": [
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/polyfills.bundle.5adbf.js",
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/system.bundle.cc789.js",
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/import-map.14612.json"
+        ],
+        "growthVersion": null
+      },
+      "visualReview": {
+        "status": "REQUIRES_IMAGE_REVIEW",
+        "expectedRings": 1,
+        "checks": [
+          "实际显示对应1/6种光环",
+          "暂停光环不动",
+          "真实死亡后光环消失"
+        ],
+        "deathEvidence": "宿主真实死亡后立即返回结算页；此截图只能证明结算页无残留光环，不声称捕获了独立死亡战斗帧。"
+      }
+    },
+    {
+      "viewport": {
+        "width": 360,
+        "height": 640
+      },
+      "label": "aura6-fixture",
+      "kind": "ARTIFICIAL VALIDATED CAMP FIXTURE — NOT NATURAL PROGRESSION",
+      "fixture": {
+        "sources": {
+          "xp": 10920,
+          "clearedFloor": 9,
+          "cores": 2000,
+          "tutorialWaves": 3,
+          "hp": 120
+        },
+        "transactions": [
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_heart"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_heart",
+              "level": 1,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "vajra"
+            },
+            "result": {
+              "ok": true,
+              "id": "vajra",
+              "level": 1,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "magnet"
+            },
+            "result": {
+              "ok": true,
+              "id": "magnet",
+              "level": 1,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_mark"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_mark",
+              "level": 1,
+              "cost": 1,
+              "bookCost": 10
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_bone"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_bone",
+              "level": 1,
+              "cost": 1,
+              "bookCost": 10
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_gate"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_gate",
+              "level": 1,
+              "cost": 1,
+              "bookCost": 10
+            }
+          }
+        ]
+      },
+      "checks": [
+        {
+          "name": "暂停快照完全静止",
+          "passed": true,
+          "passiveCount": 6
+        },
+        {
+          "name": "真实不走位死亡模拟",
+          "phase": "lost",
+          "clearedWaves": [
+            1
+          ],
+          "earned": {
+            "xp": 0,
+            "cores": 1,
+            "contribution": 2
+          },
+          "time": 26.566666666666666,
+          "passed": true
+        }
+      ],
+      "actions": [
+        "锁妖塔",
+        "重访第9层",
+        "暂停",
+        "继续挑战"
+      ],
+      "screenshots": [
+        "ui-final-360x640-aura6-fixture-playing.png",
+        "ui-final-360x640-aura6-fixture-paused-a.png",
+        "ui-final-360x640-aura6-fixture-paused-b.png",
+        "ui-final-360x640-aura6-fixture-dead.png"
+      ],
+      "errors": [],
+      "consoleErrors": [],
+      "httpErrors": [],
+      "ok": true,
+      "build": {
+        "scripts": [
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/polyfills.bundle.5adbf.js",
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/system.bundle.cc789.js",
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/import-map.14612.json"
+        ],
+        "growthVersion": null
+      },
+      "visualReview": {
+        "status": "REQUIRES_IMAGE_REVIEW",
+        "expectedRings": 6,
+        "checks": [
+          "实际显示对应1/6种光环",
+          "暂停光环不动",
+          "真实死亡后光环消失"
+        ],
+        "deathEvidence": "宿主真实死亡后立即返回结算页；此截图只能证明结算页无残留光环，不声称捕获了独立死亡战斗帧。"
+      }
+    },
+    {
+      "viewport": {
+        "width": 360,
+        "height": 640
+      },
+      "label": "startup-isolation",
+      "kind": "NATURAL: fresh storage, paid pills, real simulation",
+      "fixture": null,
+      "checks": [
+        {
+          "name": "playtest启动seed失败保持隔离只读，真实重试与购买仅写体验档",
+          "passed": true,
+          "faultAttempts": 1
+        }
+      ],
+      "actions": [
+        "丹鼎阁",
+        "购买一颗 · 20贡献",
+        "丹鼎阁",
+        "宗门",
+        "体验工具",
+        "重试打开体验档",
+        "返回宗门",
+        "丹鼎阁",
+        "购买一颗 · 20贡献"
+      ],
+      "screenshots": [
+        "ui-final-360x640-startup-isolation-readonly-seed-failure.png",
+        "ui-final-360x640-startup-isolation-retry-isolated-success.png"
+      ],
+      "errors": [],
+      "consoleErrors": [],
+      "httpErrors": [],
+      "ok": true,
+      "build": {
+        "scripts": [
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/polyfills.bundle.5adbf.js",
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/system.bundle.cc789.js",
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/import-map.14612.json"
+        ],
+        "growthVersion": null
+      }
+    },
+    {
+      "viewport": {
+        "width": 360,
+        "height": 640
+      },
+      "label": "camp-recovery",
+      "kind": "VALIDATED HIGH-PROGRESS CAMP FIXTURE + injected storage failure; NOT natural damage/progression",
+      "fixture": {
+        "sources": {
+          "xp": 10920,
+          "clearedFloor": 9,
+          "cores": 2000,
+          "tutorialWaves": 3,
+          "hp": 119.96
+        },
+        "transactions": []
+      },
+      "checks": [
+        {
+          "name": "camp自动sync失败→恢复重新启用真实消费按钮，全程保留体验标识且普通raw不变",
+          "passed": true
+        }
+      ],
+      "actions": [
+        "体验工具",
+        "进入独立体验档",
+        "返回宗门",
+        "丹鼎阁",
+        "购买一颗 · 20贡献"
+      ],
+      "screenshots": [
+        "ui-final-360x640-camp-recovery-vitals-full-marker.png",
+        "ui-final-360x640-camp-recovery-sync-failed-disabled.png",
+        "ui-final-360x640-camp-recovery-sync-recovered-purchase.png"
+      ],
+      "errors": [],
+      "consoleErrors": [],
+      "httpErrors": [],
+      "ok": true,
+      "build": {
+        "scripts": [
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/polyfills.bundle.5adbf.js",
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/system.bundle.cc789.js",
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/import-map.14612.json"
+        ],
+        "growthVersion": null
+      }
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "label": "library-fixture",
+      "kind": "ARTIFICIAL VALIDATED CAMP FIXTURE — NOT NATURAL PROGRESSION",
+      "fixture": {
+        "sources": {
+          "xp": 10920,
+          "clearedFloor": 9,
+          "cores": 2000,
+          "tutorialWaves": 3,
+          "hp": 120
+        },
+        "transactions": [
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_yujian"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_yujian",
+              "level": 2,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_yujian"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_yujian",
+              "level": 3,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_yujian"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_yujian",
+              "level": 4,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_yujian"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_yujian",
+              "level": 5,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_yujian"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_yujian",
+              "level": 6,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_heart"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_heart",
+              "level": 1,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_heart"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_heart",
+              "level": 2,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_heart"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_heart",
+              "level": 3,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_heart"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_heart",
+              "level": 4,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "evo_wanjian"
+            },
+            "result": {
+              "ok": true,
+              "id": "evo_wanjian",
+              "level": 1,
+              "cost": 3,
+              "bookCost": 240
+            }
+          }
+        ]
+      },
+      "checks": [
+        {
+          "name": "场外秘传经卷与技能点原子扣除",
+          "passed": true,
+          "quote": {
+            "ok": true,
+            "nextLevel": 1,
+            "cost": 2,
+            "bookCost": 20
+          },
+          "before": {
+            "total": 33,
+            "spent": 14,
+            "available": 19,
+            "realm": 30,
+            "firstClear": 3,
+            "research": 0,
+            "cap": 36
+          },
+          "after": {
+            "total": 33,
+            "spent": 16,
+            "available": 17,
+            "realm": 30,
+            "firstClear": 3,
+            "research": 0,
+            "cap": 36
+          }
+        },
+        {
+          "name": "重修只退实际SP，教学与经卷保留",
+          "passed": true
+        }
+      ],
+      "actions": [
+        "藏经阁",
+        "技能节点-sj_yujian",
+        "修习至7级 · 2技能点",
+        "关闭",
+        "技能节点-sj_shadow",
+        "解锁并修习1级 · 2技能点＋20妖丹经卷费",
+        "关闭",
+        "藏经阁",
+        "查看全洗退款明细",
+        "确认全洗 · 返还16点"
+      ],
+      "screenshots": [
+        "ui-final-1280x800-library-fixture-special-book.png",
+        "ui-final-1280x800-library-fixture-respec-preview.png"
+      ],
+      "errors": [],
+      "consoleErrors": [],
+      "httpErrors": [],
+      "ok": true,
+      "build": {
+        "scripts": [
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/polyfills.bundle.5adbf.js",
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/system.bundle.cc789.js",
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/import-map.14612.json"
+        ],
+        "growthVersion": null
+      }
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "label": "aura1-fixture",
+      "kind": "ARTIFICIAL VALIDATED CAMP FIXTURE — NOT NATURAL PROGRESSION",
+      "fixture": {
+        "sources": {
+          "xp": 10920,
+          "clearedFloor": 9,
+          "cores": 2000,
+          "tutorialWaves": 3,
+          "hp": 120
+        },
+        "transactions": [
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_heart"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_heart",
+              "level": 1,
+              "cost": 1,
+              "bookCost": 0
+            }
+          }
+        ]
+      },
+      "checks": [
+        {
+          "name": "暂停快照完全静止",
+          "passed": true,
+          "passiveCount": 1
+        },
+        {
+          "name": "真实不走位死亡模拟",
+          "phase": "lost",
+          "clearedWaves": [
+            1
+          ],
+          "earned": {
+            "xp": 0,
+            "cores": 1,
+            "contribution": 2
+          },
+          "time": 26.566666666666666,
+          "passed": true
+        }
+      ],
+      "actions": [
+        "锁妖塔",
+        "重访第9层",
+        "暂停",
+        "继续挑战"
+      ],
+      "screenshots": [
+        "ui-final-1280x800-aura1-fixture-playing.png",
+        "ui-final-1280x800-aura1-fixture-paused-a.png",
+        "ui-final-1280x800-aura1-fixture-paused-b.png",
+        "ui-final-1280x800-aura1-fixture-dead.png"
+      ],
+      "errors": [],
+      "consoleErrors": [],
+      "httpErrors": [],
+      "ok": true,
+      "build": {
+        "scripts": [
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/polyfills.bundle.5adbf.js",
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/system.bundle.cc789.js",
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/import-map.14612.json"
+        ],
+        "growthVersion": null
+      },
+      "visualReview": {
+        "status": "REQUIRES_IMAGE_REVIEW",
+        "expectedRings": 1,
+        "checks": [
+          "实际显示对应1/6种光环",
+          "暂停光环不动",
+          "真实死亡后光环消失"
+        ],
+        "deathEvidence": "宿主真实死亡后立即返回结算页；此截图只能证明结算页无残留光环，不声称捕获了独立死亡战斗帧。"
+      }
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "label": "aura6-fixture",
+      "kind": "ARTIFICIAL VALIDATED CAMP FIXTURE — NOT NATURAL PROGRESSION",
+      "fixture": {
+        "sources": {
+          "xp": 10920,
+          "clearedFloor": 9,
+          "cores": 2000,
+          "tutorialWaves": 3,
+          "hp": 120
+        },
+        "transactions": [
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_heart"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_heart",
+              "level": 1,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "vajra"
+            },
+            "result": {
+              "ok": true,
+              "id": "vajra",
+              "level": 1,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "magnet"
+            },
+            "result": {
+              "ok": true,
+              "id": "magnet",
+              "level": 1,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_mark"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_mark",
+              "level": 1,
+              "cost": 1,
+              "bookCost": 10
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_bone"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_bone",
+              "level": 1,
+              "cost": 1,
+              "bookCost": 10
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_gate"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_gate",
+              "level": 1,
+              "cost": 1,
+              "bookCost": 10
+            }
+          }
+        ]
+      },
+      "checks": [
+        {
+          "name": "暂停快照完全静止",
+          "passed": true,
+          "passiveCount": 6
+        },
+        {
+          "name": "真实不走位死亡模拟",
+          "phase": "lost",
+          "clearedWaves": [
+            1
+          ],
+          "earned": {
+            "xp": 0,
+            "cores": 1,
+            "contribution": 2
+          },
+          "time": 27.766666666666666,
+          "passed": true
+        }
+      ],
+      "actions": [
+        "锁妖塔",
+        "重访第9层",
+        "暂停",
+        "继续挑战"
+      ],
+      "screenshots": [
+        "ui-final-1280x800-aura6-fixture-playing.png",
+        "ui-final-1280x800-aura6-fixture-paused-a.png",
+        "ui-final-1280x800-aura6-fixture-paused-b.png",
+        "ui-final-1280x800-aura6-fixture-dead.png"
+      ],
+      "errors": [],
+      "consoleErrors": [],
+      "httpErrors": [],
+      "ok": true,
+      "build": {
+        "scripts": [
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/polyfills.bundle.5adbf.js",
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/system.bundle.cc789.js",
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/import-map.14612.json"
+        ],
+        "growthVersion": null
+      },
+      "visualReview": {
+        "status": "REQUIRES_IMAGE_REVIEW",
+        "expectedRings": 6,
+        "checks": [
+          "实际显示对应1/6种光环",
+          "暂停光环不动",
+          "真实死亡后光环消失"
+        ],
+        "deathEvidence": "宿主真实死亡后立即返回结算页；此截图只能证明结算页无残留光环，不声称捕获了独立死亡战斗帧。"
+      }
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "label": "startup-isolation",
+      "kind": "NATURAL: fresh storage, paid pills, real simulation",
+      "fixture": null,
+      "checks": [
+        {
+          "name": "playtest启动seed失败保持隔离只读，真实重试与购买仅写体验档",
+          "passed": true,
+          "faultAttempts": 1
+        }
+      ],
+      "actions": [
+        "丹鼎阁",
+        "购买一颗 · 20贡献",
+        "丹鼎阁",
+        "宗门",
+        "体验工具",
+        "重试打开体验档",
+        "返回宗门",
+        "丹鼎阁",
+        "购买一颗 · 20贡献"
+      ],
+      "screenshots": [
+        "ui-final-1280x800-startup-isolation-readonly-seed-failure.png",
+        "ui-final-1280x800-startup-isolation-retry-isolated-success.png"
+      ],
+      "errors": [],
+      "consoleErrors": [],
+      "httpErrors": [],
+      "ok": true,
+      "build": {
+        "scripts": [
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/polyfills.bundle.5adbf.js",
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/system.bundle.cc789.js",
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/import-map.14612.json"
+        ],
+        "growthVersion": null
+      }
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "label": "camp-recovery",
+      "kind": "VALIDATED HIGH-PROGRESS CAMP FIXTURE + injected storage failure; NOT natural damage/progression",
+      "fixture": {
+        "sources": {
+          "xp": 10920,
+          "clearedFloor": 9,
+          "cores": 2000,
+          "tutorialWaves": 3,
+          "hp": 119.96
+        },
+        "transactions": []
+      },
+      "checks": [
+        {
+          "name": "camp自动sync失败→恢复重新启用真实消费按钮，全程保留体验标识且普通raw不变",
+          "passed": true
+        }
+      ],
+      "actions": [
+        "体验工具",
+        "进入独立体验档",
+        "返回宗门",
+        "丹鼎阁",
+        "购买一颗 · 20贡献"
+      ],
+      "screenshots": [
+        "ui-final-1280x800-camp-recovery-vitals-full-marker.png",
+        "ui-final-1280x800-camp-recovery-sync-failed-disabled.png",
+        "ui-final-1280x800-camp-recovery-sync-recovered-purchase.png"
+      ],
+      "errors": [],
+      "consoleErrors": [],
+      "httpErrors": [],
+      "ok": true,
+      "build": {
+        "scripts": [
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/polyfills.bundle.5adbf.js",
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/system.bundle.cc789.js",
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/import-map.14612.json"
+        ],
+        "growthVersion": null
+      }
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "label": "playtest-isolation",
+      "kind": "ISOLATED ASSISTED PLAYTEST — real clock/Run/Store; NOT normal progression or balance evidence",
+      "fixture": null,
+      "checks": [
+        {
+          "name": "实际浏览器clock ×1/×3",
+          "passed": true,
+          "normalSpeed": {
+            "wallSeconds": 1.4125,
+            "simulationSeconds": 1.4166666666666667,
+            "phase": "playing",
+            "speed": 1,
+            "rate": 1.0029498525073746
+          },
+          "tripleSpeed": {
+            "wallSeconds": 1.40360000000149,
+            "simulationSeconds": 4.25,
+            "phase": "playing",
+            "speed": 3,
+            "rate": 3.027928184664782
+          },
+          "ratio": 3.019022513533415
+        },
+        {
+          "name": "URL体验直开、刷新工具与暂停快照保留、普通档raw不变",
+          "passed": true
+        },
+        {
+          "name": "无伤与真实满血Boss秒杀抽样，快照校验通过",
+          "passed": true,
+          "bossKills": [
+            {
+              "before": {
+                "id": "a1:f1:w20:f01w20b01u01",
+                "hp": 3800,
+                "maxHp": 3800,
+                "x": 192.7087683823396,
+                "y": 553.8501157650155
+              },
+              "receipt": {
+                "id": "a1:f1:w20:f01w20b01u01",
+                "archetype": "boar_boss",
+                "wave": 20
+              },
+              "timeBefore": 281.95,
+              "timeAfter": 281.96666666666664,
+              "effectiveHitEffects": [
+                {
+                  "id": "fx1242",
+                  "kind": "hit",
+                  "x": 193.86607829815367,
+                  "y": 551.5591745749069,
+                  "radius": 12,
+                  "hostile": false,
+                  "expiresAt": 282.21666666666664,
+                  "damage": 3800
+                }
+              ]
+            }
+          ],
+          "hazardTicks": 806
+        },
+        {
+          "name": "普通↔体验隔离；返回仅真实墙钟1%maxHP/min恢复，其余字段不变",
+          "passed": true,
+          "switchWallBefore": 1793158224138,
+          "switchWallAfter": 1793158224327,
+          "baselineRestAt": 1793158216148,
+          "returnedRestAt": 1793158224147,
+          "beforeHp": 100,
+          "afterHp": 100.13364995833334,
+          "maxHp": 100.25,
+          "expectedHp": 100.13364995833334,
+          "upperHp": 100.13665745833333,
+          "otherFieldsUnchanged": true,
+          "policy": "raw immutable during experience/reload; real-wall-clock HP/restAt on return"
+        }
+      ],
+      "actions": [
+        "丹鼎阁",
+        "购买一颗 · 20贡献",
+        "服用一颗",
+        "宗门",
+        "体验工具",
+        "进入独立体验档",
+        "游戏速度 ×2",
+        "游戏速度 ×1",
+        "无敌秒杀：关闭",
+        "返回宗门",
+        "锁妖塔",
+        "继续挑战第1层",
+        "暂停",
+        "体验工具",
+        "游戏速度 ×3",
+        "返回战斗",
+        "暂停",
+        "体验工具",
+        "返回战斗",
+        "体验工具",
+        "切回普通档"
+      ],
+      "screenshots": [
+        "ui-final-390x844-playtest-isolation-normal-tool-entry.png",
+        "ui-final-390x844-playtest-isolation-triple-clock.png",
+        "ui-final-390x844-playtest-isolation-reload-tools.png",
+        "ui-final-390x844-playtest-isolation-boss-sample.png",
+        "ui-final-390x844-playtest-isolation-returned-normal.png"
+      ],
+      "errors": [],
+      "consoleErrors": [],
+      "httpErrors": [],
+      "ok": true,
+      "build": {
+        "scripts": [
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/polyfills.bundle.5adbf.js",
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/system.bundle.cc789.js",
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/import-map.14612.json"
+        ],
+        "growthVersion": null
+      },
+      "assistSample": {
+        "bossKills": [
+          {
+            "before": {
+              "id": "a1:f1:w20:f01w20b01u01",
+              "hp": 3800,
+              "maxHp": 3800,
+              "x": 192.7087683823396,
+              "y": 553.8501157650155
+            },
+            "receipt": {
+              "id": "a1:f1:w20:f01w20b01u01",
+              "archetype": "boar_boss",
+              "wave": 20
+            },
+            "timeBefore": 281.95,
+            "timeAfter": 281.96666666666664,
+            "effectiveHitEffects": [
+              {
+                "id": "fx1242",
+                "kind": "hit",
+                "x": 193.86607829815367,
+                "y": 551.5591745749069,
+                "radius": 12,
+                "hostile": false,
+                "expiresAt": 282.21666666666664,
+                "damage": 3800
+              }
+            ]
+          }
+        ],
+        "hpLoss": [],
+        "hazardTicks": 806,
+        "steps": 16453,
+        "snapshot": {
+          "schema": 1,
+          "attemptId": 1,
+          "floor": 1,
+          "phase": "playing",
+          "training": false,
+          "time": 281.96666666666664,
+          "ticks": 16918,
+          "remainder": 0.01639999999,
+          "wave": 20,
+          "waveStartedAt": 277.25,
+          "waveKilled": 3,
+          "wavePlanned": 9,
+          "nextId": 1244,
+          "player": {
+            "x": 271.61045400712726,
+            "y": 397.66107850123296,
+            "hp": 101,
+            "xp": 496,
+            "maxHp": 101,
+            "attack": 107.06,
+            "moveSpeed": 220,
+            "radius": 18,
+            "faceX": -0.45089996720028064,
+            "faceY": 0.8925744896527045
+          },
+          "enemies": [
+            {
+              "id": "a1:f1:w20:f01w20b02u01",
+              "archetype": "boar_normal",
+              "name": "铁鬃妖猪",
+              "family": "boar",
+              "role": "normal",
+              "rank": 1,
+              "x": -316.42154175263283,
+              "y": 25.7810067697782,
+              "hp": 50,
+              "maxHp": 50,
+              "radius": 26,
+              "damage": 6,
+              "moveSpeed": 154,
+              "woundBudget": 0,
+              "woundUntil": 0,
+              "orbitNextAt": 0,
+              "ai": {
+                "mode": "approach",
+                "attack": null,
+                "readyAt": 278.9666666666667,
+                "graceUntil": 278.9666666666667,
+                "until": 0,
+                "eligibleSince": -1,
+                "sequence": 0,
+                "cooldowns": {},
+                "faceX": 0.8451698485921505,
+                "faceY": 0.5344978269653874,
+                "orbitSign": -1,
+                "offset": 4.225428219074367,
+                "phase": 1,
+                "transitionUntil": 0,
+                "transitionPending": false,
+                "entryUntil": 278.9666666666667
+              }
+            },
+            {
+              "id": "a1:f1:w20:f01w20b02u02",
+              "archetype": "boar_normal",
+              "name": "铁鬃妖猪",
+              "family": "boar",
+              "role": "normal",
+              "rank": 1,
+              "x": -435.4129980185855,
+              "y": 17.57194666227396,
+              "hp": 50,
+              "maxHp": 50,
+              "radius": 26,
+              "damage": 6,
+              "moveSpeed": 154,
+              "woundBudget": 0,
+              "woundUntil": 0,
+              "orbitNextAt": 0,
+              "ai": {
+                "mode": "approach",
+                "attack": null,
+                "readyAt": 279.18333333333334,
+                "graceUntil": 279.18333333333334,
+                "until": 0,
+                "eligibleSince": -1,
+                "sequence": 0,
+                "cooldowns": {},
+                "faceX": 0.8807911323203149,
+                "faceY": 0.4735049959883184,
+                "orbitSign": 1,
+                "offset": 2.469934869901417,
+                "phase": 1,
+                "transitionUntil": 0,
+                "transitionPending": false,
+                "entryUntil": 279.18333333333334
+              }
+            }
+          ],
+          "projectiles": [],
+          "zones": [],
+          "drops": [
+            {
+              "id": "h1121",
+              "kind": "heal",
+              "x": -594.4666754183854,
+              "y": 702.3525779062951,
+              "radius": 9,
+              "amount": 10,
+              "expiresAt": 299.55
+            },
+            {
+              "id": "h1152",
+              "kind": "heal",
+              "x": 18.67084974688226,
+              "y": 762.0495518493716,
+              "radius": 9,
+              "amount": 10,
+              "expiresAt": 305.96666666666664
+            },
+            {
+              "id": "h1199",
+              "kind": "heal",
+              "x": 671.5340383627345,
+              "y": 227.9204419157525,
+              "radius": 9,
+              "amount": 10,
+              "expiresAt": 315.68333333333334
+            },
+            {
+              "id": "h1209",
+              "kind": "heal",
+              "x": 711.4383561292045,
+              "y": 249.13219745036383,
+              "radius": 9,
+              "amount": 10,
+              "expiresAt": 316.05
+            },
+            {
+              "id": "d1243",
+              "kind": "resource",
+              "x": 193.86607829815367,
+              "y": 551.5591745749069,
+              "radius": 5,
+              "amount": 30,
+              "expiresAt": 282.46666666666664
+            }
+          ],
+          "effects": [
+            {
+              "id": "fx1242",
+              "kind": "hit",
+              "x": 193.86607829815367,
+              "y": 551.5591745749069,
+              "radius": 12,
+              "hostile": false,
+              "expiresAt": 282.21666666666664,
+              "damage": 3800
+            }
+          ],
+          "pending": [
+            {
+              "localId": "f01w20b05u02",
+              "archetype": "boar_normal",
+              "portal": "NW",
+              "at": 0.22,
+              "trigger": "half",
+              "warning": 0.9,
+              "id": "a1:f1:w20:f01w20b05u02",
+              "retryAt": 277.25,
+              "waitingSince": 277.25
+            }
+          ],
+          "reserved": [
+            {
+              "localId": "f01w20b05u01",
+              "archetype": "boar_normal",
+              "portal": "NW",
+              "at": 0,
+              "trigger": "half",
+              "warning": 0.9,
+              "id": "a1:f1:w20:f01w20b05u01",
+              "retryAt": 277.25,
+              "waitingSince": 277.25,
+              "x": -629,
+              "y": 660,
+              "radius": 26,
+              "readyAt": 282.8666666666666
+            },
+            {
+              "localId": "f01w20b06u01",
+              "archetype": "wolf_normal",
+              "portal": "E",
+              "at": 0,
+              "trigger": "half",
+              "warning": 0.9,
+              "id": "a1:f1:w20:f01w20b06u01",
+              "retryAt": 277.25,
+              "waitingSince": 277.25,
+              "x": 828,
+              "y": -60,
+              "radius": 22,
+              "readyAt": 282.8666666666666
+            },
+            {
+              "localId": "f01w20b07u01",
+              "archetype": "spider_normal",
+              "portal": "NE",
+              "at": 0,
+              "trigger": "half",
+              "warning": 0.9,
+              "id": "a1:f1:w20:f01w20b07u01",
+              "retryAt": 277.25,
+              "waitingSince": 277.25,
+              "x": 695,
+              "y": 660,
+              "radius": 24,
+              "readyAt": 282.8666666666666
+            }
+          ],
+          "earned": {
+            "xp": 446,
+            "cores": 63,
+            "contribution": 53
+          },
+          "rawKillXp": 446,
+          "normalCoreCounter": 6,
+          "loadout": {
+            "active": {
+              "sj_yujian": 1,
+              "sj_arc": 1,
+              "sj_wanjian": 1
+            },
+            "passive": {},
+            "evolutions": [],
+            "growthVersion": 1,
+            "evolutionLevels": {},
+            "tutorialWaves": 3,
+            "weaponId": "eq_sword_suwen",
+            "weaponQuality": 1,
+            "weaponRefine": 0
+          },
+          "rng": 3271454636,
+          "base": {
+            "xp": 50,
+            "hp": 100.02138666666667,
+            "normalCoreCounter": 0,
+            "tutorialWaves": 0
+          },
+          "input": {
+            "x": -0.45089996720028064,
+            "y": 0.8925744896527045
+          },
+          "cooldowns": {
+            "sj_yujian": 282.5833333333333,
+            "sj_arc": 284.45,
+            "sj_wanjian": 0
+          },
+          "casts": [
+            {
+              "skill": "sj_arc",
+              "level": 1,
+              "x": 273.2637538868616,
+              "y": 394.3883053725064,
+              "targetX": 192.7087683823396,
+              "targetY": 553.8501157650155,
+              "dirX": -0.45089996720028064,
+              "dirY": 0.8925744896527045,
+              "releaseAt": 282.13,
+              "castContext": {
+                "loadout": {
+                  "active": {
+                    "sj_yujian": 1,
+                    "sj_arc": 1,
+                    "sj_wanjian": 1
+                  },
+                  "passive": {},
+                  "evolutions": [],
+                  "growthVersion": 1,
+                  "evolutionLevels": {},
+                  "tutorialWaves": 3,
+                  "weaponId": "eq_sword_suwen",
+                  "weaponQuality": 1,
+                  "weaponRefine": 0
+                },
+                "xp": 466
+              }
+            }
+          ],
+          "killLedger": [
+            {
+              "id": "a1:f1:w1:f01w01b01u03",
+              "archetype": "boar_normal",
+              "wave": 1
+            },
+            {
+              "id": "a1:f1:w1:f01w01b01u01",
+              "archetype": "boar_normal",
+              "wave": 1
+            },
+            {
+              "id": "a1:f1:w1:f01w01b01u04",
+              "archetype": "boar_normal",
+              "wave": 1
+            },
+            {
+              "id": "a1:f1:w1:f01w01b01u02",
+              "archetype": "boar_normal",
+              "wave": 1
+            },
+            {
+              "id": "a1:f1:w1:f01w01b01u05",
+              "archetype": "boar_normal",
+              "wave": 1
+            },
+            {
+              "id": "a1:f1:w1:f01w01b02u03",
+              "archetype": "boar_normal",
+              "wave": 1
+            },
+            {
+              "id": "a1:f1:w1:f01w01b02u01",
+              "archetype": "boar_normal",
+              "wave": 1
+            },
+            {
+              "id": "a1:f1:w1:f01w01b02u02",
+              "archetype": "boar_normal",
+              "wave": 1
+            },
+            {
+              "id": "a1:f1:w1:f01w01b02u04",
+              "archetype": "boar_normal",
+              "wave": 1
+            },
+            {
+              "id": "a1:f1:w1:f01w01b02u05",
+              "archetype": "boar_normal",
+              "wave": 1
+            },
+            {
+              "id": "a1:f1:w2:f01w02b01u01",
+              "archetype": "wolf_normal",
+              "wave": 2
+            },
+            {
+              "id": "a1:f1:w2:f01w02b01u02",
+              "archetype": "wolf_normal",
+              "wave": 2
+            },
+            {
+              "id": "a1:f1:w2:f01w02b01u04",
+              "archetype": "wolf_normal",
+              "wave": 2
+            },
+            {
+              "id": "a1:f1:w2:f01w02b01u03",
+              "archetype": "wolf_normal",
+              "wave": 2
+            },
+            {
+              "id": "a1:f1:w2:f01w02b01u05",
+              "archetype": "wolf_normal",
+              "wave": 2
+            },
+            {
+              "id": "a1:f1:w2:f01w02b01u06",
+              "archetype": "wolf_normal",
+              "wave": 2
+            },
+            {
+              "id": "a1:f1:w2:f01w02b02u02",
+              "archetype": "wolf_normal",
+              "wave": 2
+            },
+            {
+              "id": "a1:f1:w2:f01w02b02u01",
+              "archetype": "wolf_normal",
+              "wave": 2
+            },
+            {
+              "id": "a1:f1:w2:f01w02b02u03",
+              "archetype": "wolf_normal",
+              "wave": 2
+            },
+            {
+              "id": "a1:f1:w2:f01w02b02u04",
+              "archetype": "wolf_normal",
+              "wave": 2
+            },
+            {
+              "id": "a1:f1:w2:f01w02b02u06",
+              "archetype": "wolf_normal",
+              "wave": 2
+            },
+            {
+              "id": "a1:f1:w2:f01w02b02u05",
+              "archetype": "wolf_normal",
+              "wave": 2
+            },
+            {
+              "id": "a1:f1:w3:f01w03b01u02",
+              "archetype": "spider_normal",
+              "wave": 3
+            },
+            {
+              "id": "a1:f1:w3:f01w03b01u01",
+              "archetype": "spider_normal",
+              "wave": 3
+            },
+            {
+              "id": "a1:f1:w3:f01w03b01u03",
+              "archetype": "spider_normal",
+              "wave": 3
+            },
+            {
+              "id": "a1:f1:w3:f01w03b01u06",
+              "archetype": "spider_normal",
+              "wave": 3
+            },
+            {
+              "id": "a1:f1:w3:f01w03b01u04",
+              "archetype": "spider_normal",
+              "wave": 3
+            },
+            {
+              "id": "a1:f1:w3:f01w03b01u05",
+              "archetype": "spider_normal",
+              "wave": 3
+            },
+            {
+              "id": "a1:f1:w3:f01w03b01u07",
+              "archetype": "spider_normal",
+              "wave": 3
+            },
+            {
+              "id": "a1:f1:w3:f01w03b02u01",
+              "archetype": "spider_normal",
+              "wave": 3
+            },
+            {
+              "id": "a1:f1:w3:f01w03b02u02",
+              "archetype": "spider_normal",
+              "wave": 3
+            },
+            {
+              "id": "a1:f1:w3:f01w03b02u03",
+              "archetype": "spider_normal",
+              "wave": 3
+            },
+            {
+              "id": "a1:f1:w3:f01w03b02u04",
+              "archetype": "spider_normal",
+              "wave": 3
+            },
+            {
+              "id": "a1:f1:w3:f01w03b02u06",
+              "archetype": "spider_normal",
+              "wave": 3
+            },
+            {
+              "id": "a1:f1:w3:f01w03b02u05",
+              "archetype": "spider_normal",
+              "wave": 3
+            },
+            {
+              "id": "a1:f1:w3:f01w03b02u07",
+              "archetype": "spider_normal",
+              "wave": 3
+            },
+            {
+              "id": "a1:f1:w4:f01w04b01u03",
+              "archetype": "boar_normal",
+              "wave": 4
+            },
+            {
+              "id": "a1:f1:w4:f01w04b01u01",
+              "archetype": "boar_normal",
+              "wave": 4
+            },
+            {
+              "id": "a1:f1:w4:f01w04b01u04",
+              "archetype": "boar_normal",
+              "wave": 4
+            },
+            {
+              "id": "a1:f1:w4:f01w04b01u02",
+              "archetype": "boar_normal",
+              "wave": 4
+            },
+            {
+              "id": "a1:f1:w4:f01w04b01u05",
+              "archetype": "boar_normal",
+              "wave": 4
+            },
+            {
+              "id": "a1:f1:w4:f01w04b02u01",
+              "archetype": "wolf_normal",
+              "wave": 4
+            },
+            {
+              "id": "a1:f1:w4:f01w04b02u02",
+              "archetype": "wolf_normal",
+              "wave": 4
+            },
+            {
+              "id": "a1:f1:w4:f01w04b02u04",
+              "archetype": "wolf_normal",
+              "wave": 4
+            },
+            {
+              "id": "a1:f1:w4:f01w04b02u03",
+              "archetype": "wolf_normal",
+              "wave": 4
+            },
+            {
+              "id": "a1:f1:w4:f01w04b02u05",
+              "archetype": "wolf_normal",
+              "wave": 4
+            },
+            {
+              "id": "a1:f1:w4:f01w04b02u07",
+              "archetype": "wolf_normal",
+              "wave": 4
+            },
+            {
+              "id": "a1:f1:w4:f01w04b02u06",
+              "archetype": "wolf_normal",
+              "wave": 4
+            },
+            {
+              "id": "a1:f1:w4:f01w04b03u03",
+              "archetype": "boar_normal",
+              "wave": 4
+            },
+            {
+              "id": "a1:f1:w4:f01w04b03u01",
+              "archetype": "boar_normal",
+              "wave": 4
+            },
+            {
+              "id": "a1:f1:w4:f01w04b03u02",
+              "archetype": "boar_normal",
+              "wave": 4
+            },
+            {
+              "id": "a1:f1:w4:f01w04b03u04",
+              "archetype": "boar_normal",
+              "wave": 4
+            },
+            {
+              "id": "a1:f1:w5:f01w05b01u01",
+              "archetype": "boar_elite",
+              "wave": 5
+            },
+            {
+              "id": "a1:f1:w5:f01w05b02u01",
+              "archetype": "boar_normal",
+              "wave": 5
+            },
+            {
+              "id": "a1:f1:w5:f01w05b02u03",
+              "archetype": "boar_normal",
+              "wave": 5
+            },
+            {
+              "id": "a1:f1:w5:f01w05b02u02",
+              "archetype": "boar_normal",
+              "wave": 5
+            },
+            {
+              "id": "a1:f1:w5:f01w05b03u02",
+              "archetype": "spider_normal",
+              "wave": 5
+            },
+            {
+              "id": "a1:f1:w5:f01w05b03u01",
+              "archetype": "spider_normal",
+              "wave": 5
+            },
+            {
+              "id": "a1:f1:w5:f01w05b03u04",
+              "archetype": "spider_normal",
+              "wave": 5
+            },
+            {
+              "id": "a1:f1:w5:f01w05b03u03",
+              "archetype": "spider_normal",
+              "wave": 5
+            },
+            {
+              "id": "a1:f1:w5:f01w05b04u03",
+              "archetype": "boar_normal",
+              "wave": 5
+            },
+            {
+              "id": "a1:f1:w5:f01w05b04u01",
+              "archetype": "boar_normal",
+              "wave": 5
+            },
+            {
+              "id": "a1:f1:w5:f01w05b04u02",
+              "archetype": "boar_normal",
+              "wave": 5
+            },
+            {
+              "id": "a1:f1:w6:f01w06b01u03",
+              "archetype": "boar_normal",
+              "wave": 6
+            },
+            {
+              "id": "a1:f1:w6:f01w06b01u01",
+              "archetype": "boar_normal",
+              "wave": 6
+            },
+            {
+              "id": "a1:f1:w6:f01w06b01u04",
+              "archetype": "boar_normal",
+              "wave": 6
+            },
+            {
+              "id": "a1:f1:w6:f01w06b01u02",
+              "archetype": "boar_normal",
+              "wave": 6
+            },
+            {
+              "id": "a1:f1:w6:f01w06b01u05",
+              "archetype": "boar_normal",
+              "wave": 6
+            },
+            {
+              "id": "a1:f1:w6:f01w06b02u02",
+              "archetype": "wolf_normal",
+              "wave": 6
+            },
+            {
+              "id": "a1:f1:w6:f01w06b02u01",
+              "archetype": "wolf_normal",
+              "wave": 6
+            },
+            {
+              "id": "a1:f1:w6:f01w06b02u04",
+              "archetype": "wolf_normal",
+              "wave": 6
+            },
+            {
+              "id": "a1:f1:w6:f01w06b02u03",
+              "archetype": "wolf_normal",
+              "wave": 6
+            },
+            {
+              "id": "a1:f1:w6:f01w06b03u03",
+              "archetype": "boar_normal",
+              "wave": 6
+            },
+            {
+              "id": "a1:f1:w6:f01w06b03u01",
+              "archetype": "boar_normal",
+              "wave": 6
+            },
+            {
+              "id": "a1:f1:w6:f01w06b03u02",
+              "archetype": "boar_normal",
+              "wave": 6
+            },
+            {
+              "id": "a1:f1:w6:f01w06b03u04",
+              "archetype": "boar_normal",
+              "wave": 6
+            },
+            {
+              "id": "a1:f1:w6:f01w06b04u02",
+              "archetype": "wolf_normal",
+              "wave": 6
+            },
+            {
+              "id": "a1:f1:w6:f01w06b04u01",
+              "archetype": "wolf_normal",
+              "wave": 6
+            },
+            {
+              "id": "a1:f1:w6:f01w06b04u03",
+              "archetype": "wolf_normal",
+              "wave": 6
+            },
+            {
+              "id": "a1:f1:w7:f01w07b01u02",
+              "archetype": "boar_normal",
+              "wave": 7
+            },
+            {
+              "id": "a1:f1:w7:f01w07b01u01",
+              "archetype": "boar_normal",
+              "wave": 7
+            },
+            {
+              "id": "a1:f1:w7:f01w07b01u04",
+              "archetype": "boar_normal",
+              "wave": 7
+            },
+            {
+              "id": "a1:f1:w7:f01w07b01u03",
+              "archetype": "boar_normal",
+              "wave": 7
+            },
+            {
+              "id": "a1:f1:w7:f01w07b01u05",
+              "archetype": "boar_normal",
+              "wave": 7
+            },
+            {
+              "id": "a1:f1:w7:f01w07b02u01",
+              "archetype": "spider_normal",
+              "wave": 7
+            },
+            {
+              "id": "a1:f1:w7:f01w07b02u04",
+              "archetype": "spider_normal",
+              "wave": 7
+            },
+            {
+              "id": "a1:f1:w7:f01w07b02u03",
+              "archetype": "spider_normal",
+              "wave": 7
+            },
+            {
+              "id": "a1:f1:w7:f01w07b02u02",
+              "archetype": "spider_normal",
+              "wave": 7
+            },
+            {
+              "id": "a1:f1:w7:f01w07b03u02",
+              "archetype": "boar_normal",
+              "wave": 7
+            },
+            {
+              "id": "a1:f1:w7:f01w07b03u01",
+              "archetype": "boar_normal",
+              "wave": 7
+            },
+            {
+              "id": "a1:f1:w7:f01w07b03u03",
+              "archetype": "boar_normal",
+              "wave": 7
+            },
+            {
+              "id": "a1:f1:w7:f01w07b03u04",
+              "archetype": "boar_normal",
+              "wave": 7
+            },
+            {
+              "id": "a1:f1:w7:f01w07b03u05",
+              "archetype": "boar_normal",
+              "wave": 7
+            },
+            {
+              "id": "a1:f1:w7:f01w07b04u03",
+              "archetype": "spider_normal",
+              "wave": 7
+            },
+            {
+              "id": "a1:f1:w7:f01w07b04u01",
+              "archetype": "spider_normal",
+              "wave": 7
+            },
+            {
+              "id": "a1:f1:w7:f01w07b04u04",
+              "archetype": "spider_normal",
+              "wave": 7
+            },
+            {
+              "id": "a1:f1:w7:f01w07b04u02",
+              "archetype": "spider_normal",
+              "wave": 7
+            },
+            {
+              "id": "a1:f1:w8:f01w08b01u03",
+              "archetype": "boar_normal",
+              "wave": 8
+            },
+            {
+              "id": "a1:f1:w8:f01w08b01u01",
+              "archetype": "boar_normal",
+              "wave": 8
+            },
+            {
+              "id": "a1:f1:w8:f01w08b01u02",
+              "archetype": "boar_normal",
+              "wave": 8
+            },
+            {
+              "id": "a1:f1:w8:f01w08b01u04",
+              "archetype": "boar_normal",
+              "wave": 8
+            },
+            {
+              "id": "a1:f1:w8:f01w08b01u06",
+              "archetype": "boar_normal",
+              "wave": 8
+            },
+            {
+              "id": "a1:f1:w8:f01w08b01u05",
+              "archetype": "boar_normal",
+              "wave": 8
+            },
+            {
+              "id": "a1:f1:w8:f01w08b02u02",
+              "archetype": "wolf_normal",
+              "wave": 8
+            },
+            {
+              "id": "a1:f1:w8:f01w08b02u01",
+              "archetype": "wolf_normal",
+              "wave": 8
+            },
+            {
+              "id": "a1:f1:w8:f01w08b02u04",
+              "archetype": "wolf_normal",
+              "wave": 8
+            },
+            {
+              "id": "a1:f1:w8:f01w08b02u03",
+              "archetype": "wolf_normal",
+              "wave": 8
+            },
+            {
+              "id": "a1:f1:w8:f01w08b03u01",
+              "archetype": "boar_normal",
+              "wave": 8
+            },
+            {
+              "id": "a1:f1:w8:f01w08b03u03",
+              "archetype": "boar_normal",
+              "wave": 8
+            },
+            {
+              "id": "a1:f1:w8:f01w08b03u04",
+              "archetype": "boar_normal",
+              "wave": 8
+            },
+            {
+              "id": "a1:f1:w8:f01w08b03u02",
+              "archetype": "boar_normal",
+              "wave": 8
+            },
+            {
+              "id": "a1:f1:w8:f01w08b03u05",
+              "archetype": "boar_normal",
+              "wave": 8
+            },
+            {
+              "id": "a1:f1:w8:f01w08b03u06",
+              "archetype": "boar_normal",
+              "wave": 8
+            },
+            {
+              "id": "a1:f1:w8:f01w08b04u02",
+              "archetype": "wolf_normal",
+              "wave": 8
+            },
+            {
+              "id": "a1:f1:w8:f01w08b04u01",
+              "archetype": "wolf_normal",
+              "wave": 8
+            },
+            {
+              "id": "a1:f1:w8:f01w08b04u03",
+              "archetype": "wolf_normal",
+              "wave": 8
+            },
+            {
+              "id": "a1:f1:w8:f01w08b04u04",
+              "archetype": "wolf_normal",
+              "wave": 8
+            },
+            {
+              "id": "a1:f1:w9:f01w09b01u01",
+              "archetype": "boar_normal",
+              "wave": 9
+            },
+            {
+              "id": "a1:f1:w9:f01w09b01u03",
+              "archetype": "boar_normal",
+              "wave": 9
+            },
+            {
+              "id": "a1:f1:w9:f01w09b01u04",
+              "archetype": "boar_normal",
+              "wave": 9
+            },
+            {
+              "id": "a1:f1:w9:f01w09b01u02",
+              "archetype": "boar_normal",
+              "wave": 9
+            },
+            {
+              "id": "a1:f1:w9:f01w09b01u05",
+              "archetype": "boar_normal",
+              "wave": 9
+            },
+            {
+              "id": "a1:f1:w9:f01w09b01u07",
+              "archetype": "boar_normal",
+              "wave": 9
+            },
+            {
+              "id": "a1:f1:w9:f01w09b01u06",
+              "archetype": "boar_normal",
+              "wave": 9
+            },
+            {
+              "id": "a1:f1:w9:f01w09b02u02",
+              "archetype": "spider_normal",
+              "wave": 9
+            },
+            {
+              "id": "a1:f1:w9:f01w09b02u01",
+              "archetype": "spider_normal",
+              "wave": 9
+            },
+            {
+              "id": "a1:f1:w9:f01w09b02u04",
+              "archetype": "spider_normal",
+              "wave": 9
+            },
+            {
+              "id": "a1:f1:w9:f01w09b02u05",
+              "archetype": "spider_normal",
+              "wave": 9
+            },
+            {
+              "id": "a1:f1:w9:f01w09b02u03",
+              "archetype": "spider_normal",
+              "wave": 9
+            },
+            {
+              "id": "a1:f1:w9:f01w09b03u03",
+              "archetype": "boar_normal",
+              "wave": 9
+            },
+            {
+              "id": "a1:f1:w9:f01w09b03u01",
+              "archetype": "boar_normal",
+              "wave": 9
+            },
+            {
+              "id": "a1:f1:w9:f01w09b03u02",
+              "archetype": "boar_normal",
+              "wave": 9
+            },
+            {
+              "id": "a1:f1:w9:f01w09b03u04",
+              "archetype": "boar_normal",
+              "wave": 9
+            },
+            {
+              "id": "a1:f1:w9:f01w09b03u06",
+              "archetype": "boar_normal",
+              "wave": 9
+            },
+            {
+              "id": "a1:f1:w9:f01w09b03u05",
+              "archetype": "boar_normal",
+              "wave": 9
+            },
+            {
+              "id": "a1:f1:w9:f01w09b04u02",
+              "archetype": "spider_normal",
+              "wave": 9
+            },
+            {
+              "id": "a1:f1:w9:f01w09b04u01",
+              "archetype": "spider_normal",
+              "wave": 9
+            },
+            {
+              "id": "a1:f1:w9:f01w09b04u04",
+              "archetype": "spider_normal",
+              "wave": 9
+            },
+            {
+              "id": "a1:f1:w9:f01w09b04u03",
+              "archetype": "spider_normal",
+              "wave": 9
+            },
+            {
+              "id": "a1:f1:w10:f01w10b01u01",
+              "archetype": "wolf_elite",
+              "wave": 10
+            },
+            {
+              "id": "a1:f1:w10:f01w10b02u03",
+              "archetype": "boar_normal",
+              "wave": 10
+            },
+            {
+              "id": "a1:f1:w10:f01w10b02u01",
+              "archetype": "boar_normal",
+              "wave": 10
+            },
+            {
+              "id": "a1:f1:w10:f01w10b02u02",
+              "archetype": "boar_normal",
+              "wave": 10
+            },
+            {
+              "id": "a1:f1:w10:f01w10b02u04",
+              "archetype": "boar_normal",
+              "wave": 10
+            },
+            {
+              "id": "a1:f1:w10:f01w10b03u02",
+              "archetype": "wolf_normal",
+              "wave": 10
+            },
+            {
+              "id": "a1:f1:w10:f01w10b03u01",
+              "archetype": "wolf_normal",
+              "wave": 10
+            },
+            {
+              "id": "a1:f1:w10:f01w10b03u04",
+              "archetype": "wolf_normal",
+              "wave": 10
+            },
+            {
+              "id": "a1:f1:w10:f01w10b03u05",
+              "archetype": "wolf_normal",
+              "wave": 10
+            },
+            {
+              "id": "a1:f1:w10:f01w10b03u03",
+              "archetype": "wolf_normal",
+              "wave": 10
+            },
+            {
+              "id": "a1:f1:w10:f01w10b04u01",
+              "archetype": "wolf_elite",
+              "wave": 10
+            },
+            {
+              "id": "a1:f1:w10:f01w10b05u03",
+              "archetype": "boar_normal",
+              "wave": 10
+            },
+            {
+              "id": "a1:f1:w10:f01w10b05u01",
+              "archetype": "boar_normal",
+              "wave": 10
+            },
+            {
+              "id": "a1:f1:w10:f01w10b05u02",
+              "archetype": "boar_normal",
+              "wave": 10
+            },
+            {
+              "id": "a1:f1:w11:f01w11b01u01",
+              "archetype": "boar_normal",
+              "wave": 11
+            },
+            {
+              "id": "a1:f1:w11:f01w11b01u03",
+              "archetype": "boar_normal",
+              "wave": 11
+            },
+            {
+              "id": "a1:f1:w11:f01w11b01u02",
+              "archetype": "boar_normal",
+              "wave": 11
+            },
+            {
+              "id": "a1:f1:w11:f01w11b01u04",
+              "archetype": "boar_normal",
+              "wave": 11
+            },
+            {
+              "id": "a1:f1:w11:f01w11b01u05",
+              "archetype": "boar_normal",
+              "wave": 11
+            },
+            {
+              "id": "a1:f1:w11:f01w11b02u02",
+              "archetype": "spider_normal",
+              "wave": 11
+            },
+            {
+              "id": "a1:f1:w11:f01w11b02u01",
+              "archetype": "spider_normal",
+              "wave": 11
+            },
+            {
+              "id": "a1:f1:w11:f01w11b02u04",
+              "archetype": "spider_normal",
+              "wave": 11
+            },
+            {
+              "id": "a1:f1:w11:f01w11b02u03",
+              "archetype": "spider_normal",
+              "wave": 11
+            },
+            {
+              "id": "a1:f1:w11:f01w11b02u05",
+              "archetype": "spider_normal",
+              "wave": 11
+            },
+            {
+              "id": "a1:f1:w11:f01w11b02u06",
+              "archetype": "spider_normal",
+              "wave": 11
+            },
+            {
+              "id": "a1:f1:w11:f01w11b03u02",
+              "archetype": "wolf_normal",
+              "wave": 11
+            },
+            {
+              "id": "a1:f1:w11:f01w11b03u01",
+              "archetype": "wolf_normal",
+              "wave": 11
+            },
+            {
+              "id": "a1:f1:w11:f01w11b03u04",
+              "archetype": "wolf_normal",
+              "wave": 11
+            },
+            {
+              "id": "a1:f1:w11:f01w11b03u03",
+              "archetype": "wolf_normal",
+              "wave": 11
+            },
+            {
+              "id": "a1:f1:w11:f01w11b04u03",
+              "archetype": "boar_normal",
+              "wave": 11
+            },
+            {
+              "id": "a1:f1:w11:f01w11b04u01",
+              "archetype": "boar_normal",
+              "wave": 11
+            },
+            {
+              "id": "a1:f1:w11:f01w11b04u04",
+              "archetype": "boar_normal",
+              "wave": 11
+            },
+            {
+              "id": "a1:f1:w11:f01w11b04u02",
+              "archetype": "boar_normal",
+              "wave": 11
+            },
+            {
+              "id": "a1:f1:w11:f01w11b04u05",
+              "archetype": "boar_normal",
+              "wave": 11
+            },
+            {
+              "id": "a1:f1:w12:f01w12b01u02",
+              "archetype": "boar_normal",
+              "wave": 12
+            },
+            {
+              "id": "a1:f1:w12:f01w12b01u01",
+              "archetype": "boar_normal",
+              "wave": 12
+            },
+            {
+              "id": "a1:f1:w12:f01w12b01u05",
+              "archetype": "boar_normal",
+              "wave": 12
+            },
+            {
+              "id": "a1:f1:w12:f01w12b01u03",
+              "archetype": "boar_normal",
+              "wave": 12
+            },
+            {
+              "id": "a1:f1:w12:f01w12b01u06",
+              "archetype": "boar_normal",
+              "wave": 12
+            },
+            {
+              "id": "a1:f1:w12:f01w12b01u04",
+              "archetype": "boar_normal",
+              "wave": 12
+            },
+            {
+              "id": "a1:f1:w12:f01w12b02u02",
+              "archetype": "wolf_normal",
+              "wave": 12
+            },
+            {
+              "id": "a1:f1:w12:f01w12b02u01",
+              "archetype": "wolf_normal",
+              "wave": 12
+            },
+            {
+              "id": "a1:f1:w12:f01w12b02u03",
+              "archetype": "wolf_normal",
+              "wave": 12
+            },
+            {
+              "id": "a1:f1:w12:f01w12b02u04",
+              "archetype": "wolf_normal",
+              "wave": 12
+            },
+            {
+              "id": "a1:f1:w12:f01w12b02u06",
+              "archetype": "wolf_normal",
+              "wave": 12
+            },
+            {
+              "id": "a1:f1:w12:f01w12b02u05",
+              "archetype": "wolf_normal",
+              "wave": 12
+            },
+            {
+              "id": "a1:f1:w12:f01w12b04u02",
+              "archetype": "boar_normal",
+              "wave": 12
+            },
+            {
+              "id": "a1:f1:w12:f01w12b04u01",
+              "archetype": "boar_normal",
+              "wave": 12
+            },
+            {
+              "id": "a1:f1:w12:f01w12b04u03",
+              "archetype": "boar_normal",
+              "wave": 12
+            },
+            {
+              "id": "a1:f1:w12:f01w12b04u05",
+              "archetype": "boar_normal",
+              "wave": 12
+            },
+            {
+              "id": "a1:f1:w12:f01w12b03u01",
+              "archetype": "spider_normal",
+              "wave": 12
+            },
+            {
+              "id": "a1:f1:w12:f01w12b03u02",
+              "archetype": "spider_normal",
+              "wave": 12
+            },
+            {
+              "id": "a1:f1:w12:f01w12b03u03",
+              "archetype": "spider_normal",
+              "wave": 12
+            },
+            {
+              "id": "a1:f1:w12:f01w12b03u04",
+              "archetype": "spider_normal",
+              "wave": 12
+            },
+            {
+              "id": "a1:f1:w12:f01w12b03u05",
+              "archetype": "spider_normal",
+              "wave": 12
+            },
+            {
+              "id": "a1:f1:w12:f01w12b04u04",
+              "archetype": "boar_normal",
+              "wave": 12
+            },
+            {
+              "id": "a1:f1:w13:f01w13b01u03",
+              "archetype": "boar_normal",
+              "wave": 13
+            },
+            {
+              "id": "a1:f1:w13:f01w13b01u01",
+              "archetype": "boar_normal",
+              "wave": 13
+            },
+            {
+              "id": "a1:f1:w13:f01w13b01u04",
+              "archetype": "boar_normal",
+              "wave": 13
+            },
+            {
+              "id": "a1:f1:w13:f01w13b01u02",
+              "archetype": "boar_normal",
+              "wave": 13
+            },
+            {
+              "id": "a1:f1:w13:f01w13b01u05",
+              "archetype": "boar_normal",
+              "wave": 13
+            },
+            {
+              "id": "a1:f1:w13:f01w13b01u06",
+              "archetype": "boar_normal",
+              "wave": 13
+            },
+            {
+              "id": "a1:f1:w13:f01w13b02u01",
+              "archetype": "spider_normal",
+              "wave": 13
+            },
+            {
+              "id": "a1:f1:w13:f01w13b02u02",
+              "archetype": "spider_normal",
+              "wave": 13
+            },
+            {
+              "id": "a1:f1:w13:f01w13b02u03",
+              "archetype": "spider_normal",
+              "wave": 13
+            },
+            {
+              "id": "a1:f1:w13:f01w13b02u04",
+              "archetype": "spider_normal",
+              "wave": 13
+            },
+            {
+              "id": "a1:f1:w13:f01w13b02u06",
+              "archetype": "spider_normal",
+              "wave": 13
+            },
+            {
+              "id": "a1:f1:w13:f01w13b02u07",
+              "archetype": "spider_normal",
+              "wave": 13
+            },
+            {
+              "id": "a1:f1:w13:f01w13b02u05",
+              "archetype": "spider_normal",
+              "wave": 13
+            },
+            {
+              "id": "a1:f1:w13:f01w13b03u01",
+              "archetype": "wolf_normal",
+              "wave": 13
+            },
+            {
+              "id": "a1:f1:w13:f01w13b03u02",
+              "archetype": "wolf_normal",
+              "wave": 13
+            },
+            {
+              "id": "a1:f1:w13:f01w13b03u03",
+              "archetype": "wolf_normal",
+              "wave": 13
+            },
+            {
+              "id": "a1:f1:w13:f01w13b03u04",
+              "archetype": "wolf_normal",
+              "wave": 13
+            },
+            {
+              "id": "a1:f1:w13:f01w13b03u05",
+              "archetype": "wolf_normal",
+              "wave": 13
+            },
+            {
+              "id": "a1:f1:w13:f01w13b04u01",
+              "archetype": "boar_normal",
+              "wave": 13
+            },
+            {
+              "id": "a1:f1:w13:f01w13b04u04",
+              "archetype": "boar_normal",
+              "wave": 13
+            },
+            {
+              "id": "a1:f1:w13:f01w13b04u02",
+              "archetype": "boar_normal",
+              "wave": 13
+            },
+            {
+              "id": "a1:f1:w13:f01w13b04u03",
+              "archetype": "boar_normal",
+              "wave": 13
+            },
+            {
+              "id": "a1:f1:w13:f01w13b04u05",
+              "archetype": "boar_normal",
+              "wave": 13
+            },
+            {
+              "id": "a1:f1:w13:f01w13b04u06",
+              "archetype": "boar_normal",
+              "wave": 13
+            },
+            {
+              "id": "a1:f1:w14:f01w14b01u03",
+              "archetype": "boar_normal",
+              "wave": 14
+            },
+            {
+              "id": "a1:f1:w14:f01w14b01u01",
+              "archetype": "boar_normal",
+              "wave": 14
+            },
+            {
+              "id": "a1:f1:w14:f01w14b01u02",
+              "archetype": "boar_normal",
+              "wave": 14
+            },
+            {
+              "id": "a1:f1:w14:f01w14b01u04",
+              "archetype": "boar_normal",
+              "wave": 14
+            },
+            {
+              "id": "a1:f1:w14:f01w14b01u06",
+              "archetype": "boar_normal",
+              "wave": 14
+            },
+            {
+              "id": "a1:f1:w14:f01w14b01u07",
+              "archetype": "boar_normal",
+              "wave": 14
+            },
+            {
+              "id": "a1:f1:w14:f01w14b01u05",
+              "archetype": "boar_normal",
+              "wave": 14
+            },
+            {
+              "id": "a1:f1:w14:f01w14b02u02",
+              "archetype": "wolf_normal",
+              "wave": 14
+            },
+            {
+              "id": "a1:f1:w14:f01w14b02u01",
+              "archetype": "wolf_normal",
+              "wave": 14
+            },
+            {
+              "id": "a1:f1:w14:f01w14b02u04",
+              "archetype": "wolf_normal",
+              "wave": 14
+            },
+            {
+              "id": "a1:f1:w14:f01w14b02u06",
+              "archetype": "wolf_normal",
+              "wave": 14
+            },
+            {
+              "id": "a1:f1:w14:f01w14b02u03",
+              "archetype": "wolf_normal",
+              "wave": 14
+            },
+            {
+              "id": "a1:f1:w14:f01w14b02u07",
+              "archetype": "wolf_normal",
+              "wave": 14
+            },
+            {
+              "id": "a1:f1:w14:f01w14b02u05",
+              "archetype": "wolf_normal",
+              "wave": 14
+            },
+            {
+              "id": "a1:f1:w14:f01w14b03u02",
+              "archetype": "spider_normal",
+              "wave": 14
+            },
+            {
+              "id": "a1:f1:w14:f01w14b03u01",
+              "archetype": "spider_normal",
+              "wave": 14
+            },
+            {
+              "id": "a1:f1:w14:f01w14b03u03",
+              "archetype": "spider_normal",
+              "wave": 14
+            },
+            {
+              "id": "a1:f1:w14:f01w14b03u04",
+              "archetype": "spider_normal",
+              "wave": 14
+            },
+            {
+              "id": "a1:f1:w14:f01w14b03u06",
+              "archetype": "spider_normal",
+              "wave": 14
+            },
+            {
+              "id": "a1:f1:w14:f01w14b03u05",
+              "archetype": "spider_normal",
+              "wave": 14
+            },
+            {
+              "id": "a1:f1:w14:f01w14b04u03",
+              "archetype": "boar_normal",
+              "wave": 14
+            },
+            {
+              "id": "a1:f1:w14:f01w14b04u01",
+              "archetype": "boar_normal",
+              "wave": 14
+            },
+            {
+              "id": "a1:f1:w14:f01w14b04u02",
+              "archetype": "boar_normal",
+              "wave": 14
+            },
+            {
+              "id": "a1:f1:w14:f01w14b04u04",
+              "archetype": "boar_normal",
+              "wave": 14
+            },
+            {
+              "id": "a1:f1:w14:f01w14b04u06",
+              "archetype": "boar_normal",
+              "wave": 14
+            },
+            {
+              "id": "a1:f1:w14:f01w14b04u05",
+              "archetype": "boar_normal",
+              "wave": 14
+            },
+            {
+              "id": "a1:f1:w15:f01w15b01u01",
+              "archetype": "spider_elite",
+              "wave": 15
+            },
+            {
+              "id": "a1:f1:w15:f01w15b02u01",
+              "archetype": "boar_normal",
+              "wave": 15
+            },
+            {
+              "id": "a1:f1:w15:f01w15b02u02",
+              "archetype": "boar_normal",
+              "wave": 15
+            },
+            {
+              "id": "a1:f1:w15:f01w15b02u04",
+              "archetype": "boar_normal",
+              "wave": 15
+            },
+            {
+              "id": "a1:f1:w15:f01w15b02u03",
+              "archetype": "boar_normal",
+              "wave": 15
+            },
+            {
+              "id": "a1:f1:w15:f01w15b03u01",
+              "archetype": "spider_normal",
+              "wave": 15
+            },
+            {
+              "id": "a1:f1:w15:f01w15b03u03",
+              "archetype": "spider_normal",
+              "wave": 15
+            },
+            {
+              "id": "a1:f1:w15:f01w15b03u02",
+              "archetype": "spider_normal",
+              "wave": 15
+            },
+            {
+              "id": "a1:f1:w15:f01w15b03u04",
+              "archetype": "spider_normal",
+              "wave": 15
+            },
+            {
+              "id": "a1:f1:w15:f01w15b04u01",
+              "archetype": "spider_elite",
+              "wave": 15
+            },
+            {
+              "id": "a1:f1:w15:f01w15b06u03",
+              "archetype": "boar_normal",
+              "wave": 15
+            },
+            {
+              "id": "a1:f1:w15:f01w15b06u01",
+              "archetype": "boar_normal",
+              "wave": 15
+            },
+            {
+              "id": "a1:f1:w15:f01w15b05u01",
+              "archetype": "wolf_normal",
+              "wave": 15
+            },
+            {
+              "id": "a1:f1:w15:f01w15b06u02",
+              "archetype": "boar_normal",
+              "wave": 15
+            },
+            {
+              "id": "a1:f1:w15:f01w15b05u02",
+              "archetype": "wolf_normal",
+              "wave": 15
+            },
+            {
+              "id": "a1:f1:w15:f01w15b05u03",
+              "archetype": "wolf_normal",
+              "wave": 15
+            },
+            {
+              "id": "a1:f1:w16:f01w16b01u01",
+              "archetype": "boar_normal",
+              "wave": 16
+            },
+            {
+              "id": "a1:f1:w16:f01w16b02u01",
+              "archetype": "wolf_normal",
+              "wave": 16
+            },
+            {
+              "id": "a1:f1:w16:f01w16b02u04",
+              "archetype": "wolf_normal",
+              "wave": 16
+            },
+            {
+              "id": "a1:f1:w16:f01w16b02u02",
+              "archetype": "wolf_normal",
+              "wave": 16
+            },
+            {
+              "id": "a1:f1:w16:f01w16b02u03",
+              "archetype": "wolf_normal",
+              "wave": 16
+            },
+            {
+              "id": "a1:f1:w16:f01w16b02u05",
+              "archetype": "wolf_normal",
+              "wave": 16
+            },
+            {
+              "id": "a1:f1:w16:f01w16b02u07",
+              "archetype": "wolf_normal",
+              "wave": 16
+            },
+            {
+              "id": "a1:f1:w16:f01w16b02u06",
+              "archetype": "wolf_normal",
+              "wave": 16
+            },
+            {
+              "id": "a1:f1:w16:f01w16b01u06",
+              "archetype": "boar_normal",
+              "wave": 16
+            },
+            {
+              "id": "a1:f1:w16:f01w16b01u05",
+              "archetype": "boar_normal",
+              "wave": 16
+            },
+            {
+              "id": "a1:f1:w16:f01w16b01u02",
+              "archetype": "boar_normal",
+              "wave": 16
+            },
+            {
+              "id": "a1:f1:w16:f01w16b01u04",
+              "archetype": "boar_normal",
+              "wave": 16
+            },
+            {
+              "id": "a1:f1:w16:f01w16b01u03",
+              "archetype": "boar_normal",
+              "wave": 16
+            },
+            {
+              "id": "a1:f1:w16:f01w16b03u01",
+              "archetype": "spider_normal",
+              "wave": 16
+            },
+            {
+              "id": "a1:f1:w16:f01w16b03u02",
+              "archetype": "spider_normal",
+              "wave": 16
+            },
+            {
+              "id": "a1:f1:w16:f01w16b03u03",
+              "archetype": "spider_normal",
+              "wave": 16
+            },
+            {
+              "id": "a1:f1:w16:f01w16b03u04",
+              "archetype": "spider_normal",
+              "wave": 16
+            },
+            {
+              "id": "a1:f1:w16:f01w16b03u05",
+              "archetype": "spider_normal",
+              "wave": 16
+            },
+            {
+              "id": "a1:f1:w16:f01w16b04u05",
+              "archetype": "boar_normal",
+              "wave": 16
+            },
+            {
+              "id": "a1:f1:w16:f01w16b04u04",
+              "archetype": "boar_normal",
+              "wave": 16
+            },
+            {
+              "id": "a1:f1:w16:f01w16b04u06",
+              "archetype": "boar_normal",
+              "wave": 16
+            },
+            {
+              "id": "a1:f1:w16:f01w16b04u03",
+              "archetype": "boar_normal",
+              "wave": 16
+            },
+            {
+              "id": "a1:f1:w16:f01w16b04u01",
+              "archetype": "boar_normal",
+              "wave": 16
+            },
+            {
+              "id": "a1:f1:w16:f01w16b04u02",
+              "archetype": "boar_normal",
+              "wave": 16
+            },
+            {
+              "id": "a1:f1:w17:f01w17b01u01",
+              "archetype": "boar_normal",
+              "wave": 17
+            },
+            {
+              "id": "a1:f1:w17:f01w17b01u02",
+              "archetype": "boar_normal",
+              "wave": 17
+            },
+            {
+              "id": "a1:f1:w17:f01w17b01u03",
+              "archetype": "boar_normal",
+              "wave": 17
+            },
+            {
+              "id": "a1:f1:w17:f01w17b01u04",
+              "archetype": "boar_normal",
+              "wave": 17
+            },
+            {
+              "id": "a1:f1:w17:f01w17b01u06",
+              "archetype": "boar_normal",
+              "wave": 17
+            },
+            {
+              "id": "a1:f1:w17:f01w17b01u05",
+              "archetype": "boar_normal",
+              "wave": 17
+            },
+            {
+              "id": "a1:f1:w17:f01w17b01u07",
+              "archetype": "boar_normal",
+              "wave": 17
+            },
+            {
+              "id": "a1:f1:w17:f01w17b02u03",
+              "archetype": "spider_normal",
+              "wave": 17
+            },
+            {
+              "id": "a1:f1:w17:f01w17b02u01",
+              "archetype": "spider_normal",
+              "wave": 17
+            },
+            {
+              "id": "a1:f1:w17:f01w17b02u04",
+              "archetype": "spider_normal",
+              "wave": 17
+            },
+            {
+              "id": "a1:f1:w17:f01w17b02u02",
+              "archetype": "spider_normal",
+              "wave": 17
+            },
+            {
+              "id": "a1:f1:w17:f01w17b02u05",
+              "archetype": "spider_normal",
+              "wave": 17
+            },
+            {
+              "id": "a1:f1:w17:f01w17b02u07",
+              "archetype": "spider_normal",
+              "wave": 17
+            },
+            {
+              "id": "a1:f1:w17:f01w17b02u06",
+              "archetype": "spider_normal",
+              "wave": 17
+            },
+            {
+              "id": "a1:f1:w17:f01w17b03u02",
+              "archetype": "wolf_normal",
+              "wave": 17
+            },
+            {
+              "id": "a1:f1:w17:f01w17b03u01",
+              "archetype": "wolf_normal",
+              "wave": 17
+            },
+            {
+              "id": "a1:f1:w17:f01w17b03u04",
+              "archetype": "wolf_normal",
+              "wave": 17
+            },
+            {
+              "id": "a1:f1:w17:f01w17b03u05",
+              "archetype": "wolf_normal",
+              "wave": 17
+            },
+            {
+              "id": "a1:f1:w17:f01w17b03u03",
+              "archetype": "wolf_normal",
+              "wave": 17
+            },
+            {
+              "id": "a1:f1:w17:f01w17b03u06",
+              "archetype": "wolf_normal",
+              "wave": 17
+            },
+            {
+              "id": "a1:f1:w17:f01w17b04u01",
+              "archetype": "boar_normal",
+              "wave": 17
+            },
+            {
+              "id": "a1:f1:w17:f01w17b04u03",
+              "archetype": "boar_normal",
+              "wave": 17
+            },
+            {
+              "id": "a1:f1:w17:f01w17b04u02",
+              "archetype": "boar_normal",
+              "wave": 17
+            },
+            {
+              "id": "a1:f1:w17:f01w17b04u04",
+              "archetype": "boar_normal",
+              "wave": 17
+            },
+            {
+              "id": "a1:f1:w17:f01w17b04u06",
+              "archetype": "boar_normal",
+              "wave": 17
+            },
+            {
+              "id": "a1:f1:w17:f01w17b04u05",
+              "archetype": "boar_normal",
+              "wave": 17
+            },
+            {
+              "id": "a1:f1:w18:f01w18b02u03",
+              "archetype": "boar_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w18:f01w18b02u01",
+              "archetype": "boar_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w18:f01w18b02u04",
+              "archetype": "boar_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w18:f01w18b02u02",
+              "archetype": "boar_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w18:f01w18b02u05",
+              "archetype": "boar_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w18:f01w18b02u07",
+              "archetype": "boar_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w18:f01w18b01u02",
+              "archetype": "wolf_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w18:f01w18b01u01",
+              "archetype": "wolf_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w18:f01w18b01u04",
+              "archetype": "wolf_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w18:f01w18b01u03",
+              "archetype": "wolf_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w18:f01w18b02u06",
+              "archetype": "boar_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w18:f01w18b03u02",
+              "archetype": "spider_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w18:f01w18b03u01",
+              "archetype": "spider_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w18:f01w18b03u04",
+              "archetype": "spider_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w18:f01w18b03u03",
+              "archetype": "spider_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w18:f01w18b03u05",
+              "archetype": "spider_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w18:f01w18b04u03",
+              "archetype": "boar_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w18:f01w18b04u01",
+              "archetype": "boar_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w18:f01w18b04u04",
+              "archetype": "boar_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w18:f01w18b04u02",
+              "archetype": "boar_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w18:f01w18b04u05",
+              "archetype": "boar_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w18:f01w18b04u07",
+              "archetype": "boar_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w18:f01w18b03u06",
+              "archetype": "spider_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w18:f01w18b04u06",
+              "archetype": "boar_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w18:f01w18b05u02",
+              "archetype": "wolf_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w18:f01w18b05u01",
+              "archetype": "wolf_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w18:f01w18b05u03",
+              "archetype": "wolf_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w18:f01w18b05u04",
+              "archetype": "wolf_normal",
+              "wave": 18
+            },
+            {
+              "id": "a1:f1:w19:f01w19b01u04",
+              "archetype": "boar_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b01u01",
+              "archetype": "boar_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b01u03",
+              "archetype": "boar_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b01u02",
+              "archetype": "boar_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b01u07",
+              "archetype": "boar_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b01u05",
+              "archetype": "boar_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b01u06",
+              "archetype": "boar_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b02u02",
+              "archetype": "spider_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b02u01",
+              "archetype": "spider_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b02u03",
+              "archetype": "spider_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b02u04",
+              "archetype": "spider_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b02u05",
+              "archetype": "spider_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b03u01",
+              "archetype": "wolf_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b03u02",
+              "archetype": "wolf_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b03u03",
+              "archetype": "wolf_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b03u04",
+              "archetype": "wolf_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b03u06",
+              "archetype": "wolf_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b03u05",
+              "archetype": "wolf_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b04u01",
+              "archetype": "boar_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b04u04",
+              "archetype": "boar_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b04u02",
+              "archetype": "boar_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b04u03",
+              "archetype": "boar_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b06u02",
+              "archetype": "boar_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b06u03",
+              "archetype": "boar_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b06u01",
+              "archetype": "boar_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b06u04",
+              "archetype": "boar_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b05u01",
+              "archetype": "spider_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b05u03",
+              "archetype": "spider_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b05u02",
+              "archetype": "spider_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w19:f01w19b05u04",
+              "archetype": "spider_normal",
+              "wave": 19
+            },
+            {
+              "id": "a1:f1:w20:f01w20b03u01",
+              "archetype": "wolf_normal",
+              "wave": 20
+            },
+            {
+              "id": "a1:f1:w20:f01w20b04u01",
+              "archetype": "spider_normal",
+              "wave": 20
+            },
+            {
+              "id": "a1:f1:w20:f01w20b01u01",
+              "archetype": "boar_boss",
+              "wave": 20
+            }
+          ],
+          "clearedWaves": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "gateEntries": [],
+          "gateReadyAt": 0,
+          "hurtUntil": 0,
+          "nextWindupAt": 127.78333333333333,
+          "supportReleased": true,
+          "supportAt": 281.96666666666664,
+          "view": {
+            "xmin": 139.4993380117993,
+            "xmax": 843.4993380117993,
+            "ymin": -543.6177476194013,
+            "ymax": 473.38225238059874
+          },
+          "trainingResetAt": 0
+        },
+        "note": "真实逐tick模拟抽样，非自然养成、非实际clock测量；未改统计/敌人/血量/奖励。"
+      },
+      "isolation": {
+        "keys": {
+          "normal": "xianxia.sect-tower.campaign.v1",
+          "playtest": "xianxia.sect-tower.playtest.v1",
+          "tools": "xianxia.sect-tower.playtest-tools.v1"
+        },
+        "ordinaryBeforeHash": "ad8112e69aed8af0f44043ec67c4f3fb3c582e9f4caf2d3287c47b5c9199c28e",
+        "ordinaryAfterHash": "d0cbdee332d53f5e9735fbafcfe53108a69f5c50ba62942737ac30d1905be2a2",
+        "ordinaryRawUnchanged": false,
+        "experienceHash": "ce862a8f5f6f8a657598bcbb897e8d60e3ef968bc67c484080a4406949de67b2",
+        "prefs": {
+          "speed": 3,
+          "invincible": true
+        },
+        "changedOrdinaryFields": [
+          "hp",
+          "restAt"
+        ],
+        "recovery": {
+          "switchWallBefore": 1793158224138,
+          "switchWallAfter": 1793158224327,
+          "baselineRestAt": 1793158216148,
+          "returnedRestAt": 1793158224147,
+          "beforeHp": 100,
+          "afterHp": 100.13364995833334,
+          "maxHp": 100.25,
+          "expectedHp": 100.13364995833334,
+          "upperHp": 100.13665745833333,
+          "otherFieldsUnchanged": true,
+          "policy": "raw immutable during experience/reload; real-wall-clock HP/restAt on return"
+        }
+      }
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "label": "research1-locked-fixture",
+      "kind": "ARTIFICIAL VALIDATED CAMP FIXTURE — NOT NATURAL PROGRESSION",
+      "fixture": {
+        "sources": {
+          "xp": 10920,
+          "clearedFloor": 2,
+          "cores": 2000,
+          "tutorialWaves": 3,
+          "hp": 120
+        },
+        "transactions": []
+      },
+      "checks": [
+        {
+          "name": "research场外3/6/9通层条件与80/160/240扣费",
+          "passed": true,
+          "floor": 2,
+          "cost": 80,
+          "unlocked": false
+        }
+      ],
+      "actions": [
+        "藏经阁"
+      ],
+      "screenshots": [
+        "ui-final-390x844-research1-locked-fixture-condition.png"
+      ],
+      "errors": [],
+      "consoleErrors": [],
+      "httpErrors": [],
+      "ok": true,
+      "build": {
+        "scripts": [
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/polyfills.bundle.5adbf.js",
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/system.bundle.cc789.js",
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/import-map.14612.json"
+        ],
+        "growthVersion": null
+      }
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "label": "research1-open-fixture",
+      "kind": "ARTIFICIAL VALIDATED CAMP FIXTURE — NOT NATURAL PROGRESSION",
+      "fixture": {
+        "sources": {
+          "xp": 10920,
+          "clearedFloor": 3,
+          "cores": 2000,
+          "tutorialWaves": 3,
+          "hp": 120
+        },
+        "transactions": []
+      },
+      "checks": [
+        {
+          "name": "research场外3/6/9通层条件与80/160/240扣费",
+          "passed": true,
+          "floor": 3,
+          "cost": 80,
+          "unlocked": true
+        }
+      ],
+      "actions": [
+        "藏经阁",
+        "研习一次 · 80妖丹换1点",
+        "藏经阁"
+      ],
+      "screenshots": [
+        "ui-final-390x844-research1-open-fixture-condition.png"
+      ],
+      "errors": [],
+      "consoleErrors": [],
+      "httpErrors": [],
+      "ok": true,
+      "build": {
+        "scripts": [
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/polyfills.bundle.5adbf.js",
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/system.bundle.cc789.js",
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/import-map.14612.json"
+        ],
+        "growthVersion": null
+      }
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "label": "research2-locked-fixture",
+      "kind": "ARTIFICIAL VALIDATED CAMP FIXTURE — NOT NATURAL PROGRESSION",
+      "fixture": {
+        "sources": {
+          "xp": 10920,
+          "clearedFloor": 5,
+          "cores": 2000,
+          "tutorialWaves": 3,
+          "hp": 120
+        },
+        "transactions": [
+          {
+            "action": {
+              "type": "researchPoint"
+            },
+            "result": {
+              "ok": true,
+              "cost": 80,
+              "growth": {
+                "total": 32,
+                "spent": 0,
+                "available": 32,
+                "realm": 30,
+                "firstClear": 1,
+                "research": 1,
+                "cap": 36
+              }
+            }
+          }
+        ]
+      },
+      "checks": [
+        {
+          "name": "research场外3/6/9通层条件与80/160/240扣费",
+          "passed": true,
+          "floor": 5,
+          "cost": 160,
+          "unlocked": false
+        }
+      ],
+      "actions": [
+        "藏经阁"
+      ],
+      "screenshots": [
+        "ui-final-390x844-research2-locked-fixture-condition.png"
+      ],
+      "errors": [],
+      "consoleErrors": [],
+      "httpErrors": [],
+      "ok": true,
+      "build": {
+        "scripts": [
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/polyfills.bundle.5adbf.js",
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/system.bundle.cc789.js",
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/import-map.14612.json"
+        ],
+        "growthVersion": null
+      }
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "label": "research2-open-fixture",
+      "kind": "ARTIFICIAL VALIDATED CAMP FIXTURE — NOT NATURAL PROGRESSION",
+      "fixture": {
+        "sources": {
+          "xp": 10920,
+          "clearedFloor": 6,
+          "cores": 2000,
+          "tutorialWaves": 3,
+          "hp": 120
+        },
+        "transactions": [
+          {
+            "action": {
+              "type": "researchPoint"
+            },
+            "result": {
+              "ok": true,
+              "cost": 80,
+              "growth": {
+                "total": 33,
+                "spent": 0,
+                "available": 33,
+                "realm": 30,
+                "firstClear": 2,
+                "research": 1,
+                "cap": 36
+              }
+            }
+          }
+        ]
+      },
+      "checks": [
+        {
+          "name": "research场外3/6/9通层条件与80/160/240扣费",
+          "passed": true,
+          "floor": 6,
+          "cost": 160,
+          "unlocked": true
+        }
+      ],
+      "actions": [
+        "藏经阁",
+        "研习一次 · 160妖丹换1点",
+        "藏经阁"
+      ],
+      "screenshots": [
+        "ui-final-390x844-research2-open-fixture-condition.png"
+      ],
+      "errors": [],
+      "consoleErrors": [],
+      "httpErrors": [],
+      "ok": true,
+      "build": {
+        "scripts": [
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/polyfills.bundle.5adbf.js",
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/system.bundle.cc789.js",
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/import-map.14612.json"
+        ],
+        "growthVersion": null
+      }
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "label": "research3-locked-fixture",
+      "kind": "ARTIFICIAL VALIDATED CAMP FIXTURE — NOT NATURAL PROGRESSION",
+      "fixture": {
+        "sources": {
+          "xp": 10920,
+          "clearedFloor": 8,
+          "cores": 2000,
+          "tutorialWaves": 3,
+          "hp": 120
+        },
+        "transactions": [
+          {
+            "action": {
+              "type": "researchPoint"
+            },
+            "result": {
+              "ok": true,
+              "cost": 80,
+              "growth": {
+                "total": 33,
+                "spent": 0,
+                "available": 33,
+                "realm": 30,
+                "firstClear": 2,
+                "research": 1,
+                "cap": 36
+              }
+            }
+          },
+          {
+            "action": {
+              "type": "researchPoint"
+            },
+            "result": {
+              "ok": true,
+              "cost": 160,
+              "growth": {
+                "total": 34,
+                "spent": 0,
+                "available": 34,
+                "realm": 30,
+                "firstClear": 2,
+                "research": 2,
+                "cap": 36
+              }
+            }
+          }
+        ]
+      },
+      "checks": [
+        {
+          "name": "research场外3/6/9通层条件与80/160/240扣费",
+          "passed": true,
+          "floor": 8,
+          "cost": 240,
+          "unlocked": false
+        }
+      ],
+      "actions": [
+        "藏经阁"
+      ],
+      "screenshots": [
+        "ui-final-390x844-research3-locked-fixture-condition.png"
+      ],
+      "errors": [],
+      "consoleErrors": [],
+      "httpErrors": [],
+      "ok": true,
+      "build": {
+        "scripts": [
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/polyfills.bundle.5adbf.js",
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/system.bundle.cc789.js",
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/import-map.14612.json"
+        ],
+        "growthVersion": null
+      }
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "label": "research3-open-fixture",
+      "kind": "ARTIFICIAL VALIDATED CAMP FIXTURE — NOT NATURAL PROGRESSION",
+      "fixture": {
+        "sources": {
+          "xp": 10920,
+          "clearedFloor": 9,
+          "cores": 2000,
+          "tutorialWaves": 3,
+          "hp": 120
+        },
+        "transactions": [
+          {
+            "action": {
+              "type": "researchPoint"
+            },
+            "result": {
+              "ok": true,
+              "cost": 80,
+              "growth": {
+                "total": 34,
+                "spent": 0,
+                "available": 34,
+                "realm": 30,
+                "firstClear": 3,
+                "research": 1,
+                "cap": 36
+              }
+            }
+          },
+          {
+            "action": {
+              "type": "researchPoint"
+            },
+            "result": {
+              "ok": true,
+              "cost": 160,
+              "growth": {
+                "total": 35,
+                "spent": 0,
+                "available": 35,
+                "realm": 30,
+                "firstClear": 3,
+                "research": 2,
+                "cap": 36
+              }
+            }
+          }
+        ]
+      },
+      "checks": [
+        {
+          "name": "research场外3/6/9通层条件与80/160/240扣费",
+          "passed": true,
+          "floor": 9,
+          "cost": 240,
+          "unlocked": true
+        }
+      ],
+      "actions": [
+        "藏经阁",
+        "研习一次 · 240妖丹换1点",
+        "藏经阁"
+      ],
+      "screenshots": [
+        "ui-final-390x844-research3-open-fixture-condition.png"
+      ],
+      "errors": [],
+      "consoleErrors": [],
+      "httpErrors": [],
+      "ok": true,
+      "build": {
+        "scripts": [
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/polyfills.bundle.5adbf.js",
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/system.bundle.cc789.js",
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/import-map.14612.json"
+        ],
+        "growthVersion": null
+      }
+    }
+  ],
+  "evidencePolicy": "自然路径仅购丹/真实模拟/Store事务；高进度fixture单列，不写用户存档。光环截图需人工视觉复核。",
+  "sourceHashes": {
+    "js/xianxia/TowerGrowth.js": "24543c0059d60a64c80fca40ac976b7055bd3783d5402cefd5c0900119ab38d0",
+    "js/xianxia/TowerCampaign.js": "b7ed35b634fd14c3a48d7fa4b9baa43fe778e7eace859972ad83e260350be592",
+    "js/xianxia/TowerRun.js": "274ca5e3fa962bdbc2583f45a4340112f06db46cad581c932c71a606b8d57e2a",
+    "js/xianxia/TowerPlaytest.js": "2b4af1b3700e8f298c5e921d25a13fd2b50b808a03393368b225a03bb111f4b6",
+    "cocos-pilot/assets/scripts/TowerMenu.ts": "43f845ab406c6ef4153cb104decf8937c22ca25d02a53453c4e99c60a2bea4ac",
+    "cocos-pilot/assets/scripts/TowerView.ts": "49cf14e341c83cd016b5aba8a7dbfdf8b31db7f3af7a8264999dd5ebb6e5a25e"
+  },
+  "finishedAt": "2026-10-28T03:31:11.688Z",
+  "failures": 0
+}

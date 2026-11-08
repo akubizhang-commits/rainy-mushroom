@@ -14,7 +14,7 @@ const ART=[
  {key:'swordWhite',path:'tower-skill-fx/liangyi-pure-white-v1',width:544,height:128},
  {key:'swordBlack',path:'tower-skill-fx/liangyi-pure-black-v1',width:544,height:128},
 ];
-const CAP=4,END=5.68;
+const CAP=4,END=8.68;
 const base=(z:any)=>z&&!z.hostile&&z.kind==='formation'&&z.source==='sj_formation'
  &&z.shape==='circle';
 const sameCenter=(a:any,b:any)=>a.x===b.x&&a.y===b.y&&a.radius===b.radius;
@@ -170,7 +170,7 @@ export class LiangyiFormationArt {
     }
     this.drawn.add(t.id);
     for(const e of effects)if(base(e)&&sameCenter(e,t)&&e.startedAt>=t.startedAt
-     &&e.startedAt<=t.startedAt+5.01)this.drawn.add(e.id);
+     &&e.startedAt<=t.startedAt+8.01)this.drawn.add(e.id);
    }
   }catch(error){this.fail(error)}
   return this.drawn;

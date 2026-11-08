@@ -1,0 +1,64 @@
+// 85号文档：流派共鸣。只算主动功法与进阶实际花费的技能点；
+// 投入最多的流派为主修，只有主修的共鸣生效，只提高该流派功法的伤害。
+// 完全由已学等级推导，不写存档字段。
+import { GROWTH_SKILLS, GROWTH_EVOLUTIONS } from './TowerGrowth.js'
+
+export const RESONANCE_SCHOOLS = Object.freeze([
+  Object.freeze({ id: 'qi', name: '剑气',
+    skills: Object.freeze(['sj_arc', 'sj_moon', 'sj_moon_triple', 'sj_cross', 'sj_line', 'evo_tiandi']),
+    tiers: Object.freeze([Object.freeze([4, .20]), Object.freeze([8, .28]), Object.freeze([18, .34])]) }),
+  Object.freeze({ id: 'yujian', name: '御剑',
+    skills: Object.freeze(['sj_yujian', 'sj_shadow', 'evo_wanjian']),
+    tiers: Object.freeze([Object.freeze([5, .12]), Object.freeze([11, .22]), Object.freeze([17, .30])]) }),
+  Object.freeze({ id: 'formation', name: '剑阵',
+    skills: Object.freeze(['sj_wanjian', 'sj_sancai', 'sj_formation', 'evo_wuwo', 'evo_sixiang']),
+    tiers: Object.freeze([Object.freeze([7, .08]), Object.freeze([14, .18]), Object.freeze([25, .35])]) }),
+])
+export const RESONANCE_TIER_NAMES = Object.freeze(['', '一重', '二重', '三重'])
+// The starting 流云斩 rank is free for new saves and does not count as investment.
+const FREE_RANKS = Object.freeze({ sj_arc: 1 })
+const DEFINITIONS = Object.fromEntries([...GROWTH_SKILLS, ...GROWTH_EVOLUTIONS].map(d => [d.id, d]))
+const SCHOOL_OF = Object.fromEntries(RESONANCE_SCHOOLS.flatMap(s => s.skills.map(id => [id, s.id])))
+
+export function resonanceSchoolOf(id) { return SCHOOL_OF[id] ?? null }
+
+function rankPoints(id, rank) {
+  const d = DEFINITIONS[id], r = Math.max(0, Math.floor(Number(rank) || 0))
+  if (!d || !r) return 0
+  return d.pointCosts.slice(FREE_RANKS[id] ?? 0, Math.min(r, d.pointCosts.length)).reduce((a, b) => a + b, 0)
+}
+
+/** ranks: { skillId: trainedRank } including evolutions. Equipment rank bonuses must be excluded by the caller. */
+export function resonanceFromRanks(ranks = {}) {
+  const schools = RESONANCE_SCHOOLS.map(s => {
+    const points = s.skills.reduce((sum, id) => sum + rankPoints(id, ranks[id]), 0)
+    const tier = s.tiers.filter(([need]) => points >= need).length
+    return { id: s.id, name: s.name, points, tier, bonus: tier ? s.tiers[tier - 1][1] : 0,
+      next: tier < s.tiers.length ? s.tiers[tier][0] : null, tiers: s.tiers }
+  })
+  // Most points wins. Ties go to the larger active bonus, then to the fixed school order.
+  let main = null
+  for (const s of schools) if (s.points > 0 && (!main || s.points > main.points
+    || s.points === main.points && s.bonus > main.bonus)) main = s
+  return { schools, main: main?.id ?? null, tier: main?.tier ?? 0, bonus: main?.bonus ?? 0 }
+}
+
+/** Trained ranks from a combat loadout (equipment +1 levels excluded). */
+export function loadoutResonance(loadout) {
+  if (!loadout || loadout.growthVersion !== 1) return resonanceFromRanks({})
+  const base = loadout.trainedSkills ?? loadout
+  return resonanceFromRanks({ ...(base.active || {}), ...(base.evolutionLevels || {}) })
+}
+
+/** Trained ranks from a campaign state. */
+export function stateResonance(state) {
+  return resonanceFromRanks({ ...(state?.skills || {}), ...(state?.evolutionRanks || {}) })
+}
+
+/** Damage factor for one skill hit: only the main school's own skills gain its bonus. */
+export function resonanceDamageFactor(loadout, skillId) {
+  const school = SCHOOL_OF[skillId]
+  if (!school) return 1
+  const r = loadoutResonance(loadout)
+  return r.main === school ? 1 + r.bonus : 1
+}

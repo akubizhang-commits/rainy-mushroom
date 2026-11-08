@@ -102,7 +102,7 @@ test('current schema starts with one immutable iron instance, zero counters and 
   assert.deepEqual(store.state.weaponCounters, { iron: 0 })
   assert.equal(store.state.weaponSequence, 0)
   assert.deepEqual(store.state.loadouts.map(row => row.weaponId), ['iron', 'iron', 'iron'])
-  assert.deepEqual([store.state.spiritStones, store.state.contribution, store.state.xp], [500, 300, 0])
+  assert.deepEqual([store.state.spiritStones, store.state.contribution, store.state.xp], [500, 1000, 0])
   assert.throws(() => { store.state.weapons.iron.locked = false }, TypeError)
   act(store, { type: 'sync' })
   const envelope = JSON.parse(disk.getItem(TOWER_CAMPAIGN_KEY))
@@ -172,7 +172,7 @@ test('ling forging opens exactly at cultivation level21; unsupported pools never
   for(const tier of ['di','tian','iron','',1])rejected(high.store,high.disk,forge(high.store,tier),'unknown-recipe')
 })
 
-for (const patch of [{ spiritStones: 0 }, { contribution: 0 }]) {
+for (const patch of [{ spiritStones: 0 }]) {
   test(`forge rejects insufficient ${Object.keys(patch)[0]} before changing RNG or pity`, () => {
     const { store, disk } = fixture({ ...patch, weaponPity: 19 })
     rejected(store, disk, forge(store))
@@ -249,15 +249,15 @@ test('locking is removed and dismantling still rejects iron and every referenced
   rejected(store, disk, { type: 'dismantleWeapon', id: 'missing' })
 })
 
-for (const [quality, refund] of [[1, 2], [2, 4], [3, 8], [4, 16]]) {
-  test(`dismantling quality${quality} refunds exactly${refund} contribution, never the forge costs`, () => {
+for (const [quality, refund] of [[1, 9], [2, 96], [3, 288], [4, 480]]) {
+  test(`dismantling quality${quality} refunds exactly${refund} spirit stones, never the full forge costs`, () => {
     const patch = ownedPatch({ tier:quality===1?'fan':'fa',quality,xp:225 })
     patch.weaponCounters['weapon-1'] = 3
     const { store, disk } = fixture(patch)
     const before = clone(store.state)
     act(store, { type: 'dismantleWeapon', id: 'weapon-1' })
-    assert.equal(store.state.contribution, before.contribution + refund)
-    assert.equal(store.state.spiritStones, before.spiritStones)
+    assert.equal(store.state.contribution, before.contribution)
+    assert.equal(store.state.spiritStones, before.spiritStones + refund)
     assert.equal(store.state.weapons['weapon-1'], undefined)
     assert.equal(store.state.weaponCounters['weapon-1'], undefined)
     assert.equal(store.state.weaponSequence, before.weaponSequence)

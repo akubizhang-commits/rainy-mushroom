@@ -1,4 +1,3 @@
-import { EQUIPMENT_ROSTER } from './TowerEquipmentRoster.js'
 import { cultivationAt, cultivationLevelXp } from './TowerProfile.js'
 // Equipment rank is independent of rolled quality. Future ranks are metadata,
 // never legal generation targets until their content and cultivation are ready.
@@ -19,6 +18,7 @@ export const OPEN_EQUIPMENT_TIERS = Object.freeze(EQUIPMENT_TIERS.filter(t => t.
 const tiers = new Map(EQUIPMENT_TIERS.map(t => [t.id, t]))
 export function equipmentTier(id) { return tiers.get(id) || null }
 export function canUseEquipmentTier(id, level) {
+  // Acquisition gate only: forging/draw unlocks retain their original levels.
   const tier = equipmentTier(id)
   return !!tier?.available && Number.isInteger(level) && level >= tier.minLevel
 }
@@ -37,11 +37,12 @@ export const EQUIPMENT_TAGS = Object.freeze([
   Object.freeze({ id: 'heavenly', name: '玄天宝', available: false }),
 ])
 
-const identityLevels = new Map(EQUIPMENT_ROSTER.map(d => [d.id, d.minLevel || equipmentTier(d.tier).minLevel]))
 export function canUseEquipment(item, level) {
-  return !!item && canUseEquipmentTier(item.tier, level) && level >= (identityLevels.get(item.definitionId) ?? equipmentTier(item.tier).minLevel)
+  const tier = equipmentTier(item?.tier)
+  const wearLevel = tier?.available ? Math.floor((tier.minLevel - 1) / 10) * 10 + 1 : null
+  return wearLevel !== null && Number.isInteger(level) && level >= wearLevel
 }
 export function equipmentRequirement(item) {
-  const minLevel = identityLevels.get(item?.definitionId)
-  return item?.tier === 'fan' && minLevel > 1 ? `炼气·${minLevel === 2 ? '二' : minLevel}层` : equipmentTierRequirement(item?.tier)
+  const tier = equipmentTier(item?.tier)
+  return tier ? `${tier.realm.replace(/初期|中期|后期|大圆满/g, '')}${tier.available ? '' : ' · 暂未开放'}` : '未知品阶'
 }

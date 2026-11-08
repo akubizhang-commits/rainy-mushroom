@@ -3,7 +3,7 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
 const {createServer}=require('node:http');
 const {installFixture}=require('./verify-sword-line.cjs');
 const {chromium}=require('/Users/zhangnu/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright');
-const ROOT=path.resolve(__dirname,'..'),OUT=path.resolve(process.env.BURST_OUT||path.join(ROOT,'design/xianxia-sword-burst-2026-10-31/browser'));
+const ROOT=path.resolve(__dirname,'..'),OUT=path.resolve(process.env.BURST_OUT||path.join(ROOT,'reports/sword-burst-outward-2026-11-05/browser'));
 async function main(){
  fs.mkdirSync(OUT,{recursive:true});const snapshot=fs.mkdtempSync('/tmp/aftershock-preview-');fs.cpSync(path.join(ROOT,'cocos-pilot/build/web-mobile'),snapshot,{recursive:true});
  const server=createServer((req,res)=>{const f=path.resolve(snapshot,'.'+new URL(req.url,'http://local').pathname);if(!f.startsWith(snapshot+path.sep)){res.writeHead(403).end();return}fs.readFile(f,(e,data)=>{if(e){res.writeHead(404).end();return}res.setHeader('Content-Type',({'.html':'text/html','.js':'text/javascript','.json':'application/json','.png':'image/png'})[path.extname(f)]||'application/octet-stream');res.end(data)})});
@@ -16,8 +16,9 @@ async function main(){
    await page.evaluate(()=>{
     window.__prepareAftershock=(rank,kill=true)=>{
      window.__prepareLine({rank:1,angle:0,reach:400,origin:{x:-140,y:-80}});
+     window.__lineView=()=>({}); // This check observes burst state, not the line renderer's private actor layout.
      const h=window.__towerTest.host,s=h.run.state,p=s.player,template=s.enemies[0];
-     s.loadout.active={sj_yujian:1};s.loadout.passive={sj_gate:kill?rank:0};s.cooldowns={sj_yujian:0};s.gateEntries=[];s.gateReadyAt=0;
+     s.loadout.active={sj_line:1};s.loadout.passive={sj_gate:kill?rank:0};s.cooldowns={sj_line:0};s.gateEntries=[];s.gateReadyAt=0;
      p.attack=200;p.hp=p.maxHp;
      s.enemies=Array.from({length:5},(_,i)=>{const e=JSON.parse(JSON.stringify(template));e.id=`aftershock-${i}`;
       e.x=p.x+140+(i===0?0:i===4?220:35);e.y=p.y+(i===0||i===4?0:(i-2)*22);
@@ -25,7 +26,7 @@ async function main(){
      s.wavePlanned=5;s.waveKilled=0;h.draw();if(h.overlay)h.overlay.active=false;
     };
    });
-   for(const rank of [1,4]){
+   for(const rank of [1,2]){
     await page.evaluate(rank=>window.__prepareAftershock(rank),rank);await page.waitForFunction(()=>{const h=window.__towerTest.host;h.draw();return h.monsterArt.actors.size>0});
     const result=await page.evaluate(()=>{
      const h=window.__towerTest.host,s=h.run.state,bursts=new Map(),hits=new Map();let stable=true,readonly=true,peak=0,maxStacks=0,maxSwords=0,oldGate=0;
@@ -36,13 +37,33 @@ async function main(){
      }
      return {maxStacks,maxSwords,oldGate,bursts:Array.from(bursts.values()),hits:Array.from(hits.values()),peak,stable,readonly,remaining:h.burstArt.bursts.size,kills:s.waveKilled};
     });
-    assert.ok(result.bursts.length>=1);assert.equal(result.bursts[0].radius,rank===1?80:110);assert.equal(result.hits.length,result.bursts.length*4);assert.ok(result.hits.every(h=>h.damage>0&&h.targetId!=='aftershock-4'));assert.ok(result.stable&&result.readonly);assert.equal(result.oldGate,0);assert.equal(result.maxStacks,0);assert.ok(result.maxSwords>=4);
+    assert.ok(result.bursts.length>=1);assert.equal(result.bursts[0].radius,110);assert.equal(result.hits.length,result.bursts.length*4);assert.ok(result.hits.every(h=>h.damage>0&&h.targetId!=='aftershock-4'));assert.ok(result.stable&&result.readonly);assert.equal(result.oldGate,0);assert.equal(result.maxStacks,0);assert.ok(result.maxSwords>=4);
     report.cases.push({viewport,rank,...result});
    }
-   await page.evaluate(()=>window.__prepareAftershock(4,false));const noKill=await page.evaluate(()=>{const h=window.__towerTest.host;let bursts=0;for(let i=0;i<120;i++){window.__stepLine();bursts+=h.run.state.effects.filter(e=>e.kind==='sword_burst').length}return bursts});assert.equal(noKill,0);
+   await page.evaluate(()=>window.__prepareAftershock(2));
+   for(const [stage,extra] of [['charge',0],['outward',0],['clear',0]]){
+    const state=await page.evaluate(stage=>{
+     const h=window.__towerTest.host,s=h.run.state;
+     for(let i=0;i<150;i++){
+      window.__stepLine();
+      const b=s.effects.find(e=>e.kind==='sword_burst');
+      if(stage==='charge'&&s.swordBursts?.length)break;
+      if(stage==='outward'&&b&&s.time-b.startedAt>=.13)break;
+      if(stage==='clear'&&!h.burstArt.bursts.size&&!s.swordBurstShots?.length)break;
+     }
+     const before=JSON.stringify(s);h.draw();h.draw();
+     return {readonly:before===JSON.stringify(s),actors:h.burstArt.actors.size,time:s.time,shots:s.swordBurstShots?.length||0};
+    },stage);
+    assert.ok(state.readonly);if(stage==='outward')assert.ok(state.actors>6);
+    await page.screenshot({path:path.join(OUT,`${stage}-${viewport.width}.png`)});
+    const paused=await page.evaluate(()=>JSON.stringify(window.__towerTest.host.run.state));await page.waitForTimeout(120);
+    assert.equal(await page.evaluate(()=>JSON.stringify(window.__towerTest.host.run.state)),paused);
+    report.cases.push({viewport,stage,...state});
+   }
+   await page.evaluate(()=>window.__prepareAftershock(2,false));const noKill=await page.evaluate(()=>{const h=window.__towerTest.host;let bursts=0;for(let i=0;i<120;i++){window.__stepLine();bursts+=h.run.state.effects.filter(e=>e.kind==='sword_burst').length}return bursts});assert.equal(noKill,0);
    await page.waitForFunction(()=>window.__towerTest.host.environmentArt.nodes.get('floor')?.active);
    await page.locator('canvas').click({position:{x:500,y:240}});
-   await page.evaluate(()=>{window.__prepareAftershock(4);const label=document.createElement('div');label.style.cssText='position:fixed;left:50%;bottom:26px;transform:translateX(-50%);padding:8px 18px;background:#102d2ddd;color:#eaffff;font:20px sans-serif;border-radius:6px;pointer-events:none';label.textContent='剑罡爆裂 · 一次起手 / 四剑连刺 / 白金爆裂';document.body.appendChild(label)});
+   await page.evaluate(()=>{window.__prepareAftershock(2);const label=document.createElement('div');label.style.cssText='position:fixed;left:50%;bottom:26px;transform:translateX(-50%);padding:8px 18px;background:#102d2ddd;color:#eaffff;font:20px sans-serif;border-radius:6px;pointer-events:none';label.textContent='剑罡爆裂 · 体内爆裂 / 白剑错落外射 / 10秒冷却';document.body.appendChild(label)});
    await page.waitForTimeout(250);
    await page.evaluate(()=>{const a=window.__towerTest.host.burstArt;window.__burstAudioPlayed=0;if(a.sound){const original=a.sound.play.bind(a.sound);a.sound.play=()=>{window.__burstAudioPlayed++;return original()}}});
    const start=await page.evaluate(()=>{const h=window.__towerTest.host;h.run.resume();return {time:h.run.state.time,wall:performance.now()}});

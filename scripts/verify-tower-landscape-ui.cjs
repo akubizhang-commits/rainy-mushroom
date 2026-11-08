@@ -452,7 +452,7 @@ async function main() {
       if (PHASE === 'final') {
         if (selectedCases.includes('mask')) {
           await scenario(viewport, 'mask', async q => {
-            const extreme = viewport.width >= 1900, root = await q.find('栖云宗·功能版');
+            const extreme = viewport.width >= 1900, root = await q.find('霁云宗·功能版');
             assert.equal(root.mask, true, 'Actual built game root must own Mask');
             if (extreme) {
               const h = await q.host();
@@ -521,7 +521,7 @@ async function main() {
             await q.click('技能树', { bottom: true });
             const original = await q.layout();
             if (extreme) {
-              const h = await q.host(), root = await q.find('栖云宗·功能版');
+              const h = await q.host(), root = await q.find('霁云宗·功能版');
               near(h.size.width, 1280, 'SHOW_ALL logical width', .01);
               near(h.size.height, 560, 'SHOW_ALL minimum logical height', .01);
               const scale = Math.min(viewport.width / 1280, viewport.height / 560);
@@ -576,7 +576,7 @@ async function main() {
             y: h.size.height / 2 - top - 68 + (v.y - rt.HEX_CENTER.y) * mapScale }));
           assert.ok(matches(paths.hud, mapPoints), 'Actual HUD Graphics missing six-vertex overview');
           q.check('New Campaign arenaVersion=1; actual world and HUD paths contain six hex vertices', { paths });
-          const root = await q.find('栖云宗·功能版'), joystick = await q.find('移动摇杆');
+          const root = await q.find('霁云宗·功能版'), joystick = await q.find('移动摇杆');
           assert.ok(inside(joystick.box, root.box), 'Joystick outside letterboxed game');
           assert.ok(joystick.x < root.box.left + (root.box.right - root.box.left) * .3);
           const scale = (joystick.box.right - joystick.box.left) / 224;

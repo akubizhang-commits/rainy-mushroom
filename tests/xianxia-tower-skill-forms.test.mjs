@@ -3,8 +3,12 @@ import assert from 'node:assert/strict'
 import { TowerRun, validateTowerSnapshot } from '../js/xianxia/TowerRun.js'
 import { GROWTH_SKILLS } from '../js/xianxia/TowerGrowth.js'
 import { skillForm, orbitSwordPose } from '../js/xianxia/TowerSkillForms.js'
+import { resonanceDamageFactor } from '../js/xianxia/TowerResonance.js'
 
 const STEP = 1 / 60
+// 85号：命中伤害已乘主修流派共鸣；预算断言按同一系数换算。
+const attackFor = (run, id) => (['sj_wanjian','sj_formation','sj_shadow'].includes(id) ? (run.state.player.attack + run.state.player.magicAttack) / 2 : run.state.player.attack)
+  * resonanceDamageFactor(run.state.loadout, id)
 const coefficient = (id, rank) => GROWTH_SKILLS.find(s => s.id === id).damage[rank - 1]
 const close = (a, b) => assert.ok(Math.abs(a - b) < 1e-6, `${a} != ${b}`)
 function make(id, level, evolution = null, evolutionLevel = 1) {
@@ -16,7 +20,7 @@ function make(id, level, evolution = null, evolutionLevel = 1) {
   for (let i = 0; i < 300 && !run.state.enemies.length; i++) run.advance(STEP)
   const enemy = run.state.enemies[0]
   Object.assign(enemy, { x: run.state.player.x + 100, y: run.state.player.y, radius: 5,
-    hp: 1e6, maxHp: 1e6, moveSpeed: 0 })
+    hp: 1e6, maxHp: 1e6, moveSpeed: 0, physicalDefense: 0, magicDefense: 0 })
   enemy.ai.graceUntil = 99999
   run.state.enemies = [enemy]
   run.state.pending = []; run.state.reserved = []
@@ -52,7 +56,7 @@ test('orbit expires after four seconds and restarts six seconds after activation
   assert.ok(hits.some(hit => hit.at < activation + 4))
   assert.ok(!hits.some(hit => hit.at >= activation + 4 + 1e-8 && hit.at < activation + 6 - 1e-8))
   assert.ok(hits.some(hit => hit.at >= activation + 6))
-  for (const hit of hits) close(hit.damage, run.state.player.attack * coefficient('sj_wanjian', 1) * 10 / 7)
+  for (const hit of hits) close(hit.damage, attackFor(run, 'sj_wanjian') * coefficient('sj_wanjian', 1) * 10 / 7)
 })
 
 test('orbit timing survives pause and snapshot restore without granting a fresh activation', () => {
@@ -103,14 +107,14 @@ for (const [index, radius] of formationRadii.entries()) {
     assert.deepEqual(run._targets(zone, previousRadius, 8).map(e => e.id), [enemy.id],
       'all three probes lie beyond the previous collision circle')
     const pulses = [], seen = new Set()
-    const hits = sample(run, 6.4, () => {
+    const hits = sample(run, 8.4, () => {
       for (const effect of run.state.effects) {
         if (effect.kind === 'formation' && !seen.has(effect.id)) {
           seen.add(effect.id); pulses.push({ ...effect })
         }
       }
     })
-    const count = rank === 10 ? 7 : 6
+    const count = rank >= 7 ? 16 : rank >= 4 ? 14 : 12
     assert.equal(zone.radius, radius, 'zone exposes the real expanded radius')
     assert.equal(pulses.length, count)
     assert.equal(hits.length, count * 3, 'each real target takes one hit per pulse')
@@ -126,11 +130,11 @@ for (const [index, radius] of formationRadii.entries()) {
       assert.equal(pulse.pulseIndex, i + 1)
       assert.equal(pulse.pulseCount, count)
       assert.deepEqual(new Set(pulse.targetIds), new Set([enemy.id, 'new-band', 'edge-contact']))
-      const due = zone.startedAt + .5 + i * 4.5 / (count - 1)
+      const due = zone.startedAt + .5 + i * 7.5 / (count - 1)
       close(pulse.startedAt, Math.ceil((due - 1e-8) * 60) / 60)
     }
     for (const target of [enemy, ...probes.slice(0, 2)]) {
-      close(1e6 - target.hp, run.state.player.attack * coefficient('sj_formation', rank) * 6)
+      close(1e6 - target.hp, attackFor(run, 'sj_formation') * coefficient('sj_formation', rank) * 6)
     }
     assert.equal(probes[2].hp, 1e6, 'the full collider beyond the new edge stays unharmed')
     assert.equal(skillForm('sj_formation', rank).reach, 360, 'placement reach is unchanged')
@@ -144,16 +148,16 @@ test('sixiang range follows its own evolution rank instead of parent investment'
       const form = skillForm('evo_sixiang', rank, parentRank)
       assert.equal(form.radius, radius)
       assert.equal(form.shape, 'diamond')
-      assert.equal(form.hits, rank === 1 ? 7 : 9)
+      assert.equal(form.hits, rank === 1 ? 16 : 20)
     }
   }
 })
 
 for (const [id, counts, seconds, total] of [
-  ['sj_arc', [1, 1, 1, 3], 1, 1],
+  ['sj_arc', [3, 3, 3, 3], 1, 1],
   ['sj_line', [1, 1, 2, 3], 1, 1],
   ['sj_shadow', [1, 2, 3, 4], 1.6, 1],
-  ['sj_formation', [6, 6, 6, 7], 5.4, 6],
+  ['sj_formation', [12, 12, 14, 16], 8.4, 6],
 ]) {
   for (const [i, rank] of [1, 3, 6, 10].entries()) {
     test(`${id} rank ${rank} produces ${counts[i]} distinct beats without multiplying the cast budget`, () => {
@@ -161,7 +165,7 @@ for (const [id, counts, seconds, total] of [
       start(run, id)
       const hits = sample(run, seconds)
       assert.equal(hits.length, counts[i])
-      close(1e6 - enemy.hp, run.state.player.attack * coefficient(id, rank) * total)
+      close(1e6 - enemy.hp, attackFor(run, id) * coefficient(id, rank) * total)
       assert.equal(new Set(hits.map(h => h.at)).size, counts[i], 'beats are not simultaneous duplicate receipts')
       if (id === 'sj_shadow') {
         for (let beat = 1; beat < hits.length; beat++) {
@@ -178,7 +182,7 @@ test('line combo retains its first released ray when the caster moves between be
   start(run, 'sj_line')
   const hits = sample(run, 1, i => { if (i === 12) run.state.player.y += 100 })
   assert.equal(hits.length, 3)
-  close(1e6 - enemy.hp, run.state.player.attack * coefficient('sj_line', 10))
+  close(1e6 - enemy.hp, attackFor(run, 'sj_line') * coefficient('sj_line', 10))
 })
 
 test('arc volley keeps its facing but releases later blades at the current caster position', () => {
@@ -208,7 +212,7 @@ test('orbit blades sweep the annulus while sharing one target interval', () => {
   const hits = sample(run, 1.6)
   assert.ok(hits.length >= 2, 'a stationary target on the ring is reached by rotating swords')
   for (let i = 1; i < hits.length; i++) assert.ok(hits[i].at - hits[i - 1].at >= .6 - STEP / 2)
-  for (const hit of hits) close(hit.damage, run.state.player.attack * coefficient('sj_wanjian', 10) * 10 / 7)
+  for (const hit of hits) close(hit.damage, attackFor(run, 'sj_wanjian') * coefficient('sj_wanjian', 10) * 10 / 7)
 })
 
 test('each additional orbit sword tier expands both the ring and its outer reach', () => {
@@ -243,7 +247,7 @@ for (const rank of [1, 2]) {
     start(run, 'sj_formation')
     sample(run, .5)
     const zone = run.state.zones.find(z => z.kind === 'formation')
-    const radius = rank === 1 ? 288 : 336, count = rank === 1 ? 7 : 9, body = enemy.radius
+    const radius = rank === 1 ? 288 : 336, count = rank === 1 ? 16 : 20, body = enemy.radius
     assert.equal(zone.shape, 'diamond')
     const edgeContact = radius / 2 + (body - 1) / Math.SQRT2
     const edgeClear = radius / 2 + (body + 1) / Math.SQRT2
@@ -262,7 +266,7 @@ for (const rank of [1, 2]) {
     const damaged = new Set([enemy.id, 'new-band', 'edge-contact', 'vertex-contact',
       ...(rank === 2 ? ['rank2-band'] : [])])
     const pulses = [], seen = new Set(), center = { x: zone.x, y: zone.y }
-    const hits = sample(run, 6.4, i => {
+    const hits = sample(run, 8.4, i => {
       if (i === 12) run.state.player.x -= 50
       for (const effect of run.state.effects) if (effect.kind === 'formation' && !seen.has(effect.id)) {
         seen.add(effect.id); pulses.push({ ...effect })
@@ -271,7 +275,7 @@ for (const rank of [1, 2]) {
     assert.equal(zone.radius, radius)
     assert.equal(pulses.length, count)
     assert.equal(hits.length, damaged.size * count, 'four eyes still share one hit per target and pulse')
-    const ticks = Array.from({ length: count }, (_, i) => Math.ceil((.5 + i * 5.5 / (count - 1)) * 60 - 1e-8))
+    const ticks = Array.from({ length: count }, (_, i) => Math.ceil((.5 + i * 7.5 / (count - 1)) * 60 - 1e-8))
     for (const [i, pulse] of pulses.entries()) {
       assert.equal(pulse.radius, radius)
       assert.equal(pulse.shape, 'diamond')
@@ -280,7 +284,7 @@ for (const rank of [1, 2]) {
       assert.deepEqual(new Set(pulse.targetIds), damaged)
       close(pulse.startedAt - zone.startedAt, ticks[i] / 60)
     }
-    const budget = run.state.player.attack * coefficient('sj_formation', 10) * 9 * (rank === 1 ? 2.0 : 2.3)
+    const budget = attackFor(run, 'sj_formation') * coefficient('sj_formation', 10) * 7.5 * (rank === 1 ? 2.0 : 2.3)
     for (const target of [enemy, ...probes]) {
       close(1e6 - target.hp, damaged.has(target.id) ? budget : 0)
       assert.equal(hits.filter(h => h.targetId === target.id).length, damaged.has(target.id) ? count : 0)
@@ -296,25 +300,27 @@ for (const rank of [1, 2]) {
       ...structuredClone(enemy), id: `expanded-${i}`, x: zone.x + 180 + i * 12, y: zone.y,
     }))
     run.state.enemies.push(...added)
-    const hits = sample(run, 6.4), count = rank === 1 ? 7 : 9
+    const hits = sample(run, 8.4), count = rank === 1 ? 16 : 20
     assert.equal(hits.length, 8 * count)
     assert.equal(added[7].hp, 1e6, 'the ninth nearest eligible target stays unharmed')
-    const budget = run.state.player.attack * coefficient('sj_formation', 10) * 9 * (rank === 1 ? 2.0 : 2.3)
+    const budget = attackFor(run, 'sj_formation') * coefficient('sj_formation', 10) * 7.5 * (rank === 1 ? 2.0 : 2.3)
     for (const target of [enemy, ...added.slice(0, 7)]) {
       assert.equal(hits.filter(h => h.targetId === target.id).length, count)
       close(1e6 - target.hp, budget)
     }
   })
 
-  test(`convergence rank ${rank} strikes ${rank === 1 ? 7 : 9} times and suspends ordinary yujian without catching up`, () => {
+  test(`convergence rank ${rank} strikes ${rank === 1 ? 19 : 25} times and suspends ordinary yujian without catching up`, () => {
     const { run, enemy } = make('sj_yujian', 10, 'evo_wanjian', rank)
     run.state.cooldowns.sj_yujian = 0
     run.state.cooldowns.evo_wanjian = 0
-    const hits = sample(run, 1.9, () => {
+    for(let i=0;i<120&&!run.state.zones.some(z=>z.formId==='evo_wanjian');i++)run.advance(STEP)
+    assert.ok(run.state.zones.some(z=>z.formId==='evo_wanjian'))
+    const hits = sample(run, rank === 1 ? 2.0 : 2.6, () => {
       assert.equal(run.state.projectiles.filter(p => !p.hostile).length, 0, 'no ordinary sword during the special')
     })
-    assert.equal(hits.length, rank === 1 ? 7 : 9)
-    close(1e6 - enemy.hp, run.state.player.attack * coefficient('sj_yujian', 10) * (((rank === 1 ? 1.30 : 1.69) - 1) * 8 + (rank === 1 ? 1.1 : 1.4)))
+    assert.equal(hits.length, rank === 1 ? 19 : 25)
+    close(1e6 - enemy.hp, attackFor(run, 'sj_yujian') * coefficient('sj_yujian', 10) * (((rank === 1 ? 1.30 : 1.69) - 1) * 8 + (rank === 1 ? 1.1 : 1.4)))
     assert.ok(run.state.cooldowns.sj_yujian > run.state.time)
   })
 }
@@ -331,7 +337,7 @@ test('tiandi keeps one damage receipt while both ranks have genuinely wider and 
     assert.ok(e.reach > 510)
     if (first) { assert.ok(e.width > first.width); assert.ok(e.reach > first.reach) }
     first = e
-    close(1e6 - enemy.hp, run.state.player.attack * coefficient('sj_line', 10) * 10 / 6 * (rank === 1 ? 1.40 : 1.82))
+    close(1e6 - enemy.hp, attackFor(run, 'sj_line') * coefficient('sj_line', 10) * 10 / 12 * (rank === 1 ? 1.40 : 1.82))
   }
 })
 
@@ -521,10 +527,10 @@ test('critical hit presentation marks an actual critical without an additional d
   run.state.loadout.passive.sj_heart = 4
   run.state.rng = 1
   start(run, 'sj_arc')
-  const hits = sample(run, .4)
+  const hits = sample(run, .25)
   assert.equal(hits.length, 1)
   assert.equal(hits[0].critical, true)
-  close(hits[0].damage, run.state.player.attack * coefficient('sj_arc', 1) * 1.5)
+  close(hits[0].damage, attackFor(run, 'sj_arc') * coefficient('sj_arc', 1) * .25 * 1.5)
 })
 
 test('a due convergence drains existing ordinary swords before starting instead of extending the volley', () => {
@@ -564,7 +570,7 @@ for (const rank of [1, 3, 6, 10]) {
       assert.ok(hits.length >= 12, `expected at least 12 hits across two active windows, received ${hits.length}`)
       assert.ok(hits.length <= 14, 'each four-second activation allows at most seven hits')
       for (let i = 1; i < hits.length; i++) assert.ok(hits[i].at - hits[i - 1].at >= .6 - STEP / 2)
-      close(1e6 - enemy.hp, hits.length * run.state.player.attack * coefficient('sj_wanjian', rank) * 10 / 7)
+      close(1e6 - enemy.hp, hits.length * attackFor(run, 'sj_wanjian') * coefficient('sj_wanjian', rank) * 10 / 7)
     })
   }
 }
@@ -605,12 +611,12 @@ for (const rank of [2, 3, 6, 7, 10]) {
     start(run, 'sj_cross')
     const hits = sample(run, 1.5)
     assert.equal(hits.length, 1, 'the two crossing blades share one receipt')
-    close(hits[0].damage, run.state.player.attack * coefficient('sj_cross', rank))
+    close(hits[0].damage, attackFor(run, 'sj_cross') * coefficient('sj_cross', rank))
     assert.equal(skillForm('sj_cross', rank).hits, 1)
   })
 }
 
-for (const [evolution,rank,duration,count] of [[null,1,5,7],['evo_sixiang',1,6,7],['evo_sixiang',2,6,9]]) {
+for (const [evolution,rank,duration,count] of [[null,1,8,16],['evo_sixiang',1,8,16],['evo_sixiang',2,8,20]]) {
   test(`formation ${evolution ?? 'liangyi'} rank ${rank} loses only future hits when a boss leaves`, () => {
     const measure = leaveAfter => {
       const {run,enemy}=make('sj_formation',10,evolution,rank)

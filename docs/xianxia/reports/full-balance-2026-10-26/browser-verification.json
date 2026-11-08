@@ -1,0 +1,140 @@
+{
+  "url": "http://localhost:8767/docs/xianxia/balance-review.html",
+  "viewport": {
+    "width": 390,
+    "height": 844
+  },
+  "startedAt": "2026-10-26T10:30:01.025Z",
+  "checks": [
+    {
+      "name": "8767 页面 HTTP 200",
+      "result": "PASS"
+    },
+    {
+      "name": "固定首轮 A/B 各600局且无完整性告警",
+      "result": "PASS"
+    },
+    {
+      "name": "390px 页面和 body 无横向溢出",
+      "result": "PASS"
+    },
+    {
+      "name": "额外批次与B留出集明确另列",
+      "result": "PASS"
+    },
+    {
+      "name": "初始异常局恰好3局",
+      "result": "PASS"
+    },
+    {
+      "name": "经典1/2、修仙0/2门槛通过且不宣称整体验收",
+      "result": "PASS"
+    },
+    {
+      "name": "flee筛选：133/300 与202/300",
+      "result": "PASS"
+    },
+    {
+      "name": "spore筛选：260/300 与282/300",
+      "result": "PASS"
+    },
+    {
+      "name": "spore异常筛选为空态",
+      "result": "PASS"
+    },
+    {
+      "name": "A版异常筛选为空态",
+      "result": "PASS"
+    },
+    {
+      "name": "B版异常筛选3局",
+      "result": "PASS"
+    },
+    {
+      "name": "选卡策略筛选排除不匹配异常局",
+      "result": "PASS"
+    },
+    {
+      "name": "随机选卡恢复3局异常",
+      "result": "PASS"
+    },
+    {
+      "name": "seed搜索精确筛到1局",
+      "result": "PASS"
+    },
+    {
+      "name": "异常详情含seed、pick、时长和构筑",
+      "result": "PASS"
+    },
+    {
+      "name": "390px详情弹窗无横向溢出且在视口内",
+      "result": "PASS"
+    },
+    {
+      "name": "展开逐次选卡记录",
+      "result": "PASS"
+    },
+    {
+      "name": "同配置配对跳转到A版同seed",
+      "result": "PASS"
+    },
+    {
+      "name": "Escape关闭详情弹窗",
+      "result": "PASS"
+    },
+    {
+      "name": "全部对局分页：每页20，下一页生效",
+      "result": "PASS"
+    },
+    {
+      "name": "浏览器控制台error为0",
+      "result": "PASS"
+    },
+    {
+      "name": "未捕获页面异常为0",
+      "result": "PASS"
+    },
+    {
+      "name": "失败网络请求为0",
+      "result": "PASS"
+    }
+  ],
+  "consoleErrors": [],
+  "pageErrors": [],
+  "failedRequests": [],
+  "screenshots": [
+    "/tmp/balance-review-20261026-390-overview.png",
+    "/tmp/balance-review-20261026-390-anomalies.png",
+    "/tmp/balance-review-20261026-390-detail.png"
+  ],
+  "harnessNote": "初次390px脚本误将说明文字断言写成空字符串；修正测试脚本后完整重跑，页面源码未修改。",
+  "sources": [
+    {
+      "id": "A",
+      "n": 600,
+      "path": "../../../reports/full-balance-2026-10-26/A-classic-1.json",
+      "issues": []
+    },
+    {
+      "id": "B",
+      "n": 600,
+      "path": "../../../reports/full-balance-2026-10-26/B-xianxia-1.json",
+      "issues": []
+    }
+  ],
+  "widths": {
+    "viewport": 390,
+    "document": 390,
+    "body": 390
+  },
+  "modal": {
+    "client": 350,
+    "scroll": 350,
+    "left": 19,
+    "right": 371
+  },
+  "choiceRows": 28,
+  "finishedAt": "2026-10-26T10:30:01.945Z",
+  "assertionGroups": 23,
+  "result": "PASS"
+}

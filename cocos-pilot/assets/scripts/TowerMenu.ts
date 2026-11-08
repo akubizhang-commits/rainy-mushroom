@@ -1,4 +1,3 @@
-import {equipmentSkillBonus} from './shared/js/xianxia/TowerEquipmentSkillLevels';
 import { presentationPreferences, setPresentationPreference } from './TowerPreferences';
 import { MENU_COLORS } from './TowerMenuChrome';
 import {towerResources as resources} from './TowerResources';
@@ -7,8 +6,8 @@ import { FORGING_RECIPES, forgingRecipe, forgingQuote, createForgedGear } from '
 import { FORGE_MATERIALS } from './shared/js/xianxia/TowerForgeMaterials';
 import { equipmentSourceLabel } from './shared/js/xianxia/TowerEquipmentSources';
 import { ALCHEMY_MATERIALS, ALCHEMY_RECIPES, alchemyQuote } from './shared/js/xianxia/TowerAlchemy';
-import { cultivationPillAllowance, cultivationPillsUnlocked, CULTIVATION_PILL_UNLOCK_HINT } from './shared/js/xianxia/TowerPills';
-import { drawMenuVeil, drawMenuClose } from './TowerMenuChrome';
+import { cultivationPillAllowance, cultivationPillHint, cultivationPillUseHint, cultivationPillsUnlocked, CULTIVATION_PILL_UNLOCK_HINT } from './shared/js/xianxia/TowerPills';
+import { drawMenuVeil, drawMenuClose, drawMenuBack, isMenuBack } from './TowerMenuChrome';
 import { EQUIPMENT_TIERS, OPEN_EQUIPMENT_TIERS, equipmentTier, canUseEquipmentTier, equipmentTierRequirement, isStarterEquipment } from './shared/js/xianxia/TowerEquipmentTiers';
 import {TowerMonsterArt} from './TowerMonsterArt';
 import {TowerCharacterArt} from './TowerCharacterArt';
@@ -18,11 +17,12 @@ import {createPlayerHud,drawPlayerHp,drawPlayerMana,drawHudPortrait,drawHudActio
 import {stats as combatStats,characterCombatAttributes} from './shared/js/xianxia/TowerRun';
 import { BlockInputEvents, Button, Color, Graphics, ImageAsset, isValid, Label, LabelOutline, LabelShadow, Mask, Node, ScrollView, Sprite, SpriteFrame, Texture2D, UITransform, Vec2 } from 'cc';
 import { combatLoadout } from './shared/js/xianxia/TowerCampaign';
+import { classProfile } from './shared/js/xianxia/TowerClassProfiles';
 import { weaponName, weaponDescription, WEAPONS } from './shared/js/xianxia/TowerWeapons';
 import { equipmentName, equipmentDescription, EQUIPMENT } from './shared/js/xianxia/TowerEquipment';
 import { ARCHETYPES, ECONOMY, FLOORS } from './shared/js/xianxia/TowerContent';
-import { GROWTH_SKILLS, GROWTH_EVOLUTIONS, GROWTH_RESEARCH, GROWTH_STAGES, growthStageAt, skillStage, decreaseSkillQuote, giftSkills, growthSummary, rankCap, skillRequirement } from './shared/js/xianxia/TowerGrowth';
-import { DIANJUAN_DRAW_COST, FIRST_CLEAR_REWARDS, formatSpiritStones, splitSpiritStones } from './shared/js/xianxia/TowerEconomy';
+import { GROWTH_SKILLS, GROWTH_EVOLUTIONS, GROWTH_STAGES, growthStageAt, skillStage, decreaseSkillQuote, giftSkills, growthSummary, rankCap, skillRequirement } from './shared/js/xianxia/TowerGrowth';
+import { DIANJUAN_DRAW_COST, DIANJUAN_STARTER, DIANJUAN_CAMPAIGN_TOTAL, FIRST_CLEAR_REWARDS, FIRST_CLEAR_MATERIALS, formatSpiritStones, splitSpiritStones } from './shared/js/xianxia/TowerEconomy';
 import { EQUIPMENT_CAPACITY, forgeCost } from './shared/js/xianxia/TowerCrafting';
 import { CAMP_PILLS, TOWER_RESOURCE_CAP, cultivationAt } from './shared/js/xianxia/TowerProfile';
 import { TowerSkillIcons } from './TowerSkillIcons';
@@ -31,6 +31,7 @@ import { TowerInventoryPanel } from './TowerInventoryPanel';
 import { TowerLibraryPanel } from './TowerLibraryPanel';
 import { layoutSkillTree } from './TowerSkillTreeLayout';
 import { TREE_BRANCHES, COMMON_SKILL_IDS, FUTURE_SKILLS, DISPLAY_STAGES, COLUMN_INDEX } from './TowerSkillTreeCatalog';
+import { RESONANCE_SCHOOLS, RESONANCE_TIER_NAMES, resonanceFromRanks, resonanceSchoolOf, stateResonance } from './shared/js/xianxia/TowerResonance';
 import { skillPresentation } from './shared/js/xianxia/TowerSkillPresentation';
 
 export type TowerMenuHandlers = {
@@ -59,9 +60,9 @@ const stageLabel = (stage: any) => `${stage.realm}·${stage.phase}`;
 const qualityNames = ['不入品', '下品', '中品', '上品', '极品'];
 const stoneGradeNames = ['下品', '中品', '上品', '极品'];
 const titles: Record<string, string> = {
- hall: '落云宗', tower: '锁妖塔', library: '藏经阁', forge: '炼器峰',
- pills: '丹霞峰', loadouts: '洞府整备', inventory: '背包', training: '演武场', home: '落云主峰',
- gate: '山门', tutorial: '入宗指引', swordPeak: '凌霄剑峰',
+ hall: '霁云宗', tower: '锁妖塔', library: '藏经阁', forge: '炼器峰',
+ pills: '丹霞峰', loadouts: '洞府整备', inventory: '背包', training: '演武场', home: '霁云主峰',
+ tutorial: '入宗指引', swordPeak: '凌霄剑峰',
 };
 const count = (v: any) => Number.isFinite(v) ? Math.max(0, Math.floor(v)) : 0;
 const pct = (v: number) => `${Math.round(v * 100000) / 1000}%`;
@@ -108,7 +109,8 @@ export class TowerMenu {
  private skillPaneOffset = 0;
  private readonly expandedSkillRealms = new Set<string>();
  private horizontalOffsets: Record<string, number> = {};
- private skillFeedback: { id: string; text: string; failed?: boolean } | null = null;
+ private skillFeedback: { id: string; text: string; failed?: boolean; resonance?: boolean } | null = null;
+ private pendingDecrease: { id: string; text: string } | null = null;
  private notice = '';
  private editIndex = 0;
  private weaponDetailId = '';
@@ -131,6 +133,8 @@ export class TowerMenu {
  private commerceDetailId = '';
  private purchaseOffset = 0;
  private commerceRewards: any[] = [];
+ private forgeRitualTime = 0;
+ private forgeRitual: {root:Node; materials:Node[]; flames:Sprite[]; fire:Graphics; rays:Graphics; sparks:Graphics; caption:Label; finish:()=>void} | null = null;
  private gearSelection = '';
  private gearCategory = 'weapon';
  private gearQuality = 1;
@@ -261,11 +265,13 @@ export class TowerMenu {
   if (nextPage === 'home' && !this.homeDetailsOpen) {
    this.homeCourtyard();
    this.sectShortcuts();
+   this.headerWallet();
    return;
   }
   if (nextPage === 'swordPeak') {
    this.swordCourtyard();
    this.sectShortcuts();
+   this.headerWallet();
    return;
   }
   if (!['library', 'inventory', 'forge', 'pills'].includes(nextPage)) {
@@ -275,25 +281,20 @@ export class TowerMenu {
   // Keep the hall HUD in the upper-left; its shorter, fading paper leaves
   // Sword Peak visible through the lower edge.
   this.playerHud.root.setPosition(nextPage==='hall' ? -this.designWidth / 2 + 206 : this.designWidth / 2 - 204,
-   h / 2 - (nextPage==='hall'?86:70));
+   h / 2 - (nextPage==='hall'?86:122));
   this.playerHud.xpBar.node.active=false;
   this.healthLabel=this.playerHud.hpLabel;this.healthBar=this.playerHud.hpBar;
   this.updatePlayerHud(state);
   }
   const paperHeader = !['library', 'hall', 'inventory', 'forge', 'pills'].includes(nextPage);
-  let walletExtra = paperHeader ? 72 : 0;
-  if (!['library', 'hall'].includes(nextPage)) {
-   const compactHeader = ['forge', 'pills', 'inventory'].includes(nextPage);
-   const width = this.walletWidth();
-   const separateRow = !compactHeader || width > 424;
-   this.wallet(this.designWidth / 2 - 24 - width / 2, top - (paperHeader ? 164 : separateRow ? 102 : 40), width);
-   if (compactHeader && separateRow) walletExtra = 52;
-  }
+  const walletExtra = paperHeader ? 72 : 0;
+  if (['hall', 'library', 'forge', 'pills', 'home', 'loadouts'].includes(nextPage))
+   this.headerWallet();
   if(nextPage === 'hall') {
    this.sectScene.attach(this.root,this.designWidth,h,page=>this.go(page));
    this.sectShortcuts();
-   this.sectIcon('设置','gear',this.designWidth/2-66,h/2-64,()=>this.sectSettings());
-   this.sectIcon('机缘抽奖','chest',this.designWidth/2-164,h/2-64,()=>{this.mixedOpen=true;this.mixedTier=this.state.xp>=6601?'ling':this.state.xp>=1801?'bao':'fa';this.mixedView='closed';this.mixedText='';this.render(this.state,'hall');});
+   this.sectIcon('设置','gear',this.designWidth/2-52,h/2-116,()=>this.sectSettings());
+   this.sectIcon('机缘抽奖','chest',this.designWidth/2-116,h/2-116,()=>{this.mixedOpen=true;this.mixedTier=this.state.xp>=6601?'ling':this.state.xp>=1801?'bao':'fa';this.mixedView='closed';this.mixedText='';this.render(this.state,'hall');});
    this.clickable(this.playerHud!.portraitGraphics.node,()=>this.showCharacterInfo(),true);
    if(this.mixedOpen)this.mixedOverlay();
    if(this.characterInfoOpen)this.showCharacterInfo();
@@ -323,7 +324,6 @@ export class TowerMenu {
    case 'loadouts': this.loadouts(); break;
    case 'training': this.training(); break;
    case 'home': this.home(); break;
-   case 'gate': this.gate(); break;
    case 'tutorial': this.tutorial(); break;
    default: this.hall();
   }
@@ -380,7 +380,7 @@ export class TowerMenu {
    ?`${compactHealth(current)}/${compactHealth(maximum)}`:exactHealth;
   if(this.characterHpLabel)this.characterHpLabel.string=exactHealth;
   const manaStats=combatStats(xp,combatLoadout(state));
-  this.playerHud.manaLabel.string=`灵力 ${Math.floor(p?.mana??state.mana)}/${Math.round(p?.maxMana??manaStats.maxMana)}`;
+  this.playerHud.manaLabel.string=`灵力值 ${Math.floor(p?.mana??state.mana)}/${Math.round(p?.maxMana??manaStats.maxMana)}`;
   if(this.characterManaLabel)this.characterManaLabel.string=`${number(p?.mana??state.mana)} / ${number(p?.maxMana??manaStats.maxMana)}`;
   drawPlayerHp(this.playerHud.hpBar,hp/maxHp,this.playerHud.style);
   drawPlayerMana(this.playerHud.manaBar,(p?.mana??state.mana)/(p?.maxMana??manaStats.maxMana));
@@ -391,6 +391,7 @@ export class TowerMenu {
  }
 
  private clear() {
+  this.forgeRitual = null;
   this.clearCharacterPortraits();
   this.purchaseScroll = null;
   this.libraryPanel?.destroy(); this.libraryPanel = null;
@@ -501,6 +502,7 @@ export class TowerMenu {
   box.addComponent(BlockInputEvents);
   const heading=this.label(box,'背包',-width/2+82,height/2-42,100,52,30,C.text);heading.overflow=Label.Overflow.CLAMP;
   this.closeIcon(box, '关闭背包', width / 2 - 42, height / 2 - 42, () => this.dismissInventory());
+  this.headerWallet(box, width, height, 96, width - 280, 42);
   const root = this.node('背包面板', box, width - 32, height - 92); root.setPosition(0, -30);
   this.backpack.render(root, state, width - 32, height - 92, {
    modalRoot: shade,
@@ -514,7 +516,7 @@ export class TowerMenu {
     this.stoneArt.draw(parent,`inventory-refund-${parent.name}`,grade,0,0,52,()=>{if(isValid(fallback,true))fallback.clear();});
    },
    pillIcon: (parent: Node,id: string,fallback: Graphics) => {
-    const known = ['huichuncao','bailuhua','huangjing','lingshenxu','ningluzhi','linglu','yusuizhi','zilinghua','jinsuiguo','yangyuan','zhenyuan','zifu','heqi','ningqi','xuming','zhixue','huichun','peiyuan','zhuji','ningyuan','ningdan','jiuzhuan','xiaoyue','chilin'].includes(id);
+    const known = ['huiling','huichuncao','bailuhua','huangjing','lingshenxu','ningluzhi','linglu','yusuizhi','zilinghua','jinsuiguo','yangyuan','zhenyuan','zifu','heqi','ningqi','xuming','zhixue','huichun','peiyuan','zhuji','ningyuan','ningdan','jiuzhuan','xiaoyue','chilin'].includes(id);
     const forgeArt = ['forge_xuantie','forge_lingmu','forge_yaopi','forge_lingsi','forge_lingyu','forge_tiejing','forge_hanjingsha','forge_chitongjing','forge_zijingsui','forge_ninglingjing','forge_core_fa','forge_core_bao','forge_core_ling'].includes(id);
     if(!known && !forgeArt){ fallback.clear(); this.label(parent,(CAMP_PILLS as any)[id]?.name || id,0,0,parent.getComponent(UITransform)!.contentSize.width-4,64,22,C.text,true);return; }
     const resource=`pill_${id}` as any;
@@ -529,10 +531,10 @@ export class TowerMenu {
  private equipmentArtwork(parent: Node, id: string, fallback: Graphics, previewDefinition?: string) {
 
     const definitionId = previewDefinition || (this.state.weapons?.[id] || this.state.equipment?.[id])?.definitionId;
-    if (!['eq_sword_iron', 'eq_sword_suwen', 'eq_sword_songfeng', 'eq_ring_basic',
-     'eq_armor_basic', 'eq_armor_qingma', 'eq_armor_chentie', 'eq_armor_bichen', 'eq_armor_yunwen', 'eq_armor_houlin', 'eq_armor_liufeng', 'eq_armor_ninglu', 'eq_armor_fushan', 'eq_armor_dangyu', 'eq_armor_shouyi', 'eq_armor_zhenyue', 'eq_armor_huilan', 'eq_armor_mingche', 'eq_armor_humai', 'eq_armor_jingbo', 'eq_armor_jinsuo', 'eq_armor_yuheng', 'eq_sword_shoushan', 'eq_sword_guiyan',
-     'eq_sword_caiyun', 'eq_sword_panxi', 'eq_sword_liuquan', 'eq_sword_ningshuang', 'eq_sword_xingluo', 'eq_sword_lingxi', 'eq_sword_zhaodan', 'eq_sword_dingyue', 'eq_sword_tingyu', 'eq_sword_qingxiao', 'eq_sword_liuxia', 'eq_sword_hanguang', 'eq_sword_duanliu', 'eq_sword_hechuan', 'eq_sword_xuanjun', 'eq_sword_zhufeng', 'eq_sword_zhenyue', 'eq_ring_anxi', 'eq_ring_huyuan',
-     'eq_ring_dingxin', 'eq_ring_qinglu', 'eq_ring_wenmai', 'eq_ring_wenpo', 'eq_ring_shoudan', 'eq_ring_huichun', 'eq_ring_changning', 'eq_ring_xuxi', 'eq_ring_huming', 'eq_ring_hanyuan', 'eq_ring_guizhen', 'eq_ring_ningyuan', 'eq_ring_bujing'].includes(definitionId)) return;
+    if (!['eq_sword_iron', 'eq_sword_suwen', 'eq_sword_songfeng', 'eq_sword_qingfeng', 'eq_sword_wangshu', 'eq_sword_biluo', 'eq_sword_qiyao', 'eq_sword_jinghong', 'eq_sword_xiaohan', 'eq_sword_tianshu', 'eq_sword_xuanwei', 'eq_sword_zhuiri', 'eq_sword_luotian', 'eq_sword_zhaoyuan', 'eq_sword_taiheng', 'eq_ring_basic',
+     'eq_armor_basic', 'eq_armor_qingma', 'eq_armor_chentie', 'eq_armor_bichen', 'eq_armor_yunwen', 'eq_armor_houlin', 'eq_armor_liufeng', 'eq_armor_ninglu', 'eq_armor_fushan', 'eq_armor_dangyu', 'eq_armor_shouyi', 'eq_armor_zhenyue', 'eq_armor_huilan', 'eq_armor_mingche', 'eq_armor_humai', 'eq_armor_jingbo', 'eq_armor_jinsuo', 'eq_armor_yuheng', 'eq_armor_panshi', 'eq_armor_chengxiao', 'eq_armor_wugou', 'eq_armor_xuansu', 'eq_armor_xingmu', 'eq_armor_taisu', 'eq_armor_budong', 'eq_armor_wuyin', 'eq_sword_shoushan', 'eq_sword_guiyan',
+     'eq_sword_caiyun', 'eq_sword_panxi', 'eq_sword_liuquan', 'eq_sword_ningshuang', 'eq_sword_xingluo', 'eq_sword_lingxi', 'eq_sword_zhaodan', 'eq_sword_dingyue', 'eq_sword_tingyu', 'eq_sword_qingxiao', 'eq_sword_liuxia', 'eq_sword_hanguang', 'eq_sword_duanliu', 'eq_sword_hechuan', 'eq_sword_chengming', 'eq_sword_kunwu', 'eq_sword_xuanjun', 'eq_sword_zhufeng', 'eq_sword_zhenyue', 'eq_ring_anxi', 'eq_ring_huyuan',
+     'eq_ring_dingxin', 'eq_ring_qinglu', 'eq_ring_wenmai', 'eq_ring_wenpo', 'eq_ring_shoudan', 'eq_ring_huichun', 'eq_ring_changning', 'eq_ring_xuxi', 'eq_ring_huming', 'eq_ring_hanyuan', 'eq_ring_guizhen', 'eq_ring_ningyuan', 'eq_ring_bujing', 'eq_ring_jingshui', 'eq_ring_dingwei', 'eq_ring_guyuan', 'eq_ring_zhuixing', 'eq_ring_zhenxin', 'eq_ring_chengshen', 'eq_ring_shouzhen', 'eq_ring_guiyuan', 'eq_ring_taihe', 'eq_ring_weiming'].includes(definitionId)) return;
     const { width, height } = parent.getComponent(UITransform)!.contentSize;
     this.towerImage(parent, `tower-equipment/${definitionId}`, width, height, 0, 0, false, fallback);
  }
@@ -614,15 +616,7 @@ export class TowerMenu {
   const text = `← ${caption}`;
   const node = this.node(inBattle ? '返回战斗' : text, this.root, destination ? 180 : 136, 72);
   node.setPosition(x, y);
-  const arrow = this.node('返回箭头', node, 24, 28);
-  arrow.setPosition(destination ? -52 : -29, 0);
-  const g = arrow.addComponent(Graphics);
-  g.fillColor = new Color(C.primary);
-  // A single filled chevron keeps the narrow fold crisp at small landscape sizes.
-  g.moveTo(3, 10); g.lineTo(5, 8); g.lineTo(-3, 0);
-  g.lineTo(5, -8); g.lineTo(3, -10); g.lineTo(-7, 0);
-  g.close(); g.fill();
-  this.label(node, caption, 16, 0, destination ? 108 : 64, 48, 26, C.primary, true);
+  drawMenuBack(node, caption);
   this.clickable(node, destination?.run || (() => inBattle ? this.handlers.resume() : this.go('hall')), true);
   return node;
  }
@@ -630,6 +624,9 @@ export class TowerMenu {
   run: () => void, reason = '', primary = false, font = 25) {
   const minimum = this.landscape ? 72 : 88;
   const n = this.node(text, parent, Math.max(minimum, width), Math.max(minimum, height)); n.setPosition(x, y);
+  if (isMenuBack(text) && !reason) {
+   drawMenuBack(n, text); this.clickable(n, run, true); return n;
+  }
   this.panel(n, reason ? C.disabled : primary ? C.primary : C.raised, primary && !reason ? C.primary : C.edge, 10);
   this.label(n, reason.trim() ? `${text}\n${reason}` : text, 0, 0, width - 24, height - 8, font,
    reason ? C.muted : primary ? C.onPrimary : C.text, true);
@@ -700,39 +697,48 @@ export class TowerMenu {
    { grade: -1, quantity: count(this.state.contribution) }];
  }
  private walletWidth() {
-  return this.walletEntries().reduce((width, entry) => width + 52 + `×${entry.quantity}`.length * 14, -16);
+  return this.walletEntries().reduce((width, entry) => width + 45 + `×${entry.quantity}`.length * 11, -14);
+ }
+ private headerWallet(parent: Node = this.root, width = this.designWidth, height = this.designHeight,
+  right = 24, available = 424, top = 52) {
+  const naturalWidth = this.walletWidth(), scale = Math.min(1, available / naturalWidth);
+  const row = this.wallet(width / 2 - right - naturalWidth * scale / 2, height / 2 - top, naturalWidth, parent);
+  row.setScale(scale, scale, 1);
  }
  private wallet(x: number, y: number, width: number, parent: Node = this.root) {
   const row = this.node('货币信息', parent, width, 44);
   row.setPosition(x, y);
   let left = -width / 2;
   for (const { grade, quantity } of this.walletEntries()) {
-   const icon = this.node(grade < 0 ? '点眷货币图标' : `灵石货币图标-${grade}`, row, 32, 40);
-   icon.setPosition(left + 16, 0);
+   const icon = this.node(grade < 0 ? '点眷货币图标' : `灵石货币图标-${grade}`, row, 28, 34);
+   icon.setPosition(left + 14, 0);
    const g = icon.addComponent(Graphics);
    g.strokeColor = new Color(C.primary); g.lineWidth = 1;
    if (grade < 0) {
     g.fillColor = new Color('#C4B18A'); g.roundRect(-10, -14, 20, 28, 4); g.fill(); g.stroke();
     g.moveTo(-5, 0); g.lineTo(5, 0); g.moveTo(0, -5); g.lineTo(0, 5); g.stroke();
-    this.stoneArt.drawResource(icon, 'wallet-contribution', 'resource_contribution', 0, 0, 36,
+    this.stoneArt.drawResource(icon, `wallet-${parent.name}-contribution`, 'resource_contribution', 0, 0, 28,
      () => { if (isValid(g, true)) g.clear(); });
    } else {
     g.fillColor = new Color(['#A4C6D4', '#8ED5C4', '#B4A4E3', '#F1D58A'][grade]);
     g.moveTo(0, 14); g.lineTo(9, 3); g.lineTo(6, -12); g.lineTo(0, -15);
     g.lineTo(-6, -12); g.lineTo(-9, 3); g.close(); g.fill(); g.stroke();
-    this.stoneArt.draw(icon, `wallet-${grade}`, grade, 0, 0, 36,
+    this.stoneArt.draw(icon, `wallet-${parent.name}-${grade}`, grade, 0, 0, 28,
      () => { if (isValid(g, true)) g.clear(); });
    }
-   const caption = `×${quantity}`, textWidth = caption.length * 14;
-   const label = this.label(row, caption, left + 36 + textWidth / 2, 0, textWidth, 40, 22, C.primary, true);
+   const caption = `×${quantity}`, textWidth = caption.length * 11;
+   const label = this.label(row, caption, left + 31 + textWidth / 2, 0, textWidth, 34, 18, C.primary, true);
    label.string = caption;
    label.enableWrapText = false;
-   left += 52 + textWidth;
+   label.enableOutline = true; label.outlineColor = new Color(C.panel); label.outlineWidth = 2;
+   left += 45 + textWidth;
   }
+  return row;
  }
 
  private sectIcon(name:string,kind:'bag'|'book'|'gear'|'chest',x:number,y:number,run:()=>void) {
-  const n=this.node(name,this.root,80,104);n.setPosition(x,y);
+  const compact=kind==='gear'||kind==='chest';
+  const n=this.node(name,this.root,compact?56:80,compact?64:104);n.setPosition(x,y);
   const visual=this.node(`${name}图形`,n,80,80);visual.setPosition(0,10);
   if(kind==='chest')this.label(visual,'抽奖',0,0,76,50,22,C.text,true);
   else drawHudActionIcon(visual,kind,kind==='gear'?SETTINGS_ICON_SIZE/70*.75:.75);
@@ -802,7 +808,7 @@ export class TowerMenu {
   const cultivation=this.node('角色修行分区',content,leftWidth,bodyHeight);
   cultivation.setPosition(leftX,-bodyHeight/2);this.panel(cultivation,'#EDF0E7','#EDF0E7',8);
   const leftText=(name:string,value:string,y:number,size=24,tint=C.text)=>text(name,value,content,leftX,y,leftWidth-24,size,tint);
-  leftText('角色境界',`剑修 · ${TowerMenu.realmLabel(growth,growthStageAt(state.xp))}`,-25,22,C.primary).fontFamily='serif';
+  leftText('角色境界',`${classProfile(state.classId).name} · ${TowerMenu.realmLabel(growth,growthStageAt(state.xp))}`,-25,22,C.primary).fontFamily='serif';
   const begin=growth.xpStart,end=growth.xpEnd;
   leftText('角色修为',growth.capped?'经验已圆满':`经验  ${state.xp-begin} / ${end-begin}`,-57,22,C.muted);
   const barWidth=leftWidth-24;
@@ -841,7 +847,7 @@ export class TowerMenu {
   row('力量',number(attributes.strength));
   row('智力',number(attributes.intelligence));
   row('神识',number(attributes.awareness));
-  row('体力',String(Math.round(attributes.vitality*100)/100));
+  row('体力',String(Math.round(attributes.vitality*10)/10));
   row('物理攻击力',number(attributes.attack)).node.name='角色攻击力';
   row('法术攻击力',number(attributes.magicAttack));
   row('攻击速度',`${Math.round((1+combat.attackSpeed)*1000)/1000}次/秒`);
@@ -856,9 +862,11 @@ export class TowerMenu {
   row('功法伤害增加',`+${pct(combat.skillDamageIncrease)}`);
   row('附加伤害',pct(combat.attachedDamage));
   if(combat.bleedConversion>0){row('流血转化率',pct(combat.bleedConversion));row('流血伤害加成',pct(combat.bleedBonus));}
-  if(combat.woundConversion>0){row('剩余直伤转剑痕',pct(combat.woundConversion));row('剑痕伤害加成',pct(combat.woundBonus));}
-  this.characterManaLabel=row('灵力',`${number(state.mana)} / ${number(attributes.maxMana)}`);
-  row('每秒恢复灵力',number(attributes.manaRegen));
+  if(combat.scarVulnerability>0){row('蚀骨破绽·直接易伤',pct(combat.scarVulnerability));row('蚀骨剑意·内置冷却',`${combat.scarCooldown}秒`);}
+  this.characterManaLabel=row('灵力值',`${number(state.mana)} / ${number(attributes.maxMana)}`);
+  row('战斗恢复／秒',number(attributes.manaRegen));
+  row('脱战3秒后／秒',number(attributes.maxMana*.10));
+  row('灵力值不足时','自动服丹；无丹技能等待，普攻继续');
   row('气血上限',number(attributes.maxHp)).node.name='角色气血上限';
   row('每3秒恢复气血',`${Math.round(attributes.maxHp*combat.healthRegen*100)/100}`);
   row('物理防御',number(combat.physicalDefense));
@@ -905,9 +913,10 @@ export class TowerMenu {
   rule.moveTo(-294,top-94);rule.lineTo(294,top-94);rule.stroke();
   const entries: {title:string;description:string;action:()=>void}[]=[];
   const prefs=presentationPreferences();
-  const change=(patch:any)=>{const ok=setPresentationPreference(patch);this.sectSettings();if(!ok){const panel=this.root.children.find(n=>n.name==='宗门设置遮罩');if(panel)this.label(panel,'设置保存失败，请重试',0,-height/2+18,560,32,22,C.warning,true);}};
+  const change=(patch:any)=>{const ok=setPresentationPreference(patch);this.dismissSettings();this.sectSettings();if(!ok){const panel=this.root.children.find(n=>n.name==='宗门设置遮罩');if(panel)this.label(panel,'设置保存失败，请重试',0,-height/2+18,560,32,22,C.warning,true);}};
   entries.push({title:`音效音量：${Math.round(prefs.soundVolume*100)}%`,description:'点击切换音量，0%为静音',action:()=>change({soundVolume:(Math.round(prefs.soundVolume*4)+1)%5/4})});
   entries.push({title:`减少动态效果：${prefs.reducedMotion?'开启':'关闭'}`,description:'关闭震动与全屏闪光，保留战斗提示',action:()=>change({reducedMotion:!prefs.reducedMotion})});
+  entries.push({title:`自身受伤数字：${prefs.playerDamageNumbers?'开启':'关闭'}`,description:'显示扣血与护盾吸收，关闭后仍保留受击提示',action:()=>change({playerDamageNumbers:!prefs.playerDamageNumbers})});
   entries.push({title:'操作指引' ,description:'查看战斗、成长与宗门玩法',action:()=>{this.tutorialStep=0;this.go('tutorial');}});
   if(this.handlers.tools)entries.push({title:'开发者工具',description:'游戏速度与战斗辅助',action:()=>this.handlers.tools!()});
   const list=this.commerceScroll(box,'设置选项',0,-18,604,height-164,entries.length*110);
@@ -926,16 +935,16 @@ export class TowerMenu {
  private hall() {
   const cleared = this.state.clearedFloor, next = Math.min(9, cleared + 1);
   this.card(cleared === 9 ? '九重封印已修复' : `下一站 · 第${next}层${floors[next - 1].name}`,
-   cleared === 9 ? '九层已通，可重访各层、重新分配功法点与尝试三套装备配装。'
-    : '境界提升获得功法点，学会的功法自动施放。整备后带着当前气血入塔。',
+   cleared === 9 ? '九层已通，可重访各层、重新分配悟道点与尝试三套装备配装。'
+    : '境界提升获得悟道点，学会的功法自动施放。整备后带着当前气血入塔。',
     this.handlers.tools?[{label:'开发者工具',run:()=>this.handlers.tools!()}]:[]);
   const buildings = [
    ['锁妖塔', '九层妖塔 · 选层与继续', 'tower'],
-   ['落云主峰', '宗门大殿 · 藏经阁', 'home'],
+   ['霁云主峰', '宗门大殿 · 藏经阁', 'home'],
    ['凌霄剑峰', '剑修传承 · 修习功法', 'swordPeak'],
    ['炼器峰', '开炉炼器 · 武器防具戒指', 'forge'],
    ['丹霞峰', '炼丹／购丹 · 背包服用', 'pills'],
-   ['山门', '入宗记事 · 玩法指引', 'gate'],
+   ['山门', '宗门周边 · 后续开放', ''],
    ['御兽峰', '御兽师传承 · 后续开放', ''],
    ['云篆符峰', '符师传承 · 后续开放', ''],
    ['万法峰', '法修传承 · 后续开放', ''],
@@ -956,7 +965,7 @@ export class TowerMenu {
    this.clickable(n, () => this.go(target), !!target);
   });
   this.cursor += Math.ceil(buildings.length / columns) * (height + gap);
-  if (!this.state.tutorialDone) this.card('第一次入宗', '认识功法点、恢复与登塔。开局自带弦月斩，其余功法由你分配功法点学习。', [
+  if (!this.state.tutorialDone) this.card('第一次入宗', '认识悟道点、恢复与登塔。开局自带流云斩，其余功法由你分配悟道点学习。', [
    { label: '查看入宗指引', run: () => { this.tutorialStep = 0; this.go('tutorial'); }, primary: true },
    { label: '跳过引导', run: () => this.act({ type: 'tutorialDone' }), reason: this.blocked() },
   ]);
@@ -1040,18 +1049,30 @@ export class TowerMenu {
    } else this.towerImage(portrait, `tower-monsters/${family}`, 120, 120, 0, 0, !unlocked);
    this.label(row, `第${f}层`, 12, 23, 144, 48, 34, unlocked ? C.text : C.muted).isBold = true;
    this.label(row, boss?.name || floors[f - 1].boss_name, 12, -22, 144, 32, 23, unlocked ? C.text : C.muted);
+   const prize = FIRST_CLEAR_REWARDS[f - 1];
+   // 首通炼器材料：只列第一种（器心或凝灵晶），其余写“等N种”，避免挤占塔层卡片。
+   const firstMaterials: { id: string; count: number }[] = (FIRST_CLEAR_MATERIALS as any)[f] || [];
+   if (firstMaterials.length) {
+    const head = firstMaterials[0], more = firstMaterials.length > 1 ? `等${firstMaterials.length}种` : '';
+    const label = this.label(row, `${(FORGE_MATERIALS as any)[head.id].name}×${head.count}${more}`, 12, -49, 144, 20, 14,
+     cleared || !unlocked ? C.muted : C.primary, true);
+    label.node.name = '首通炼器材料';
+   }
+   if (prize.kind !== 'none') {
    const reward = this.node('首通奖励', row, 72, 72); reward.setPosition(162, 0);
    this.panel(reward, cleared ? '#DCE4DB50' : '#EAF0E650', '#AFBEAD40', 6);
-   const prize = FIRST_CLEAR_REWARDS[f - 1];
    const tint = cleared || !unlocked ? C.muted : C.primary;
-   const fallback = this.label(reward, prize.kind === 'spiritStones' ? '◆' : prize.kind === 'contribution' ? '贡' : '悟',
+   const fallback = this.label(reward, prize.kind === 'spiritStones' ? '◆' : prize.kind === 'item' ? '丹' : '贡',
     0, 12, 44, 40, 26, tint, true);
    const ready = () => { if (isValid(fallback.node, true)) fallback.node.active = false; };
    if (prize.kind === 'spiritStones') this.stoneArt.draw(reward, `first-clear-${f}`, prize.grade, 0, 12, 44, ready);
    else this.stoneArt.drawResource(reward, `first-clear-${f}`,
-    prize.kind === 'contribution' ? 'resource_contribution' : 'resource_skill_point', 0, 12, 44, ready);
-   this.label(reward, `×${prize.quantity}`, 0, -20, 70, 25, 21, tint, true);
-   this.label(row, prize.name, 162, -44, 84, 18, 14, tint, true);
+    prize.kind === 'item' ? (`pill_${(prize as any).id}` as any) : 'resource_contribution', 0, 12, 44, ready);
+   // Quantity stays on one line; shrink instead of wrapping into the name below.
+   const quantity = this.label(reward, `×${prize.quantity}`, 0, -20, 70, 25, 21, tint, true);
+   quantity.string = `×${prize.quantity}`; quantity.enableWrapText = false;
+   quantity.overflow = Label.Overflow.SHRINK;
+   // Reward type is shown by its icon alone; no caption under the box.
    if (cleared) {
     // Append above the reward art, including when its texture finishes loading later.
     const claimed = this.node('首通奖励已领取对勾', reward, 24, 24);
@@ -1063,6 +1084,7 @@ export class TowerMenu {
     mark.lineWidth = 3;
     mark.moveTo(-6, 0); mark.lineTo(-2, -4); mark.lineTo(6, 5); mark.stroke();
     this.label(row, '已领取', 162, -58, 74, 14, 12, C.muted, true);
+   }
    }
    if (!unlocked) {
     const lock = this.node('封印锁', row, 28, 32); lock.setPosition(-96, -38);
@@ -1112,14 +1134,14 @@ export class TowerMenu {
   const headerHeight = 64, headerY = treeHeight / 2 - 30;
   const countText = String(summary.available), countWidth = Math.max(58, countText.length * 15 + 24);
   const countX = treeWidth / 2 - 16 - countWidth / 2;
-  const countBackground = this.node('功法点数值底', treePanel, countWidth, 36);
+  const countBackground = this.node('悟道点数值底', treePanel, countWidth, 36);
   countBackground.setPosition(countX, headerY); this.panel(countBackground, '#DCE7DB', '#DCE7DB', 6);
   const points = this.label(countBackground, countText, 0, 0, countWidth, 36, 24, C.primary, true);
   points.overflow = Label.Overflow.CLAMP; points.enableWrapText = false;
-  points.node.name = '功法点';
+  points.node.name = '悟道点';
   const titleX = countX - countWidth / 2 - 10 - 72;
-  const pointsTitle = this.label(treePanel, '可用功法点', titleX, headerY, 144, 36, 22, C.primary, true);
-  pointsTitle.node.name = '功法点标题';
+  const pointsTitle = this.label(treePanel, '可用悟道点', titleX, headerY, 144, 36, 22, C.primary, true);
+  pointsTitle.node.name = '悟道点标题';
   if (!this.state.activeRun) {
    const enabled = !this.blocked() && [...Object.values(this.state.skills), ...Object.values(this.state.evolutionRanks)].some(rank => Number(rank) > 0);
    const reset = this.node('初始化', treePanel, 152, 48);
@@ -1139,9 +1161,18 @@ export class TowerMenu {
    this.clickable(reset, () => this.openRespec(), enabled);
   }
   const toolsHeight = this.state.activeRun ? 0 : 56;
-  const treeViewHeight = Math.max(80, treeHeight - headerHeight - toolsHeight);
+  // Resonance chips share the header row with 重置加点/悟道点; only a narrow panel gets its own row.
+  const headerLeft = -treeWidth / 2 + 16;
+  const headerRight = (this.state.activeRun ? titleX - 72 : titleX - 72 - 16 - 152) - 12;
+  const inHeader = headerRight - headerLeft >= 330;
+  const resonanceHeight = inHeader ? 0 : 48;
+  if (inHeader) {
+   const rowWidth = Math.min(headerRight - headerLeft, 3 * 168 + 16);
+   this.resonanceRow(treePanel, rowWidth, headerLeft + rowWidth / 2, headerY, 44);
+  } else this.resonanceRow(treePanel, treeWidth - 32, 0, treeHeight / 2 - headerHeight - resonanceHeight / 2 + 6, resonanceHeight - 6);
+  const treeViewHeight = Math.max(80, treeHeight - headerHeight - resonanceHeight - toolsHeight);
   const treeViewport = this.node('功法树二维卷轴', treePanel, treeWidth - 16, treeViewHeight);
-  treeViewport.setPosition(0, (6 - headerHeight + toolsHeight) / 2); treeViewport.addComponent(Mask);
+  treeViewport.setPosition(0, (6 - headerHeight - resonanceHeight + toolsHeight) / 2); treeViewport.addComponent(Mask);
   const treeContent = this.node('境界功法树内容', treeViewport, 1, 1);
   treeContent.getComponent(UITransform)!.setAnchorPoint(0, 1);
   treeContent.setPosition(-(treeWidth - 16) / 2, treeViewHeight / 2);
@@ -1156,9 +1187,9 @@ export class TowerMenu {
    Math.min(this.offsets[this.scrollKey()] || 0, Math.max(0, extent.height - treeViewHeight))), 0);
 
   if (!this.state.activeRun) {
-   const tools = this.node('获取功法点', treePanel, 160, 56);
+   const tools = this.node('获取悟道点', treePanel, 160, 56);
    tools.setPosition(-treeWidth / 2 + 96, -treeHeight / 2 + 28);
-   this.label(tools, '获取功法点 ›', 0, 0, 160, 36, 20, C.primary, true);
+   this.label(tools, '获取悟道点 ›', 0, 0, 160, 36, 20, C.primary, true);
    this.clickable(tools, () => {
     this.rememberPan(); this.showLearningTools = true; this.respecOpen = false; this.detailOffset = 0;
     this.render(this.state, 'library', this.notice);
@@ -1243,10 +1274,13 @@ export class TowerMenu {
   const learn = this.growthQuote(skill);
   const rank = this.skillLevel(skill);
   const maxed = rank >= skill.maxLevel;
-  const hint = maxed ? '此功法已修至满级'
-   : learn.reason || (learn.bookCost ? '修习时购买经卷' : '条件已满足，可修习');
+  const preview = !maxed && !learn.reason ? this.resonancePreview(skill) : '';
+  const pending = this.pendingDecrease?.id === skill.id ? this.pendingDecrease.text : '';
+  const reached = this.skillFeedback?.id === skill.id && this.skillFeedback.resonance ? this.skillFeedback.text : '';
+  const hint = pending || reached || (maxed ? '此功法已修至满级'
+   : learn.reason || [preview, learn.bookCost ? '修习时购买经卷' : preview ? '' : '条件已满足，可修习'].filter(Boolean).join('\n'));
   const status = this.label(footer, hint, 0, 37, width - 48, 44, 20,
-   learn.reason ? C.muted : C.primary, true);
+   pending ? C.warning : learn.reason && !reached ? C.muted : C.primary, true);
   status.lineHeight = 22;
   status.overflow = Label.Overflow.CLAMP;
   status.node.getComponent(UITransform)!.setContentSize(width - 48, 44);
@@ -1267,18 +1301,11 @@ export class TowerMenu {
   }
  }
  private libraryExtras() {
-  if (!this.state.activeRun) {
-   const purchased = count(this.state.researchPurchases), research = GROWTH_RESEARCH[purchased];
-   const reason = this.blocked() || (!research ? '本阶段已研习3/3'
-    : this.state.clearedFloor < research.learnClear ? `需通关第${research.learnClear}层`
-    : this.afford(research.cost, 'spiritStones'));
-   this.card(`道悟研习 · ${purchased}/3`,
-    `每次获得4功法点，累计限3次，共12点。${research ? `\n条件：通关第${research.learnClear}层` : ''}`, [
-     { label: research ? `研习 · ${formatSpiritStones(research.cost)}灵石换${research.points}点` : '三次研习已完成',
-      run: () => this.act({ type: 'researchPoint' }), reason, primary: true },
-    ]);
-
-  }
+  this.skillSection('随角色升级获得');
+  this.skillCopy('每升1级获得1点悟道点；突破筑基、金丹时各额外获得3点。30级累计35点。', 22, C.primary, true);
+  this.skillCopy('开局赠送流云斩1级；重置后返还1点。');
+  this.skillCopy('通关不再奖励悟道点，也不能用灵石兑换。');
+  this.skillCopy('秘籍只解锁功法，不增加悟道点。');
  }
 
  private skillLevel(skill: any) {
@@ -1293,11 +1320,11 @@ export class TowerMenu {
   else if (this.state.activeRun && this.state.activeRun.snapshot?.phase !== 'paused') reason = '请先暂停并保存战斗';
   else if (!quote.ok) {
    const reasons: Record<string, string> = {
-    'insufficient-points': `功法点不足 · 需${quote.cost}点 / 可用${growthSummary(this.state).available}点`,
+    'insufficient-points': `悟道点不足 · 需${quote.cost}点 / 可用${growthSummary(this.state).available}点`,
     'insufficient-spirit-stones': '灵石不足，暂不能购买经卷',
     'insufficient-stones': '灵石不足，暂不能购买经卷',
-    'stage-locked': `需${stageLabel(skillStage(skill.id))}`,
-    'realm-locked': '境界未达要求',
+    'stage-locked': `需角色${skill.learnLevel}级`,
+    'realm-locked': `需角色${skill.rankRequirements?.[quote.nextLevel - 1]?.characterLevel || skill.learnLevel}级`,
     'parent-required': `需先修炼${GROWTH_SKILLS.find(row => row.id === skill.parent)?.name || '基础功法'}1级`,
     'prerequisite': `需凝神诀${skill.rankRequirements?.[quote.nextLevel - 1]?.prerequisites?.sj_spirit || ''}级`,
     'max-level': '已达最高等级',
@@ -1325,6 +1352,15 @@ export class TowerMenu {
   if (skill.future) return;
   const quote = type === 'learnSkill' ? this.growthQuote(skill) : this.decreaseQuote(skill);
   if (quote.reason) return;
+  // 85号：退点会让共鸣掉档或换主修时，需要再点一次确认。
+  const before = stateResonance(this.state);
+  if (type === 'decreaseSkill') {
+   const warning = this.resonanceLoss((quote as DecreaseQuote).changes || []);
+   if (warning && this.pendingDecrease?.id !== skill.id) {
+    this.rememberPan(); this.pendingDecrease = { id: skill.id, text: `再点退点确认：${warning}` };
+    this.render(this.state, 'library', this.notice); return;
+   }
+  }
   this.rememberPan();
   // Suppress the host's synchronous success notice before it can insert a card.
   this.skillFeedback = { id: skill.id, text: '' };
@@ -1344,11 +1380,100 @@ export class TowerMenu {
       `${nameOf(change.id)}${change.from}→${change.to}级`).join('、')
    : failureReasons[result.reason || ''] || `操作未提交：${this.notice || '请检查条件后重试'}`;
   this.rememberPan();
-  this.skillFeedback = { id: skill.id, text, failed: !result.ok };
+  // A failed save keeps the confirmation, so a retry needs only one more press.
+  if (result.ok) this.pendingDecrease = null;
+  const gained = result.ok && type === 'learnSkill' ? this.resonanceGain(before, stateResonance(this.state)) : '';
+  this.skillFeedback = gained ? { id: skill.id, text: gained, resonance: true } : { id: skill.id, text, failed: !result.ok };
   this.render(this.state, 'library', this.notice);
  }
+ // 85号：流派共鸣。所有显示与预览读取 TowerResonance 的同一套计算，与战斗一致。
+ private resonanceRanks(changes: { id: string; to: number }[] = []) {
+  const ranks: Record<string, number> = { ...(this.state.skills || {}), ...(this.state.evolutionRanks || {}) };
+  for (const change of changes) ranks[change.id] = change.to;
+  return ranks;
+ }
+ private resonanceName(id: string | null) { return RESONANCE_SCHOOLS.find(row => row.id === id)?.name || ''; }
+ private resonancePreview(skill: any) {
+  const schoolId = resonanceSchoolOf(skill.id);
+  const before = stateResonance(this.state);
+  const after = resonanceFromRanks(this.resonanceRanks([{ id: skill.id, to: this.skillLevel(skill) + 1 }]));
+  if (before.main && after.main !== before.main) return `主修将变为${this.resonanceName(after.main)}`;
+  if (!schoolId) return '';
+  const a = before.schools.find((row: any) => row.id === schoolId), b = after.schools.find((row: any) => row.id === schoolId);
+  if (b.tier > a.tier) return `达成${b.name}${RESONANCE_TIER_NAMES[b.tier]}`
+   + (after.main === schoolId ? `·伤害+${Math.round(b.bonus * 100)}%` : '（非主修）');
+  return `${b.name}共鸣 ${a.points} → ${b.points}点`;
+ }
+ private resonanceLoss(changes: { id: string; to: number }[]) {
+  const before = stateResonance(this.state), after = resonanceFromRanks(this.resonanceRanks(changes));
+  if (!before.main) return '';
+  const name = this.resonanceName(before.main);
+  if (after.main !== before.main) return after.main ? `主修将变为${this.resonanceName(after.main)}` : `${name}共鸣失效`;
+  if (after.tier < before.tier) return `${name}共鸣降为${RESONANCE_TIER_NAMES[after.tier] || '无'}`;
+  return '';
+ }
+ private resonanceGain(before: any, after: any) {
+  if (!after.main || !after.tier || after.main === before.main && after.tier <= before.tier) return '';
+  const name = this.resonanceName(after.main);
+  return `${name}共鸣达到${RESONANCE_TIER_NAMES[after.tier]}：${name}功法伤害 +${Math.round(after.bonus * 100)}%`;
+ }
+ private resonanceRow(parent: Node, rowWidth: number, x: number, y: number, height: number) {
+  const r = stateResonance(this.state), gap = 8, chipWidth = (rowWidth - gap * 2) / 3;
+  const row = this.node('流派共鸣', parent, rowWidth, height); row.setPosition(x, y);
+  r.schools.forEach((school: any, index: number) => {
+   // Only the main school's resonance applies, so it alone gets the solid jade fill.
+   const main = r.main === school.id, max = school.tiers[school.tiers.length - 1][0];
+   const chip = this.node(`流派共鸣-${school.id}`, row, chipWidth, height);
+   chip.setPosition(-rowWidth / 2 + chipWidth / 2 + index * (chipWidth + gap), 0);
+   this.panel(chip, main ? C.primary : C.panel, main ? C.primary : C.edge, 8);
+   // Tier is read from the filled segments; text keeps only name and points to the next tier.
+   const text = `${main ? '主修·' : ''}${school.name} ${school.points}/${school.next ?? max}`;
+   const units = Array.from(text).reduce((sum, char) => sum + (/[\x00-\x7f]/.test(char) ? .55 : 1), 0);
+   const label = this.label(chip, text, 0, 7, chipWidth - 12, 22, Math.min(17, (chipWidth - 14) / units), main ? C.onPrimary : C.muted, true);
+   label.string = text; label.enableWrapText = false; label.overflow = Label.Overflow.CLAMP;
+   if (main) label.isBold = true;
+   // One rounded segment per tier (重); gaps mark thresholds instead of protruding ticks.
+   const barWidth = chipWidth - 24, barH = 6, segGap = 4, bar = this.node(`流派共鸣进度-${school.id}`, chip, barWidth, barH);
+   bar.setPosition(0, -height / 2 + 11);
+   const g = bar.addComponent(Graphics);
+   const segments = school.tiers.length, segWidth = (barWidth - segGap * (segments - 1)) / segments;
+   const track = main ? '#FBF9F14D' : '#E2E7DC';
+   school.tiers.forEach(([need]: [number], i: number) => {
+    const from = i ? school.tiers[i - 1][0] : 0, left = -barWidth / 2 + i * (segWidth + segGap);
+    g.fillColor = new Color(track); g.roundRect(left, -barH / 2, segWidth, barH, barH / 2); g.fill();
+    const ratio = Math.max(0, Math.min(1, (school.points - from) / Math.max(1, need - from)));
+    if (ratio > 0) {
+     g.fillColor = new Color(main ? (ratio >= 1 ? '#E9CF93' : C.onPrimary) : (ratio >= 1 ? C.quiet : '#A3AFA1'));
+     g.roundRect(left, -barH / 2, Math.max(barH, segWidth * ratio), barH, barH / 2); g.fill();
+    }
+   });
+   const ids = RESONANCE_SCHOOLS[index].skills;
+   const target = ids.find(id => count(this.state.skills?.[id] ?? this.state.evolutionRanks?.[id]) > 0) ?? ids[0];
+   this.clickable(chip, () => this.openDetails(target), true);
+  });
+ }
+ private resonanceSection(skill: any) {
+  const schoolId = resonanceSchoolOf(skill.id);
+  if (!schoolId || skill.future) return;
+  const r = stateResonance(this.state), school = r.schools.find((row: any) => row.id === schoolId);
+  const main = r.main === schoolId, mainSchool = r.schools.find((row: any) => row.id === r.main);
+  this.skillSection(`${school.name}共鸣`);
+  const status = main
+   ? school.tier ? `主修生效 · ${RESONANCE_TIER_NAMES[school.tier]}：${school.name}功法伤害 +${Math.round(school.bonus * 100)}%（已计入上方数值）`
+    : `主修 · 尚未达到一重（已投入${school.points}点）`
+   : mainSchool ? `未生效：当前主修为${mainSchool.name}（${mainSchool.points}点），${school.name}已投入${school.points}点`
+    : `尚未投入${school.name}功法`;
+  this.skillCopy(status, 20, main && school.tier ? C.primary : C.muted, true, 8);
+  school.tiers.forEach(([need, bonus]: number[], index: number) => {
+   this.skillCopy(`${RESONANCE_TIER_NAMES[index + 1]} · ${need}点 · 功法伤害 +${Math.round(bonus * 100)}%${school.points >= need ? ' · 已达成' : ''}`,
+    20, main && school.tier === index + 1 ? C.primary : C.text, false, 4);
+  });
+  if (school.next !== null) this.skillCopy(`再投入${school.next - school.points}点达到${RESONANCE_TIER_NAMES[school.tier + 1]}`, 20, C.primary, false, 8);
+  this.skillCopy('只有投入最多的流派共鸣生效。只计功法与进阶的悟道点；心法、通用技能和开局赠送的流云斩1级不计入。', 18, C.muted, false, 8);
+ }
  private skillFlow(id: string) {
-  return branches[COLUMN_INDEX[id] ?? 2]?.name || '通用';
+  const school = RESONANCE_SCHOOLS.find(row => row.id === resonanceSchoolOf(id));
+  return school?.name || branches[COLUMN_INDEX[id] ?? 2]?.name || '通用';
  }
  private skillCadence(skill: any, detailed = false) {
   if (skill.future) return '未开放';
@@ -1409,6 +1534,8 @@ export class TowerMenu {
   }
   switch (skill.id) {
    case 'sj_yujian': sword(); break;
+   case 'sj_moon': g.arc(0, 0, 30, -.9, .9, false); g.stroke(); break;
+   case 'sj_moon_triple': for (const x of [-16, 0, 16]) { g.arc(x, 0, 22, -.9, .9, false); g.stroke(); } break;
    case 'sj_arc': g.arc(0, -12, 30, .15, Math.PI - .15, false); g.stroke(); sword(0, -5, -.65); break;
    case 'sj_cross': {
     const back = .7 * (1 - Math.SQRT1_2), span = (1 + 2 * back) * Math.SQRT1_2;
@@ -1428,6 +1555,12 @@ export class TowerMenu {
    case 'sj_shadow': sword(-13, -4, -.25); sword(13, 4, -.25); break;
    case 'sj_wanjian': ring(29); sword(0, 0, .4); break;
    case 'sj_formation': ring(28); line(-28, 0, 28, 0); g.circle(-12, 9, 5); g.circle(12, -9, 5); g.stroke(); break;
+   case 'sj_sancai':
+    g.moveTo(0, 30); g.lineTo(-26, -15); g.lineTo(26, -15); g.close(); g.stroke();
+    for (const [x,y] of [[0,22],[-19,-11],[19,-11]]) {
+     line(x,y-8,x,y+9);line(x-4,y+4,x+4,y+4);
+    }
+    break;
    case 'sj_spirit': ring(25); ring(11); line(-34, 0, -16, 0); line(16, 0, 34, 0); line(0, -34, 0, -16); line(0, 16, 0, 34); break;
    case 'sj_heart': g.moveTo(0, 26); g.lineTo(22, 0); g.lineTo(0, -26); g.lineTo(-22, 0); g.close(); g.stroke(); sword(0, 0, .2); break;
    case 'sj_mark': line(-24, -17, 20, 23); line(-15, -25, 29, 15); line(-28, -1, 9, 28); break;
@@ -1454,8 +1587,6 @@ export class TowerMenu {
    text.outlineColor = new Color('#59665B');
    text.outlineWidth = 1.2;
   }
-  const bonus=this.skillLevel(skill)>0?equipmentSkillBonus(this.state.activeRun?.snapshot?.loadout||combatLoadout(this.state),skill.id):0;
-  if(bonus)this.label(icon,'装备＋1',0,48,100,24,18,C.primary,true);
   const badge = this.node(`功法等级-${skill.id}`, icon, 34, 34); badge.setPosition(0, -67);
   const bg = badge.addComponent(Graphics); bg.fillColor = new Color(C.primary); bg.circle(0, 0, 17); bg.fill();
   this.label(badge, `${this.skillLevel(skill)+bonus}`, 0, 0, 34, 34, 22, C.onPrimary, true);
@@ -1564,6 +1695,7 @@ export class TowerMenu {
  }
  private openDetails(id: string) {
   this.rememberPan();
+  this.pendingDecrease = null;
   if (id !== this.detailId) {
    this.skillPaneScroll?.stopAutoScroll(); this.skillPaneScroll = null; this.skillPaneOffset = 0;
   }
@@ -1580,14 +1712,14 @@ export class TowerMenu {
   this.render(this.state, 'library', this.notice);
  }
  private details() {
-  const overlay = this.node(this.respecOpen ? '全洗确认遮罩' : '研习遮罩', this.root, this.designWidth, this.designHeight);
+  const overlay = this.node(this.respecOpen ? '全洗确认遮罩' : '悟道点说明遮罩', this.root, this.designWidth, this.designHeight);
   drawMenuVeil(overlay, this.designWidth, this.designHeight);
   overlay.addComponent(BlockInputEvents);
   const height = Math.min(this.designHeight - 64, 720), top = height / 2;
-  const sheet = this.node(this.respecOpen ? '初始化功法' : '获取功法点', overlay, 688, height);
+  const sheet = this.node(this.respecOpen ? '初始化功法' : '获取悟道点', overlay, 688, height);
   this.panel(sheet, C.panel, C.edge, 12);
   sheet.addComponent(BlockInputEvents);
-  const heading=this.label(sheet,this.respecOpen?'重置加点':'获取功法点',-20,top-42,584,52,30,C.text);heading.overflow=Label.Overflow.CLAMP;
+  const heading=this.label(sheet,this.respecOpen?'重置加点':'获取悟道点',-20,top-42,584,52,30,C.text);heading.overflow=Label.Overflow.CLAMP;
   this.closeIcon(sheet, '关闭', 302, top - 42, () => this.closeDetails());
   const summary = growthSummary(this.state);
   this.label(sheet, `可用${summary.available}点 / 总获${summary.total}点`,
@@ -1681,7 +1813,7 @@ export class TowerMenu {
   const info = skillPresentation(this.state, skill.id);
   if(info.equipmentLevels>0)this.skillCopy(`生效等级 ${info.effectiveLevel}（已学习${info.learnedLevel}＋装备${info.equipmentLevels}）`,20,C.primary,true,8);
   if (info.cooldown !== null) this.skillValue(['sj_yujian','evo_wanjian'].includes(skill.id) ? '飞剑生成间隔' : '冷却时间', `${number(info.cooldown)}秒`);
-  if (info.manaCost !== null && info.manaCost > 0) this.skillCopy(`魔法值消耗量：${number(info.manaCost)}`, 20, C.primary, false, 8);
+  if (info.manaCost !== null && info.manaCost > 0) this.skillCopy(`灵力值消耗：${number(info.manaCost)}`, 20, C.primary, false, 8);
   const training = info.stats.find((row: any) => row.key === 'trainingRank');
   if (training) this.skillCopy(training.text, 20, C.primary, true, 8);
   // Long mechanics follow the current and next-rank values.
@@ -1700,7 +1832,12 @@ export class TowerMenu {
   else {
    if (!info.preview) {
     this.skillSection(`下一级（${info.nextPreview.level}级）`);
-    for (const line of info.nextFormLines) this.skillCopy(line, 20, C.text, false, 4);
+    if (info.cooldown !== null && info.nextPreview.cooldown !== null && info.cooldown !== info.nextPreview.cooldown) {
+     this.skillValue(['sj_yujian','evo_wanjian'].includes(skill.id) ? '飞剑生成间隔' : '冷却时间',
+      `${number(info.cooldown)} → ${number(info.nextPreview.cooldown)}秒`);
+    }
+    for (const line of info.nextFormLines.filter((line: string) => !/^(同敌最多命中|每击目标上限)：/.test(line)))
+     this.skillCopy(line.replace(/^剑数：/, '飞剑数：'), 20, C.text, false, 4);
     for (const row of info.nextPreview.stats.filter((row: any) => shown.has(row.key))) {
      const old = info.stats.find((current: any) => current.key === row.key);
      if (!old || old.value === row.value) continue;
@@ -1709,7 +1846,13 @@ export class TowerMenu {
     }
    }
    this.skillSection(info.preview ? '学习条件' : '升级条件');
-   const requirements = info.requirementLines.filter((line: string) => !/^(经卷|功法点)/.test(line));
+   const requirements = info.requirementLines.filter((line: string) => !/^(经卷|悟道点)/.test(line)).map((line: string) => {
+    if (!line.startsWith('角色')) return line;
+    const level = info.nextRequirement.characterLevel;
+    const stage = GROWTH_STAGES.find(row => level >= row.minLevel && level <= row.maxLevel);
+    const layer = ['一','二','三','四','五','六','七','八','九','十'][(level - 1) % 10];
+    return `境界: ${stage.realm}${layer}层 * ${stage.phase}`;
+   });
    const quote = this.growthQuote(skill);
    this.skillCopy(requirements.join('\n'), 20, C.text);
    if (quote.bookCost > 0) this.skillBookCost(quote.bookCost);
@@ -1718,8 +1861,13 @@ export class TowerMenu {
    this.skillSection('解锁节点');
    for(const line of info.rankRuleLines)this.skillCopy(line,22,C.text,false,4);
   }
+  this.resonanceSection(skill);
   this.skillSection('详细规则');
-  this.skillCopy(info.description.replace(/^首级预览。/, ''),22,C.text,false,8);
+  const ruleLines = info.description.replace(/^首级预览。/, '')
+   .replace(/([。；])\s*/g, '$1\n')
+   .replace(/，(?=\s*\d+级)/g, '，\n')
+   .split('\n').map((line: string) => line.trim()).filter(Boolean);
+  for (const line of ruleLines) this.skillCopy(line,22,C.text,false,10);
   if(skill.bookCost>0&&this.state.books?.includes(skill.id))
    this.skillCopy('永久经卷：已拥有，后续修习无需重复购买。',20,C.muted,false,12,true);
   if (this.skillFeedback?.id === skill.id && this.skillFeedback.text && !this.skillFeedback.failed) {
@@ -1732,16 +1880,17 @@ export class TowerMenu {
   const returned = after.available - summary.available;
   const changes = [...skills, ...evolutions].filter(skill => this.skillLevel(skill) > 0).map(skill =>
    `${skill.name} ${this.skillLevel(skill)} → 0级`);
-  this.card(`返还${returned}功法点`,
-   `功法点 ${summary.available} → ${after.available}。\n`
-   + '全部功法等级归零，返还已投入功法点，初始赠送等级折为功法点。保留经卷，已花费的灵石不退。\n\n' + changes.join('\n'));
+  this.card(`返还${returned}悟道点`,
+   `悟道点 ${summary.available} → ${after.available}。\n`
+   + '全部功法等级归零，返还已投入悟道点，初始赠送等级折为悟道点。保留经卷，已花费的灵石不退。\n'
+   + (stateResonance(this.state).main ? '流派共鸣随之清零。\n' : '') + '\n' + changes.join('\n'));
   this.button(sheet, '取消 · 返回功法', -206, -height / 2 + 52, 224, 64,
    () => this.closeDetails(), '', false, 22);
   this.button(sheet, `确认重置 · 返还${returned}点`, 116, -height / 2 + 52, 392, 64,
    () => {
     const result = this.act({ type: 'respecSkills' });
     if (result && result.ok && !this.dead) this.closeDetails();
-   }, this.blocked() || (!returned ? '尚无可退的功法点' : ''), true, 22);
+   }, this.blocked() || (!returned ? '尚无可退的悟道点' : ''), true, 22);
  }
 
  private equipmentTabs() {
@@ -1811,9 +1960,9 @@ export class TowerMenu {
   const page=this.node('机缘抽奖页',this.root,w,h);page.addComponent(BlockInputEvents);this.panel(page,C.ground,C.edge,0);
   const redraw=()=>this.render(this.state,'hall');
   const button=(text:string,x:number,y:number,width:number,height:number,run:()=>void,selected=false,enabled=true)=>this.commerceButton(page,text,text,x,y,width,height,run,selected,enabled);
-  button('返回首页',-w/2+120,h/2-40,190,54,()=>{this.mixedOpen=false;redraw();});
+  button('返回宗门',-w/2+92,h/2-52,136,72,()=>{this.mixedOpen=false;redraw();});
   this.label(page,'机缘抽奖',0,h/2-40,300,50,30,C.text,true);
-  this.label(page,`点眷 ${this.state.contribution}`,w/2-170,h/2-40,300,46,22,C.price,true);
+  this.headerWallet(page);
   ['fa','bao','ling'].forEach((tier,i)=>button(['法器池','宝器池','灵器池'][i],w*(-.415+i*.165),h/2-106,w*.15,54,()=>{this.mixedTier=tier;this.mixedText='';redraw();},this.mixedTier===tier,mixedTierUnlocked(this.state,tier)));
   this.label(page,trial?'试玩池 · 最高上品 · 不计正式保底':`最多 ${40-pool.dry} 抽出极品 · ${pool.miss?'下次极品必中当前心愿':'极品未中心愿后，下次极品必中'}`,-w*.22,h/2-165,w*.52,50,23,C.text,true);
   const left=-w*.25;
@@ -1831,7 +1980,7 @@ export class TowerMenu {
    this.clickable(icon,()=>{const result:any=this.act({type:'setMixedWish',tier:this.mixedTier,targetId:chosen?null:d.id});if(!result?.ok)this.mixedText='设置失败：'+result?.reason;redraw();},!trial&&!this.blocked());
   });
   button('抽取历史',-w/2+175,-h/2+57,280,68,()=>{this.mixedView=this.mixedView==='history'?'closed':'history';redraw();},this.mixedView==='history');
-  let text=trial?'试玩独立奖励池\n\n下品装备 20% · 中品装备 20%\n上品装备 20% · 极品装备 0%\n基础丹药 15% · 进阶丹药 15%\n材料 10%\n\n试玩不改变正式池的保底及心愿记录。':'正式池极品概率 3%，最多40抽出极品。\n\n单抽100点眷，十连1000点眷。\n第3、6、9层首通各得1000点眷；九层合计3000。重刷不产出。';
+  let text=trial?'试玩独立奖励池\n\n下品装备 20% · 中品装备 20%\n上品装备 20% · 极品装备 0%\n基础丹药 15% · 进阶丹药 15%\n材料 10%\n\n试玩不改变正式池的保底及心愿记录。':'正式池极品概率 3%，最多40抽出极品。\n\n单抽100点眷，十连1000点眷。\n第1、4、7层首通各得2000点眷（突破筑基、金丹时正好可抽新阶装备）；九层合计6000。重刷不产出。';
   if(this.mixedView==='history'){
    const tierNames:any={fa:'法器池',bao:'宝器池',ling:'灵器池'};
    text='抽取历史 · 最近64次记录\n\n'+(m.receipts.length?[...m.receipts].reverse().map((receipt:any)=>
@@ -1855,7 +2004,7 @@ export class TowerMenu {
    this.mixedText=result?.ok?`已完成${count===10?'十连':'单抽'}，奖励已入背包。`:({'capacity':'空间不足，请整理背包后重试；未扣点眷。','save-failed':'保存失败，未扣点眷，请重试。','insufficient-dianjuan':'点眷不足。','insufficient-trial-tickets':'剩余试玩券不足十连，请先单抽用完试玩券。'} as any)[result?.reason]||'抽取失败：'+result?.reason;
    redraw();
   };
-  this.label(page,'点眷仅由第3、6、9层首通获得',-w/2+175,-h/2+137,300,68,20,C.muted,true);
+  this.label(page,'点眷仅由塔层首通获得',-w/2+175,-h/2+137,300,68,20,C.muted,true);
   button('单抽 · 100点眷',0,-h/2+57,240,68,()=>submit(1),true,available>=1&&!this.blocked());
   button('十连 · 1000点眷',w/2-200,-h/2+57,300,68,()=>submit(10),true,available>=10&&!this.blocked());
   const latest=m.receipts[m.receipts.length-1];
@@ -1939,6 +2088,9 @@ export class TowerMenu {
  // is intentionally not used: tightly packed tabs must not overlap their neighbours.
  private commerceButton(parent: Node, name: string, text: string, x: number, y: number, w: number, h: number, run: () => void, selected = false, enabled = true) {
   const n = this.node(name, parent, w, h); n.setPosition(x,y);
+  if (isMenuBack(text)) {
+   drawMenuBack(n, text, enabled); this.clickable(n, run, enabled); return n;
+  }
   this.panel(n, !enabled ? C.disabled : selected ? C.primary : C.raised, selected ? C.primary : C.edge, 6);
   this.label(n,text,0,0,w-16,h-6,22,selected && enabled ? C.onPrimary : enabled ? C.text : C.muted,true);
   this.clickable(n,run,enabled); return n;
@@ -1977,11 +2129,11 @@ export class TowerMenu {
   label.color=new Color(C.text);label.horizontalAlign=Label.HorizontalAlign.LEFT;label.verticalAlign=Label.VerticalAlign.CENTER;
   label.overflow=Label.Overflow.CLAMP;label.enableWrapText=true;label.cacheMode=Label.CacheMode.NONE;
  }
- renderSettlementRewards(parent: Node, summary: string, materials: Array<{id:string,count:number}>, width: number, height: number, earned: {spiritStones?:number;contribution?:number;skillPoints?:number} = {}) {
+ renderSettlementRewards(parent: Node, summary: string, materials: Array<{id:string,count:number}>, width: number, height: number, earned: {spiritStones?:number;contribution?:number} = {}) {
   const columns=8,gap=10,side=Math.min(88,(width-gap*(columns-1)-24)/columns),pitch=side+gap;
   const names=['下品灵石','中品灵石','上品灵石','极品灵石'],ids=['stone_low','stone_mid','stone_high','stone_top'];
   const stones=splitSpiritStones(count(earned.spiritStones));
-  const items:any[]=[...(count(earned.skillPoints)>0?[{id:'resource_skill_point',name:'功法点',count:count(earned.skillPoints),currency:true}]:[]),...[3,2,1,0].filter(grade=>stones[grade]>0).map(grade=>({id:ids[grade],name:names[grade],count:stones[grade],grade,currency:true})),
+  const items:any[]=[...[3,2,1,0].filter(grade=>stones[grade]>0).map(grade=>({id:ids[grade],name:names[grade],count:stones[grade],grade,currency:true})),
    ...(count(earned.contribution)>0?[{id:'resource_contribution',name:'点眷',count:count(earned.contribution),currency:true}]:[]),...materials];
   const noteText=summary.split('\n').filter(line=>!/^实际入账|^突破晋升修为/.test(line)).join('\n').trim();
   const fixedH=44;
@@ -2015,7 +2167,7 @@ export class TowerMenu {
   if(framed)this.panel(slot,TowerInventoryPanel.cellFill,C.edge,6);
   if(id.startsWith('eq_')) {
    // Only load delivered art; unseen equipment keeps its actual name as fallback.
-   const known=['eq_sword_iron','eq_sword_suwen','eq_sword_songfeng','eq_ring_basic','eq_armor_basic','eq_armor_qingma','eq_armor_chentie','eq_armor_bichen','eq_armor_yunwen','eq_armor_houlin','eq_armor_liufeng','eq_armor_ninglu','eq_armor_fushan','eq_armor_dangyu','eq_armor_shouyi','eq_armor_zhenyue', 'eq_armor_huilan', 'eq_armor_mingche', 'eq_armor_humai', 'eq_armor_jingbo', 'eq_armor_jinsuo', 'eq_armor_yuheng','eq_sword_shoushan','eq_sword_guiyan','eq_sword_caiyun','eq_sword_panxi','eq_sword_liuquan','eq_sword_ningshuang','eq_sword_xingluo', 'eq_sword_lingxi', 'eq_sword_zhaodan', 'eq_sword_dingyue', 'eq_sword_tingyu', 'eq_sword_qingxiao', 'eq_sword_liuxia', 'eq_sword_hanguang', 'eq_sword_duanliu', 'eq_sword_hechuan', 'eq_sword_xuanjun', 'eq_sword_zhufeng', 'eq_sword_zhenyue','eq_ring_anxi','eq_ring_huyuan','eq_ring_dingxin','eq_ring_qinglu','eq_ring_wenmai','eq_ring_wenpo', 'eq_ring_shoudan', 'eq_ring_huichun', 'eq_ring_changning', 'eq_ring_xuxi', 'eq_ring_huming', 'eq_ring_hanyuan', 'eq_ring_guizhen', 'eq_ring_ningyuan', 'eq_ring_bujing'];
+   const known=['eq_sword_iron','eq_sword_suwen','eq_sword_songfeng', 'eq_sword_qingfeng', 'eq_sword_wangshu', 'eq_sword_biluo', 'eq_sword_qiyao', 'eq_sword_jinghong', 'eq_sword_xiaohan', 'eq_sword_tianshu', 'eq_sword_xuanwei', 'eq_sword_zhuiri', 'eq_sword_luotian', 'eq_sword_zhaoyuan', 'eq_sword_taiheng','eq_ring_basic','eq_armor_basic','eq_armor_qingma','eq_armor_chentie','eq_armor_bichen','eq_armor_yunwen','eq_armor_houlin','eq_armor_liufeng','eq_armor_ninglu','eq_armor_fushan','eq_armor_dangyu','eq_armor_shouyi','eq_armor_zhenyue', 'eq_armor_huilan', 'eq_armor_mingche', 'eq_armor_humai', 'eq_armor_jingbo', 'eq_armor_jinsuo', 'eq_armor_yuheng', 'eq_armor_panshi', 'eq_armor_chengxiao', 'eq_armor_wugou', 'eq_armor_xuansu', 'eq_armor_xingmu', 'eq_armor_taisu', 'eq_armor_budong', 'eq_armor_wuyin','eq_sword_shoushan','eq_sword_guiyan','eq_sword_caiyun','eq_sword_panxi','eq_sword_liuquan','eq_sword_ningshuang','eq_sword_xingluo', 'eq_sword_lingxi', 'eq_sword_zhaodan', 'eq_sword_dingyue', 'eq_sword_tingyu', 'eq_sword_qingxiao', 'eq_sword_liuxia', 'eq_sword_hanguang', 'eq_sword_duanliu', 'eq_sword_hechuan', 'eq_sword_chengming', 'eq_sword_kunwu', 'eq_sword_xuanjun', 'eq_sword_zhufeng', 'eq_sword_zhenyue','eq_ring_anxi','eq_ring_huyuan','eq_ring_dingxin','eq_ring_qinglu','eq_ring_wenmai','eq_ring_wenpo', 'eq_ring_shoudan', 'eq_ring_huichun', 'eq_ring_changning', 'eq_ring_xuxi', 'eq_ring_huming', 'eq_ring_hanyuan', 'eq_ring_guizhen', 'eq_ring_ningyuan', 'eq_ring_bujing', 'eq_ring_jingshui', 'eq_ring_dingwei', 'eq_ring_guyuan', 'eq_ring_zhuixing', 'eq_ring_zhenxin', 'eq_ring_chengshen', 'eq_ring_shouzhen', 'eq_ring_guiyuan', 'eq_ring_taihe', 'eq_ring_weiming'];
    if(known.includes(id))this.towerImage(slot,'tower-equipment/'+id,size-4,size-4);
    else this.label(slot,id==='eq_sword_qingfeng'?'青锋':'器',0,0,size-8,size-8,24,C.accent,true);
   } else {
@@ -2056,15 +2208,35 @@ export class TowerMenu {
  }
  private commerceDescription(kind: string, entry: any, compact = false, includeName = true) {
   if(kind==='gear')return entry.recipe.definitionIds.map((id:string)=>{const item=createForgedGear(entry.key,'preview',id),weapon=entry.recipe.category==='weapon';return (includeName||entry.recipe.definitionIds.length>1?(weapon?weaponName(item):equipmentName(item))+'\n':'')+(weapon?weaponDescription(item):equipmentDescription(item)).join('\n');}).join('\n\n');
-  const p=pills[entry.key],allowance=cultivationPillAllowance(this.state,entry.key);
-  const effect=p.healShare?`恢复最大气血 ${Math.round(p.healShare*100)}%。\n满血不可服用，不复活。`
+  const p=pills[entry.key];
+  const effect=p.restoreSpirit?p.description:p.healShare?`恢复最大气血 ${Math.round(p.healShare*100)}%。\n满血不可服用，不复活。`
    :p.successChance?`${p.from}十层满修为 → ${p.target}，成功率 ${Math.round(p.successChance*100)}%。失败扣除丹药，保留满修为。`
    :`每颗增加 ${p.xp} 修为，仅限${p.realm}，不跨越境界瓶颈。`;
-  return `${effect}${compact?'':'\n'+(p.description || '')}\n持有 ${count(this.state.pills[entry.key])} 颗`+(p.xp?`\n本境已服 ${allowance.used}/6 颗，两种修为丹共享额度。\n${CULTIVATION_PILL_UNLOCK_HINT}`:'');
+  return `${effect}${compact||p.restoreSpirit?'':'\n'+(p.description || '')}\n持有 ${count(this.state.pills[entry.key])} 颗`+(p.xp?`\n${cultivationPillHint(this.state,entry.key)}\n${cultivationPillUseHint(this.state,entry.key)}`:'');
  }
- private commerceCost(parent: Node, x: number, y: number, quote: any, width: number) {
-  const cost=`${formatSpiritStones(quote.stones)}灵石`;
-  this.label(parent,cost,x,y,width,34,24,C.price,true);
+ private commerceCost(parent: Node, x: number, y: number, quote: any, width: number, compact = false) {
+  const amounts=splitSpiritStones(quote.stones);
+  const grades=[3,2,1,0].filter(grade=>amounts[grade]>0);
+  if(!grades.length)grades.push(0);
+  const iconSize=compact?26:32,iconGap=compact?4:6,groupGap=compact?10:18;
+  const fontSize=compact?20:24,digitWidth=compact?12:15;
+  const entries=grades.map(grade=>({grade,caption:`×${amounts[grade]}`,textWidth:`×${amounts[grade]}`.length*digitWidth}));
+  const naturalWidth=entries.reduce((sum,e)=>sum+iconSize+iconGap+e.textWidth,0)+groupGap*(entries.length-1);
+  const row=this.node('价格图标行',parent,naturalWidth,36);
+  row.setPosition(x,y);
+  const scale=Math.min(1,width/naturalWidth);row.setScale(scale,scale,1);
+  let left=-naturalWidth/2;
+  for(const e of entries){
+   const iconX=left+iconSize/2;
+   const fallback=this.label(row,['下品','中品','上品','极品'][e.grade],iconX,0,iconSize,32,14,C.price,true);
+   this.stoneArt.draw(row,`commerce-price-${parent.uuid}-${e.grade}`,e.grade,iconX,0,iconSize,
+    ()=>{if(isValid(fallback.node,true))fallback.node.active=false;});
+   const label=this.label(row,e.caption,left+iconSize+iconGap+e.textWidth/2,0,e.textWidth,34,fontSize,C.price,true);
+   label.string=e.caption;label.enableWrapText=false;label.overflow=Label.Overflow.CLAMP;
+   label.horizontalAlign=Label.HorizontalAlign.LEFT;
+   label.node.getComponent(UITransform)!.setContentSize(e.textWidth,34);
+   left+=iconSize+iconGap+e.textWidth+groupGap;
+  }
  }
  private commerceQuantity(parent: Node, kind: string, x: number, y: number, entry: any, redraw: () => void) {
   const amount=kind==='gear'?this.gearCount:this.apothecaryQuantity;
@@ -2079,12 +2251,11 @@ export class TowerMenu {
   let recipeScroll: ScrollView | null = null;
   const redraw=()=>{if(recipeScroll)this.gearRecipeOffset=Math.max(0,recipeScroll.getScrollOffset().y);this.render(this.state,kind==='gear'?'forge':'pills');};
   const close=()=>{this.commerceDialog='';this.commerceNotice='';if(kind==='gear')this.gearOpen=false;else this.apothecaryOpen=false;redraw();};
-  this.commerceButton(page,kind==='gear'?'关闭炼器工坊':'关闭丹药菜单','‹ 返回庭院',-w/2+105,h/2-40,166,68,close);
+  this.commerceButton(page,kind==='gear'?'关闭炼器工坊':'关闭丹药菜单','返回庭院',-w/2+92,h/2-52,136,72,close);
   this.label(page,title,-w/2+320,h/2-40,240,48,30,C.text,true);
-  const walletWidth=this.walletWidth();
-  this.wallet(w/2-24-walletWidth/2,h/2-40,walletWidth,page);
+  this.headerWallet(page);
   const sideW=168,left=-w/2+sideW+32,areaW=w-sideW-58;
-  const categories=kind==='gear'&&!buy?[['fa','法器'],['bao','宝器'],['ling','灵器']]:kind==='gear'?[['all','全部装备'],['weapon','武器'],['armor','防具'],['ring','戒指']]:[['all','全部丹药'],['heal','疗伤丹药'],['cultivation','修为丹药'],['breakthrough','突破丹药']];
+  const categories=kind==='gear'&&!buy?[['fa','法器'],['bao','宝器'],['ling','灵器']]:kind==='gear'?[['all','全部装备'],['weapon','武器'],['armor','防具'],['ring','戒指']]:[['all','全部丹药'],['heal','疗伤丹药'],['spirit','恢复灵力'],['cultivation','修为丹药'],['breakthrough','突破丹药']];
   categories.forEach(([id,name],i)=>this.commerceButton(page,'分类-'+id,name,-w/2+92,h/2-122-i*80,148,72,()=>{
    if(kind==='gear'){if(buy)this.gearCategory=id;else {this.gearCraftTier=id;this.gearRecipeOffset=0;recipeScroll=null;}}else this.alchemyCategory=id;this.commerceDialog='';this.commerceNotice='';redraw();
   },id===(kind==='gear'?(buy?this.gearCategory:this.gearCraftTier):this.alchemyCategory)));
@@ -2102,13 +2273,14 @@ export class TowerMenu {
   if(buy){
    this.label(page,'宗门供应',left+90,top-20,180,40,24,C.text);
    this.label(page,'点击商品购买',w/2-140,top-20,230,40,20,C.muted,true);
-   const gap=18,cardW=(areaW-2*gap)/3,cardH=146,viewH=h-192;
-   const list=this.commerceScroll(page,'商品列表',left+areaW/2,bottom+viewH/2,areaW,viewH,Math.ceil(entries.length/3)*(cardH+gap));
+   const gap=14,cardW=160,cols=Math.max(1,Math.floor((areaW+gap)/(cardW+gap)));
+   const cardH=166,viewH=h-192;
+   const list=this.commerceScroll(page,'商品列表',left+areaW/2,bottom+viewH/2,areaW,viewH,Math.ceil(entries.length/cols)*(cardH+gap)-gap);
    entries.forEach((e:any,i:number)=>{
-    const card=this.node('商品卡片-'+e.key,list,cardW,cardH);card.setPosition(-areaW/2+cardW/2+(i%3)*(cardW+gap),-cardH/2-Math.floor(i/3)*(cardH+gap));this.panel(card,TowerInventoryPanel.cellFill,C.edge,8);
-    this.commerceArt(card,e.art,-cardW/2+54,17,82);
-    this.label(card,e.name,49,23,cardW-122,70,23,C.text);
-    this.commerceCost(card,0,-cardH/2+24,this.commerceQuote(kind,e,1),cardW-16);
+    const card=this.node('商品卡片-'+e.key,list,cardW,cardH);card.setPosition(-areaW/2+cardW/2+(i%cols)*(cardW+gap),-cardH/2-Math.floor(i/cols)*(cardH+gap));this.panel(card,TowerInventoryPanel.cellFill,C.edge,8);
+    this.commerceArt(card,e.art,0,34,76);
+    this.label(card,e.name,0,-21,cardW-16,30,20,C.text,true);
+    this.commerceCost(card,0,-cardH/2+24,this.commerceQuote(kind,e,1),cardW-16,true);
     this.clickable(card,()=>choose(e),true);
    });
   }else{
@@ -2138,14 +2310,15 @@ export class TowerMenu {
     });
    }else{
     this.commerceButton(page,'切换可炼配方',this.alchemyOnlyAvailable?'✓ 仅可炼制':'全部配方',left+110,top-24,220,48,()=>{this.alchemyOnlyAvailable=!this.alchemyOnlyAvailable;redraw();},this.alchemyOnlyAvailable);
-    const cols=3,gap=12,cellW=(gridW-gap*2)/cols,cellH=146,viewH=h-214;
-    const list=this.commerceScroll(page,'配方列表',left+gridW/2,bottom+viewH/2,gridW,viewH,Math.ceil(entries.length/cols)*(cellH+gap));
+    const cols=3,gap=12,cellW=(gridW-gap*2)/cols,cellH=124,viewH=h-214;
+    const list=this.commerceScroll(page,'配方列表',left+gridW/2,bottom+viewH/2,gridW,viewH,Math.ceil(entries.length/cols)*(cellH+gap)-gap);
     entries.forEach((e:any,i:number)=>{
      const card=this.node('配方卡片-'+e.key,list,cellW,cellH);card.setPosition(-gridW/2+cellW/2+i%cols*(cellW+gap),-cellH/2-Math.floor(i/cols)*(cellH+gap));
      this.panel(card,e.key===selected?C.raised:TowerInventoryPanel.cellFill,e.key===selected?C.primary:C.edge,7);
-     this.commerceArt(card,e.art,0,24,76);
-     this.label(card,e.name,0,-32,cellW-8,40,20,C.text,true);
-     const ready=!this.commerceQuote(kind,e,1).reason;this.label(card,ready?'可炼制':'查看配方',0,-61,cellW-8,24,17,ready?C.primary:C.muted,true);
+     this.commerceArt(card,e.art,0,13,76);
+     this.label(card,e.name,0,-39,cellW-8,28,20,C.text,true);
+     const ready=!this.commerceQuote(kind,e,1).reason;
+     if(ready){const marker=this.label(card,'✓',cellW/2-15,cellH/2-16,22,24,18,C.primary,true);marker.node.name='可炼制标记';}
      this.clickable(card,()=>choose(e),true);
     });
    }
@@ -2192,7 +2365,7 @@ export class TowerMenu {
     const realmLocked=quote.reason==='境界不足';
     const notice=this.commerceNotice||(realmLocked?'':quote.reason);
     if(notice)this.label(page,notice,detailX-100,-h/2+43,detailW-212,32,20,C.warning,true);
-    this.commerceButton(page,'开始炼制',realmLocked?'境界不足':'炼制',detailX+detailW/2-97,-h/2+43,180,58,()=>{this.commerceDialog='confirm';this.commerceNotice='';redraw();},true,!quote.reason);
+    this.commerceButton(page,'开始炼制',realmLocked?'境界不足':'炼制',detailX+detailW/2-97,-h/2+43,180,72,()=>{this.commerceDialog='confirm';this.commerceNotice='';redraw();},true,!quote.reason);
    }
   }
   if(!entries.length)this.label(page,'暂无符合条件的配方',left+areaW/2,0,areaW-40,80,26,C.muted,true);
@@ -2218,6 +2391,7 @@ export class TowerMenu {
  private commerceModal(kind: string, entry: any, redraw: () => void) {
   const mode=this.commerceDialog,buy=kind==='gear'?this.gearMode==='buy':this.alchemyMode==='buy';
   const shade=this.node('交易弹窗遮罩',this.root,this.designWidth,this.designHeight);shade.addComponent(BlockInputEvents);drawMenuVeil(shade,this.designWidth,this.designHeight);
+  if(mode==='forging'){this.renderForgeRitual(shade,entry,redraw);return;}
   if(mode==='detail'||mode==='material'){
    const close=()=>{this.commerceDialog='';this.commerceNotice='';redraw();};
    const ids=mode==='material'?[this.commerceMaterial]:kind==='gear'?entry.recipe.definitionIds:[entry.art];
@@ -2228,13 +2402,22 @@ export class TowerMenu {
    shade.on(Node.EventType.TOUCH_END,(event:any)=>{if(event.target===shade)close();});
    return;
   }
-  const w=mode==='result'?Math.min(820,this.designWidth-48):mode==='purchase'?Math.min(1100,this.designWidth-48):720,h=Math.min(this.designHeight-48,mode==='confirm'?390:mode==='material'?390:mode==='result'?Math.min(520,240+Math.ceil(this.commerceRewards.length/8)*92):mode==='purchase'&&kind!=='gear'?440:mode==='detail'&&kind!=='gear'?400:550);
+  const singleReward=mode==='result'&&this.commerceRewards.length===1;
+  const resultWidth=singleReward?360:Math.max(400,Math.min(8,this.commerceRewards.length)*92+72);
+  const w=mode==='result'?Math.min(resultWidth,this.designWidth-48):mode==='purchase'?Math.min(1100,this.designWidth-48):720,h=Math.min(this.designHeight-48,mode==='confirm'?450:mode==='material'?390:mode==='result'?(singleReward?288:Math.min(520,240+Math.ceil(this.commerceRewards.length/8)*92)):mode==='purchase'&&kind!=='gear'?440:mode==='detail'&&kind!=='gear'?400:550);
   const panel=this.node(({purchase:'购买物品弹窗',confirm:'炼制确认弹窗',result:'获得物品弹窗',detail:'物品详情弹窗',material:'材料来源弹窗'} as any)[mode],shade,w,h);this.panel(panel,['purchase','detail'].includes(mode)?TowerInventoryPanel.detailFill:C.panel,C.edge,12);panel.addComponent(BlockInputEvents);
   const close=()=>{this.commerceDialog='';this.commerceNotice='';redraw();};
   const title=({purchase:'购买物品',confirm:'确认炼制',result:'获得物品',detail:'成品详情',material:'材料来源'} as any)[mode];
-  this.modalHeading(panel,title,w,h,close,mode==='result');
+  if(mode==='confirm')this.closeIcon(panel,'关闭交易弹窗',w/2-42,h/2-42,close);
+  else this.modalHeading(panel,title,w,h,close,mode==='result');
   const quantity=kind==='gear'?(this.gearMode==='buy'?this.gearCount:1):(this.alchemyMode==='buy'?this.apothecaryQuantity:1);
   if(mode==='result'){
+   if(singleReward){
+    const reward=this.commerceRewards[0];
+    this.commerceArt(panel,reward.art||reward.id,0,18,80,true);
+    this.label(panel,`${reward.name||(CAMP_PILLS as any)[reward.id]?.name||reward.id} ×${reward.count}`,0,-43,w-40,34,23,C.text,true);
+    this.commerceButton(panel,'确认获得','确认',0,-h/2+43,200,58,close,true);return;
+   }
    const rewards=this.node('获得物品格子区',panel,w-48,h-156);rewards.setPosition(0,-4);
    this.rewardGrid(rewards,'获得物品列表',this.commerceRewards,w-48,h-156);
    this.commerceButton(panel,'确认获得','确认',0,-h/2+43,230,58,close,true);return;
@@ -2259,10 +2442,22 @@ export class TowerMenu {
    this.commerceButton(panel,'确认购买','购买',actionX+88,-h/2+44,164,72,()=>this.commerceSubmit(kind,entry,redraw),true,!quote.reason);
    return;
   }else{
-   this.commerceArt(panel,entry.art,-w/2+100,54,90);this.label(panel,`${entry.name} ×${quantity}\n确认后消耗材料并炼制`,55,56,w-270,88,26,C.text);
-   this.commerceCost(panel,0,-25,quote,w-80);
+   const heading=this.label(panel,entry.name,0,h/2-44,w-144,46,32,C.primary,true);
+   heading.node.name='炼制配方标题';
+   this.label(panel,kind==='gear'?`随机获得其中 ${quantity} 件成品`:`炼制数量 ×${quantity}`,0,h/2-86,w-96,30,20,C.muted,true);
+   this.label(panel,'消耗材料',0,h/2-128,w-80,30,22,C.text,true);
+   const ingredients=entry.recipe.ingredients,cellW=Math.min(104,(w-80)/Math.max(1,ingredients.length));
+   ingredients.forEach((a:any,i:number)=>{
+    const x=(i-(ingredients.length-1)/2)*cellW,y=h/2-182,need=a.count*quantity;
+    this.commerceArt(panel,a.id,x,y,52);
+    this.label(panel,(CAMP_PILLS as any)[a.id]?.name||a.id,x,y-43,cellW-8,30,20,C.text,true);
+    this.label(panel,`×${need}`,x,y-72,cellW-8,28,22,count(this.state.pills[a.id])>=need?C.price:C.warning,true);
+   });
+   if(!ingredients.length)this.label(panel,'无需制作材料',0,h/2-200,w-80,32,22,C.muted,true);
+   this.label(panel,'灵石费用',-w/2+100,-h/2+143,144,32,21,C.muted,true);
+   this.commerceCost(panel,65,-h/2+143,quote,w-280);
   }
-  this.label(panel,this.commerceNotice||quote.reason||quote.excess||(mode==='confirm'?'材料与费用将在确认后扣除':'购买后物品放入背包'),0,-h/2+99,w-60,60,20,(quote.reason||quote.excess||this.commerceNotice)?C.warning:C.muted,true);
+  this.label(panel,this.commerceNotice||quote.reason||quote.excess||(mode==='confirm'?'材料与费用将在确认后扣除':'购买后物品放入背包'),0,-h/2+99,w-60,44,20,(quote.reason||quote.excess||this.commerceNotice)?C.warning:C.muted,true);
   this.commerceButton(panel,mode==='purchase'?'取消购买':'取消炼制','取消',-140,-h/2+40,220,58,close);
   this.commerceButton(panel,mode==='purchase'?'确认购买':'确认炼制',mode==='purchase'?'购买':'确认炼制',140,-h/2+40,220,58,()=>this.commerceSubmit(kind,entry,redraw),true,!quote.reason);
  }
@@ -2285,8 +2480,96 @@ export class TowerMenu {
    if(kind==='gear')for(const id of result.ids){const item=this.state.weapons[id]||this.state.equipment[id],name=entry.recipe.category==='weapon'?weaponName(item):equipmentName(item),row=rewards.find(r=>r.art===item.definitionId);if(row)row.count++;else rewards.push({art:item.definitionId,name,count:1});}
    else rewards.push({art:entry.art,name:entry.name,count:quantity});
    this.commerceRewards=rewards;this.commerceDialog='result';this.commerceNotice='';if(kind==='gear')this.gearRequest=null;else this.alchemyRequest=null;
+   if(kind==='gear'&&!buy&&!presentationPreferences().reducedMotion){this.forgeRitualTime=0;this.commerceDialog='forging';}
   }else this.commerceNotice=result?.reason==='save-failed'?'保存失败，未扣除材料和费用，请重试。':'操作未完成，请检查材料、资源或重新进入。';
   redraw();
+ }
+
+ private renderForgeRitual(shade:Node,entry:any,redraw:()=>void) {
+  const root=this.node('炼器仪式',shade,this.designWidth,this.designHeight);
+  const backdrop=root.addComponent(Graphics);
+  backdrop.fillColor=new Color(12,25,23,242);backdrop.rect(-this.designWidth/2,-this.designHeight/2,this.designWidth,this.designHeight);backdrop.fill();
+  const rays=this.node('成器霞光',root,640,480).addComponent(Graphics);
+  this.towerImage(root,'tower-forge/furnace',340,340,0,-25);
+  const fire=this.node('炉底灵火',root,220,160).addComponent(Graphics);
+  const flames=[this.towerImage(root,'tower-forge/fire',142,71,0,-61),this.towerImage(root,'tower-forge/fire',108,64,-4,-57)];
+  const materials=entry.recipe.ingredients.map((a:any)=>{
+   const n=this.node('入炉材料-'+a.id,root,52,52);
+   // Keep the recipe artwork, without inventory cell backgrounds or random product previews.
+   this.towerImage(n,'tower-stones/pill_'+a.id,48,48);
+   return n;
+  });
+  const sparks=this.node('入炉流光',root,640,480).addComponent(Graphics);
+  this.label(root,entry.name,0,this.designHeight/2-60,this.designWidth-120,42,30,'#EDE4BE',true);
+  const caption=this.label(root,'投料入炉',0,-this.designHeight/2+76,480,36,23,'#D1C9AA',true);
+  const finish=()=>{
+   if(this.dead||this.commerceDialog!=='forging'||this.forgeRitual?.root!==root)return;
+   this.forgeRitual=null;this.commerceDialog='result';redraw();
+  };
+  this.forgeRitual={root,materials,flames,fire,rays,sparks,caption,finish};
+  this.drawForgeRitual(0);
+ }
+
+ private drawForgeRitual(dt:number) {
+  const e=this.forgeRitual;
+  if(!e||!isValid(e.root,true)||this.commerceDialog!=='forging')return;
+  this.forgeRitualTime+=Number.isFinite(dt)?Math.max(0,Math.min(dt,.1)):0;
+  const t=this.forgeRitualTime;
+  if(t>=3.4||presentationPreferences().reducedMotion){e.finish();return;}
+  e.caption.string=t<1.5?'投料入炉':t<2.3?'炉火凝炼':'宝光初成';
+  e.sparks.clear();e.fire.clear();e.rays.clear();
+  const mouthY=91;
+  e.materials.forEach((n,i)=>{
+   const delay=.12+i*.19,p=Math.max(0,Math.min(1,(t-delay)/.68));
+   n.active=t>=delay&&p<1;
+   if(!n.active)return;
+   const sx=(i%2?-1:1)*(206+(i%3)*25),sy=104+(i%3)*39;
+   const x=sx*(1-p),y=(1-p)*sy+p*mouthY+Math.sin(p*Math.PI)*60;
+   n.setPosition(x,y);n.angle=(i%2?-1:1)*p*55;
+   const size=1-.8*p*p;n.setScale(size,size,1);
+   for(let j=1;j<=7;j++){
+    const q=Math.max(0,p-j*.025),px=sx*(1-q),py=(1-q)*sy+q*mouthY+Math.sin(q*Math.PI)*60;
+    e.sparks.fillColor=new Color(246,205,112,Math.round(100*(1-j/8)));
+    e.sparks.circle(px,py,2.5*(1-j/9));e.sparks.fill();
+   }
+  });
+  const heat=t<1.5?.35+.35*t/1.5:t<2.3?.7+.3*(t-1.5)/.8:Math.max(.2,1-(t-2.3));
+  // Soft local light and curved flame tongues stay within the existing hearth.
+  for(let k=10;k>=1;k--){
+   e.fire.fillColor=new Color(255,136,35,Math.round(4*heat));
+   e.fire.ellipse(0,-61,29+k*3,9+k*2);e.fire.fill();
+  }
+  e.flames.forEach((flame,i)=>{
+   flame.node.setScale(1+.025*Math.sin(t*8+i*2),.85+heat*.2+.09*Math.sin(t*11+i*2),1);
+   flame.color=new Color(255,255,255,Math.round((i?100:170)*heat));
+  });
+  for(let i=0;i<16;i++){
+   const p=(t*.7+i*.173)%1,x=Math.sin(i*3.1+p*2)*45,y=-62+p*68;
+   e.fire.fillColor=new Color(255,194,91,Math.round((1-p)*120*heat));e.fire.circle(x,y,1.1);e.fire.fill();
+  }
+  if(t<2.25)return;
+  const burst=Math.min(1,(t-2.25)/.45),fade=Math.min(1,(3.4-t)/.5);
+  const palette=[[255,222,140],[204,229,192],[238,194,177]];
+  for(let i=0;i<24;i++){
+   const angle=i*Math.PI*2/24+.07*t,length=(180+(i%5)*24)*burst,c=palette[i%3];
+   for(let band=0;band<10;band++){
+    const a=angle-.022,b=angle+.022,near=28+length*band/10,far=28+length*(band+1)/10;
+    e.rays.fillColor=new Color(c[0],c[1],c[2],Math.round(88*(1-band/10)*burst*fade));
+    e.rays.moveTo(Math.cos(a)*near,25+Math.sin(a)*near*.72);
+    e.rays.lineTo(Math.cos(a)*far,25+Math.sin(a)*far*.72);
+    e.rays.lineTo(Math.cos(b)*far,25+Math.sin(b)*far*.72);
+    e.rays.lineTo(Math.cos(b)*near,25+Math.sin(b)*near*.72);e.rays.close();e.rays.fill();
+   }
+  }
+  for(let i=12;i>=1;i--){
+   e.rays.fillColor=new Color(253,222,153,Math.round(7*burst*fade));
+   e.rays.ellipse(0,25,50+i*8,35+i*6);e.rays.fill();
+  }
+  for(let i=0;i<28;i++){
+   const a=i*2.399,r=40+burst*(65+(i%7)*20);
+   e.sparks.fillColor=new Color(255,239,183,Math.round(180*fade*burst));
+   e.sparks.circle(Math.cos(a)*r,25+Math.sin(a)*r*.72,1.4+i%3*.5);e.sparks.fill();
+  }
  }
 
  private sectTextStyle(label: Label, size: number) {
@@ -2345,10 +2628,10 @@ export class TowerMenu {
    g.lineTo(-s * .92, -s * .85); g.close(); g.fill();
    g.moveTo(-s * .95, -s * .45); g.lineTo(-s * .35, -s * .92); g.stroke();
   }
-  const known = ['eq_sword_iron', 'eq_sword_suwen', 'eq_sword_songfeng', 'eq_ring_basic',
-   'eq_armor_basic', 'eq_armor_qingma', 'eq_armor_chentie', 'eq_armor_bichen', 'eq_armor_yunwen', 'eq_armor_houlin', 'eq_armor_liufeng', 'eq_armor_ninglu', 'eq_armor_fushan', 'eq_armor_dangyu', 'eq_armor_shouyi', 'eq_armor_zhenyue', 'eq_armor_huilan', 'eq_armor_mingche', 'eq_armor_humai', 'eq_armor_jingbo', 'eq_armor_jinsuo', 'eq_armor_yuheng', 'eq_sword_shoushan', 'eq_sword_guiyan', 'eq_sword_caiyun',
-   'eq_sword_panxi', 'eq_sword_liuquan', 'eq_sword_ningshuang', 'eq_sword_xingluo', 'eq_sword_lingxi', 'eq_sword_zhaodan', 'eq_sword_dingyue', 'eq_sword_tingyu', 'eq_sword_qingxiao', 'eq_sword_liuxia', 'eq_sword_hanguang', 'eq_sword_duanliu', 'eq_sword_hechuan', 'eq_sword_xuanjun', 'eq_sword_zhufeng', 'eq_sword_zhenyue', 'eq_ring_anxi',
-   'eq_ring_huyuan', 'eq_ring_dingxin', 'eq_ring_qinglu', 'eq_ring_wenmai', 'eq_ring_wenpo', 'eq_ring_shoudan', 'eq_ring_huichun', 'eq_ring_changning', 'eq_ring_xuxi', 'eq_ring_huming', 'eq_ring_hanyuan', 'eq_ring_guizhen', 'eq_ring_ningyuan', 'eq_ring_bujing'];
+  const known = ['eq_sword_iron', 'eq_sword_suwen', 'eq_sword_songfeng', 'eq_sword_qingfeng', 'eq_sword_wangshu', 'eq_sword_biluo', 'eq_sword_qiyao', 'eq_sword_jinghong', 'eq_sword_xiaohan', 'eq_sword_tianshu', 'eq_sword_xuanwei', 'eq_sword_zhuiri', 'eq_sword_luotian', 'eq_sword_zhaoyuan', 'eq_sword_taiheng', 'eq_ring_basic',
+   'eq_armor_basic', 'eq_armor_qingma', 'eq_armor_chentie', 'eq_armor_bichen', 'eq_armor_yunwen', 'eq_armor_houlin', 'eq_armor_liufeng', 'eq_armor_ninglu', 'eq_armor_fushan', 'eq_armor_dangyu', 'eq_armor_shouyi', 'eq_armor_zhenyue', 'eq_armor_huilan', 'eq_armor_mingche', 'eq_armor_humai', 'eq_armor_jingbo', 'eq_armor_jinsuo', 'eq_armor_yuheng', 'eq_armor_panshi', 'eq_armor_chengxiao', 'eq_armor_wugou', 'eq_armor_xuansu', 'eq_armor_xingmu', 'eq_armor_taisu', 'eq_armor_budong', 'eq_armor_wuyin', 'eq_sword_shoushan', 'eq_sword_guiyan', 'eq_sword_caiyun',
+   'eq_sword_panxi', 'eq_sword_liuquan', 'eq_sword_ningshuang', 'eq_sword_xingluo', 'eq_sword_lingxi', 'eq_sword_zhaodan', 'eq_sword_dingyue', 'eq_sword_tingyu', 'eq_sword_qingxiao', 'eq_sword_liuxia', 'eq_sword_hanguang', 'eq_sword_duanliu', 'eq_sword_hechuan', 'eq_sword_chengming', 'eq_sword_kunwu', 'eq_sword_xuanjun', 'eq_sword_zhufeng', 'eq_sword_zhenyue', 'eq_ring_anxi',
+   'eq_ring_huyuan', 'eq_ring_dingxin', 'eq_ring_qinglu', 'eq_ring_wenmai', 'eq_ring_wenpo', 'eq_ring_shoudan', 'eq_ring_huichun', 'eq_ring_changning', 'eq_ring_xuxi', 'eq_ring_huming', 'eq_ring_hanyuan', 'eq_ring_guizhen', 'eq_ring_ningyuan', 'eq_ring_bujing', 'eq_ring_jingshui', 'eq_ring_dingwei', 'eq_ring_guyuan', 'eq_ring_zhuixing', 'eq_ring_zhenxin', 'eq_ring_chengshen', 'eq_ring_shouzhen', 'eq_ring_guiyuan', 'eq_ring_taihe', 'eq_ring_weiming'];
   if (known.includes(item.definitionId)) this.towerImage(art, `tower-equipment/${item.definitionId}`, size, size, 0, 0, false, g);
   return art;
  }
@@ -2356,6 +2639,7 @@ export class TowerMenu {
  /** Presentation clock only: never advances the draw or mutates the campaign. */
  updateEffects(dt: number) {
   if (this.dead) return;
+  this.drawForgeRitual(dt);
   const portraitDelta=presentationPreferences().reducedMotion?0:Number.isFinite(dt)?Math.max(0,Math.min(dt,.1)):0;
   this.characterPortraits=this.characterPortraits.filter(p=>{
    if(!isValid(p.root,true)||!p.root.parent){p.art.destroy();return false;}
@@ -2743,7 +3027,7 @@ export class TowerMenu {
   const weapon = this.state.weapons[selected.weaponId];
   return `${selected.name} · ${weapon ? weaponName(weapon) : '未装备'}\n${this.weaponLines(weapon).join('\n')}`
    + `\n功法${Object.keys(combat.active).length}种 · 心法${Object.keys(combat.passive).length}种 · 进化${combat.evolutions.length}种，学会自动生效。`
-   + (summary.available > 0 ? `\n剩余${summary.available}功法点，可在功法页分配；入塔后也可暂停按境界与资源修习。` : '')
+   + (summary.available > 0 ? `\n剩余${summary.available}悟道点，可在功法页分配；入塔后也可暂停按境界与资源修习。` : '')
    + `\n\n${this.equipmentLoadoutSummary(selected)}`;
  }
  private equipmentLoadoutSummary(loadout: Loadout) {
@@ -2800,7 +3084,7 @@ export class TowerMenu {
 
  private training() {
   const combat = combatLoadout(this.state), summary = growthSummary(this.state);
-  this.card('演武试剑', `功法${Object.keys(combat.active).length}种 · 心法${Object.keys(combat.passive).length}种 · 进化${combat.evolutions.length}种，学会自动生效。可用功法点${summary.available}。\n使用当前配装演练功法和走位。训练不扣丹药，不改变真实气血、资源或通层记录。`, [
+  this.card('演武试剑', `功法${Object.keys(combat.active).length}种 · 心法${Object.keys(combat.passive).length}种 · 进化${combat.evolutions.length}种，学会自动生效。可用悟道点${summary.available}。\n使用当前配装演练功法和走位。训练不扣丹药，不改变真实气血、资源或通层记录。`, [
    { label: '进入演武场', run: () => this.handlers.training(), reason: this.blocked(), primary: true },
    { label: '先调整配装', run: () => this.go('loadouts') },
   ]);
@@ -2818,7 +3102,7 @@ export class TowerMenu {
     this.modalHeading(panel,`第${result.floor}层 · ${outcome}`,w,h,()=>shade.destroy(),true);
     const area=this.node('战报收获区',panel,w-70,h-120);area.setPosition(0,-40);
     const credited=(result.materials||[]).map((r:any)=>({...r,count:Math.max(0,r.count-(result.materialOverflow?.items?.find((v:any)=>v.id===r.id)?.count||0))})).filter((r:any)=>r.count>0);
-    this.renderSettlementRewards(area,(result.firstClear?'\n首通奖励已结算':'')+(result.materialOverflow?.items?.length?`\n库存已满：材料自动出售到账 ${formatSpiritStones(result.materialOverflow.convertedStones)}灵石；灵石溢出损失 ${result.materialOverflow.lostStones}下品灵石。`:''),credited,w-70,h-120,{...result.earned,skillPoints:result.firstClear&&FIRST_CLEAR_REWARDS[result.floor-1]?.kind==='skillPoints'?FIRST_CLEAR_REWARDS[result.floor-1].amount:0});
+    this.renderSettlementRewards(area,(result.firstClear&&FIRST_CLEAR_REWARDS[result.floor-1]?.kind!=='none'?'\n首通奖励已结算':'')+(result.materialOverflow?.items?.length?`\n库存已满：材料自动出售到账 ${formatSpiritStones(result.materialOverflow.convertedStones)}灵石；灵石溢出损失 ${result.materialOverflow.lostStones}下品灵石。`:''),credited,w-70,h-120,result.earned);
    },primary:true}]);
  }
  private home() {
@@ -2840,12 +3124,14 @@ export class TowerMenu {
    [{ label: '查看锁妖塔', run: () => this.go('tower'), primary: true }]);
   this.lastBattle();
   const summary = growthSummary(this.state);
-  this.card('修行与功法点', `可用${summary.available} / 总获${summary.total}点。\n升级、突破与首通共可获得68点，三次道悟研习再补12点；初始赠送功法另值1点。\n所有学会的功法自动生效，藏经阁可免费重置加点重新分配。`, [
+  this.card('修行与悟道点', `可用${summary.available} / 总获${summary.total}点。\n每升1级获得1点，突破筑基、金丹各额外3点，30级累计35点；开局赠送功法另值1点。\n所有学会的功法自动生效，藏经阁可免费重置加点重新分配。`, [
    { label: '查看功法', run: () => this.go('librarySkills'), primary: true },
   ]);
-  this.card('三种资源，各有用途', '灵石 → 通用资源：通塔掉落、分解装备和出售材料获得，用于经卷、研习、购买装备及炼器的灵力消耗。分解仅返还同阶同品质装备购买或炼制灵石成本的40%，不返材料或点眷。普通功法加点只消耗功法点。\n妖丹 → 修为：击杀妖兽后自动吸收，提升境界，最多金丹大圆满；不存入钱包，不作购物货币，封顶后不囤积经验。\n点眷 → 稀缺抽奖货币：第3、6、9层首次通关各得1000，九层累计3000，恰好三次十连。开局、重刷、分解和出售均不产出，不能与灵石互兑；付费道具商店尚未开放。');
-  this.card('功法点从哪里来', '境界成长最多48点：除每境第十层外，每升1阶获得1点，突破筑基额外8点、突破金丹额外14点。\n第1、4、7层首通分别获得4、7、9功法点，共20点；其他层首通仅奖励灵石或点眷。\n第3、6、9层通关后，各开放一次灵石研习，每次4点，共12点。\n免费来源共68点，研习后共80点。开局弦月斩1级另值1点，重置后可分配；含赠送最多81点。重复通关、重置不会重复发点。');
-  this.card('落云宗弟子', '踏飞剑入塔，修九重封印。眼前先练好一门本领，再以不同功法应对妖兽。\n宗门暂不开放御兽师与符师业务。', [
+  this.card('三种资源，各有用途', `灵石 → 通用资源：通塔掉落、分解装备和出售材料获得，用于经卷、购买装备及炼器的灵石消耗。分解仅返还同阶同品质装备购买或炼制灵石成本的40%，不返材料或点眷。普通功法加点只消耗悟道点。\n妖丹 → 修为：击杀妖兽后自动吸收，提升境界，最多金丹大圆满；不存入钱包，不作购物货币，封顶后不囤积经验。\n点眷 → 稀缺抽奖货币：开局赠送${DIANJUAN_STARTER}，第1、3、4、6、7、9层首次通关累计获得${DIANJUAN_CAMPAIGN_TOTAL}，合计${DIANJUAN_STARTER+DIANJUAN_CAMPAIGN_TOTAL}，可抽${(DIANJUAN_STARTER+DIANJUAN_CAMPAIGN_TOTAL)/DIANJUAN_DRAW_COST}抽。重刷、分解和出售不产出点眷，不能与灵石互兑；付费道具商店尚未开放。`);
+  this.card('灵力与自动施法', '已学功法自动施放。灵力值不足时自动服用回灵丹；无丹药则技能等待恢复，普攻继续。脱战3秒后恢复加快，离开副本立即回满。神识还会影响施法速度，请结合功法与装备选择。');
+  this.card('点眷保底规则', '当前各池独立累计极品保底，分散抽取不会合并进度。定向未命中后的保证仅在同池保持同一目标时保留，更换目标会清除该保证。有限点眷不保证获得所有定向目标，请先查看池内规则。');
+  this.card('悟道点从哪里来', '角色每升1级获得1点；突破到筑基、金丹时各额外获得3点；30级累计35点。通关和灵石兑换不提供悟道点。开局流云斩1级另值1点，重置后可分配，含赠送最多36点。秘籍只负责解锁功法，重复通关和重置不会重复发点。');
+  this.card('霁云宗弟子', '踏飞剑入塔，修九重封印。眼前先练好一门本领，再以不同功法应对妖兽。\n宗门暂不开放御兽师与符师业务。', [
    { label: '查看入宗指引', run: () => { this.tutorialStep = 0; this.go('tutorial'); } },
   ]);
  }
@@ -2901,20 +3187,13 @@ export class TowerMenu {
    this.clickable(label.node, place.run, true);
   }
  }
- private gate() {
-  this.card('山门记事', '你是落云宗新入门的剑修。宗门镇守的锁妖塔封印松动，需要逐层清除妖兽。\n可随时回宗调整配装，已通层与永久功法会保留。');
-  this.card('入门行囊', '新档已配普通铁剑、弦月斩1级、500下品灵石和3颗回春丹；点眷初始为0。赠礼仅发一次，不需重复领取。', [
-   { label: '查看玩法指引', run: () => { this.tutorialStep = 0; this.go('tutorial'); }, primary: true },
-   { label: '查看功法与自主修习', run: () => this.go('librarySkills') },
-  ]);
- }
  private tutorial() {
   const steps = [
    ['认识宗门', '锁妖塔负责战斗，主峰藏经阁面向所有职业。剑修也可到凌霄剑峰修习；整备与演武入口设在主峰。', 'home', '看看宗门目标'],
-   ['自主修习', '入门自带弦月斩1级。升级、清波和通层都不会自动学习功法；第1、2层首通各奖励1功法点，由你选择修习。', 'librarySkills', '查看功法'],
-   ['认识资源', '灵石是通用资源，掉落、分解和出售可获得，用于经卷、研习和装备；点眷仅在第3、6、9层首通各发1000，九层共3000。机缘单抽100、十连1000点眷，不再发试玩券。丹药、炼丹和炼器均消耗灵石，炼制另需配方材料。两种货币不互兑。圆珠妖丹自动化为修为，不存钱包。', 'home', '查看资源用途'],
-   ['分配功法点', '境界提升获得功法点。所有学会的功法自动施放，心法自动生效，进化替换原功法。塔内暂停并保存后可按境界与资源修习；重置加点需回藏经阁。', 'library', '前往藏经阁'],
-   ['保留你的气血', '出塔与下层继承HP，死亡回宗1HP。场外每分钟恢复1%最大气血，离线也算；在丹霞峰购买丹药后，从背包服用。材料可在背包出售，Boss灵材也可直接突破或炼丹。修为丹每境两种共享6颗，服用才扣额度。回春丹恢复50%，培元丹增加50修为；炼气十层满修为后服筑基丹，每颗55%概率突破，失败扣丹但保留修为。战斗中不可服用。', 'inventory', '前往背包'],
+   ['自主修习', '入门自带流云斩1级。升级、清波和通层都不会自动学习功法；角色每升1级获得1点悟道点，突破大境界另得3点，由你选择修习。', 'librarySkills', '查看功法'],
+   ['认识资源', '灵石是通用资源，掉落、分解和出售可获得，用于经卷和装备；点眷仅在第1、3、4、6、7、9层首通各发1000，九层共6000。机缘单抽100、十连1000点眷，不再发试玩券。丹药、炼丹和炼器均消耗灵石，炼制另需配方材料。两种货币不互兑。圆珠妖丹自动化为修为，不存钱包。', 'home', '查看资源用途'],
+   ['分配悟道点', '境界提升获得悟道点。所有学会的功法自动施放，心法自动生效，进化替换原功法。塔内暂停并保存后可按境界与资源修习；重置加点需回藏经阁。', 'library', '前往藏经阁'],
+   ['保留你的气血', '出塔与下层继承HP，死亡回宗1HP。场外每分钟恢复1%最大气血，离线也算；在丹霞峰购买丹药后，从背包服用。材料可在背包出售，Boss灵材也可直接突破或炼丹。修为丹每境两种共享6颗，服用才扣额度。回春丹恢复50%，培元丹增加50修为；炼气十层满修为后服筑基丹，每颗55%概率突破，失败扣丹但保留修为。疗伤与修为丹仅在宗门服用；回灵丹则在塔内灵力值不足时自动服用，离开副本灵力立即回满。', 'inventory', '前往背包'],
    ['逐层修复封印', '每层20波，清完所有妖兽才通层。死亡或撤离保留已击杀收益；未达成奖励不发。通层可回宗，下次继续新层。', 'tower', '准备入塔'],
   ];
   const step = steps[this.tutorialStep];

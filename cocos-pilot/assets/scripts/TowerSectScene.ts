@@ -4,7 +4,7 @@ import { Button, Color, ImageAsset, isValid, Label, LabelOutline, LabelShadow, N
 // Coordinates refer to the approved 2560 × 1440 painting, including its whitespace.
 export const SECT_PLACES = [
  // body: left, top, width, height in the painting; independent of label clamping.
- {name:'落云主峰',sub:'宗门大殿 · 藏经阁',x:.50,y:.29,target:'home',body:[.44,.055,.13,.18]},
+ {name:'霁云主峰',sub:'宗门大殿 · 藏经阁',x:.50,y:.29,target:'home',body:[.44,.055,.13,.18]},
  {name:'凌霄剑峰',sub:'',x:.28,y:.35,target:'swordPeak',body:[.215,.105,.11,.205]},
  {name:'炼器峰',sub:'',x:.10,y:.56,target:'forge',body:[.02,.37,.16,.15]},
  {name:'丹霞峰',sub:'',x:.31,y:.64,target:'pills',body:[.23,.40,.14,.18]},
@@ -12,7 +12,7 @@ export const SECT_PLACES = [
  {name:'云篆符峰',sub:'未开放 · 符修传承',x:.81,y:.48,target:'',body:[.765,.26,.11,.155]},
  {name:'御兽峰',sub:'未开放 · 御兽传承',x:.91,y:.69,target:'',body:[.815,.455,.18,.155]},
  {name:'锁妖塔',sub:'',x:.65,y:.69,target:'tower',body:[.615,.405,.078,.245]},
- {name:'山门',sub:'',x:.50,y:.93,target:'gate',body:[.365,.555,.25,.33]},
+ {name:'山门',sub:'未开放 · 宗门周边',x:.50,y:.93,target:'',body:[.365,.555,.25,.33]},
 ];
 
 export class TowerSectScene {
@@ -27,12 +27,12 @@ export class TowerSectScene {
 
  attach(parent:Node,width:number,height:number,go:(page:string)=>void) {
   this.clearBindings();
-  const root=this.node('落云宗群峰场景',parent,width,height);
+  const root=this.node('霁云宗群峰场景',parent,width,height);
   root.setSiblingIndex(0);
   // Cover the landscape viewport; preserve aspect ratio and crop only excess edges.
   const scale=Math.max(width/2560,height/1440),w=2560*scale,h=1440*scale;
   root.setPosition(0,0);
-  const bg=this.node('落云宗已确认母稿',root,w,h);
+  const bg=this.node('霁云宗已确认母稿',root,w,h);
   const sprite=bg.addComponent(Sprite);sprite.sizeMode=Sprite.SizeMode.CUSTOM;sprite.trim=false;
   this.binding=sprite;if(this.frame)sprite.spriteFrame=this.frame;
   this.status=this.text(root,this.failed?'场景暂未加载，仍可点击名称进入':'场景载入中',0,0,24,false);

@@ -1,5 +1,6 @@
-import {canUseEquipmentTier} from '../js/xianxia/TowerEquipmentTiers.js'
+import {canUseEquipment} from '../js/xianxia/TowerEquipmentTiers.js'
 import {mixedTopItems} from '../js/xianxia/TowerMixedDraw.js'
+import {DIANJUAN_DRAW_COST} from '../js/xianxia/TowerEconomy.js'
 // Real Campaign transactions, finite earned resources and movement-only combat.
 // Run one route per process. Fixed fixtures belong to verify-monster-mechanics-balance.
 import assert from 'node:assert/strict'
@@ -13,7 +14,7 @@ import {TowerRun,stats,validateTowerSnapshot} from '../js/xianxia/TowerRun.js'
 import {cultivationAt,ZHUJI_FULL_XP,CAMP_PILLS} from '../js/xianxia/TowerProfile.js'
 import {growthSummary,GROWTH_RESEARCH} from '../js/xianxia/TowerGrowth.js'
 import {planNaturalGrowth} from './lib/tower-natural-growth.mjs'
-import {DEFAULT_GROWTH_POLICY,pursuitGrowthPriorities} from './lib/tower-natural-growth-policies.mjs'
+import {DEFAULT_GROWTH_POLICY,pursuitGrowthPriorities,growthCompletionPriorities} from './lib/tower-natural-growth-policies.mjs'
 import {naturalEquipmentScore} from './lib/tower-natural-equipment.mjs'
 import {weaponFlatAttack,weaponDamageModifiers} from '../js/xianxia/TowerWeapons.js'
 import {armorModifiers,ringDamageModifiers,ringCooldownReduction} from '../js/xianxia/TowerEquipment.js'
@@ -21,6 +22,10 @@ import {steerMechanics} from './verify-monster-mechanics-balance.mjs'
 const option=(key,fallback)=>process.argv.find(a=>a.startsWith(`--${key}=`))?.slice(key.length+3)??fallback
 const route=option('route','qi'),alchemyRoute=option('alchemy','mixed'),seed=Number(option('seed','101')),maxAttempts=Number(option('attempts','8'))
 const drawMode=option('draw','early'); const reserveMode=option('reserve','standard')
+const shopMode=option('shop','none')
+const pursueTop=option('pursue-top','none')
+assert.ok(['none','fa','bao'].includes(pursueTop),'known top crafting pursuit')
+assert.ok(['none','buy'].includes(shopMode),'known equipment shop policy')
 const buyResearch=option('research','none')==='all'
 const growthPolicy=option('growth-policy',DEFAULT_GROWTH_POLICY)
 assert.ok(['legacy','split'].includes(growthPolicy),'known growth policy')
@@ -35,10 +40,12 @@ const priorities={
  lance:[['sj_yujian',1],['sj_arc',3],['vajra',2],['sj_line',6],['sj_bone',4],['sj_line',10],['sj_arc',6],['sj_heart',4],['sj_mark',4],['sj_yujian',6],['sj_arc',10],['sj_yujian',10]],
  formation:[['sj_yujian',1],['sj_wanjian',3],['vajra',2],['sj_formation',6],['sj_bone',4],['sj_formation',10],['sj_wanjian',6],['sj_yujian',6],['sj_wanjian',10],['sj_heart',4],['sj_mark',4]],
  pursuit:pursuitGrowthPriorities(growthPolicy),
+ moon:[['sj_yujian',1],['sj_moon',3],['vajra',2],['sj_moon_triple',3],['sj_cross',3],['sj_bone',4],['sj_moon',10],['sj_moon_triple',10],['sj_cross',10],['sj_heart',4]],
+ sancai:[['sj_yujian',1],['sj_arc',3],['vajra',2],['sj_sancai',3],['sj_bone',4],['sj_sancai',10],['sj_wanjian',6],['sj_heart',4],['sj_mark',4],['sj_yujian',6]],
 }
 for(const key of Object.keys(priorities)) priorities[key]=priorities[key].flatMap(([id,n])=>id==='sj_yujian'&&n>=4?[['sj_spirit',Math.ceil((n-3)/3)],[id,n]]:[[id,n]])
 assert.ok(priorities[route],'known route')
-const evolutionRoutes={qi:['evo_wanjian'],array:['evo_wuwo'],mixed:[],lance:['evo_tiandi'],formation:['evo_sixiang'],pursuit:['evo_wanjian']}
+const evolutionRoutes={qi:['evo_wanjian'],array:['evo_wuwo'],mixed:[],lance:['evo_tiandi'],formation:['evo_sixiang'],pursuit:['evo_wanjian'],moon:[],sancai:[]}
 const evolutions=evolutionRoutes[route]
 let observation=null
 const gainXp=TowerRun.prototype._gainXp
@@ -50,12 +57,15 @@ let store=new TowerCampaignStore(storage,seed),clock=seed
 const report={completed:false,breakthroughPolicy:'safe-wave-node',method:'Actual Campaign from new save; cultivation pills according to reported alchemy/draw policy, earned/starting-resource healing and breakthrough pills only, no XP/HP edits, no free books/items. Earned-material fixed-identity forging, at most one upgrade per slot per camp, healing pills, learn/refund transactions. Movement-only bot. Finite attempts with retained earned XP. Evolution inherits actual base rank; no parent refund. Not a human pass-rate estimate.',route,alchemyRoute,drawMode,reserveMode,seed,maxAttempts,realmMilestones:{},hashes:hashes(),attempts:[],transactions:[]}
 report.growthPolicy=route==='pursuit'?growthPolicy:'unchanged'
 report.growthPriorities=priorities[route]
+report.completionPriorities=growthCompletionPriorities(route)
+report.shopMode=shopMode
+report.pursueTop=pursueTop
 mkdirSync(dirname(output),{recursive:true})
 const flush=()=>writeFileSync(output,JSON.stringify(report,null,2))
 function resources(){return {xp:store.state.xp,clearedFloor:store.state.clearedFloor,materials:structuredClone(store.state.materials??{}),stones:store.state.spiritStones,contribution:store.state.contribution,points:growthSummary(store.state),xp:store.state.xp,craftSequence:store.state.craftSequence,pills:{...store.state.pills}}}
 function act(a){const before=resources();const result=store.act(a,clock);if(result.ok)report.transactions.push({time:clock,action:a.type,id:a.id,tier:a.tier,category:a.category,result,before,after:resources()});return result}
 function learn(){
- for(const action of planNaturalGrowth(store.state,priorities[route],evolutions)){
+ for(const action of planNaturalGrowth(store.state,priorities[route],evolutions,report.completionPriorities)){
  const result=act(action)
  if(!result.ok){
  report.failure={kind:'growth-plan-rejected',action,reason:result.reason,floor:store.state.activeRun?.snapshot.floor??store.state.clearedFloor+1,time:clock}
@@ -97,12 +107,11 @@ function pills(){
 }
 function camp(){
  if(drawMode!=='none'){
-  if(!store.state.mixedDraw.trialClaimed)assert.ok(act({type:'claimDrawTrial'}).ok)
   const level=cultivationAt(store.state.xp).level
-  if(store.state.mixedDraw.tickets>=10&&(drawMode==='early'||level>=21)){
-   const tier=drawMode==='early'?'fa':'ling',target=mixedTopItems(tier).find(i=>i.category==='weapon')
+  if(store.state.contribution>=10*DIANJUAN_DRAW_COST&&(drawMode==='early'||level>=21)){
+   const tier=level>=21?'ling':level>=11?'bao':'fa',target=mixedTopItems(tier).find(i=>i.category==='weapon')
    assert.ok(act({type:'setMixedWish',tier,targetId:target.id}).ok)
-   assert.ok(act({type:'drawMixed',tier,count:10,sequence:store.state.mixedDraw.sequence+1,requestId:`natural-draw-${seed}`}).ok)
+   assert.ok(act({type:'drawMixed',tier,count:10,sequence:store.state.mixedDraw.sequence+1,requestId:`natural-draw-${seed}-${store.state.mixedDraw.sequence+1}`}).ok)
   }
   // Consume only naturally awarded cultivation pills; never purchase extra XP here.
   for(let i=0;i<6&&!cultivationAt(store.state.xp).breakthroughReady;i++){
@@ -118,20 +127,29 @@ function camp(){
  if(!supply('huichun'))break
  if(!act({type:'usePill',id:'huichun'}).ok)break
  }
- if(store.state.clearedFloor>0&&!cultivationAt(store.state.xp).breakthroughReady){
+ if(!cultivationAt(store.state.xp).breakthroughReady){
  const level=cultivationAt(store.state.xp).level
- const owned=category=>Object.values(category==='weapon'?store.state.weapons:store.state.equipment).filter(i=>(category==='weapon'||i.category===category)&&canUseEquipmentTier(i.tier,level))
+ const owned=category=>Object.values(category==='weapon'?store.state.weapons:store.state.equipment).filter(i=>(category==='weapon'||i.category===category)&&canUseEquipment(i,level))
  const score=(i,category)=>naturalEquipmentScore(store.state,route,i,category)
+ const pursuitRecipe=pursueTop==='none'?null:FORGING_RECIPES.find(r=>r.id===`weapon:${pursueTop}:q4`)
+ if(pursuitRecipe&&!report.topCrafted){
+  const quote=forgingQuote(store.state,pursuitRecipe.id,1,'craft')
+  if(quote.ok){
+   const result=act({type:'craftGear',id:pursuitRecipe.id,count:1,sequence:store.state.forgeSequence+1,requestId:`pursuit-${seed}`})
+   assert.ok(result.ok,result.reason)
+   report.topCrafted={tier:pursueTop,level,attempts:report.attempts.length,simulationSeconds:(clock-seed)/1000,result}
+  }
+ }
  // A new tier's lower quality is not automatically an upgrade. Forge only
  // when the recipe's average candidate beats the best owned item by 3%.
  for(const category of ['weapon','armor','ring']){
   const best=owned(category).sort((a,b)=>score(b,category)-score(a,category))[0]
-  const candidates=FORGING_RECIPES.filter(r=>r.category===category).map(r=>({r,q:forgingQuote(store.state,r.id,1,'craft')}))
-   .filter(({q})=>q.ok&&store.state.contribution-q.contribution>=20&&store.state.spiritStones-q.spiritStones>=100)
+  const candidates=FORGING_RECIPES.filter(r=>r.category===category&&(r.source!=='shopOnly'||shopMode==='buy')&&(pursueTop==='none'||r.source==='shopOnly')).map(r=>({r,q:forgingQuote(store.state,r.id,1,r.source==='shopOnly'?'buy':'craft')}))
+   .filter(({q})=>q.ok&&store.state.contribution>=q.contribution&&store.state.spiritStones-q.spiritStones>=100)
    .map(row=>({...row,score:row.r.definitionIds.reduce((sum,id)=>sum+score(createForgedGear(row.r.id,'preview',id),category),0)/row.r.definitionIds.length}))
    .filter(row=>row.score>score(best,category)*1.03).sort((a,b)=>b.score-a.score)
   const choice=candidates[0]
-  if(choice){const r=choice.r;assert.ok(act({type:'craftGear',id:r.id,count:1,sequence:store.state.forgeSequence+1,requestId:`growth-${route}-${seed}-${store.state.forgeSequence+1}`}).ok)}
+  if(choice){const r=choice.r;assert.ok(act({type:r.source==='shopOnly'?'buyGear':'craftGear',id:r.id,count:1,sequence:store.state.forgeSequence+1,requestId:`growth-${route}-${seed}-${store.state.forgeSequence+1}`}).ok)}
  }
  const weapon=owned('weapon').sort((a,b)=>score(b,'weapon')-score(a,'weapon'))[0]
  assert.ok(act({type:'setLoadout',index:0,loadout:{...store.state.loadouts[0],weaponId:weapon.id}}).ok)
@@ -142,6 +160,7 @@ function camp(){
 let postClearRuns=0,matureRunDone=false
 for(let attempt=0;attempt<maxAttempts&&(store.state.clearedFloor<9||postClearRuns<8&&!matureRunDone);attempt++){
  camp();
+ if(report.topCrafted)break // Focused acquisition audit ends after the actual craft/equip transactions.
  if(reserveMode!=='none'&&[3,6].includes(store.state.clearedFloor)){
   const id=store.state.xp<=1800?'zhuji':store.state.xp<=6600?'ningdan':null;
   if(id)for(let n=store.state.pills[id];n<3;n++){if(!act({type:'buyPill',id,count:1}).ok)break;}
@@ -151,7 +170,14 @@ for(let attempt=0;attempt<maxAttempts&&(store.state.clearedFloor<9||postClearRun
  // If paid rolls exhausted the wallet, earn more contribution in an unlocked
  // floor. Do not enter and immediately abandon the next floor in a zero-time loop.
  const postClear=store.state.clearedFloor===9
- const floor=postClear?9:farmingBreakthrough?Math.max(1,store.state.clearedFloor):store.state.clearedFloor+1,start=act({type:'startFloor',floor,seed:seed+attempt});assert.equal(start.ok,true,start.reason)
+ let floor=postClear?9:farmingBreakthrough?Math.max(1,store.state.clearedFloor):store.state.clearedFloor+1
+ if(pursueTop!=='none'&&store.state.clearedFloor>=(pursueTop==='fa'?2:5)){
+  const recipe=FORGING_RECIPES.find(r=>r.id===`weapon:${pursueTop}:q4`)
+  const main=recipe.ingredients[3]
+  // Use a real low-XP floor for common materials; main materials retain their tier source.
+  floor=store.state.pills[main.id]<main.count?(pursueTop==='fa'?2:4):1
+ }
+ const start=act({type:'startFloor',floor,seed:seed+attempt});assert.equal(start.ok,true,start.reason)
  let run=TowerRun.restore(start.snapshot),previousLevel=cultivationAt(run.state.player.xp).level
  observation={damage:{},waveSeconds:{},minHpFraction:1,capSeconds:0,xpOffered:0,xpGained:0,xpLost:0}
  const entry={postClear,floor,attempt:attempt+1,xp:store.state.xp,level:previousLevel,skills:structuredClone(store.state.skills),evolutions:structuredClone(store.state.evolutionRanks),points:growthSummary(store.state),loadout:combatLoadout(store.state),hp:store.state.hp,stones:store.state.spiritStones,contribution:store.state.contribution}

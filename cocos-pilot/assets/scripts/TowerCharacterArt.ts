@@ -1,4 +1,5 @@
 import {towerResources as resources} from './TowerResources';
+import { castActionTiming } from './shared/js/xianxia/TowerSkillTiming';
 import { WeaponQualityArt } from './WeaponQualityArt';
 import { isStarterEquipment } from './shared/js/xianxia/TowerEquipmentTiers';
 import { Color, Graphics, ImageAsset, isValid, JsonAsset, Node, Rect, Size, Sprite, SpriteFrame, Texture2D, UITransform } from 'cc';
@@ -14,16 +15,51 @@ const PATH = 'tower-character/ground-actions';
 const RENDER_BODY_HEIGHT = 108;
 // Derived from the approved HD illustrations by scripts/art/prepare_held_weapons.py.
 const HELD_WEAPONS:Record<string,{guard:Pair;bladePixels:number;bladeLength:number}>={
- eq_sword_suwen:{guard:[208,63],bladePixels:489.5222,bladeLength:74},
- eq_sword_zhenyue:{guard:[183,59],bladePixels:526.833,bladeLength:72},
+ eq_sword_biluo:{"guard":[175,60],"bladePixels":543.4722,"bladeLength":72},
+ eq_sword_caiyun:{"guard":[190,128],"bladePixels":500.9361,"bladeLength":72},
+ eq_sword_chengming:{"guard":[190,129],"bladePixels":450.2022,"bladeLength":72},
+ eq_sword_dingyue:{"guard":[186,60],"bladePixels":533.1885,"bladeLength":72},
+ eq_sword_duanliu:{"guard":[175,131],"bladePixels":519.9356,"bladeLength":72},
+ eq_sword_guiyan:{"guard":[208,123],"bladePixels":489.7397,"bladeLength":72},
+ eq_sword_hanguang:{"guard":[177,128],"bladePixels":498.9589,"bladeLength":72},
+ eq_sword_hechuan:{"guard":[175,128],"bladePixels":506.928,"bladeLength":72},
+ eq_sword_iron:{"guard":[203,123],"bladePixels":494.0162,"bladeLength":46.5},
+ eq_sword_jinghong:{"guard":[177,121],"bladePixels":530.1368,"bladeLength":72},
+ eq_sword_kunwu:{"guard":[190,127],"bladePixels":520.5247,"bladeLength":72},
+ eq_sword_lingxi:{"guard":[188,127],"bladePixels":511.0323,"bladeLength":72},
+ eq_sword_liuquan:{"guard":[208,123],"bladePixels":481.3647,"bladeLength":72},
+ eq_sword_liuxia:{"guard":[166,61],"bladePixels":542.6389,"bladeLength":72},
+ eq_sword_luotian:{"guard":[155,60],"bladePixels":557.2881,"bladeLength":72},
+ eq_sword_ningshuang:{"guard":[199,123],"bladePixels":492.4683,"bladeLength":72},
+ eq_sword_panxi:{"guard":[209,127],"bladePixels":486.4124,"bladeLength":72},
+ eq_sword_qingfeng:{"guard":[163,60],"bladePixels":535.8517,"bladeLength":72},
+ eq_sword_qingxiao:{"guard":[163,60],"bladePixels":551.0,"bladeLength":72},
+ eq_sword_qiyao:{"guard":[162,65],"bladePixels":533.5804,"bladeLength":72},
+ eq_sword_shoushan:{"guard":[200,128],"bladePixels":493.5474,"bladeLength":72},
+ eq_sword_songfeng:{"guard":[193,121],"bladePixels":515.2106,"bladeLength":72},
+ eq_sword_suwen:{"guard":[208,63],"bladePixels":489.5222,"bladeLength":74},
+ eq_sword_taiheng:{"guard":[154,127],"bladePixels":551.6593,"bladeLength":72},
+ eq_sword_tianshu:{"guard":[162,59],"bladePixels":536.4644,"bladeLength":72},
+ eq_sword_tingyu:{"guard":[149,59],"bladePixels":558.7933,"bladeLength":72},
+ eq_sword_wangshu:{"guard":[168,60],"bladePixels":525.9629,"bladeLength":72},
+ eq_sword_xiaohan:{"guard":[166,64],"bladePixels":541.7933,"bladeLength":72},
+ eq_sword_xingluo:{"guard":[212,125],"bladePixels":503.5871,"bladeLength":72},
+ eq_sword_xuanjun:{"guard":[157,61],"bladePixels":557.3455,"bladeLength":72},
+ eq_sword_xuanwei:{"guard":[150,63],"bladePixels":558.7021,"bladeLength":72},
+ eq_sword_zhaodan:{"guard":[159,126],"bladePixels":555.1333,"bladeLength":72},
+ eq_sword_zhaoyuan:{"guard":[156,63],"bladePixels":554.4872,"bladeLength":72},
+ eq_sword_zhenyue:{"guard":[183,59],"bladePixels":526.833,"bladeLength":72},
+ eq_sword_zhufeng:{"guard":[161,56],"bladePixels":555.9011,"bladeLength":72},
+ eq_sword_zhuiri:{"guard":[160,57],"bladePixels":551.7626,"bladeLength":72},
 };
 type HeldArt={image:ImageAsset;texture:Texture2D;full:SpriteFrame;blade:SpriteFrame;cut:number};
 const CAST_STYLE:Record<string,{priority:number;style:string}>={
  basic_attack:{priority:3,style:'sweep'},
  sj_yujian:{priority:1,style:'command'},sj_arc:{priority:3,style:'sweep'},
+ sj_moon:{priority:3,style:'sweep'},sj_moon_triple:{priority:3,style:'sweep'},
  sj_cross:{priority:4,style:'sweep'},
  sj_line:{priority:4,style:'thrust'},sj_shadow:{priority:2,style:'seal'},
- sj_formation:{priority:5,style:'seal'},evo_sixiang:{priority:5,style:'seal'},
+ sj_sancai:{priority:5,style:'seal'},sj_formation:{priority:5,style:'seal'},evo_sixiang:{priority:5,style:'seal'},
  sj_wanjian:{priority:5,style:'seal'},evo_wuwo:{priority:5,style:'seal'},
  evo_wanjian:{priority:6,style:'command'},evo_tiandi:{priority:7,style:'heavy'},
 };
@@ -80,7 +116,7 @@ export class TowerCharacterArt {
   if (this.dead || this.defeated || !preset || ![event.startedAt,event.releaseAt,event.dirX,event.dirY].every(Number.isFinite)) return;
   // One sword-qi gesture emits the whole volley. Replaying the hit pose on
   // continuation impacts would snap the recovering hand and blade backwards.
-  if((form==='sj_line'||form==='sj_arc')&&(event.pulseIndex??1)>1)return;
+  if((['sj_line','sj_arc','sj_moon_triple'].includes(form))&&(event.pulseIndex??1)>1)return;
   // One body cannot perform several simultaneous poses. Let the strongest
   // committed action finish its release before a lower-priority action replaces it.
   if(this.attack&&this.attack.priority>preset.priority&&event.startedAt<this.attack.release-1e-8)return;
@@ -92,7 +128,18 @@ export class TowerCharacterArt {
  private syncAction(s:any){
   const live=s.actions?.current||s.actions?.basic;
   if(live&&s.time<live.endsAt&&CAST_STYLE[live.skill]){
-   this.attack={start:live.startedAt,release:live.releaseAt,end:live.endsAt,
+   let start=live.startedAt,release=live.releaseAt,end=live.endsAt;
+   // Split the saved melee action into three complete strokes. Midpoints
+   // leave recovery before the next windup; pause/restore uses the same clock.
+   if(live.skill==='sj_arc'){
+    const times=castActionTiming(live.skill,live.hits??3,live.speed??0).releases.map(t=>live.startedAt+t);
+    let index=0;
+    while(index<times.length-1&&s.time>=(times[index]+times[index+1])/2)index++;
+    start=index? (times[index-1]+times[index])/2:live.startedAt;
+    release=times[index];
+    end=index<times.length-1?(times[index]+times[index+1])/2:live.endsAt;
+   }
+   this.attack={start,release,end,
     face:(live.dirX??s.player.faceX)<0?-1:1,...CAST_STYLE[live.skill]};
   }else if(s.actions&&this.attack?.end!==undefined&&s.time>=this.attack.end)this.attack=null;
  }

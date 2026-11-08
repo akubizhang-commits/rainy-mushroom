@@ -1,0 +1,1224 @@
+{
+  "status": "AUTOMATED_PASS_VISUAL_REVIEW_PENDING",
+  "buildClassification": "final",
+  "scriptHash": "5748d454a84dba81e2cc0ceac0e2661ffb674f846af162195e52f93e6aef6259",
+  "startedAt": "2026-10-28T06:18:23.838Z",
+  "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/index.html?ruleset=xianxia&tower=1",
+  "preparation": {
+    "status": "BUILD_READY_PREFLIGHT_PASS",
+    "browserExecuted": false,
+    "preparedAt": "2026-10-28T06:18:23.459Z",
+    "sizes": [
+      {
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "width": 844,
+        "height": 390
+      },
+      {
+        "width": 1024,
+        "height": 768
+      },
+      {
+        "width": 390,
+        "height": 844
+      },
+      {
+        "width": 1920,
+        "height": 280
+      },
+      {
+        "width": 3840,
+        "height": 1080
+      }
+    ],
+    "contract": {
+      "selectors": {
+        "treePanel": "技能树面板",
+        "treeScroll": "技能树二维卷轴",
+        "treeContent": "境界技能树内容",
+        "detail": "技能详情固定栏",
+        "detailScroll": "技能详情独立卷轴",
+        "detailContent": "技能详情栏内容",
+        "name": "技能节点-<id>",
+        "icon": "技能图标-<id>",
+        "level": "技能等级-<id>",
+        "plus": "learnSkill-<id>",
+        "minus": "decreaseSkill-<id>",
+        "joystick": "移动摇杆"
+      },
+      "expectedRealmRows": {
+        "炼气": 12,
+        "金丹": 4
+      },
+      "handoff844LogicalViewports": {
+        "tree": {
+          "width": 820,
+          "height": 297.47
+        },
+        "detail": {
+          "width": 364,
+          "height": 281.47
+        }
+      },
+      "cdMeaning": "Current source displays authored cooldown / hit interval / 常驻, not a live countdown.",
+      "sourceHashes": {
+        "cocos-pilot/assets/scripts/TowerMenu.ts": "195a4db6ea11414fbcd8ab49e45aeb46a0b92feec7b16b5e7269f60f415f5390",
+        "cocos-pilot/assets/scripts/TowerView.ts": "4851a3656ee76c2b196e71eb3723e2130d12d5cae059c202c7098b1b1cf4a774",
+        "cocos-pilot/assets/scripts/PinePilot.ts": "2159b0491dde3dcf1e770ec226876e601b944c5f946e833e3fedfd44259dff60",
+        "js/xianxia/TowerCampaign.js": "9abd84775cc6475dba457f5d6dcef714dc23216e87d7753fbbcc480416ee0283",
+        "js/xianxia/TowerGrowth.js": "6d380a236d33043757b7525c628b0da0e5bad491c3f503e2aefbce417462ba92",
+        "js/xianxia/TowerRun.js": "79e4a7703d08ceee31670000ba93b4ddcd70855e6c9bb8a210e1f27423a08b0d",
+        "js/xianxia/TowerLoot.js": "f2eeb5dca0ee913fc30250ef46e9515fe58f4d1318855431e55408d2d1cd9761",
+        "js/xianxia/TowerArena.js": "f79cc3c9f5eb833abcf3b2b511046dafa579cf78b7f2e758bc3b6cf7259c43b6",
+        "js/xianxia/TowerEnemyAttacks.js": "586c053dc035220250b7c884ca6b7b456d8a9fe1863b860ac8220c9f2c32e561",
+        "cocos-pilot/assets/scripts/TowerArenaView.ts": "2a70b4c56a4b9a4a0c05c0ab5f18ea8ef60d8c4a565468f6aad71f4833f8e6ad"
+      }
+    },
+    "fixtures": [
+      {
+        "kind": "ARTIFICIAL CAMPAIGN-VALIDATED UI FIXTURE — NOT NATURAL PROGRESSION/BALANCE",
+        "name": "tree",
+        "sources": {
+          "xp": 10920,
+          "hp": 120,
+          "cores": 2000,
+          "clearedFloor": 9,
+          "tutorialWaves": 3
+        },
+        "transactions": [
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_arc"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_arc",
+              "level": 2,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_line"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_line",
+              "level": 1,
+              "cost": 2,
+              "bookCost": 20
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_yujian"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_yujian",
+              "level": 2,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_yujian"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_yujian",
+              "level": 3,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_yujian"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_yujian",
+              "level": 4,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_yujian"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_yujian",
+              "level": 5,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_yujian"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_yujian",
+              "level": 6,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_yujian"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_yujian",
+              "level": 7,
+              "cost": 2,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_yujian"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_yujian",
+              "level": 8,
+              "cost": 2,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_heart"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_heart",
+              "level": 1,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_heart"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_heart",
+              "level": 2,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_heart"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_heart",
+              "level": 3,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_heart"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_heart",
+              "level": 4,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_heart"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_heart",
+              "level": 5,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "evo_wanjian"
+            },
+            "result": {
+              "ok": true,
+              "id": "evo_wanjian",
+              "level": 1,
+              "cost": 3,
+              "bookCost": 240
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "evo_wanjian"
+            },
+            "result": {
+              "ok": true,
+              "id": "evo_wanjian",
+              "level": 2,
+              "cost": 4,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "sync"
+            },
+            "result": {
+              "ok": true,
+              "hp": 120
+            }
+          }
+        ],
+        "rawHash": "8941dc6622d745c9bd2308bc10087d1f29d7e47d87aacb8b96538248965f4464",
+        "growth": {
+          "total": 33,
+          "spent": 24,
+          "available": 9,
+          "realm": 30,
+          "firstClear": 3,
+          "research": 0,
+          "cap": 36
+        },
+        "skills": {
+          "sj_yujian": 8,
+          "sj_arc": 2,
+          "sj_wanjian": 1,
+          "sj_line": 1,
+          "sj_heart": 5
+        },
+        "evolutionRanks": {
+          "evo_wanjian": 2
+        }
+      },
+      {
+        "kind": "ARTIFICIAL CAMPAIGN-VALIDATED UI FIXTURE — NOT NATURAL PROGRESSION/BALANCE",
+        "name": "input",
+        "sources": {
+          "xp": 10920,
+          "hp": 120,
+          "cores": 2000,
+          "clearedFloor": 9,
+          "tutorialWaves": 3
+        },
+        "transactions": [
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "vajra"
+            },
+            "result": {
+              "ok": true,
+              "id": "vajra",
+              "level": 1,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "sync"
+            },
+            "result": {
+              "ok": true,
+              "hp": 120
+            }
+          }
+        ],
+        "rawHash": "2f14416390e5b29df202f7d0acf8824608204818a2705508c2312af143991446",
+        "growth": {
+          "total": 33,
+          "spent": 1,
+          "available": 32,
+          "realm": 30,
+          "firstClear": 3,
+          "research": 0,
+          "cap": 36
+        },
+        "skills": {
+          "sj_yujian": 1,
+          "sj_arc": 1,
+          "sj_wanjian": 1,
+          "vajra": 1
+        },
+        "evolutionRanks": {}
+      }
+    ]
+  },
+  "browser": {
+    "version": "155.0.8059.12",
+    "module": "/Users/zhangnu/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright",
+    "executablePath": "/Users/zhangnu/Library/Caches/ms-playwright/chromium_headless_shell-1247/chrome-headless-shell-mac-arm64/chrome-headless-shell"
+  },
+  "results": [
+    {
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "kind": "mask",
+      "fixtureHash": "2f14416390e5b29df202f7d0acf8824608204818a2705508c2312af143991446",
+      "ok": true,
+      "checks": [
+        {
+          "name": "learnSkill-vajra: allocation, selection, two-axis tree pan and detail pan retained",
+          "passed": true,
+          "beforeHost": {
+            "screen": "camp",
+            "landscape": true,
+            "size": {
+              "width": 1280,
+              "height": 591.4691943127962
+            },
+            "selected": "vajra",
+            "menuPage": "library",
+            "treePan": {
+              "x": 0,
+              "y": 0
+            },
+            "detailPan": {
+              "x": 0,
+              "y": 1.1368683772161603e-13
+            },
+            "stick": {
+              "x": 0,
+              "y": 0,
+              "dx": 0,
+              "dy": 0
+            },
+            "touch": null,
+            "keys": [],
+            "camera": {
+              "x": 0,
+              "y": 0
+            },
+            "tools": {
+              "speed": 1,
+              "invincible": false
+            }
+          },
+          "afterHost": {
+            "screen": "camp",
+            "landscape": true,
+            "size": {
+              "width": 1280,
+              "height": 591.4691943127962
+            },
+            "selected": "vajra",
+            "menuPage": "library",
+            "treePan": {
+              "x": 0,
+              "y": 0
+            },
+            "detailPan": {
+              "x": 0,
+              "y": 1.1368683772161603e-13
+            },
+            "stick": {
+              "x": 0,
+              "y": 0,
+              "dx": 0,
+              "dy": 0
+            },
+            "touch": null,
+            "keys": [],
+            "camera": {
+              "x": 0,
+              "y": 0
+            },
+            "tools": {
+              "speed": 1,
+              "invincible": false
+            }
+          },
+          "quote": {
+            "ok": true,
+            "nextLevel": 2,
+            "cost": 1,
+            "bookCost": 0
+          }
+        },
+        {
+          "name": "Root Mask allows real tree entry, circle selection and committed plus input",
+          "passed": true
+        },
+        {
+          "name": "Actual root Mask preserves legal fixed joystick drag/release and fixed location",
+          "passed": true,
+          "root": {
+            "left": -9.370282327836321e-14,
+            "right": 844,
+            "top": 0,
+            "bottom": 390
+          },
+          "before": {
+            "x": 33,
+            "y": -60,
+            "hp": 120,
+            "xp": 10920,
+            "maxHp": 120,
+            "attack": 127.2,
+            "moveSpeed": 220,
+            "radius": 18,
+            "faceX": 1,
+            "faceY": 0
+          },
+          "moved": {
+            "x": 195.26206775495876,
+            "y": -56.33236791293663,
+            "hp": 120,
+            "xp": 10920,
+            "maxHp": 120,
+            "attack": 127.2,
+            "moveSpeed": 220,
+            "radius": 18,
+            "faceX": 0.9997842930567066,
+            "faceY": 0.020769385092043915
+          },
+          "released": {
+            "x": 195.26206775495876,
+            "y": -56.33236791293663,
+            "hp": 120,
+            "xp": 10920,
+            "maxHp": 120,
+            "attack": 127.2,
+            "moveSpeed": 220,
+            "radius": 18,
+            "faceX": 0.9997842930567066,
+            "faceY": 0.020769385092043915
+          }
+        }
+      ],
+      "actions": [
+        {
+          "type": "pointer-click",
+          "target": "技能树",
+          "x": 522.225,
+          "y": 358.35,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "技能图标-vajra",
+          "x": 123.96249999999993,
+          "y": 185.28437499999998,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "learnSkill-vajra",
+          "x": 152.97499999999994,
+          "y": 298.69687500000003,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "宗门",
+          "x": 121.32499999999995,
+          "y": 358.35,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "体验工具",
+          "x": 422,
+          "y": 203.08750000000003,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "进入独立体验档",
+          "x": 253.19999999999993,
+          "y": 291.26875,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "无敌秒杀：关闭",
+          "x": 590.8000000000001,
+          "y": 266.87187500000005,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "返回宗门",
+          "x": 253.19999999999993,
+          "y": 326.215625,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "锁妖塔",
+          "x": 321.775,
+          "y": 358.35,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "重访第9层",
+          "x": 422,
+          "y": 228.14375,
+          "enabled": true
+        },
+        {
+          "type": "pointer-drag",
+          "label": "legal fixed stick under root Mask",
+          "from": {
+            "x": 97.58749999999993,
+            "y": 285.81874999999997
+          },
+          "to": {
+            "x": 137.14999999999992,
+            "y": 285.81874999999997
+          },
+          "holdMs": 600,
+          "release": false
+        },
+        {
+          "type": "pointer-release",
+          "target": "移动摇杆 under root Mask"
+        }
+      ],
+      "screenshots": [
+        "ui-delivery-mask-844x390-mask-mask-tree-input.png",
+        "ui-delivery-mask-844x390-mask-mask-fixed-stick.png"
+      ],
+      "pageErrors": [],
+      "console": [
+        {
+          "type": "warning",
+          "text": "[.WebGL-0x12400436000]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+        },
+        {
+          "type": "warning",
+          "text": "[.WebGL-0x12400436000]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+        },
+        {
+          "type": "warning",
+          "text": "[.WebGL-0x12400436000]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+        },
+        {
+          "type": "warning",
+          "text": "[.WebGL-0x12400436000]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (setting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.setFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "Setting window size is not supported."
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        }
+      ],
+      "httpErrors": [],
+      "requestFailures": [],
+      "assets": [
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/polyfills.bundle.5adbf.js",
+          "status": 200,
+          "sha256": "f1e4ced3322168d6b9915e782e4c1cf1055d75f66f2b38e7fcd60f48cf89082b"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/system.bundle.cc789.js",
+          "status": 200,
+          "sha256": "5d1a25de07cc11276a6b1d6479cac7f12c0c561dd06941b8339e568c9d94f900"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/index.bb9fc.js",
+          "status": 200,
+          "sha256": "7a9f5f31bf1115c3f3b0f32deb14fc44f09ef5a65b63029780fc62c6ee476c60"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/application.013ea.js",
+          "status": 200,
+          "sha256": "6b7ee6c94e129139b718cba1fbe90bd4f8441e610fb28df116407b04dd9e9b83"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/cocos-js/cc.c2df8.js",
+          "status": 200,
+          "sha256": "a670bba566ce7e3a2c25e17b7eb104efc0463a62d85c3d4974d2be9b586eee89"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/chunks/bundle.e2cd5.js",
+          "status": 200,
+          "sha256": "c0ab1af06c40484eba8e9d40042b2162a8355e8d8d1d914ea5a21d4d420dc1d5"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/assets/internal/index.4e53f.js",
+          "status": 200,
+          "sha256": "d842bf596127320ad8cd42ce506a2817cd8a6402fbec6735e6b13af359a40757"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/assets/main/index.02690.js",
+          "status": 200,
+          "sha256": "02d66ceb5c716e0a6d05149805e361c02ae0c306842e7dc1886a792a179af2cc"
+        }
+      ],
+      "invalidLabels": []
+    },
+    {
+      "viewport": {
+        "width": 1920,
+        "height": 280
+      },
+      "kind": "mask",
+      "fixtureHash": "2f14416390e5b29df202f7d0acf8824608204818a2705508c2312af143991446",
+      "ok": true,
+      "checks": [
+        {
+          "name": "Actual root Mask preserves legal fixed joystick drag/release and fixed location",
+          "passed": true,
+          "root": {
+            "left": 640.0000000000001,
+            "right": 1280,
+            "top": 0,
+            "bottom": 280
+          },
+          "before": {
+            "x": 33,
+            "y": -60,
+            "hp": 120,
+            "xp": 10920,
+            "maxHp": 120,
+            "attack": 127.2,
+            "moveSpeed": 220,
+            "radius": 18,
+            "faceX": 1,
+            "faceY": 0
+          },
+          "moved": {
+            "x": 482.77019504574383,
+            "y": 742.2569400496645,
+            "hp": 120,
+            "xp": 10920,
+            "maxHp": 120,
+            "attack": 127.2,
+            "moveSpeed": 220,
+            "radius": 18,
+            "faceX": 0.49026123963255896,
+            "faceY": 0.8715755371245493
+          },
+          "released": {
+            "x": 482.77019504574383,
+            "y": 742.2569400496645,
+            "hp": 120,
+            "xp": 10920,
+            "maxHp": 120,
+            "attack": 127.2,
+            "moveSpeed": 220,
+            "radius": 18,
+            "faceX": 0.16027613889511808,
+            "faceY": -0.9870722158489078
+          }
+        },
+        {
+          "name": "VIS-01 actual PNG outside-root pixels unchanged from clean camp background",
+          "passed": true,
+          "before": "/Users/zhangnu/WeChatProjects/rainy-mushroom/docs/xianxia/reports/tower-landscape-2026-10-28/ui-delivery-mask-1920x280-mask-letterbox-before-world.png",
+          "after": "/Users/zhangnu/WeChatProjects/rainy-mushroom/docs/xianxia/reports/tower-landscape-2026-10-28/ui-delivery-mask-1920x280-mask-letterbox-wall-clipped.png",
+          "bands": [
+            {
+              "side": "left",
+              "rect": [
+                0,
+                0,
+                638,
+                280
+              ],
+              "pixels": 178640,
+              "changedPixelsBeyondOneRGBLevel": 0,
+              "maximumRGBDifference": 0
+            },
+            {
+              "side": "right",
+              "rect": [
+                1282,
+                0,
+                1920,
+                280
+              ],
+              "pixels": 178640,
+              "changedPixelsBeyondOneRGBLevel": 0,
+              "maximumRGBDifference": 0
+            }
+          ],
+          "examinedPixels": 357280,
+          "changedPixels": 0
+        }
+      ],
+      "actions": [
+        {
+          "type": "pointer-click",
+          "target": "体验工具",
+          "x": 960,
+          "y": 154,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "进入独立体验档",
+          "x": 832,
+          "y": 213,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "无敌秒杀：关闭",
+          "x": 1088,
+          "y": 194.5,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "游戏速度 ×3",
+          "x": 832,
+          "y": 194.5,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "返回宗门",
+          "x": 832,
+          "y": 239.50000000000003,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "锁妖塔",
+          "x": 884,
+          "y": 256,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "重访第9层",
+          "x": 960,
+          "y": 173,
+          "enabled": true
+        },
+        {
+          "type": "pointer-drag",
+          "label": "reproduce former wall overflow position",
+          "from": {
+            "x": 714,
+            "y": 201
+          },
+          "to": {
+            "x": 732,
+            "y": 169.5
+          },
+          "holdMs": 0,
+          "release": false
+        },
+        {
+          "type": "pointer-release",
+          "target": "移动摇杆 under root Mask"
+        }
+      ],
+      "screenshots": [
+        "ui-delivery-mask-1920x280-mask-letterbox-before-world.png",
+        "ui-delivery-mask-1920x280-mask-letterbox-wall-clipped.png"
+      ],
+      "pageErrors": [],
+      "console": [
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (setting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.setFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "Setting window size is not supported."
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        }
+      ],
+      "httpErrors": [],
+      "requestFailures": [],
+      "assets": [
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/polyfills.bundle.5adbf.js",
+          "status": 200,
+          "sha256": "f1e4ced3322168d6b9915e782e4c1cf1055d75f66f2b38e7fcd60f48cf89082b"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/system.bundle.cc789.js",
+          "status": 200,
+          "sha256": "5d1a25de07cc11276a6b1d6479cac7f12c0c561dd06941b8339e568c9d94f900"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/index.bb9fc.js",
+          "status": 200,
+          "sha256": "7a9f5f31bf1115c3f3b0f32deb14fc44f09ef5a65b63029780fc62c6ee476c60"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/application.013ea.js",
+          "status": 200,
+          "sha256": "6b7ee6c94e129139b718cba1fbe90bd4f8441e610fb28df116407b04dd9e9b83"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/cocos-js/cc.c2df8.js",
+          "status": 200,
+          "sha256": "a670bba566ce7e3a2c25e17b7eb104efc0463a62d85c3d4974d2be9b586eee89"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/chunks/bundle.e2cd5.js",
+          "status": 200,
+          "sha256": "c0ab1af06c40484eba8e9d40042b2162a8355e8d8d1d914ea5a21d4d420dc1d5"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/assets/internal/index.4e53f.js",
+          "status": 200,
+          "sha256": "d842bf596127320ad8cd42ce506a2817cd8a6402fbec6735e6b13af359a40757"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/assets/main/index.02690.js",
+          "status": 200,
+          "sha256": "02d66ceb5c716e0a6d05149805e361c02ae0c306842e7dc1886a792a179af2cc"
+        }
+      ],
+      "invalidLabels": []
+    },
+    {
+      "viewport": {
+        "width": 3840,
+        "height": 1080
+      },
+      "kind": "mask",
+      "fixtureHash": "2f14416390e5b29df202f7d0acf8824608204818a2705508c2312af143991446",
+      "ok": true,
+      "checks": [
+        {
+          "name": "Actual root Mask preserves legal fixed joystick drag/release and fixed location",
+          "passed": true,
+          "root": {
+            "left": 685.7142857142857,
+            "right": 3154.285714285714,
+            "top": 0,
+            "bottom": 1080
+          },
+          "before": {
+            "x": 33,
+            "y": -60,
+            "hp": 120,
+            "xp": 10920,
+            "maxHp": 120,
+            "attack": 127.2,
+            "moveSpeed": 220,
+            "radius": 18,
+            "faceX": 1,
+            "faceY": 0
+          },
+          "moved": {
+            "x": 480.425723234076,
+            "y": 743.5966382277604,
+            "hp": 120,
+            "xp": 10920,
+            "maxHp": 120,
+            "attack": 127.2,
+            "moveSpeed": 220,
+            "radius": 18,
+            "faceX": 0.4890997369941595,
+            "faceY": 0.8722278643062511
+          },
+          "released": {
+            "x": 480.14246342058243,
+            "y": 743.7585009783281,
+            "hp": 120,
+            "xp": 10920,
+            "maxHp": 120,
+            "attack": 127.2,
+            "moveSpeed": 220,
+            "radius": 18,
+            "faceX": -0.5848255212127181,
+            "faceY": -0.8111591149326207
+          }
+        },
+        {
+          "name": "VIS-01 actual PNG outside-root pixels unchanged from clean camp background",
+          "passed": true,
+          "before": "/Users/zhangnu/WeChatProjects/rainy-mushroom/docs/xianxia/reports/tower-landscape-2026-10-28/ui-delivery-mask-3840x1080-mask-letterbox-before-world.png",
+          "after": "/Users/zhangnu/WeChatProjects/rainy-mushroom/docs/xianxia/reports/tower-landscape-2026-10-28/ui-delivery-mask-3840x1080-mask-letterbox-wall-clipped.png",
+          "bands": [
+            {
+              "side": "left",
+              "rect": [
+                0,
+                0,
+                683,
+                1080
+              ],
+              "pixels": 737640,
+              "changedPixelsBeyondOneRGBLevel": 0,
+              "maximumRGBDifference": 0
+            },
+            {
+              "side": "right",
+              "rect": [
+                3157,
+                0,
+                3840,
+                1080
+              ],
+              "pixels": 737640,
+              "changedPixelsBeyondOneRGBLevel": 0,
+              "maximumRGBDifference": 0
+            }
+          ],
+          "examinedPixels": 1475280,
+          "changedPixels": 0
+        }
+      ],
+      "actions": [
+        {
+          "type": "pointer-click",
+          "target": "体验工具",
+          "x": 1920,
+          "y": 594,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "进入独立体验档",
+          "x": 1426.2857142857142,
+          "y": 821.5714285714287,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "无敌秒杀：关闭",
+          "x": 2413.714285714286,
+          "y": 750.2142857142857,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "游戏速度 ×3",
+          "x": 1426.2857142857142,
+          "y": 750.2142857142857,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "返回宗门",
+          "x": 1426.2857142857142,
+          "y": 923.7857142857143,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "锁妖塔",
+          "x": 1626.857142857143,
+          "y": 987.4285714285714,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "重访第9层",
+          "x": 1920,
+          "y": 667.2857142857143,
+          "enabled": true
+        },
+        {
+          "type": "pointer-drag",
+          "label": "reproduce former wall overflow position",
+          "from": {
+            "x": 971.142857142857,
+            "y": 775.2857142857143
+          },
+          "to": {
+            "x": 1040.5714285714284,
+            "y": 653.7857142857142
+          },
+          "holdMs": 0,
+          "release": false
+        },
+        {
+          "type": "pointer-release",
+          "target": "移动摇杆 under root Mask"
+        }
+      ],
+      "screenshots": [
+        "ui-delivery-mask-3840x1080-mask-letterbox-before-world.png",
+        "ui-delivery-mask-3840x1080-mask-letterbox-wall-clipped.png"
+      ],
+      "pageErrors": [],
+      "console": [
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (setting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.setFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "Setting window size is not supported."
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        }
+      ],
+      "httpErrors": [],
+      "requestFailures": [],
+      "assets": [
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/polyfills.bundle.5adbf.js",
+          "status": 200,
+          "sha256": "f1e4ced3322168d6b9915e782e4c1cf1055d75f66f2b38e7fcd60f48cf89082b"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/system.bundle.cc789.js",
+          "status": 200,
+          "sha256": "5d1a25de07cc11276a6b1d6479cac7f12c0c561dd06941b8339e568c9d94f900"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/index.bb9fc.js",
+          "status": 200,
+          "sha256": "7a9f5f31bf1115c3f3b0f32deb14fc44f09ef5a65b63029780fc62c6ee476c60"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/application.013ea.js",
+          "status": 200,
+          "sha256": "6b7ee6c94e129139b718cba1fbe90bd4f8441e610fb28df116407b04dd9e9b83"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/cocos-js/cc.c2df8.js",
+          "status": 200,
+          "sha256": "a670bba566ce7e3a2c25e17b7eb104efc0463a62d85c3d4974d2be9b586eee89"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/chunks/bundle.e2cd5.js",
+          "status": 200,
+          "sha256": "c0ab1af06c40484eba8e9d40042b2162a8355e8d8d1d914ea5a21d4d420dc1d5"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/assets/internal/index.4e53f.js",
+          "status": 200,
+          "sha256": "d842bf596127320ad8cd42ce506a2817cd8a6402fbec6735e6b13af359a40757"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/assets/main/index.02690.js",
+          "status": 200,
+          "sha256": "02d66ceb5c716e0a6d05149805e361c02ae0c306842e7dc1886a792a179af2cc"
+        }
+      ],
+      "invalidLabels": []
+    }
+  ],
+  "failures": 0,
+  "visualReview": "PENDING: actual circle geometry, row labels, fixed pane, joystick and modal images.",
+  "finishedAt": "2026-10-28T06:18:51.173Z"
+}

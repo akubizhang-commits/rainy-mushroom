@@ -10,7 +10,7 @@ type IconEntry = {
  frame: SpriteFrame | null;
  waiting: Set<Ready>;
 };
-// All current skills have approved raster artwork; load failures retain vector glyphs.
+// Approved artwork replaces each skill's vector fallback after loading.
 const skillIds = new Set([...GROWTH_SKILLS, ...GROWTH_EVOLUTIONS].map(skill => skill.id));
 
 /** One cache per menu lifetime. Redraws cancel subscriptions, not resource loads.

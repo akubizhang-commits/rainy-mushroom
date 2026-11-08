@@ -1,0 +1,900 @@
+TAP version 13
+# (node:27153) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: monster art caches all nine families, bounds ID nodes, faces without hopping, and releases once
+ok 1 - monster art caches all nine families, bounds ID nodes, faces without hopping, and releases once
+  ---
+  duration_ms: 12.963542
+  type: 'test'
+  ...
+# Subtest: monster missing/malformed resources and unsupported beasts retain fallback with no retry storm
+ok 2 - monster missing/malformed resources and unsupported beasts retain fallback with no retry storm
+  ---
+  duration_ms: 2.888208
+  type: 'test'
+  ...
+# Subtest: monster late completion after clearing or destruction cannot mutate stale actors
+ok 3 - monster late completion after clearing or destruction cannot mutate stale actors
+  ---
+  duration_ms: 2.327125
+  type: 'test'
+  ...
+# Subtest: monster synchronous resource success and exceptions are cached without unbalanced refs
+ok 4 - monster synchronous resource success and exceptions are cached without unbalanced refs
+  ---
+  duration_ms: 2.531209
+  type: 'test'
+  ...
+# Subtest: returning to camp before monster resources arrive cannot resurrect the battle
+ok 5 - returning to camp before monster resources arrive cannot resurrect the battle
+  ---
+  duration_ms: 9.405333
+  type: 'test'
+  ...
+# Subtest: real battle layers artwork below warnings and foreground, preserves state, and clears it on camp
+ok 6 - real battle layers artwork below warnings and foreground, preserves state, and clears it on camp
+  ---
+  duration_ms: 5.779041
+  type: 'test'
+  ...
+# Subtest: requested playtest stays read-only and never writes the ordinary save when the initial copy fails
+ok 7 - requested playtest stays read-only and never writes the ordinary save when the initial copy fails
+  ---
+  duration_ms: 3.986875
+  type: 'test'
+  ...
+# Subtest: same-mode retry can recover a failed isolated copy without touching ordinary progress
+ok 8 - same-mode retry can recover a failed isolated copy without touching ordinary progress
+  ---
+  duration_ms: 6.609416
+  type: 'test'
+  ...
+# Subtest: ordinary progress becomes writable only after an explicit switch from the failed playtest
+ok 9 - ordinary progress becomes writable only after an explicit switch from the failed playtest
+  ---
+  duration_ms: 3.713041
+  type: 'test'
+  ...
+# Subtest: successful sync re-enables current-page buttons and preserves scroll (ordinary)
+ok 10 - successful sync re-enables current-page buttons and preserves scroll (ordinary)
+  ---
+  duration_ms: 4.548666
+  type: 'test'
+  ...
+# Subtest: successful sync re-enables current-page buttons and preserves scroll (playtest)
+ok 11 - successful sync re-enables current-page buttons and preserves scroll (playtest)
+  ---
+  duration_ms: 3.577667
+  type: 'test'
+  ...
+# Subtest: playtest identity survives partial healing, full-HP redraw, and local skill-detail navigation
+ok 12 - playtest identity survives partial healing, full-HP redraw, and local skill-detail navigation
+  ---
+  duration_ms: 10.5625
+  type: 'test'
+  ...
+# Subtest: skill page hides battle vitals and keeps rank hints below icons
+ok 13 - skill page hides battle vitals and keeps rank hints below icons
+  ---
+  duration_ms: 7.143083
+  type: 'test'
+  ...
+# Subtest: host resets obsolete schema3 exactly once (successful save)
+ok 14 - host resets obsolete schema3 exactly once (successful save)
+  ---
+  duration_ms: 2.12225
+  type: 'test'
+  ...
+# Subtest: host resets obsolete schema3 exactly once (save failure stays read-only)
+ok 15 - host resets obsolete schema3 exactly once (save failure stays read-only)
+  ---
+  duration_ms: 1.2625
+  type: 'test'
+  ...
+# Subtest: economy v2 hides the wallet on hall and skills but shows it in relevant pages
+ok 16 - economy v2 hides the wallet on hall and skills but shows it in relevant pages
+  ---
+  duration_ms: 4.0425
+  type: 'test'
+  ...
+# Subtest: weapon draw rejects insufficient spiritStones without any state or save change
+ok 17 - weapon draw rejects insufficient spiritStones without any state or save change
+  ---
+  duration_ms: 3.555583
+  type: 'test'
+  ...
+# Subtest: weapon draw rejects insufficient contribution without any state or save change
+ok 18 - weapon draw rejects insufficient contribution without any state or save change
+  ---
+  duration_ms: 3.34825
+  type: 'test'
+  ...
+# Subtest: weapon draw atomically pays 100 stones and contribution and preserves the rolled instance
+ok 19 - weapon draw atomically pays 100 stones and contribution and preserves the rolled instance
+  ---
+  duration_ms: 4.6335
+  type: 'test'
+  ...
+# Subtest: skill pane uses shared weapon damage once after equipping an affix instance
+ok 20 - skill pane uses shared weapon damage once after equipping an affix instance
+  ---
+  duration_ms: 4.583666
+  type: 'test'
+  ...
+# Subtest: first special skill book costs 200 stones atomically and subsequent ranks do not rebuy it
+ok 21 - first special skill book costs 200 stones atomically and subsequent ranks do not rebuy it
+  ---
+  duration_ms: 13.314167
+  type: 'test'
+  ...
+# Subtest: three research purchases cost 800/1600/2400 stones and failed saves grant no points
+ok 22 - three research purchases cost 800/1600/2400 stones and failed saves grant no points
+  ---
+  duration_ms: 10.733417
+  type: 'test'
+  ...
+# Subtest: manual healing works after sync recovery and a failed pill save consumes neither HP nor inventory
+ok 23 - manual healing works after sync recovery and a failed pill save consumes neither HP nor inventory
+  ---
+  duration_ms: 3.224792
+  type: 'test'
+  ...
+# Subtest: actual tool buttons preserve paused snapshots and HP, and preferences do not publish on save failure
+ok 24 - actual tool buttons preserve paused snapshots and HP, and preferences do not publish on save failure
+  ---
+  duration_ms: 5.615958
+  type: 'test'
+  ...
+# Subtest: a failed pause checkpoint blocks switching until the real retry button commits it
+ok 25 - a failed pause checkpoint blocks switching until the real retry button commits it
+  ---
+  duration_ms: 4.197625
+  type: 'test'
+  ...
+# Subtest: paused and withdrawn loot displays only the 0 credited spirit stones near the wallet cap
+ok 26 - paused and withdrawn loot displays only the 0 credited spirit stones near the wallet cap
+  ---
+  duration_ms: 23.35625
+  type: 'test'
+  ...
+# Subtest: paused and withdrawn loot displays only the 1 credited spirit stones near the wallet cap
+ok 27 - paused and withdrawn loot displays only the 1 credited spirit stones near the wallet cap
+  ---
+  duration_ms: 9.009583
+  type: 'test'
+  ...
+# Subtest: paused and withdrawn loot displays only the 10 credited spirit stones near the wallet cap
+ok 28 - paused and withdrawn loot displays only the 10 credited spirit stones near the wallet cap
+  ---
+  duration_ms: 13.088875
+  type: 'test'
+  ...
+# Subtest: capped first-clear popup includes both fixed awards in the disclosed overflow without crediting them twice
+ok 29 - capped first-clear popup includes both fixed awards in the disclosed overflow without crediting them twice
+  ---
+  duration_ms: 54.060166
+  type: 'test'
+  ...
+# Subtest: host refund preview and committed cascade show concrete skill names and ranks without undefined fields
+ok 30 - host refund preview and committed cascade show concrete skill names and ranks without undefined fields
+  ---
+  duration_ms: 8.269167
+  type: 'test'
+  ...
+# Subtest: skill arrow follows purchase eligibility: realm cap with spare points
+ok 31 - skill arrow follows purchase eligibility: realm cap with spare points
+  ---
+  duration_ms: 3.905084
+  type: 'test'
+  ...
+# Subtest: skill arrow follows purchase eligibility: no points below cap
+ok 32 - skill arrow follows purchase eligibility: no points below cap
+  ---
+  duration_ms: 5.233458
+  type: 'test'
+  ...
+# Subtest: skill arrow follows purchase eligibility: stage locked
+ok 33 - skill arrow follows purchase eligibility: stage locked
+  ---
+  duration_ms: 4.431917
+  type: 'test'
+  ...
+# Subtest: skill arrow follows purchase eligibility: tutorial locked
+ok 34 - skill arrow follows purchase eligibility: tutorial locked
+  ---
+  duration_ms: 3.09725
+  type: 'test'
+  ...
+# Subtest: skill arrow follows purchase eligibility: prerequisite locked
+ok 35 - skill arrow follows purchase eligibility: prerequisite locked
+  ---
+  duration_ms: 3.473875
+  type: 'test'
+  ...
+# Subtest: skill arrow follows purchase eligibility: unlocked first rank
+ok 36 - skill arrow follows purchase eligibility: unlocked first rank
+  ---
+  duration_ms: 4.482791
+  type: 'test'
+  ...
+# Subtest: skill arrow follows purchase eligibility: current rank can grow
+ok 37 - skill arrow follows purchase eligibility: current rank can grow
+  ---
+  duration_ms: 3.655
+  type: 'test'
+  ...
+# Subtest: skill arrow follows purchase eligibility: absolute maximum
+ok 38 - skill arrow follows purchase eligibility: absolute maximum
+  ---
+  duration_ms: 4.921666
+  type: 'test'
+  ...
+# Subtest: skill arrow disappears at the realm cap after purchase and returns after refund
+ok 39 - skill arrow disappears at the realm cap after purchase and returns after refund
+  ---
+  duration_ms: 5.867375
+  type: 'test'
+  ...
+# Subtest: dependency connections remain stable across learning and refund without mutating saved state
+ok 40 - dependency connections remain stable across learning and refund without mutating saved state
+  ---
+  duration_ms: 8.576833
+  type: 'test'
+  ...
+# Subtest: async skill artwork preserves all 16 click targets, clipping, badges and camp transactions (844x390)
+ok 41 - async skill artwork preserves all 16 click targets, clipping, badges and camp transactions (844x390)
+  ---
+  duration_ms: 28.370916
+  type: 'test'
+  ...
+# Subtest: async skill artwork preserves all 16 click targets, clipping, badges and camp transactions (1024x600)
+ok 42 - async skill artwork preserves all 16 click targets, clipping, badges and camp transactions (1024x600)
+  ---
+  duration_ms: 37.780167
+  type: 'test'
+  ...
+# Subtest: one failed skill image leaves its glyph and camp controls usable alongside loaded artwork
+ok 43 - one failed skill image leaves its glyph and camp controls usable alongside loaded artwork
+  ---
+  duration_ms: 8.089417
+  type: 'test'
+  ...
+# Subtest: destroying the real host releases loaded icon art and safely ignores pending completions
+ok 44 - destroying the real host releases loaded icon art and safely ignores pending completions
+  ---
+  duration_ms: 4.522708
+  type: 'test'
+  ...
+# Subtest: compact skill labels show passive mastery over loaded art and right-aligned points (1280x720)
+ok 45 - compact skill labels show passive mastery over loaded art and right-aligned points (1280x720)
+  ---
+  duration_ms: 7.88375
+  type: 'test'
+  ...
+# Subtest: physical type, flow and level are separate nonoverlapping tags (1280x720)
+ok 46 - physical type, flow and level are separate nonoverlapping tags (1280x720)
+  ---
+  duration_ms: 8.315041
+  type: 'test'
+  ...
+# Subtest: four solid dependency arrows align parents and avoid skill hitboxes (1280x720)
+ok 47 - four solid dependency arrows align parents and avoid skill hitboxes (1280x720)
+  ---
+  duration_ms: 6.044625
+  type: 'test'
+  ...
+# Subtest: realm blocks group all 26 skills with five-slot rows and no label column (1280x720)
+ok 48 - realm blocks group all 26 skills with five-slot rows and no label column (1280x720)
+  ---
+  duration_ms: 26.679791
+  type: 'test'
+  ...
+# Subtest: nine-stage UI keeps compact nodes and fixed footer targets (1280x720)
+ok 49 - nine-stage UI keeps compact nodes and fixed footer targets (1280x720)
+  ---
+  duration_ms: 24.336833
+  type: 'test'
+  ...
+# Subtest: compact skill labels show passive mastery over loaded art and right-aligned points (844x390)
+ok 50 - compact skill labels show passive mastery over loaded art and right-aligned points (844x390)
+  ---
+  duration_ms: 8.28825
+  type: 'test'
+  ...
+# Subtest: physical type, flow and level are separate nonoverlapping tags (844x390)
+ok 51 - physical type, flow and level are separate nonoverlapping tags (844x390)
+  ---
+  duration_ms: 6.781667
+  type: 'test'
+  ...
+# Subtest: four solid dependency arrows align parents and avoid skill hitboxes (844x390)
+ok 52 - four solid dependency arrows align parents and avoid skill hitboxes (844x390)
+  ---
+  duration_ms: 3.874417
+  type: 'test'
+  ...
+# Subtest: realm blocks group all 26 skills with five-slot rows and no label column (844x390)
+ok 53 - realm blocks group all 26 skills with five-slot rows and no label column (844x390)
+  ---
+  duration_ms: 26.389875
+  type: 'test'
+  ...
+# Subtest: nine-stage UI keeps compact nodes and fixed footer targets (844x390)
+ok 54 - nine-stage UI keeps compact nodes and fixed footer targets (844x390)
+  ---
+  duration_ms: 29.923208
+  type: 'test'
+  ...
+# Subtest: compact skill labels show passive mastery over loaded art and right-aligned points (1024x600)
+ok 55 - compact skill labels show passive mastery over loaded art and right-aligned points (1024x600)
+  ---
+  duration_ms: 9.828334
+  type: 'test'
+  ...
+# Subtest: physical type, flow and level are separate nonoverlapping tags (1024x600)
+ok 56 - physical type, flow and level are separate nonoverlapping tags (1024x600)
+  ---
+  duration_ms: 7.951834
+  type: 'test'
+  ...
+# Subtest: four solid dependency arrows align parents and avoid skill hitboxes (1024x600)
+ok 57 - four solid dependency arrows align parents and avoid skill hitboxes (1024x600)
+  ---
+  duration_ms: 5.478709
+  type: 'test'
+  ...
+# Subtest: realm blocks group all 26 skills with five-slot rows and no label column (1024x600)
+ok 58 - realm blocks group all 26 skills with five-slot rows and no label column (1024x600)
+  ---
+  duration_ms: 33.339125
+  type: 'test'
+  ...
+# Subtest: nine-stage UI keeps compact nodes and fixed footer targets (1024x600)
+ok 59 - nine-stage UI keeps compact nodes and fixed footer targets (1024x600)
+  ---
+  duration_ms: 37.629208
+  type: 'test'
+  ...
+# Subtest: nine-stage UI plus/minus retain selection and vertical scroll in the viewport-wide tree (1280x720)
+ok 60 - nine-stage UI plus/minus retain selection and vertical scroll in the viewport-wide tree (1280x720)
+  ---
+  duration_ms: 9.99775
+  type: 'test'
+  ...
+# Subtest: nine-stage UI plus/minus retain selection and vertical scroll in the viewport-wide tree (844x390)
+ok 61 - nine-stage UI plus/minus retain selection and vertical scroll in the viewport-wide tree (844x390)
+  ---
+  duration_ms: 8.240167
+  type: 'test'
+  ...
+# Subtest: nine-stage UI plus/minus retain selection and vertical scroll in the viewport-wide tree (1024x600)
+ok 62 - nine-stage UI plus/minus retain selection and vertical scroll in the viewport-wide tree (1024x600)
+  ---
+  duration_ms: 8.280583
+  type: 'test'
+  ...
+# Subtest: skill footer is stationary through commits, failures, read-only and selection (844x390)
+ok 63 - skill footer is stationary through commits, failures, read-only and selection (844x390)
+  ---
+  duration_ms: 33.643458
+  type: 'test'
+  ...
+# Subtest: skill footer displays actual unlearned and maximum ranks (844x390)
+ok 64 - skill footer displays actual unlearned and maximum ranks (844x390)
+  ---
+  duration_ms: 18.02625
+  type: 'test'
+  ...
+# Subtest: skill footer is stationary through commits, failures, read-only and selection (1024x600)
+ok 65 - skill footer is stationary through commits, failures, read-only and selection (1024x600)
+  ---
+  duration_ms: 18.941542
+  type: 'test'
+  ...
+# Subtest: skill footer displays actual unlearned and maximum ranks (1024x600)
+ok 66 - skill footer displays actual unlearned and maximum ranks (1024x600)
+  ---
+  duration_ms: 9.699333
+  type: 'test'
+  ...
+# Subtest: nine-stage UI keeps old below-stage investments but rejects disabled learning without writes
+ok 67 - nine-stage UI keeps old below-stage investments but rejects disabled learning without writes
+  ---
+  duration_ms: 6.824958
+  type: 'test'
+  ...
+# Subtest: nine-stage UI failed learning keeps scroll and assets, shows a fixed error, and retries once
+ok 68 - nine-stage UI failed learning keeps scroll and assets, shows a fixed error, and retries once
+  ---
+  duration_ms: 11.737042
+  type: 'test'
+  ...
+# Subtest: nine-stage UI evo_wanjian first-rank condition matches its stage without changing higher-rank gates
+ok 69 - nine-stage UI evo_wanjian first-rank condition matches its stage without changing higher-rank gates
+  ---
+  duration_ms: 4.434166
+  type: 'test'
+  ...
+# Subtest: nine-stage UI evo_tiandi first-rank condition matches its stage without changing higher-rank gates
+ok 70 - nine-stage UI evo_tiandi first-rank condition matches its stage without changing higher-rank gates
+  ---
+  duration_ms: 3.457625
+  type: 'test'
+  ...
+# Subtest: nine-stage UI evo_wuwo first-rank condition matches its stage without changing higher-rank gates
+ok 71 - nine-stage UI evo_wuwo first-rank condition matches its stage without changing higher-rank gates
+  ---
+  duration_ms: 3.155166
+  type: 'test'
+  ...
+# Subtest: nine-stage UI evo_sixiang first-rank condition matches its stage without changing higher-rank gates
+ok 72 - nine-stage UI evo_sixiang first-rank condition matches its stage without changing higher-rank gates
+  ---
+  duration_ms: 4.481667
+  type: 'test'
+  ...
+# Subtest: paused tower skills show only plus, keep its hit area, and commit a legal upgrade (844x390)
+ok 73 - paused tower skills show only plus, keep its hit area, and commit a legal upgrade (844x390)
+  ---
+  duration_ms: 32.271708
+  type: 'test'
+  ...
+# Subtest: paused tower skills show only plus, keep its hit area, and commit a legal upgrade (1024x600)
+ok 74 - paused tower skills show only plus, keep its hit area, and commit a legal upgrade (1024x600)
+  ---
+  duration_ms: 31.622042
+  type: 'test'
+  ...
+# Subtest: host decreaseSkill is rejected outside the camp library (hall)
+ok 75 - host decreaseSkill is rejected outside the camp library (hall)
+  ---
+  duration_ms: 5.313584
+  type: 'test'
+  ...
+# Subtest: host decreaseSkill is rejected outside the camp library (tower)
+ok 76 - host decreaseSkill is rejected outside the camp library (tower)
+  ---
+  duration_ms: 4.063833
+  type: 'test'
+  ...
+# Subtest: host decreaseSkill is rejected outside the camp library (battle)
+ok 77 - host decreaseSkill is rejected outside the camp library (battle)
+  ---
+  duration_ms: 8.294792
+  type: 'test'
+  ...
+# Subtest: host decreaseSkill is rejected outside the camp library (skills)
+ok 78 - host decreaseSkill is rejected outside the camp library (skills)
+  ---
+  duration_ms: 14.994375
+  type: 'test'
+  ...
+# Subtest: host decreaseSkill remains allowed in the camp library and preserves books and gifts
+ok 79 - host decreaseSkill remains allowed in the camp library and preserves books and gifts
+  ---
+  duration_ms: 8.975417
+  type: 'test'
+  ...
+# Subtest: host respecSkills is rejected outside the camp library (hall)
+ok 80 - host respecSkills is rejected outside the camp library (hall)
+  ---
+  duration_ms: 1.957709
+  type: 'test'
+  ...
+# Subtest: host respecSkills is rejected outside the camp library (tower)
+ok 81 - host respecSkills is rejected outside the camp library (tower)
+  ---
+  duration_ms: 1.940791
+  type: 'test'
+  ...
+# Subtest: host respecSkills is rejected outside the camp library (battle)
+ok 82 - host respecSkills is rejected outside the camp library (battle)
+  ---
+  duration_ms: 4.29225
+  type: 'test'
+  ...
+# Subtest: host respecSkills is rejected outside the camp library (skills)
+ok 83 - host respecSkills is rejected outside the camp library (skills)
+  ---
+  duration_ms: 4.382208
+  type: 'test'
+  ...
+# Subtest: host respecSkills remains allowed in the camp library and preserves books and gifts
+ok 84 - host respecSkills remains allowed in the camp library and preserves books and gifts
+  ---
+  duration_ms: 5.456708
+  type: 'test'
+  ...
+# Subtest: portrait launch gates camp UI and updates until a landscape frame is available
+ok 85 - portrait launch gates camp UI and updates until a landscape frame is available
+  ---
+  duration_ms: 2.610417
+  type: 'test'
+  ...
+# Subtest: portrait gate preserves the playing run and requires manual continue
+ok 86 - portrait gate preserves the playing run and requires manual continue
+  ---
+  duration_ms: 7.630041
+  type: 'test'
+  ...
+# Subtest: portrait gate preserves the paused run and requires manual continue
+ok 87 - portrait gate preserves the paused run and requires manual continue
+  ---
+  duration_ms: 5.05125
+  type: 'test'
+  ...
+# Subtest: fixed bottom-left joystick keeps its origin, applies a deadzone, and clamps actual Run movement
+ok 88 - fixed bottom-left joystick keeps its origin, applies a deadzone, and clamps actual Run movement
+  ---
+  duration_ms: 5.960583
+  type: 'test'
+  ...
+# Subtest: joystick end clears movement and a later touch reuses the fixed origin
+ok 89 - joystick end clears movement and a later touch reuses the fixed origin
+  ---
+  duration_ms: 6.02625
+  type: 'test'
+  ...
+# Subtest: joystick cancel clears movement and a later touch reuses the fixed origin
+ok 90 - joystick cancel clears movement and a later touch reuses the fixed origin
+  ---
+  duration_ms: 3.57625
+  type: 'test'
+  ...
+# Subtest: secondary touches cannot steal, redirect or release the active joystick touch
+ok 91 - secondary touches cannot steal, redirect or release the active joystick touch
+  ---
+  duration_ms: 2.982709
+  type: 'test'
+  ...
+# Subtest: right-side field touches cannot relocate or start the fixed joystick
+ok 92 - right-side field touches cannot relocate or start the fixed joystick
+  ---
+  duration_ms: 3.420834
+  type: 'test'
+  ...
+# Subtest: 暂停 resets a held stick, ignores late touch events, and resumes without movement
+ok 93 - 暂停 resets a held stick, ignores late touch events, and resumes without movement
+  ---
+  duration_ms: 7.070583
+  type: 'test'
+  ...
+# Subtest: 技能 resets a held stick, ignores late touch events, and resumes without movement
+ok 94 - 技能 resets a held stick, ignores late touch events, and resumes without movement
+  ---
+  duration_ms: 4.853541
+  type: 'test'
+  ...
+# Subtest: landscape resize releases a held stick and places its replacement at the new bottom-left
+ok 95 - landscape resize releases a held stick and places its replacement at the new bottom-left
+  ---
+  duration_ms: 2.56925
+  type: 'test'
+  ...
+# Subtest: landscape 1280×720 pause and tool targets fit in two columns and keep real tool actions
+ok 96 - landscape 1280×720 pause and tool targets fit in two columns and keep real tool actions
+  ---
+  duration_ms: 4.659958
+  type: 'test'
+  ...
+# Subtest: landscape 844×390 pause and tool targets fit in two columns and keep real tool actions
+ok 97 - landscape 844×390 pause and tool targets fit in two columns and keep real tool actions
+  ---
+  duration_ms: 3.171042
+  type: 'test'
+  ...
+# Subtest: extreme 1920×280 letterboxes combat and tools, then restores fixed-width without losing state
+ok 98 - extreme 1920×280 letterboxes combat and tools, then restores fixed-width without losing state
+  ---
+  duration_ms: 4.366916
+  type: 'test'
+  ...
+# Subtest: extreme 3840×1080 letterboxes combat and tools, then restores fixed-width without losing state
+ok 99 - extreme 3840×1080 letterboxes combat and tools, then restores fixed-width without losing state
+  ---
+  duration_ms: 4.346542
+  type: 'test'
+  ...
+# Subtest: real host up sector arc matches the locked 140-degree Run warning and actual hit direction
+ok 100 - real host up sector arc matches the locked 140-degree Run warning and actual hit direction
+  ---
+  duration_ms: 7.663125
+  type: 'test'
+  ...
+# Subtest: real host down sector arc matches the locked 140-degree Run warning and actual hit direction
+ok 101 - real host down sector arc matches the locked 140-degree Run warning and actual hit direction
+  ---
+  duration_ms: 10.443209
+  type: 'test'
+  ...
+# Subtest: real host left sector arc matches the locked 140-degree Run warning and actual hit direction
+ok 102 - real host left sector arc matches the locked 140-degree Run warning and actual hit direction
+  ---
+  duration_ms: 14.342
+  type: 'test'
+  ...
+# Subtest: real host right sector arc matches the locked 140-degree Run warning and actual hit direction
+ok 103 - real host right sector arc matches the locked 140-degree Run warning and actual hit direction
+  ---
+  duration_ms: 7.447958
+  type: 'test'
+  ...
+# Subtest: lightweight HUD stays fixed and keeps safe targets at 1280×720
+ok 104 - lightweight HUD stays fixed and keeps safe targets at 1280×720
+  ---
+  duration_ms: 3.384167
+  type: 'test'
+  ...
+# Subtest: lightweight HUD stays fixed and keeps safe targets at 1024×600
+ok 105 - lightweight HUD stays fixed and keeps safe targets at 1024×600
+  ---
+  duration_ms: 2.779084
+  type: 'test'
+  ...
+# Subtest: lightweight HUD stays fixed and keeps safe targets at 844×390
+ok 106 - lightweight HUD stays fixed and keeps safe targets at 844×390
+  ---
+  duration_ms: 2.760459
+  type: 'test'
+  ...
+# Subtest: lightweight HUD stays fixed and keeps safe targets at 1920×280
+ok 107 - lightweight HUD stays fixed and keeps safe targets at 1920×280
+  ---
+  duration_ms: 5.638833
+  type: 'test'
+  ...
+# Subtest: HUD numeric HP and bar ratio remain readable, XP cap fills the bar and skill points remain actionable
+ok 108 - HUD numeric HP and bar ratio remain readable, XP cap fills the bar and skill points remain actionable
+  ---
+  duration_ms: 3.882041
+  type: 'test'
+  ...
+# Subtest: ordinary enemies have no names, elite names remain, and only a live boss enables the fixed boss HUD
+ok 109 - ordinary enemies have no names, elite names remain, and only a live boss enables the fixed boss HUD
+  ---
+  duration_ms: 3.435625
+  type: 'test'
+  ...
+# Subtest: ordinary damage reveals health for three simulation seconds, refreshes on damage and does not restart offscreen
+ok 110 - ordinary damage reveals health for three simulation seconds, refreshes on damage and does not restart offscreen
+  ---
+  duration_ms: 2.922917
+  type: 'test'
+  ...
+# Subtest: queued notices display in order, keep simulation-time durations through pause, then disappear
+ok 111 - queued notices display in order, keep simulation-time durations through pause, then disappear
+  ---
+  duration_ms: 14.613708
+  type: 'test'
+  ...
+# Subtest: all six passive auras retain visible distinct geometry without changing combat or checkpoint data
+ok 112 - all six passive auras retain visible distinct geometry without changing combat or checkpoint data
+  ---
+  duration_ms: 3.001292
+  type: 'test'
+  ...
+# Subtest: playtest point grant is real, repeatable to 999, and reset requires confirmation
+ok 113 - playtest point grant is real, repeatable to 999, and reset requires confirmation
+  ---
+  duration_ms: 2.154792
+  type: 'test'
+  ...
+# Subtest: normal mode cannot execute experience reset or skill grant
+ok 114 - normal mode cannot execute experience reset or skill grant
+  ---
+  duration_ms: 2.619583
+  type: 'test'
+  ...
+# Subtest: failed playtest reset retains paused run and earned skills
+ok 115 - failed playtest reset retains paused run and earned skills
+  ---
+  duration_ms: 2.664458
+  type: 'test'
+  ...
+# Subtest: resource submenu uses real denomination additions and preserves ordinary saves
+ok 116 - resource submenu uses real denomination additions and preserves ordinary saves
+  ---
+  duration_ms: 1.883333
+  type: 'test'
+  ...
+# Subtest: camp level button reaches 27 with natural SP and no extra healing
+ok 117 - camp level button reaches 27 with natural SP and no extra healing
+  ---
+  duration_ms: 1.985167
+  type: 'test'
+  ...
+# Subtest: in-tower level button gives a short exit hint; resource grants keep the run paused and intact
+ok 118 - in-tower level button gives a short exit hint; resource grants keep the run paused and intact
+  ---
+  duration_ms: 4.792083
+  type: 'test'
+  ...
+# Subtest: resource write failures show errors without publishing grants
+ok 119 - resource write failures show errors without publishing grants
+  ---
+  duration_ms: 2.573209
+  type: 'test'
+  ...
+# Subtest: full contribution balance rejects the resource button without truncating its grant
+ok 120 - full contribution balance rejects the resource button without truncating its grant
+  ---
+  duration_ms: 2.755417
+  type: 'test'
+  ...
+# Subtest: tools checkpoint a locally paused restored run before enabling resource actions
+ok 121 - tools checkpoint a locally paused restored run before enabling resource actions
+  ---
+  duration_ms: 2.715791
+  type: 'test'
+  ...
+# Subtest: normal mode cannot invoke resource or level actions through tool methods
+ok 122 - normal mode cannot invoke resource or level actions through tool methods
+  ---
+  duration_ms: 1.210208
+  type: 'test'
+  ...
+# Subtest: grouped tool menus fit 1280x720 without overlapping labels or buttons
+ok 123 - grouped tool menus fit 1280x720 without overlapping labels or buttons
+  ---
+  duration_ms: 1.5465
+  type: 'test'
+  ...
+# Subtest: grouped tool menus fit 844x390 without overlapping labels or buttons
+ok 124 - grouped tool menus fit 844x390 without overlapping labels or buttons
+  ---
+  duration_ms: 1.978167
+  type: 'test'
+  ...
+# Subtest: grouped tool menus fit 1920x280 without overlapping labels or buttons
+ok 125 - grouped tool menus fit 1920x280 without overlapping labels or buttons
+  ---
+  duration_ms: 1.526125
+  type: 'test'
+  ...
+# Subtest: flight is a one-rank shared passive with real purchase, reload and refund
+ok 126 - flight is a one-rank shared passive with real purchase, reload and refund
+  ---
+  duration_ms: 15.058125
+  type: 'test'
+  ...
+# Subtest: actual kill starts a minor level animation only once
+ok 127 - actual kill starts a minor level animation only once
+  ---
+  duration_ms: 4.155042
+  type: 'test'
+  ...
+# Subtest: actual kill starts a major level animation only once
+ok 128 - actual kill starts a major level animation only once
+  ---
+  duration_ms: 5.059708
+  type: 'test'
+  ...
+# Subtest: avatar opens a bounded character overlay with actual attributes and read-only dismissal
+ok 129 - avatar opens a bounded character overlay with actual attributes and read-only dismissal
+  ---
+  duration_ms: 2.200833
+  type: 'test'
+  ...
+# Subtest: character overlay follows camp healing and closes when leaving the hall
+ok 130 - character overlay follows camp healing and closes when leaving the hall
+  ---
+  duration_ms: 1.946959
+  type: 'test'
+  ...
+# Subtest: paper HUD loads the existing character art, disposes assets and rejects stale callbacks
+ok 131 - paper HUD loads the existing character art, disposes assets and rejects stale callbacks
+  ---
+  duration_ms: 1.922291
+  type: 'test'
+  ...
+# Subtest: paper HUD resource failure preserves readable stats without changing combat HUD
+ok 132 - paper HUD resource failure preserves readable stats without changing combat HUD
+  ---
+  duration_ms: 3.17075
+  type: 'test'
+  ...
+# Subtest: portrait stage label and XP/mana tracks stay outside the avatar; realm border changes live
+ok 133 - portrait stage label and XP/mana tracks stay outside the avatar; realm border changes live
+  ---
+  duration_ms: 2.02725
+  type: 'test'
+  ...
+# Subtest: skill page keeps reset compact and moves research below the skill viewport
+ok 134 - skill page keeps reset compact and moves research below the skill viewport
+  ---
+  duration_ms: 4.907625
+  type: 'test'
+  ...
+# Subtest: character atlas preserves feet, independent sword, movement modes and paused redraws
+ok 135 - character atlas preserves feet, independent sword, movement modes and paused redraws
+  ---
+  duration_ms: 3.215
+  type: 'test'
+  ...
+# Subtest: character slash follows a real short windup across a 3x frame and cannot cause damage
+ok 136 - character slash follows a real short windup across a 3x frame and cannot cause damage
+  ---
+  duration_ms: 3.870542
+  type: 'test'
+  ...
+# Subtest: character flight uses idle plus original flying sword while equipment remains independent
+ok 137 - character flight uses idle plus original flying sword while equipment remains independent
+  ---
+  duration_ms: 2.339
+  type: 'test'
+  ...
+# Subtest: invalid character atlas falls back and late resource callbacks cannot resurrect a destroyed host
+ok 138 - invalid character atlas falls back and late resource callbacks cannot resurrect a destroyed host
+  ---
+  duration_ms: 3.269542
+  type: 'test'
+  ...
+# Subtest: character reads revised JSON geometry and all 35 frames across atlas rows
+ok 139 - character reads revised JSON geometry and all 35 frames across atlas rows
+  ---
+  duration_ms: 5.135041
+  type: 'test'
+  ...
+# Subtest: separate blade keeps a full-width shaft over the repaired source path
+ok 140 - separate blade keeps a full-width shaft over the repaired source path
+  ---
+  duration_ms: 2.05225
+  type: 'test'
+  ...
+# Subtest: real character PNG, manifest and import metadata satisfy the running atlas contract
+ok 141 - real character PNG, manifest and import metadata satisfy the running atlas contract
+  ---
+  duration_ms: 2.037917
+  type: 'test'
+  ...
+# Subtest: cast notifications are immutable, unsaved and independent of cooldown arithmetic
+ok 142 - cast notifications are immutable, unsaved and independent of cooldown arithmetic
+  ---
+  duration_ms: 3.403458
+  type: 'test'
+  ...
+# Subtest: tower entry focuses next uncleared floor, locks future floors and enters only the selection
+ok 143 - tower entry focuses next uncleared floor, locks future floors and enters only the selection
+  ---
+  duration_ms: 3.047042
+  type: 'test'
+  ...
+# Subtest: tower entry completed campaign selects ninth floor and readonly disables entry
+ok 144 - tower entry completed campaign selects ninth floor and readonly disables entry
+  ---
+  duration_ms: 1.562791
+  type: 'test'
+  ...
+# Subtest: tower entry artwork reuses requests and late loads cannot revive abandoned page
+ok 145 - tower entry artwork reuses requests and late loads cannot revive abandoned page
+  ---
+  duration_ms: 3.255875
+  type: 'test'
+  ...
+# Subtest: tower cards scroll with complete boss artwork and separate text (1280x720)
+ok 146 - tower cards scroll with complete boss artwork and separate text (1280x720)
+  ---
+  duration_ms: 2.6825
+  type: 'test'
+  ...
+# Subtest: tower cards scroll with complete boss artwork and separate text (844x390)
+ok 147 - tower cards scroll with complete boss artwork and separate text (844x390)
+  ---
+  duration_ms: 1.924125
+  type: 'test'
+  ...
+# Subtest: new rhino and yak floor cards show named species fallback without requesting absent assets
+ok 148 - new rhino and yak floor cards show named species fallback without requesting absent assets
+  ---
+  duration_ms: 2.003542
+  type: 'test'
+  ...
+1..148
+# tests 148
+# suites 0
+# pass 148
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1374.3915

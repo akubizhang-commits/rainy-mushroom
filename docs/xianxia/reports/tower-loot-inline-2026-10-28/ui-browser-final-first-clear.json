@@ -1,0 +1,1441 @@
+{
+  "status": "AUTOMATED_PASS_VISUAL_REVIEW_PENDING",
+  "startedAt": "2026-10-28T04:54:32.138Z",
+  "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/index.html?ruleset=xianxia&tower=1",
+  "browser": {
+    "version": "155.0.8059.12",
+    "playwrightModule": "/Users/zhangnu/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright",
+    "executablePath": "/Users/zhangnu/Library/Caches/ms-playwright/chromium_headless_shell-1247/chrome-headless-shell-mac-arm64/chrome-headless-shell"
+  },
+  "authorizedBuildFlag": true,
+  "preparation": {
+    "status": "PREPARED_WAITING_FOR_BUILDREADY",
+    "browserExecuted": false,
+    "preparedAt": "2026-10-28T04:54:31.877Z",
+    "contract": {
+      "plus": "learnSkill-<id>",
+      "minus": "decreaseSkill-<id>",
+      "name": "技能节点-<id>",
+      "row": "技能行-<id>",
+      "tree": "十六技能树",
+      "inlineDetails": "同页技能详情",
+      "sourceHasInlineDetails": true,
+      "sourceHasActionControls": true,
+      "sourceHasValueUnit": true,
+      "sourceHasLootSummary": true
+    },
+    "viewports": [
+      {
+        "width": 390,
+        "height": 844
+      },
+      {
+        "width": 360,
+        "height": 640
+      },
+      {
+        "width": 1280,
+        "height": 800
+      },
+      {
+        "width": 720,
+        "height": 1280
+      },
+      {
+        "width": 1080,
+        "height": 2400
+      }
+    ],
+    "coreRankValues": [
+      0,
+      1,
+      6,
+      24,
+      30,
+      36,
+      42,
+      48
+    ],
+    "sourceHashes": {
+      "cocos-pilot/assets/scripts/TowerMenu.ts": "092e5a666102366c11bf830cf032fffb97152f1e93e2220661e9988d1dc6e500",
+      "cocos-pilot/assets/scripts/TowerView.ts": "77c435137fecb9487af1b1ef52ce093221b16ad0bcd3dd329de65c48a1f7698b",
+      "js/xianxia/TowerCampaign.js": "37fbd24596caeeaa04e72b5109769e91284e019f29e0fc70c23562c9fa039337",
+      "js/xianxia/TowerGrowth.js": "6d380a236d33043757b7525c628b0da0e5bad491c3f503e2aefbce417462ba92",
+      "js/xianxia/TowerLoot.js": "f2eeb5dca0ee913fc30250ef46e9515fe58f4d1318855431e55408d2d1cd9761",
+      "js/xianxia/TowerRun.js": "893ec5a691dbd606992144edbd9cbe5385f3d0d77866860b1034eea93aa016fe"
+    },
+    "fixtures": [
+      {
+        "kind": "ARTIFICIAL VALIDATED CAMP FIXTURE — UI ONLY, NOT NATURAL PROGRESSION OR BALANCE",
+        "name": "camp",
+        "sources": {
+          "xp": 10920,
+          "hp": 120,
+          "clearedFloor": 9,
+          "cores": 2000,
+          "tutorialWaves": 3
+        },
+        "transactions": [
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_arc"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_arc",
+              "level": 2,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_arc"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_arc",
+              "level": 3,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_arc"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_arc",
+              "level": 4,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_arc"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_arc",
+              "level": 5,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_arc"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_arc",
+              "level": 6,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_line"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_line",
+              "level": 1,
+              "cost": 2,
+              "bookCost": 20
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_line"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_line",
+              "level": 2,
+              "cost": 2,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_line"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_line",
+              "level": 3,
+              "cost": 2,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_line"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_line",
+              "level": 4,
+              "cost": 2,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_line"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_line",
+              "level": 5,
+              "cost": 2,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_line"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_line",
+              "level": 6,
+              "cost": 2,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "vajra"
+            },
+            "result": {
+              "ok": true,
+              "id": "vajra",
+              "level": 1,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "vajra"
+            },
+            "result": {
+              "ok": true,
+              "id": "vajra",
+              "level": 2,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "vajra"
+            },
+            "result": {
+              "ok": true,
+              "id": "vajra",
+              "level": 3,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "vajra"
+            },
+            "result": {
+              "ok": true,
+              "id": "vajra",
+              "level": 4,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "vajra"
+            },
+            "result": {
+              "ok": true,
+              "id": "vajra",
+              "level": 5,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "sync"
+            },
+            "result": {
+              "ok": true,
+              "hp": 120
+            }
+          }
+        ],
+        "rawHash": "2b913e8e89734e7d6bee92227ce5442aff9531ecf8b6575166ce94113c35080d",
+        "summary": {
+          "total": 33,
+          "spent": 22,
+          "available": 11,
+          "realm": 30,
+          "firstClear": 3,
+          "research": 0,
+          "cap": 36
+        },
+        "state": {
+          "skills": {
+            "sj_yujian": 1,
+            "sj_arc": 6,
+            "sj_wanjian": 1,
+            "sj_line": 6,
+            "vajra": 5
+          },
+          "books": [
+            "sj_line"
+          ],
+          "evolutionRanks": {},
+          "evolutions": [],
+          "cores": 1980,
+          "researchPurchases": 0
+        }
+      },
+      {
+        "kind": "ARTIFICIAL VALIDATED CAMP FIXTURE — UI ONLY, NOT NATURAL PROGRESSION OR BALANCE",
+        "name": "refunds",
+        "sources": {
+          "xp": 10920,
+          "hp": 120,
+          "clearedFloor": 9,
+          "cores": 2000,
+          "tutorialWaves": 3
+        },
+        "transactions": [
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_arc"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_arc",
+              "level": 2,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_line"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_line",
+              "level": 1,
+              "cost": 2,
+              "bookCost": 20
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_yujian"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_yujian",
+              "level": 2,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_yujian"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_yujian",
+              "level": 3,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_yujian"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_yujian",
+              "level": 4,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_yujian"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_yujian",
+              "level": 5,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_yujian"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_yujian",
+              "level": 6,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_yujian"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_yujian",
+              "level": 7,
+              "cost": 2,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_yujian"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_yujian",
+              "level": 8,
+              "cost": 2,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_heart"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_heart",
+              "level": 1,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_heart"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_heart",
+              "level": 2,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_heart"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_heart",
+              "level": 3,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_heart"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_heart",
+              "level": 4,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_heart"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_heart",
+              "level": 5,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "evo_wanjian"
+            },
+            "result": {
+              "ok": true,
+              "id": "evo_wanjian",
+              "level": 1,
+              "cost": 3,
+              "bookCost": 240
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "evo_wanjian"
+            },
+            "result": {
+              "ok": true,
+              "id": "evo_wanjian",
+              "level": 2,
+              "cost": 4,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "sync"
+            },
+            "result": {
+              "ok": true,
+              "hp": 120
+            }
+          }
+        ],
+        "rawHash": "4d1c0e74e707cee279e715901f9c3310f2185f412011d002ada370928e302c81",
+        "summary": {
+          "total": 33,
+          "spent": 24,
+          "available": 9,
+          "realm": 30,
+          "firstClear": 3,
+          "research": 0,
+          "cap": 36
+        },
+        "state": {
+          "skills": {
+            "sj_yujian": 8,
+            "sj_arc": 2,
+            "sj_wanjian": 1,
+            "sj_line": 1,
+            "sj_heart": 5
+          },
+          "books": [
+            "sj_line",
+            "evo_wanjian"
+          ],
+          "evolutionRanks": {
+            "evo_wanjian": 2
+          },
+          "evolutions": [
+            "evo_wanjian"
+          ],
+          "cores": 1740,
+          "researchPurchases": 0
+        }
+      },
+      {
+        "kind": "ARTIFICIAL VALIDATED CAMP FIXTURE — UI ONLY, NOT NATURAL PROGRESSION OR BALANCE",
+        "name": "paused",
+        "sources": {
+          "xp": 10920,
+          "hp": 120,
+          "clearedFloor": 9,
+          "cores": 2000,
+          "tutorialWaves": 3
+        },
+        "transactions": [
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "vajra"
+            },
+            "result": {
+              "ok": true,
+              "id": "vajra",
+              "level": 1,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "sync"
+            },
+            "result": {
+              "ok": true,
+              "hp": 120
+            }
+          }
+        ],
+        "rawHash": "f64577eb72ffdde82a987e828603d1df95a7621f139449abc45b71af84b855f1",
+        "summary": {
+          "total": 33,
+          "spent": 1,
+          "available": 32,
+          "realm": 30,
+          "firstClear": 3,
+          "research": 0,
+          "cap": 36
+        },
+        "state": {
+          "skills": {
+            "sj_yujian": 1,
+            "sj_arc": 1,
+            "sj_wanjian": 1,
+            "vajra": 1
+          },
+          "books": [],
+          "evolutionRanks": {},
+          "evolutions": [],
+          "cores": 2000,
+          "researchPurchases": 0
+        }
+      },
+      {
+        "kind": "ARTIFICIAL VALIDATED CAMP FIXTURE — UI ONLY, NOT NATURAL PROGRESSION OR BALANCE",
+        "name": "loot",
+        "sources": {
+          "xp": 10920,
+          "hp": 120,
+          "clearedFloor": 8,
+          "cores": 2000,
+          "tutorialWaves": 3
+        },
+        "transactions": [
+          {
+            "action": {
+              "type": "sync"
+            },
+            "result": {
+              "ok": true,
+              "hp": 120
+            }
+          }
+        ],
+        "rawHash": "8f45ae1d02a8d9384ddb54a80719756a1ed1c9c298bd0b50f6e8ca256b17b1d5",
+        "summary": {
+          "total": 32,
+          "spent": 0,
+          "available": 32,
+          "realm": 30,
+          "firstClear": 2,
+          "research": 0,
+          "cap": 36
+        },
+        "state": {
+          "skills": {
+            "sj_yujian": 1,
+            "sj_arc": 1,
+            "sj_wanjian": 1
+          },
+          "books": [],
+          "evolutionRanks": {},
+          "evolutions": [],
+          "cores": 2000,
+          "researchPurchases": 0
+        }
+      },
+      {
+        "kind": "ARTIFICIAL VALIDATED CAMP FIXTURE — UI ONLY, NOT NATURAL PROGRESSION OR BALANCE",
+        "name": "cap",
+        "sources": {
+          "xp": 10920,
+          "hp": 120,
+          "clearedFloor": 8,
+          "cores": 1999999997,
+          "tutorialWaves": 3
+        },
+        "transactions": [
+          {
+            "action": {
+              "type": "sync"
+            },
+            "result": {
+              "ok": true,
+              "hp": 120
+            }
+          }
+        ],
+        "rawHash": "afdeb222e0ef54623847a4753b93ecf769b5993962f43529de82ad3f6907b769",
+        "summary": {
+          "total": 32,
+          "spent": 0,
+          "available": 32,
+          "realm": 30,
+          "firstClear": 2,
+          "research": 0,
+          "cap": 36
+        },
+        "state": {
+          "skills": {
+            "sj_yujian": 1,
+            "sj_arc": 1,
+            "sj_wanjian": 1
+          },
+          "books": [],
+          "evolutionRanks": {},
+          "evolutions": [],
+          "cores": 1999999997,
+          "researchPurchases": 0
+        }
+      }
+    ]
+  },
+  "selection": {
+    "cases": [
+      "loot"
+    ],
+    "sizes": [
+      "390x844"
+    ]
+  },
+  "evidencePolicy": "UI buttons use actual pointer clicks. Camp fixture sources are artificial. Loot uses real Run spawns/attacks/receipts with explicit playtest assist and accelerated stepping, not balance evidence.",
+  "results": [
+    {
+      "name": "loot",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fixture": {
+        "kind": "ARTIFICIAL VALIDATED CAMP FIXTURE — UI ONLY, NOT NATURAL PROGRESSION OR BALANCE",
+        "name": "loot",
+        "rawHash": "8f45ae1d02a8d9384ddb54a80719756a1ed1c9c298bd0b50f6e8ca256b17b1d5"
+      },
+      "checks": [
+        {
+          "label": "Real kill produces visible graded core, rank label and immediate value credit",
+          "passed": true,
+          "visibleDrop": {
+            "id": "c492",
+            "kind": "core",
+            "rank": 3,
+            "killId": "a1:f9:w5:u8",
+            "x": 605.9086149280408,
+            "y": 428.61050267495597,
+            "radius": 13,
+            "amount": 24,
+            "expiresAt": 66.21666666666667
+          },
+          "labels": [
+            {
+              "text": "3阶妖丹",
+              "x": 204.38629987182375,
+              "y": 487.4384350605784
+            }
+          ],
+          "loot": {
+            "byRank": [
+              0,
+              0,
+              1,
+              0,
+              0,
+              0,
+              0
+            ],
+            "count": 1,
+            "value": 24
+          }
+        },
+        {
+          "label": "pause: visible summary has exact counts, ranks and value",
+          "passed": true,
+          "expected": {
+            "byRank": [
+              0,
+              0,
+              1,
+              0,
+              0,
+              0,
+              0
+            ],
+            "count": 1,
+            "value": 24
+          },
+          "independentlyCounted": {
+            "byRank": [
+              0,
+              0,
+              1,
+              0,
+              0,
+              0,
+              0
+            ],
+            "count": 1,
+            "value": 24
+          },
+          "coreRankValues": [
+            0,
+            1,
+            6,
+            24,
+            30,
+            36,
+            42,
+            48
+          ],
+          "earned": {
+            "xp": 0,
+            "cores": 24,
+            "contribution": 8
+          },
+          "extra": 0,
+          "text": "塔内暂停\n本次获得：0修为 · 24妖丹值 · 8贡献\n掉落 1颗：3阶×1\n按一阶折合24点。已自动收取。\n回宗保留收益，本层重试从第1波开始。\n\n继续挑战\n\n技能树 · 可用32点\n\n体验工具\n\n返回宗门"
+        },
+        {
+          "label": "reload pause: visible summary has exact counts, ranks and value",
+          "passed": true,
+          "expected": {
+            "byRank": [
+              0,
+              0,
+              1,
+              0,
+              0,
+              0,
+              0
+            ],
+            "count": 1,
+            "value": 24
+          },
+          "independentlyCounted": {
+            "byRank": [
+              0,
+              0,
+              1,
+              0,
+              0,
+              0,
+              0
+            ],
+            "count": 1,
+            "value": 24
+          },
+          "coreRankValues": [
+            0,
+            1,
+            6,
+            24,
+            30,
+            36,
+            42,
+            48
+          ],
+          "earned": {
+            "xp": 0,
+            "cores": 24,
+            "contribution": 8
+          },
+          "extra": 0,
+          "text": "塔内暂停\n本次获得：0修为 · 24妖丹值 · 8贡献\n掉落 1颗：3阶×1\n按一阶折合24点。已自动收取。\n回宗保留收益，本层重试从第1波开始。\n\n继续挑战\n\n技能树 · 可用32点\n\n体验工具\n\n返回宗门"
+        },
+        {
+          "label": "settlement: visible summary has exact counts, ranks and value",
+          "passed": true,
+          "expected": {
+            "byRank": [
+              0,
+              1,
+              1,
+              1,
+              0,
+              0,
+              1
+            ],
+            "count": 4,
+            "value": 108
+          },
+          "independentlyCounted": {
+            "byRank": [
+              0,
+              1,
+              1,
+              1,
+              0,
+              0,
+              1
+            ],
+            "count": 4,
+            "value": 108
+          },
+          "coreRankValues": [
+            0,
+            1,
+            6,
+            24,
+            30,
+            36,
+            42,
+            48
+          ],
+          "earned": {
+            "xp": 0,
+            "cores": 148,
+            "contribution": 140
+          },
+          "extra": 0,
+          "text": "第9层已通关\n实际入账：修为 0 · 妖丹值 158 · 贡献 190\n掉落 4颗：2阶×1、3阶×1、4阶×1、7阶×1\n按一阶折合108点，通层奖另加40点。已自动收取。\n首通奖励已结算，包含在以上收益中 · 另获1技能点\n生命继承，可回宗整备后再次挑战。\n\n返回宗门\n\n前往丹鼎阁"
+        },
+        {
+          "label": "Exact loot and bonuses persist through full settlement and reload; normal storage untouched",
+          "passed": true,
+          "full": {
+            "byRank": [
+              0,
+              1,
+              1,
+              1,
+              0,
+              0,
+              1
+            ],
+            "count": 4,
+            "value": 108
+          },
+          "result": {
+            "outcome": "won",
+            "floor": 9,
+            "firstClear": true,
+            "earned": {
+              "xp": 0,
+              "cores": 158,
+              "contribution": 190
+            },
+            "coreLoot": {
+              "byRank": [
+                0,
+                1,
+                1,
+                1,
+                0,
+                0,
+                1
+              ],
+              "count": 4,
+              "value": 108
+            }
+          },
+          "normalRawHash": "88800694ea852bcbb639073ebf6d9dc8f5cf636c741b928bd6bc1df220fe1a55"
+        }
+      ],
+      "clicks": [
+        {
+          "target": "体验工具",
+          "x": 195,
+          "y": 344,
+          "enabled": true,
+          "pointer": "mouse",
+          "at": "2026-10-28T04:54:34.728Z",
+          "ancestors": [
+            "下一站 · 第9层镇魇封台",
+            "卷轴内容",
+            "事务卷轴",
+            "TowerMenu",
+            "栖云宗·功能版",
+            "Survivor Canvas",
+            "PinePilot"
+          ],
+          "immediateState": {
+            "skills": {
+              "sj_yujian": 1,
+              "sj_arc": 1,
+              "sj_wanjian": 1
+            },
+            "books": [],
+            "evolutionRanks": {},
+            "evolutions": [],
+            "cores": 2000,
+            "researchPurchases": 0
+          }
+        },
+        {
+          "target": "进入独立体验档",
+          "x": 115.91666666666667,
+          "y": 506.50000000000006,
+          "enabled": true,
+          "pointer": "mouse",
+          "at": "2026-10-28T04:54:34.892Z",
+          "ancestors": [
+            "对话面板",
+            "栖云宗·功能版",
+            "Survivor Canvas",
+            "PinePilot"
+          ],
+          "immediateState": {
+            "skills": {
+              "sj_yujian": 1,
+              "sj_arc": 1,
+              "sj_wanjian": 1
+            },
+            "books": [],
+            "evolutionRanks": {},
+            "evolutions": [],
+            "cores": 2000,
+            "researchPurchases": 0
+          }
+        },
+        {
+          "target": "无敌秒杀：关闭",
+          "x": 195,
+          "y": 512.4583333333334,
+          "enabled": true,
+          "pointer": "mouse",
+          "at": "2026-10-28T04:54:35.094Z",
+          "ancestors": [
+            "对话面板",
+            "栖云宗·功能版",
+            "Survivor Canvas",
+            "PinePilot"
+          ],
+          "immediateState": {
+            "skills": {
+              "sj_yujian": 1,
+              "sj_arc": 1,
+              "sj_wanjian": 1
+            },
+            "books": [],
+            "evolutionRanks": {},
+            "evolutions": [],
+            "cores": 2000,
+            "researchPurchases": 0
+          }
+        },
+        {
+          "target": "返回宗门",
+          "x": 195,
+          "y": 561.2083333333333,
+          "enabled": true,
+          "pointer": "mouse",
+          "at": "2026-10-28T04:54:35.230Z",
+          "ancestors": [
+            "对话面板",
+            "栖云宗·功能版",
+            "Survivor Canvas",
+            "PinePilot"
+          ],
+          "immediateState": {
+            "skills": {
+              "sj_yujian": 1,
+              "sj_arc": 1,
+              "sj_wanjian": 1
+            },
+            "books": [],
+            "evolutionRanks": {},
+            "evolutions": [],
+            "cores": 2000,
+            "researchPurchases": 0
+          }
+        },
+        {
+          "target": "锁妖塔",
+          "x": 148.41666666666666,
+          "y": 735.0833333333333,
+          "enabled": true,
+          "pointer": "mouse",
+          "at": "2026-10-28T04:54:35.385Z",
+          "ancestors": [
+            "TowerMenu",
+            "栖云宗·功能版",
+            "Survivor Canvas",
+            "PinePilot"
+          ],
+          "immediateState": {
+            "skills": {
+              "sj_yujian": 1,
+              "sj_arc": 1,
+              "sj_wanjian": 1
+            },
+            "books": [],
+            "evolutionRanks": {},
+            "evolutions": [],
+            "cores": 2000,
+            "researchPurchases": 0
+          }
+        },
+        {
+          "target": "继续挑战第9层",
+          "x": 195,
+          "y": 344,
+          "enabled": true,
+          "pointer": "mouse",
+          "at": "2026-10-28T04:54:35.564Z",
+          "ancestors": [
+            "免费入塔 · 保留当前生命",
+            "卷轴内容",
+            "事务卷轴",
+            "TowerMenu",
+            "栖云宗·功能版",
+            "Survivor Canvas",
+            "PinePilot"
+          ],
+          "immediateState": {
+            "skills": {
+              "sj_yujian": 1,
+              "sj_arc": 1,
+              "sj_wanjian": 1
+            },
+            "books": [],
+            "evolutionRanks": {},
+            "evolutions": [],
+            "cores": 2000,
+            "researchPurchases": 0
+          }
+        },
+        {
+          "target": "暂停",
+          "x": 354.7916666666667,
+          "y": 99.70833333333337,
+          "enabled": true,
+          "pointer": "mouse",
+          "at": "2026-10-28T04:54:35.884Z",
+          "ancestors": [
+            "锁妖塔战场",
+            "栖云宗·功能版",
+            "Survivor Canvas",
+            "PinePilot"
+          ],
+          "immediateState": {
+            "skills": {
+              "sj_yujian": 1,
+              "sj_arc": 1,
+              "sj_wanjian": 1
+            },
+            "books": [],
+            "evolutionRanks": {},
+            "evolutions": [],
+            "cores": 2024,
+            "researchPurchases": 0
+          }
+        },
+        {
+          "target": "继续挑战",
+          "x": 195,
+          "y": 421.1875,
+          "enabled": true,
+          "pointer": "mouse",
+          "at": "2026-10-28T04:54:38.588Z",
+          "ancestors": [
+            "对话面板",
+            "栖云宗·功能版",
+            "Survivor Canvas",
+            "PinePilot"
+          ],
+          "immediateState": {
+            "skills": {
+              "sj_yujian": 1,
+              "sj_arc": 1,
+              "sj_wanjian": 1
+            },
+            "books": [],
+            "evolutionRanks": {},
+            "evolutions": [],
+            "cores": 2024,
+            "researchPurchases": 0
+          }
+        },
+        {
+          "target": "返回宗门",
+          "x": 115.91666666666667,
+          "y": 530.0624999999999,
+          "enabled": true,
+          "pointer": "mouse",
+          "at": "2026-10-28T04:54:40.394Z",
+          "ancestors": [
+            "对话面板",
+            "栖云宗·功能版",
+            "Survivor Canvas",
+            "PinePilot"
+          ],
+          "immediateState": {
+            "skills": {
+              "sj_yujian": 1,
+              "sj_arc": 1,
+              "sj_wanjian": 1
+            },
+            "books": [],
+            "evolutionRanks": {},
+            "evolutions": [],
+            "cores": 2158,
+            "researchPurchases": 0
+          }
+        },
+        {
+          "target": "锁妖塔",
+          "x": 148.41666666666666,
+          "y": 735.0833333333333,
+          "enabled": true,
+          "pointer": "mouse",
+          "at": "2026-10-28T04:54:43.073Z",
+          "ancestors": [
+            "TowerMenu",
+            "栖云宗·功能版",
+            "Survivor Canvas",
+            "PinePilot"
+          ],
+          "immediateState": {
+            "skills": {
+              "sj_yujian": 1,
+              "sj_arc": 1,
+              "sj_wanjian": 1
+            },
+            "books": [],
+            "evolutionRanks": {},
+            "evolutions": [],
+            "cores": 2158,
+            "researchPurchases": 0
+          }
+        }
+      ],
+      "scrolls": [],
+      "screenshots": [
+        "ui-final-first-clear-390x844-loot-graded-drop-battlefield.png",
+        "ui-final-first-clear-390x844-loot-pause-counts-values.png",
+        "ui-final-first-clear-390x844-loot-reload-same-loot.png",
+        "ui-final-first-clear-390x844-loot-settlement-counts-values.png",
+        "ui-final-first-clear-390x844-loot-persisted-result.png"
+      ],
+      "pageErrors": [],
+      "console": [
+        {
+          "type": "warning",
+          "text": "[.WebGL-0x13c00437800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+        },
+        {
+          "type": "warning",
+          "text": "[.WebGL-0x13c00437800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+        },
+        {
+          "type": "warning",
+          "text": "[.WebGL-0x13c00437800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+        },
+        {
+          "type": "warning",
+          "text": "[.WebGL-0x13c00437800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (setting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.setFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "Setting window size is not supported."
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (setting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.setFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "Setting window size is not supported."
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (setting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.setFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "Setting window size is not supported."
+        }
+      ],
+      "httpErrors": [],
+      "requestFailures": [],
+      "servedAssets": [
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/polyfills.bundle.5adbf.js",
+          "status": 200,
+          "hash": "f1e4ced3322168d6b9915e782e4c1cf1055d75f66f2b38e7fcd60f48cf89082b"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/system.bundle.cc789.js",
+          "status": 200,
+          "hash": "5d1a25de07cc11276a6b1d6479cac7f12c0c561dd06941b8339e568c9d94f900"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/index.92628.js",
+          "status": 200,
+          "hash": "19c0023d820f80bcc43b94450088296be5139c232e6d7aef4122104bc7877321"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/application.b9045.js",
+          "status": 200,
+          "hash": "5b288ca8f276e779c2f5891e0181fa04faf7a3e3fdc26243bc0f0fa993bbb748"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/cocos-js/cc.c2df8.js",
+          "status": 200,
+          "hash": "a670bba566ce7e3a2c25e17b7eb104efc0463a62d85c3d4974d2be9b586eee89"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/chunks/bundle.e2cd5.js",
+          "status": 200,
+          "hash": "c0ab1af06c40484eba8e9d40042b2162a8355e8d8d1d914ea5a21d4d420dc1d5"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/assets/internal/index.4e53f.js",
+          "status": 200,
+          "hash": "d842bf596127320ad8cd42ce506a2817cd8a6402fbec6735e6b13af359a40757"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/assets/main/index.77af0.js",
+          "status": 200,
+          "hash": "873d426a53905196a7e1ee8be4d0057c0678a98d937a1a58538c40a9544ec833"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/polyfills.bundle.5adbf.js",
+          "status": 200,
+          "hash": "f1e4ced3322168d6b9915e782e4c1cf1055d75f66f2b38e7fcd60f48cf89082b"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/system.bundle.cc789.js",
+          "status": 200,
+          "hash": "5d1a25de07cc11276a6b1d6479cac7f12c0c561dd06941b8339e568c9d94f900"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/index.92628.js",
+          "status": 200,
+          "hash": "19c0023d820f80bcc43b94450088296be5139c232e6d7aef4122104bc7877321"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/application.b9045.js",
+          "status": 200,
+          "hash": "5b288ca8f276e779c2f5891e0181fa04faf7a3e3fdc26243bc0f0fa993bbb748"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/cocos-js/cc.c2df8.js",
+          "status": 200,
+          "hash": "a670bba566ce7e3a2c25e17b7eb104efc0463a62d85c3d4974d2be9b586eee89"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/chunks/bundle.e2cd5.js",
+          "status": 200,
+          "hash": "c0ab1af06c40484eba8e9d40042b2162a8355e8d8d1d914ea5a21d4d420dc1d5"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/assets/internal/index.4e53f.js",
+          "status": 200,
+          "hash": "d842bf596127320ad8cd42ce506a2817cd8a6402fbec6735e6b13af359a40757"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/assets/main/index.77af0.js",
+          "status": 200,
+          "hash": "873d426a53905196a7e1ee8be4d0057c0678a98d937a1a58538c40a9544ec833"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/polyfills.bundle.5adbf.js",
+          "status": 200,
+          "hash": "f1e4ced3322168d6b9915e782e4c1cf1055d75f66f2b38e7fcd60f48cf89082b"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/system.bundle.cc789.js",
+          "status": 200,
+          "hash": "5d1a25de07cc11276a6b1d6479cac7f12c0c561dd06941b8339e568c9d94f900"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/index.92628.js",
+          "status": 200,
+          "hash": "19c0023d820f80bcc43b94450088296be5139c232e6d7aef4122104bc7877321"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/application.b9045.js",
+          "status": 200,
+          "hash": "5b288ca8f276e779c2f5891e0181fa04faf7a3e3fdc26243bc0f0fa993bbb748"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/cocos-js/cc.c2df8.js",
+          "status": 200,
+          "hash": "a670bba566ce7e3a2c25e17b7eb104efc0463a62d85c3d4974d2be9b586eee89"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/chunks/bundle.e2cd5.js",
+          "status": 200,
+          "hash": "c0ab1af06c40484eba8e9d40042b2162a8355e8d8d1d914ea5a21d4d420dc1d5"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/assets/internal/index.4e53f.js",
+          "status": 200,
+          "hash": "d842bf596127320ad8cd42ce506a2817cd8a6402fbec6735e6b13af359a40757"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/assets/main/index.77af0.js",
+          "status": 200,
+          "hash": "873d426a53905196a7e1ee8be4d0057c0678a98d937a1a58538c40a9544ec833"
+        }
+      ],
+      "uiTextFailures": [],
+      "ok": true,
+      "build": {
+        "scriptURLs": [
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/polyfills.bundle.5adbf.js",
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/system.bundle.cc789.js",
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/import-map.14612.json"
+        ],
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.8059.12 Safari/537.36",
+        "canvas": {
+          "width": 390,
+          "height": 844
+        },
+        "entryAsset": {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/index.92628.js",
+          "status": 200,
+          "hash": "19c0023d820f80bcc43b94450088296be5139c232e6d7aef4122104bc7877321"
+        }
+      },
+      "kind": "ARTIFICIAL CAMP + ISOLATED PLAYTEST ASSIST + REAL COMBAT STEPPING — UI ONLY, NOT BALANCE"
+    }
+  ],
+  "failures": 0,
+  "visualReview": "PENDING: inspect screenshots, especially connector visibility and graded-drop legibility.",
+  "finishedAt": "2026-10-28T04:54:43.475Z"
+}

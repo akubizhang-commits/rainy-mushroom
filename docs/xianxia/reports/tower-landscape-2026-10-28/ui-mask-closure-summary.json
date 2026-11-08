@@ -1,0 +1,116 @@
+{
+  "status": "PASS_VIS01_CLOSED",
+  "counts": {
+    "cases": 3,
+    "passed": 3,
+    "checks": 7,
+    "clicks": 24,
+    "drags": 3,
+    "releases": 3,
+    "screenshots": 6
+  },
+  "mainBundle": {
+    "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/assets/main/index.02690.js",
+    "sha256": "02d66ceb5c716e0a6d05149805e361c02ae0c306842e7dc1886a792a179af2cc"
+  },
+  "changedSources": [
+    "cocos-pilot/assets/scripts/TowerView.ts"
+  ],
+  "pixels": [
+    {
+      "size": "1920x280",
+      "before": "/Users/zhangnu/WeChatProjects/rainy-mushroom/docs/xianxia/reports/tower-landscape-2026-10-28/ui-delivery-mask-1920x280-mask-letterbox-before-world.png",
+      "after": "/Users/zhangnu/WeChatProjects/rainy-mushroom/docs/xianxia/reports/tower-landscape-2026-10-28/ui-delivery-mask-1920x280-mask-letterbox-wall-clipped.png",
+      "bands": [
+        {
+          "side": "left",
+          "rect": [
+            0,
+            0,
+            638,
+            280
+          ],
+          "pixels": 178640,
+          "changedPixelsBeyondOneRGBLevel": 0,
+          "maximumRGBDifference": 0
+        },
+        {
+          "side": "right",
+          "rect": [
+            1282,
+            0,
+            1920,
+            280
+          ],
+          "pixels": 178640,
+          "changedPixelsBeyondOneRGBLevel": 0,
+          "maximumRGBDifference": 0
+        }
+      ],
+      "examinedPixels": 357280,
+      "changedPixels": 0
+    },
+    {
+      "size": "3840x1080",
+      "before": "/Users/zhangnu/WeChatProjects/rainy-mushroom/docs/xianxia/reports/tower-landscape-2026-10-28/ui-delivery-mask-3840x1080-mask-letterbox-before-world.png",
+      "after": "/Users/zhangnu/WeChatProjects/rainy-mushroom/docs/xianxia/reports/tower-landscape-2026-10-28/ui-delivery-mask-3840x1080-mask-letterbox-wall-clipped.png",
+      "bands": [
+        {
+          "side": "left",
+          "rect": [
+            0,
+            0,
+            683,
+            1080
+          ],
+          "pixels": 737640,
+          "changedPixelsBeyondOneRGBLevel": 0,
+          "maximumRGBDifference": 0
+        },
+        {
+          "side": "right",
+          "rect": [
+            3157,
+            0,
+            3840,
+            1080
+          ],
+          "pixels": 737640,
+          "changedPixelsBeyondOneRGBLevel": 0,
+          "maximumRGBDifference": 0
+        }
+      ],
+      "examinedPixels": 1475280,
+      "changedPixels": 0
+    }
+  ],
+  "errors": {
+    "page": 0,
+    "console": 0,
+    "http": 0,
+    "request": 0,
+    "invalidLabels": 0
+  },
+  "screenshots": [
+    "ui-delivery-mask-844x390-mask-mask-tree-input.png",
+    "ui-delivery-mask-844x390-mask-mask-fixed-stick.png",
+    "ui-delivery-mask-1920x280-mask-letterbox-before-world.png",
+    "ui-delivery-mask-1920x280-mask-letterbox-wall-clipped.png",
+    "ui-delivery-mask-3840x1080-mask-letterbox-before-world.png",
+    "ui-delivery-mask-3840x1080-mask-letterbox-wall-clipped.png"
+  ],
+  "parentVisualReview": "Parent confirmed 1920x280 masked wall screenshot has no ground/wall in letterbox and approved VIS-01 closure.",
+  "knownOpenTrueFindings": 0,
+  "source": "ui-browser-delivery-mask.json",
+  "sourceBridge": {
+    "previousBundle": {
+      "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/assets/main/index.9d6d8.js",
+      "sha256": "81f0f42bd6d98f8c745cdf625a2da2a9a9b1b0fb2cea2c7ac15b34a302c7dee8"
+    },
+    "changedTrackedProductionSources": [
+      "cocos-pilot/assets/scripts/TowerView.ts"
+    ],
+    "change": "TowerView root adds Mask; existing UITransform logical dimensions still update on render.",
+    "verification": "Two extreme-frame pixel comparisons and one 844x390 tree/stick input case."
+  }
+}

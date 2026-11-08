@@ -56,7 +56,7 @@ test('forging cost ladder and dismantle cannot generate contribution',()=>{
  for(const tier of ['fa','bao','ling'])for(const category of ['weapon','armor','ring']){
   const rows=[1,2,3,4].map(q=>forging.forgingRecipe(`${category}:${tier}:q${q}`))
   assert.ok(rows.every(r=>r.contribution===0));assert.ok(rows.every((r,i)=>!i||r.spiritStones>rows[i-1].spiritStones))
-  assert.equal(rows[3].ingredients.find(x=>x.id===`forge_core_${tier}`).count,2)
+  assert.equal(rows[3].ingredients.find(x=>x.id===`forge_core_${tier}`).count,tier==='ling'?2:1)
  }
  for(const r of forging.FORGING_RECIPES)assert.equal(r.contribution,0)
 })
@@ -98,8 +98,8 @@ test('Boss rare reward survives checkpoint reload and settlement without duplica
  const reload=new TowerCampaignStore(disk,0);assert.equal(reload.readOnly,false)
  assert.equal(reload.act(action,0).ok,true);assert.equal(reload.state.pills.forge_core_fa,amount+1)
  assert.equal(reload.act({type:'finishFloor',snapshot},0).ok,true)
- assert.equal(reload.state.pills.forge_core_fa,amount+1)
- assert.deepEqual(reload.state.lastResult.materials.find(r=>r.id==='forge_core_fa'),{id:'forge_core_fa',count:1})
+ assert.equal(reload.state.pills.forge_core_fa,amount+2,'one boss drop plus one first-clear reward')
+ assert.deepEqual(reload.state.lastResult.materials.find(r=>r.id==='forge_core_fa'),{id:'forge_core_fa',count:2})
  assert.equal(reload.act({type:'finishFloor',snapshot},0).reason,'wrong-attempt')
 })
 test('removed wish action is rejected without changing state or disk',()=>{
@@ -124,12 +124,12 @@ test('only top quality uses 70/30 weights, with exact sampling boundaries',()=>{
   }
  }
 })
-test('fa supreme fee is entirely stones; common and rare ingredients remain intact',()=>{
+test('fa supreme fee is entirely stones and uses the approved stage-accessible ingredients',()=>{
  for(const category of ['weapon','armor','ring']){
   const r=forging.forgingRecipe(`${category}:fa:q4`)
-  assert.equal(r.contribution,0);assert.equal(r.spiritStones,2080)
-  assert.deepEqual(r.ingredients.slice(0,3).map(x=>x.count),[80,40,40])
-  assert.equal(r.ingredients.find(x=>x.id==='forge_hanjingsha').count,64)
-  assert.equal(r.ingredients.find(x=>x.id==='forge_core_fa').count,2)
+  assert.equal(r.contribution,0);assert.equal(r.spiritStones,1200)
+  assert.deepEqual(r.ingredients.slice(0,3).map(x=>x.count),[32,16,16])
+  assert.equal(r.ingredients.find(x=>x.id==='forge_hanjingsha').count,28)
+  assert.equal(r.ingredients.find(x=>x.id==='forge_core_fa').count,1)
  }
 })

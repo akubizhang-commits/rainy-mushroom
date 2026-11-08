@@ -47,7 +47,7 @@ const state=()=>{
    await page.waitForFunction(()=>!window.__towerTest.host.host.assetLoading.blocked,{},{timeout:90000});
    const loaded=await page.evaluate(()=>{
     const walk=n=>[n,...n.children.flatMap(walk)],nodes=walk(window.__towerTest.host.root);
-    return ['落云宗已确认母稿','HUD.PaperArtwork','HUD.ProfessionArtwork'].map(name=>({name,ready:!!nodes.find(n=>n.name===name)?.getComponent('cc.Sprite')?.spriteFrame}));
+    return ['霁云宗已确认母稿','HUD.PaperArtwork','HUD.ProfessionArtwork'].map(name=>({name,ready:!!nodes.find(n=>n.name===name)?.getComponent('cc.Sprite')?.spriteFrame}));
    });
    assert.ok(loaded.every(x=>x.ready));await page.screenshot({path:path.join(out,`hall-${viewport.width}.png`)});
    await page.evaluate(()=>window.__towerTest.enter(1));

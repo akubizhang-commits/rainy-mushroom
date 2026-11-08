@@ -1,4 +1,4 @@
-import { BOOK_COLORS } from './TowerMenuChrome';
+import { BOOK_COLORS, drawMenuBack, isMenuBack } from './TowerMenuChrome';
 import {towerResources as resources} from './TowerResources';
 import {
  BlockInputEvents, Button, Color, EditBox, EventKeyboard, EventTouch, Graphics, ImageAsset,
@@ -12,6 +12,8 @@ import {
 const C = BOOK_COLORS;
 const MEMORY_KEY = 'xianxia.library.reading.v1';
 const ART_ROOT = 'tower-library/';
+// Lore book and its catalogue rows reuse the accepted skill-book resource icon.
+const LORE_ICON = 'tower-stones/resource_skill_book';
 const ROOM_ART = ['library_interior_bg', 'library_book_pills', 'library_book_weapons',
  'library_book_equipment', 'library_jade_stand'];
 const volumes: any[] = LIBRARY_VOLUMES as any;
@@ -212,6 +214,9 @@ export class TowerLibraryPanel {
   primary = false, enabled = true, height = 72, font = 25) {
   const node = this.node(text, parent, Math.max(72, width), Math.max(72, height));
   node.setPosition(x, y);
+  if (isMenuBack(text)) {
+   drawMenuBack(node, text, enabled); this.click(node, run, enabled); return node;
+  }
   this.box(node, !enabled ? C.disabled : primary ? C.jade : C.raised, primary && enabled ? C.jade : C.edge);
   this.label(node, text, 0, 0, width - 20, height - 8, font, !enabled ? C.quiet : primary ? C.paper : C.ink, true);
   this.click(node, run, enabled);
@@ -310,30 +315,26 @@ export class TowerLibraryPanel {
   const header = this.node('藏经阁题栏', this.root, this.width - 64, 88);
   header.setPosition(0, top - 64); this.box(header, '#FBF9F1EB');
   const back = this.node('返回主峰', header, 168, 72); back.setPosition(-this.width / 2 + 130, 0);
-  const arrow = back.addComponent(Graphics); arrow.fillColor = new Color(C.jade);
-  arrow.moveTo(-53, 10); arrow.lineTo(-51, 8); arrow.lineTo(-59, 0);
-  arrow.lineTo(-51, -8); arrow.lineTo(-53, -10); arrow.lineTo(-63, 0); arrow.close(); arrow.fill();
-  this.label(back, '主峰', 12, 0, 96, 48, 26, C.jade, true); this.click(back, this.options.onHome);
+  drawMenuBack(back, '主峰'); this.click(back, this.options.onHome);
   this.label(header, '藏经阁', 0, 0, 320, 60, 34, C.ink, true).isBold = true;
   this.button(header, '典籍目录', this.width / 2 - 154, 0, 196, () => this.openCatalog());
   const cardHeight = this.compact ? 262 : 312;
   const choices = [
    ...volumes.map(volume => ({
-    ...volume, icon: volume.id === 'pills' ? 'tower-stones/pill_huichun'
+    ...volume, icon: volume.id === 'lore' ? LORE_ICON : volume.id === 'pills' ? 'tower-stones/pill_huichun'
      : volume.id === 'weapons' ? 'tower-equipment/eq_sword_suwen' : volume.id === 'materials' ? 'tower-stones/pill_forge_lingyu' : 'tower-equipment/eq_ring_wenpo',
     run: () => this.openVolume(volume.id),
    })),
-   { id: 'skills', name: '功法修习', subtitle: '学习 · 加点 · 重修', icon: 'tower-stones/resource_skill_book', run: this.options.onSkills },
   ];
   const gap = 22, cardWidth = (this.width - 108 - gap * (choices.length - 1)) / choices.length;
-  const bookArt = { pills: ROOM_ART[1], weapons: ROOM_ART[2], equipment: ROOM_ART[3], skills: ROOM_ART[4] };
+  const bookArt = { pills: ROOM_ART[1], weapons: ROOM_ART[2], equipment: ROOM_ART[3] };
   choices.forEach((choice, index) => {
-   const card = this.node(choice.id === 'skills' ? '功法修习入口' : `打开${choice.name}`, this.root, cardWidth, cardHeight);
+   const card = this.node(`打开${choice.name}`, this.root, cardWidth, cardHeight);
    card.setPosition((index - (choices.length - 1) / 2) * (cardWidth + gap), -20);
    if (this.roomArtReady && bookArt[choice.id]) {
     const artHeight = cardHeight - 94;
     this.image(card, ART_ROOT + bookArt[choice.id],
-     choice.id === 'skills' ? artHeight * 4 / 3 : artHeight * 2 / 3, artHeight, 0, 42);
+     artHeight * 2 / 3, artHeight, 0, 42);
     const plate = this.node('典籍名称底板', card, cardWidth, 96);
     plate.setPosition(0, -cardHeight / 2 + 48); this.box(plate, '#FBF9F1ED');
    } else {
@@ -341,7 +342,11 @@ export class TowerLibraryPanel {
     this.image(card, choice.icon, 128, 128, 0, this.compact ? 42 : 54);
    }
    this.label(card, choice.name, 0, -cardHeight / 2 + 83, cardWidth - 24, 48, 30, C.jade, true).isBold = true;
-   this.label(card, choice.subtitle, 0, -cardHeight / 2 + 36, cardWidth - 24, 38, 22, C.muted, true);
+   const subtitleWidth = cardWidth - 24;
+   const subtitleUnits = Array.from(choice.subtitle as string).reduce((sum, char) => sum + (/[\x00-\x7f]/.test(char) ? .65 : 1), 0);
+   const subtitle = this.label(card, choice.subtitle, 0, -cardHeight / 2 + 36,
+    subtitleWidth, 38, Math.min(22, Math.floor(subtitleWidth / subtitleUnits)), C.muted, true);
+   subtitle.string = choice.subtitle; subtitle.enableWrapText = false;
    this.click(card, choice.run);
   });
   this.label(this.root, this.roomArtReady ? '选取典籍查阅，功法由玉简传习。'
@@ -383,8 +388,8 @@ export class TowerLibraryPanel {
  private renderCatalog() {
   const frame = this.frame('典籍目录'), w = this.width - 64, h = this.height - 36;
   const top = h / 2, leftWidth = 238, divider = -w / 2 + leftWidth;
-  this.label(frame, '典籍目录', -w / 2 + 162, top - 48, 264, 60, 32, C.ink).isBold = true;
-  this.button(frame, this.returnEntry ? '返回书页' : '返回馆内', w / 2 - 122, top - 48, 196, () => this.dismiss());
+  this.label(frame, '典籍目录', 0, top - 48, 264, 60, 32, C.ink, true).isBold = true;
+  this.button(frame, this.returnEntry ? '返回书页' : '返回馆内', -w / 2 + 92, top - 48, 136, () => this.dismiss());
   const left = this.node('馆藏分类', frame, leftWidth - 24, h - 122);
   left.setPosition(-w / 2 + leftWidth / 2, -36); this.box(left, C.raised, C.raised, 6);
   volumes.forEach((volume, index) => this.button(left, volume.name, 0, (h - 122) / 2 - 54 - index * 88,
@@ -444,7 +449,7 @@ export class TowerLibraryPanel {
    const row = this.node(entry.name, flow.content, flow.width, rowHeight);
    row.setPosition(0, -(rowHeight / 2 + index * (rowHeight + gap)));
    this.box(row, C.paper, '#CFD5C7', 6);
-   this.icon(row, entry, 72, -flow.width / 2 + 52);
+   this.icon(row, entry.volume === 'lore' ? { icon: LORE_ICON } : entry, 72, -flow.width / 2 + 52);
    this.label(row, entry.name, 35, 19, flow.width - 144, 44, 27, C.ink).isBold = true;
    const remembered = this.memory[entry.volume] === entry.id ? ' · 上次阅读' : '';
    this.label(row, `${entry.category}${remembered}`, 35, -22, flow.width - 144, 34, 21, C.muted);
@@ -536,22 +541,27 @@ export class TowerLibraryPanel {
   leftText(entry.category, bodyFont, C.muted);
   leftText(entry.name, this.compact ? 32 : 30, C.ink, true);
   leftText(detail.summary, bodyFont, C.muted, false, 8);
-  const loreHeight = this.textHeight(entry.description, innerWidth, bodyFont);
-  const loreHeadingHeight = this.textHeight('典籍小记', innerWidth, bodyFont);
-  const portraitPath = `tower-library-items/${entry.id}`;
-  const hasPortrait = entry.icon && resources.getInfoWithPath(portraitPath, ImageAsset);
-  const portraitSize = Math.max(32, Math.min(hasPortrait ? (this.compact ? 200 : 320) : 96,
-   innerHeight - leftY - loreHeight - loreHeadingHeight - 22));
-  if (hasPortrait) this.image(left, portraitPath, portraitSize, portraitSize, 0, innerHeight / 2 - leftY - portraitSize / 2);
-  else this.icon(left, entry, portraitSize, 0, innerHeight / 2 - leftY - portraitSize / 2);
-  leftY += portraitSize + 10;
-  leftText('典籍小记', bodyFont, C.jade, true, 4);
+  // World-lore pages are prose: no item portrait, the body is the overview.
+  if (!detail.lore) {
+   const loreHeight = this.textHeight(entry.description, innerWidth, bodyFont);
+   const loreHeadingHeight = this.textHeight('典籍小记', innerWidth, bodyFont);
+   const portraitPath = `tower-library-items/${entry.id}`;
+   const hasPortrait = entry.icon && resources.getInfoWithPath(portraitPath, ImageAsset);
+   const portraitSize = Math.max(32, Math.min(hasPortrait ? (this.compact ? 200 : 320) : 96,
+    innerHeight - leftY - loreHeight - loreHeadingHeight - 22));
+   if (hasPortrait) this.image(left, portraitPath, portraitSize, portraitSize, 0, innerHeight / 2 - leftY - portraitSize / 2);
+   else this.icon(left, entry, portraitSize, 0, innerHeight / 2 - leftY - portraitSize / 2);
+   leftY += portraitSize + 10;
+  } else leftY += 10;
+  leftText(detail.lore ? '概述' : '典籍小记', bodyFont, C.jade, true, 4);
   leftText(entry.description, bodyFont, C.muted, false, 0);
 
   let rightY = 0;
-  const requirementHeight = this.textHeight(detail.requirement, innerWidth, bodyFont);
-  this.label(right, detail.requirement, 0, innerHeight / 2 - requirementHeight / 2,
-   innerWidth, requirementHeight, bodyFont, C.muted); rightY += requirementHeight + 6;
+  if (detail.requirement) {
+   const requirementHeight = this.textHeight(detail.requirement, innerWidth, bodyFont);
+   this.label(right, detail.requirement, 0, innerHeight / 2 - requirementHeight / 2,
+    innerWidth, requirementHeight, bodyFont, C.muted); rightY += requirementHeight + 6;
+  }
   if (entry.qualities.length > 1) {
    const gap = 8, tabWidth = (innerWidth - (entry.qualities.length - 1) * gap) / entry.qualities.length;
    const names = ['不入品', '下品', '中品', '上品', '极品'];
@@ -561,7 +571,7 @@ export class TowerLibraryPanel {
    rightY += 80;
   }
   type Row = { text: string; height: number; title: boolean };
-  const sections: {title: string; lines: string[]}[] = [
+  const sections: {title: string; lines: string[]}[] = detail.sections ? detail.sections : [
    { title: entry.qualities.length > 1 ? '可出现的属性范围' : '主要效果', lines: detail.effects },
    { title: entry.volume === 'pills' ? '服用条件' : entry.volume === 'materials' ? '使用条件' : '生效条件', lines: detail.conditions },
    { title: '使用提示', lines: detail.tips },

@@ -89,8 +89,9 @@ test('a portrait charge cropped by landscape recovers without damage and restore
   }
   const enemy = run.state.enemies.find(e => e.family === 'boar' && e.role === 'normal')
   assert.ok(enemy)
-  enemy.x = run.state.player.x; enemy.y = run.state.player.y + 250
+  enemy.x = run.state.player.x; enemy.y = run.state.player.y + 220
   enemy.ai.entryUntil = 0; enemy.ai.graceUntil = 0; enemy.ai.readyAt = 0
+  enemy.ai.cooldowns = {} // 83号：跳过普通怪出生4秒的首次技能等待
   run.setViewport(viewport(run.state.player, 390, 844))
   run.advance(STEP)
   assert.equal(enemy.ai.mode, 'windup')
@@ -126,6 +127,7 @@ function snakeAtViewportEdge() {
   // camera still crops this shot before its final three windup ticks.
   enemy.y = rect.ymax - enemy.radius - 8
   enemy.ai.entryUntil = 0; enemy.ai.graceUntil = 0; enemy.ai.readyAt = 0
+  enemy.ai.cooldowns = {} // 83号：跳过普通怪出生4秒的首次技能等待
   run.setViewport(rect)
   run.advance(STEP)
   run.advance(.8)

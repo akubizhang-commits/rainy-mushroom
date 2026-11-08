@@ -16,7 +16,7 @@ test('empty bonuses are numeric zero and physical/magic crit include the same cu
 })
 
 test('summary aggregates bone, ring and weapon without applying conditional bonuses globally',()=>{
- const l=loadout();l.weapon=createFixedWeapon('eq_sword_guiyan','weapon-1');l.passive={sj_bone:4,sj_heart:4,sj_gate:4}
+ const l=loadout();l.weapon=createFixedWeapon('eq_sword_guiyan','weapon-1');l.passive={sj_bone:4,sj_heart:4,sj_gate:2}
  const d=RINGS.find(d=>d.tier==='ling'&&d.quality===4);l.ring=createFixedEquipment(d.id,'ring-1')
  const a=characterCombatAttributes(l),r=ringDamageModifiers(l.ring),p=weaponAttackProfile(l.weapon)
  near(a.physicalCritChance,Math.min(1,.28+r.critChance+(l.weapon.affixes.find(a=>a.type==='critChance')?.value??0)/100));near(a.magicCritChance,a.physicalCritChance)

@@ -26,3 +26,15 @@ test('owner death, cancelled zones and destroyed view cannot leave webs or late 
  const late=setup();late.art.draw(state(0),{x:0,y:0});late.art.destroy();late.load();assert.equal(late.image.refs,0);
  const failed=setup();failed.art.draw(state(0),{x:0,y:0});failed.load(Error('missing'));failed.art.draw(state(1.3),{x:0,y:0});assert.equal(failed.art.webs.size,0);
 });
+test('web releases from the rendered hand or mouth and freezes that origin in world space',()=>{
+ const f=setup();f.art.draw(state(0),{x:10,y:20});f.load();
+ const s=state(1.3-.35),before=JSON.stringify(s);
+ f.art.draw(s,{x:10,y:20},()=>({x:-110,y:120}));
+ const w=f.art.webs.get('z');
+ assert.ok(Math.abs(w.node.position.x+110)<1e-8);assert.ok(Math.abs(w.node.position.y-120)<1e-8);
+ assert.equal(JSON.stringify(s),before);
+ f.art.draw(state(1.3-.35),{x:30,y:40},()=>({x:900,y:900}));
+ assert.ok(Math.abs(w.node.position.x+130)<1e-8);assert.ok(Math.abs(w.node.position.y-100)<1e-8);
+ f.art.draw(state(1.3),{x:30,y:40},()=>({x:900,y:900}));
+ assert.ok(Math.abs(w.node.position.x-20)<1e-8);assert.ok(Math.abs(w.node.position.y+40)<1e-8);
+});

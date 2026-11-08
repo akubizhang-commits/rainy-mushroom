@@ -3,7 +3,7 @@ import assert from 'node:assert/strict'
 import { TowerCampaignStore, combatLoadout } from '../js/xianxia/TowerCampaign.js'
 import { TowerRun, stats } from '../js/xianxia/TowerRun.js'
 import { rollWeapon } from '../js/xianxia/TowerWeapons.js'
-import { cultivationAt } from '../js/xianxia/TowerProfile.js'
+import { cultivationAt, cultivationLevelXp } from '../js/xianxia/TowerProfile.js'
 import { FLOORS, FLOOR01, ARCHETYPES } from '../js/xianxia/TowerContent.js'
 import { towerEnemyStats } from '../js/xianxia/TowerEnemyStats.js'
 import { towerKillXp } from '../js/xianxia/TowerCultivationRewards.js'
@@ -25,15 +25,14 @@ function shots(rank, targets=2, weapon=null) {
     source:'sj_yujian',direct:true,castContext:shot.castContext})
   return run.state.enemies.map(e=>10000-e.hp)
 }
-test('fan equipment adds bounded damage without promising a kill-count breakpoint',()=>{
+test('fan equipment adds its fixed attack and strength without promising a kill-count breakpoint',()=>{
   const state=fresh(), bare=fresh();bare.loadouts[0].weaponId=''
-  const weapon=rollWeapon('fan',4,()=>.999999,'test-fan')
+  const weapon=rollWeapon('fan',1,()=>.999999,'test-fan')
   state.weapons[weapon.id]=weapon;state.loadouts[0].weaponId=weapon.id
   const equipped=stats(0,combatLoadout(state)).attack
-  assert.ok(equipped>105)
-  assert.ok(equipped/105<=1.06)
-  assert.equal(stats(0,combatLoadout(bare)).attack,100)
-  assert.equal(stats(0,combatLoadout(fresh())).attack,105)
+  assert.equal(equipped,129)
+  assert.equal(stats(0,combatLoadout(bare)).attack,110)
+  assert.equal(stats(0,combatLoadout(fresh())).attack,115)
 })
 test('rank three increases stored damage and concentrates all swords on a sole target',()=>{
   const before=shots(2),after=shots(3),solo=shots(3,1)
@@ -56,12 +55,12 @@ test('nominal full-clear XP remains deterministic with the Foundation barrier at
   }
   assert.equal(cumulative,10920)
 })
-test('special skills share the realm gate regardless of previous choices or floor progress',()=>{
-  const state=fresh();state.xp=1485;state.clearedFloor=0
-  for(const id of ['sj_line','sj_shadow','sj_formation']){
+test('special skills use their own current level gates without floor prerequisites',()=>{
+  for(const [id,level] of [['sj_line',13],['sj_shadow',11],['sj_formation',17]]){
+    const state=fresh();state.xp=cultivationLevelXp(level);state.clearedFloor=0
     assert.equal(skillRequirement(state,id).ok,true)
-    assert.equal(skillPresentation(state,id).nextRequirement.characterLevel,10)
-    state.skills[id]=1;state.books.push(id)
+    assert.equal(skillPresentation(state,id).nextRequirement.characterLevel,level)
+    assert.equal(skillRequirement({...state,xp:cultivationLevelXp(level)-1},id).reason,'stage-locked')
   }
 })
 test('teaching waits for authored milestones and cannot be farmed with wave-one retries',()=>{

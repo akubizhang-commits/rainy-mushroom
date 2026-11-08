@@ -44,7 +44,7 @@ test('all armor and bare character recover in 120–180 seconds at every tested 
  }
 })
 test('critical eligibility is independent of direct-hit proc eligibility; inherited wounds never reroll',()=>{
- const l=base();l.passive={sj_heart:4,sj_mark:4,sj_gate:1}
+ const l=base();l.passive={sj_heart:4,sj_mark:1,sj_gate:1}
  const run=make(l),target={id:'crit-rule-target',x:100,y:0,hp:1e8,maxHp:1e8,radius:20}
  run.state.enemies.push(target)
  let rolls=0
@@ -57,7 +57,7 @@ test('critical eligibility is independent of direct-hit proc eligibility; inheri
   assert.equal(hit.critical,true)
   near(hit.damage,150)
   assert.equal(run.state.swordBursts?.length??0,0,'non-direct hits cannot recursively trigger burst')
-  assert.equal(target.woundBudget??0,0,'non-direct hits cannot create wounds')
+  assert.equal(target.scarDebuff,undefined,'periodic and derived damage cannot apply scar')
  }
  const start=rolls,before=target.hp,oldEffects=run.state.effects.length
  run._damageEnemy({target:target.id,source:'wound',damage:100,direct:false,scaled:true,damageParts:{physical:100,magic:0}})

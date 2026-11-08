@@ -1,3 +1,5 @@
+import {EQUIPMENT_RANGES} from '../js/xianxia/TowerEquipmentRanges.js'
+import {equipmentBaseAttributes} from '../js/xianxia/TowerEquipmentBases.js'
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import {WEAPONS,createFixedWeapon,validateWeapon,weaponFlatAttack,weaponDamageModifiers} from '../js/xianxia/TowerWeapons.js'
@@ -22,23 +24,24 @@ test('fixed weapons remain below4.5x standalone including fixed attack and every
   }
  }
 })
-test('fixed ring continuum envelope stays below20% standalone with full focus and cooldown acceleration',()=>{
- for(const d of EQUIPMENT.filter(d=>d.category==='ring')){
-  const r=item(d),m=ringDamageModifiers(r),R=ringCooldownReduction(r)
-  assert.ok(validateEquipment(r,'ring'));assert.equal(r.refine,0)
-  // For all native p in[0,1], crit extra q in[0,.5], focus z in[0,1],
-  // added numerator <= U+.5*C+K+X; denominator before CDR is at least1.
-  assert.ok((1+(m.skillDamage||0)+.5*m.critChance+m.critBonus+m.special)/(1-R)<=1.20+1e-10,d.id)
-  assert.ok(m.critChance<=.1&&m.critBonus<=.03&&R<=.025&&m.special<=.004)
- }
-})
-test('armor retains31%HP,17%reduction,1%recovery,20s cooldown and10% per-floor healing limits',()=>{
- for(const d of EQUIPMENT.filter(d=>d.category==='armor'&&d.quality)){
-  const a=item(d),m=armorModifiers(a)
-  assert.ok(validateEquipment(a,'armor'));assert.equal(a.refine,0)
-  assert.ok(m.hpBonus<=.31&&m.reduction<=.17&&m.healFraction<=.01,d.id)
-  assert.equal(m.healFloorCap,.1);assert.equal(m.healCooldown,20);assert.equal(m.healDelay,d.quality===4?2:3)
-  // A resource upper bound, not fictitious actual healing at full health.
-  assert.ok((1+m.hpBonus)*(1+m.healFloorCap)/(1-m.reduction)<=1.31*1.1/.83+1e-10)
+// The integer V2 contract defines component ranges, not the retired 20% ring envelope.
+test('ring offense and armor survival remain inside approved per-component ranges',()=>{
+ for(const d of EQUIPMENT.filter(d=>d.quality)){
+  const instance=item(d),base=equipmentBaseAttributes(d),range=EQUIPMENT_RANGES[`${d.tier}:${d.quality}`]
+  const slot=range[d.category],ordinary=range.ordinary
+  assert.ok(validateEquipment(instance,d.category))
+  const defense=base[d.category==='armor'?'physicalDefense':'magicDefense']
+  assert.ok(defense>=slot.defense[0]&&defense<=slot.defense[1],d.id)
+  const v=Object.fromEntries(instance.affixes.map(a=>[a.type,a.value]))
+  if(d.category==='ring'){
+   assert.ok(!(v.critChance&&v.cooldownReduction),d.id)
+   for(const [key,bounds] of [['critChance',ordinary.crit],['critBonus',ordinary.critBonus],['cooldownReduction',ordinary.cdr]])
+    if(v[key])assert.ok(v[key]>=bounds[0]&&v[key]<=bounds[1],d.id+'/'+key)
+  }else{
+   assert.equal(armorModifiers(instance).hpBonus,0)
+   assert.ok(base.vitality>=slot.vitality[0]&&base.vitality<=slot.vitality[1],d.id)
+   assert.ok(v.healthRegen>0&&v.healthRegen<=2.5,d.id)
+   assert.ok(!(v.attackSpeed&&v.castSpeed),d.id)
+  }
  }
 })

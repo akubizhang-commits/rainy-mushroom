@@ -21,18 +21,20 @@ const loadout=item=>({growthVersion:1,skillsInitialized:true,active:{},passive:{
   weaponQuality:0,weaponRefine:0,weaponFocusCount:0,armor:item,armorId:item.id})
 
 test('every same-quality armor pair trades survival for physical or magical primary emphasis, including top quality',()=>{
-  const points={fa:[3,5,7,9],bao:[8,12,16,20],ling:[20,28,36,44]}
-  for(const tier of Object.keys(points))for(let q=1;q<=4;q++){
+  // Integer budgets supersede the 2026-11-02 fractional primary-attribute table.
+  for(const tier of ['fa','bao','ling'])for(let q=1;q<=4;q++){
     const physical=armor(tier,q),magic=armor(tier,q,true)
     const p=gear.armorModifiers(physical),m=gear.armorModifiers(magic)
-    near(p.strength,points[tier][q-1]*(q===1?1:q===3?.8:.9));near(p.intelligence,q===3?points[tier][q-1]*.1:0)
-    near(m.intelligence,points[tier][q-1]*(q===1?1:q===3?.8:.9));near(m.strength,q===3?points[tier][q-1]*.1:0)
+    assert.ok(p.strength>p.intelligence)
+    assert.ok(m.intelligence>m.strength)
+    for(const item of [physical,magic])for(const n of Object.values(baseOf(item)))assert.ok(Number.isInteger(n)&&n>0)
     assert.ok(p.attackSpeed>0&&m.castSpeed>0)
     assert.equal(p.castSpeed,0);assert.equal(m.attackSpeed,0)
     assert.ok(p.physicalDefense>m.physicalDefense&&p.magicDefense===0&&m.magicDefense===0)
-    assert.ok(p.hpBonus>m.hpBonus&&p.healthRegen<m.healthRegen)
+    assert.equal(p.hpBonus,0);assert.equal(m.hpBonus,0)
+    assert.ok(baseOf(physical).vitality>0&&baseOf(magic).vitality>0)
     assert.equal(p.cooldownReduction,0)
-    assert.ok(m.cooldownReduction>0)
+    assert.equal(m.cooldownReduction,0)
     assert.match(gear.equipmentDescription(physical).join(' '),/力量 \+\d+.*普攻速度 \+/)
     assert.match(gear.equipmentDescription(magic).join(' '),/智力 \+\d+.*施法速度 \+/)
     for(const item of [physical,magic]){
@@ -42,14 +44,11 @@ test('every same-quality armor pair trades survival for physical or magical prim
     }
     if(q>1)for(const caster of [false,true]){
       const a=gear.armorModifiers(armor(tier,q-1,caster)),b=gear.armorModifiers(armor(tier,q,caster))
-      for(const key of ['hpBonus','physicalDefense','healthRegen'])
-        assert.ok(b[key]>a[key],`${tier}/${q}/${caster}/${key}`)
+      for(const key of ['physicalDefense','vitality'])
+        assert.ok((key==='vitality'?baseOf(armor(tier,q,caster))[key]:b[key])>(key==='vitality'?baseOf(armor(tier,q-1,caster))[key]:a[key]),`${tier}/${q}/${caster}/${key}`)
     }
   }
-  // Actual sacrifice against the former ling-middle defensive budget.
-  const p=gear.armorModifiers(armor('ling',2)),m=gear.armorModifiers(armor('ling',2,true))
-  assert.ok(p.hpBonus<.1625&&m.hpBonus<.15)
-  assert.ok(p.physicalDefense<110.79&&m.magicDefense<103.85)
+
 })
 
 test('fixed primary attributes aggregate once after cultivation and disappear when armor is removed',()=>{
@@ -126,7 +125,7 @@ test('actual released physical skill favors strength; hybrid settlement increase
   for(const caster of [false,true]){
     const {run,enemy}=fixture(armor('ling',4,caster),{sj_line:1})
     // Durable authored target to measure full hits, rather than overkill capped HP.
-    enemy.hp=enemy.maxHp=1e8;enemy.x=run.state.player.x+140
+    enemy.physicalDefense=enemy.magicDefense=0;enemy.hp=enemy.maxHp=1e8;enemy.x=run.state.player.x+140
     run.state.cooldowns.sj_line=0
     let hit
     for(let i=0;i<120&&!hit;i++){
@@ -140,7 +139,7 @@ test('actual released physical skill favors strength; hybrid settlement increase
     run._damageEnemy({target:enemy.id,source:'sj_shadow',damage:physical,direct:true,castContext:context})
     const hybrid=run.state.effects.findLast(e=>e.kind==='hit'&&e.source==='sj_shadow')
     near(hybrid.damageParts.physical,physical/2);near(hybrid.damageParts.magic,magic/2)
-    near(hybrid.damageParts.physical-hybrid.damageParts.magic,((baseOf(run.state.loadout.armor).strength??0)-(baseOf(run.state.loadout.armor).intelligence??0))/2)
+    near(hybrid.damageParts.physical-hybrid.damageParts.magic,(a.strength-a.intelligence)/2)
   }
   assert.ok(observed[0]>observed[1])
 })
@@ -175,7 +174,8 @@ test('obsolete armor schema resets only the campaign key and a failed reset leav
     const disk={getItem:k=>records.get(k)??null,setItem:(k,v)=>records.set(k,v)}
     const store=new TowerCampaignStore(disk,0)
     assert.ok(store.act({type:'unlockFloor',floor:2},0).ok===false) // no unauthorized grant
-    // Create the first legitimate current record through the store.
+    assert.ok(store.act({type:'sync'},0).ok)
+    const currentSchema=JSON.parse(records.get(TOWER_CAMPAIGN_KEY)).schema
     const current={format:'xianxia-sect-tower-campaign',schema:50,data:'obsolete',checksum:'obsolete'}
     const old=JSON.stringify(current);records.set(TOWER_CAMPAIGN_KEY,old)
     const reloaded=new TowerCampaignStore({...disk,setItem:(k,v)=>{if(fail)throw Error('disk full');records.set(k,v)}},0)
@@ -183,7 +183,7 @@ test('obsolete armor schema resets only the campaign key and a failed reset leav
     if(fail){assert.equal(reloaded.error,'save-failed');assert.equal(records.get(TOWER_CAMPAIGN_KEY),old)}
     else {
       assert.equal(reloaded.error,'');assert.equal(reloaded.migrationReport?.reset,true)
-      assert.equal(JSON.parse(records.get(TOWER_CAMPAIGN_KEY)).schema,58)
+      assert.equal(JSON.parse(records.get(TOWER_CAMPAIGN_KEY)).schema,currentSchema)
       assert.deepEqual(new TowerCampaignStore(disk,0).state,reloaded.state)
     }
   }

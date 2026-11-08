@@ -22,6 +22,12 @@ def positive(value):
 
 def validate_monster_scaling(data):
     floors, archetypes = data["FLOORS"], data["ARCHETYPES"]
+    baseline = data["MONSTER_RANK_BASELINE"]
+    assert baseline["version"] == 2
+    elite_hp = baseline["elite_hp_multiplier_by_rank"]
+    assert len(elite_hp) == 10 and elite_hp[0] == 0
+    assert all(positive(value) and value > 1 for value in elite_hp[1:])
+    assert positive(baseline["elite_damage_multiplier"]) and baseline["elite_damage_multiplier"] > 1
     assert [f["floor"] for f in floors] == list(range(1, 10)), "Expected nine ordered floors"
     ids = {a["id"] for a in archetypes}
     assert len(ids) == len(archetypes), "Duplicate archetype IDs"
@@ -45,6 +51,12 @@ def validate_monster_scaling(data):
             assert all(group["archetype"] in ids for group in wave["enemy_groups"])
     first = floors[0]["floor_stat_scale"]
     assert data["FLOOR01"]["floor_stat_scale"] == first
+    canonical = {a["id"]: a for a in archetypes}
+    for id, alias in data["FLOOR01"]["enemies"].items():
+        assert id in canonical, f"Unknown first-floor alias: {id}"
+        assert positive(alias.get("body_radius")), f"Invalid first-floor body_radius: {id}"
+        assert alias == {**canonical[id], "body_radius": alias["body_radius"]}, \
+            f"First-floor alias differs from canonical archetype: {id}"
     boss = data["FLOOR01_BOSS"]
     boar = next(a for a in archetypes if a["id"] == boss["id"])
     assert boss["stats_resolved"] is True

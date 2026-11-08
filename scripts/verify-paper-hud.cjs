@@ -31,7 +31,7 @@ const types = {'.html':'text/html','.js':'text/javascript','.json':'application/
     window.qaWalk = n => [n,...n.children.flatMap(window.qaWalk)];
     window.qaFind = name => window.qaWalk(window.__towerTest.host.root).find(n=>n.name===name&&n.activeInHierarchy);
    });
-   await page.waitForFunction(() => window.qaFind('HUD.PaperArtwork')?.getComponent('cc.Sprite')?.spriteFrame && window.qaFind('落云宗已确认母稿')?.getComponent('cc.Sprite')?.spriteFrame);
+   await page.waitForFunction(() => window.qaFind('HUD.PaperArtwork')?.getComponent('cc.Sprite')?.spriteFrame && window.qaFind('霁云宗已确认母稿')?.getComponent('cc.Sprite')?.spriteFrame);
    const data = await page.evaluate(() => {
     const h = window.__towerTest.host, menu=h.menu;
     const rects=['HUD.PlayerVitals','HUD.Portrait','HUD.ProfessionIcon','HUD.RealmLabel','HUD.HPLabel','HUD.HPBar'].map(name => {
@@ -155,7 +155,7 @@ const types = {'.html':'text/html','.js':'text/javascript','.json':'application/
    assert.equal(await page.evaluate(()=>window.__towerTest.host.menu.currentPage),'hall');
    assert.equal(await page.evaluate(()=>JSON.stringify(window.__towerTest.state(),(key,value)=>key==='restAt'?undefined:value)),infoBefore);
    data.characterInfo=info;data.compactButtonPaddingClickable=true;
-   for(const [name,target] of [['宗门入口-凌霄剑峰','library'],['宗门入口-炼器峰','forge'],['宗门入口-丹霞峰','pills'],['宗门入口-落云主峰','home'],['宗门入口-山门','gate']]) {
+   for(const [name,target] of [['宗门入口-凌霄剑峰','library'],['宗门入口-炼器峰','forge'],['宗门入口-丹霞峰','pills'],['宗门入口-霁云主峰','home'],['宗门入口-山门','gate']]) {
     await click(name);await page.waitForFunction(target=>window.__towerTest.host.menu.currentPage===target,target);
     actions.push(target);
     await click('← 宗门');await page.waitForFunction(()=>window.__towerTest.host.menu.currentPage==='hall');

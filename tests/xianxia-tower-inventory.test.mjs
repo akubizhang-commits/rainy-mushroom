@@ -1,3 +1,6 @@
+import {equipmentSkillBonus} from '../js/xianxia/TowerEquipmentSkillLevels.js'
+import * as resonanceTools from '../js/xianxia/TowerResonance.js'
+import {classProfile} from '../js/xianxia/TowerClassProfiles.js'
 import * as forgingTools from '../js/xianxia/TowerForging.js'
 import * as forgingMaterials from '../js/xianxia/TowerForgeMaterials.js'
 import * as equipmentSources from '../js/xianxia/TowerEquipmentSources.js'
@@ -21,12 +24,12 @@ import * as content from '../js/xianxia/TowerContent.js'
 import * as profile from '../js/xianxia/TowerProfile.js'
 import * as loot from '../js/xianxia/TowerLoot.js'
 import * as economy from '../js/xianxia/TowerEconomy.js'
-import { stats as combatStats } from '../js/xianxia/TowerRun.js'
+import { stats as combatStats, characterCombatAttributes } from '../js/xianxia/TowerRun.js'
 import { checksum } from '../js/xianxia/Checksum.js'
 
 // Independent inventory UI harness: real menu/business code, simulated Cocos scene graph.
 // Intentionally does not import or execute the shared host-tools test suite.
-const sources = Object.fromEntries(['TowerPreferences', 'TowerMenuChrome', 'TowerMonsterArt', 'TowerStoneArt', 'TowerSkillIcons', 'TowerSkillTreeCatalog', 'TowerSkillTreeLayout', 'TowerPlayerHud', 'TowerInventoryPanel', 'TowerMenu'].map(name => [name,
+const sources = Object.fromEntries(['TowerStatusIconArt','TowerPreferences', 'TowerMenuChrome', 'TowerMonsterArt', 'TowerStoneArt', 'TowerSkillIcons', 'TowerSkillTreeCatalog', 'TowerSkillTreeLayout', 'TowerPlayerHud', 'TowerInventoryPanel', 'TowerMenu'].map(name => [name,
  stripTypeScriptTypes(readFileSync(new URL(`../cocos-pilot/assets/scripts/${name}.ts`, import.meta.url), 'utf8').replace(/^import .*$/gm, ''), {mode:'transform'}).replace(/^export /gm, '')]));
 class Node {
   static EventType = { TOUCH_START: 'start', TOUCH_MOVE: 'move', TOUCH_END: 'end', TOUCH_CANCEL: 'cancel' }
@@ -146,13 +149,16 @@ class TowerLibraryPanelBoundary {
  destroy() { this.root.destroy(); }
 }
 
-const context = { ...mixedTools, ...forgingTools, ...forgingMaterials, ...equipmentSources, ...alchemyTools, ...tierTools, ...inventoryTools, ...weaponTools, ...equipmentTools, ...craftingTools, ...campaign, ...growth, ...content, ...profile, ...pillTools, ...loot, ...economy,
+const context = { ...resonanceTools, equipmentSkillBonus, classProfile, characterCombatAttributes, ...mixedTools, ...forgingTools, ...forgingMaterials, ...equipmentSources, ...alchemyTools, ...tierTools, ...inventoryTools, ...weaponTools, ...equipmentTools, ...craftingTools, ...campaign, ...growth, ...content, ...profile, ...pillTools, ...loot, ...economy,
  sys:{localStorage:{getItem:()=>null,setItem(){}}}, skillPresentation, combatStats, Node, UITransform, Graphics, Label, LabelOutline, LabelShadow, Button, Sprite, SpriteFrame, ImageAsset, Texture2D, Color, Vec2, ScrollView, Mask, BlockInputEvents,
  TowerLibraryPanel: TowerLibraryPanelBoundary,
+ // Character artwork is outside this inventory scene-graph harness.
+ TowerCharacterArt: class { draw() {} destroy() {} },
  isValid: value => value?.isValid === true, resources: {load() {}} };
 for (const [key, result] of [
+ ['TowerStatusIconArt','{TowerStatusIconArt,STATUS_ICON_SIZE}'],
  ['TowerPreferences','{presentationPreferences,setPresentationPreference}'],
- ['TowerMenuChrome','{drawMenuVeil,drawMenuClose,MENU_COLORS,ITEM_COLORS,BOOK_COLORS}'],
+ ['TowerMenuChrome','{drawMenuVeil,drawMenuClose,drawMenuBack,isMenuBack,MENU_COLORS,ITEM_COLORS,BOOK_COLORS}'],
  ['TowerMonsterArt','{TowerMonsterArt}'],
  ['TowerStoneArt','{TowerStoneArt}'],
  ['TowerSkillIcons','TowerSkillIcons'],
@@ -201,13 +207,24 @@ function draw(fixture, category='weapon') {
 function dismissDetails(f){const overlay=find(f.menu,'物品详情遮罩');overlay.events.get(Node.EventType.TOUCH_END)({target:overlay});}
 function select(f,id){click(f.menu,'背包物品-'+id);}
 function stateJSON(f){return JSON.stringify(f.store.state);}
-function coords(node,ancestor){let x=0,y=0,n=node;while(n!==ancestor){assert.ok(n);x+=n.position?.x||0;y+=n.position?.y||0;n=n.parent;}return{x,y,...node.getComponent(UITransform).contentSize};}
+function coords(node,ancestor){
+ const transform=node.getComponent(UITransform),size=transform.contentSize;
+ let x=(.5-(transform.anchor?.x??.5))*size.width,y=(.5-(transform.anchor?.y??.5))*size.height;
+ let width=size.width,height=size.height,n=node;
+ while(n!==ancestor){
+  assert.ok(n,'ancestor must contain node');
+  const sx=n.scale?.x??1,sy=n.scale?.y??1;
+  x=x*sx+(n.position?.x??0);y=y*sy+(n.position?.y??0);
+  width*=Math.abs(sx);height*=Math.abs(sy);n=n.parent;
+ }
+ return{x,y,width,height};
+}
 function bounded(node,ancestor){const b=coords(node,ancestor),a=ancestor.getComponent(UITransform).contentSize;assert.ok(b.x-b.width/2>=-a.width/2-.01&&b.x+b.width/2<=a.width/2+.01,node.name+' x');assert.ok(b.y-b.height/2>=-a.height/2-.01&&b.y+b.height/2<=a.height/2+.01,node.name+' y');return b;}
 
 for(const [w,h] of [[1280,720],[844,390]])test(`mixed draw ${w}x${h}: reveal, skip, inspect and dismiss never award twice`,()=>{
  const f=setup(w,h);
  f.menu.dismissInventory();f.menu.render(f.store.state,'hall');click(f.menu,'机缘抽奖');
- click(f.menu,'领取10张试玩券');click(f.menu,'十连 · 10券');
+ click(f.menu,'十连 · 1000点眷');
  const saved=stateJSON(f);
  assert.match(text(find(f.menu,'机缘抽取结果')),/1\s*\/\s*10/);
  click(f.menu,'下一件');
@@ -225,17 +242,17 @@ for(const [w,h] of [[1280,720],[844,390]])test(`mixed draw ${w}x${h}: reveal, sk
 });
 test('mixed draw: failed save has no success overlay; single draw can be confirmed',()=>{
  const f=setup();f.menu.dismissInventory();f.menu.render(f.store.state,'hall');click(f.menu,'机缘抽奖');
- click(f.menu,'领取10张试玩券');const saved=stateJSON(f);f.storage.fail=true;
- click(f.menu,'单抽 · 1券');
+ const saved=stateJSON(f);f.storage.fail=true;
+ click(f.menu,'单抽 · 100点眷');
  assert.equal(all(f.menu.root).some(n=>n.name==='机缘抽取结果'),false);
  assert.equal(stateJSON(f),saved);
  f.storage.fail=false;f.menu.mixedLastSubmit=-1000;
- click(f.menu,'单抽 · 1券');find(f.menu,'机缘抽取结果');
- click(f.menu,'确认获得');assert.equal(f.store.state.mixedDraw.tickets,9);
+ click(f.menu,'单抽 · 100点眷');find(f.menu,'机缘抽取结果');
+ click(f.menu,'确认获得');assert.equal(f.store.state.contribution,900);assert.equal(f.store.state.mixedDraw.tickets,0);
 });
 for(const [w,h] of [[1280,720],[844,390]])test(`mixed draw cells match backpack rendering ${w}x${h}`,()=>{
  const f=setup(w,h);f.menu.dismissInventory();f.menu.render(f.store.state,'hall');
- click(f.menu,'机缘抽奖');click(f.menu,'领取10张试玩券');click(f.menu,'十连 · 10券');click(f.menu,'跳过展示');
+ click(f.menu,'机缘抽奖');click(f.menu,'十连 · 1000点眷');click(f.menu,'跳过展示');
  const rewards=f.store.state.mixedDraw.receipts.at(-1).rewards;
  const cells=rewards.map((_,i)=>find(f.menu,`机缘结果-${i}`));
  const visual=n=>({
@@ -427,10 +444,12 @@ test('viewing, equipping and dismantling never alter forge RNG, prices or pity c
  const f=setup(1280,720,{spiritStones:5000,contribution:5000});const id=draw(f,'weapon');
  const forge=state=>copy({forgeRng:state.forgeRng,forgeBossPity:state.forgeBossPity,forgeSequence:state.forgeSequence,forgeReceipts:state.forgeReceipts,rng:state.rng,equipmentRng:state.equipmentRng,weaponPity:state.weaponPity,
   equipmentPity:state.equipmentPity,equipmentDraws:state.equipmentDraws,weaponSequence:state.weaponSequence,
-  equipmentSequence:state.equipmentSequence,spiritStones:state.spiritStones});
+  equipmentSequence:state.equipmentSequence});
  const before=forge(f.store.state),price=copy(forgingTools.FORGING_RECIPES);
+ const stones=f.store.state.spiritStones,refund=forgingTools.dismantleStoneRefund(f.store.state.weapons[id]);
  select(f,id);click(f.menu,'分解');click(f.menu,'确认分解');
  assert.deepEqual(forge(f.store.state),before);assert.deepEqual(forgingTools.FORGING_RECIPES,price);
+ assert.equal(f.store.state.spiritStones,stones+refund);
 });
 
 test('invalid inventory metadata is rejected on reload instead of trusting display state',()=>{
@@ -470,7 +489,7 @@ test('equipped items can be removed atomically and remain usable after reload',(
  assert.equal(inBattle.state.loadouts[0].weaponId,'');
 });
 
-for(const [w,h] of [[1280,720],[844,390]])test(`inventory ${w}x${h}: character slots, no avatar, contextual back`,()=>{
+for(const [w,h] of [[1280,720],[844,390]])test(`inventory ${w}x${h}: character slots, wallet and contextual back`,()=>{
  const f=setup(w,h);
  assert.equal(all(f.menu.root).some(n=>n.name.startsWith('HUD.')),false);
  assert.equal(all(f.menu.root).some(n=>n.name==='三套配装'),false);
@@ -486,14 +505,15 @@ for(const [w,h] of [[1280,720],[844,390]])test(`inventory ${w}x${h}: character s
  }
  const box=find(f.menu,'背包弹窗');bounded(box,f.menu.root);
  assert.ok(box.getComponent(UITransform).contentSize.width<f.menu.designWidth);
- assert.equal(all(find(f.menu,'背包遮罩')).some(n=>n.name==='货币信息'),false);
+ bounded(find(f.menu,'货币信息'),box);
+ assert.equal(all(find(f.menu,'人物装备区')).filter(n=>n.name==='角色全身形象').length,1);
  click(f.menu,'关闭背包'); assert.equal(f.menu.currentPage,'');
  assert.ok(f.store.act({type:'startFloor',floor:1},1800000000000).ok);
  f.menu.showInventory(f.store.state,()=>f.calls.push({type:'resume'}));
  click(f.menu,'关闭背包');assert.equal(f.calls.at(-1).type,'resume');
 });
 
-for(const page of ['forge','pills','loadouts','training','home','gate','tutorial','tower'])test(`secondary ${page}: shared background-free sect return`,()=>{
+for(const page of ['forge','pills','loadouts','training','home','tutorial','tower'])test(`secondary ${page}: shared background-free sect return`,()=>{
  const f=setup(); f.menu.dismissInventory(); f.menu.render(f.store.state,page);
  const back=find(f.menu,'← 宗门');
  assert.equal(back.getComponent(Graphics),null);
@@ -514,7 +534,7 @@ for (const [page,label] of [['hall','宗门'],['swordPeak','凌霄剑峰']]) {
  for (const dismiss of ['button','escape']) test(`${page} skill shortcut returns to its entry via ${dismiss} after refresh`,()=>{
   const f=setup();f.menu.dismissInventory();f.menu.go(page);
   const before=stateJSON(f);
-  click(f.menu,'技能');
+  click(f.menu,'功法');
   assert.equal(f.menu.currentPage,'library');
   assert.equal(f.menu.libraryPanel,null);
   f.menu.render({...f.store.state},'library','刷新');
@@ -574,7 +594,7 @@ for (const [width,height] of [[844,390],[1280,720]]) test(`pill shop ${width}x${
  for(const n of all(stage).filter(n=>n.getComponent(Button))) bounded(n,stage);
  assert.equal(f.menu.scroll.vertical,false);
  click(f.menu,'丹霞主殿');click(f.menu,'商品卡片-huichun');click(f.menu,'确认购买');click(f.menu,'确认获得');
- assert.equal(f.store.state.contribution,295);assert.equal(f.store.state.pills.huichun,1);assert.equal(f.store.state.hp,35);
+ assert.equal(f.store.state.spiritStones,495);assert.equal(f.store.state.contribution,300);assert.equal(f.store.state.pills.huichun,1);assert.equal(f.store.state.hp,35);
  click(f.menu,'关闭丹药菜单');
  click(f.menu,'背包');click(f.menu,'丹药');select(f,'huichun');click(f.menu,'使用');
  assert.equal(f.store.state.hp,85);assert.equal(f.store.state.pills.huichun,0);
@@ -594,7 +614,7 @@ for (const [stones,contribution,expected] of [
   assert.equal(new Set(labels.map(n=>coords(n,wallet).y)).size,1);
   for(const label of labels){bounded(label,wallet);assert.equal(label.getComponent(Label).enableWrapText,false);}
   const rect=coords(wallet,f.menu.root);
-  const title=all(f.menu.root).find(n=>n.getComponent(Label)?.string===({pills:'丹霞峰',forge:'炼器峰',inventory:'背包',home:'落云主峰'})[page]);
+  const title=all(f.menu.root).find(n=>n.getComponent(Label)?.string===({pills:'丹霞峰',forge:'炼器峰',inventory:'背包',home:'霁云主峰'})[page]);
   const titleRect=coords(title,f.menu.root);
   assert.ok(rect.x-rect.width/2>=titleRect.x+titleRect.width/2||rect.y+rect.height/2<=titleRect.y-titleRect.height/2);
  }
@@ -671,8 +691,8 @@ for (const [w,h] of [[1280,720],[844,390]]) test(`equipment detail hierarchy and
  const detail=find(f.menu,'背包详情区');
  assert.equal(detail.getComponent(Graphics).strokeColor.r,'#E4E6E3','detail border follows the item tier');
  const labels=all(detail).map(n=>n.getComponent(Label)).filter(Boolean);
- assert.ok(labels.some(l=>l.string==='境界要求 炼气·初期'));
- assert.ok(labels.some(l=>l.string==='装备属性'));
+ assert.ok(labels.some(l=>l.string==='穿戴要求：炼气'));
+ assert.ok(labels.some(l=>l.string==='基础属性'));
  assert.ok(labels.some(l=>l.string.includes('基础物理攻击 +4～6')));
  assert.ok(labels.some(l=>l.string.includes('基础法术攻击 +4～6')));
  assert.ok(labels.every(l=>!l.string.includes('（平均')));
@@ -699,12 +719,12 @@ test('detail data unifies attributes, preserves actual realm gates and covers ev
    assert.doesNotMatch(line,/[：；＋]|不缩短|独立判定|冷却缩短/);
   }
  }
- assert.equal(new Set([...weaponTools.WEAPONS,...equipmentTools.EQUIPMENT].map(d=>d.description)).size,87);
+ assert.equal(new Set([...weaponTools.WEAPONS,...equipmentTools.EQUIPMENT].map(d=>d.description)).size,weaponTools.WEAPONS.length+equipmentTools.EQUIPMENT.length);
  const item=equipmentTools.rollEquipment('ring','ling',4,()=>0,'detail-ring');
  const state={...f.store.state,equipment:{...f.store.state.equipment,[item.id]:item}};
  const row=inventoryTools.inventoryEntries(state).find(r=>r.id===item.id);
  const info=inventoryTools.inventoryDetail(state,row);
- assert.equal(info.requirement,'金丹·初期');assert.equal(info.requirementMet,false);
+ assert.equal(info.requirement,'金丹');assert.equal(info.requirementMet,false);
  assert.ok(info.effects.every(line=>!line.includes('会心')));
  assert.ok(info.basic.every(line=>!line.includes('会心')));
  assert.ok(info.ordinaryEffects.some(line=>line.includes('功法伤害')));
@@ -718,7 +738,7 @@ for (const xp of [0, profile.TOWER_XP_CAP]) test(`realm label reflects cultivati
  const item=equipmentTools.rollEquipment('ring','ling',4,()=>0,'realm-ring');
  const state={...f.store.state,xp,readOnly:true,equipment:{...f.store.state.equipment,[item.id]:item}};
  f.menu.render(state,'inventory');select(f,item.id);
- const label=all(find(f.menu,'背包详情区')).map(n=>n.getComponent(Label)).find(l=>l?.string==='境界要求 金丹·初期');
+ const label=all(find(f.menu,'背包详情区')).map(n=>n.getComponent(Label)).find(l=>l?.string==='穿戴要求：金丹');
  assert.ok(label);
  assert.equal(label.color.r,xp===0?'#97422F':'#263F39');
  assert.equal(find(f.menu,'穿戴').getComponent(Button).interactable,false);
@@ -767,10 +787,12 @@ for(const [w,h] of [[1280,720],[844,390]])test(`compact comparison cards and ext
  assert.equal(all(overlay).some(n=>n.name.startsWith('分享物品-')),false);
  assert.equal(selected.getComponent(Graphics).fillColor.r,'#DEE3D3');
  const basic=all(selected).find(n=>n.name==='装备基础属性').getComponent(Label);
- const effects=inventoryTools.inventoryDetail(f.store.state,inventoryTools.inventoryEntries(f.store.state).find(row=>row.id===id)).effects;
- const effect=all(selected).find(n=>n.name==='装备效果');
- assert.equal(!!effect,effects.length>0);
- if(effect)assert.notEqual(basic.color.r,effect.getComponent(Label).color.r);
+ const info=inventoryTools.inventoryDetail(f.store.state,inventoryTools.inventoryEntries(f.store.state).find(row=>row.id===id));
+ for(const [name,lines] of [['装备普通效果',info.ordinaryEffects],['装备特殊效果',info.specialEffects]]){
+  const effect=all(selected).find(n=>n.name===name);
+  assert.equal(!!effect,lines.length>0);
+  if(effect)assert.equal(effect.getComponent(Label).string,lines.join('\n'));
+ }
  assert.notEqual(find(f.menu,'背包详情视口').getComponent(ScrollView),find(f.menu,'对比详情视口').getComponent(ScrollView));
  const before=stateJSON(f),close=overlay.events.get(Node.EventType.TOUCH_END);
  close({target:selected});
@@ -810,8 +832,8 @@ test('equipped items, empty slots and pills show only one compact information ca
 for (const [width,height] of [[844,390],[1280,720]]) test(`paper menu header and fixed tutorial navigation ${width}x${height}`,()=>{
  const f=setup(width,height,{spiritStones:99999999,contribution:999999});
  f.menu.dismissInventory();f.menu.go('tutorial');
- const hud=bounded(find(f.menu,'HUD.PlayerVitals'),f.menu.root),wallet=bounded(find(f.menu,'货币信息'),f.menu.root);
- assert.ok(wallet.y+wallet.height/2<hud.y-hud.height/2,'wallet must clear portrait');
+ bounded(find(f.menu,'HUD.PlayerVitals'),f.menu.root);
+ assert.equal(all(f.menu.root).some(n=>n.name==='货币信息'),false,'tutorial has no transaction wallet');
  const footer=find(f.menu,'指引固定导航'),view=find(f.menu,'事务卷轴');
  const nav=bounded(footer,f.menu.root),body=bounded(view,f.menu.root);
  assert.ok(nav.y+nav.height/2<body.y-body.height/2,'navigation must clear scrolling content');
@@ -849,10 +871,10 @@ for (const [width,height] of [[844,390],[1280,720]]) test(`cultivation pill shop
  click(f.menu,'丹霞主殿');click(f.menu,'分类-cultivation');click(f.menu,'商品卡片-peiyuan');
  assert.match(text(f.menu.root),/已服\s*0\/6\s*颗/);
  assert.doesNotMatch(text(f.menu.root),/首次通关解锁额度/);
- assert.equal(f.store.state.pills.peiyuan,0);assert.equal(f.store.state.contribution,300);
+ assert.equal(f.store.state.pills.peiyuan,0);assert.equal(f.store.state.contribution,1000);
  assert.match(text(f.menu.root).replace(/\s/g,''),/还可服6颗.*持有7颗/);
  click(f.menu,'确认购买');
- assert.equal(f.store.state.pills.peiyuan,1);assert.equal(f.store.state.contribution,280);
+ assert.equal(f.store.state.pills.peiyuan,1);assert.equal(f.store.state.spiritStones,480);assert.equal(f.store.state.contribution,1000);
  assert.equal(f.store.state.cultivationPillUses.炼气,0);
  find(f.menu,'获得物品弹窗');
 });
@@ -864,7 +886,7 @@ for (const [width,height] of [[844,390],[1280,720]]) test(`alchemy ${width}x${he
  const submit=find(f.menu,'确认炼制').events.get(Button.EventType.CLICK);submit();submit();
  assert.equal(f.store.state.pills.huichun,1);assert.equal(f.store.state.pills.huichuncao,2);
  assert.equal(f.store.state.pills.bailuhua,1);assert.equal(f.store.state.pills.linglu,1);
- assert.equal(f.store.state.contribution,298);assert.equal(f.calls.filter(a=>a.type==='craftPill').length,1);
+ assert.equal(f.store.state.spiritStones,499);assert.equal(f.store.state.contribution,1000);assert.equal(f.calls.filter(a=>a.type==='craftPill').length,1);
  click(f.menu,'确认获得');click(f.menu,'关闭丹药菜单');click(f.menu,'背包');click(f.menu,'材料');
  assert.ok(all(f.menu.root).some(n=>n.name==='背包物品-huichuncao'));
  assert.equal(all(f.menu.root).some(n=>n.name==='背包物品-huichun'),false);
@@ -924,47 +946,39 @@ test('profession image releases completed loads and ignores callbacks after menu
  }finally{context.resources.load=original;}
 });
 
-test('HD jade loads atomically, shows latest progress and releases all texture resources',()=>{
+test('paper HUD loads current portrait resources and releases them on menu destruction',()=>{
  const original=context.resources.load,requests=[];
  context.resources.load=(path,type,done)=>requests.push({path,done});
  try{
   const f=setup();f.menu.dismissInventory();f.menu.go('hall');
-  const pending=['body','tail','head'].map(part=>requests.filter(r=>r.path===`player-hud/jade-dragon-hd/${part}`).at(-1));
-  assert.ok(pending.every(Boolean),'all three HD layers are requested');
-  const root=find(f.menu,'HUD.XPArtwork'),ring=find(f.menu,'HUD.XPRing').getComponent(Graphics);
-  const assets=pending.map(()=>new ImageAsset());
-  context.drawPlayerXp(ring,.5);
-  pending[0].done(null,assets[0]);pending[1].done(null,assets[1]);
-  assert.equal(root.active,false,'partial assets must not replace the complete fallback');
-  context.drawPlayerXp(ring,.75);
-  pending[2].done(null,assets[2]);
-  assert.equal(root.active,true);
-  const head=find(f.menu,'HUD.XPHead').getComponent(Sprite);
-  assert.equal(head.node.angle,-270,'late loading keeps the latest earned endpoint');
-  assert.ok(head.fillRange>0);
-  const sprites=['Body','Tail','Head'].map(n=>find(f.menu,`HUD.XP${n}`).getComponent(Sprite));
-  assert.ok(sprites.every(s=>Object.values(s.spriteFrame.texture.filters).every(v=>v===Texture2D.Filter.LINEAR)));
-  assert.ok(sprites.every(s=>s.spriteFrame.texture.mipFilter===Texture2D.Filter.LINEAR));
-  context.drawPlayerXp(ring,1,true);assert.equal(ring.node.active,false);
-  context.drawPlayerXp(ring,.1);assert.equal(ring.node.active,true);assert.equal(head.node.angle,-36);
+  const pending=['paper-portrait','sword-cultivator'].map(part=>requests.filter(r=>r.path===`player-hud/${part}`).at(-1));
+  assert.ok(pending.every(Boolean),'both current HUD resources are requested');
+  const fallback=find(f.menu,'HUD.PaperFallback');assert.equal(fallback.active,true);
+  const assets=pending.map(()=>new ImageAsset());pending[0].done(null,assets[0]);
+  assert.equal(fallback.active,false);pending[1].done(null,assets[1]);
+  const sprites=['PaperArtwork','ProfessionArtwork'].map(n=>find(f.menu,`HUD.${n}`).getComponent(Sprite));
+  assert.ok(sprites.every(s=>s.spriteFrame&&Object.values(s.spriteFrame.texture.filters).every(v=>v===Texture2D.Filter.LINEAR)));
+  assert.equal(find(f.menu,'HUD.XPBar').active,false,'sect HUD does not show combat experience');
   const frames=sprites.map(s=>s.spriteFrame),textures=frames.map(f=>f.texture);
   f.menu.destroy();
   assert.ok(assets.every(a=>a.refs===0));assert.ok(frames.every(f=>!f.isValid));assert.ok(textures.every(t=>!t.isValid));
-  const late=new ImageAsset();pending[2].done(null,late);assert.equal(late.refs,0);
+  for(const request of pending){const late=new ImageAsset();request.done(null,late);assert.equal(late.refs,0);}
  }finally{context.resources.load=original;}
 });
 
-test('HD jade failed layer keeps fallback and releases partially loaded assets',()=>{
+test('paper HUD portrait failure preserves fallback and releases the independent profession resource',()=>{
  const original=context.resources.load,requests=[];
  context.resources.load=(path,type,done)=>requests.push({path,done});
  try{
   const f=setup();f.menu.dismissInventory();f.menu.go('hall');
-  const pending=['body','tail','head'].map(part=>requests.filter(r=>r.path===`player-hud/jade-dragon-hd/${part}`).at(-1));
-  const ring=find(f.menu,'HUD.XPRing').getComponent(Graphics),assets=[new ImageAsset(),new ImageAsset()];
-  pending[0].done(null,assets[0]);pending[1].done(null,assets[1]);pending[2].done(new Error('offline'));
-  context.drawPlayerXp(ring,.5);
-  assert.equal(ring.node.active,true);assert.equal(find(f.menu,'HUD.XPArtwork').active,false);
-  f.menu.destroy();assert.ok(assets.every(a=>a.refs===0));
+  const portrait=requests.filter(r=>r.path==='player-hud/paper-portrait').at(-1);
+  const profession=requests.filter(r=>r.path==='player-hud/sword-cultivator').at(-1);
+  assert.ok(portrait&&profession);
+  const asset=new ImageAsset();profession.done(null,asset);portrait.done(new Error('offline'));
+  assert.equal(find(f.menu,'HUD.PaperFallback').active,true);
+  assert.equal(find(f.menu,'HUD.PaperArtwork').getComponent(Sprite).spriteFrame,null);
+  const frame=find(f.menu,'HUD.ProfessionArtwork').getComponent(Sprite).spriteFrame,texture=frame.texture;
+  f.menu.destroy();assert.equal(asset.refs,0);assert.equal(frame.isValid,false);assert.equal(texture.isValid,false);
  }finally{context.resources.load=original;}
 });
 
@@ -1002,7 +1016,7 @@ test('alchemy save failure preserves ingredients and retries with the same recei
  f.storage.fail=false;await new Promise(resolve=>setTimeout(resolve,710));click(f.menu,'确认炼制');
  const commands=f.calls.filter(a=>a.type==='craftPill');assert.equal(commands.length,2);
  assert.equal(commands[0].requestId,commands[1].requestId);
- assert.equal(f.store.state.pills.huichun,1);assert.equal(f.store.state.contribution,298);
+ assert.equal(f.store.state.pills.huichun,1);assert.equal(f.store.state.spiritStones,499);assert.equal(f.store.state.contribution,1000);
 });
 
 test('cultivation overflow requires a separate confirmation and preserves HP',()=>{
@@ -1029,7 +1043,7 @@ test('purchase hall remains available when furnace craftable-only filter has no 
  const f=setup();f.menu.dismissInventory();f.menu.render(f.store.state,'pills');
  click(f.menu,'炼丹炉');click(f.menu,'切换可炼配方');assert.match(text(f.menu.root),/暂无符合条件/);
  click(f.menu,'关闭丹药菜单');click(f.menu,'丹霞主殿');assert.equal(all(f.menu.root).some(n=>n.name==='✓ 仅可炼制'),false);
- click(f.menu,'商品卡片-huichun');click(f.menu,'确认购买');assert.equal(f.store.state.contribution,295);
+ click(f.menu,'商品卡片-huichun');click(f.menu,'确认购买');assert.equal(f.store.state.spiritStones,495);assert.equal(f.store.state.contribution,1000);
 });
 
 test('rapid excess-stock confirmation preserves the visible confirmation until retry',async()=>{
@@ -1050,7 +1064,7 @@ for (const [width,height] of [[844,390],[1280,720]]) test(`reference commerce ${
  click(f.menu,'商品卡片-huichun');find(f.menu,'购买物品弹窗');click(f.menu,'取消购买');
  assert.equal(JSON.stringify(f.store.state),before);
  click(f.menu,'商品卡片-huichun');click(f.menu,'确认购买');find(f.menu,'获得物品弹窗');
- assert.equal(f.store.state.contribution,295);assert.equal(f.calls.filter(a=>a.type==='buyPill').length,1);
+ assert.equal(f.store.state.spiritStones,495);assert.equal(f.store.state.contribution,1000);assert.equal(f.calls.filter(a=>a.type==='buyPill').length,1);
  click(f.menu,'确认获得');assert.equal(all(f.menu.root).some(n=>n.name==='购买物品弹窗'),false);
 });
 
@@ -1060,7 +1074,7 @@ test('reference commerce crafting confirms before spending and shows actual rewa
  click(f.menu,'开始炼制');find(f.menu,'炼制确认弹窗');assert.equal(JSON.stringify(f.store.state),before);
  click(f.menu,'取消炼制');assert.equal(JSON.stringify(f.store.state),before);
  click(f.menu,'开始炼制');click(f.menu,'确认炼制');find(f.menu,'获得物品弹窗');
- assert.equal(f.store.state.pills.huichuncao,2);assert.equal(f.store.state.contribution,298);
+ assert.equal(f.store.state.pills.huichuncao,2);assert.equal(f.store.state.spiritStones,499);assert.equal(f.store.state.contribution,1000);
  assert.equal(f.calls.filter(a=>a.type==='craftPill').length,1);
 });
 
@@ -1070,7 +1084,7 @@ test('reference commerce gear shop separates browsing, purchase and actual equip
  assert.equal(all(f.menu.root).some(n=>n.name==='炼制详情'),false);
  click(f.menu,'增加数量');click(f.menu,'确认购买');find(f.menu,'获得物品弹窗');
  assert.equal(f.calls.filter(a=>a.type==='buyGear').length,1);assert.equal(f.calls.at(-1).count,2);
- assert.equal(f.store.state.spiritStones,70);assert.equal(f.store.state.contribution,282);
+ assert.equal(f.store.state.spiritStones,52);assert.equal(f.store.state.contribution,300);
  assert.equal(f.menu.commerceRewards.reduce((n,r)=>n+r.count,0),2);
 });
 
@@ -1079,7 +1093,7 @@ test('reference commerce save failure keeps confirmation and retries the same re
  const before=JSON.stringify(f.store.state);f.storage.fail=true;click(f.menu,'确认炼制');
  assert.equal(JSON.stringify(f.store.state),before);find(f.menu,'炼制确认弹窗');assert.match(text(f.menu.root),/保存失败/);
  const request=f.calls.at(-1).requestId;f.storage.fail=false;await new Promise(r=>setTimeout(r,710));click(f.menu,'确认炼制');
- assert.equal(f.calls.at(-1).requestId,request);find(f.menu,'获得物品弹窗');assert.equal(f.store.state.contribution,298);
+ assert.equal(f.calls.at(-1).requestId,request);find(f.menu,'获得物品弹窗');assert.equal(f.store.state.spiritStones,499);assert.equal(f.store.state.contribution,1000);
 });
 
 test('reference commerce final craftable recipe still shows success after consuming all materials',()=>{
@@ -1186,7 +1200,7 @@ test('settlement currencies join the grid, cultivation is hidden and notes remai
  assert.ok(all(cells[0]).some(n=>n.getComponent(Label)?.string==='6'));
  assert.ok(all(cells[1]).some(n=>n.getComponent(Label)?.string==='80'));
  assert.ok(all(cells[2]).some(n=>n.getComponent(Label)?.string==='100'));
- cells[2].events.get(Button.EventType.CLICK)();assert.match(text(parent),/贡献 · 本次获得 100/);
+ cells[2].events.get(Button.EventType.CLICK)();assert.match(text(parent),/点眷 · 本次获得 100/);
  const grid=all(parent).find(n=>n.name==='结算收获列表');
  assert.ok(text(grid).includes('溢出'));assert.ok(!text(grid).includes('实际入账'));
  assert.equal(grid.getComponent(ScrollView).vertical,true);
@@ -1231,11 +1245,11 @@ test('presentation settings persist separately and a failed write leaves the pre
  const api=runInNewContext('(() => {'+sources.TowerPreferences+';return {presentationPreferences,setPresentationPreference}})()',{
   sys:{localStorage:{getItem:()=>raw,setItem:(_,v)=>{if(fail)throw Error('quota');raw=v;}}}
  });
- assert.deepEqual(copy(api.presentationPreferences()),{soundVolume:1,reducedMotion:true});
+ assert.deepEqual(copy(api.presentationPreferences()),{soundVolume:1,reducedMotion:true,playerDamageNumbers:true});
  assert.equal(api.setPresentationPreference({soundVolume:.25}),true);
- assert.deepEqual(JSON.parse(raw),{soundVolume:.25,reducedMotion:true});
+ assert.deepEqual(JSON.parse(raw),{soundVolume:.25,reducedMotion:true,playerDamageNumbers:true});
  fail=true;assert.equal(api.setPresentationPreference({soundVolume:0,reducedMotion:false}),false);
- assert.deepEqual(copy(api.presentationPreferences()),{soundVolume:.25,reducedMotion:true});
+ assert.deepEqual(copy(api.presentationPreferences()),{soundVolume:.25,reducedMotion:true,playerDamageNumbers:true});
 });
 
 test('settings change sound and reduced motion without dispatching campaign actions',()=>{
@@ -1255,7 +1269,7 @@ test('destroyed library menu cannot consume battle Escape',()=>{
 for(const category of ['weapon','armor','ring'])test(`craft preview uses inventory card and exact information: ${category}`,()=>{
  const f=setup(1280,720,{xp:6601});f.menu.dismissInventory();
  const item=forgingTools.createForgedGear(`${category}:fa:q1`,'preview');
- const state={...f.store.state,weapons:category==='weapon'?{preview:item}:{},equipment:category==='weapon'?{}:{preview:item}};
+ const state={...f.store.state,weapons:{...f.store.state.weapons,...(category==='weapon'?{preview:item}:{})},equipment:{...f.store.state.equipment,...(category==='weapon'?{}:{preview:item})}};
  f.menu.render(state,'forge');f.menu.gearMode='craft';f.menu.commerceDialog='detail';
  const entry=f.menu.commerceEntries('gear').find(e=>e.key===`${category}:fa:q1`);
  f.menu.commerceDetailId=item.definitionId;f.menu.commerceModal('gear',entry,()=>{});
@@ -1302,4 +1316,66 @@ test('craft material inspection uses backpack detail card, including unowned mat
  const card=find(f.menu,'背包详情区');assert.match(text(card),/玄铁/);assert.match(text(card),/炼器材料/);
  assert.equal(all(f.menu.root).some(n=>n.name==='前往材料来源'),false);
  assert.equal(f.store.state.pills.forge_xuantie,0);
+});
+
+for (const [w,h] of [[1280,720],[844,390]]) test(`major realm wear label and button ${w}x${h}`,()=>{
+ const f=setup(w,h);
+ const item=weaponTools.createFixedWeapon('eq_sword_caiyun','wear-caiyun');
+ const state={...f.store.state,xp:0,weapons:{...f.store.state.weapons,[item.id]:item},weaponCounters:{...f.store.state.weaponCounters,[item.id]:0}};
+ f.menu.render(state,'inventory');select(f,item.id);
+ const labels=all(find(f.menu,'背包详情区')).map(n=>n.getComponent(Label)).filter(Boolean);
+ const label=labels.find(l=>l.string==='穿戴要求：炼气');
+ assert.ok(label);assert.equal(label.color.r,'#263F39');
+ assert.equal(find(f.menu,'穿戴').getComponent(Button).interactable,true);
+ assert.ok(!labels.some(l=>/境界要求|炼气·中期/.test(l.string)));
+});
+
+function forgeAnimationFixture(){
+ const f=setup(844,390,{xp:6601,spiritStones:100000,pills:{forge_xuantie:100,forge_lingmu:100,forge_lingyu:100,forge_hanjingsha:100}});
+ f.menu.dismissInventory();f.menu.render(f.store.state,'forge');click(f.menu,'炼器炉');click(f.menu,'分类-fa');click(f.menu,'配方卡片-weapon:fa:q1');click(f.menu,'开始炼制');return f;
+}
+test('forge ritual commits once then reveals saved rewards after animation',()=>{
+ const f=forgeAnimationFixture(),submit=find(f.menu,'确认炼制').events.get(Button.EventType.CLICK);
+ submit();submit();assert.equal(f.calls.filter(a=>a.type==='craftGear').length,1);
+ find(f.menu,'炼器仪式');assert.equal(f.menu.commerceDialog,'forging');
+ const saved=JSON.stringify(f.store.state);for(let i=0;i<40;i++)f.menu.updateEffects(.1);
+ find(f.menu,'获得物品弹窗');assert.equal(JSON.stringify(f.store.state),saved);
+});
+test('forge ritual never plays on failed save and preserves costs',()=>{
+ const f=forgeAnimationFixture(),before=JSON.stringify(f.store.state);f.storage.fail=true;click(f.menu,'确认炼制');
+ assert.equal(JSON.stringify(f.store.state),before);find(f.menu,'炼制确认弹窗');assert.equal(all(f.menu.root).some(n=>n.name==='炼器仪式'),false);
+});
+test('forge ritual leaving page cancels presentation without losing saved gear',()=>{
+ const f=forgeAnimationFixture();click(f.menu,'确认炼制');const saved=JSON.stringify(f.store.state);
+ f.menu.render(f.store.state,'hall');for(let i=0;i<40;i++)f.menu.updateEffects(.1);
+ assert.equal(f.menu.currentPage,'hall');assert.equal(all(f.menu.root).some(n=>n.name==='获得物品弹窗'),false);assert.equal(JSON.stringify(f.store.state),saved);
+});
+test('forge ritual staggers real recipe materials and survives a same-page refresh',()=>{
+ const f=forgeAnimationFixture();click(f.menu,'确认炼制');
+ const items=all(f.menu.root).filter(n=>n.name.startsWith('入炉材料-'));
+ assert.deepEqual(items.map(n=>n.name).sort(),['forge_xuantie','forge_lingmu','forge_lingyu','forge_hanjingsha'].map(id=>'入炉材料-'+id).sort());
+ f.menu.updateEffects(.1);f.menu.updateEffects(.1);assert.equal(items.filter(n=>n.active).length,1);
+ f.menu.render(f.store.state,'forge');for(let i=0;i<40;i++)f.menu.updateEffects(.1);
+ find(f.menu,'获得物品弹窗');assert.equal(f.calls.filter(a=>a.type==='craftGear').length,1);
+});
+test('forge ritual reduced motion goes directly to saved rewards',()=>{
+ context.setPresentationPreference({reducedMotion:true});
+ try{const f=forgeAnimationFixture();click(f.menu,'确认炼制');find(f.menu,'获得物品弹窗');assert.equal(f.calls.filter(a=>a.type==='craftGear').length,1);}
+ finally{context.setPresentationPreference({reducedMotion:false});}
+});
+
+test('unknown retired gate route falls back to the hall without changing state',()=>{
+ const f=setup();f.menu.dismissInventory();const before=stateJSON(f);
+ f.menu.render(f.store.state,'gate');assert.equal(f.menu.currentPage,'hall');
+ assert.equal(stateJSON(f),before);
+});
+
+test('bounds helper composes nested scale, position and target anchor without hiding overflow',()=>{
+ const root=new Node('root');root.addComponent(UITransform).setContentSize(200,200);
+ const parent=new Node('parent');root.addChild(parent);parent.setScale(.5,.5,1);parent.setPosition(20,10);
+ const child=new Node('child');parent.addChild(child);child.addComponent(UITransform).setContentSize(80,40);
+ child.getComponent(UITransform).setAnchorPoint(0,0);child.setScale(2,1,1);child.setPosition(10,20);
+ assert.deepEqual(coords(child,root),{x:65,y:30,width:80,height:20});
+ assert.throws(()=>bounded(child,root),/child x/);
+ child.setPosition(0,20);assert.deepEqual(bounded(child,root),{x:60,y:30,width:80,height:20});
 });

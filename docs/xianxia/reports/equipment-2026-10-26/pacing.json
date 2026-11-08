@@ -1,0 +1,73 @@
+{
+  "scope": "exact proposed reward arithmetic; no observed player time or game balance claim",
+  "baseRates": {
+    "blue": 0.65,
+    "purple": 0.3,
+    "gold": 0.05
+  },
+  "goldHardPity": 20,
+  "goldMeanPulls": 12.830281551829145,
+  "longRunGoldShareIncludingPity": 0.07794061228979307,
+  "goldPullQuantiles": {
+    "0.5": 14,
+    "0.9": 20,
+    "0.95": 20
+  },
+  "chanceReachGuaranteedPull": 0.37735360253530725,
+  "normalSlotIdentityChance": 0.25,
+  "normalSpecificGoldChance": 0.0125,
+  "pitySpecificGoldChance": 0.25,
+  "chosenGoldMarkCost": 40,
+  "pace": [
+    {
+      "profile": "early defeat",
+      "minutes": 2,
+      "sandPerRun": 30,
+      "pullsPerCombatHour": 9.0,
+      "meanMinutesToGold": 85.53521034552764,
+      "maxMinutesToGold": 133.33333333333334,
+      "maxMinutesToChosenGoldSavingMarks": 266.6666666666667
+    },
+    {
+      "profile": "mid defeat",
+      "minutes": 4,
+      "sandPerRun": 60,
+      "pullsPerCombatHour": 9.0,
+      "meanMinutesToGold": 85.53521034552764,
+      "maxMinutesToGold": 133.33333333333334,
+      "maxMinutesToChosenGoldSavingMarks": 266.6666666666667
+    },
+    {
+      "profile": "late defeat",
+      "minutes": 6,
+      "sandPerRun": 90,
+      "pullsPerCombatHour": 9.0,
+      "meanMinutesToGold": 85.53521034552764,
+      "maxMinutesToGold": 133.33333333333334,
+      "maxMinutesToChosenGoldSavingMarks": 266.6666666666667
+    },
+    {
+      "profile": "seven-minute victory",
+      "minutes": 7,
+      "sandPerRun": 120,
+      "pullsPerCombatHour": 10.285714285714285,
+      "meanMinutesToGold": 74.84330905233669,
+      "maxMinutesToGold": 116.66666666666669,
+      "maxMinutesToChosenGoldSavingMarks": 233.33333333333337
+    }
+  ],
+  "excluded": [
+    "starter/first-clear grants",
+    "daily activity supplement",
+    "menus/loading",
+    "variable Boss duration",
+    "abandon farming",
+    "retention"
+  ],
+  "checks": {
+    "distributionSumsToOne": true,
+    "95PercentileWithin20": true,
+    "slotProbabilitiesSumToOne": true,
+    "existingAndNewAttackAdditiveCap": true
+  }
+}

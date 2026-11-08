@@ -1,0 +1,628 @@
+TAP version 13
+# Subtest: independent S1: max yujian rejects legacy evolution at 360s and fires three bounded swords
+ok 1 - independent S1: max yujian rejects legacy evolution at 360s and fires three bounded swords
+  ---
+  duration_ms: 7.233333
+  type: 'test'
+  ...
+# Subtest: historical standalone wanjian: tier change during warning uses new tier but excludes power expiring on strike tick
+ok 2 - historical standalone wanjian: tier change during warning uses new tier but excludes power expiring on strike tick
+  ---
+  duration_ms: 9.064875
+  type: 'test'
+  ...
+# Subtest: independent: three pills freeze in queued selection; refresh survives shared expiry once
+ok 3 - independent: three pills freeze in queued selection; refresh survives shared expiry once
+  ---
+  duration_ms: 8.517625
+  type: 'test'
+  ...
+# Subtest: E04 CLASSIC: default and explicit survivor keep exactly the original card pools
+ok 4 - E04 CLASSIC: default and explicit survivor keep exactly the original card pools
+  ---
+  duration_ms: 12.390542
+  type: 'test'
+  ...
+# Subtest: S1 CLASS: yujian is a normal weapon; passive slots do not restore old class cards
+ok 5 - S1 CLASS: yujian is a normal weapon; passive slots do not restore old class cards
+  ---
+  duration_ms: 7.659167
+  type: 'test'
+  ...
+# Subtest: E04 PILL-DRAFT: target level, not banked level, gates three pills; at most one per offer
+ok 6 - E04 PILL-DRAFT: target level, not banked level, gates three pills; at most one per offer
+  ---
+  duration_ms: 5.821833
+  type: 'test'
+  ...
+# Subtest: E04 BREAKTHROUGH: real Run offers at 10 guarantee S1 weapon growth and never a legacy evolution
+ok 7 - E04 BREAKTHROUGH: real Run offers at 10 guarantee S1 weapon growth and never a legacy evolution
+  ---
+  duration_ms: 22.221416
+  type: 'test'
+  ...
+# Subtest: E04 BREAKTHROUGH: maxed S1 pool has a legal three-card fallback without a fake weapon
+ok 8 - E04 BREAKTHROUGH: maxed S1 pool has a legal three-card fallback without a fake weapon
+  ---
+  duration_ms: 0.866458
+  type: 'test'
+  ...
+# Subtest: E04 EVOLVE: xianxia t=359.999 yujian=3 cooldown=5
+ok 9 - E04 EVOLVE: xianxia t=359.999 yujian=3 cooldown=5
+  ---
+  duration_ms: 0.583917
+  type: 'test'
+  ...
+# Subtest: E04 EVOLVE: xianxia t=360 yujian=2 cooldown=5
+ok 10 - E04 EVOLVE: xianxia t=360 yujian=2 cooldown=5
+  ---
+  duration_ms: 0.705917
+  type: 'test'
+  ...
+# Subtest: E04 EVOLVE: xianxia t=360 yujian=3 cooldown=0
+ok 11 - E04 EVOLVE: xianxia t=360 yujian=3 cooldown=0
+  ---
+  duration_ms: 0.73775
+  type: 'test'
+  ...
+# Subtest: E04 EVOLVE: xianxia t=360.001 yujian=3 cooldown=0
+ok 12 - E04 EVOLVE: xianxia t=360.001 yujian=3 cooldown=0
+  ---
+  duration_ms: 1.331875
+  type: 'test'
+  ...
+# Subtest: E04 EVOLVE: survivor t=359.999 yujian=0 cooldown=3
+ok 13 - E04 EVOLVE: survivor t=359.999 yujian=0 cooldown=3
+  ---
+  duration_ms: 1.581334
+  type: 'test'
+  ...
+# Subtest: E04 EVOLVE: survivor t=360 yujian=0 cooldown=2
+ok 14 - E04 EVOLVE: survivor t=360 yujian=0 cooldown=2
+  ---
+  duration_ms: 0.786667
+  type: 'test'
+  ...
+# Subtest: E04 EVOLVE: survivor t=360 yujian=0 cooldown=3
+ok 15 - E04 EVOLVE: survivor t=360 yujian=0 cooldown=3
+  ---
+  duration_ms: 0.320167
+  type: 'test'
+  ...
+# Subtest: E04 EVOLVE: survivor t=360 yujian=3 cooldown=0
+ok 16 - E04 EVOLVE: survivor t=360 yujian=3 cooldown=0
+  ---
+  duration_ms: 0.248167
+  type: 'test'
+  ...
+# Subtest: E04 PILLS: choosing all three applies stats immediately; same pill refreshes without stacking
+ok 17 - E04 PILLS: choosing all three applies stats immediately; same pill refreshes without stacking
+  ---
+  duration_ms: 4.579542
+  type: 'test'
+  ...
+# Subtest: E04 PILL-TIME: pause and levelup freeze ticks/deadlines; resume does not catch up wall time
+ok 18 - E04 PILL-TIME: pause and levelup freeze ticks/deadlines; resume does not catch up wall time
+  ---
+  duration_ms: 1.484042
+  type: 'test'
+  ...
+# Subtest: E04 PILL-EXPIRY: exact wind deadline removes speed before the same Run.step movement
+ok 19 - E04 PILL-EXPIRY: exact wind deadline removes speed before the same Run.step movement
+  ---
+  duration_ms: 17.832792
+  type: 'test'
+  ...
+# Subtest: E04 PILL-EXPIRY: body expires before contact damage on tick 1200
+ok 20 - E04 PILL-EXPIRY: body expires before contact damage on tick 1200
+  ---
+  duration_ms: 4.38675
+  type: 'test'
+  ...
+# Subtest: E04 DAMAGE: contact raw=35, vajra=0, body=false => 35
+ok 21 - E04 DAMAGE: contact raw=35, vajra=0, body=false => 35
+  ---
+  duration_ms: 1.051708
+  type: 'test'
+  ...
+# Subtest: E04 DAMAGE: contact raw=35, vajra=5, body=false => 25
+ok 22 - E04 DAMAGE: contact raw=35, vajra=5, body=false => 25
+  ---
+  duration_ms: 1.039
+  type: 'test'
+  ...
+# Subtest: E04 DAMAGE: contact raw=35, vajra=0, body=true => 18
+ok 23 - E04 DAMAGE: contact raw=35, vajra=0, body=true => 18
+  ---
+  duration_ms: 0.658583
+  type: 'test'
+  ...
+# Subtest: E04 DAMAGE: contact raw=35, vajra=5, body=true => 12
+ok 24 - E04 DAMAGE: contact raw=35, vajra=5, body=true => 12
+  ---
+  duration_ms: 0.68225
+  type: 'test'
+  ...
+# Subtest: E04 DAMAGE: contact raw=17.5, vajra=5, body=true => 6
+ok 25 - E04 DAMAGE: contact raw=17.5, vajra=5, body=true => 6
+  ---
+  duration_ms: 1.177458
+  type: 'test'
+  ...
+# Subtest: E04 DAMAGE: contact raw=1, vajra=5, body=true => 1
+ok 26 - E04 DAMAGE: contact raw=1, vajra=5, body=true => 1
+  ---
+  duration_ms: 0.28025
+  type: 'test'
+  ...
+# Subtest: E04 CLASSIC-DAMAGE: contact preserves fractional incoming damage
+ok 27 - E04 CLASSIC-DAMAGE: contact preserves fractional incoming damage
+  ---
+  duration_ms: 0.267875
+  type: 'test'
+  ...
+# Subtest: E04 PILL-EXPIRY: body expires before bubble damage on tick 1200
+ok 28 - E04 PILL-EXPIRY: body expires before bubble damage on tick 1200
+  ---
+  duration_ms: 8.604334
+  type: 'test'
+  ...
+# Subtest: E04 DAMAGE: bubble raw=35, vajra=0, body=false => 35
+ok 29 - E04 DAMAGE: bubble raw=35, vajra=0, body=false => 35
+  ---
+  duration_ms: 1.034167
+  type: 'test'
+  ...
+# Subtest: E04 DAMAGE: bubble raw=35, vajra=5, body=false => 25
+ok 30 - E04 DAMAGE: bubble raw=35, vajra=5, body=false => 25
+  ---
+  duration_ms: 1.600167
+  type: 'test'
+  ...
+# Subtest: E04 DAMAGE: bubble raw=35, vajra=0, body=true => 18
+ok 31 - E04 DAMAGE: bubble raw=35, vajra=0, body=true => 18
+  ---
+  duration_ms: 1.060084
+  type: 'test'
+  ...
+# Subtest: E04 DAMAGE: bubble raw=35, vajra=5, body=true => 12
+ok 32 - E04 DAMAGE: bubble raw=35, vajra=5, body=true => 12
+  ---
+  duration_ms: 1.006708
+  type: 'test'
+  ...
+# Subtest: E04 DAMAGE: bubble raw=17.5, vajra=5, body=true => 6
+ok 33 - E04 DAMAGE: bubble raw=17.5, vajra=5, body=true => 6
+  ---
+  duration_ms: 0.490084
+  type: 'test'
+  ...
+# Subtest: E04 DAMAGE: bubble raw=1, vajra=5, body=true => 1
+ok 34 - E04 DAMAGE: bubble raw=1, vajra=5, body=true => 1
+  ---
+  duration_ms: 0.604458
+  type: 'test'
+  ...
+# Subtest: E04 CLASSIC-DAMAGE: bubble preserves fractional incoming damage
+ok 35 - E04 CLASSIC-DAMAGE: bubble preserves fractional incoming damage
+  ---
+  duration_ms: 0.421875
+  type: 'test'
+  ...
+# Subtest: E04 WIND: marks existing spores, does not bank XP/recurse; repeated pill attracts later spores
+ok 36 - E04 WIND: marks existing spores, does not bank XP/recurse; repeated pill attracts later spores
+  ---
+  duration_ms: 0.572542
+  type: 'test'
+  ...
+# Subtest: E04 TOKEN: old token cannot consume the next queued offer or mutate any combat state
+ok 37 - E04 TOKEN: old token cannot consume the next queued offer or mutate any combat state
+  ---
+  duration_ms: 0.352833
+  type: 'test'
+  ...
+# Subtest: E04 INVALID: unknown pill does not consume an offer
+ok 38 - E04 INVALID: unknown pill does not consume an offer
+  ---
+  duration_ms: 0.364292
+  type: 'test'
+  ...
+# Subtest: E04 INVALID: unknown weapon does not consume an offer
+ok 39 - E04 INVALID: unknown weapon does not consume an offer
+  ---
+  duration_ms: 0.235916
+  type: 'test'
+  ...
+# Subtest: E04 INVALID: obsolete class passive does not consume an offer
+ok 40 - E04 INVALID: obsolete class passive does not consume an offer
+  ---
+  duration_ms: 0.231083
+  type: 'test'
+  ...
+# Subtest: E04 INVALID: stale weapon tier does not consume an offer
+ok 41 - E04 INVALID: stale weapon tier does not consume an offer
+  ---
+  duration_ms: 0.223917
+  type: 'test'
+  ...
+# Subtest: E04 INVALID: maxed normal passive does not consume an offer
+ok 42 - E04 INVALID: maxed normal passive does not consume an offer
+  ---
+  duration_ms: 0.227583
+  type: 'test'
+  ...
+# Subtest: E04 INVALID: stale normal passive tier does not consume an offer
+ok 43 - E04 INVALID: stale normal passive tier does not consume an offer
+  ---
+  duration_ms: 0.411167
+  type: 'test'
+  ...
+# Subtest: E04 INVALID: lost evolution eligibility does not consume an offer
+ok 44 - E04 INVALID: lost evolution eligibility does not consume an offer
+  ---
+  duration_ms: 0.296666
+  type: 'test'
+  ...
+# Subtest: E04 INVALID: pill before target 5 and xianxia-only cards in classic mode are rejected
+ok 45 - E04 INVALID: pill before target 5 and xianxia-only cards in classic mode are rejected
+  ---
+  duration_ms: 2.395541
+  type: 'test'
+  ...
+# Subtest: E04 WANJIAN: death immediately cancels a real pending warning
+ok 46 - E04 WANJIAN: death immediately cancels a real pending warning
+  ---
+  duration_ms: 0.773333
+  type: 'test'
+  ...
+# Subtest: E04 WANJIAN: abandon immediately cancels a real pending warning
+ok 47 - E04 WANJIAN: abandon immediately cancels a real pending warning
+  ---
+  duration_ms: 0.225625
+  type: 'test'
+  ...
+# Subtest: E04 WANJIAN: cleansing immediately cancels a real pending warning
+ok 48 - E04 WANJIAN: cleansing immediately cancels a real pending warning
+  ---
+  duration_ms: 0.822916
+  type: 'test'
+  ...
+# Subtest: E04 WANJIAN: won immediately cancels a real pending warning
+ok 49 - E04 WANJIAN: won immediately cancels a real pending warning
+  ---
+  duration_ms: 0.224
+  type: 'test'
+  ...
+# Subtest: E04 WANJIAN: pause and card choice freeze, rather than cancel, a pending cast
+ok 50 - E04 WANJIAN: pause and card choice freeze, rather than cancel, a pending cast
+  ---
+  duration_ms: 0.508417
+  type: 'test'
+  ...
+# Subtest: xianxia starts at committed level 1 with matching realm and full base health
+ok 51 - xianxia starts at committed level 1 with matching realm and full base health
+  ---
+  duration_ms: 7.886167
+  type: 'test'
+  ...
+# Subtest: omitted ruleset preserves survivor behavior, including the one-argument choose API
+ok 52 - omitted ruleset preserves survivor behavior, including the one-argument choose API
+  ---
+  duration_ms: 9.231333
+  type: 'test'
+  ...
+# Subtest: banked XP alone cannot apply realm stats, heal, or grant invulnerability
+ok 53 - banked XP alone cannot apply realm stats, heal, or grant invulnerability
+  ---
+  duration_ms: 1.651042
+  type: 'test'
+  ...
+# Subtest: a real XP pickup opens an offer without prematurely committing its level
+ok 54 - a real XP pickup opens an offer without prematurely committing its level
+  ---
+  duration_ms: 6.46175
+  type: 'test'
+  ...
+# Subtest: QUEUE-01: XP from applied 9 to 12 commits offers 10, 11, 12 separately
+ok 55 - QUEUE-01: XP from applied 9 to 12 commits offers 10, 11, 12 separately
+  ---
+  duration_ms: 4.572833
+  type: 'test'
+  ...
+# Subtest: QUEUE-02: one XP batch crosses both breakthroughs and keeps leveling past 27
+ok 56 - QUEUE-02: one XP batch crosses both breakthroughs and keeps leveling past 27
+  ---
+  duration_ms: 5.360083
+  type: 'test'
+  ...
+# Subtest: QUEUE-03: ordinary 1→2 preserves missing HP, including bonuses
+ok 57 - QUEUE-03: ordinary 1→2 preserves missing HP, including bonuses
+  ---
+  duration_ms: 0.776792
+  type: 'test'
+  ...
+# Subtest: QUEUE-03: ordinary 10→11 preserves missing HP, including bonuses
+ok 58 - QUEUE-03: ordinary 10→11 preserves missing HP, including bonuses
+  ---
+  duration_ms: 1.231792
+  type: 'test'
+  ...
+# Subtest: QUEUE-03: ordinary 19→20 preserves missing HP, including bonuses
+ok 59 - QUEUE-03: ordinary 19→20 preserves missing HP, including bonuses
+  ---
+  duration_ms: 1.274417
+  type: 'test'
+  ...
+# Subtest: QUEUE-03: ordinary 27→28 preserves missing HP, including bonuses
+ok 60 - QUEUE-03: ordinary 27→28 preserves missing HP, including bonuses
+  ---
+  duration_ms: 1.731834
+  type: 'test'
+  ...
+# Subtest: ordinary upgrade from full health reaches the new maximum without overflow
+ok 61 - ordinary upgrade from full health reaches the new maximum without overflow
+  ---
+  duration_ms: 2.394959
+  type: 'test'
+  ...
+# Subtest: QUEUE-03/04: breakthrough 10 heals final maximum and preserves immunity 0
+ok 62 - QUEUE-03/04: breakthrough 10 heals final maximum and preserves immunity 0
+  ---
+  duration_ms: 1.394292
+  type: 'test'
+  ...
+# Subtest: QUEUE-03/04: breakthrough 10 heals final maximum and preserves immunity 0.5
+ok 63 - QUEUE-03/04: breakthrough 10 heals final maximum and preserves immunity 0.5
+  ---
+  duration_ms: 1.080125
+  type: 'test'
+  ...
+# Subtest: QUEUE-03/04: breakthrough 10 heals final maximum and preserves immunity 2
+ok 64 - QUEUE-03/04: breakthrough 10 heals final maximum and preserves immunity 2
+  ---
+  duration_ms: 1.63125
+  type: 'test'
+  ...
+# Subtest: QUEUE-03/04: breakthrough 19 heals final maximum and preserves immunity 0
+ok 65 - QUEUE-03/04: breakthrough 19 heals final maximum and preserves immunity 0
+  ---
+  duration_ms: 1.060208
+  type: 'test'
+  ...
+# Subtest: QUEUE-03/04: breakthrough 19 heals final maximum and preserves immunity 0.5
+ok 66 - QUEUE-03/04: breakthrough 19 heals final maximum and preserves immunity 0.5
+  ---
+  duration_ms: 0.970583
+  type: 'test'
+  ...
+# Subtest: QUEUE-03/04: breakthrough 19 heals final maximum and preserves immunity 2
+ok 67 - QUEUE-03/04: breakthrough 19 heals final maximum and preserves immunity 2
+  ---
+  duration_ms: 1.063792
+  type: 'test'
+  ...
+# Subtest: QUEUE-04: breakthrough wave respects center radius, resistance, overlap, and live entities
+ok 68 - QUEUE-04: breakthrough wave respects center radius, resistance, overlap, and live entities
+  ---
+  duration_ms: 1.166709
+  type: 'test'
+  ...
+# Subtest: stale offer tokens cannot consume the next queued card or trigger its breakthrough
+ok 69 - stale offer tokens cannot consume the next queued card or trigger its breakthrough
+  ---
+  duration_ms: 1.211459
+  type: 'test'
+  ...
+# Subtest: invalid indices and foreign tokens leave the entire breakthrough transaction unchanged
+ok 70 - invalid indices and foreign tokens leave the entire breakthrough transaction unchanged
+  ---
+  duration_ms: 1.371333
+  type: 'test'
+  ...
+# Subtest: invalid card payload cannot consume pending levels, heal, or half-commit a breakthrough
+ok 71 - invalid card payload cannot consume pending levels, heal, or half-commit a breakthrough
+  ---
+  duration_ms: 3.187791
+  type: 'test'
+  ...
+# Subtest: QUEUE-05: pause freezes a queued breakthrough and resume preserves the exact offer/token
+ok 72 - QUEUE-05: pause freezes a queued breakthrough and resume preserves the exact offer/token
+  ---
+  duration_ms: 1.512917
+  type: 'test'
+  ...
+# Subtest: same seed and accepted choices produce identical offers despite rejected callbacks and pauses
+ok 73 - same seed and accepted choices produce identical offers despite rejected callbacks and pauses
+  ---
+  duration_ms: 4.272417
+  type: 'test'
+  ...
+# Subtest: QUEUE-07: lethal contact plus healing/XP pickups cannot revive player (Boss death=false)
+ok 74 - QUEUE-07: lethal contact plus healing/XP pickups cannot revive player (Boss death=false)
+  ---
+  duration_ms: 0.743417
+  type: 'test'
+  ...
+# Subtest: QUEUE-07: lethal contact plus healing/XP pickups cannot revive player (Boss death=true)
+ok 75 - QUEUE-07: lethal contact plus healing/XP pickups cannot revive player (Boss death=true)
+  ---
+  duration_ms: 1.2665
+  type: 'test'
+  ...
+# Subtest: legacy survivor retains same-step healing pickup behavior after lethal contact
+ok 76 - legacy survivor retains same-step healing pickup behavior after lethal contact
+  ---
+  duration_ms: 2.165292
+  type: 'test'
+  ...
+# Subtest: QUEUE-07: Boss ending ignores pending levels and pickups; condensation freezes movement until extraction
+ok 77 - QUEUE-07: Boss ending ignores pending levels and pickups; condensation freezes movement until extraction
+  ---
+  duration_ms: 6.291542
+  type: 'test'
+  ...
+# Subtest: legacy survivor can still move during cleansing
+ok 78 - legacy survivor can still move during cleansing
+  ---
+  duration_ms: 6.645459
+  type: 'test'
+  ...
+# Subtest: sword sweep hits nearest intersected enemy, irrespective of pool order
+ok 79 - sword sweep hits nearest intersected enemy, irrespective of pool order
+  ---
+  duration_ms: 5.179333
+  type: 'test'
+  ...
+# Subtest: sword tests final partial segment and never travels beyond its range
+ok 80 - sword tests final partial segment and never travels beyond its range
+  ---
+  duration_ms: 2.042208
+  type: 'test'
+  ...
+# Subtest: piercing sword hits overlapping enemy only once across steps
+ok 81 - piercing sword hits overlapping enemy only once across steps
+  ---
+  duration_ms: 2.20175
+  type: 'test'
+  ...
+# Subtest: independent S1 schema: live data accepts zero knockback and fractional arc damage
+ok 82 - independent S1 schema: live data accepts zero knockback and fractional arc damage
+  ---
+  duration_ms: 5.383792
+  type: 'test'
+  ...
+# Subtest: independent S1 schema rejects duplicate index
+ok 83 - independent S1 schema rejects duplicate index
+  ---
+  duration_ms: 2.964375
+  type: 'test'
+  ...
+# Subtest: independent S1 schema rejects wrong stable index
+ok 84 - independent S1 schema rejects wrong stable index
+  ---
+  duration_ms: 3.845166
+  type: 'test'
+  ...
+# Subtest: independent S1 schema rejects non-xianxia
+ok 85 - independent S1 schema rejects non-xianxia
+  ---
+  duration_ms: 3.467042
+  type: 'test'
+  ...
+# Subtest: independent S1 schema rejects unsupported evolution
+ok 86 - independent S1 schema rejects unsupported evolution
+  ---
+  duration_ms: 5.610459
+  type: 'test'
+  ...
+# Subtest: independent S1 schema rejects missing rank
+ok 87 - independent S1 schema rejects missing rank
+  ---
+  duration_ms: 4.379666
+  type: 'test'
+  ...
+# Subtest: independent S1 schema rejects invalid range
+ok 88 - independent S1 schema rejects invalid range
+  ---
+  duration_ms: 4.350458
+  type: 'test'
+  ...
+# Subtest: independent S1 schema rejects negative knockback
+ok 89 - independent S1 schema rejects negative knockback
+  ---
+  duration_ms: 1.578792
+  type: 'test'
+  ...
+# Subtest: independent S1 schema rejects fractional count
+ok 90 - independent S1 schema rejects fractional count
+  ---
+  duration_ms: 2.670916
+  type: 'test'
+  ...
+# Subtest: independent S1 schema rejects nonpositive lifetime
+ok 91 - independent S1 schema rejects nonpositive lifetime
+  ---
+  duration_ms: 2.294416
+  type: 'test'
+  ...
+# Subtest: independent S1 schema rejects missing damage
+ok 92 - independent S1 schema rejects missing damage
+  ---
+  duration_ms: 2.8785
+  type: 'test'
+  ...
+# Subtest: independent S1 schema rejects zero cooldown
+ok 93 - independent S1 schema rejects zero cooldown
+  ---
+  duration_ms: 1.73875
+  type: 'test'
+  ...
+# Subtest: independent S1 schema rejects invalid radius
+ok 94 - independent S1 schema rejects invalid radius
+  ---
+  duration_ms: 1.149292
+  type: 'test'
+  ...
+# Subtest: independent S1 schema rejects invalid angle
+ok 95 - independent S1 schema rejects invalid angle
+  ---
+  duration_ms: 0.783083
+  type: 'test'
+  ...
+# Subtest: independent S1 schema rejects zero windup
+ok 96 - independent S1 schema rejects zero windup
+  ---
+  duration_ms: 0.662291
+  type: 'test'
+  ...
+# Subtest: independent S1: queued first offer commits exactly once and rejects stale tier and token atomically
+ok 97 - independent S1: queued first offer commits exactly once and rejects stale tier and token atomically
+  ---
+  duration_ms: 4.854292
+  type: 'test'
+  ...
+# Subtest: independent S1: Run freezes arc windup through pause and queued upgrades, strikes once after resume
+ok 98 - independent S1: Run freezes arc windup through pause and queued upgrades, strikes once after resume
+  ---
+  duration_ms: 5.949667
+  type: 'test'
+  ...
+# Subtest: S1 opens with only new sword and no legacy class multiplier
+ok 99 - S1 opens with only new sword and no legacy class multiplier
+  ---
+  duration_ms: 8.327291
+  type: 'test'
+  ...
+# Subtest: first choice learns arc once; pause and stale offer cannot spend a second level
+ok 100 - first choice learns arc once; pause and stale offer cannot spend a second level
+  ---
+  duration_ms: 3.909
+  type: 'test'
+  ...
+# Subtest: forged legacy and future cards are rejected without consuming level
+ok 101 - forged legacy and future cards are rejected without consuming level
+  ---
+  duration_ms: 0.948417
+  type: 'test'
+  ...
+# Subtest: only simulated movement updates sword aim, not paused input
+ok 102 - only simulated movement updates sword aim, not paused input
+  ---
+  duration_ms: 3.503583
+  type: 'test'
+  ...
+# Subtest: all staged choices stay valid through 27; no unimplemented skill enters pool
+ok 103 - all staged choices stay valid through 27; no unimplemented skill enters pool
+  ---
+  duration_ms: 7.321375
+  type: 'test'
+  ...
+1..103
+# tests 103
+# suites 0
+# pass 103
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 292.480875

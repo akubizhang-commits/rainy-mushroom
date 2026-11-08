@@ -36,8 +36,8 @@ test('physical/magic defenses route separately, hybrid splits once, absent armor
   assert.ok(m.physicalDefense > m.magicDefense)
   const physical = gear.armorDamageMultiplier(armor, 'physical')
   const magic = gear.armorDamageMultiplier(armor, 'magic')
-  close(physical, 1000 / (1000 + m.physicalDefense))
-  close(magic, 1000 / (1000 + m.magicDefense))
+  close(physical, 500 / (500 + m.physicalDefense))
+  close(magic, 500 / (500 + m.magicDefense))
   close(gear.armorDamageMultiplier(armor, 'hybrid'), (physical + magic) / 2)
   close(gear.armorDamageMultiplier(null, 'physical'), 1)
   assert.throws(() => gear.armorDamageMultiplier(armor, 'fire'))
@@ -80,7 +80,7 @@ test('real hostile projectiles apply the selected defense once and preserve type
     const restored = TowerRun.restore(snap)
     const before = restored.state.player.hp
     restored.advance(1 / 60)
-    close(before - restored.state.player.hp, 20 * gear.armorDamageMultiplier(armor, damageType))
+    close(before - restored.state.player.hp, 40 * gear.armorDamageMultiplier(armor, damageType))
     const sheet = characterCombatAttributes(restored.state.loadout)
     close(sheet.physicalReduction, 1 - gear.armorDamageMultiplier(armor, 'physical'))
     close(sheet.magicReduction, 1 - gear.armorDamageMultiplier(armor, 'magic'))
@@ -100,7 +100,7 @@ test('hostile zones preserve magic damage, reject invalid types and receive the 
   const restored = TowerRun.restore(snap), before = restored.state.player.hp
   restored.advance(1/60)
   const loss = before - restored.state.player.hp
-  close(loss, 20 * gear.armorDamageMultiplier(armor, 'magic'))
+  close(loss, 40 * gear.armorDamageMultiplier(armor, 'magic'))
   close(restored.state.armorState.healedTotal,0)
 })
 test('each armor quality increases both damage-type survival; top variants retain physical and magical choices', () => {

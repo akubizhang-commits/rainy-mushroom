@@ -1,0 +1,30 @@
+import {sancaiContains} from './TowerSancai.js'
+import {monsterSlowStrength} from './TowerMonsterAttributes.js'
+
+export const FORMATION_SLOWS = Object.freeze({sj_sancai: .2, sj_formation: .3, evo_sixiang: .4})
+const durations = {sj_sancai: 3, sj_formation: 8, evo_sixiang: 8}
+
+// Same circles/triangles/diamonds as the damage fields, including enemy hurtboxes.
+export function formationContains(zone, enemy) {
+  if (zone.formId === 'sj_sancai') return sancaiContains(zone, enemy)
+  const x = Math.abs(enemy.x - zone.x), y = Math.abs(enemy.y - zone.y)
+  const radius = Math.max(0, enemy.radius || 0), field = zone.radius
+  if (zone.formId === 'sj_formation') return Math.hypot(x, y) <= field + radius
+  if (zone.formId !== 'evo_sixiang') return false
+  if (x + y <= field) return true
+  // Closest point on the diamond edge in this quadrant, clamped at both tips.
+  const t = Math.max(0, Math.min(1, (field - x + y) / (2 * field)))
+  return Math.hypot(x - field * (1 - t), y - field * t) <= radius + 1e-9
+}
+
+export function formationMovementMultiplier(zones, enemy, time, visible = () => true) {
+  if (enemy.hp <= 0) return 1
+  let slow = 0
+  for (const zone of zones) {
+    const strength = FORMATION_SLOWS[zone.formId]
+    if (!strength || zone.hostile || zone.renderOnly || time < zone.startedAt
+      || time >= Math.min(zone.expiresAt, zone.startedAt + durations[zone.formId])) continue
+    if (formationContains(zone, enemy) && visible(zone, enemy)) slow = Math.max(slow, strength)
+  }
+  return 1 - monsterSlowStrength(enemy,slow)
+}

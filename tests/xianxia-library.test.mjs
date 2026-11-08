@@ -8,19 +8,19 @@ import {
 import { CAMP_PILLS, TOWER_XP_CAP } from '../js/xianxia/TowerProfile.js'
 import { WEAPONS, WEAPON_BASE_ATTACK, createFixedWeapon, weaponDescription } from '../js/xianxia/TowerWeapons.js'
 import { EQUIPMENT, RING_AFFIX_RANGES, ARMOR_AFFIX_RANGES, createFixedEquipment, equipmentDescription } from '../js/xianxia/TowerEquipment.js'
-import { OPEN_EQUIPMENT_TIERS, equipmentTierRequirement } from '../js/xianxia/TowerEquipmentTiers.js'
+import { OPEN_EQUIPMENT_TIERS, equipmentRequirement } from '../js/xianxia/TowerEquipmentTiers.js'
 
 const amount = n => String(Number(n.toFixed(12)))
 const range = r => r[0] === r[1] ? amount(r[0]) : `${amount(r[0])}～${amount(r[1])}`
 
 test('encyclopedia contains every open definition and only this mode’s camp medicine', () => {
-  assert.deepEqual(LIBRARY_VOLUMES.map(v => v.id), ['pills', 'weapons', 'equipment', 'materials'])
+  assert.deepEqual(LIBRARY_VOLUMES.map(v => v.id), ['lore', 'pills', 'weapons', 'equipment', 'materials'])
   assert.deepEqual(libraryEntries('pills').map(e => e.id), Object.keys(CAMP_PILLS).filter(id => !CAMP_PILLS[id].material).map(id => `pill_${id}`))
   const definitions = [...WEAPONS, ...EQUIPMENT].filter(d => OPEN_EQUIPMENT_TIERS.includes(d.tier))
   assert.deepEqual(new Set(LIBRARY_ENTRIES.filter(e => ['weapons', 'equipment'].includes(e.volume)).map(e => e.id)), new Set(definitions.map(d => d.id)))
   assert.equal(LIBRARY_ENTRIES.length, new Set(LIBRARY_ENTRIES.map(e => e.id)).size)
   assert.equal(LIBRARY_QUALITY_NAMES.length, 5)
-  for (const entry of LIBRARY_ENTRIES) {
+  for (const entry of LIBRARY_ENTRIES.filter(e => e.volume !== 'lore')) {
     assert.ok(entry.description)
     assert.ok(entry.name)
     assert.ok(entry.qualities.length)
@@ -44,8 +44,12 @@ test('only real accepted icons are referenced, missing art does not remove entri
   const illustrated = new Set(LIBRARY_ENTRIES.filter(e => ['weapons', 'equipment'].includes(e.volume) && e.icon).map(e => `${e.id}.png`))
   const files = readdirSync(new URL('tower-equipment/', base)).filter(name => name.endsWith('.png'))
   assert.deepEqual(illustrated, new Set(files), 'new accepted icons must be explicitly added to the library artwork list')
-  assert.equal(LIBRARY_ENTRIES.find(e => e.id === 'eq_ring_dingwei').icon, '')
-  assert.ok(libraryDetails('eq_ring_dingwei'))
+  // Any weapon/equipment still without accepted art keeps its entry with an empty icon.
+  const missing = LIBRARY_ENTRIES.find(e => ['weapons', 'equipment'].includes(e.volume) && !files.includes(`${e.id}.png`))
+  if (missing) {
+    assert.equal(missing.icon, '')
+    assert.ok(libraryDetails(missing.id))
+  }
 })
 
 test('search and chapters are deterministic, detached, and do not expose unrelated categories', () => {
@@ -64,7 +68,7 @@ test('search and chapters are deterministic, detached, and do not expose unrelat
 test('medicine amounts, prices, cap, and non-consumption rules follow camp definitions', () => {
   const healing = libraryDetails('pill_huichun')
   assert.ok(healing.effects.some(text => text.includes(`${CAMP_PILLS.huichun.healShare * 100}%`)))
-  assert.ok(healing.source.includes(`${CAMP_PILLS.huichun.price}贡献`))
+  assert.ok(healing.source.includes(`${CAMP_PILLS.huichun.price}下品灵石`))
   assert.match(healing.conditions.join(' '), /满血.*不消耗/)
   assert.match(healing.conditions.join(' '), /塔内不可服用/)
   const training = libraryDetails('pill_peiyuan')
@@ -74,10 +78,10 @@ test('medicine amounts, prices, cap, and non-consumption rules follow camp defin
   assert.match(training.conditions.join(' '), /事先确认实际收益与浪费/)
 })
 
-test('initial equipment has no realm prerequisite; all others show their actual tier requirement', () => {
+test('equipment consistently shows major-realm wear requirements', () => {
   for (const d of [...WEAPONS, ...EQUIPMENT]) {
     const details = libraryDetails(d.id)
-    assert.equal(details.requirement, d.qualities.includes(0) ? '境界要求：无' : `境界要求：${equipmentTierRequirement(d.tier)}`)
+    assert.equal(details.requirement, `穿戴要求：${equipmentRequirement(d)}`)
     assert.deepEqual(libraryDetails(d.id, 'invalid'), details)
     assert.deepEqual(libraryDetails(d.id, 99), details)
   }
@@ -90,19 +94,22 @@ test('initial equipment has no realm prerequisite; all others show their actual 
 test('weapon descriptions show the unique fixed identity rather than random ranges', () => {
   for(const d of WEAPONS.filter(d=>d.quality)) assert.deepEqual(libraryDetails(d.id).effects,weaponDescription(createFixedWeapon(d.id,'library-test')))
 })
-test('ring descriptions show concise fixed crit and cooldown attributes', () => {
+test('ring descriptions show their actual fixed crit or cooldown attributes', () => {
   for(const d of EQUIPMENT.filter(d=>d.category==='ring'&&d.quality)) {
     const details=libraryDetails(d.id), text=details.effects.join(' ')
     assert.deepEqual(details.effects,equipmentDescription(createFixedEquipment(d.id,'library-test')))
-    assert.match(text,/暴击伤害 \+/);assert.match(text,/所有技能冷却时间 -/)
+    const affixes=createFixedEquipment(d.id,'library-test').affixes
+    assert.equal(/暴击伤害 \+/.test(text),affixes.some(a=>a.type==='critBonus'))
+    assert.equal(/所有技能冷却时间 -/.test(text),affixes.some(a=>a.type==='cooldownReduction'))
     assert.doesNotMatch(text,/[：；]|不缩短|独立判定/)
   }
 })
-test('armor descriptions list defenses and periodic recovery without explanations', () => {
+test('armor descriptions list defenses, periodic recovery and conditional recovery', () => {
   for(const d of EQUIPMENT.filter(d=>d.category==='armor'&&d.quality)) {
     const details=libraryDetails(d.id), text=details.effects.join(' ')
     assert.deepEqual(details.effects,equipmentDescription(createFixedEquipment(d.id,'library-test')))
-    assert.match(text,/物理防御 \+/);assert.doesNotMatch(text,/法术防御 \+/);assert.match(text,/气血回复 \+[\d.]+%\/3秒/);assert.doesNotMatch(text,/[：；]/)
+    assert.match(text,/物理防御 \+/);assert.doesNotMatch(text,/法术防御 \+/);assert.match(text,/气血回复 \+[\d.]+%\/3秒/);assert.doesNotMatch(text,/；/)
+    if(text.includes('连续4秒未受伤'))assert.match(text,/每3秒气血回复额外.*总回复上限2.5%/)
   }
 })
 
@@ -139,3 +146,21 @@ test('all catalogue and detail results are immutable and leave game definitions 
   assert.match(libraryDetails('pill_xiaoyue').effects.join(''), /75%/)
   assert.match(libraryDetails('pill_chilin').effects.join(''), /80%/)
  })
+
+test('霁云志 is read-only prose with its own sections and no item fields', () => {
+  const lore = libraryEntries('lore')
+  assert.ok(lore.length >= 10)
+  assert.deepEqual(libraryChapters('lore'), ['世界篇', '修行篇', '宗门篇', '锁妖塔篇'])
+  assert.deepEqual(libraryEntries('lore', '山峰', '宗门篇').map(e => e.id), ['lore_zhufeng', 'lore_lingxiao', 'lore_danxia', 'lore_lianqi', 'lore_sanfeng'])
+  for (const entry of lore) {
+    const detail = libraryDetails(entry.id)
+    assert.equal(entry.icon, '')
+    assert.ok(entry.description && detail.summary)
+    assert.equal(detail.lore, true)
+    assert.equal(detail.requirement, '')
+    assert.ok(detail.sections.length && detail.sections.every(s => s.title && s.lines.length && s.lines.every(Boolean)))
+    assert.ok(Object.isFrozen(detail.sections[0].lines))
+  }
+  // Rumours must be labelled as such rather than read as confirmed canon.
+  assert.match(libraryDetails('lore_chuanwen').sections[0].title, /未经证实/)
+})

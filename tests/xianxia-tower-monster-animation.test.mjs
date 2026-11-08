@@ -12,6 +12,7 @@ const source = stripTypeScriptTypes(readFileSync(new URL('../cocos-pilot/assets/
 const resource = name => new URL('../cocos-pilot/assets/resources/tower-monsters-motion/'+name,import.meta.url)
 const manifest = JSON.parse(readFileSync(resource('boar.json'),'utf8'))
 const copy = value => JSON.parse(JSON.stringify(value))
+const closeSize=(actual,expected)=>assert.ok(Math.abs(actual-expected)<1e-8,`${actual} != ${expected}`)
 class Node {
   constructor(name='') { Object.assign(this,{name,layer:1,children:[],components:new Map(),isValid:true,active:true}) }
   addChild(n) { n.removeFromParent(); n.parent=this; this.children.push(n) }
@@ -26,6 +27,7 @@ class UITransform {
   setContentSize(width,height) { this.contentSize={width,height} }
   setAnchorPoint(x,y) { this.anchor={x,y} }
 }
+class Color { constructor(r,g,b,a){Object.assign(this,{r,g,b,a})} }
 class Sprite { static SizeMode={CUSTOM:0}; spriteFrame=null }
 class SpriteFrame { isValid=true; destroy(){this.isValid=false} }
 class Texture2D { static Filter={LINEAR:0}; isValid=true; setFilters(){} destroy(){this.isValid=false} }
@@ -38,7 +40,7 @@ class Rect { constructor(x,y,width,height){Object.assign(this,{x,y,width,height}
 class Size { constructor(width,height){Object.assign(this,{width,height})} }
 function setup() {
   const requests=[]
-  const context={ARCHETYPES,setTowerDepth:()=>{},Node,UITransform,Sprite,SpriteFrame,Texture2D,ImageAsset,JsonAsset,Rect,Size,
+  const context={Color,ARCHETYPES,setTowerDepth:()=>{},Node,UITransform,Sprite,SpriteFrame,Texture2D,ImageAsset,JsonAsset,Rect,Size,
     isValid:n=>!!n?.isValid,resources:{load(path,Type,done){requests.push({path,Type,done})}}}
   const Art=runInNewContext('(() => {'+source+';return TowerMonsterArt})()',context)
   const art=new Art(),parent=new Node('monsters')
@@ -73,14 +75,14 @@ test('spiders share stage resources while elite size remains independent from Bo
   f.art.draw(...args);
   f.staticImage(family);
   const size=f.art.draw(...args);
-  assert.equal(size,24*3.2*1.12);
-  const actor=f.art.actors.get(family);
+  closeSize(size,148.93980582524273);
+  const actor=(f.art.speciesRenderers.get(family)??f.art).actors.get(family);
   assert.equal(actor.node.position.y,size*.4);
   assert.equal(actor.sprite.spriteFrame.texture.image.width,256);
  }
- assert.ok(f.requests.every(r=>!r.path.startsWith('tower-monsters-motion/')),'static portraits must not claim another animal’s animation');
+ assert.ok(f.requests.filter(r=>r.path.startsWith('tower-monsters-motion/')).every(r=>r.path==='tower-monsters-motion/spider-lady-v1'),'spider lady loads only its own walk atlas; the reserved queen stays static');
  f.art.beginFrame();f.art.endFrame(1,new Set(['spider-lady','spider-queen']));
- assert.equal(f.art.actors.size,0,'killed static portraits leave no ghost actor');
+ assert.equal(f.art.actors.size,0,'killed static portraits leave no ghost actor');assert.equal(f.art.speciesRenderers.get('spider-lady').actors.size,0);
 });
 
 test('runtime atlas exactly preserves the delivered pixels and rectangles; unapproved walking loop is absent',()=>{
@@ -118,9 +120,9 @@ test('approved boar pack selects movement, charge, enrage, hit and confirmed dea
 
 test('undelivered species and legacy callers retain static rendering',()=>{
   const f=setup()
-  f.art.draw(f.parent,1,'bear',0,0,0,1,25,{time:1,ai:{mode:'active',until:2}})
-  f.staticImage('bear')
-  assert.equal(f.art.draw(f.parent,1,'bear',0,0,0,1,25),80)
+  f.art.draw(f.parent,1,'ape',0,0,0,1,25,{time:1,ai:{mode:'active',until:2}})
+  f.staticImage('ape')
+  assert.equal(f.art.draw(f.parent,1,'ape',0,0,0,1,25),80)
   f.art.draw(f.parent,2,'boar',0,0,0,1,25);f.staticImage()
   assert.equal(f.requests.filter(r=>r.path.startsWith('tower-monsters-motion/')).length,0)
   f.art.destroy()
@@ -178,13 +180,13 @@ test('gore phases follow the attack clock, while repeated paused draws preserve 
  f.art.beginFrame();f.art.endFrame(13,new Set());assert.equal(f.parent.children.length,0,'offscreen removal must not create an unconfirmed death');f.art.destroy();
 });
 
-test('boar boss is twice the prior base size and death preserves boss size while ending rage',()=>{
+test('boar boss clears the high-rank elite size and death preserves boss size while ending rage',()=>{
  const f=setup();f.draw(10);f.staticImage();f.motionImages();
  const draw=(role)=>f.art.draw(f.parent,'boar1','boar',12,34,100,200,30,{time:10,worldY:50,role,ai:{mode:'approach',until:0},mechanic:{enraged:role==='boss'}});
- assert.equal(draw('normal'),26*3.2);assert.equal(draw('boss'),220);
- const a=f.art.actors.get('boar1');assert.equal(a.transform.contentSize.width,220);assert.equal(a.node.position.y,34);
+ assert.equal(draw('normal'),26*3.2);closeSize(draw('boss'),237.952);
+ const a=f.art.actors.get('boar1');closeSize(a.transform.contentSize.width,237.952);assert.equal(a.node.position.y,34);
  f.art.beginFrame();f.art.endFrame(11,new Set(['boar1']));
- assert.equal(a.transform.contentSize.width,220);assert.equal(a.node.scale.y,1);assert.equal(a.sprite.spriteFrame.texture,f.art.motionTexture);
+ closeSize(a.transform.contentSize.width,237.952);assert.equal(a.node.scale.y,1);assert.equal(a.sprite.spriteFrame.texture,f.art.motionTexture);
  f.art.destroy();
 });
 
@@ -212,18 +214,18 @@ test('wolf loads only its native atlas; bite phases, summon, pause and boss deat
 });
 
 test('approved 512px portraits load, keep front-facing anatomy and separate boss scale',()=>{
- for(const family of ['crocodile','rhino','yak','bat','falcon']){
+ for(const family of ['rhino','yak']){
   const f=setup();const render=(role,playerX)=>f.art.draw(f.parent,'portrait',family,0,0,100,playerX,40,{time:10,hp:100,role,worldY:0,ai:{mode:'approach',until:0}});
   assert.equal(render('normal',0),0);
   f.finish('tower-monsters/'+family,ImageAsset,new ImageAsset(512,512));
   const normal=render('normal',0),boss=render('boss',200);
   assert.ok(boss>normal);assert.equal(boss,['bat','falcon'].includes(family)?275:220);
-  assert.equal(f.requests.length,1,'static portraits must not request a motion atlas');
+  assert.equal(f.requests.length,3,'each upright Boss loads its own motion pack');
   if(family==='spider'){
    assert.equal(f.art.actors.get('portrait').node.scale.x,1);
    render('boss',0);assert.equal(f.art.actors.get('portrait').node.scale.x,1);
   }
-  f.art.beginFrame();f.art.endFrame(11,new Set(['portrait']));assert.equal(f.art.actors.size,0);
+  f.art.beginFrame();f.art.endFrame(11,new Set(['portrait']));assert.equal(f.art.actors.size,0);assert.equal(f.art.speciesRenderers.get('rhino')?.actors.size??0,0);f.art.destroy();
  }
 });
 
@@ -234,13 +236,13 @@ test('side-facing crocodiles spawn toward the player and turn while approaching'
    {time:10,role,worldY:0,ai:{mode:'approach',until:0}});
   render('left',100,0);f.staticImage('crocodile');
   render('left',100,0);
-  assert.equal(f.art.actors.get('left').node.scale.x,1,'left-facing source points toward player on left');
+  assert.equal(f.art.speciesRenderers.get('crocodile').actors.get('left').node.scale.x,1,'left-facing source points toward player on left');
   render('right',-100,0);
-  assert.equal(f.art.actors.get('right').node.scale.x,-1,'source must mirror toward player on right');
+  assert.equal(f.art.speciesRenderers.get('crocodile').actors.get('right').node.scale.x,-1,'source must mirror toward player on right');
   render('left',90,0);
-  assert.equal(f.art.actors.get('left').node.scale.x,1);
+  assert.equal(f.art.speciesRenderers.get('crocodile').actors.get('left').node.scale.x,1);
   render('left',100,200);
-  assert.equal(f.art.actors.get('left').node.scale.x,-1);
+  assert.equal(f.art.speciesRenderers.get('crocodile').actors.get('left').node.scale.x,-1);
  }
 });
 
@@ -252,11 +254,11 @@ test('static side-facing monsters keep the attack direction when displaced or fl
   render(0,-100,'approach',-1);f.staticImage(family);
   render(0,-100,'windup',-1);
   render(10,100,'active',-1);
-  assert.equal(f.art.actors.get('attacker').node.scale.x,1,`${family}: left attack overrides right displacement and flanking`);
+  assert.equal((f.art.speciesRenderers.get(family)||f.art).actors.get('attacker').node.scale.x,1,`${family}: left attack overrides right displacement and flanking`);
   render(0,-100,'recovery',1);
-  assert.equal(f.art.actors.get('attacker').node.scale.x,-1,`${family}: right attack overrides left displacement`);
+  assert.equal((f.art.speciesRenderers.get(family)||f.art).actors.get('attacker').node.scale.x,-1,`${family}: right attack overrides left displacement`);
   render(-10,-100,'approach',1);
-  assert.equal(f.art.actors.get('attacker').node.scale.x,1,'approach ignores the stale attack');
+  assert.equal((f.art.speciesRenderers.get(family)||f.art).actors.get('attacker').node.scale.x,1,'approach ignores the stale attack');
  }
 });
 
@@ -267,11 +269,11 @@ test('rank-seven white tiger owns its portrait and scales around its feet',()=>{
  assert.equal(Art.artFamily('tiger','tiger_elite'),'tiger-humanoid');
  const args=[f.parent,'human-white-tiger','white-tiger',0,0,100,-100,42,{time:0,hp:100,worldY:0,role:'boss',ai:{mode:'approach'}}];
  f.art.draw(...args);f.staticImage('white-tiger');
- assert.equal(f.art.draw(...args),220);
- const actor=f.art.actors.get('human-white-tiger');
+ closeSize(f.art.draw(...args),286.1110679611651);
+ const actor=f.art.speciesRenderers.get('white-tiger').actors.get('human-white-tiger');
  assert.equal(actor.node.position.y,0);
  assert.ok(Math.abs(actor.transform.anchor.y-.1)<1e-10);
- assert.ok(f.requests.every(r=>!r.path.startsWith('tower-monsters-motion/')));
+ assert.ok(f.requests.filter(r=>r.path.startsWith('tower-monsters-motion/')).every(r=>r.path==='tower-monsters-motion/white-tiger-v1'),'white tiger loads only its own walk atlas');
 });
 
 
@@ -281,11 +283,11 @@ test('rank-five snake boss portrait leaves lower-rank snakes unchanged',()=>{
  for(const id of ['snake_normal','snake_elite'])assert.equal(Art.artFamily('snake',id),'snake');
  const args=[f.parent,'snake-boss','snake-lady',0,0,100,-100,42,{time:0,hp:100,worldY:0,role:'boss',ai:{mode:'approach'}}];
  f.art.draw(...args);f.staticImage('snake-lady');
- assert.equal(f.art.draw(...args),220);
- const actor=f.art.actors.get('snake-boss');
+ closeSize(f.art.draw(...args),245.2380582524272);
+ const actor=f.art.speciesRenderers.get('snake-lady').actors.get('snake-boss');
  assert.equal(actor.node.position.y,0);
  assert.ok(Math.abs(actor.transform.anchor.y-.1)<1e-10);
- assert.ok(f.requests.every(r=>!r.path.startsWith('tower-monsters-motion/')));
+ assert.ok(f.requests.filter(r=>r.path.startsWith('tower-monsters-motion/')).every(r=>r.path==='tower-monsters-motion/snake-lady-v1'),'serpent queen loads only its own walk atlas');
 });
 
 test('bear portraits follow form stage and preserve role sizes and ground anchor',()=>{
@@ -294,13 +296,14 @@ test('bear portraits follow form stage and preserve role sizes and ground anchor
  for(const role of ['normal','elite','boss']){
   const args=[f.parent,role,'bear-humanoid',0,0,100,-100,32,{time:0,hp:100,worldY:0,role,ai:{mode:'approach'}}];
   f.art.draw(...args);if(role==='normal')f.staticImage('bear-humanoid');
-  const size=f.art.draw(...args);assert.equal(size,Art.bodySize('bear',role,32));
-  assert.equal(f.art.actors.get(role).node.position.y,0);
+  const size=f.art.draw(...args);closeSize(size,{normal:114.82718446601942,elite:195.206213592233, boss:328.4057475728156}[role]);
+  assert.equal(f.art.speciesRenderers.get('bear-humanoid').actors.get(role).node.position.y,0);
  }
- assert.ok(f.requests.every(r=>!r.path.startsWith('tower-monsters-motion/')));
+ // The upright form owns only its walking atlas; the low-rank bear slam atlas is never shared.
+ assert.deepEqual([...new Set(f.requests.filter(r=>r.path.startsWith('tower-monsters-motion/')).map(r=>r.path))],['tower-monsters-motion/bear-humanoid-v1']);
 });
 
-test('low-rank spider owns its atlas, phases and frontal pose; death uses existing removal',()=>{
+test('low-rank spider owns its atlas, phases and frontal pose; death holds frontal pose until cleanup',()=>{
  const f=setup(),data=JSON.parse(readFileSync(resource('spider-v1.json'),'utf8'));
  const render=(time,extra={})=>{f.art.beginFrame();return f.art.draw(f.parent,'spider1','spider',20,30,50,0,24,{time,hp:100,worldY:70,role:'normal',ai:{mode:'approach',until:0},...extra})};
  render(1);const image=f.staticImage('spider');
@@ -318,8 +321,411 @@ test('low-rank spider owns its atlas, phases and frontal pose; death uses existi
  }
  render(9,{hp:90});assert.match(name(),/^hit-/);render(9.2,{hp:80});assert.equal(name(),'hit-000');
  assert.equal(actor.sprite.spriteFrame.rect.width,256);assert.equal(actor.transform.anchor.y,1-data.anchor[1]);assert.equal(actor.node.position.y,30);
- f.art.beginFrame();f.art.endFrame(10,new Set(['spider1']));assert.equal(spider.actors.size,0);assert.equal(data.clips.death,undefined);
+ f.art.beginFrame();f.art.endFrame(10,new Set(['spider1']));assert.equal(spider.actors.size,1);assert.equal(name(),'death-000');assert.equal(actor.node.scale.x,1);
+ f.art.beginFrame();f.art.endFrame(10,new Set(['spider1']));assert.equal(name(),'death-000');
+ f.art.beginFrame();f.art.endFrame(11,new Set(['spider1']));assert.equal(name(),'death-018');
+ f.art.beginFrame();f.art.endFrame(13,new Set(['spider1']));assert.equal(spider.actors.size,0);
  assert.equal(f.art.constructor.artFamily('spider','spider_boss'),'spider-lady');
  const png=readFileSync(resource('spider-v1.png'));assert.equal(png.readUInt32BE(16),data.width);assert.equal(png.readUInt32BE(20),data.height);assert.equal(png[25],6);assert.equal(createHash('sha256').update(png).digest('hex'),data.sourceSha256);
  assert.deepEqual(data.damageEvents,[]);f.art.destroy();assert.equal(texture.refs,0);assert.equal(image.refs,0);
+});
+
+test('bat flight keeps native480 detail, pauses and falls back for undelivered combat',()=>{
+ const f=setup(),data=JSON.parse(readFileSync(resource('bat-v1.json'),'utf8'));
+ const render=(time,extra={})=>{f.art.beginFrame();return f.art.draw(f.parent,'bat1','bat',20,30,50,0,18,{time,hp:100,worldY:70,role:'boss',ai:{mode:'approach',until:0},...extra})};
+ render(1);f.staticImage('bat');const image=f.finish('tower-monsters-motion/bat-v1',ImageAsset,new ImageAsset(data.width,data.height));f.finish('tower-monsters-motion/bat-v1',JsonAsset,new JsonAsset(data));
+ assert.equal(render(1),275);const bat=f.art.speciesRenderers.get('bat'),a=bat.actors.get('bat1');assert.equal(a.sprite.spriteFrame.rect.width,480);const frame=a.sprite.spriteFrame;render(1);assert.equal(a.sprite.spriteFrame,frame);render(1.2);assert.notEqual(a.sprite.spriteFrame,frame);assert.equal(a.node.position.y,30);
+ render(2,{ai:{mode:'windup',until:3,attack:{startedAt:2,active:.2,dirX:1}}});assert.equal(a.sprite.spriteFrame,bat.entries.get('bat').frame);
+ // Ordinary bite: procedural lunge frames on the real phases; sonic shot keeps the portrait.
+ const pose=()=>[...bat.motionFrames].find(([,fr])=>fr===a.sprite.spriteFrame)?.[0];
+ render(1.2);const top0=a.top,bite={id:'bite1',kind:'bite',startedAt:2,active:.12,recovery:.7,dirX:-1};
+ const phase=(time,mode,until)=>render(time,{ai:{mode,until,attack:bite}});
+ phase(2,'windup',2.85);assert.equal(pose(),'bite-000');assert.equal(a.transform.contentSize.width,275*1.2333);assert.ok(Math.abs(a.top-top0)<.1,'label height stays put');
+ phase(2.5,'windup',2.85);assert.equal(pose(),'bite-005');
+ const frozen=a.sprite.spriteFrame;phase(2.5,'windup',2.85);assert.equal(a.sprite.spriteFrame,frozen);
+ phase(2.85,'active',2.97);assert.equal(pose(),'bite-009');phase(2.94,'active',2.97);assert.equal(pose(),'bite-011');
+ phase(2.97,'recovery',3.67);assert.equal(pose(),'bite-012');phase(3.66,'recovery',3.67);assert.equal(pose(),'bite-019');
+ assert.equal(a.node.scale.x,1);assert.equal(a.node.position.y,30);
+ render(3.7,{ai:{mode:'windup',until:4.55,attack:{...bite,kind:'shot'}}});assert.equal(a.sprite.spriteFrame,bat.entries.get('bat').frame);
+ render(3.7,{ai:{mode:'windup',until:4.55,attack:bite},mechanic:{skillId:'M07',phase:'windup'}});assert.equal(a.sprite.spriteFrame,bat.entries.get('bat').frame);
+ const bad=copy(data);bad.clips.bite.phases.recovery=[12,9];assert.equal(bat.validMotion(bad),false);
+ render(3);f.art.beginFrame();f.art.endFrame(4,new Set(['bat1']));assert.equal(bat.actors.size,0);assert.equal(f.art.constructor.artFamily('bat','bat_elite_rank4'),'bat-humanoid');
+ const png=readFileSync(resource('bat-v1.png'));assert.equal(png.readUInt32BE(16),2880);assert.equal(png.readUInt32BE(20),2880);assert.equal(createHash('sha256').update(png).digest('hex'),data.sourceSha256);f.art.destroy();assert.equal(image.refs,0);
+});
+
+test('falcon flight keeps native384 detail, pauses and falls back for undelivered comfalcon',()=>{
+ const f=setup(),data=JSON.parse(readFileSync(resource('falcon-v1.json'),'utf8'));
+ const render=(time,extra={})=>{f.art.beginFrame();return f.art.draw(f.parent,'falcon1','falcon',20,30,50,0,18,{time,hp:100,worldY:70,role:'boss',ai:{mode:'approach',until:0},...extra})};
+ render(1);f.staticImage('falcon');const image=f.finish('tower-monsters-motion/falcon-v1',ImageAsset,new ImageAsset(data.width,data.height));f.finish('tower-monsters-motion/falcon-v1',JsonAsset,new JsonAsset(data));
+ assert.equal(render(1),275);const falcon=f.art.speciesRenderers.get('falcon'),a=falcon.actors.get('falcon1');assert.equal(a.sprite.spriteFrame.rect.width,384);const frame=a.sprite.spriteFrame;render(1);assert.equal(a.sprite.spriteFrame,frame);render(1.2);assert.notEqual(a.sprite.spriteFrame,frame);assert.equal(a.node.position.y,30);
+ render(2,{ai:{mode:'windup',until:3,attack:{startedAt:2,active:.2,dirX:1}}});assert.equal(a.sprite.spriteFrame,falcon.entries.get('falcon').frame);
+ // Ordinary bite: procedural lunge frames on the real phases; feather shot keeps the portrait.
+ const pose=()=>[...falcon.motionFrames].find(([,fr])=>fr===a.sprite.spriteFrame)?.[0];
+ render(1.2);const top0=a.top,bite={id:'bite1',kind:'bite',startedAt:2,active:.12,recovery:.7,dirX:-1};
+ const phase=(time,mode,until)=>render(time,{ai:{mode,until,attack:bite}});
+ phase(2,'windup',2.85);assert.equal(pose(),'bite-000');assert.equal(a.transform.contentSize.width,275*1.0729);assert.ok(Math.abs(a.top-top0)<.1,'label height stays put');
+ phase(2.5,'windup',2.85);assert.equal(pose(),'bite-005');
+ const frozen=a.sprite.spriteFrame;phase(2.5,'windup',2.85);assert.equal(a.sprite.spriteFrame,frozen);
+ phase(2.85,'active',2.97);assert.equal(pose(),'bite-009');phase(2.94,'active',2.97);assert.equal(pose(),'bite-011');
+ phase(2.97,'recovery',3.67);assert.equal(pose(),'bite-012');phase(3.66,'recovery',3.67);assert.equal(pose(),'bite-019');
+ assert.equal(a.node.scale.x,1);assert.equal(a.node.position.y,30);
+ render(3.7,{ai:{mode:'windup',until:4.55,attack:{...bite,kind:'shot'}}});assert.equal(a.sprite.spriteFrame,falcon.entries.get('falcon').frame);
+ render(3.7,{ai:{mode:'windup',until:4.55,attack:bite},mechanic:{skillId:'M07',phase:'windup'}});assert.equal(a.sprite.spriteFrame,falcon.entries.get('falcon').frame);
+ const bad=copy(data);bad.clips.bite.phases.recovery=[12,9];assert.equal(falcon.validMotion(bad),false);
+ render(3);f.art.beginFrame();f.art.endFrame(4,new Set(['falcon1']));assert.equal(falcon.actors.size,0);assert.equal(f.art.constructor.artFamily('falcon','falcon_elite'),'falcon-humanoid');
+ const png=readFileSync(resource('falcon-v1.png'));assert.equal(png.readUInt32BE(16),2304);assert.equal(png.readUInt32BE(20),2304);assert.equal(createHash('sha256').update(png).digest('hex'),data.sourceSha256);f.art.destroy();assert.equal(image.refs,0);
+});
+
+test('crocodile movement and sweep preserve detail, timing, pause and mechanic fallback',()=>{
+ const f=setup(),data=JSON.parse(readFileSync(resource('crocodile-v1.json'),'utf8'));
+ const render=(time,extra={})=>{f.art.beginFrame();return f.art.draw(f.parent,'crocodile1','crocodile',20,30,50,0,18,{time,hp:100,worldY:70,role:'boss',ai:{mode:'approach',until:0},...extra})};
+ render(1);f.staticImage('crocodile');const image=f.finish('tower-monsters-motion/crocodile-v1',ImageAsset,new ImageAsset(2880,3840));f.finish('tower-monsters-motion/crocodile-v1',JsonAsset,new JsonAsset(data));
+ closeSize(render(1),274.56);const crocodile=f.art.speciesRenderers.get('crocodile'),a=crocodile.actors.get('crocodile1');assert.equal(a.sprite.spriteFrame.rect.width,480);const frame=a.sprite.spriteFrame;render(1);assert.equal(a.sprite.spriteFrame,frame);render(1.2);assert.notEqual(a.sprite.spriteFrame,frame);assert.equal(a.node.position.y,30);
+ const attack={id:'sweep1',startedAt:2,active:.18,recovery:.9,dirX:1};
+ const pose=()=>[...crocodile.motionFrames].find(([,f])=>f===a.sprite.spriteFrame)?.[0];
+ const phase=(time,mode,until,extra={})=>render(time,{ai:{mode,until,attack},...extra});
+ phase(2,'windup',3);assert.equal(pose(),'sweep-000');
+ phase(2.5,'windup',3);assert.equal(pose(),'sweep-004');
+ const frozen=a.sprite.spriteFrame;phase(2.5,'windup',3);assert.equal(a.sprite.spriteFrame,frozen);
+ phase(3,'active',3.18);assert.equal(pose(),'sweep-009');
+ phase(3.1,'active',3.18);assert.equal(pose(),'sweep-010');
+ phase(3.18,'recovery',4.08);assert.equal(pose(),'sweep-012');
+ phase(4.07,'recovery',4.08);assert.equal(pose(),'sweep-023');
+ assert.equal(a.node.scale.x,-1);assert.equal(a.node.position.y,30);
+ phase(3.1,'active',3.18,{mechanic:{skillId:'M08',phase:'active'}});assert.equal(a.sprite.spriteFrame,crocodile.entries.get('crocodile').frame);
+ phase(2.5,'windup',3);assert.equal(pose(),'sweep-004','loading mid-phase restores exact progress');
+ const bad=copy(data);bad.clips.sweep.phases.active=[23,2];assert.equal(crocodile.validMotion(bad),false);
+ assert.deepEqual(data.damageEvents,[]);
+ render(3);f.art.beginFrame();f.art.endFrame(4,new Set(['crocodile1']));assert.equal(crocodile.actors.size,0);assert.equal(f.art.constructor.artFamily('crocodile','crocodile_boss'),'crocodile-humanoid');
+ const png=readFileSync(resource('crocodile-v1.png'));assert.equal(png.readUInt32BE(16),2880);assert.equal(png.readUInt32BE(20),3840);assert.equal(createHash('sha256').update(png).digest('hex'),data.sourceSha256);f.art.destroy();assert.equal(image.refs,0);
+});
+
+ test('bear walk keeps fixed frame, simulation clock and static combat fallback',()=>{
+ const f=setup(),data=JSON.parse(readFileSync(resource('bear-v1.json'),'utf8'));
+ const render=(time,extra={})=>{f.art.beginFrame();return f.art.draw(f.parent,'bear1','bear',20,30,50,0,32,{time,hp:100,worldY:70,role:'normal',ai:{mode:'approach',until:0},...extra})};
+ render(1);f.staticImage('bear');const image=f.finish('tower-monsters-motion/bear-v1',ImageAsset,new ImageAsset(data.width,data.height));f.finish('tower-monsters-motion/bear-v1',JsonAsset,new JsonAsset(data));
+ assert.equal(render(1),102.4);const bear=f.art.speciesRenderers.get('bear'),a=bear.actors.get('bear1');assert.equal(a.sprite.spriteFrame.rect.width,480);const frame=a.sprite.spriteFrame;render(1);assert.equal(a.sprite.spriteFrame,frame);render(1.2);assert.notEqual(a.sprite.spriteFrame,frame);assert.equal(a.node.position.y,30);
+ render(2,{ai:{mode:'windup',until:3}});assert.equal(a.sprite.spriteFrame,bear.entries.get('bear').frame);
+ render(2,{mechanic:{skillId:'M02',phase:'windup'}});assert.equal(a.sprite.spriteFrame,bear.entries.get('bear').frame);
+ assert.equal(f.art.constructor.artFamily('bear','bear_boss'),'bear-humanoid');assert.equal(f.art.constructor.artFamily('bear','bear_elite'),'bear-humanoid');
+ render(3);f.art.beginFrame();f.art.endFrame(4,new Set(['bear1']));assert.equal(bear.actors.size,0);
+ const png=readFileSync(resource('bear-v1.png'));assert.equal(png.readUInt32BE(16),3840);assert.equal(createHash('sha256').update(png).digest('hex'),data.sourceSha256);f.art.destroy();assert.equal(image.refs,0);
+ });
+
+test('bear slam selects phased frames, freezes when paused and keeps mechanics isolated',()=>{
+ const f=setup(),data=JSON.parse(readFileSync(resource('bear-v1.json'),'utf8'));
+ const render=(time,mode='approach',until=0,extra={})=>{f.art.beginFrame();f.art.draw(f.parent,'bear-slam','bear',20,30,50,0,32,{time,hp:100,worldY:70,role:'normal',ai:{mode,until,attack:mode==='approach'?null:{kind:'slam',id:'slam-1',startedAt:2,active:.18,recovery:.9,dirX:-1}},...extra});};
+ render(1);f.staticImage('bear');f.finish('tower-monsters-motion/bear-v1',ImageAsset,new ImageAsset(data.width,data.height));f.finish('tower-monsters-motion/bear-v1',JsonAsset,new JsonAsset(data));
+ const art=f.art.speciesRenderers.get('bear');assert.ok(data.clips.slam,'delivered slam required');
+ const pose=()=>[...art.motionFrames].find(([,v])=>v===art.actors.get('bear-slam').sprite.spriteFrame)?.[0];
+ render(2,'windup',3);assert.equal(pose(),'slam-000');render(2.999,'windup',3);assert.equal(pose(),'slam-010');
+ render(3,'active',3.18);assert.equal(pose(),'slam-011');const before=pose();render(3,'active',3.18);assert.equal(pose(),before);
+ render(3.179,'active',3.18);assert.equal(pose(),'slam-013');render(3.18,'recovery',4.08);assert.equal(pose(),'slam-014');render(4.079,'recovery',4.08);assert.equal(pose(),'slam-023');
+ render(3,'active',3.18,{mechanic:{phase:'active',skillId:'M07'}});assert.equal(pose(),undefined);
+ const bad=copy(data);bad.clips.slam.phases.active=[24,1];assert.equal(art.validMotion(bad),false);
+ render(5);assert.ok(pose().startsWith('move-'));f.art.beginFrame();f.art.endFrame(6,new Set(['bear-slam']));assert.equal(art.actors.size,0);
+});
+
+test('tiger walking uses its own atlas only while moving, with static combat and higher forms isolated',()=>{
+ const f=setup(),data=JSON.parse(readFileSync(resource('tiger-v1.json'),'utf8'));
+ const render=(time,extra={})=>{f.art.beginFrame();return f.art.draw(f.parent,'tiger1','tiger',20,30,50,0,28,{time,hp:100,worldY:70,moving:true,role:'normal',ai:{mode:'approach',until:0},...extra})};
+ render(1);f.staticImage('tiger');
+ assert.ok(f.requests.some(r=>r.path==='tower-monsters-motion/tiger-v1'),'tiger must request its own movement atlas');
+ const image=f.finish('tower-monsters-motion/tiger-v1',ImageAsset,new ImageAsset(data.width,data.height));f.finish('tower-monsters-motion/tiger-v1',JsonAsset,new JsonAsset(data));
+ const png=readFileSync(resource('tiger-v1.png'));assert.equal(createHash('sha256').update(png).digest('hex'),data.sourceSha256);assert.equal(png.readUInt32BE(16),2880);assert.equal(png.readUInt32BE(20),2880);assert.equal(png[25],6);assert.equal(Object.keys(data.frames).length,36);
+ assert.equal(render(1),89.60000000000001);const tiger=f.art.speciesRenderers.get('tiger'),actor=tiger.actors.get('tiger1');const first=actor.sprite.spriteFrame;
+ assert.equal(first.rect.width,480);render(1);assert.equal(actor.sprite.spriteFrame,first);render(1.3);assert.notEqual(actor.sprite.spriteFrame,first);
+ render(2,{moving:false});assert.equal(actor.sprite.spriteFrame,tiger.entries.get('tiger').frame,'stationary approach must not walk in place');
+ for(const mode of ['windup','active','recovery']){render(2,{ai:{mode,until:3}});assert.equal(actor.sprite.spriteFrame,tiger.entries.get('tiger').frame);render(2,{mechanic:{skillId:'M06',phase:mode}});assert.equal(actor.sprite.spriteFrame,tiger.entries.get('tiger').frame);}
+ assert.equal(f.art.constructor.artFamily('tiger','tiger_boss'),'tiger-humanoid');assert.equal(f.art.constructor.artFamily('tiger','tiger_elite'),'tiger-humanoid');assert.equal(f.art.constructor.artFamily('tiger','tiger_boss_zhenyan'),'white-tiger');
+ render(3);f.art.beginFrame();f.art.endFrame(4,new Set(['tiger1']));assert.equal(tiger.actors.size,0);f.art.destroy();assert.equal(image.refs,0);
+});
+
+test('tiger production motion inference follows displacement and keeps higher-form resources isolated',()=>{
+ const f=setup(),data=JSON.parse(readFileSync(resource('tiger-v1.json'),'utf8'));
+ const render=(time,x)=>{f.art.beginFrame();f.art.draw(f.parent,'tiger1','tiger',x,30,x,200,28,{time,hp:100,worldY:70,role:'normal',ai:{mode:'approach',until:0}})};
+ render(1,50);f.staticImage('tiger');f.finish('tower-monsters-motion/tiger-v1',ImageAsset,new ImageAsset(data.width,data.height));f.finish('tower-monsters-motion/tiger-v1',JsonAsset,new JsonAsset(data));render(1,50);
+ const r=f.art.speciesRenderers.get('tiger'),a=r.actors.get('tiger1');assert.equal(a.sprite.spriteFrame,r.entries.get('tiger').frame);
+ render(1.1,55);assert.notEqual(a.sprite.spriteFrame,r.entries.get('tiger').frame);const moved=a.sprite.spriteFrame;render(1.1,55);assert.equal(a.sprite.spriteFrame,moved);render(1.2,55);assert.equal(a.sprite.spriteFrame,r.entries.get('tiger').frame);
+ f.art.destroy();const high=setup();for(const family of ['tiger-humanoid','white-tiger']){high.art.draw(high.parent,family,family,0,0,1,2,28,{time:1,moving:true,role:'boss',ai:{mode:'approach',until:0}});high.staticImage(family);}
+ assert.equal(high.requests.filter(r=>r.path==='tower-monsters-motion/tiger-v1').length,0);
+ assert.equal(high.requests.filter(r=>r.path==='tower-monsters-motion/tiger-humanoid-v1').length,2);
+ assert.equal(high.requests.filter(r=>r.path==='tower-monsters-motion/white-tiger-v1').length,2);high.art.destroy();
+});
+
+test('upright rhino walks only on displacement and preserves static attacks, mechanics and yak isolation',()=>{
+ const f=setup(),data=JSON.parse(readFileSync(resource('rhino-v1.json'),'utf8'));
+ const render=(time,x,extra={})=>{f.art.beginFrame();return f.art.draw(f.parent,'rhino1','rhino',x,30,x,0,42,{time,hp:100,worldY:70,role:'boss',ai:{mode:'approach',until:0},...extra})};
+ render(1,100);f.staticImage('rhino');assert.ok(f.requests.some(r=>r.path==='tower-monsters-motion/rhino-v1'),'rhino must load the upright walking atlas');
+ const image=f.finish('tower-monsters-motion/rhino-v1',ImageAsset,new ImageAsset(data.width,data.height));f.finish('tower-monsters-motion/rhino-v1',JsonAsset,new JsonAsset(data));
+ render(1,100);const r=f.art.speciesRenderers.get('rhino'),a=r.actors.get('rhino1');assert.equal(a.sprite.spriteFrame,r.entries.get('rhino').frame);
+ assert.equal(render(1.1,98),220);const frame=a.sprite.spriteFrame;assert.equal(frame.rect.width,480);assert.equal(a.node.position.y,30);render(1.1,98);assert.equal(a.sprite.spriteFrame,frame);render(1.3,96);assert.notEqual(a.sprite.spriteFrame,frame);render(1.4,96);assert.equal(a.sprite.spriteFrame,r.entries.get('rhino').frame);
+ const sweep=data.clips.sweep;assert.deepEqual(sweep.phases,{windup:[0,9],active:[9,3],recovery:[12,8]});
+ for(const mode of ['windup','active','recovery']){render(2,90,{ai:{mode,until:3,attack:{id:'rhino-sweep',kind:'sweep',startedAt:1,active:2,recovery:2,dirX:-1}}});const [o,c]=sweep.phases[mode];assert.ok(sweep.frames.slice(o,o+c).map(k=>r.motionFrames.get(k)).includes(a.sprite.spriteFrame),'sweep '+mode);render(2,90,{ai:{mode,until:3,attack:{id:'rhino-charge',kind:'charge',startedAt:1,active:.2,dirX:-1}}});assert.equal(a.sprite.spriteFrame,r.entries.get('rhino').frame);for(const skillId of ['M06','M07','M20']){render(2.1,80,{mechanic:{skillId,phase:mode}});assert.equal(a.sprite.spriteFrame,r.entries.get('rhino').frame);}}
+ render(3,70);f.art.beginFrame();f.art.endFrame(4,new Set(['rhino1']));assert.equal(r.actors.size,0);f.art.destroy();assert.equal(image.refs,0);
+ const png=readFileSync(resource('rhino-v1.png'));assert.equal(createHash('sha256').update(png).digest('hex'),data.sourceSha256);assert.equal(png.readUInt32BE(16),2880);assert.equal(png.readUInt32BE(20),2880);assert.equal(png[25],6);assert.equal(Object.keys(data.frames).length,35);
+ const other=setup();other.art.draw(other.parent,'yak1','yak',0,0,1,2,42,{time:1,moving:true,role:'boss',ai:{mode:'approach',until:0}});assert.equal(other.requests.filter(r=>r.path==='tower-monsters-motion/rhino-v1').length,0);other.art.destroy();
+});
+
+test('upright yak walks only on displacement and preserves static attacks, mechanics and rhino isolation',()=>{
+ const f=setup(),data=JSON.parse(readFileSync(resource('yak-v1.json'),'utf8'));
+ const render=(time,x,extra={})=>{f.art.beginFrame();return f.art.draw(f.parent,'yak1','yak',x,30,x,0,42,{time,hp:100,worldY:70,role:'boss',ai:{mode:'approach',until:0},...extra})};
+ render(1,100);f.staticImage('yak');assert.ok(f.requests.some(r=>r.path==='tower-monsters-motion/yak-v1'),'yak must load the upright walking atlas');
+ const image=f.finish('tower-monsters-motion/yak-v1',ImageAsset,new ImageAsset(data.width,data.height));f.finish('tower-monsters-motion/yak-v1',JsonAsset,new JsonAsset(data));
+ render(1,100);const r=f.art.speciesRenderers.get('yak'),a=r.actors.get('yak1');assert.equal(a.sprite.spriteFrame,r.entries.get('yak').frame);
+ assert.equal(render(1.1,98),220);const frame=a.sprite.spriteFrame;assert.equal(frame.rect.width,480);assert.equal(a.node.position.y,30);render(1.1,98);assert.equal(a.sprite.spriteFrame,frame);render(1.3,96);assert.notEqual(a.sprite.spriteFrame,frame);render(1.4,96);assert.equal(a.sprite.spriteFrame,r.entries.get('yak').frame);
+ const slam=data.clips.slam;assert.deepEqual(slam.phases,{windup:[0,9],active:[9,3],recovery:[12,8]});
+ for(const mode of ['windup','active','recovery']){render(2,90,{ai:{mode,until:3,attack:{id:'yak-slam',kind:'slam',startedAt:1,active:2,recovery:2,dirX:-1}}});const [o,c]=slam.phases[mode];assert.ok(slam.frames.slice(o,o+c).map(k=>r.motionFrames.get(k)).includes(a.sprite.spriteFrame),'slam '+mode);for(const skillId of ['M19','M15','M05']){render(2.1,80,{mechanic:{skillId,phase:mode}});assert.equal(a.sprite.spriteFrame,r.entries.get('yak').frame);}}
+ render(3,70);f.art.beginFrame();f.art.endFrame(4,new Set(['yak1']));assert.equal(r.actors.size,0);f.art.destroy();assert.equal(image.refs,0);
+ const png=readFileSync(resource('yak-v1.png'));assert.equal(createHash('sha256').update(png).digest('hex'),data.sourceSha256);assert.equal(png.readUInt32BE(16),2880);assert.equal(png.readUInt32BE(20),2880);assert.equal(png[25],6);assert.equal(Object.keys(data.frames).length,36);
+});
+
+test('low tiger sweep follows combat phases with constant body scale and feet, leaving mechanics static',()=>{
+ const f=setup(),data=JSON.parse(readFileSync(resource('tiger-v1.json'),'utf8'));
+ const render=(time,mode,extra={})=>{f.art.beginFrame();return f.art.draw(f.parent,'claw','tiger',20,30,50,0,28,{time,hp:100,worldY:70,role:'normal',ai:{mode,until:mode==='windup'?11:mode==='active'?11.18:12.08,attack:{kind:'sweep',id:'sweep1',startedAt:10,active:.18,recovery:.9,dirX:-1}},...extra})};
+ render(10,'windup');f.staticImage('tiger');const image=f.finish('tower-monsters-motion/tiger-v1',ImageAsset,new ImageAsset(data.width,data.height));f.finish('tower-monsters-motion/tiger-v1',JsonAsset,new JsonAsset(data));
+ render(10,'windup');const r=f.art.speciesRenderers.get('tiger'),a=r.actors.get('claw');const name=()=>[...r.motionFrames].find(([,frame])=>frame===a.sprite.spriteFrame)?.[0]||'static';
+ for(const [time,mode,expected]of [[10,'windup','sweep-000'],[10.99,'windup','sweep-009'],[11,'active','sweep-010'],[11.179,'active','sweep-012'],[11.18,'recovery','sweep-013'],[12.079,'recovery','sweep-020']]){
+  assert.equal(render(time,mode),89.60000000000001);assert.equal(name(),expected);assert.equal(a.sprite.spriteFrame.rect.width,480);assert.equal(a.node.position.y,30);assert.equal(a.transform.contentSize.width,89.60000000000001*data.frames[expected].displayScale);assert.equal(a.transform.anchor.y,1-data.frames[expected].anchor[1]);const prior=a.sprite.spriteFrame;render(time,mode);assert.equal(a.sprite.spriteFrame,prior);
+ }
+ for(const phase of ['windup','active','recovery']){render(11,'active',{mechanic:{skillId:'M06',phase}});assert.equal(name(),'static');}
+ render(12.1,'approach',{moving:true});assert.match(name(),/^move-/);assert.equal(a.transform.contentSize.width,89.60000000000001);assert.equal(a.transform.anchor.y,1-data.anchor[1]);
+ render(12.2,'approach',{moving:false});assert.equal(name(),'static');f.art.beginFrame();f.art.endFrame(13,new Set(['claw']));assert.equal(r.actors.size,0);f.art.destroy();assert.equal(image.refs,0);
+});
+
+test('upright wolf walks only on displacement with independent movement and static combat',()=>{
+ const f=setup(),data=JSON.parse(readFileSync(resource('wolf-humanoid-v1.json'),'utf8'));
+ const render=(time,x,extra={})=>{f.art.beginFrame();return f.art.draw(f.parent,'wolf-humanoid1','wolf-humanoid',x,30,x,0,42,{time,hp:100,worldY:70,role:'normal',ai:{mode:'approach',until:0},...extra})};
+ render(1,100);f.staticImage('wolf-humanoid');assert.ok(f.requests.some(r=>r.path==='tower-monsters-motion/wolf-humanoid-v1'),'wolf-humanoid must load the upright walking atlas');
+ const image=f.finish('tower-monsters-motion/wolf-humanoid-v1',ImageAsset,new ImageAsset(data.width,data.height));f.finish('tower-monsters-motion/wolf-humanoid-v1',JsonAsset,new JsonAsset(data));
+ render(1,100);const r=f.art.speciesRenderers.get('wolf-humanoid'),a=r.actors.get('wolf-humanoid1');assert.equal(a.sprite.spriteFrame,r.entries.get('wolf-humanoid').frame);
+ closeSize(render(1.1,98),78.60194174757282);const frame=a.sprite.spriteFrame;assert.equal(frame.rect.width,480);assert.equal(a.node.position.y,30);render(1.1,98);assert.equal(a.sprite.spriteFrame,frame);render(1.3,96);assert.notEqual(a.sprite.spriteFrame,frame);render(1.4,96);assert.equal(a.sprite.spriteFrame,r.entries.get('wolf-humanoid').frame);
+ const clip=data.clips.sweep;assert.deepEqual(clip.phases,{windup:[0,9],active:[9,3],recovery:[12,8]});for(const kind of ['sweep','bite'])for(const mode of ['windup','active','recovery']){render(2,90,{ai:{mode,until:3,attack:{id:'wolf-humanoid-'+kind,kind,startedAt:1,active:2,recovery:2,dirX:-1}}});const [o,c]=clip.phases[mode];const names=clip.frames.slice(o,o+c).map(k=>r.motionFrames.get(k));assert.ok(names.includes(a.sprite.spriteFrame),kind+' '+mode+' plays its attack phase');}for(const mode of ['windup','active','recovery']){for(const skillId of ['M05']){render(2.1,80,{mechanic:{skillId,phase:mode}});assert.equal(a.sprite.spriteFrame,r.entries.get('wolf-humanoid').frame);}}
+ render(3,70);f.art.beginFrame();f.art.endFrame(4,new Set(['wolf-humanoid1']));assert.equal(r.actors.size,0);f.art.destroy();assert.equal(image.refs,0);
+ const png=readFileSync(resource('wolf-humanoid-v1.png'));assert.equal(createHash('sha256').update(png).digest('hex'),data.sourceSha256);assert.equal(png.readUInt32BE(16),2880);assert.equal(png.readUInt32BE(20),2880);assert.equal(png[25],6);assert.equal(Object.keys(data.frames).length,36);
+});
+
+
+test('upright tiger walks only on displacement with independent movement and static combat',()=>{
+ const f=setup(),data=JSON.parse(readFileSync(resource('tiger-humanoid-v1.json'),'utf8'));
+ const render=(time,x,extra={})=>{f.art.beginFrame();return f.art.draw(f.parent,'tiger-humanoid1','tiger-humanoid',x,30,x,0,42,{time,hp:100,worldY:70,role:'normal',ai:{mode:'approach',until:0},...extra})};
+ render(1,100);f.staticImage('tiger-humanoid');assert.ok(f.requests.some(r=>r.path==='tower-monsters-motion/tiger-humanoid-v1'),'tiger-humanoid must load the upright walking atlas');
+ const image=f.finish('tower-monsters-motion/tiger-humanoid-v1',ImageAsset,new ImageAsset(data.width,data.height));f.finish('tower-monsters-motion/tiger-humanoid-v1',JsonAsset,new JsonAsset(data));
+ render(1,100);const r=f.art.speciesRenderers.get('tiger-humanoid'),a=r.actors.get('tiger-humanoid1');assert.equal(a.sprite.spriteFrame,r.entries.get('tiger-humanoid').frame);
+ closeSize(render(1.1,98),100.03883495145631);const frame=a.sprite.spriteFrame;assert.equal(frame.rect.width,480);assert.equal(a.node.position.y,30);render(1.1,98);assert.equal(a.sprite.spriteFrame,frame);render(1.3,96);assert.notEqual(a.sprite.spriteFrame,frame);render(1.4,96);assert.equal(a.sprite.spriteFrame,r.entries.get('tiger-humanoid').frame);
+ const clip=data.clips.sweep;assert.deepEqual(clip.phases,{windup:[0,9],active:[9,3],recovery:[12,8]});for(const kind of ['sweep','bite'])for(const mode of ['windup','active','recovery']){render(2,90,{ai:{mode,until:3,attack:{id:'tiger-humanoid-'+kind,kind,startedAt:1,active:2,recovery:2,dirX:-1}}});const [o,c]=clip.phases[mode];const names=clip.frames.slice(o,o+c).map(k=>r.motionFrames.get(k));assert.ok(names.includes(a.sprite.spriteFrame),kind+' '+mode+' plays its attack phase');}for(const mode of ['windup','active','recovery']){for(const skillId of ['M06','M03']){render(2.1,80,{mechanic:{skillId,phase:mode}});assert.equal(a.sprite.spriteFrame,r.entries.get('tiger-humanoid').frame);}}
+ render(3,70);f.art.beginFrame();f.art.endFrame(4,new Set(['tiger-humanoid1']));assert.equal(r.actors.size,0);f.art.destroy();assert.equal(image.refs,0);
+ const png=readFileSync(resource('tiger-humanoid-v1.png'));assert.equal(createHash('sha256').update(png).digest('hex'),data.sourceSha256);assert.equal(png.readUInt32BE(16),2880);assert.equal(png.readUInt32BE(20),2880);assert.equal(png[25],6);assert.equal(Object.keys(data.frames).length,36);
+});
+
+test('upright falcon walks only on displacement with independent movement and static combat',()=>{
+ const f=setup(),data=JSON.parse(readFileSync(resource('falcon-humanoid-v1.json'),'utf8'));
+ const render=(time,x,extra={})=>{f.art.beginFrame();return f.art.draw(f.parent,'falcon-humanoid1','falcon-humanoid',x,30,x,0,42,{time,hp:100,worldY:70,role:'normal',ai:{mode:'approach',until:0},...extra})};
+ render(1,100);f.staticImage('falcon-humanoid');assert.ok(f.requests.some(r=>r.path==='tower-monsters-motion/falcon-humanoid-v1'),'falcon-humanoid must load the upright walking atlas');
+ const image=f.finish('tower-monsters-motion/falcon-humanoid-v1',ImageAsset,new ImageAsset(data.width,data.height));f.finish('tower-monsters-motion/falcon-humanoid-v1',JsonAsset,new JsonAsset(data));
+ render(1,100);const r=f.art.speciesRenderers.get('falcon-humanoid'),a=r.actors.get('falcon-humanoid1');assert.equal(a.sprite.spriteFrame,r.entries.get('falcon-humanoid').frame);
+ closeSize(render(1.1,98),91.70731707317073);const frame=a.sprite.spriteFrame;assert.equal(frame.rect.width,480);assert.equal(a.node.position.y,30);render(1.1,98);assert.equal(a.sprite.spriteFrame,frame);render(1.3,96);assert.notEqual(a.sprite.spriteFrame,frame);render(1.4,96);assert.equal(a.sprite.spriteFrame,r.entries.get('falcon-humanoid').frame);
+ const clip=data.clips.sweep;assert.deepEqual(clip.phases,{windup:[0,9],active:[9,3],recovery:[12,8]});for(const kind of ['bite'])for(const mode of ['windup','active','recovery']){render(2,90,{ai:{mode,until:3,attack:{id:'falcon-humanoid-'+kind,kind,startedAt:1,active:2,recovery:2,dirX:-1}}});const [o,c]=clip.phases[mode];const names=clip.frames.slice(o,o+c).map(k=>r.motionFrames.get(k));assert.ok(names.includes(a.sprite.spriteFrame),kind+' '+mode+' plays its attack phase');}render(2,90,{ai:{mode:'active',until:3,attack:{id:'falcon-humanoid-shot',kind:'shot',startedAt:1,active:.1,dirX:-1}}});assert.equal(a.sprite.spriteFrame,r.entries.get('falcon-humanoid').frame,'feather shot keeps the portrait emission pose');for(const mode of ['windup','active','recovery']){for(const skillId of ['M11']){render(2.1,80,{mechanic:{skillId,phase:mode}});assert.equal(a.sprite.spriteFrame,r.entries.get('falcon-humanoid').frame);}}
+ render(3,70);f.art.beginFrame();f.art.endFrame(4,new Set(['falcon-humanoid1']));assert.equal(r.actors.size,0);f.art.destroy();assert.equal(image.refs,0);
+ const png=readFileSync(resource('falcon-humanoid-v1.png'));assert.equal(createHash('sha256').update(png).digest('hex'),data.sourceSha256);assert.equal(png.readUInt32BE(16),2880);assert.equal(png.readUInt32BE(20),2880);assert.equal(png[25],6);assert.equal(Object.keys(data.frames).length,36);
+});
+
+test('low-rank snake slithers only on displacement; shots and mechanics keep the portrait',()=>{
+ const f=setup(),data=JSON.parse(readFileSync(resource('snake-v1.json'),'utf8'));
+ const render=(time,x,extra={})=>{f.art.beginFrame();return f.art.draw(f.parent,'snake1','snake',x,30,x,0,24,{time,hp:100,worldY:70,role:'normal',ai:{mode:'approach',until:0},...extra})};
+ render(1,100);f.staticImage('snake');assert.ok(f.requests.some(r=>r.path==='tower-monsters-motion/snake-v1'));
+ const image=f.finish('tower-monsters-motion/snake-v1',ImageAsset,new ImageAsset(data.width,data.height));f.finish('tower-monsters-motion/snake-v1',JsonAsset,new JsonAsset(data));
+ const r=f.art.speciesRenderers.get('snake');render(1,100);const a=r.actors.get('snake1');assert.equal(a.sprite.spriteFrame,r.entries.get('snake').frame);
+ const staticSize=a.transform.contentSize.width;render(1.1,98);const frame=a.sprite.spriteFrame;assert.notEqual(frame,r.entries.get('snake').frame);assert.equal(frame.rect.width,384);
+ closeSize(a.transform.contentSize.width,staticSize*data.frames['move-000'].displayScale);assert.equal(a.node.position.y,30);
+ render(1.5,96);assert.notEqual(a.sprite.spriteFrame,frame);render(1.6,96);assert.equal(a.sprite.spriteFrame,r.entries.get('snake').frame);
+ for(const mode of ['windup','active','recovery']){render(2,90,{ai:{mode,until:3,attack:{id:'snake-shot',kind:'shot',startedAt:1,active:.1,dirX:-1}}});assert.equal(a.sprite.spriteFrame,r.entries.get('snake').frame);}const bite=data.clips.bite;assert.deepEqual(bite.phases,{windup:[0,9],active:[9,3],recovery:[12,8]});for(const mode of ['windup','active','recovery']){render(2,90,{ai:{mode,until:3,attack:{id:'snake-bite',kind:'bite',startedAt:1,active:2,recovery:2,dirX:-1}}});const [o,c]=bite.phases[mode];assert.ok(bite.frames.slice(o,o+c).map(k=>r.motionFrames.get(k)).includes(a.sprite.spriteFrame),'snake bite '+mode);assert.equal(a.sprite.spriteFrame.rect.width,480);}
+ render(3,70);f.art.beginFrame();f.art.endFrame(4,new Set(['snake1']));assert.equal(r.actors.size,0);f.art.destroy();assert.equal(image.refs,0);
+ const png=readFileSync(resource('snake-v1.png'));assert.equal(createHash('sha256').update(png).digest('hex'),data.sourceSha256);assert.equal(png.readUInt32BE(16),2880);assert.equal(png[25],6);assert.equal(Object.keys(data.frames).length,36);
+});
+
+test('upright bear walks only on displacement with independent movement and static combat',()=>{
+ const f=setup(),data=JSON.parse(readFileSync(resource('bear-humanoid-v1.json'),'utf8'));
+ const render=(time,x,extra={})=>{f.art.beginFrame();return f.art.draw(f.parent,'bear-humanoid1','bear-humanoid',x,30,x,0,42,{time,hp:100,worldY:70,role:'normal',ai:{mode:'approach',until:0},...extra})};
+ render(1,100);f.staticImage('bear-humanoid');assert.ok(f.requests.some(r=>r.path==='tower-monsters-motion/bear-humanoid-v1'),'bear-humanoid must load the upright walking atlas');
+ assert.equal(f.requests.filter(r=>r.path==='tower-monsters-motion/bear-v1').length,0,'low-rank bear slam must not be reused for the upright form');
+ const image=f.finish('tower-monsters-motion/bear-humanoid-v1',ImageAsset,new ImageAsset(data.width,data.height));f.finish('tower-monsters-motion/bear-humanoid-v1',JsonAsset,new JsonAsset(data));
+ render(1,100);const r=f.art.speciesRenderers.get('bear-humanoid'),a=r.actors.get('bear-humanoid1');assert.equal(a.sprite.spriteFrame,r.entries.get('bear-humanoid').frame);
+ closeSize(render(1.1,98),102.4*231/206);const frame=a.sprite.spriteFrame;assert.equal(frame.rect.width,480);assert.equal(a.node.position.y,30);render(1.1,98);assert.equal(a.sprite.spriteFrame,frame);render(1.3,96);assert.notEqual(a.sprite.spriteFrame,frame);render(1.4,96);assert.equal(a.sprite.spriteFrame,r.entries.get('bear-humanoid').frame);
+ const slam=data.clips.slam;assert.deepEqual(slam.phases,{windup:[0,9],active:[9,3],recovery:[12,8]});for(const mode of ['windup','active','recovery']){for(const kind of ['bite','slam']){render(2,90,{ai:{mode,until:3,attack:{id:'bear-humanoid-'+kind,kind,startedAt:1,active:2,recovery:2,dirX:-1}}});const [o,c]=slam.phases[mode];assert.ok(slam.frames.slice(o,o+c).map(k=>r.motionFrames.get(k)).includes(a.sprite.spriteFrame),kind+' '+mode+' plays the slam phase');}for(const skillId of ['M02','M04','M07','M09']){render(2.1,80,{mechanic:{skillId,phase:mode}});assert.equal(a.sprite.spriteFrame,r.entries.get('bear-humanoid').frame);}}
+ render(3,70);f.art.beginFrame();f.art.endFrame(4,new Set(['bear-humanoid1']));assert.equal(r.actors.size,0);f.art.destroy();assert.equal(image.refs,0);
+ const png=readFileSync(resource('bear-humanoid-v1.png'));assert.equal(createHash('sha256').update(png).digest('hex'),data.sourceSha256);assert.equal(png.readUInt32BE(16),2880);assert.equal(png.readUInt32BE(20),2880);assert.equal(png[25],6);assert.equal(Object.keys(data.frames).length,36);
+});
+
+test('upright boar walks only on displacement with independent movement and static combat',()=>{
+ const f=setup(),data=JSON.parse(readFileSync(resource('boar-humanoid-v1.json'),'utf8'));
+ const render=(time,x,extra={})=>{f.art.beginFrame();return f.art.draw(f.parent,'boar-humanoid1','boar-humanoid',x,30,x,0,42,{time,hp:100,worldY:70,role:'normal',ai:{mode:'approach',until:0},...extra})};
+ render(1,100);f.staticImage('boar-humanoid');assert.ok(f.requests.some(r=>r.path==='tower-monsters-motion/boar-humanoid-v1'),'boar-humanoid must load the upright walking atlas');
+ const image=f.finish('tower-monsters-motion/boar-humanoid-v1',ImageAsset,new ImageAsset(data.width,data.height));f.finish('tower-monsters-motion/boar-humanoid-v1',JsonAsset,new JsonAsset(data));
+ render(1,100);const r=f.art.speciesRenderers.get('boar-humanoid'),a=r.actors.get('boar-humanoid1');assert.equal(a.sprite.spriteFrame,r.entries.get('boar-humanoid').frame);
+ render(1.1,98);const frame=a.sprite.spriteFrame;assert.equal(frame.rect.width,480);assert.equal(a.node.position.y,30);render(1.1,98);assert.equal(a.sprite.spriteFrame,frame);render(1.3,96);assert.notEqual(a.sprite.spriteFrame,frame);render(1.4,96);assert.equal(a.sprite.spriteFrame,r.entries.get('boar-humanoid').frame);
+ const bite=data.clips.bite;assert.deepEqual(bite.phases,{windup:[0,9],active:[9,3],recovery:[12,8]});
+ for(const mode of ['windup','active','recovery']){render(2,90,{ai:{mode,until:3,attack:{id:'boar-humanoid-bite',kind:'bite',startedAt:1,active:2,recovery:2,dirX:-1}}});const [o,c]=bite.phases[mode];assert.ok(bite.frames.slice(o,o+c).map(k=>r.motionFrames.get(k)).includes(a.sprite.spriteFrame),'bite '+mode+' plays the tusk bite phase');{const charge=data.clips.charge;assert.deepEqual(charge.phases,{windup:[0,9],active:[9,3],recovery:[12,8]});render(2,90,{ai:{mode,until:3,attack:{id:'boar-humanoid-charge',kind:'charge',startedAt:1,active:2,recovery:2,dirX:-1}}});const [o2,c2]=charge.phases[mode];assert.ok(charge.frames.slice(o2,o2+c2).map(k=>r.motionFrames.get(k)).includes(a.sprite.spriteFrame),'charge '+mode+' plays the charge phase');}for(const skillId of ['M06']){render(2.1,80,{mechanic:{skillId,phase:mode}});assert.equal(a.sprite.spriteFrame,r.entries.get('boar-humanoid').frame);}}
+ render(3,70);f.art.beginFrame();f.art.endFrame(4,new Set(['boar-humanoid1']));assert.equal(r.actors.size,0);f.art.destroy();assert.equal(image.refs,0);
+ const png=readFileSync(resource('boar-humanoid-v1.png'));assert.equal(createHash('sha256').update(png).digest('hex'),data.sourceSha256);assert.equal(png.readUInt32BE(16),3840);assert.equal(png.readUInt32BE(20),3360);assert.equal(png[25],6);assert.equal(Object.keys(data.frames).length,56);
+});
+
+test('upright crocodile walks only on displacement with independent movement and static combat',()=>{
+ const f=setup(),data=JSON.parse(readFileSync(resource('crocodile-humanoid-v1.json'),'utf8'));
+ const render=(time,x,extra={})=>{f.art.beginFrame();return f.art.draw(f.parent,'crocodile-humanoid1','crocodile-humanoid',x,30,x,0,42,{time,hp:100,worldY:70,role:'normal',ai:{mode:'approach',until:0},...extra})};
+ render(1,100);f.staticImage('crocodile-humanoid');assert.ok(f.requests.some(r=>r.path==='tower-monsters-motion/crocodile-humanoid-v1'),'crocodile-humanoid must load the upright walking atlas');
+ const image=f.finish('tower-monsters-motion/crocodile-humanoid-v1',ImageAsset,new ImageAsset(data.width,data.height));f.finish('tower-monsters-motion/crocodile-humanoid-v1',JsonAsset,new JsonAsset(data));
+ render(1,100);const r=f.art.speciesRenderers.get('crocodile-humanoid'),a=r.actors.get('crocodile-humanoid1');assert.equal(a.sprite.spriteFrame,r.entries.get('crocodile-humanoid').frame);
+ render(1.1,98);const frame=a.sprite.spriteFrame;assert.equal(frame.rect.width,480);render(1.1,98);assert.equal(a.sprite.spriteFrame,frame);render(1.3,96);assert.notEqual(a.sprite.spriteFrame,frame);render(1.4,96);assert.equal(a.sprite.spriteFrame,r.entries.get('crocodile-humanoid').frame);
+ for(const mode of ['windup','active','recovery']){for(const kind of ['sweep']){render(2,90,{ai:{mode,until:3,attack:{id:'crocodile-humanoid-'+kind,kind,startedAt:1,active:.2,dirX:-1}}});assert.equal(a.sprite.spriteFrame,r.entries.get('crocodile-humanoid').frame);}for(const skillId of ['M08','M12','M02']){render(2.1,80,{mechanic:{skillId,phase:mode}});assert.equal(a.sprite.spriteFrame,r.entries.get('crocodile-humanoid').frame);}}
+ render(3,70);f.art.beginFrame();f.art.endFrame(4,new Set(['crocodile-humanoid1']));assert.equal(r.actors.size,0);f.art.destroy();assert.equal(image.refs,0);
+ const png=readFileSync(resource('crocodile-humanoid-v1.png'));assert.equal(createHash('sha256').update(png).digest('hex'),data.sourceSha256);assert.equal(png.readUInt32BE(16),1920);assert.equal(png.readUInt32BE(20),1920);assert.equal(png[25],6);assert.equal(Object.keys(data.frames).length,16);
+});
+
+test('rank-five serpent queen walks only on displacement with independent movement and static combat',()=>{
+ const f=setup(),data=JSON.parse(readFileSync(resource('snake-lady-v1.json'),'utf8'));
+ const render=(time,x,extra={})=>{f.art.beginFrame();return f.art.draw(f.parent,'snake-lady1','snake-lady',x,30,x,0,42,{time,hp:100,worldY:70,role:'boss',ai:{mode:'approach',until:0},...extra})};
+ render(1,100);f.staticImage('snake-lady');assert.ok(f.requests.some(r=>r.path==='tower-monsters-motion/snake-lady-v1'),'snake-lady must load the upright walking atlas');
+ const image=f.finish('tower-monsters-motion/snake-lady-v1',ImageAsset,new ImageAsset(data.width,data.height));f.finish('tower-monsters-motion/snake-lady-v1',JsonAsset,new JsonAsset(data));
+ render(1,100);const r=f.art.speciesRenderers.get('snake-lady'),a=r.actors.get('snake-lady1');assert.equal(a.sprite.spriteFrame,r.entries.get('snake-lady').frame);
+ render(1.1,98);const frame=a.sprite.spriteFrame;assert.equal(frame.rect.width,480);render(1.1,98);assert.equal(a.sprite.spriteFrame,frame);render(1.3,96);assert.notEqual(a.sprite.spriteFrame,frame);render(1.4,96);assert.equal(a.sprite.spriteFrame,r.entries.get('snake-lady').frame);
+ for(const mode of ['windup','active','recovery']){for(const kind of ['shot']){render(2,90,{ai:{mode,until:3,attack:{id:'snake-lady-'+kind,kind,startedAt:1,active:.2,dirX:-1}}});assert.equal(a.sprite.spriteFrame,r.entries.get('snake-lady').frame);}for(const skillId of ['M03']){render(2.1,80,{mechanic:{skillId,phase:mode}});assert.equal(a.sprite.spriteFrame,r.entries.get('snake-lady').frame);}}
+ render(3,70);f.art.beginFrame();f.art.endFrame(4,new Set(['snake-lady1']));assert.equal(r.actors.size,0);f.art.destroy();assert.equal(image.refs,0);
+ const png=readFileSync(resource('snake-lady-v1.png'));assert.equal(createHash('sha256').update(png).digest('hex'),data.sourceSha256);assert.equal(png.readUInt32BE(16),1920);assert.equal(png.readUInt32BE(20),1920);assert.equal(png[25],6);assert.equal(Object.keys(data.frames).length,16);
+});
+
+test('rank-six spider lady walks only on displacement with independent movement and static combat',()=>{
+ const f=setup(),data=JSON.parse(readFileSync(resource('spider-lady-v1.json'),'utf8'));
+ const render=(time,x,extra={})=>{f.art.beginFrame();return f.art.draw(f.parent,'spider-lady1','spider-lady',x,30,x,0,42,{time,hp:100,worldY:70,role:'normal',ai:{mode:'approach',until:0},...extra})};
+ render(1,100);f.staticImage('spider-lady');assert.ok(f.requests.some(r=>r.path==='tower-monsters-motion/spider-lady-v1'),'spider-lady must load the upright walking atlas');
+ const image=f.finish('tower-monsters-motion/spider-lady-v1',ImageAsset,new ImageAsset(data.width,data.height));f.finish('tower-monsters-motion/spider-lady-v1',JsonAsset,new JsonAsset(data));
+ render(1,100);const r=f.art.speciesRenderers.get('spider-lady'),a=r.actors.get('spider-lady1');assert.equal(a.sprite.spriteFrame,r.entries.get('spider-lady').frame);
+ render(1.1,98);const frame=a.sprite.spriteFrame;assert.equal(frame.rect.width,480);render(1.1,98);assert.equal(a.sprite.spriteFrame,frame);render(1.3,96);assert.notEqual(a.sprite.spriteFrame,frame);render(1.4,96);assert.equal(a.sprite.spriteFrame,r.entries.get('spider-lady').frame);
+ for(const mode of ['windup','active','recovery']){for(const kind of ['bite']){render(2,90,{ai:{mode,until:3,attack:{id:'spider-lady-'+kind,kind,startedAt:1,active:.2,dirX:-1}}});assert.equal(a.sprite.spriteFrame,r.entries.get('spider-lady').frame);}for(const skillId of ['M10']){render(2.1,80,{mechanic:{skillId,phase:mode}});assert.equal(a.sprite.spriteFrame,r.entries.get('spider-lady').frame);}}
+ render(3,70);f.art.beginFrame();f.art.endFrame(4,new Set(['spider-lady1']));assert.equal(r.actors.size,0);f.art.destroy();assert.equal(image.refs,0);
+ const png=readFileSync(resource('spider-lady-v1.png'));assert.equal(createHash('sha256').update(png).digest('hex'),data.sourceSha256);assert.equal(png.readUInt32BE(16),1920);assert.equal(png.readUInt32BE(20),1920);assert.equal(png[25],6);assert.equal(Object.keys(data.frames).length,16);
+});
+
+test('rank-four bat warrior walks only on displacement with independent movement and static combat',()=>{
+ const f=setup(),data=JSON.parse(readFileSync(resource('bat-humanoid-v1.json'),'utf8'));
+ const render=(time,x,extra={})=>{f.art.beginFrame();return f.art.draw(f.parent,'bat-humanoid1','bat-humanoid',x,30,x,0,42,{time,hp:100,worldY:70,role:'normal',ai:{mode:'approach',until:0},...extra})};
+ render(1,100);f.staticImage('bat-humanoid');assert.ok(f.requests.some(r=>r.path==='tower-monsters-motion/bat-humanoid-v1'),'bat-humanoid must load the upright walking atlas');
+ const image=f.finish('tower-monsters-motion/bat-humanoid-v1',ImageAsset,new ImageAsset(data.width,data.height));f.finish('tower-monsters-motion/bat-humanoid-v1',JsonAsset,new JsonAsset(data));
+ render(1,100);const r=f.art.speciesRenderers.get('bat-humanoid'),a=r.actors.get('bat-humanoid1');assert.equal(a.sprite.spriteFrame,r.entries.get('bat-humanoid').frame);
+ render(1.1,98);const frame=a.sprite.spriteFrame;assert.equal(frame.rect.width,480);render(1.1,98);assert.equal(a.sprite.spriteFrame,frame);render(1.3,96);assert.notEqual(a.sprite.spriteFrame,frame);render(1.4,96);assert.equal(a.sprite.spriteFrame,r.entries.get('bat-humanoid').frame);
+ for(const mode of ['windup','active','recovery']){for(const kind of ['bite']){render(2,90,{ai:{mode,until:3,attack:{id:'bat-humanoid-'+kind,kind,startedAt:1,active:.2,dirX:-1}}});assert.equal(a.sprite.spriteFrame,r.entries.get('bat-humanoid').frame);}for(const skillId of ['M07']){render(2.1,80,{mechanic:{skillId,phase:mode}});assert.equal(a.sprite.spriteFrame,r.entries.get('bat-humanoid').frame);}}
+ render(3,70);f.art.beginFrame();f.art.endFrame(4,new Set(['bat-humanoid1']));assert.equal(r.actors.size,0);f.art.destroy();assert.equal(image.refs,0);
+ const png=readFileSync(resource('bat-humanoid-v1.png'));assert.equal(createHash('sha256').update(png).digest('hex'),data.sourceSha256);assert.equal(png.readUInt32BE(16),1920);assert.equal(png.readUInt32BE(20),1920);assert.equal(png[25],6);assert.equal(Object.keys(data.frames).length,16);
+});
+
+test('rank-seven white tiger walks only on displacement with independent movement and static combat',()=>{
+ const f=setup(),data=JSON.parse(readFileSync(resource('white-tiger-v1.json'),'utf8'));
+ const render=(time,x,extra={})=>{f.art.beginFrame();return f.art.draw(f.parent,'white-tiger1','white-tiger',x,30,x,0,42,{time,hp:100,worldY:70,role:'boss',ai:{mode:'approach',until:0},...extra})};
+ render(1,100);f.staticImage('white-tiger');assert.ok(f.requests.some(r=>r.path==='tower-monsters-motion/white-tiger-v1'),'white-tiger must load the upright walking atlas');
+ const image=f.finish('tower-monsters-motion/white-tiger-v1',ImageAsset,new ImageAsset(data.width,data.height));f.finish('tower-monsters-motion/white-tiger-v1',JsonAsset,new JsonAsset(data));
+ render(1,100);const r=f.art.speciesRenderers.get('white-tiger'),a=r.actors.get('white-tiger1');assert.equal(a.sprite.spriteFrame,r.entries.get('white-tiger').frame);
+ render(1.1,98);const frame=a.sprite.spriteFrame;assert.equal(frame.rect.width,480);render(1.1,98);assert.equal(a.sprite.spriteFrame,frame);render(1.3,96);assert.notEqual(a.sprite.spriteFrame,frame);render(1.4,96);assert.equal(a.sprite.spriteFrame,r.entries.get('white-tiger').frame);
+ for(const mode of ['windup','active','recovery']){for(const kind of ['sweep']){render(2,90,{ai:{mode,until:3,attack:{id:'white-tiger-'+kind,kind,startedAt:1,active:.2,dirX:-1}}});assert.equal(a.sprite.spriteFrame,r.entries.get('white-tiger').frame);}for(const skillId of ['M06','M01','M19','M02']){render(2.1,80,{mechanic:{skillId,phase:mode}});assert.equal(a.sprite.spriteFrame,r.entries.get('white-tiger').frame);}}
+ render(3,70);f.art.beginFrame();f.art.endFrame(4,new Set(['white-tiger1']));assert.equal(r.actors.size,0);f.art.destroy();assert.equal(image.refs,0);
+ const png=readFileSync(resource('white-tiger-v1.png'));assert.equal(createHash('sha256').update(png).digest('hex'),data.sourceSha256);assert.equal(png.readUInt32BE(16),1920);assert.equal(png.readUInt32BE(20),1920);assert.equal(png[25],6);assert.equal(Object.keys(data.frames).length,16);
+});
+
+test('boar charge phases use per-frame hoof anchors at the unchanged world origin',()=>{
+ const f=setup();f.draw(10);f.staticImage();f.motionImages();
+ const data=JSON.parse(readFileSync(resource('boar-v3.json'),'utf8'));
+ for(const role of ['normal','boss'])for(const enraged of [false,true])for(const [phase,clip]of [['windup','charge-start'],['active','charge-loop'],['recovery','charge-end']]){
+  const id=`${role}-${enraged}-${phase}`;
+  for(const time of [10,10.25,10.5,10.9]){
+   f.art.draw(f.parent,id,'boar',12,34,100,200,30,{time,worldY:50,role,hp:100,ai:{mode:'approach'},mechanic:{skillId:'M06',phase,startedAt:10,until:11,chargeX:300,enraged}});
+   const actor=f.art.actors.get(id),name=[...f.art.motionFrames,...f.art.rageFrames].find(([,frame])=>frame===actor.sprite.spriteFrame)[0];
+   assert.ok(name.startsWith(clip));assert.ok(data.frames[name].anchor,'native frame must have a measured hoof anchor');
+   assert.equal(actor.transform.anchor.y,1-data.frames[name].anchor[1]);
+   assert.equal(actor.node.position.x,12);assert.equal(actor.node.position.y,34);
+  }
+ }
+});
+
+test('discarded floor preload ignores late motion callbacks while replacement cache loads once',()=>{
+ const f=setup(),Art=f.art.constructor,old=f.art;
+ old.preloadFloor({boss_id:'wolf_normal_r4',waves:[]});old.destroy();
+ const image=new ImageAsset(2880,2880),data=JSON.parse(readFileSync(resource('wolf-humanoid-v1.json'),'utf8'));
+ f.finish('tower-monsters-motion/wolf-humanoid-v1',JsonAsset,new JsonAsset(data));
+ f.finish('tower-monsters-motion/wolf-humanoid-v1',ImageAsset,image);
+ f.staticImage('wolf-humanoid');assert.equal(image.refs,0);assert.equal(old.speciesRenderers.size,0);assert.equal(f.parent.children.length,0);
+ const next=new Art(),floor={boss_id:'wolf_normal_r4',waves:[{enemy_groups:[{archetype:'wolf_normal_r4'},{archetype:'wolf_normal_r5'}]}]};
+ const start=f.requests.length;next.preloadFloor(floor);next.preloadFloor(floor);
+ assert.equal(f.requests.length-start,3,'one static image, one motion image and one manifest per family');
+ const current=f.finish('tower-monsters-motion/wolf-humanoid-v1',ImageAsset,new ImageAsset(2880,2880));
+ f.finish('tower-monsters-motion/wolf-humanoid-v1',JsonAsset,new JsonAsset(data));f.staticImage('wolf-humanoid');
+ const renderer=next.speciesRenderers.get('wolf-humanoid'),texture=renderer.motionTexture;
+ assert.ok(texture);next.clearBindings();next.preloadFloor(floor);assert.equal(renderer.motionTexture,texture);assert.equal(f.requests.length-start,3);
+ next.destroy();assert.equal(current.refs,0);assert.equal(texture.isValid,false);
+});
+
+test('floor renderer releases queued motion originals but retains shared portraits and skill effects',()=>{
+ const queueSource=stripTypeScriptTypes(readFileSync(new URL('../cocos-pilot/assets/scripts/TowerAssetQueue.ts',import.meta.url),'utf8'),{mode:'transform'}).replace(/^export /gm,'');
+ const Queue=runInNewContext('(()=>{'+queueSource+';return TowerAssetQueue})()',{setTimeout,clearTimeout,console});
+ const jobs=[],queue=new Queue((path,Type,done)=>jobs.push({path,Type,done}));
+ const context={Color,ARCHETYPES,setTowerDepth:()=>{},Node,UITransform,Sprite,SpriteFrame,Texture2D,ImageAsset,JsonAsset,Rect,Size,
+  isValid:n=>!!n?.isValid,resources:{load:queue.load.bind(queue),release:queue.release.bind(queue)}};
+ const Art=runInNewContext('(()=>{'+source+';return TowerMonsterArt})()',context),art=new Art();
+ const complete=(path,Type,value)=>{const job=jobs.find(j=>j.path===path&&j.Type===Type&&!j.finished);assert.ok(job,path);job.finished=true;job.done(null,value);return value};
+ const motion='tower-monsters-motion/wolf-humanoid-v1';
+ art.preload('wolf-humanoid');
+ const portrait=complete('tower-monsters/wolf-humanoid',ImageAsset,new ImageAsset());
+ const body=complete(motion,ImageAsset,new ImageAsset(2880,2880));
+ const meta=new JsonAsset(JSON.parse(readFileSync(resource('wolf-humanoid-v1.json'),'utf8')));
+ meta.refs=0;meta.addRef=function(){this.refs++};meta.decRef=function(){this.refs--};
+ complete(motion,JsonAsset,meta);
+ queue.load('tower-monsters-motion/crystal',ImageAsset,()=>{});
+ const effect=complete('tower-monsters-motion/crystal',ImageAsset,new ImageAsset());
+ assert.equal(body.refs,2);assert.equal(meta.refs,1);
+ art.clearBindings();assert.equal(body.refs,2);
+ art.destroy();assert.equal(body.refs,0);assert.equal(meta.refs,0);assert.equal(portrait.refs,1);assert.equal(effect.refs,1);
+ const next=new Art();next.preload('wolf-humanoid');
+ assert.equal(jobs.filter(j=>j.path===motion).length,4,'both image and JSON reload on reentry');
+ const late=jobs.filter(j=>j.path===motion&&!j.finished);next.destroy();
+ const stale=new ImageAsset();late.find(j=>j.Type===ImageAsset).done(null,stale);assert.equal(stale.refs,0);
+ assert.equal(queue.state.pending,0);queue.dispose();assert.equal(portrait.refs,0);assert.equal(effect.refs,0);
+});
+
+test('rank and role reach static and animated draws without moving grounded feet or changing state',()=>{
+ const f=setup();f.draw(10);f.staticImage();
+ const draw=(rank,role)=>{const motion={time:10,rank,role,worldY:50,hp:100,ai:{mode:'approach',until:0}};const before=copy(motion);
+  const size=f.art.draw(f.parent,'boar1','boar',12,34,100,200,30,motion);assert.deepEqual(motion,before);return size;};
+ for(const animated of [false,true]){
+  if(animated)f.motionImages();
+  for(const [rank,normal,elite] of [[1,83.2,141.44],[3,83.2,141.44],[4,99.84,162.24],[6,99.84,162.24],[7,116.48,183.04],[9,116.48,183.04]]){
+   for(const [role,want] of [['normal',normal],['elite',elite]]){
+    assert.ok(Math.abs(draw(rank,role)-want)<1e-8);
+    const a=f.art.actors.get('boar1');assert.ok(Math.abs(a.transform.contentSize.width-want)<1e-8);
+    assert.ok(Math.abs(a.node.position.y-(animated?34:34+want*(.9492-.5)))<1e-8);
+   }
+  }
+  assert.ok(Math.abs(draw(3,'boss')-237.952)<1e-8);
+ }
+ f.art.beginFrame();f.art.endFrame(11,new Set(['boar1']));
+ assert.ok(Math.abs(f.art.actors.get('boar1').transform.contentSize.width-237.952)<1e-8);
+});
+
+test('all same-species forms preserve visible rank progression and bosses exceed highest elite by 30 percent',()=>{
+ const Art=setup().art.constructor;
+ const forms=[['boar','boar-humanoid',232/256,206/256],['wolf','wolf-humanoid',230/256,206/256],['spider','spider-lady',470/512,206/256],['tiger','white-tiger',230/256,206/256]];
+ for(const [low,high,lowExtent,highExtent] of forms){
+  const baseline=Art.bodySize(low,'normal',24,1)*lowExtent;
+  assert.ok(Math.abs(Art.bodySize(high,'normal',24,7)*highExtent/baseline-1.4)<1e-8,high);
+  const elite=Art.bodySize(high,'elite',24,9)*highExtent;
+  for(const family of [low,high]){
+   const extent=family===low?lowExtent:highExtent;
+   assert.ok(Art.bodySize(family,'boss',24,3)*extent>=elite*1.3-1e-8,family);
+  }
+ }
+});
+
+test('death after a charge restores the death foot anchor while retaining enlarged elite size',()=>{
+ const f=setup();f.draw(10);f.staticImage();f.motionImages();
+ f.art.draw(f.parent,'boar1','boar',12,34,100,200,30,{time:10,rank:7,role:'elite',hp:100,worldY:50,ai:{mode:'approach'},mechanic:{skillId:'M06',phase:'active',until:11,chargeX:300}});
+ const a=f.art.actors.get('boar1');assert.notEqual(a.transform.anchor.y,1-f.art.motionAtlas.anchor[1]);
+ f.art.beginFrame();f.art.endFrame(11,new Set(['boar1']));
+ closeSize(a.transform.contentSize.width,183.04);assert.equal(a.transform.anchor.y,1-f.art.motionAtlas.anchor[1]);
 });

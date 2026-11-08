@@ -25,7 +25,7 @@ async function main(){
  assert.equal(await page.evaluate(()=>JSON.stringify(window.__towerTest.host.store.state)),before);
  await click(page,'← 宗门');
  assert.equal(await page.evaluate(()=>window.__towerTest.host.menu.currentPage),'hall');
- await click(page,'宗门入口-落云主峰');
+ await click(page,'宗门入口-霁云主峰');
  await click(page,'主峰建筑-藏经阁');
  await page.evaluate(()=>window.__towerTest.host.menu.go('librarySkills'));
  await click(page,'← 藏经阁');

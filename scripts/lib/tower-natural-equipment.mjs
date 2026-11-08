@@ -14,7 +14,8 @@ export function naturalEquipmentScore(state,route,item,category) {
     return hybrid&&isSkill?(physical+magic)/2:physical
   }
   const damage=(.8*hit(skill,true)/(1-a.cooldownReduction)+.2*hit('basic_attack',false)*(1+a.attackSpeed))
-    *(1+a.critChance*a.physicalCritExtra)*((1-a.bleedConversion)*(1-a.woundConversion)*(1+a.attachedDamage)+a.bleedConversion*(1+a.bleedBonus)*1.1+(1-a.bleedConversion)*a.woundConversion*(1+a.woundBonus)*1.1)
+    *(1+a.critChance*a.physicalCritExtra)*((1-a.bleedConversion)*(1+a.attachedDamage)+a.bleedConversion*(1+a.bleedBonus)*1.1)
+    *(1+a.scarVulnerability*3/(a.scarCooldown||10))
   // Defensive shopping values EHP directly; the modest offense weight breaks
   // close ties without treating every cast-speed point as a full DPS multiplier.
   return category==='armor'?s.maxHp/(1-a.reduction)*Math.sqrt(damage):damage

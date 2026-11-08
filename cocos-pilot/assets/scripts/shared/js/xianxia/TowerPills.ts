@@ -35,8 +35,25 @@ export function cultivationUseQuote(state,id,confirmed=false) {
  const gained=Math.min(pill.xp,cultivationXpCap(state.xp)-state.xp),wasted=pill.xp-gained
  return wasted&&!confirmed?{ok:false,reason:'cultivation-overflow-confirmation',gained,wasted}:{ok:true,gained,wasted}
 }
-export function cultivationPillHint(state) {
+export function cultivationPillHint(state, id) {
+ const a=cultivationPillAllowance(state,id)
+ const yields=Object.values(CAMP_PILLS).filter(p=>p.xp&&p.realm===a.realm)
+  .sort((a,b)=>a.xp-b.xp).map(p=>`${p.name}${p.xp}`).join('、')
+ const hint=`${a.realm}修为丹已服${a.used}/${a.total}颗；同境两种修为丹共用额度，剩余${a.remaining}颗。\n每颗修为：${yields}；高阶丹单颗收益更高，服用均占1颗额度。`
+ return cultivationPillsUnlocked(state)?hint:`${CULTIVATION_PILL_UNLOCK_HINT}。\n${hint}`
+}
+/** Read-only use preview; the transaction quote remains the authority for consumption. */
+export function cultivationPillUseHint(state,id) {
+ const pill=CAMP_PILLS[id]
+ if(!pill?.xp)return ''
  if(!cultivationPillsUnlocked(state))return CULTIVATION_PILL_UNLOCK_HINT
- const a=cultivationPillAllowance(state)
- return `${a.realm}修为丹已服${a.used}/${a.total}颗；同境两种修为丹共用额度，剩余${a.remaining}颗。`
+ const q=cultivationUseQuote(state,id)
+ if(!q.ok&&q.reason!=='cultivation-overflow-confirmation'){
+  if(q.reason==='wrong-realm')return `仅限${pill.realm}服用。`
+  if(q.reason==='cultivation-capped')return '修为已满，不消耗丹药。'
+  if(q.reason==='breakthrough-required')return '当前境界修为已满，突破后请使用新境界丹药。'
+  return '本境修为丹额度已用尽，不消耗丹药。'
+ }
+ const remaining=cultivationPillAllowance(state,id).remaining-1
+ return `本次可得${q.gained}修为${q.wasted?`，超出${q.wasted}修为将损失`:''}；服用后剩余${remaining}颗额度。`
 }

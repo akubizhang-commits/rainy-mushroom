@@ -1,0 +1,378 @@
+{
+  "status": "BUILD_READY_PREFLIGHT_PASS",
+  "browserExecuted": false,
+  "preparedAt": "2026-10-28T06:18:23.459Z",
+  "sizes": [
+    {
+      "width": 1280,
+      "height": 720
+    },
+    {
+      "width": 844,
+      "height": 390
+    },
+    {
+      "width": 1024,
+      "height": 768
+    },
+    {
+      "width": 390,
+      "height": 844
+    },
+    {
+      "width": 1920,
+      "height": 280
+    },
+    {
+      "width": 3840,
+      "height": 1080
+    }
+  ],
+  "contract": {
+    "selectors": {
+      "treePanel": "技能树面板",
+      "treeScroll": "技能树二维卷轴",
+      "treeContent": "境界技能树内容",
+      "detail": "技能详情固定栏",
+      "detailScroll": "技能详情独立卷轴",
+      "detailContent": "技能详情栏内容",
+      "name": "技能节点-<id>",
+      "icon": "技能图标-<id>",
+      "level": "技能等级-<id>",
+      "plus": "learnSkill-<id>",
+      "minus": "decreaseSkill-<id>",
+      "joystick": "移动摇杆"
+    },
+    "expectedRealmRows": {
+      "炼气": 12,
+      "金丹": 4
+    },
+    "handoff844LogicalViewports": {
+      "tree": {
+        "width": 820,
+        "height": 297.47
+      },
+      "detail": {
+        "width": 364,
+        "height": 281.47
+      }
+    },
+    "cdMeaning": "Current source displays authored cooldown / hit interval / 常驻, not a live countdown.",
+    "sourceHashes": {
+      "cocos-pilot/assets/scripts/TowerMenu.ts": "195a4db6ea11414fbcd8ab49e45aeb46a0b92feec7b16b5e7269f60f415f5390",
+      "cocos-pilot/assets/scripts/TowerView.ts": "4851a3656ee76c2b196e71eb3723e2130d12d5cae059c202c7098b1b1cf4a774",
+      "cocos-pilot/assets/scripts/PinePilot.ts": "2159b0491dde3dcf1e770ec226876e601b944c5f946e833e3fedfd44259dff60",
+      "js/xianxia/TowerCampaign.js": "9abd84775cc6475dba457f5d6dcef714dc23216e87d7753fbbcc480416ee0283",
+      "js/xianxia/TowerGrowth.js": "6d380a236d33043757b7525c628b0da0e5bad491c3f503e2aefbce417462ba92",
+      "js/xianxia/TowerRun.js": "79e4a7703d08ceee31670000ba93b4ddcd70855e6c9bb8a210e1f27423a08b0d",
+      "js/xianxia/TowerLoot.js": "f2eeb5dca0ee913fc30250ef46e9515fe58f4d1318855431e55408d2d1cd9761",
+      "js/xianxia/TowerArena.js": "f79cc3c9f5eb833abcf3b2b511046dafa579cf78b7f2e758bc3b6cf7259c43b6",
+      "js/xianxia/TowerEnemyAttacks.js": "586c053dc035220250b7c884ca6b7b456d8a9fe1863b860ac8220c9f2c32e561",
+      "cocos-pilot/assets/scripts/TowerArenaView.ts": "2a70b4c56a4b9a4a0c05c0ab5f18ea8ef60d8c4a565468f6aad71f4833f8e6ad"
+    }
+  },
+  "fixtures": [
+    {
+      "kind": "ARTIFICIAL CAMPAIGN-VALIDATED UI FIXTURE — NOT NATURAL PROGRESSION/BALANCE",
+      "name": "tree",
+      "sources": {
+        "xp": 10920,
+        "hp": 120,
+        "cores": 2000,
+        "clearedFloor": 9,
+        "tutorialWaves": 3
+      },
+      "transactions": [
+        {
+          "action": {
+            "type": "learnSkill",
+            "id": "sj_arc"
+          },
+          "result": {
+            "ok": true,
+            "id": "sj_arc",
+            "level": 2,
+            "cost": 1,
+            "bookCost": 0
+          }
+        },
+        {
+          "action": {
+            "type": "learnSkill",
+            "id": "sj_line"
+          },
+          "result": {
+            "ok": true,
+            "id": "sj_line",
+            "level": 1,
+            "cost": 2,
+            "bookCost": 20
+          }
+        },
+        {
+          "action": {
+            "type": "learnSkill",
+            "id": "sj_yujian"
+          },
+          "result": {
+            "ok": true,
+            "id": "sj_yujian",
+            "level": 2,
+            "cost": 1,
+            "bookCost": 0
+          }
+        },
+        {
+          "action": {
+            "type": "learnSkill",
+            "id": "sj_yujian"
+          },
+          "result": {
+            "ok": true,
+            "id": "sj_yujian",
+            "level": 3,
+            "cost": 1,
+            "bookCost": 0
+          }
+        },
+        {
+          "action": {
+            "type": "learnSkill",
+            "id": "sj_yujian"
+          },
+          "result": {
+            "ok": true,
+            "id": "sj_yujian",
+            "level": 4,
+            "cost": 1,
+            "bookCost": 0
+          }
+        },
+        {
+          "action": {
+            "type": "learnSkill",
+            "id": "sj_yujian"
+          },
+          "result": {
+            "ok": true,
+            "id": "sj_yujian",
+            "level": 5,
+            "cost": 1,
+            "bookCost": 0
+          }
+        },
+        {
+          "action": {
+            "type": "learnSkill",
+            "id": "sj_yujian"
+          },
+          "result": {
+            "ok": true,
+            "id": "sj_yujian",
+            "level": 6,
+            "cost": 1,
+            "bookCost": 0
+          }
+        },
+        {
+          "action": {
+            "type": "learnSkill",
+            "id": "sj_yujian"
+          },
+          "result": {
+            "ok": true,
+            "id": "sj_yujian",
+            "level": 7,
+            "cost": 2,
+            "bookCost": 0
+          }
+        },
+        {
+          "action": {
+            "type": "learnSkill",
+            "id": "sj_yujian"
+          },
+          "result": {
+            "ok": true,
+            "id": "sj_yujian",
+            "level": 8,
+            "cost": 2,
+            "bookCost": 0
+          }
+        },
+        {
+          "action": {
+            "type": "learnSkill",
+            "id": "sj_heart"
+          },
+          "result": {
+            "ok": true,
+            "id": "sj_heart",
+            "level": 1,
+            "cost": 1,
+            "bookCost": 0
+          }
+        },
+        {
+          "action": {
+            "type": "learnSkill",
+            "id": "sj_heart"
+          },
+          "result": {
+            "ok": true,
+            "id": "sj_heart",
+            "level": 2,
+            "cost": 1,
+            "bookCost": 0
+          }
+        },
+        {
+          "action": {
+            "type": "learnSkill",
+            "id": "sj_heart"
+          },
+          "result": {
+            "ok": true,
+            "id": "sj_heart",
+            "level": 3,
+            "cost": 1,
+            "bookCost": 0
+          }
+        },
+        {
+          "action": {
+            "type": "learnSkill",
+            "id": "sj_heart"
+          },
+          "result": {
+            "ok": true,
+            "id": "sj_heart",
+            "level": 4,
+            "cost": 1,
+            "bookCost": 0
+          }
+        },
+        {
+          "action": {
+            "type": "learnSkill",
+            "id": "sj_heart"
+          },
+          "result": {
+            "ok": true,
+            "id": "sj_heart",
+            "level": 5,
+            "cost": 1,
+            "bookCost": 0
+          }
+        },
+        {
+          "action": {
+            "type": "learnSkill",
+            "id": "evo_wanjian"
+          },
+          "result": {
+            "ok": true,
+            "id": "evo_wanjian",
+            "level": 1,
+            "cost": 3,
+            "bookCost": 240
+          }
+        },
+        {
+          "action": {
+            "type": "learnSkill",
+            "id": "evo_wanjian"
+          },
+          "result": {
+            "ok": true,
+            "id": "evo_wanjian",
+            "level": 2,
+            "cost": 4,
+            "bookCost": 0
+          }
+        },
+        {
+          "action": {
+            "type": "sync"
+          },
+          "result": {
+            "ok": true,
+            "hp": 120
+          }
+        }
+      ],
+      "rawHash": "8941dc6622d745c9bd2308bc10087d1f29d7e47d87aacb8b96538248965f4464",
+      "growth": {
+        "total": 33,
+        "spent": 24,
+        "available": 9,
+        "realm": 30,
+        "firstClear": 3,
+        "research": 0,
+        "cap": 36
+      },
+      "skills": {
+        "sj_yujian": 8,
+        "sj_arc": 2,
+        "sj_wanjian": 1,
+        "sj_line": 1,
+        "sj_heart": 5
+      },
+      "evolutionRanks": {
+        "evo_wanjian": 2
+      }
+    },
+    {
+      "kind": "ARTIFICIAL CAMPAIGN-VALIDATED UI FIXTURE — NOT NATURAL PROGRESSION/BALANCE",
+      "name": "input",
+      "sources": {
+        "xp": 10920,
+        "hp": 120,
+        "cores": 2000,
+        "clearedFloor": 9,
+        "tutorialWaves": 3
+      },
+      "transactions": [
+        {
+          "action": {
+            "type": "learnSkill",
+            "id": "vajra"
+          },
+          "result": {
+            "ok": true,
+            "id": "vajra",
+            "level": 1,
+            "cost": 1,
+            "bookCost": 0
+          }
+        },
+        {
+          "action": {
+            "type": "sync"
+          },
+          "result": {
+            "ok": true,
+            "hp": 120
+          }
+        }
+      ],
+      "rawHash": "2f14416390e5b29df202f7d0acf8824608204818a2705508c2312af143991446",
+      "growth": {
+        "total": 33,
+        "spent": 1,
+        "available": 32,
+        "realm": 30,
+        "firstClear": 3,
+        "research": 0,
+        "cap": 36
+      },
+      "skills": {
+        "sj_yujian": 1,
+        "sj_arc": 1,
+        "sj_wanjian": 1,
+        "vajra": 1
+      },
+      "evolutionRanks": {}
+    }
+  ]
+}

@@ -1,0 +1,1590 @@
+{
+  "status": "AUTOMATED_PASS_VISUAL_REVIEW_PENDING",
+  "buildClassification": "final",
+  "scriptHash": "c22c4e557ac72afd02ba8c8a6052004868f13e21ff52adb1a88455fd97bf6df0",
+  "startedAt": "2026-10-28T05:57:04.426Z",
+  "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/index.html?ruleset=xianxia&tower=1",
+  "preparation": {
+    "status": "PREPARED_WAITING_FOR_BUILD_READY",
+    "browserExecuted": false,
+    "preparedAt": "2026-10-28T05:57:04.009Z",
+    "sizes": [
+      {
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "width": 844,
+        "height": 390
+      },
+      {
+        "width": 1024,
+        "height": 768
+      },
+      {
+        "width": 390,
+        "height": 844
+      }
+    ],
+    "contract": {
+      "selectors": {
+        "treePanel": "技能树面板",
+        "treeScroll": "技能树二维卷轴",
+        "treeContent": "境界技能树内容",
+        "detail": "技能详情固定栏",
+        "detailScroll": "技能详情独立卷轴",
+        "detailContent": "技能详情栏内容",
+        "name": "技能节点-<id>",
+        "icon": "技能图标-<id>",
+        "level": "技能等级-<id>",
+        "plus": "learnSkill-<id>",
+        "minus": "decreaseSkill-<id>",
+        "joystick": "移动摇杆"
+      },
+      "expectedRealmRows": {
+        "炼气": 12,
+        "金丹": 4
+      },
+      "handoff844LogicalViewports": {
+        "tree": {
+          "width": 820,
+          "height": 297.47
+        },
+        "detail": {
+          "width": 364,
+          "height": 281.47
+        }
+      },
+      "cdMeaning": "Current source displays authored cooldown / hit interval / 常驻, not a live countdown.",
+      "sourceHashes": {
+        "cocos-pilot/assets/scripts/TowerMenu.ts": "195a4db6ea11414fbcd8ab49e45aeb46a0b92feec7b16b5e7269f60f415f5390",
+        "cocos-pilot/assets/scripts/TowerView.ts": "013f50c89d5b64d237b886503b021fe1523bac8ab92bbbb54845b228e96c15ee",
+        "cocos-pilot/assets/scripts/PinePilot.ts": "2159b0491dde3dcf1e770ec226876e601b944c5f946e833e3fedfd44259dff60",
+        "js/xianxia/TowerCampaign.js": "9abd84775cc6475dba457f5d6dcef714dc23216e87d7753fbbcc480416ee0283",
+        "js/xianxia/TowerGrowth.js": "6d380a236d33043757b7525c628b0da0e5bad491c3f503e2aefbce417462ba92",
+        "js/xianxia/TowerRun.js": "79e4a7703d08ceee31670000ba93b4ddcd70855e6c9bb8a210e1f27423a08b0d",
+        "js/xianxia/TowerLoot.js": "f2eeb5dca0ee913fc30250ef46e9515fe58f4d1318855431e55408d2d1cd9761",
+        "js/xianxia/TowerArena.js": "f79cc3c9f5eb833abcf3b2b511046dafa579cf78b7f2e758bc3b6cf7259c43b6",
+        "js/xianxia/TowerEnemyAttacks.js": "586c053dc035220250b7c884ca6b7b456d8a9fe1863b860ac8220c9f2c32e561",
+        "cocos-pilot/assets/scripts/TowerArenaView.ts": "2a70b4c56a4b9a4a0c05c0ab5f18ea8ef60d8c4a565468f6aad71f4833f8e6ad"
+      }
+    },
+    "fixtures": [
+      {
+        "kind": "ARTIFICIAL CAMPAIGN-VALIDATED UI FIXTURE — NOT NATURAL PROGRESSION/BALANCE",
+        "name": "tree",
+        "sources": {
+          "xp": 10920,
+          "hp": 120,
+          "cores": 2000,
+          "clearedFloor": 9,
+          "tutorialWaves": 3
+        },
+        "transactions": [
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_arc"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_arc",
+              "level": 2,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_line"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_line",
+              "level": 1,
+              "cost": 2,
+              "bookCost": 20
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_yujian"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_yujian",
+              "level": 2,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_yujian"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_yujian",
+              "level": 3,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_yujian"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_yujian",
+              "level": 4,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_yujian"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_yujian",
+              "level": 5,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_yujian"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_yujian",
+              "level": 6,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_yujian"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_yujian",
+              "level": 7,
+              "cost": 2,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_yujian"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_yujian",
+              "level": 8,
+              "cost": 2,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_heart"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_heart",
+              "level": 1,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_heart"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_heart",
+              "level": 2,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_heart"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_heart",
+              "level": 3,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_heart"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_heart",
+              "level": 4,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_heart"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_heart",
+              "level": 5,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "evo_wanjian"
+            },
+            "result": {
+              "ok": true,
+              "id": "evo_wanjian",
+              "level": 1,
+              "cost": 3,
+              "bookCost": 240
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "evo_wanjian"
+            },
+            "result": {
+              "ok": true,
+              "id": "evo_wanjian",
+              "level": 2,
+              "cost": 4,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "sync"
+            },
+            "result": {
+              "ok": true,
+              "hp": 120
+            }
+          }
+        ],
+        "rawHash": "544dd5dd83d8280165c587f060e9d3fc5a0f04d7c1cb57fab954e58147be3221",
+        "growth": {
+          "total": 33,
+          "spent": 24,
+          "available": 9,
+          "realm": 30,
+          "firstClear": 3,
+          "research": 0,
+          "cap": 36
+        },
+        "skills": {
+          "sj_yujian": 8,
+          "sj_arc": 2,
+          "sj_wanjian": 1,
+          "sj_line": 1,
+          "sj_heart": 5
+        },
+        "evolutionRanks": {
+          "evo_wanjian": 2
+        }
+      },
+      {
+        "kind": "ARTIFICIAL CAMPAIGN-VALIDATED UI FIXTURE — NOT NATURAL PROGRESSION/BALANCE",
+        "name": "input",
+        "sources": {
+          "xp": 10920,
+          "hp": 120,
+          "cores": 2000,
+          "clearedFloor": 9,
+          "tutorialWaves": 3
+        },
+        "transactions": [
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "vajra"
+            },
+            "result": {
+              "ok": true,
+              "id": "vajra",
+              "level": 1,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "sync"
+            },
+            "result": {
+              "ok": true,
+              "hp": 120
+            }
+          }
+        ],
+        "rawHash": "a8abf13ed377874079379dbbef4846cab8e5ee59a79ae874820da3c8c9959ff8",
+        "growth": {
+          "total": 33,
+          "spent": 1,
+          "available": 32,
+          "realm": 30,
+          "firstClear": 3,
+          "research": 0,
+          "cap": 36
+        },
+        "skills": {
+          "sj_yujian": 1,
+          "sj_arc": 1,
+          "sj_wanjian": 1,
+          "vajra": 1
+        },
+        "evolutionRanks": {}
+      }
+    ]
+  },
+  "browser": {
+    "version": "155.0.8059.12",
+    "module": "/Users/zhangnu/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright",
+    "executablePath": "/Users/zhangnu/Library/Caches/ms-playwright/chromium_headless_shell-1247/chrome-headless-shell-mac-arm64/chrome-headless-shell"
+  },
+  "results": [
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "kind": "ranged",
+      "fixtureHash": "a8abf13ed377874079379dbbef4846cab8e5ee59a79ae874820da3c8c9959ff8",
+      "ok": true,
+      "checks": [
+        {
+          "name": "Real new-attempt ranged projectile visible across screenshot interval; no injected enemy/shot",
+          "passed": true,
+          "observations": [
+            {
+              "beforeTime": 7.016666666666667,
+              "afterTime": 7.266666666666667,
+              "before": [
+                {
+                  "id": "p16",
+                  "x": 463.66666666667066,
+                  "y": -60,
+                  "vx": -270,
+                  "vy": 0,
+                  "radius": 12,
+                  "damage": 10,
+                  "hostile": true,
+                  "hitIds": [],
+                  "expiresAt": 11,
+                  "source": "a1:f9:w1:u12:a1:s1",
+                  "element": "feather"
+                }
+              ],
+              "after": [
+                {
+                  "id": "p16",
+                  "x": 396.16666666667066,
+                  "y": -60,
+                  "vx": -270,
+                  "vy": 0,
+                  "radius": 12,
+                  "damage": 10,
+                  "hostile": true,
+                  "hitIds": [],
+                  "expiresAt": 11,
+                  "source": "a1:f9:w1:u12:a1:s1",
+                  "element": "feather"
+                }
+              ],
+              "enemies": [
+                {
+                  "id": "a1:f9:w1:u2",
+                  "archetype": "tiger_normal",
+                  "name": "斑纹妖虎",
+                  "family": "tiger",
+                  "role": "normal",
+                  "rank": 3,
+                  "x": 33,
+                  "y": -198.00000000000546,
+                  "hp": 7.799999999999997,
+                  "maxHp": 135,
+                  "radius": 28,
+                  "damage": 10,
+                  "moveSpeed": 198,
+                  "woundBudget": 0,
+                  "woundUntil": 8.683333333333334,
+                  "orbitNextAt": 0,
+                  "ai": {
+                    "mode": "windup",
+                    "attack": {
+                      "kind": "sweep",
+                      "shape": "sector",
+                      "windup": 1,
+                      "active": 0.18,
+                      "recovery": 0.9,
+                      "cooldown": 1.8,
+                      "range": 123,
+                      "radius": 123,
+                      "width": 0,
+                      "angle": 140,
+                      "damage": 10,
+                      "lock": 0.15,
+                      "speed": 0,
+                      "cost": 1,
+                      "segments": 1,
+                      "id": "a1:f9:w1:u2:a1:s1",
+                      "segment": 1,
+                      "dirX": 0,
+                      "dirY": 1,
+                      "x": 33,
+                      "y": -198.00000000000546,
+                      "targetX": 33,
+                      "targetY": -60,
+                      "startedAt": 6.4,
+                      "locked": true,
+                      "hit": false,
+                      "fired": false,
+                      "travelled": 0,
+                      "boundary": false,
+                      "maxRange": 123,
+                      "clipped": false
+                    },
+                    "readyAt": 1.9333333333333333,
+                    "graceUntil": 1.9333333333333333,
+                    "until": 7.4,
+                    "eligibleSince": -1,
+                    "sequence": 1,
+                    "cooldowns": {},
+                    "faceX": 0,
+                    "faceY": 1,
+                    "orbitSign": -1,
+                    "offset": 4.623506930387686,
+                    "phase": 1,
+                    "transitionUntil": 0,
+                    "transitionPending": false,
+                    "entryUntil": 1.9333333333333333
+                  }
+                },
+                {
+                  "id": "a1:f9:w1:u3",
+                  "archetype": "tiger_normal",
+                  "name": "斑纹妖虎",
+                  "family": "tiger",
+                  "role": "normal",
+                  "rank": 3,
+                  "x": -53.596546928100935,
+                  "y": 49.385111909180566,
+                  "hp": 135,
+                  "maxHp": 135,
+                  "radius": 28,
+                  "damage": 10,
+                  "moveSpeed": 198,
+                  "woundBudget": 0,
+                  "woundUntil": 0,
+                  "orbitNextAt": 0,
+                  "ai": {
+                    "mode": "windup",
+                    "attack": {
+                      "kind": "sweep",
+                      "shape": "sector",
+                      "windup": 1,
+                      "active": 0.18,
+                      "recovery": 0.9,
+                      "cooldown": 1.8,
+                      "range": 123,
+                      "radius": 123,
+                      "width": 0,
+                      "angle": 140,
+                      "damage": 10,
+                      "lock": 0.15,
+                      "speed": 0,
+                      "cost": 1,
+                      "segments": 1,
+                      "id": "a1:f9:w1:u3:a1:s1",
+                      "segment": 1,
+                      "dirX": 0.6207029443655595,
+                      "dirY": -0.7840458244617625,
+                      "x": -53.596546928100935,
+                      "y": 49.385111909180566,
+                      "targetX": 33,
+                      "targetY": -60,
+                      "startedAt": 6.65,
+                      "locked": true,
+                      "hit": false,
+                      "fired": false,
+                      "travelled": 0,
+                      "boundary": false,
+                      "maxRange": 123,
+                      "clipped": false
+                    },
+                    "readyAt": 2.1500000000000004,
+                    "graceUntil": 2.1500000000000004,
+                    "until": 7.65,
+                    "eligibleSince": -1,
+                    "sequence": 1,
+                    "cooldowns": {},
+                    "faceX": 0.6207029443655595,
+                    "faceY": -0.7840458244617625,
+                    "orbitSign": 1,
+                    "offset": 3.5597272300703993,
+                    "phase": 1,
+                    "transitionUntil": 0,
+                    "transitionPending": false,
+                    "entryUntil": 2.1500000000000004
+                  }
+                },
+                {
+                  "id": "a1:f9:w1:u4",
+                  "archetype": "tiger_normal",
+                  "name": "斑纹妖虎",
+                  "family": "tiger",
+                  "role": "normal",
+                  "rank": 3,
+                  "x": 171.30000000000314,
+                  "y": -60,
+                  "hp": 20.519999999999996,
+                  "maxHp": 135,
+                  "radius": 28,
+                  "damage": 10,
+                  "moveSpeed": 198,
+                  "woundBudget": 0,
+                  "woundUntil": 7.7,
+                  "orbitNextAt": 0,
+                  "ai": {
+                    "mode": "recovery",
+                    "attack": {
+                      "kind": "sweep",
+                      "shape": "sector",
+                      "windup": 1,
+                      "active": 0.18,
+                      "recovery": 0.9,
+                      "cooldown": 1.8,
+                      "range": 123,
+                      "radius": 123,
+                      "width": 0,
+                      "angle": 140,
+                      "damage": 10,
+                      "lock": 0.15,
+                      "speed": 0,
+                      "cost": 1,
+                      "segments": 1,
+                      "id": "a1:f9:w1:u4:a1:s1",
+                      "segment": 1,
+                      "dirX": -1,
+                      "dirY": 0,
+                      "x": 171.30000000000314,
+                      "y": -60,
+                      "targetX": 33,
+                      "targetY": -60,
+                      "startedAt": 5.9,
+                      "locked": true,
+                      "hit": true,
+                      "fired": false,
+                      "travelled": 0,
+                      "boundary": false,
+                      "maxRange": 123,
+                      "clipped": false
+                    },
+                    "readyAt": 2.3666666666666667,
+                    "graceUntil": 2.3666666666666667,
+                    "until": 7.983333333333333,
+                    "eligibleSince": -1,
+                    "sequence": 1,
+                    "cooldowns": {},
+                    "faceX": -1,
+                    "faceY": 0,
+                    "orbitSign": 1,
+                    "offset": 3.209329138537708,
+                    "phase": 1,
+                    "transitionUntil": 0,
+                    "transitionPending": false,
+                    "entryUntil": 2.3666666666666667
+                  }
+                },
+                {
+                  "id": "a1:f9:w1:u5",
+                  "archetype": "tiger_normal",
+                  "name": "斑纹妖虎",
+                  "family": "tiger",
+                  "role": "normal",
+                  "rank": 3,
+                  "x": -53.59654692810129,
+                  "y": -169.38511190918138,
+                  "hp": 135,
+                  "maxHp": 135,
+                  "radius": 28,
+                  "damage": 10,
+                  "moveSpeed": 198,
+                  "woundBudget": 0,
+                  "woundUntil": 0,
+                  "orbitNextAt": 0,
+                  "ai": {
+                    "mode": "approach",
+                    "attack": null,
+                    "readyAt": 2.5833333333333335,
+                    "graceUntil": 2.5833333333333335,
+                    "until": 0,
+                    "eligibleSince": 6.65,
+                    "sequence": 0,
+                    "cooldowns": {},
+                    "faceX": 0.6207029443655583,
+                    "faceY": 0.7840458244617635,
+                    "orbitSign": 1,
+                    "offset": 3.2356705760614553,
+                    "phase": 1,
+                    "transitionUntil": 0,
+                    "transitionPending": false,
+                    "entryUntil": 2.5833333333333335
+                  }
+                },
+                {
+                  "id": "a1:f9:w1:u6",
+                  "archetype": "tiger_normal",
+                  "name": "斑纹妖虎",
+                  "family": "tiger",
+                  "role": "normal",
+                  "rank": 3,
+                  "x": 33,
+                  "y": 78.00000000000364,
+                  "hp": 135,
+                  "maxHp": 135,
+                  "radius": 28,
+                  "damage": 10,
+                  "moveSpeed": 198,
+                  "woundBudget": 0,
+                  "woundUntil": 0,
+                  "orbitNextAt": 0,
+                  "ai": {
+                    "mode": "approach",
+                    "attack": null,
+                    "readyAt": 2.8,
+                    "graceUntil": 2.8,
+                    "until": 0,
+                    "eligibleSince": -1,
+                    "sequence": 0,
+                    "cooldowns": {},
+                    "faceX": 0,
+                    "faceY": -1,
+                    "orbitSign": -1,
+                    "offset": 4.728861799298003,
+                    "phase": 1,
+                    "transitionUntil": 0,
+                    "transitionPending": false,
+                    "entryUntil": 2.8
+                  }
+                },
+                {
+                  "id": "a1:f9:w1:u7",
+                  "archetype": "tiger_normal",
+                  "name": "斑纹妖虎",
+                  "family": "tiger",
+                  "role": "normal",
+                  "rank": 3,
+                  "x": 119.59654692810118,
+                  "y": -169.38511190918138,
+                  "hp": 135,
+                  "maxHp": 135,
+                  "radius": 28,
+                  "damage": 10,
+                  "moveSpeed": 198,
+                  "woundBudget": 0,
+                  "woundUntil": 0,
+                  "orbitNextAt": 0,
+                  "ai": {
+                    "mode": "approach",
+                    "attack": null,
+                    "readyAt": 3.033333333333333,
+                    "graceUntil": 3.033333333333333,
+                    "until": 0,
+                    "eligibleSince": -1,
+                    "sequence": 0,
+                    "cooldowns": {},
+                    "faceX": -0.6207029443655578,
+                    "faceY": 0.784045824461764,
+                    "orbitSign": 1,
+                    "offset": 3.760229037135459,
+                    "phase": 1,
+                    "transitionUntil": 0,
+                    "transitionPending": false,
+                    "entryUntil": 3.033333333333333
+                  }
+                },
+                {
+                  "id": "a1:f9:w1:u8",
+                  "archetype": "tiger_normal",
+                  "name": "斑纹妖虎",
+                  "family": "tiger",
+                  "role": "normal",
+                  "rank": 3,
+                  "x": -105.3000000000021,
+                  "y": -60,
+                  "hp": 135,
+                  "maxHp": 135,
+                  "radius": 28,
+                  "damage": 10,
+                  "moveSpeed": 198,
+                  "woundBudget": 0,
+                  "woundUntil": 0,
+                  "orbitNextAt": 0,
+                  "ai": {
+                    "mode": "approach",
+                    "attack": null,
+                    "readyAt": 3.25,
+                    "graceUntil": 3.25,
+                    "until": 0,
+                    "eligibleSince": 6.65,
+                    "sequence": 0,
+                    "cooldowns": {},
+                    "faceX": 1,
+                    "faceY": 0,
+                    "orbitSign": -1,
+                    "offset": 5.373608381295381,
+                    "phase": 1,
+                    "transitionUntil": 0,
+                    "transitionPending": false,
+                    "entryUntil": 3.25
+                  }
+                },
+                {
+                  "id": "a1:f9:w1:u9",
+                  "archetype": "tiger_normal",
+                  "name": "斑纹妖虎",
+                  "family": "tiger",
+                  "role": "normal",
+                  "rank": 3,
+                  "x": 146.74587753930047,
+                  "y": 47.90394425178481,
+                  "hp": 135,
+                  "maxHp": 135,
+                  "radius": 28,
+                  "damage": 10,
+                  "moveSpeed": 198,
+                  "woundBudget": 0,
+                  "woundUntil": 0,
+                  "orbitNextAt": 0,
+                  "ai": {
+                    "mode": "approach",
+                    "attack": null,
+                    "readyAt": 3.466666666666667,
+                    "graceUntil": 3.466666666666667,
+                    "until": 0,
+                    "eligibleSince": -1,
+                    "sequence": 0,
+                    "cooldowns": {},
+                    "faceX": -0.7254917592440052,
+                    "faceY": -0.6882308531801219,
+                    "orbitSign": 1,
+                    "offset": 2.8915340913612506,
+                    "phase": 1,
+                    "transitionUntil": 0,
+                    "transitionPending": false,
+                    "entryUntil": 3.466666666666667
+                  }
+                },
+                {
+                  "id": "a1:f9:w1:u10",
+                  "archetype": "tiger_normal",
+                  "name": "斑纹妖虎",
+                  "family": "tiger",
+                  "role": "normal",
+                  "rank": 3,
+                  "x": 10.846167957253016,
+                  "y": -283.94634564950934,
+                  "hp": 135,
+                  "maxHp": 135,
+                  "radius": 28,
+                  "damage": 10,
+                  "moveSpeed": 198,
+                  "woundBudget": 0,
+                  "woundUntil": 0,
+                  "orbitNextAt": 0,
+                  "ai": {
+                    "mode": "approach",
+                    "attack": null,
+                    "readyAt": 3.6833333333333336,
+                    "graceUntil": 3.6833333333333336,
+                    "until": 0,
+                    "eligibleSince": -1,
+                    "sequence": 0,
+                    "cooldowns": {},
+                    "faceX": 0.09844421135624053,
+                    "faceY": 0.9951425713185262,
+                    "orbitSign": -1,
+                    "offset": 4.803481405972709,
+                    "phase": 1,
+                    "transitionUntil": 0,
+                    "transitionPending": false,
+                    "entryUntil": 3.6833333333333336
+                  }
+                },
+                {
+                  "id": "a1:f9:w1:u11",
+                  "archetype": "falcon_normal",
+                  "name": "灰羽妖隼",
+                  "family": "falcon",
+                  "role": "normal",
+                  "rank": 3,
+                  "x": -184.64752777320288,
+                  "y": 146.46925595403513,
+                  "hp": 60,
+                  "maxHp": 60,
+                  "radius": 20,
+                  "damage": 10,
+                  "moveSpeed": 220,
+                  "woundBudget": 0,
+                  "woundUntil": 0,
+                  "orbitNextAt": 0,
+                  "ai": {
+                    "mode": "approach",
+                    "attack": null,
+                    "readyAt": 3.9000000000000004,
+                    "graceUntil": 3.9000000000000004,
+                    "until": 0,
+                    "eligibleSince": 6.65,
+                    "sequence": 0,
+                    "cooldowns": {},
+                    "faceX": 0.7254917592440097,
+                    "faceY": -0.6882308531801171,
+                    "orbitSign": 1,
+                    "offset": 3.087462098217744,
+                    "phase": 1,
+                    "transitionUntil": 0,
+                    "transitionPending": false,
+                    "entryUntil": 3.9000000000000004
+                  }
+                },
+                {
+                  "id": "a1:f9:w1:u12",
+                  "archetype": "falcon_normal",
+                  "name": "灰羽妖隼",
+                  "family": "falcon",
+                  "role": "normal",
+                  "rank": 3,
+                  "x": 472.66666666667066,
+                  "y": -60,
+                  "hp": 60,
+                  "maxHp": 60,
+                  "radius": 20,
+                  "damage": 10,
+                  "moveSpeed": 220,
+                  "woundBudget": 0,
+                  "woundUntil": 0,
+                  "orbitNextAt": 0,
+                  "ai": {
+                    "mode": "recovery",
+                    "attack": {
+                      "kind": "shot",
+                      "shape": "capsule",
+                      "windup": 0.85,
+                      "active": 0.1,
+                      "recovery": 0.7,
+                      "cooldown": 2.8,
+                      "range": 480,
+                      "radius": 12,
+                      "width": 24,
+                      "angle": 0,
+                      "damage": 10,
+                      "lock": 0.15,
+                      "speed": 270,
+                      "cost": 1,
+                      "segments": 1,
+                      "element": "feather",
+                      "id": "a1:f9:w1:u12:a1:s1",
+                      "segment": 1,
+                      "dirX": -1,
+                      "dirY": 0,
+                      "x": 472.66666666667066,
+                      "y": -60,
+                      "targetX": 33,
+                      "targetY": -60,
+                      "startedAt": 6.15,
+                      "locked": true,
+                      "hit": false,
+                      "fired": true,
+                      "travelled": 0,
+                      "boundary": false,
+                      "maxRange": 480,
+                      "clipped": false
+                    },
+                    "readyAt": 4.133333333333334,
+                    "graceUntil": 4.133333333333334,
+                    "until": 7.8,
+                    "eligibleSince": -1,
+                    "sequence": 1,
+                    "cooldowns": {},
+                    "faceX": -1,
+                    "faceY": 0,
+                    "orbitSign": -1,
+                    "offset": 2.684644562221927,
+                    "phase": 1,
+                    "transitionUntil": 0,
+                    "transitionPending": false,
+                    "entryUntil": 4.133333333333334
+                  }
+                },
+                {
+                  "id": "a1:f9:w1:u13",
+                  "archetype": "falcon_normal",
+                  "name": "灰羽妖隼",
+                  "family": "falcon",
+                  "role": "normal",
+                  "rank": 3,
+                  "x": -184.64752777320288,
+                  "y": -266.4692559540352,
+                  "hp": 60,
+                  "maxHp": 60,
+                  "radius": 20,
+                  "damage": 10,
+                  "moveSpeed": 220,
+                  "woundBudget": 0,
+                  "woundUntil": 0,
+                  "orbitNextAt": 0,
+                  "ai": {
+                    "mode": "approach",
+                    "attack": null,
+                    "readyAt": 4.35,
+                    "graceUntil": 4.35,
+                    "until": 0,
+                    "eligibleSince": -1,
+                    "sequence": 0,
+                    "cooldowns": {},
+                    "faceX": 0.7254917592440097,
+                    "faceY": 0.6882308531801173,
+                    "orbitSign": 1,
+                    "offset": 1.8108419008794345,
+                    "phase": 1,
+                    "transitionUntil": 0,
+                    "transitionPending": false,
+                    "entryUntil": 4.35
+                  }
+                },
+                {
+                  "id": "a1:f9:w1:u14",
+                  "archetype": "falcon_normal",
+                  "name": "灰羽妖隼",
+                  "family": "falcon",
+                  "role": "normal",
+                  "rank": 3,
+                  "x": -0.16317634608636572,
+                  "y": 275.2364565419594,
+                  "hp": 60,
+                  "maxHp": 60,
+                  "radius": 20,
+                  "damage": 10,
+                  "moveSpeed": 220,
+                  "woundBudget": 0,
+                  "woundUntil": 0,
+                  "orbitNextAt": 0,
+                  "ai": {
+                    "mode": "approach",
+                    "attack": null,
+                    "readyAt": 4.566666666666666,
+                    "graceUntil": 4.566666666666666,
+                    "until": 0,
+                    "eligibleSince": -1,
+                    "sequence": 0,
+                    "cooldowns": {},
+                    "faceX": 0.09844421135624147,
+                    "faceY": -0.995142571318526,
+                    "orbitSign": 1,
+                    "offset": 3.144752205540671,
+                    "phase": 1,
+                    "transitionUntil": 0,
+                    "transitionPending": false,
+                    "entryUntil": 4.566666666666666
+                  }
+                },
+                {
+                  "id": "a1:f9:w1:u15",
+                  "archetype": "falcon_normal",
+                  "name": "灰羽妖隼",
+                  "family": "falcon",
+                  "role": "normal",
+                  "rank": 3,
+                  "x": 295.9795324157949,
+                  "y": -309.47303075093527,
+                  "hp": 60,
+                  "maxHp": 60,
+                  "radius": 20,
+                  "damage": 10,
+                  "moveSpeed": 220,
+                  "woundBudget": 0,
+                  "woundUntil": 0,
+                  "orbitNextAt": 0,
+                  "ai": {
+                    "mode": "approach",
+                    "attack": null,
+                    "readyAt": 4.783333333333333,
+                    "graceUntil": 4.783333333333333,
+                    "until": 0,
+                    "eligibleSince": -1,
+                    "sequence": 0,
+                    "cooldowns": {},
+                    "faceX": -0.7254917592440092,
+                    "faceY": 0.6882308531801175,
+                    "orbitSign": -1,
+                    "offset": 5.686063841850909,
+                    "phase": 1,
+                    "transitionUntil": 0,
+                    "transitionPending": false,
+                    "entryUntil": 4.783333333333333
+                  }
+                },
+                {
+                  "id": "a1:f9:w1:u16",
+                  "archetype": "falcon_normal",
+                  "name": "灰羽妖隼",
+                  "family": "falcon",
+                  "role": "normal",
+                  "rank": 3,
+                  "x": -351.66666666666936,
+                  "y": -60,
+                  "hp": 60,
+                  "maxHp": 60,
+                  "radius": 20,
+                  "damage": 10,
+                  "moveSpeed": 220,
+                  "woundBudget": 0,
+                  "woundUntil": 0,
+                  "orbitNextAt": 0,
+                  "ai": {
+                    "mode": "approach",
+                    "attack": null,
+                    "readyAt": 5,
+                    "graceUntil": 5,
+                    "until": 0,
+                    "eligibleSince": -1,
+                    "sequence": 0,
+                    "cooldowns": {},
+                    "faceX": 1,
+                    "faceY": 0,
+                    "orbitSign": -1,
+                    "offset": 3.8850251349595673,
+                    "phase": 1,
+                    "transitionUntil": 0,
+                    "transitionPending": false,
+                    "entryUntil": 5
+                  }
+                },
+                {
+                  "id": "a1:f9:w1:u17",
+                  "archetype": "falcon_normal",
+                  "name": "灰羽妖隼",
+                  "family": "falcon",
+                  "role": "normal",
+                  "rank": 3,
+                  "x": 323.06297209113154,
+                  "y": 306.3953331677471,
+                  "hp": 60,
+                  "maxHp": 60,
+                  "radius": 20,
+                  "damage": 10,
+                  "moveSpeed": 220,
+                  "woundBudget": 0,
+                  "woundUntil": 0,
+                  "orbitNextAt": 0,
+                  "ai": {
+                    "mode": "approach",
+                    "attack": null,
+                    "readyAt": 5.233333333333333,
+                    "graceUntil": 5.233333333333333,
+                    "until": 0,
+                    "eligibleSince": -1,
+                    "sequence": 0,
+                    "cooldowns": {},
+                    "faceX": -0.6207029443655591,
+                    "faceY": -0.7840458244617631,
+                    "orbitSign": -1,
+                    "offset": 4.632137276619105,
+                    "phase": 1,
+                    "transitionUntil": 0,
+                    "transitionPending": false,
+                    "entryUntil": 5.233333333333333
+                  }
+                },
+                {
+                  "id": "a1:f9:w1:u18",
+                  "archetype": "falcon_normal",
+                  "name": "灰羽妖隼",
+                  "family": "falcon",
+                  "role": "normal",
+                  "rank": 3,
+                  "x": 85.29416808631566,
+                  "y": -588.625829568191,
+                  "hp": 60,
+                  "maxHp": 60,
+                  "radius": 20,
+                  "damage": 10,
+                  "moveSpeed": 220,
+                  "woundBudget": 0,
+                  "woundUntil": 0,
+                  "orbitNextAt": 0,
+                  "ai": {
+                    "mode": "approach",
+                    "attack": null,
+                    "readyAt": 5.45,
+                    "graceUntil": 5.45,
+                    "until": 0,
+                    "eligibleSince": -1,
+                    "sequence": 0,
+                    "cooldowns": {},
+                    "faceX": -0.09844421135624129,
+                    "faceY": 0.995142571318526,
+                    "orbitSign": 1,
+                    "offset": 5.893394085302038,
+                    "phase": 1,
+                    "transitionUntil": 0,
+                    "transitionPending": false,
+                    "entryUntil": 5.45
+                  }
+                },
+                {
+                  "id": "a1:f9:w1:u19",
+                  "archetype": "falcon_normal",
+                  "name": "灰羽妖隼",
+                  "family": "falcon",
+                  "role": "normal",
+                  "rank": 3,
+                  "x": -316.2366527873152,
+                  "y": 381.141035099769,
+                  "hp": 60,
+                  "maxHp": 60,
+                  "radius": 20,
+                  "damage": 10,
+                  "moveSpeed": 220,
+                  "woundBudget": 0,
+                  "woundUntil": 0,
+                  "orbitNextAt": 0,
+                  "ai": {
+                    "mode": "approach",
+                    "attack": null,
+                    "readyAt": 5.666666666666666,
+                    "graceUntil": 5.666666666666666,
+                    "until": 0,
+                    "eligibleSince": -1,
+                    "sequence": 0,
+                    "cooldowns": {},
+                    "faceX": 0.620702944365559,
+                    "faceY": -0.7840458244617631,
+                    "orbitSign": -1,
+                    "offset": 1.0087486632765619,
+                    "phase": 1,
+                    "transitionUntil": 0,
+                    "transitionPending": false,
+                    "entryUntil": 5.666666666666666
+                  }
+                },
+                {
+                  "id": "a1:f9:w1:u21",
+                  "archetype": "falcon_normal",
+                  "name": "灰羽妖隼",
+                  "family": "falcon",
+                  "role": "normal",
+                  "rank": 3,
+                  "x": -375.4103334834986,
+                  "y": -575.8867370317897,
+                  "hp": 60,
+                  "maxHp": 60,
+                  "radius": 20,
+                  "damage": 10,
+                  "moveSpeed": 220,
+                  "woundBudget": 0,
+                  "woundUntil": 0,
+                  "orbitNextAt": 0,
+                  "ai": {
+                    "mode": "approach",
+                    "attack": null,
+                    "readyAt": 6.1,
+                    "graceUntil": 6.1,
+                    "until": 0,
+                    "eligibleSince": -1,
+                    "sequence": 0,
+                    "cooldowns": {},
+                    "faceX": 0.6207029443655596,
+                    "faceY": 0.7840458244617625,
+                    "orbitSign": -1,
+                    "offset": 0.7316144849199285,
+                    "phase": 1,
+                    "transitionUntil": 0,
+                    "transitionPending": false,
+                    "entryUntil": 6.1
+                  }
+                },
+                {
+                  "id": "a1:f9:w1:u22",
+                  "archetype": "falcon_normal",
+                  "name": "灰羽妖隼",
+                  "family": "falcon",
+                  "role": "normal",
+                  "rank": 3,
+                  "x": 33,
+                  "y": 661.0000000000022,
+                  "hp": 60,
+                  "maxHp": 60,
+                  "radius": 20,
+                  "damage": 10,
+                  "moveSpeed": 220,
+                  "woundBudget": 0,
+                  "woundUntil": 0,
+                  "orbitNextAt": 0,
+                  "ai": {
+                    "mode": "approach",
+                    "attack": null,
+                    "readyAt": 6.333333333333333,
+                    "graceUntil": 6.333333333333333,
+                    "until": 0,
+                    "eligibleSince": -1,
+                    "sequence": 0,
+                    "cooldowns": {},
+                    "faceX": 0,
+                    "faceY": -1,
+                    "orbitSign": -1,
+                    "offset": 1.398269460358403,
+                    "phase": 1,
+                    "transitionUntil": 0,
+                    "transitionPending": false,
+                    "entryUntil": 6.333333333333333
+                  }
+                },
+                {
+                  "id": "a1:f9:w1:u23",
+                  "archetype": "falcon_normal",
+                  "name": "灰羽妖隼",
+                  "family": "falcon",
+                  "role": "normal",
+                  "rank": 3,
+                  "x": 502.8599249756888,
+                  "y": -653.5072736535035,
+                  "hp": 60,
+                  "maxHp": 60,
+                  "radius": 20,
+                  "damage": 10,
+                  "moveSpeed": 220,
+                  "woundBudget": 0,
+                  "woundUntil": 0,
+                  "orbitNextAt": 0,
+                  "ai": {
+                    "mode": "approach",
+                    "attack": null,
+                    "readyAt": 6.55,
+                    "graceUntil": 6.55,
+                    "until": 0,
+                    "eligibleSince": -1,
+                    "sequence": 0,
+                    "cooldowns": {},
+                    "faceX": -0.62070294436556,
+                    "faceY": 0.7840458244617624,
+                    "orbitSign": -1,
+                    "offset": 0.9202159698202318,
+                    "phase": 1,
+                    "transitionUntil": 0,
+                    "transitionPending": false,
+                    "entryUntil": 6.55
+                  }
+                },
+                {
+                  "id": "a1:f9:w1:u25",
+                  "archetype": "falcon_normal",
+                  "name": "灰羽妖隼",
+                  "family": "falcon",
+                  "role": "normal",
+                  "rank": 3,
+                  "x": 647.1175438898954,
+                  "y": 522.5767636901128,
+                  "hp": 60,
+                  "maxHp": 60,
+                  "radius": 20,
+                  "damage": 10,
+                  "moveSpeed": 220,
+                  "woundBudget": 0,
+                  "woundUntil": 0,
+                  "orbitNextAt": 0,
+                  "ai": {
+                    "mode": "approach",
+                    "attack": null,
+                    "readyAt": 6.983333333333333,
+                    "graceUntil": 6.983333333333333,
+                    "until": 0,
+                    "eligibleSince": -1,
+                    "sequence": 0,
+                    "cooldowns": {},
+                    "faceX": -0.725491759244009,
+                    "faceY": -0.6882308531801179,
+                    "orbitSign": 1,
+                    "offset": 3.7981392791063477,
+                    "phase": 1,
+                    "transitionUntil": 0,
+                    "transitionPending": false,
+                    "entryUntil": 6.983333333333333
+                  }
+                },
+                {
+                  "id": "a1:f9:w1:u20",
+                  "archetype": "falcon_normal",
+                  "name": "灰羽妖隼",
+                  "family": "falcon",
+                  "role": "normal",
+                  "rank": 3,
+                  "x": 773.0000000000006,
+                  "y": -60,
+                  "hp": 60,
+                  "maxHp": 60,
+                  "radius": 20,
+                  "damage": 10,
+                  "moveSpeed": 220,
+                  "woundBudget": 0,
+                  "woundUntil": 0,
+                  "orbitNextAt": 0,
+                  "ai": {
+                    "mode": "approach",
+                    "attack": null,
+                    "readyAt": 7.033333333333333,
+                    "graceUntil": 7.033333333333333,
+                    "until": 0,
+                    "eligibleSince": -1,
+                    "sequence": 0,
+                    "cooldowns": {},
+                    "faceX": -1,
+                    "faceY": 0,
+                    "orbitSign": 1,
+                    "offset": 2.8171901320997947,
+                    "phase": 1,
+                    "transitionUntil": 0,
+                    "transitionPending": false,
+                    "entryUntil": 7.033333333333333
+                  }
+                },
+                {
+                  "id": "a1:f9:w1:u26",
+                  "archetype": "falcon_normal",
+                  "name": "灰羽妖隼",
+                  "family": "falcon",
+                  "role": "normal",
+                  "rank": 3,
+                  "x": -57.19518945846891,
+                  "y": -971.7557195258269,
+                  "hp": 60,
+                  "maxHp": 60,
+                  "radius": 20,
+                  "damage": 10,
+                  "moveSpeed": 220,
+                  "woundBudget": 0,
+                  "woundUntil": 0,
+                  "orbitNextAt": 0,
+                  "ai": {
+                    "mode": "approach",
+                    "attack": null,
+                    "readyAt": 7.2,
+                    "graceUntil": 7.2,
+                    "until": 0,
+                    "eligibleSince": -1,
+                    "sequence": 0,
+                    "cooldowns": {},
+                    "faceX": 0.09844421135624129,
+                    "faceY": 0.995142571318526,
+                    "orbitSign": -1,
+                    "offset": 4.264759367043123,
+                    "phase": 1,
+                    "transitionUntil": 0,
+                    "transitionPending": false,
+                    "entryUntil": 7.2
+                  }
+                },
+                {
+                  "id": "a1:f9:w1:u24",
+                  "archetype": "falcon_normal",
+                  "name": "灰羽妖隼",
+                  "family": "falcon",
+                  "role": "normal",
+                  "rank": 3,
+                  "x": -762,
+                  "y": -60,
+                  "hp": 60,
+                  "maxHp": 60,
+                  "radius": 20,
+                  "damage": 10,
+                  "moveSpeed": 220,
+                  "woundBudget": 0,
+                  "woundUntil": 0,
+                  "orbitNextAt": 0,
+                  "ai": {
+                    "mode": "approach",
+                    "attack": null,
+                    "readyAt": 7.916666666666666,
+                    "graceUntil": 7.916666666666666,
+                    "until": 0,
+                    "eligibleSince": -1,
+                    "sequence": 0,
+                    "cooldowns": {},
+                    "faceX": 0,
+                    "faceY": -1,
+                    "orbitSign": 1,
+                    "offset": 2.0219698723497515,
+                    "phase": 1,
+                    "transitionUntil": 0,
+                    "transitionPending": false,
+                    "entryUntil": 7.916666666666666
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "actions": [
+        {
+          "type": "pointer-click",
+          "target": "锁妖塔",
+          "x": 488,
+          "y": 672,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "重访第9层",
+          "x": 640,
+          "y": 345.99999999999994,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "暂停",
+          "x": 1215,
+          "y": 45,
+          "enabled": true
+        }
+      ],
+      "screenshots": [
+        "ui-delivery-ranged-1280x720-ranged-real-ranged-emit-1.png",
+        "ui-delivery-ranged-1280x720-ranged-real-ranged-paused.png"
+      ],
+      "pageErrors": [],
+      "console": [
+        {
+          "type": "warning",
+          "text": "[.WebGL-0x10400437e00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+        },
+        {
+          "type": "warning",
+          "text": "[.WebGL-0x10400437e00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+        },
+        {
+          "type": "warning",
+          "text": "[.WebGL-0x10400437e00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+        },
+        {
+          "type": "warning",
+          "text": "[.WebGL-0x10400437e00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (setting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.setFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "Setting window size is not supported."
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        }
+      ],
+      "httpErrors": [],
+      "requestFailures": [],
+      "assets": [
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/polyfills.bundle.5adbf.js",
+          "status": 200,
+          "sha256": "f1e4ced3322168d6b9915e782e4c1cf1055d75f66f2b38e7fcd60f48cf89082b"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/system.bundle.cc789.js",
+          "status": 200,
+          "sha256": "5d1a25de07cc11276a6b1d6479cac7f12c0c561dd06941b8339e568c9d94f900"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/index.9dfc9.js",
+          "status": 200,
+          "sha256": "45ff755b782b689a74542e2cb550ec8e092e2f0f6dc2321dcd5dfda73bc68668"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/application.6230d.js",
+          "status": 200,
+          "sha256": "9724f071e4f4ed8e65df5a695185e7b4d0df90785a0d2bcda109c07f9593b17f"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/cocos-js/cc.c2df8.js",
+          "status": 200,
+          "sha256": "a670bba566ce7e3a2c25e17b7eb104efc0463a62d85c3d4974d2be9b586eee89"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/chunks/bundle.e2cd5.js",
+          "status": 200,
+          "sha256": "c0ab1af06c40484eba8e9d40042b2162a8355e8d8d1d914ea5a21d4d420dc1d5"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/assets/internal/index.4e53f.js",
+          "status": 200,
+          "sha256": "d842bf596127320ad8cd42ce506a2817cd8a6402fbec6735e6b13af359a40757"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/assets/main/index.272d1.js",
+          "status": 200,
+          "sha256": "c70cb27788d9c4952c5ed5a19b28d66c934d186fe2e6dd7045f6f86a8f6a1956"
+        }
+      ],
+      "invalidLabels": []
+    }
+  ],
+  "failures": 0,
+  "visualReview": "PENDING: actual circle geometry, row labels, fixed pane, joystick and modal images.",
+  "finishedAt": "2026-10-28T05:57:15.916Z"
+}

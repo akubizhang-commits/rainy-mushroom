@@ -1,9 +1,10 @@
 import {Color,Graphics} from 'cc';
 import {skillForm,orbitSwordPose} from './shared/js/xianxia/TowerSkillForms';
-import {swordQiSegments,swordQiVisualLift} from './shared/js/xianxia/TowerSwordQi';
+import {swordQiSegments,swordQiVisualLift,swordQiPoseIndex} from './shared/js/xianxia/TowerSwordQi';
 import {SHADOW_LIFT,shadowPreviewLine,shadowHitFeedback} from './shared/js/xianxia/TowerShadow';
+import {sancaiVertices} from './shared/js/xianxia/TowerSancai';
 
-const FRIENDLY=new Set(['basic_swing','arc','cross','line','tiandi','tiandi_windup','shadow','formation','convergence','sword_rain','orbit','wuwo','hit','gate','armor_heal','sword_charge','sword_burst_charge','sword_burst']);
+const FRIENDLY=new Set(['basic_swing','arc','cross','line','tiandi','tiandi_windup','shadow','formation','sancai','convergence','sword_rain','orbit','wuwo','hit','gate','armor_heal','sword_charge','sword_burst_charge','sword_burst','sword_burst_hit']);
 /** Geometric skill presentation. Every damaging frontier comes from combat.
  * Uses one existing Graphics layer and cached colors: no per-frame nodes,
  * textures, tweens, timers, particles, random choices or gameplay writes.
@@ -36,9 +37,21 @@ export class TowerSkillEffects {
    if(e.kind==='arc'&&arcSprites?.has(e.id))continue;
    if(e.kind==='line'&&e.source==='sj_line'&&!e.hostile)continue; // Ground qi retired; chest sword/rift owns this effect.
    if(e.kind==='tiandi'&&e.source==='evo_tiandi'&&tiandiSprites?.has(e.id))continue;
+   if(e.kind==='cross'&&e.source==='sj_moon'){
+    if(!qiSprites?.has(e.id)){
+     const alpha=Math.round(210*Math.max(0,1-(s.time-e.startedAt)/.42));
+     this.lineColor(g,220,245,255,alpha,8);
+     const angle=Math.atan2(e.dirY,e.dirX),r=e.radius;
+     for(let i=0;i<=60;i++){
+      const t=(-150+i*5)*Math.PI/180,x=r*Math.cos(t),y=r*.5*Math.sin(t);
+      const px=e.x-this.cx+x*Math.cos(angle)-y*Math.sin(angle),py=e.y-this.cy+swordQiVisualLift(e)+x*Math.sin(angle)+y*Math.cos(angle);
+      if(i===0)g.moveTo(px,py);else g.lineTo(px,py);
+     }g.stroke();
+    }continue;
+   }
    if(e.kind==='cross'&&e.source==='sj_cross'){
     if(e.shape==='cross-burst'){
-     if(!qiSprites?.has(e.id)){this.lineColor(g,180,240,255,Math.round(120*Math.max(0,1-(s.time-e.startedAt)/.9)),2);g.circle(e.x-this.cx,e.y-this.cy+swordQiVisualLift(e),e.radius);g.stroke()}
+     if(!qiSprites?.has(e.id)){this.lineColor(g,180,240,255,Math.round(120*Math.max(0,1-(s.time-e.startedAt)/.9)),2);const a=Math.atan2(e.dirY??0,e.dirX??1);g.arc(e.x-this.cx,e.y-this.cy+swordQiVisualLift(e),e.radius,a-Math.PI/2,a+Math.PI/2,false);g.stroke()}
     }else if(!qiSprites?.has(e.id))this.drawSwordQi(g,e,s.time,camera);
     continue;
    }
@@ -246,7 +259,7 @@ export class TowerSkillEffects {
  drawSwordQi(g:Graphics,e:any,time:number,camera:{x:number;y:number}){
   const near=e?.kind==='cross',kind=near?'cross':e?.bladeKind;
   if(e?.hostile||!['crescent','cross'].includes(kind)
-   ||e.source!==(kind==='crescent'?'sj_arc':'sj_cross')
+   ||(kind==='crescent'?!['sj_arc','sj_moon','sj_moon_triple'].includes(e.source):e.source!=='sj_cross')
    ||(near?e.shape!=='cross':e.shape!==`${kind}-projectile`))return false;
   const started=e.startedAt,expires=e.expiresAt,width=e.width;
   const dx=e.dirX??e.vx,dy=e.dirY??e.vy,d=Math.hypot(dx,dy);
@@ -257,7 +270,7 @@ export class TowerSkillEffects {
   const alpha=near?Math.pow(Math.max(0,1-(time-started)/(expires-started)),1.2):
    ended?Math.pow(Math.max(0,1-(time-e.dissolveAt)/Math.max(.001,expires-e.dissolveAt)),1.35):
    Math.min(1,(time-started)/.055);
-  const segments=swordQiSegments(kind,width,e.pulseIndex),thickness=e.bladeWidth||12;
+  const segments=swordQiSegments(kind,width,swordQiPoseIndex(e)),thickness=e.bladeWidth||12;
   for(let layer=0;layer<2;layer++){
    this.lineColor(g,layer?211:72,layer?251:200,255,alpha*(layer?240:65),thickness*(layer?.55:1.7));
    for(const edge of segments){
@@ -307,6 +320,13 @@ export class TowerSkillEffects {
   const alpha=zone?1:Math.pow(1-progress,1.2);
   const x=e.x-this.cx,y=e.y-this.cy;
   if(e.kind==='orbit'||e.kind==='wuwo')return; // Actual blades already convey these hits.
+  if(e.kind==='sancai'){
+   const vertices=sancaiVertices({x,y,radius:e.radius});
+   this.lineColor(g,147,230,228,130*alpha,1.5);
+   g.moveTo(vertices[0].x,vertices[0].y);
+   for(let i=1;i<3;i++)g.lineTo(vertices[i].x,vertices[i].y);
+   g.close();g.stroke();return;
+  }
   if(e.kind==='formation'||e.source==='evo_sixiang'){
    this.formation(g,e,time,alpha);return;
   }
@@ -318,7 +338,9 @@ export class TowerSkillEffects {
    g.moveTo(x-r*.35,y);g.lineTo(x+r*.35,y);g.moveTo(x,y-r*.35);g.lineTo(x,y+r*.35);g.stroke();
    return;
   }
-  if(e.kind==='arc'||e.kind==='basic_swing'){
+  // Basic attacks keep their character swing and hit feedback, without a qi crescent.
+  if(e.kind==='basic_swing')return;
+  if(e.kind==='arc'){
    const dir=Math.atan2(e.dirY??e.faceY??0,e.dirX??e.faceX??1);
    this.crescent(g,x,y,e.radius,dir,(e.angle||90)*Math.PI/180,alpha,e.pulseIndex||1,progress);return;
   }
@@ -402,7 +424,7 @@ export class TowerSkillEffects {
   const pulseAt=Number.isFinite(e.nextAt)&&Number.isFinite(e.interval)?e.nextAt-e.interval:e.startedAt;
   const since=e.pulseIndex>0&&Number.isFinite(pulseAt)?Math.max(0,time-pulseAt):999;
   const flash=Math.max(0,1-since/.18);
-  const final=e.pulseIndex===e.pulseCount&&(diamond||e.pulseCount===7);
+  const final=e.pulseIndex===e.pulseCount&&(diamond||e.pulseCount>=7);
   this.paint(g,diamond?128:105,diamond?202:207,218,(8+flash*(final?45:27))*alpha);
   this.region(g,x,y,r,diamond);g.fill();
   this.lineColor(g,diamond?188:147,diamond?229:230,228,(80+flash*130)*alpha,final&&flash>0?3:1.5);

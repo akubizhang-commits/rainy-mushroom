@@ -22,12 +22,12 @@ test('Chixiao is one named rank-six elite in floor eight wave eighteen; original
  assert.equal(FLOORS[2].boss_id,'spider_boss')
 })
 
-test('new elite keeps the floor elite combat budget and receives a nonzero rank-six loot chance',()=>{
+test('named rank-six elite keeps the approved 28x HP and 1.7x attack with nonzero loot chance',()=>{
  const a=ARCHETYPES.find(a=>a.id===id);assert.ok(a)
  const stats=towerEnemyStats(a,8,15)
  const normal=ARCHETYPES.find(n=>n.role==='normal'&&n.species==='spider'&&n.rank===6)
- assert.equal(stats.hp,towerEnemyStats(normal,8,15).hp*2.5)
- assert.equal(stats.damage,towerEnemyStats(normal,8,15).damage*1.15)
+ assert.equal(stats.hp,towerEnemyStats(normal,8,15).hp*28)
+ assert.equal(stats.damage,towerEnemyStats(normal,8,15).damage*1.7)
  const p=CORE_DROP_RULES[8].chancesByRole.elite[6]
  assert.ok(p>0&&p<=1)
 })

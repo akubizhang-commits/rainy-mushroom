@@ -85,7 +85,7 @@ function fixture({ synchronous = false, throwLoad = false, throwTexture = false 
     icon.addChild(glyph)
     loader.attach(icon, glyph, id, learned)
     const badge = new Node(`技能等级-${id}`); icon.addChild(badge)
-    const clip = icon.children.find(node => node.name === `技能素材裁剪-${id}`)
+    const clip = icon.children.find(node => node.name === `功法素材裁剪-${id}`)
     return { icon, glyph, badge, clip, sprite: clip?.children[0].getComponent(Sprite) }
   }
   async function complete(index, error = null, image = new ImageAsset()) {
@@ -96,7 +96,17 @@ function fixture({ synchronous = false, throwLoad = false, throwTexture = false 
   return { loader, attach, complete, calls, images, textures, frames, ImageAsset, UITransform, Mask, Sprite }
 }
 
-test('all 18 icons deduplicate pending loads across redraws and reuse completed assets', async () => {
+test('Sancai loads approved artwork and replaces the fallback glyph', async () => {
+  const f=fixture(),view=f.attach('sj_sancai')
+  assert.equal(f.calls.length,1)
+  assert.equal(f.calls[0].path,'tower-skill-icons/sj_sancai')
+  assert.equal(view.glyph.active,true)
+  await f.complete(0)
+  assert.equal(view.glyph.active,false)
+  assert.equal(view.clip.active,true)
+  f.loader.destroy()
+})
+test('all available icons deduplicate pending loads across redraws and reuse completed assets', async () => {
   const f = fixture()
   let current = []
   for (let redraw = 0; redraw < 24; redraw++) {
@@ -104,18 +114,18 @@ test('all 18 icons deduplicate pending loads across redraws and reuse completed 
     current.forEach(view => view.icon.destroy())
     current = ids.map(id => f.attach(id))
   }
-  assert.equal(f.calls.length, 18)
+  assert.equal(f.calls.length, ids.length)
   assert.deepEqual(f.calls.map(call => call.path), ids.map(id => `tower-skill-icons/${id}`))
   assert.ok(f.calls.every(call => call.Type === f.ImageAsset))
   assert.ok(current.every(view => view.glyph.active && !view.clip.active))
   await Promise.all(f.calls.map((_, index) => f.complete(index)))
   assert.ok(current.every(view => !view.glyph.active && view.clip.active))
-  assert.equal(f.textures.length, 18)
-  assert.equal(f.frames.length, 18)
+  assert.equal(f.textures.length, ids.length)
+  assert.equal(f.frames.length, ids.length)
   assert.ok(f.images.every(image => image.refs === 1 && image.adds === 1))
   f.loader.clearBindings()
   const cached = ids.map(id => f.attach(id))
-  assert.equal(f.calls.length, 18)
+  assert.equal(f.calls.length, ids.length)
   cached.forEach((view, i) => assert.equal(view.sprite.frame, current[i].sprite.frame))
   f.loader.destroy()
   assert.ok(f.images.every(image => image.refs === 0 && image.releases === 1))
@@ -238,7 +248,7 @@ test('unknown IDs never request paths or create artwork nodes', () => {
 })
 
 test('new icons load their artwork and retain glyph on failure', async () => {
-  for (const id of ['sj_cross', 'sj_spirit', 'sj_flight']) {
+  for (const id of ['sj_cross', 'sj_spirit', 'sj_flight', 'sj_moon', 'sj_moon_triple']) {
     const f = fixture()
     const view = f.attach(id)
     assert.equal(f.calls.length, 1)
@@ -249,3 +259,13 @@ test('new icons load their artwork and retain glyph on failure', async () => {
     f.loader.destroy()
   }
 })
+
+test('triple moon loads its approved artwork and hides the fallback glyph', async () => {
+ const f=fixture(); const view=f.attach('sj_moon_triple');
+ assert.equal(f.calls.length,1);
+ assert.equal(f.calls[0].path,'tower-skill-icons/sj_moon_triple');
+ await f.complete(0);
+ assert.equal(view.glyph.active,false);
+ assert.equal(view.clip.active,true);
+ f.loader.destroy();
+});

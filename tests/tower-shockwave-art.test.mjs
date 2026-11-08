@@ -34,3 +34,10 @@ test('M07 cosmetic dust is a full ring contained in unchanged full-disk damage z
  for(const [x,y]of w.mask.points)assert.ok(Math.hypot(x,y)<=145);assert.equal(w.strips[0].transform.height,35);assert.ok(inside(w.mask.points,70,0));assert.ok(inside(w.mask.points,-70,1));
  s.time=1.2;f.art.draw(s,{x:0,y:0});assert.equal(f.art.waves.size,0);f.art.destroy();
 });
+
+test('M08 dust respects authored sector and preserves its solid-sector damage data',()=>{
+ const f=setup(),s=state(1.05,145);Object.assign(s.monsterMechanics.zones[0],{skillId:'M08',shape:'sector',innerRadius:0,angle:Math.PI*1.2,expiresAt:1.2});
+ f.art.draw(s,{x:0,y:0});f.load();const before=JSON.stringify(s);f.art.draw(s,{x:0,y:0});const w=f.art.waves.get('z');assert.equal(JSON.stringify(s),before);assert.equal(w.strips[0].transform.height,35);
+ for(const [x,y]of w.mask.points){assert.ok(Math.hypot(x,y)<=145.000001);assert.ok(Math.abs(Math.atan2(y,x))<=Math.PI*.6+1e-8);}assert.ok(inside(w.mask.points,130,0));assert.ok(!inside(w.mask.points,-130,0));
+ s.time=1.2;f.art.draw(s,{x:0,y:0});assert.equal(f.art.waves.size,0);f.art.destroy();
+});

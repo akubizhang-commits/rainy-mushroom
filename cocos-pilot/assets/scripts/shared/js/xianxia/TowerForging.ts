@@ -7,18 +7,21 @@ import {cultivationAt} from './TowerProfile'
 import {EQUIPMENT_CAPACITY} from './TowerCrafting'
 const tiers={fan:{scale:1,main:'tiejing',stones:5,contribution:3},fa:{scale:1,main:'hanjingsha',stones:40,contribution:20},bao:{scale:2,main:'chitongjing',stones:80,contribution:35},ling:{scale:3,main:'zijingsui',stones:150,contribution:60}}
 const bases={weapon:{xuantie:2,lingmu:1,lingyu:1},armor:{yaopi:2,lingsi:1,xuantie:1},ring:{lingyu:2,xuantie:1,lingmu:1}}
+// Approved 2026-11-04: pursue a top item before its realm is already obsolete.
+const topCosts={fa:{unit:16,main:28,core:1,stones:1200},bao:{unit:32,main:40,core:1,stones:2400},ling:{unit:64,main:56,core:2,stones:4800}}
 const definitions=[...WEAPONS.map(d=>({...d,category:'weapon'})),...EQUIPMENT]
 const qualityNames=['','下品','中品','上品','极品']
 const pooledRecipes=Object.keys(bases).flatMap(category=>Object.keys(tiers).flatMap(tier=>(tier==='fan'?[1]:[1,2,3,4]).map(quality=>{
  const t=tiers[tier],factor=[0,1,4,12,32][quality],definitionIds=definitions.filter(d=>d.category===category&&d.tier===tier&&d.qualities.includes(quality)).map(d=>d.id)
  // Only top-quality master variants are rarer; specialist sidegrades stay equiprobable.
  const weights=definitionIds.map(id=>quality===4?(definitions.find(d=>d.id===id).role==='master'?3:7):1)
- const ingredients=Object.entries(bases[category]).map(([id,count])=>Object.freeze({id:'forge_'+id,count:count*t.scale*factor*(tier==='fa'&&quality===4?1.25:1)}))
- ingredients.push(Object.freeze({id:'forge_'+t.main,count:tier==='fan'?1:2*factor}))
+ const top=quality===4?topCosts[tier]:null
+ const ingredients=Object.entries(bases[category]).map(([id,count])=>Object.freeze({id:'forge_'+id,count:count*(top?top.unit:t.scale*factor)}))
+ ingredients.push(Object.freeze({id:'forge_'+t.main,count:top?top.main:tier==='fan'?1:2*factor}))
  if(quality===3)ingredients.push(Object.freeze({id:'forge_ninglingjing',count:2}))
- if(quality===4)ingredients.push(Object.freeze({id:'forge_core_'+tier,count:2}))
+ if(top)ingredients.push(Object.freeze({id:'forge_core_'+tier,count:top.core}))
  return Object.freeze({id:`${category}:${tier}:q${quality}`,name:`${equipmentTier(tier).name}·${tier==='fan'?'':qualityNames[quality]}${{weapon:'兵器',armor:'法衣',ring:'灵戒'}[category]}`,
- category,tier,quality,source:tier==='fan'?'shopOnly':'qualityPool',definitionIds:Object.freeze(definitionIds),weights:Object.freeze(weights),ingredients:Object.freeze(tier==='fan'?[]:ingredients),spiritStones:t.stones*factor+t.contribution*factor*(tier==='fa'&&quality===4?1.25:1),contribution:0})
+ category,tier,quality,source:tier==='fan'?'shopOnly':'qualityPool',definitionIds:Object.freeze(definitionIds),weights:Object.freeze(weights),ingredients:Object.freeze(tier==='fan'?[]:ingredients),spiritStones:top?top.stones:(t.stones+t.contribution)*factor,contribution:0})
 })))
 // A second deterministic shop upgrade during the first floor, never a forge pool.
 const openingRecipe=Object.freeze({id:'weapon:fan:q2',name:'凡器·青锋剑',category:'weapon',tier:'fan',quality:2,

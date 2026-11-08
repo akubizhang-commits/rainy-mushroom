@@ -14,7 +14,7 @@ function fixture(level){
  const disk={getItem:k=>k===TOWER_CAMPAIGN_KEY?raw:null,setItem(k,v){if(fail)throw Error('disk');raw=v}}
  let store=new TowerCampaignStore(disk,0);store.act({type:'sync'},0)
  const env=JSON.parse(raw)
- env.data=JSON.stringify({...store.state,xp:cultivationLevelXp(level),clearedFloor:9,researchPurchases:3,spiritStones:20000})
+ env.data=JSON.stringify({...store.state,xp:cultivationLevelXp(level),clearedFloor:9,researchPurchases: 0,spiritStones:20000})
  env.checksum=checksum(env.data);raw=JSON.stringify(env)
  store=new TowerCampaignStore(disk,0);assert.equal(store.readOnly,false)
  return {store,reload:()=>new TowerCampaignStore(disk,0),block:()=>{fail=true},raw:()=>raw}
@@ -39,9 +39,9 @@ test('Four Symbols rank two requires level 30, preserves atomicity and persisted
  for(const e of GROWTH_EVOLUTIONS)assert.equal(rankCap(e.id,cultivationLevelXp(29)),e.id==='evo_sixiang'?1:2)
  assert.equal(GROWTH_EVOLUTIONS.find(e=>e.id==='evo_sixiang').levels[1].characterLevel,30)
 })
-test('Scar single-hit return increases at every rank and beats no-scar with 5% on-hit weapon',()=>{
+test('Scar boosts follow-up damage without removing weapon on-hit or delaying the trigger hit',()=>{
  const totals=[]
- for(let rank=0;rank<=4;rank++){
+ for(let rank=0;rank<=1;rank++){
   const w=createFixedWeapon('eq_sword_wangshu','probe')
   const loadout={growthVersion:1,active:{sj_arc:1},passive:rank?{sj_mark:rank}:{},evolutions:[],evolutionLevels:{},
    tutorialWaves:0,weapon:w,weaponId:w.id,weaponQuality:w.quality,weaponRefine:0,weaponFocusCount:0}
@@ -50,12 +50,14 @@ test('Scar single-hit return increases at every rank and beats no-scar with 5% o
   r.state.enemies=[e];r._random=()=>1
   r._damageEnemy({target:e.id,source:'sj_arc',direct:true,damage:100})
   const immediate=1e8-e.hp
-  for(let i=1;i<=6;i++){r.state.time=i*.5;for(const h of tickQingping(r))r._damageEnemy(h)}
+  for(let i=1;i<=2;i++){r.state.time=i*.5;for(const h of tickQingping(r))r._damageEnemy(h)}
+  assert.equal(1e8-e.hp,immediate,'scar never generates delayed damage')
+  r.state.time=1
+  r._damageEnemy({target:e.id,source:'sj_arc',direct:true,damage:100})
   totals.push(1e8-e.hp)
-  if(rank)assert.ok(immediate<totals[rank],'damage remains delayed')
  }
  for(let i=1;i<totals.length;i++)assert.ok(totals[i]>totals[i-1])
- assert.ok(Math.abs(totals[1]/totals[0]-1.125/1.05)<1e-7)
+ assert.ok(totals[1]>totals[0], 'first scar rank adds damage without reducing weapon on-hit')
 })
 test('cross burst descriptions and radius upgrade previews match all trained ranks',()=>{
  const f=fixture(30)
@@ -63,13 +65,15 @@ test('cross burst descriptions and radius upgrade previews match all trained ran
   const p=skillPresentation({...f.store.state,skills:{sj_cross:rank}},'sj_cross')
   const text=[p.description,...p.formLines,...p.nextFormLines,...p.statLines].join(' ')
   assert.doesNotMatch(text,/飞行十字|贯穿|布置距离|射程|刃面横宽/)
-  assert.match(text,/周身剑光爆发/)
+  assert.match(text,/前方180°/)
+  assert.match(text,/不向外飞行/)
   if([3,6].includes(rank))assert.ok(p.nextFormLines.some(t=>t.includes('范围半径')))
  }
 })
 test('Yujian hints track its own realm bands without obsolete spirit requirements',()=>{
  const f=fixture(30)
- for(const [rank,level,stage] of [[3,4,'炼气 · 中期'],[6,7,'炼气 · 巅峰'],[9,11,'筑基 · 初期']]){
+ // 2026-11-06（85号）：御剑术1–3/4–6/7–9/10级分别在2/7/11/14级开放。
+ for(const [rank,level,stage] of [[3,7,'炼气 · 巅峰'],[6,11,'筑基 · 初期'],[9,14,'筑基 · 中期']]){
   const p=skillPresentation({...f.store.state,skills:{sj_yujian:rank}},'sj_yujian')
   assert.equal(p.nextRequirement.characterLevel,level)
   assert.equal(p.nextRequirement.stage,stage)

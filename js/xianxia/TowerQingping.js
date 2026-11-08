@@ -1,42 +1,39 @@
-import {addDotBudget,tickDotBudget,validDotBudget} from './TowerDotConversion.js'
-// The slash remains a visual introduction. All converted damage is periodic.
-export const QINGPING_CONTACT=.48
-export function addQingping(run,e,amount,physicalAmount=amount){
- if(!(amount>0)||!(e.hp>0))return
- physicalAmount=Math.min(amount,Math.max(0,physicalAmount))
- const s=run.state,active=e.qingpingDot&&e.qingpingDot.endsAt>s.time
- addDotBudget(e,'qingpingDot',s.time,amount,physicalAmount)
- if(!active)e.qingping={startedAt:s.time,impactAt:s.time+QINGPING_CONTACT,amount,physicalAmount,applied:false,
-  originX:s.player.x,originY:s.player.y,side:e.x>=s.player.x?1:-1}
- else if(!e.qingping.applied){e.qingping.amount+=amount;e.qingping.physicalAmount+=physicalAmount}
- syncScar(e)
+import {applyArmorBreak} from './TowerMonsterAttributes.js'
+// Instant status application only: no cast, damage ticks, animation or audio.
+export const SCAR_DURATION=3
+export const SCAR_COOLDOWN=10
+export const SCAR_VULNERABILITY=.2
+// Orbit contacts use the combat engine's direct flag, but are continuous skills.
+const periodicSources=new Set(['sj_wanjian','orbit','evo_wuwo','wuwo','sj_formation','formation','evo_sixiang','sj_sancai','sancai'])
+export const isScarDirectHit=hit=>!!hit.direct&&!hit.scaled&&!periodicSources.has(hit.source)
+export function scarDamageMultiplier(enemy,time,hit){
+ const d=enemy.scarDebuff
+ return enemy.hp>0&&d&&d.endsAt>time&&isScarDirectHit(hit) ? 1+d.vulnerability : 1
 }
-function syncScar(e){
- e.woundBudget=e.qingpingDot?.remaining??0;e.woundPhysicalBudget=e.qingpingDot?.physical??0
- e.woundUntil=e.qingpingDot?.endsAt??0
+export function addQingping(run,e){
+ const s=run.state
+ if(!(e.hp>0)||s.time+1e-9<(s.scarReadyAt??0))return false
+ e.scarDebuff={endsAt:s.time+SCAR_DURATION,vulnerability:SCAR_VULNERABILITY}
+ applyArmorBreak(e,s.time,.2,SCAR_DURATION)
+ s.scarReadyAt=s.time+SCAR_COOLDOWN
+ return true
 }
 export function tickQingping(run){
- const s=run.state,hits=[]
+ const s=run.state
  for(const e of s.enemies){
-  const q=e.qingping
-  if(q&&!q.applied&&q.impactAt<=s.time+1e-9)q.applied=true
-  const first=e.qingpingDot&&q&&e.qingpingDot.nextAt<=q.startedAt+.5+1e-8
-  const before=hits.length;tickDotBudget(e,'qingpingDot',s.time,'wound',hits)
-  if(first&&hits.length>before)hits.at(-1).impact={skill:'sj_mark',dirX:q.side,dirY:-1,pulseIndex:1,pulseCount:1}
-  if(s.loadout?.growthVersion===1)syncScar(e)
+  if(e.scarDebuff&&(!(e.hp>0)||s.time>=e.scarDebuff.endsAt))delete e.scarDebuff
  }
- return hits
+ return []
 }
 export function validQingping(s){
+ if(s.enemies.filter(e=>e.scarDebuff).length>1)return false
+ if(s.scarReadyAt===undefined)return s.enemies.every(e=>!e.scarDebuff&&!e.qingping&&!e.qingpingDot)
+ if(!Number.isFinite(s.scarReadyAt)||s.scarReadyAt<0||s.scarReadyAt>s.time+SCAR_COOLDOWN+1e-8)return false
  return s.enemies.every(e=>{
-  if(!validDotBudget(e.qingpingDot,s.time))return false
-  if(s.loadout?.growthVersion===1&&(e.woundBudget!==(e.qingpingDot?.remaining??0)
-   ||(e.woundPhysicalBudget??0)!==(e.qingpingDot?.physical??0)||e.woundUntil!==(e.qingpingDot?.endsAt??0)))return false
-  const p=e.woundPhysicalBudget
-  if(p!==undefined&&(!Number.isFinite(p)||p<0||p>e.woundBudget+1e-8))return false
-  const q=e.qingping;if(q===undefined)return !e.qingpingDot
-  return q&&typeof q.applied==='boolean'&&[q.startedAt,q.impactAt,q.amount,q.originX,q.originY].every(Number.isFinite)
-   &&q.startedAt>=0&&q.startedAt<=s.time+1e-8&&q.amount>0&&Math.abs(q.impactAt-q.startedAt-QINGPING_CONTACT)<1e-8
-   &&Number.isFinite(q.physicalAmount)&&q.physicalAmount>=0&&q.physicalAmount<=q.amount&&(q.side===1||q.side===-1)
+  if(e.qingping||e.qingpingDot)return false
+  const d=e.scarDebuff
+  return !d||(e.hp>0&&Object.keys(d).sort().join(',')==='endsAt,vulnerability'
+   &&Number.isFinite(d.endsAt)&&d.endsAt>s.time-1e-8&&d.endsAt<=s.time+SCAR_DURATION+1e-8
+   &&d.vulnerability===SCAR_VULNERABILITY&&Math.abs(s.scarReadyAt-d.endsAt-(SCAR_COOLDOWN-SCAR_DURATION))<1e-8)
  })
 }

@@ -1,0 +1,26 @@
+{
+  "kind": "unmodified growth combat bot QA; NOT human balance acceptance",
+  "options": {
+    "seeds": [
+      1,
+      7,
+      43
+    ],
+    "maxAttempts": 40,
+    "maxSeconds": 1800,
+    "mode": "all",
+    "suffix": "-preflight",
+    "repeatCheck": false
+  },
+  "sourceHashes": {
+    "TowerGrowth": "39195430045ce4e7470adc1eeed0496ccdfd1beea34c23c262aa6689287a72b0",
+    "TowerCampaign": "58b31968dd83f6ac5b3941b12c383130aff0a2e8c8701f24d69f4db5c796b14a",
+    "TowerRun": "052c02156bd965246ec20bfda0f71a58ac72da067b14476546da81d697fb09b5",
+    "TowerProfile": "67b47ef2bbba560f18e262c7afd0a8853f14ef44e89a62c9f5e557b756e9f1d9",
+    "TowerContent": "e736d7c6971ffccc4e53686c91af5571bb074cd6db937e56158247908dc21b6d"
+  },
+  "natural": [],
+  "fixtures": [],
+  "status": "dependency-not-ready",
+  "error": "AssertionError [ERR_ASSERTION]: DEPENDENCY_NOT_READY: TowerRun growth API\n+ actual - expected\n\n+ 'undefined'\n- 'function'\n\n    at runtime (file:///Users/zhangnu/WeChatProjects/rainy-mushroom/scripts/verify-tower-growth-balance.mjs:153:10)\n    at async main (file:///Users/zhangnu/WeChatProjects/rainy-mushroom/scripts/verify-tower-growth-balance.mjs:377:14)\n    at async file:///Users/zhangnu/WeChatProjects/rainy-mushroom/scripts/verify-tower-growth-balance.mjs:404:87"
+}

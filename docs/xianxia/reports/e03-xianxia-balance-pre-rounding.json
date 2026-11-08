@@ -1,0 +1,8070 @@
+{
+ "ruleset": "xianxia",
+ "note": "修仙规则自动对局样本；不是完整平衡验收，未完成 A/B 600 局对照及留出集验证。",
+ "opts": {
+  "ruleset": "xianxia",
+  "seeds": 2,
+  "moves": [
+   "flee",
+   "spore"
+  ],
+  "picks": [
+   "random",
+   "prefer:spore_shot",
+   "prefer:umbrella_blades",
+   "prefer:dew_ring",
+   "prefer:raindrop",
+   "prefer:leaf_boomerang"
+  ],
+  "maxSec": 1020,
+  "json": "docs/xianxia/reports/e03-xianxia-balance.json"
+ },
+ "configs": [
+  {
+   "label": "保守逃跑·随机选卡",
+   "move": "flee",
+   "pick": "random",
+   "summary": {
+    "n": 2,
+    "won": 0,
+    "lost": 2,
+    "timeout": 0,
+    "survivalMean": 332.9666666666925,
+    "survivalMedian": 332.9666666666925,
+    "wonDurationMean": null,
+    "wonDurationMedian": null,
+    "lostInBoss": 0,
+    "deathMinute": {
+     "5": 2
+    },
+    "death630to730": 0,
+    "past12": 0,
+    "weaponCombos": {
+     "露珠环+落叶回旋镖+雨滴坠击+孢子弹": 1,
+     "落叶回旋镖+孢子弹": 1
+    },
+    "abandoned": {
+     "菌伞旋刃": 1,
+     "菌伞旋刃+露珠环+雨滴坠击": 1
+    },
+    "wonAbandoned": {},
+    "weaponLevelSum": 5.5,
+    "passiveMean": 4,
+    "hpAtBossSpawn": null,
+    "hpAtBossDefeat": null,
+    "minutes": [
+     {
+      "n": 2,
+      "enemies": 11,
+      "purified": 62.5,
+      "hurt": 0
+     },
+     {
+      "n": 2,
+      "enemies": 26.183333333333334,
+      "purified": 81.5,
+      "hurt": 0
+     },
+     {
+      "n": 2,
+      "enemies": 58.65833333333333,
+      "purified": 92,
+      "hurt": 5.5
+     },
+     {
+      "n": 2,
+      "enemies": 76.525,
+      "purified": 108,
+      "hurt": 1.5
+     },
+     {
+      "n": 2,
+      "enemies": 107.82499999999999,
+      "purified": 97,
+      "hurt": 4
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     }
+    ],
+    "in6to9": 0,
+    "won6to9": 0,
+    "wonDurationMin": null,
+    "wonDurationMax": null,
+    "bossFightMin": null,
+    "bossFightMax": null,
+    "reachedBoss": 0,
+    "bossFightMedian": null,
+    "bossFightMean": null,
+    "extractMean": null,
+    "firstLevelUpMedian": 12.56666666666687,
+    "lv60": [
+     5,
+     4
+    ],
+    "lv180": [
+     10,
+     7
+    ],
+    "lv300": [
+     14,
+     8
+    ],
+    "lvBoss": [],
+    "finalLevelMean": 12,
+    "purifyPreBoss": null,
+    "purifyPreBossN": 0,
+    "purifyCombat": 0.6990033956326092,
+    "sporeCollect": 0.6971883769302191,
+    "killers": {
+     "mist_bubble": 1,
+     "beetle": 1
+    },
+    "builds": {
+     "露珠环+落叶回旋镖+雨滴坠击+孢子弹 | 宽檐菌帽+湿润苔衣+孢子罗盘+晨光菌丝": {
+      "n": 1,
+      "won": 0
+     },
+     "落叶回旋镖+孢子弹 | 湿润苔衣+孢子罗盘+露水叶片+蕨叶轻靴": {
+      "n": 1,
+      "won": 0
+     }
+    },
+    "weaponCount": {
+     "2": 1,
+     "4": 1
+    },
+    "passiveCount": {
+     "4": 2
+    },
+    "capSkipped": 405,
+    "dropped": {
+     "enemies": 0,
+     "shots": 0,
+     "bubbles": 0,
+     "pickups": 0
+    },
+    "capSkippedPickups": 0,
+    "droppedTimeMax": 0,
+    "wonBuilds": 0,
+    "evoRuns": 0,
+    "evoWon": 0,
+    "noEvoRuns": 2,
+    "noEvoWon": 0,
+    "wonEvo": 0,
+    "evoCount": {
+     "0": 2
+    },
+    "evoFirstMedian": null,
+    "evoFirstMin": null,
+    "evoFirstMax": null,
+    "evoBeforeBoss": 0,
+    "evoOfferedRuns": 0,
+    "evoById": {},
+    "evoWonById": {},
+    "eliteSpawned": 2,
+    "eliteKilled": 0,
+    "eliteKillMedian": null,
+    "drops": {
+     "dew": {
+      "spawned": 8,
+      "picked": 6,
+      "heal": 0
+     },
+     "bigDew": {
+      "spawned": 0,
+      "picked": 0,
+      "heal": 0
+     },
+     "wind": {
+      "spawned": 1,
+      "picked": 0,
+      "xp": 0
+     },
+     "unseen": 0,
+     "windRuns": 0
+    },
+    "regenRuns": 1,
+    "regenHealMean": 31.79999999999992,
+    "magnetRuns": 2,
+    "collectMagnet": 0.6971883769302191,
+    "collectNoMagnet": null
+   }
+  },
+  {
+   "label": "保守逃跑·偏好孢子弹",
+   "move": "flee",
+   "pick": "prefer:spore_shot",
+   "summary": {
+    "n": 2,
+    "won": 1,
+    "lost": 1,
+    "timeout": 0,
+    "survivalMean": 545.2333333331661,
+    "survivalMedian": 545.2333333331661,
+    "wonDurationMean": 653.6833333330675,
+    "wonDurationMedian": 653.6833333330675,
+    "lostInBoss": 1,
+    "deathMinute": {
+     "7": 1
+    },
+    "death630to730": 1,
+    "past12": 0,
+    "weaponCombos": {
+     "露珠环+落叶回旋镖+孢子弹+菌伞旋刃": 1,
+     "露珠环+孢子弹+菌伞旋刃": 1
+    },
+    "abandoned": {
+     "雨滴坠击": 1,
+     "雨滴坠击+落叶回旋镖": 1
+    },
+    "wonAbandoned": {
+     "雨滴坠击": 1
+    },
+    "weaponLevelSum": 14,
+    "passiveMean": 3.5,
+    "hpAtBossSpawn": 156.02000000000004,
+    "hpAtBossDefeat": 245,
+    "minutes": [
+     {
+      "n": 2,
+      "enemies": 11.191666666666666,
+      "purified": 62.5,
+      "hurt": 0
+     },
+     {
+      "n": 2,
+      "enemies": 27.933333333333334,
+      "purified": 69.5,
+      "hurt": 0
+     },
+     {
+      "n": 2,
+      "enemies": 56.275,
+      "purified": 108.5,
+      "hurt": 0
+     },
+     {
+      "n": 2,
+      "enemies": 74.16666666666667,
+      "purified": 103,
+      "hurt": 0
+     },
+     {
+      "n": 2,
+      "enemies": 101.03333333333333,
+      "purified": 98,
+      "hurt": 1.5
+     },
+     {
+      "n": 2,
+      "enemies": 152.80833333333334,
+      "purified": 77.5,
+      "hurt": 0.5
+     },
+     {
+      "n": 2,
+      "enemies": 159.34166666666667,
+      "purified": 119.5,
+      "hurt": 4
+     },
+     {
+      "n": 1,
+      "enemies": 114.7,
+      "purified": 175,
+      "hurt": 5
+     },
+     {
+      "n": 1,
+      "enemies": 52.1,
+      "purified": 221,
+      "hurt": 1
+     },
+     {
+      "n": 1,
+      "enemies": 29.666666666666668,
+      "purified": 201,
+      "hurt": 0
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     }
+    ],
+    "in6to9": 1,
+    "won6to9": 0,
+    "wonDurationMin": 653.6833333330675,
+    "wonDurationMax": 653.6833333330675,
+    "bossFightMin": 229.1499999997916,
+    "bossFightMax": 229.1499999997916,
+    "reachedBoss": 2,
+    "bossFightMedian": 229.1499999997916,
+    "bossFightMean": 229.1499999997916,
+    "extractMean": 2.9999999999972715,
+    "firstLevelUpMedian": 12.56666666666687,
+    "lv60": [
+     5,
+     5
+    ],
+    "lv180": [
+     10,
+     6
+    ],
+    "lv300": [
+     16,
+     8
+    ],
+    "lvBoss": [
+     20,
+     11
+    ],
+    "finalLevelMean": 19,
+    "purifyPreBoss": 0.7600720447435776,
+    "purifyPreBossN": 2,
+    "purifyCombat": 0.8497735836445515,
+    "sporeCollect": 0.8765840910289162,
+    "killers": {
+     "snail": 1
+    },
+    "builds": {
+     "露珠环+落叶回旋镖+孢子弹+菌伞旋刃 | 湿润苔衣+晨光菌丝+露水叶片+蕨叶轻靴": {
+      "n": 1,
+      "won": 1
+     },
+     "露珠环+孢子弹+菌伞旋刃 | 宽檐菌帽+湿润苔衣+露水叶片": {
+      "n": 1,
+      "won": 0
+     }
+    },
+    "weaponCount": {
+     "3": 1,
+     "4": 1
+    },
+    "passiveCount": {
+     "3": 1,
+     "4": 1
+    },
+    "capSkipped": 1094,
+    "dropped": {
+     "enemies": 0,
+     "shots": 0,
+     "bubbles": 0,
+     "pickups": 0
+    },
+    "capSkippedPickups": 0,
+    "droppedTimeMax": 0,
+    "wonBuilds": 1,
+    "evoRuns": 1,
+    "evoWon": 1,
+    "noEvoRuns": 1,
+    "noEvoWon": 0,
+    "wonEvo": 1,
+    "evoCount": {
+     "0": 1,
+     "1": 1
+    },
+    "evoFirstMedian": 597.8166666664516,
+    "evoFirstMin": 597.8166666664516,
+    "evoFirstMax": 597.8166666664516,
+    "evoBeforeBoss": 0,
+    "evoOfferedRuns": 1,
+    "evoById": {
+     "spore_shot": 1
+    },
+    "evoWonById": {
+     "spore_shot": 1
+    },
+    "eliteSpawned": 2,
+    "eliteKilled": 1,
+    "eliteKillMedian": 317.46666666637793,
+    "drops": {
+     "dew": {
+      "spawned": 13,
+      "picked": 12,
+      "heal": 70.70000000000178
+     },
+     "bigDew": {
+      "spawned": 1,
+      "picked": 0,
+      "heal": 0
+     },
+     "wind": {
+      "spawned": 5,
+      "picked": 4,
+      "xp": 523
+     },
+     "unseen": 0,
+     "windRuns": 1
+    },
+    "regenRuns": 2,
+    "regenHealMean": 39.100000000000016,
+    "magnetRuns": 0,
+    "collectMagnet": null,
+    "collectNoMagnet": 0.8765840910289162
+   }
+  },
+  {
+   "label": "保守逃跑·偏好菌伞旋刃",
+   "move": "flee",
+   "pick": "prefer:umbrella_blades",
+   "summary": {
+    "n": 2,
+    "won": 0,
+    "lost": 2,
+    "timeout": 0,
+    "survivalMean": 469.65833333323485,
+    "survivalMedian": 469.65833333323485,
+    "wonDurationMean": null,
+    "wonDurationMedian": null,
+    "lostInBoss": 2,
+    "deathMinute": {
+     "7": 1,
+     "8": 1
+    },
+    "death630to730": 1,
+    "past12": 0,
+    "weaponCombos": {
+     "露珠环+落叶回旋镖+孢子弹+菌伞旋刃": 1,
+     "露珠环+雨滴坠击+孢子弹+菌伞旋刃": 1
+    },
+    "abandoned": {
+     "雨滴坠击": 1,
+     "落叶回旋镖": 1
+    },
+    "wonAbandoned": {},
+    "weaponLevelSum": 9,
+    "passiveMean": 2,
+    "hpAtBossSpawn": 69.8,
+    "hpAtBossDefeat": null,
+    "minutes": [
+     {
+      "n": 2,
+      "enemies": 11.191666666666666,
+      "purified": 62.5,
+      "hurt": 0
+     },
+     {
+      "n": 2,
+      "enemies": 34.19166666666666,
+      "purified": 57.5,
+      "hurt": 0
+     },
+     {
+      "n": 2,
+      "enemies": 80.89166666666668,
+      "purified": 40.5,
+      "hurt": 0
+     },
+     {
+      "n": 2,
+      "enemies": 108.05000000000001,
+      "purified": 17,
+      "hurt": 0
+     },
+     {
+      "n": 2,
+      "enemies": 138.125,
+      "purified": 27,
+      "hurt": 2
+     },
+     {
+      "n": 2,
+      "enemies": 158.99166666666667,
+      "purified": 21,
+      "hurt": 1
+     },
+     {
+      "n": 2,
+      "enemies": 163.51666666666665,
+      "purified": 30.5,
+      "hurt": 1.5
+     },
+     {
+      "n": 1,
+      "enemies": 120.55,
+      "purified": 88,
+      "hurt": 6
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     }
+    ],
+    "in6to9": 2,
+    "won6to9": 0,
+    "wonDurationMin": null,
+    "wonDurationMax": null,
+    "bossFightMin": null,
+    "bossFightMax": null,
+    "reachedBoss": 2,
+    "bossFightMedian": null,
+    "bossFightMean": null,
+    "extractMean": null,
+    "firstLevelUpMedian": 12.56666666666687,
+    "lv60": [
+     5,
+     5
+    ],
+    "lv180": [
+     7,
+     6
+    ],
+    "lv300": [
+     8,
+     7
+    ],
+    "lvBoss": [
+     9,
+     9
+    ],
+    "finalLevelMean": 11,
+    "purifyPreBoss": 0.5884933998022848,
+    "purifyPreBossN": 2,
+    "purifyCombat": 0.714755538579068,
+    "sporeCollect": 0.8303671003717472,
+    "killers": {
+     "gnat": 1,
+     "moth": 1
+    },
+    "builds": {
+     "露珠环+落叶回旋镖+孢子弹+菌伞旋刃 | 蕨叶轻靴": {
+      "n": 1,
+      "won": 0
+     },
+     "露珠环+雨滴坠击+孢子弹+菌伞旋刃 | 宽檐菌帽+湿润苔衣+晨光菌丝": {
+      "n": 1,
+      "won": 0
+     }
+    },
+    "weaponCount": {
+     "4": 2
+    },
+    "passiveCount": {
+     "1": 1,
+     "3": 1
+    },
+    "capSkipped": 1879,
+    "dropped": {
+     "enemies": 0,
+     "shots": 0,
+     "bubbles": 0,
+     "pickups": 0
+    },
+    "capSkippedPickups": 0,
+    "droppedTimeMax": 0,
+    "wonBuilds": 0,
+    "evoRuns": 0,
+    "evoWon": 0,
+    "noEvoRuns": 2,
+    "noEvoWon": 0,
+    "wonEvo": 0,
+    "evoCount": {
+     "0": 2
+    },
+    "evoFirstMedian": null,
+    "evoFirstMin": null,
+    "evoFirstMax": null,
+    "evoBeforeBoss": 0,
+    "evoOfferedRuns": 0,
+    "evoById": {},
+    "evoWonById": {},
+    "eliteSpawned": 2,
+    "eliteKilled": 0,
+    "eliteKillMedian": null,
+    "drops": {
+     "dew": {
+      "spawned": 6,
+      "picked": 5,
+      "heal": 20
+     },
+     "bigDew": {
+      "spawned": 0,
+      "picked": 0,
+      "heal": 0
+     },
+     "wind": {
+      "spawned": 1,
+      "picked": 1,
+      "xp": 84
+     },
+     "unseen": 0,
+     "windRuns": 1
+    },
+    "regenRuns": 0,
+    "regenHealMean": null,
+    "magnetRuns": 0,
+    "collectMagnet": null,
+    "collectNoMagnet": 0.8303671003717472
+   }
+  },
+  {
+   "label": "保守逃跑·偏好露珠环",
+   "move": "flee",
+   "pick": "prefer:dew_ring",
+   "summary": {
+    "n": 2,
+    "won": 1,
+    "lost": 1,
+    "timeout": 0,
+    "survivalMean": 511.30833333319697,
+    "survivalMedian": 511.30833333319697,
+    "wonDurationMean": 505.93333333320186,
+    "wonDurationMedian": 505.93333333320186,
+    "lostInBoss": 1,
+    "deathMinute": {
+     "8": 1
+    },
+    "death630to730": 0,
+    "past12": 0,
+    "weaponCombos": {
+     "露珠环+雨滴坠击+孢子弹+菌伞旋刃": 1,
+     "露珠环+落叶回旋镖+孢子弹+菌伞旋刃": 1
+    },
+    "abandoned": {
+     "落叶回旋镖": 1,
+     "雨滴坠击": 1
+    },
+    "wonAbandoned": {
+     "落叶回旋镖": 1
+    },
+    "weaponLevelSum": 15.5,
+    "passiveMean": 2.5,
+    "hpAtBossSpawn": 150.17,
+    "hpAtBossDefeat": 250,
+    "minutes": [
+     {
+      "n": 2,
+      "enemies": 11.641666666666666,
+      "purified": 59.5,
+      "hurt": 0
+     },
+     {
+      "n": 2,
+      "enemies": 26.133333333333333,
+      "purified": 78,
+      "hurt": 0
+     },
+     {
+      "n": 2,
+      "enemies": 51.766666666666666,
+      "purified": 103.5,
+      "hurt": 1.5
+     },
+     {
+      "n": 2,
+      "enemies": 71.575,
+      "purified": 100.5,
+      "hurt": 0
+     },
+     {
+      "n": 2,
+      "enemies": 94.49166666666667,
+      "purified": 104.5,
+      "hurt": 0.5
+     },
+     {
+      "n": 2,
+      "enemies": 114.99166666666666,
+      "purified": 129,
+      "hurt": 4
+     },
+     {
+      "n": 2,
+      "enemies": 131.80833333333334,
+      "purified": 145.5,
+      "hurt": 0.5
+     },
+     {
+      "n": 2,
+      "enemies": 79.50833333333334,
+      "purified": 179,
+      "hurt": 4.5
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     }
+    ],
+    "in6to9": 2,
+    "won6to9": 1,
+    "wonDurationMin": 505.93333333320186,
+    "wonDurationMax": 505.93333333320186,
+    "bossFightMin": 81.33333333325936,
+    "bossFightMax": 81.33333333325936,
+    "reachedBoss": 2,
+    "bossFightMedian": 81.33333333325936,
+    "bossFightMean": 81.33333333325936,
+    "extractMean": 3.0666666666638775,
+    "firstLevelUpMedian": 12.56666666666687,
+    "lv60": [
+     5,
+     5
+    ],
+    "lv180": [
+     11,
+     6
+    ],
+    "lv300": [
+     17,
+     8
+    ],
+    "lvBoss": [
+     23,
+     9
+    ],
+    "finalLevelMean": 19.5,
+    "purifyPreBoss": 0.7426696826221953,
+    "purifyPreBossN": 2,
+    "purifyCombat": 0.8418618662582491,
+    "sporeCollect": 0.9331802822277355,
+    "killers": {
+     "gnat": 1
+    },
+    "builds": {
+     "露珠环+雨滴坠击+孢子弹+菌伞旋刃 | 宽檐菌帽+湿润苔衣+晨光菌丝+露水叶片": {
+      "n": 1,
+      "won": 1
+     },
+     "露珠环+落叶回旋镖+孢子弹+菌伞旋刃 | 湿润苔衣": {
+      "n": 1,
+      "won": 0
+     }
+    },
+    "weaponCount": {
+     "4": 2
+    },
+    "passiveCount": {
+     "1": 1,
+     "4": 1
+    },
+    "capSkipped": 1032,
+    "dropped": {
+     "enemies": 0,
+     "shots": 0,
+     "bubbles": 0,
+     "pickups": 0
+    },
+    "capSkippedPickups": 0,
+    "droppedTimeMax": 0,
+    "wonBuilds": 1,
+    "evoRuns": 0,
+    "evoWon": 0,
+    "noEvoRuns": 2,
+    "noEvoWon": 1,
+    "wonEvo": 0,
+    "evoCount": {
+     "0": 2
+    },
+    "evoFirstMedian": null,
+    "evoFirstMin": null,
+    "evoFirstMax": null,
+    "evoBeforeBoss": 0,
+    "evoOfferedRuns": 0,
+    "evoById": {},
+    "evoWonById": {},
+    "eliteSpawned": 2,
+    "eliteKilled": 1,
+    "eliteKillMedian": 119.54999999989127,
+    "drops": {
+     "dew": {
+      "spawned": 13,
+      "picked": 11,
+      "heal": 29.00000000000003
+     },
+     "bigDew": {
+      "spawned": 1,
+      "picked": 1,
+      "heal": 0
+     },
+     "wind": {
+      "spawned": 5,
+      "picked": 4,
+      "xp": 870
+     },
+     "unseen": 0,
+     "windRuns": 1
+    },
+    "regenRuns": 1,
+    "regenHealMean": 25.79999999999994,
+    "magnetRuns": 0,
+    "collectMagnet": null,
+    "collectNoMagnet": 0.9331802822277355
+   }
+  },
+  {
+   "label": "保守逃跑·偏好雨滴坠击",
+   "move": "flee",
+   "pick": "prefer:raindrop",
+   "summary": {
+    "n": 2,
+    "won": 1,
+    "lost": 1,
+    "timeout": 0,
+    "survivalMean": 443.87499999992497,
+    "survivalMedian": 443.87499999992497,
+    "wonDurationMean": 452.7833333332502,
+    "wonDurationMedian": 452.7833333332502,
+    "lostInBoss": 1,
+    "deathMinute": {
+     "7": 1
+    },
+    "death630to730": 1,
+    "past12": 0,
+    "weaponCombos": {
+     "落叶回旋镖+雨滴坠击+孢子弹+菌伞旋刃": 1,
+     "露珠环+雨滴坠击+孢子弹+菌伞旋刃": 1
+    },
+    "abandoned": {
+     "露珠环": 1,
+     "落叶回旋镖": 1
+    },
+    "wonAbandoned": {
+     "露珠环": 1
+    },
+    "weaponLevelSum": 12,
+    "passiveMean": 3.5,
+    "hpAtBossSpawn": 160.7625,
+    "hpAtBossDefeat": 207.4,
+    "minutes": [
+     {
+      "n": 2,
+      "enemies": 10.983333333333334,
+      "purified": 64.5,
+      "hurt": 0
+     },
+     {
+      "n": 2,
+      "enemies": 25.358333333333334,
+      "purified": 71.5,
+      "hurt": 0
+     },
+     {
+      "n": 2,
+      "enemies": 48.81666666666666,
+      "purified": 107.5,
+      "hurt": 0
+     },
+     {
+      "n": 2,
+      "enemies": 67.66666666666667,
+      "purified": 104,
+      "hurt": 0
+     },
+     {
+      "n": 2,
+      "enemies": 87.69166666666668,
+      "purified": 110,
+      "hurt": 0.5
+     },
+     {
+      "n": 2,
+      "enemies": 104.75833333333333,
+      "purified": 128,
+      "hurt": 1
+     },
+     {
+      "n": 2,
+      "enemies": 105.35833333333333,
+      "purified": 208,
+      "hurt": 1.5
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     }
+    ],
+    "in6to9": 2,
+    "won6to9": 1,
+    "wonDurationMin": 452.7833333332502,
+    "wonDurationMax": 452.7833333332502,
+    "bossFightMin": 28.249999999974307,
+    "bossFightMax": 28.249999999974307,
+    "reachedBoss": 2,
+    "bossFightMedian": 28.249999999974307,
+    "bossFightMean": 28.249999999974307,
+    "extractMean": 2.9999999999972715,
+    "firstLevelUpMedian": 12.56666666666687,
+    "lv60": [
+     5,
+     5
+    ],
+    "lv180": [
+     11,
+     6
+    ],
+    "lv300": [
+     18,
+     7
+    ],
+    "lvBoss": [
+     26,
+     9
+    ],
+    "finalLevelMean": 17.5,
+    "purifyPreBoss": 0.8070205290322966,
+    "purifyPreBossN": 2,
+    "purifyCombat": 0.848505367464905,
+    "sporeCollect": 0.7563690044728886,
+    "killers": {
+     "mist_bubble": 1
+    },
+    "builds": {
+     "落叶回旋镖+雨滴坠击+孢子弹+菌伞旋刃 | 宽檐菌帽+湿润苔衣+晨光菌丝+蕨叶轻靴": {
+      "n": 1,
+      "won": 1
+     },
+     "露珠环+雨滴坠击+孢子弹+菌伞旋刃 | 宽檐菌帽+湿润苔衣+晨光菌丝": {
+      "n": 1,
+      "won": 0
+     }
+    },
+    "weaponCount": {
+     "4": 2
+    },
+    "passiveCount": {
+     "3": 1,
+     "4": 1
+    },
+    "capSkipped": 815,
+    "dropped": {
+     "enemies": 0,
+     "shots": 0,
+     "bubbles": 0,
+     "pickups": 0
+    },
+    "capSkippedPickups": 0,
+    "droppedTimeMax": 0,
+    "wonBuilds": 1,
+    "evoRuns": 1,
+    "evoWon": 1,
+    "noEvoRuns": 1,
+    "noEvoWon": 0,
+    "wonEvo": 1,
+    "evoCount": {
+     "0": 1,
+     "1": 1
+    },
+    "evoFirstMedian": 419.14999999994745,
+    "evoFirstMin": 419.14999999994745,
+    "evoFirstMax": 419.14999999994745,
+    "evoBeforeBoss": 1,
+    "evoOfferedRuns": 1,
+    "evoById": {
+     "raindrop": 1
+    },
+    "evoWonById": {
+     "raindrop": 1
+    },
+    "eliteSpawned": 2,
+    "eliteKilled": 1,
+    "eliteKillMedian": 62.39999999994325,
+    "drops": {
+     "dew": {
+      "spawned": 12,
+      "picked": 9,
+      "heal": 0
+     },
+     "bigDew": {
+      "spawned": 1,
+      "picked": 1,
+      "heal": 8.699999999999989
+     },
+     "wind": {
+      "spawned": 4,
+      "picked": 3,
+      "xp": 137
+     },
+     "unseen": 0,
+     "windRuns": 1
+    },
+    "regenRuns": 0,
+    "regenHealMean": null,
+    "magnetRuns": 0,
+    "collectMagnet": null,
+    "collectNoMagnet": 0.7563690044728886
+   }
+  },
+  {
+   "label": "保守逃跑·偏好落叶回旋镖",
+   "move": "flee",
+   "pick": "prefer:leaf_boomerang",
+   "summary": {
+    "n": 2,
+    "won": 0,
+    "lost": 2,
+    "timeout": 0,
+    "survivalMean": 431.4999999999362,
+    "survivalMedian": 431.4999999999362,
+    "wonDurationMean": null,
+    "wonDurationMedian": null,
+    "lostInBoss": 2,
+    "deathMinute": {
+     "7": 2
+    },
+    "death630to730": 2,
+    "past12": 0,
+    "weaponCombos": {
+     "露珠环+落叶回旋镖+孢子弹+菌伞旋刃": 2
+    },
+    "abandoned": {
+     "雨滴坠击": 2
+    },
+    "wonAbandoned": {},
+    "weaponLevelSum": 11,
+    "passiveMean": 3.5,
+    "hpAtBossSpawn": 108.67000000000004,
+    "hpAtBossDefeat": null,
+    "minutes": [
+     {
+      "n": 2,
+      "enemies": 11.191666666666666,
+      "purified": 62.5,
+      "hurt": 0
+     },
+     {
+      "n": 2,
+      "enemies": 28.266666666666666,
+      "purified": 68,
+      "hurt": 0
+     },
+     {
+      "n": 2,
+      "enemies": 67.7,
+      "purified": 83.5,
+      "hurt": 0.5
+     },
+     {
+      "n": 2,
+      "enemies": 104.94166666666666,
+      "purified": 86.5,
+      "hurt": 0
+     },
+     {
+      "n": 2,
+      "enemies": 135.13333333333333,
+      "purified": 72.5,
+      "hurt": 0
+     },
+     {
+      "n": 2,
+      "enemies": 158.73333333333335,
+      "purified": 61.5,
+      "hurt": 1.5
+     },
+     {
+      "n": 2,
+      "enemies": 160.075,
+      "purified": 87.5,
+      "hurt": 3
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     }
+    ],
+    "in6to9": 2,
+    "won6to9": 0,
+    "wonDurationMin": null,
+    "wonDurationMax": null,
+    "bossFightMin": null,
+    "bossFightMax": null,
+    "reachedBoss": 2,
+    "bossFightMedian": null,
+    "bossFightMean": null,
+    "extractMean": null,
+    "firstLevelUpMedian": 12.56666666666687,
+    "lv60": [
+     5,
+     5
+    ],
+    "lv180": [
+     9,
+     7
+    ],
+    "lv300": [
+     13,
+     9
+    ],
+    "lvBoss": [
+     16,
+     11
+    ],
+    "finalLevelMean": 14.5,
+    "purifyPreBoss": 0.7366421705240231,
+    "purifyPreBossN": 2,
+    "purifyCombat": 0.7683838940075122,
+    "sporeCollect": 0.8071709519844801,
+    "killers": {
+     "snail": 1,
+     "mist_bubble": 1
+    },
+    "builds": {
+     "露珠环+落叶回旋镖+孢子弹+菌伞旋刃 | 湿润苔衣+晨光菌丝+露水叶片+蕨叶轻靴": {
+      "n": 1,
+      "won": 0
+     },
+     "露珠环+落叶回旋镖+孢子弹+菌伞旋刃 | 宽檐菌帽+湿润苔衣+蕨叶轻靴": {
+      "n": 1,
+      "won": 0
+     }
+    },
+    "weaponCount": {
+     "4": 2
+    },
+    "passiveCount": {
+     "3": 1,
+     "4": 1
+    },
+    "capSkipped": 1249,
+    "dropped": {
+     "enemies": 0,
+     "shots": 0,
+     "bubbles": 0,
+     "pickups": 0
+    },
+    "capSkippedPickups": 0,
+    "droppedTimeMax": 0,
+    "wonBuilds": 0,
+    "evoRuns": 0,
+    "evoWon": 0,
+    "noEvoRuns": 2,
+    "noEvoWon": 0,
+    "wonEvo": 0,
+    "evoCount": {
+     "0": 2
+    },
+    "evoFirstMedian": null,
+    "evoFirstMin": null,
+    "evoFirstMax": null,
+    "evoBeforeBoss": 0,
+    "evoOfferedRuns": 0,
+    "evoById": {},
+    "evoWonById": {},
+    "eliteSpawned": 2,
+    "eliteKilled": 0,
+    "eliteKillMedian": null,
+    "drops": {
+     "dew": {
+      "spawned": 8,
+      "picked": 6,
+      "heal": 0
+     },
+     "bigDew": {
+      "spawned": 0,
+      "picked": 0,
+      "heal": 0
+     },
+     "wind": {
+      "spawned": 1,
+      "picked": 1,
+      "xp": 114
+     },
+     "unseen": 0,
+     "windRuns": 1
+    },
+    "regenRuns": 1,
+    "regenHealMean": 5.400000000000002,
+    "magnetRuns": 0,
+    "collectMagnet": null,
+    "collectNoMagnet": 0.8071709519844801
+   }
+  },
+  {
+   "label": "贴孢子·随机选卡",
+   "move": "spore",
+   "pick": "random",
+   "summary": {
+    "n": 2,
+    "won": 1,
+    "lost": 1,
+    "timeout": 0,
+    "survivalMean": 444.80833333325745,
+    "survivalMedian": 444.80833333325745,
+    "wonDurationMean": 460.9333333332428,
+    "wonDurationMedian": 460.9333333332428,
+    "lostInBoss": 1,
+    "deathMinute": {
+     "7": 1
+    },
+    "death630to730": 1,
+    "past12": 0,
+    "weaponCombos": {
+     "露珠环+落叶回旋镖+雨滴坠击+孢子弹": 1,
+     "落叶回旋镖+孢子弹+菌伞旋刃": 1
+    },
+    "abandoned": {
+     "菌伞旋刃": 1,
+     "露珠环+雨滴坠击": 1
+    },
+    "wonAbandoned": {
+     "菌伞旋刃": 1
+    },
+    "weaponLevelSum": 10,
+    "passiveMean": 4,
+    "hpAtBossSpawn": 134.85875000000019,
+    "hpAtBossDefeat": 222.9,
+    "minutes": [
+     {
+      "n": 2,
+      "enemies": 11.041666666666668,
+      "purified": 64.5,
+      "hurt": 0
+     },
+     {
+      "n": 2,
+      "enemies": 21.383333333333333,
+      "purified": 80,
+      "hurt": 0
+     },
+     {
+      "n": 2,
+      "enemies": 50.375,
+      "purified": 115.5,
+      "hurt": 2
+     },
+     {
+      "n": 2,
+      "enemies": 68.61666666666667,
+      "purified": 135,
+      "hurt": 0.5
+     },
+     {
+      "n": 2,
+      "enemies": 91.43333333333334,
+      "purified": 139.5,
+      "hurt": 3
+     },
+     {
+      "n": 2,
+      "enemies": 103.70833333333333,
+      "purified": 168.5,
+      "hurt": 4.5
+     },
+     {
+      "n": 2,
+      "enemies": 105.35833333333332,
+      "purified": 192.5,
+      "hurt": 4.5
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     }
+    ],
+    "in6to9": 2,
+    "won6to9": 1,
+    "wonDurationMin": 460.9333333332428,
+    "wonDurationMax": 460.9333333332428,
+    "bossFightMin": 36.33333333330029,
+    "bossFightMax": 36.33333333330029,
+    "reachedBoss": 2,
+    "bossFightMedian": 36.33333333330029,
+    "bossFightMean": 36.33333333330029,
+    "extractMean": 3.0666666666638775,
+    "firstLevelUpMedian": 11.358333333333476,
+    "lv60": [
+     5,
+     5
+    ],
+    "lv180": [
+     11,
+     8
+    ],
+    "lv300": [
+     18,
+     11
+    ],
+    "lvBoss": [
+     26,
+     15
+    ],
+    "finalLevelMean": 21,
+    "purifyPreBoss": 0.8564558811279771,
+    "purifyPreBossN": 2,
+    "purifyCombat": 0.8656808244481855,
+    "sporeCollect": 0.9639634715901186,
+    "killers": {
+     "beetle": 1
+    },
+    "builds": {
+     "露珠环+落叶回旋镖+雨滴坠击+孢子弹 | 宽檐菌帽+湿润苔衣+孢子罗盘+晨光菌丝": {
+      "n": 1,
+      "won": 1
+     },
+     "落叶回旋镖+孢子弹+菌伞旋刃 | 湿润苔衣+孢子罗盘+露水叶片+蕨叶轻靴": {
+      "n": 1,
+      "won": 0
+     }
+    },
+    "weaponCount": {
+     "3": 1,
+     "4": 1
+    },
+    "passiveCount": {
+     "4": 2
+    },
+    "capSkipped": 602,
+    "dropped": {
+     "enemies": 0,
+     "shots": 0,
+     "bubbles": 0,
+     "pickups": 0
+    },
+    "capSkippedPickups": 0,
+    "droppedTimeMax": 0,
+    "wonBuilds": 1,
+    "evoRuns": 1,
+    "evoWon": 1,
+    "noEvoRuns": 1,
+    "noEvoWon": 0,
+    "wonEvo": 1,
+    "evoCount": {
+     "0": 1,
+     "1": 1
+    },
+    "evoFirstMedian": 373.0166666666561,
+    "evoFirstMin": 373.0166666666561,
+    "evoFirstMax": 373.0166666666561,
+    "evoBeforeBoss": 1,
+    "evoOfferedRuns": 1,
+    "evoById": {
+     "spore_shot": 1
+    },
+    "evoWonById": {
+     "spore_shot": 1
+    },
+    "eliteSpawned": 2,
+    "eliteKilled": 1,
+    "eliteKillMedian": 72.8999999999337,
+    "drops": {
+     "dew": {
+      "spawned": 12,
+      "picked": 11,
+      "heal": 5.274999999999949
+     },
+     "bigDew": {
+      "spawned": 1,
+      "picked": 1,
+      "heal": 50
+     },
+     "wind": {
+      "spawned": 4,
+      "picked": 4,
+      "xp": 59
+     },
+     "unseen": 0,
+     "windRuns": 1
+    },
+    "regenRuns": 1,
+    "regenHealMean": 90.59999999999962,
+    "magnetRuns": 2,
+    "collectMagnet": 0.9639634715901186,
+    "collectNoMagnet": null
+   }
+  },
+  {
+   "label": "贴孢子·偏好孢子弹",
+   "move": "spore",
+   "pick": "prefer:spore_shot",
+   "summary": {
+    "n": 2,
+    "won": 2,
+    "lost": 0,
+    "timeout": 0,
+    "survivalMean": 516.7999999998586,
+    "survivalMedian": 516.7999999998586,
+    "wonDurationMean": 516.7999999998586,
+    "wonDurationMedian": 516.7999999998586,
+    "lostInBoss": 0,
+    "deathMinute": {},
+    "death630to730": 0,
+    "past12": 0,
+    "weaponCombos": {
+     "露珠环+落叶回旋镖+孢子弹+菌伞旋刃": 2
+    },
+    "abandoned": {
+     "雨滴坠击": 2
+    },
+    "wonAbandoned": {
+     "雨滴坠击": 2
+    },
+    "weaponLevelSum": 20,
+    "passiveMean": 4,
+    "hpAtBossSpawn": 233.79999999999995,
+    "hpAtBossDefeat": 241.94999999999996,
+    "minutes": [
+     {
+      "n": 2,
+      "enemies": 8.758333333333333,
+      "purified": 68,
+      "hurt": 0
+     },
+     {
+      "n": 2,
+      "enemies": 14.641666666666666,
+      "purified": 90.5,
+      "hurt": 0
+     },
+     {
+      "n": 2,
+      "enemies": 23.78333333333333,
+      "purified": 167.5,
+      "hurt": 0
+     },
+     {
+      "n": 2,
+      "enemies": 33,
+      "purified": 181,
+      "hurt": 0
+     },
+     {
+      "n": 2,
+      "enemies": 44.2,
+      "purified": 198.5,
+      "hurt": 1
+     },
+     {
+      "n": 2,
+      "enemies": 59.775000000000006,
+      "purified": 228,
+      "hurt": 3
+     },
+     {
+      "n": 2,
+      "enemies": 66.44166666666666,
+      "purified": 300,
+      "hurt": 4
+     },
+     {
+      "n": 2,
+      "enemies": 20.316666666666666,
+      "purified": 224.5,
+      "hurt": 0.5
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     }
+    ],
+    "in6to9": 2,
+    "won6to9": 2,
+    "wonDurationMin": 494.04999999987933,
+    "wonDurationMax": 539.549999999838,
+    "bossFightMin": 69.51666666660344,
+    "bossFightMax": 114.94999999989545,
+    "reachedBoss": 2,
+    "bossFightMedian": 92.23333333324945,
+    "bossFightMean": 92.23333333324945,
+    "extractMean": 3.0333333333305745,
+    "firstLevelUpMedian": 11.358333333333476,
+    "lv60": [
+     5,
+     5
+    ],
+    "lv180": [
+     11,
+     11
+    ],
+    "lv300": [
+     18,
+     18
+    ],
+    "lvBoss": [
+     26,
+     25
+    ],
+    "finalLevelMean": 27.5,
+    "purifyPreBoss": 0.9444869831546707,
+    "purifyPreBossN": 2,
+    "purifyCombat": 0.9866770262005844,
+    "sporeCollect": 0.9921659526100188,
+    "killers": {},
+    "builds": {
+     "露珠环+落叶回旋镖+孢子弹+菌伞旋刃 | 湿润苔衣+晨光菌丝+露水叶片+蕨叶轻靴": {
+      "n": 1,
+      "won": 1
+     },
+     "露珠环+落叶回旋镖+孢子弹+菌伞旋刃 | 宽檐菌帽+湿润苔衣+晨光菌丝+露水叶片": {
+      "n": 1,
+      "won": 1
+     }
+    },
+    "weaponCount": {
+     "4": 2
+    },
+    "passiveCount": {
+     "4": 2
+    },
+    "capSkipped": 0,
+    "dropped": {
+     "enemies": 0,
+     "shots": 0,
+     "bubbles": 0,
+     "pickups": 0
+    },
+    "capSkippedPickups": 0,
+    "droppedTimeMax": 0,
+    "wonBuilds": 2,
+    "evoRuns": 2,
+    "evoWon": 2,
+    "noEvoRuns": 0,
+    "noEvoWon": 0,
+    "wonEvo": 2,
+    "evoCount": {
+     "1": 2
+    },
+    "evoFirstMedian": 467.49166666657015,
+    "evoFirstMin": 416.6166666666164,
+    "evoFirstMax": 518.3666666665239,
+    "evoBeforeBoss": 1,
+    "evoOfferedRuns": 2,
+    "evoById": {
+     "spore_shot": 2
+    },
+    "evoWonById": {
+     "spore_shot": 2
+    },
+    "eliteSpawned": 2,
+    "eliteKilled": 2,
+    "eliteKillMedian": 52.55833333328553,
+    "drops": {
+     "dew": {
+      "spawned": 19,
+      "picked": 18,
+      "heal": 72.41250000000235
+     },
+     "bigDew": {
+      "spawned": 2,
+      "picked": 2,
+      "heal": 23.80000000000058
+     },
+     "wind": {
+      "spawned": 8,
+      "picked": 7,
+      "xp": 175
+     },
+     "unseen": 0,
+     "windRuns": 2
+    },
+    "regenRuns": 2,
+    "regenHealMean": 34.49999999999995,
+    "magnetRuns": 0,
+    "collectMagnet": null,
+    "collectNoMagnet": 0.9921659526100188
+   }
+  },
+  {
+   "label": "贴孢子·偏好菌伞旋刃",
+   "move": "spore",
+   "pick": "prefer:umbrella_blades",
+   "summary": {
+    "n": 2,
+    "won": 2,
+    "lost": 0,
+    "timeout": 0,
+    "survivalMean": 486.90833333321916,
+    "survivalMedian": 486.90833333321916,
+    "wonDurationMean": 486.90833333321916,
+    "wonDurationMedian": 486.90833333321916,
+    "lostInBoss": 0,
+    "deathMinute": {},
+    "death630to730": 0,
+    "past12": 0,
+    "weaponCombos": {
+     "露珠环+落叶回旋镖+孢子弹+菌伞旋刃": 1,
+     "露珠环+雨滴坠击+孢子弹+菌伞旋刃": 1
+    },
+    "abandoned": {
+     "雨滴坠击": 1,
+     "落叶回旋镖": 1
+    },
+    "wonAbandoned": {
+     "雨滴坠击": 1,
+     "落叶回旋镖": 1
+    },
+    "weaponLevelSum": 20,
+    "passiveMean": 4,
+    "hpAtBossSpawn": 240.4999999999999,
+    "hpAtBossDefeat": 250,
+    "minutes": [
+     {
+      "n": 2,
+      "enemies": 8.85,
+      "purified": 68.5,
+      "hurt": 0
+     },
+     {
+      "n": 2,
+      "enemies": 14.2,
+      "purified": 91,
+      "hurt": 0
+     },
+     {
+      "n": 2,
+      "enemies": 22.416666666666664,
+      "purified": 168,
+      "hurt": 0
+     },
+     {
+      "n": 2,
+      "enemies": 30.458333333333336,
+      "purified": 182.5,
+      "hurt": 0
+     },
+     {
+      "n": 2,
+      "enemies": 41.975,
+      "purified": 203,
+      "hurt": 4.5
+     },
+     {
+      "n": 2,
+      "enemies": 52.983333333333334,
+      "purified": 228.5,
+      "hurt": 2.5
+     },
+     {
+      "n": 2,
+      "enemies": 59.81666666666666,
+      "purified": 298.5,
+      "hurt": 4
+     },
+     {
+      "n": 2,
+      "enemies": 17.425,
+      "purified": 210,
+      "hurt": 0.5
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     }
+    ],
+    "in6to9": 2,
+    "won6to9": 2,
+    "wonDurationMin": 480.2833333332252,
+    "wonDurationMax": 493.53333333321314,
+    "bossFightMin": 55.68333333328269,
+    "bossFightMax": 69.13333333327046,
+    "reachedBoss": 2,
+    "bossFightMedian": 62.40833333327657,
+    "bossFightMean": 62.40833333327657,
+    "extractMean": 2.9666666666639685,
+    "firstLevelUpMedian": 11.358333333333476,
+    "lv60": [
+     5,
+     5
+    ],
+    "lv180": [
+     11,
+     11
+    ],
+    "lv300": [
+     18,
+     18
+    ],
+    "lvBoss": [
+     26,
+     25
+    ],
+    "finalLevelMean": 27,
+    "purifyPreBoss": 0.9494640122511485,
+    "purifyPreBossN": 2,
+    "purifyCombat": 0.9871853120217573,
+    "sporeCollect": 0.9914336183054979,
+    "killers": {},
+    "builds": {
+     "露珠环+落叶回旋镖+孢子弹+菌伞旋刃 | 湿润苔衣+晨光菌丝+露水叶片+蕨叶轻靴": {
+      "n": 1,
+      "won": 1
+     },
+     "露珠环+雨滴坠击+孢子弹+菌伞旋刃 | 宽檐菌帽+湿润苔衣+晨光菌丝+露水叶片": {
+      "n": 1,
+      "won": 1
+     }
+    },
+    "weaponCount": {
+     "4": 2
+    },
+    "passiveCount": {
+     "4": 2
+    },
+    "capSkipped": 0,
+    "dropped": {
+     "enemies": 0,
+     "shots": 0,
+     "bubbles": 0,
+     "pickups": 0
+    },
+    "capSkippedPickups": 0,
+    "droppedTimeMax": 0,
+    "wonBuilds": 2,
+    "evoRuns": 1,
+    "evoWon": 1,
+    "noEvoRuns": 1,
+    "noEvoWon": 1,
+    "wonEvo": 1,
+    "evoCount": {
+     "0": 1,
+     "1": 1
+    },
+    "evoFirstMedian": 416.23333333328344,
+    "evoFirstMin": 416.23333333328344,
+    "evoFirstMax": 416.23333333328344,
+    "evoBeforeBoss": 1,
+    "evoOfferedRuns": 1,
+    "evoById": {
+     "leaf_boomerang": 1
+    },
+    "evoWonById": {
+     "leaf_boomerang": 1
+    },
+    "eliteSpawned": 2,
+    "eliteKilled": 2,
+    "eliteKillMedian": 60.99999999994452,
+    "drops": {
+     "dew": {
+      "spawned": 18,
+      "picked": 18,
+      "heal": 95.76000000000212
+     },
+     "bigDew": {
+      "spawned": 2,
+      "picked": 2,
+      "heal": 32.10000000000059
+     },
+     "wind": {
+      "spawned": 7,
+      "picked": 6,
+      "xp": 105
+     },
+     "unseen": 0,
+     "windRuns": 2
+    },
+    "regenRuns": 2,
+    "regenHealMean": 27.899999999999956,
+    "magnetRuns": 0,
+    "collectMagnet": null,
+    "collectNoMagnet": 0.9914336183054979
+   }
+  },
+  {
+   "label": "贴孢子·偏好露珠环",
+   "move": "spore",
+   "pick": "prefer:dew_ring",
+   "summary": {
+    "n": 2,
+    "won": 2,
+    "lost": 0,
+    "timeout": 0,
+    "survivalMean": 512.7333333331957,
+    "survivalMedian": 512.7333333331957,
+    "wonDurationMean": 512.7333333331957,
+    "wonDurationMedian": 512.7333333331957,
+    "lostInBoss": 0,
+    "deathMinute": {},
+    "death630to730": 0,
+    "past12": 0,
+    "weaponCombos": {
+     "露珠环+雨滴坠击+孢子弹+菌伞旋刃": 1,
+     "露珠环+落叶回旋镖+孢子弹+菌伞旋刃": 1
+    },
+    "abandoned": {
+     "落叶回旋镖": 1,
+     "雨滴坠击": 1
+    },
+    "wonAbandoned": {
+     "落叶回旋镖": 1,
+     "雨滴坠击": 1
+    },
+    "weaponLevelSum": 20,
+    "passiveMean": 3.5,
+    "hpAtBossSpawn": 245,
+    "hpAtBossDefeat": 249.7499999999997,
+    "minutes": [
+     {
+      "n": 2,
+      "enemies": 8.850000000000001,
+      "purified": 68.5,
+      "hurt": 0
+     },
+     {
+      "n": 2,
+      "enemies": 13.716666666666667,
+      "purified": 92.5,
+      "hurt": 0
+     },
+     {
+      "n": 2,
+      "enemies": 22.616666666666667,
+      "purified": 168,
+      "hurt": 0
+     },
+     {
+      "n": 2,
+      "enemies": 30.65833333333333,
+      "purified": 179.5,
+      "hurt": 0
+     },
+     {
+      "n": 2,
+      "enemies": 48.18333333333334,
+      "purified": 204,
+      "hurt": 1
+     },
+     {
+      "n": 2,
+      "enemies": 58.88333333333334,
+      "purified": 224,
+      "hurt": 1.5
+     },
+     {
+      "n": 2,
+      "enemies": 63.916666666666664,
+      "purified": 296.5,
+      "hurt": 2
+     },
+     {
+      "n": 2,
+      "enemies": 23.991666666666667,
+      "purified": 226,
+      "hurt": 2.5
+     },
+     {
+      "n": 1,
+      "enemies": 11.533333333333333,
+      "purified": 171,
+      "hurt": 0
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     }
+    ],
+    "in6to9": 1,
+    "won6to9": 1,
+    "wonDurationMin": 484.48333333322137,
+    "wonDurationMax": 540.98333333317,
+    "bossFightMin": 59.88333333327887,
+    "bossFightMax": 116.38333333322748,
+    "reachedBoss": 2,
+    "bossFightMedian": 88.13333333325318,
+    "bossFightMean": 88.13333333325318,
+    "extractMean": 3.0666666666638775,
+    "firstLevelUpMedian": 11.358333333333476,
+    "lv60": [
+     5,
+     5
+    ],
+    "lv180": [
+     11,
+     11
+    ],
+    "lv300": [
+     18,
+     18
+    ],
+    "lvBoss": [
+     26,
+     26
+    ],
+    "finalLevelMean": 27.5,
+    "purifyPreBoss": 0.944104134762634,
+    "purifyPreBossN": 2,
+    "purifyCombat": 0.9879161825426521,
+    "sporeCollect": 0.9979663353084474,
+    "killers": {},
+    "builds": {
+     "露珠环+雨滴坠击+孢子弹+菌伞旋刃 | 宽檐菌帽+湿润苔衣+晨光菌丝+露水叶片": {
+      "n": 1,
+      "won": 1
+     },
+     "露珠环+落叶回旋镖+孢子弹+菌伞旋刃 | 宽檐菌帽+湿润苔衣+露水叶片": {
+      "n": 1,
+      "won": 1
+     }
+    },
+    "weaponCount": {
+     "4": 2
+    },
+    "passiveCount": {
+     "3": 1,
+     "4": 1
+    },
+    "capSkipped": 0,
+    "dropped": {
+     "enemies": 0,
+     "shots": 0,
+     "bubbles": 0,
+     "pickups": 0
+    },
+    "capSkippedPickups": 0,
+    "droppedTimeMax": 0,
+    "wonBuilds": 2,
+    "evoRuns": 1,
+    "evoWon": 1,
+    "noEvoRuns": 1,
+    "noEvoWon": 1,
+    "wonEvo": 1,
+    "evoCount": {
+     "0": 1,
+     "1": 1
+    },
+    "evoFirstMedian": 445.9833333332564,
+    "evoFirstMin": 445.9833333332564,
+    "evoFirstMax": 445.9833333332564,
+    "evoBeforeBoss": 0,
+    "evoOfferedRuns": 1,
+    "evoById": {
+     "dew_ring": 1
+    },
+    "evoWonById": {
+     "dew_ring": 1
+    },
+    "eliteSpawned": 2,
+    "eliteKilled": 2,
+    "eliteKillMedian": 78.92499999992822,
+    "drops": {
+     "dew": {
+      "spawned": 19,
+      "picked": 17,
+      "heal": 47.100000000000364
+     },
+     "bigDew": {
+      "spawned": 2,
+      "picked": 2,
+      "heal": 19.00000000000037
+     },
+     "wind": {
+      "spawned": 8,
+      "picked": 8,
+      "xp": 145
+     },
+     "unseen": 0,
+     "windRuns": 2
+    },
+    "regenRuns": 2,
+    "regenHealMean": 31.999999999999986,
+    "magnetRuns": 0,
+    "collectMagnet": null,
+    "collectNoMagnet": 0.9979663353084474
+   }
+  },
+  {
+   "label": "贴孢子·偏好雨滴坠击",
+   "move": "spore",
+   "pick": "prefer:raindrop",
+   "summary": {
+    "n": 2,
+    "won": 2,
+    "lost": 0,
+    "timeout": 0,
+    "survivalMean": 466.68333333323756,
+    "survivalMedian": 466.68333333323756,
+    "wonDurationMean": 466.68333333323756,
+    "wonDurationMedian": 466.68333333323756,
+    "lostInBoss": 0,
+    "deathMinute": {},
+    "death630to730": 0,
+    "past12": 0,
+    "weaponCombos": {
+     "落叶回旋镖+雨滴坠击+孢子弹+菌伞旋刃": 1,
+     "露珠环+雨滴坠击+孢子弹+菌伞旋刃": 1
+    },
+    "abandoned": {
+     "露珠环": 1,
+     "落叶回旋镖": 1
+    },
+    "wonAbandoned": {
+     "露珠环": 1,
+     "落叶回旋镖": 1
+    },
+    "weaponLevelSum": 19,
+    "passiveMean": 4,
+    "hpAtBossSpawn": 234.29999999999993,
+    "hpAtBossDefeat": 235.33249999999958,
+    "minutes": [
+     {
+      "n": 2,
+      "enemies": 8.691666666666666,
+      "purified": 68.5,
+      "hurt": 0
+     },
+     {
+      "n": 2,
+      "enemies": 12.741666666666667,
+      "purified": 91,
+      "hurt": 0
+     },
+     {
+      "n": 2,
+      "enemies": 21.433333333333334,
+      "purified": 171,
+      "hurt": 0
+     },
+     {
+      "n": 2,
+      "enemies": 27.28333333333333,
+      "purified": 179,
+      "hurt": 0
+     },
+     {
+      "n": 2,
+      "enemies": 36.36666666666667,
+      "purified": 215,
+      "hurt": 0
+     },
+     {
+      "n": 2,
+      "enemies": 46.233333333333334,
+      "purified": 228,
+      "hurt": 1.5
+     },
+     {
+      "n": 2,
+      "enemies": 54.141666666666666,
+      "purified": 304.5,
+      "hurt": 1
+     },
+     {
+      "n": 1,
+      "enemies": 16.366666666666667,
+      "purified": 209,
+      "hurt": 2
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     }
+    ],
+    "in6to9": 2,
+    "won6to9": 2,
+    "wonDurationMin": 452.34999999991726,
+    "wonDurationMax": 481.01666666655785,
+    "bossFightMin": 27.816666666641368,
+    "bossFightMax": 56.416666666615356,
+    "reachedBoss": 2,
+    "bossFightMedian": 42.11666666662836,
+    "bossFightMean": 42.11666666662836,
+    "extractMean": 3.0333333333305745,
+    "firstLevelUpMedian": 11.358333333333476,
+    "lv60": [
+     5,
+     5
+    ],
+    "lv180": [
+     11,
+     11
+    ],
+    "lv300": [
+     18,
+     18
+    ],
+    "lvBoss": [
+     26,
+     25
+    ],
+    "finalLevelMean": 26.5,
+    "purifyPreBoss": 0.9624808575803981,
+    "purifyPreBossN": 2,
+    "purifyCombat": 0.9906626893142256,
+    "sporeCollect": 0.9685656184639925,
+    "killers": {},
+    "builds": {
+     "落叶回旋镖+雨滴坠击+孢子弹+菌伞旋刃 | 宽檐菌帽+湿润苔衣+晨光菌丝+蕨叶轻靴": {
+      "n": 1,
+      "won": 1
+     },
+     "露珠环+雨滴坠击+孢子弹+菌伞旋刃 | 宽檐菌帽+湿润苔衣+晨光菌丝+露水叶片": {
+      "n": 1,
+      "won": 1
+     }
+    },
+    "weaponCount": {
+     "4": 2
+    },
+    "passiveCount": {
+     "4": 2
+    },
+    "capSkipped": 0,
+    "dropped": {
+     "enemies": 0,
+     "shots": 0,
+     "bubbles": 0,
+     "pickups": 0
+    },
+    "capSkippedPickups": 0,
+    "droppedTimeMax": 0,
+    "wonBuilds": 2,
+    "evoRuns": 1,
+    "evoWon": 1,
+    "noEvoRuns": 1,
+    "noEvoWon": 1,
+    "wonEvo": 1,
+    "evoCount": {
+     "0": 1,
+     "1": 1
+    },
+    "evoFirstMedian": 415.6666666666173,
+    "evoFirstMin": 415.6666666666173,
+    "evoFirstMax": 415.6666666666173,
+    "evoBeforeBoss": 1,
+    "evoOfferedRuns": 1,
+    "evoById": {
+     "raindrop": 1
+    },
+    "evoWonById": {
+     "raindrop": 1
+    },
+    "eliteSpawned": 2,
+    "eliteKilled": 2,
+    "eliteKillMedian": 59.14166666661288,
+    "drops": {
+     "dew": {
+      "spawned": 17,
+      "picked": 14,
+      "heal": 21.900000000000375
+     },
+     "bigDew": {
+      "spawned": 2,
+      "picked": 2,
+      "heal": 8.699999999999989
+     },
+     "wind": {
+      "spawned": 6,
+      "picked": 6,
+      "xp": 280
+     },
+     "unseen": 0,
+     "windRuns": 2
+    },
+    "regenRuns": 1,
+    "regenHealMean": 22.99999999999995,
+    "magnetRuns": 0,
+    "collectMagnet": null,
+    "collectNoMagnet": 0.9685656184639925
+   }
+  },
+  {
+   "label": "贴孢子·偏好落叶回旋镖",
+   "move": "spore",
+   "pick": "prefer:leaf_boomerang",
+   "summary": {
+    "n": 2,
+    "won": 2,
+    "lost": 0,
+    "timeout": 0,
+    "survivalMean": 536.0333333331745,
+    "survivalMedian": 536.0333333331745,
+    "wonDurationMean": 536.0333333331745,
+    "wonDurationMedian": 536.0333333331745,
+    "lostInBoss": 0,
+    "deathMinute": {},
+    "death630to730": 0,
+    "past12": 0,
+    "weaponCombos": {
+     "露珠环+落叶回旋镖+孢子弹+菌伞旋刃": 2
+    },
+    "abandoned": {
+     "雨滴坠击": 2
+    },
+    "wonAbandoned": {
+     "雨滴坠击": 2
+    },
+    "weaponLevelSum": 20,
+    "passiveMean": 4,
+    "hpAtBossSpawn": 235.2,
+    "hpAtBossDefeat": 227.6324999999997,
+    "minutes": [
+     {
+      "n": 2,
+      "enemies": 8.758333333333333,
+      "purified": 68,
+      "hurt": 0
+     },
+     {
+      "n": 2,
+      "enemies": 14.716666666666665,
+      "purified": 90,
+      "hurt": 0
+     },
+     {
+      "n": 2,
+      "enemies": 25.55,
+      "purified": 166,
+      "hurt": 0
+     },
+     {
+      "n": 2,
+      "enemies": 33.275,
+      "purified": 178,
+      "hurt": 0
+     },
+     {
+      "n": 2,
+      "enemies": 45.06666666666667,
+      "purified": 204.5,
+      "hurt": 4
+     },
+     {
+      "n": 2,
+      "enemies": 57.233333333333334,
+      "purified": 221,
+      "hurt": 3
+     },
+     {
+      "n": 2,
+      "enemies": 73.66666666666666,
+      "purified": 300.5,
+      "hurt": 3
+     },
+     {
+      "n": 2,
+      "enemies": 24.65,
+      "purified": 229.5,
+      "hurt": 2
+     },
+     {
+      "n": 1,
+      "enemies": 12.816666666666666,
+      "purified": 175,
+      "hurt": 2
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     },
+     {
+      "n": 0,
+      "enemies": null,
+      "purified": null,
+      "hurt": null
+     }
+    ],
+    "in6to9": 1,
+    "won6to9": 1,
+    "wonDurationMin": 491.1999999998819,
+    "wonDurationMax": 580.866666666467,
+    "bossFightMin": 66.79999999993925,
+    "bossFightMax": 156.46666666652436,
+    "reachedBoss": 2,
+    "bossFightMedian": 111.6333333332318,
+    "bossFightMean": 111.6333333332318,
+    "extractMean": 2.8666666666640594,
+    "firstLevelUpMedian": 11.358333333333476,
+    "lv60": [
+     5,
+     5
+    ],
+    "lv180": [
+     11,
+     11
+    ],
+    "lv300": [
+     18,
+     18
+    ],
+    "lvBoss": [
+     25,
+     25
+    ],
+    "finalLevelMean": 27.5,
+    "purifyPreBoss": 0.9402756508422665,
+    "purifyPreBossN": 2,
+    "purifyCombat": 0.98707040687831,
+    "sporeCollect": 0.996911987503662,
+    "killers": {},
+    "builds": {
+     "露珠环+落叶回旋镖+孢子弹+菌伞旋刃 | 湿润苔衣+晨光菌丝+露水叶片+蕨叶轻靴": {
+      "n": 1,
+      "won": 1
+     },
+     "露珠环+落叶回旋镖+孢子弹+菌伞旋刃 | 宽檐菌帽+湿润苔衣+晨光菌丝+蕨叶轻靴": {
+      "n": 1,
+      "won": 1
+     }
+    },
+    "weaponCount": {
+     "4": 2
+    },
+    "passiveCount": {
+     "4": 2
+    },
+    "capSkipped": 0,
+    "dropped": {
+     "enemies": 0,
+     "shots": 0,
+     "bubbles": 0,
+     "pickups": 0
+    },
+    "capSkippedPickups": 0,
+    "droppedTimeMax": 0,
+    "wonBuilds": 2,
+    "evoRuns": 1,
+    "evoWon": 1,
+    "noEvoRuns": 1,
+    "noEvoWon": 1,
+    "wonEvo": 1,
+    "evoCount": {
+     "0": 1,
+     "1": 1
+    },
+    "evoFirstMedian": 420.24999999994645,
+    "evoFirstMin": 420.24999999994645,
+    "evoFirstMax": 420.24999999994645,
+    "evoBeforeBoss": 0,
+    "evoOfferedRuns": 1,
+    "evoById": {
+     "leaf_boomerang": 1
+    },
+    "evoWonById": {
+     "leaf_boomerang": 1
+    },
+    "eliteSpawned": 2,
+    "eliteKilled": 2,
+    "eliteKillMedian": 76.4916666665971,
+    "drops": {
+     "dew": {
+      "spawned": 19,
+      "picked": 19,
+      "heal": 112.30000000000035
+     },
+     "bigDew": {
+      "spawned": 2,
+      "picked": 2,
+      "heal": 16.200000000000585
+     },
+     "wind": {
+      "spawned": 8,
+      "picked": 8,
+      "xp": 187
+     },
+     "unseen": 0,
+     "windRuns": 2
+    },
+    "regenRuns": 1,
+    "regenHealMean": 36.39999999999998,
+    "magnetRuns": 0,
+    "collectMagnet": null,
+    "collectNoMagnet": 0.996911987503662
+   }
+  }
+ ],
+ "total": {
+  "n": 24,
+  "won": 14,
+  "lost": 10,
+  "timeout": 0,
+  "survivalMean": 474.87569444434115,
+  "survivalMedian": 480.6499999998915,
+  "wonDurationMean": 507.97499999986667,
+  "wonDurationMedian": 492.36666666654753,
+  "lostInBoss": 8,
+  "deathMinute": {
+   "5": 2,
+   "7": 6,
+   "8": 2
+  },
+  "death630to730": 6,
+  "past12": 0,
+  "weaponCombos": {
+   "露珠环+落叶回旋镖+雨滴坠击+孢子弹": 2,
+   "落叶回旋镖+孢子弹": 1,
+   "露珠环+落叶回旋镖+孢子弹+菌伞旋刃": 11,
+   "露珠环+孢子弹+菌伞旋刃": 1,
+   "露珠环+雨滴坠击+孢子弹+菌伞旋刃": 6,
+   "落叶回旋镖+雨滴坠击+孢子弹+菌伞旋刃": 2,
+   "落叶回旋镖+孢子弹+菌伞旋刃": 1
+  },
+  "abandoned": {
+   "菌伞旋刃": 2,
+   "菌伞旋刃+露珠环+雨滴坠击": 1,
+   "雨滴坠击": 11,
+   "雨滴坠击+落叶回旋镖": 1,
+   "落叶回旋镖": 6,
+   "露珠环": 2,
+   "露珠环+雨滴坠击": 1
+  },
+  "wonAbandoned": {
+   "雨滴坠击": 7,
+   "落叶回旋镖": 4,
+   "露珠环": 2,
+   "菌伞旋刃": 1
+  },
+  "weaponLevelSum": 14.666666666666666,
+  "passiveMean": 3.5416666666666665,
+  "hpAtBossSpawn": 179.00738636363639,
+  "hpAtBossDefeat": 238.18785714285698,
+  "minutes": [
+   {
+    "n": 24,
+    "enemies": 10.179166666666669,
+    "purified": 65,
+    "hurt": 0
+   },
+   {
+    "n": 24,
+    "enemies": 21.62222222222222,
+    "purified": 80.08333333333333,
+    "hurt": 0
+   },
+   {
+    "n": 24,
+    "enemies": 44.19027777777779,
+    "purified": 124.29166666666667,
+    "hurt": 0.7916666666666666
+   },
+   {
+    "n": 24,
+    "enemies": 60.51805555555555,
+    "purified": 129.5,
+    "hurt": 0.16666666666666666
+   },
+   {
+    "n": 24,
+    "enemies": 80.96041666666666,
+    "purified": 139.45833333333334,
+    "hurt": 1.8333333333333333
+   },
+   {
+    "n": 22,
+    "enemies": 97.1909090909091,
+    "purified": 155.9090909090909,
+    "hurt": 2.1818181818181817
+   },
+   {
+    "n": 22,
+    "enemies": 103.94924242424241,
+    "purified": 207.5909090909091,
+    "hurt": 2.6363636363636362
+   },
+   {
+    "n": 13,
+    "enemies": 44.87692307692306,
+    "purified": 200.76923076923077,
+    "hurt": 2.5384615384615383
+   },
+   {
+    "n": 3,
+    "enemies": 25.483333333333334,
+    "purified": 189,
+    "hurt": 1
+   },
+   {
+    "n": 1,
+    "enemies": 29.666666666666668,
+    "purified": 201,
+    "hurt": 0
+   },
+   {
+    "n": 0,
+    "enemies": null,
+    "purified": null,
+    "hurt": null
+   },
+   {
+    "n": 0,
+    "enemies": null,
+    "purified": null,
+    "hurt": null
+   },
+   {
+    "n": 0,
+    "enemies": null,
+    "purified": null,
+    "hurt": null
+   },
+   {
+    "n": 0,
+    "enemies": null,
+    "purified": null,
+    "hurt": null
+   },
+   {
+    "n": 0,
+    "enemies": null,
+    "purified": null,
+    "hurt": null
+   },
+   {
+    "n": 0,
+    "enemies": null,
+    "purified": null,
+    "hurt": null
+   },
+   {
+    "n": 0,
+    "enemies": null,
+    "purified": null,
+    "hurt": null
+   }
+  ],
+  "in6to9": 19,
+  "won6to9": 11,
+  "wonDurationMin": 452.34999999991726,
+  "wonDurationMax": 653.6833333330675,
+  "bossFightMin": 27.816666666641368,
+  "bossFightMax": 229.1499999997916,
+  "reachedBoss": 22,
+  "bossFightMedian": 67.96666666660485,
+  "bossFightMean": 83.43690476182887,
+  "extractMean": 3.004761904759172,
+  "firstLevelUpMedian": 11.791666666666831,
+  "lv60": [
+   5,
+   4,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5,
+   5
+  ],
+  "lv180": [
+   10,
+   7,
+   10,
+   6,
+   7,
+   6,
+   11,
+   6,
+   11,
+   6,
+   9,
+   7,
+   11,
+   8,
+   11,
+   11,
+   11,
+   11,
+   11,
+   11,
+   11,
+   11,
+   11,
+   11
+  ],
+  "lv300": [
+   14,
+   8,
+   16,
+   8,
+   8,
+   7,
+   17,
+   8,
+   18,
+   7,
+   13,
+   9,
+   18,
+   11,
+   18,
+   18,
+   18,
+   18,
+   18,
+   18,
+   18,
+   18,
+   18,
+   18
+  ],
+  "lvBoss": [
+   20,
+   11,
+   9,
+   9,
+   23,
+   9,
+   26,
+   9,
+   16,
+   11,
+   26,
+   15,
+   26,
+   25,
+   26,
+   25,
+   26,
+   26,
+   26,
+   25,
+   25,
+   25
+  ],
+  "finalLevelMean": 20.875,
+  "purifyPreBoss": 0.8392877587675883,
+  "purifyPreBossN": 22,
+  "purifyCombat": 0.8772896739160507,
+  "sporeCollect": 0.9009888992331437,
+  "killers": {
+   "mist_bubble": 3,
+   "beetle": 2,
+   "snail": 2,
+   "gnat": 2,
+   "moth": 1
+  },
+  "builds": {
+   "露珠环+落叶回旋镖+雨滴坠击+孢子弹 | 宽檐菌帽+湿润苔衣+孢子罗盘+晨光菌丝": {
+    "n": 2,
+    "won": 1
+   },
+   "落叶回旋镖+孢子弹 | 湿润苔衣+孢子罗盘+露水叶片+蕨叶轻靴": {
+    "n": 1,
+    "won": 0
+   },
+   "露珠环+落叶回旋镖+孢子弹+菌伞旋刃 | 湿润苔衣+晨光菌丝+露水叶片+蕨叶轻靴": {
+    "n": 5,
+    "won": 4
+   },
+   "露珠环+孢子弹+菌伞旋刃 | 宽檐菌帽+湿润苔衣+露水叶片": {
+    "n": 1,
+    "won": 0
+   },
+   "露珠环+落叶回旋镖+孢子弹+菌伞旋刃 | 蕨叶轻靴": {
+    "n": 1,
+    "won": 0
+   },
+   "露珠环+雨滴坠击+孢子弹+菌伞旋刃 | 宽檐菌帽+湿润苔衣+晨光菌丝": {
+    "n": 2,
+    "won": 0
+   },
+   "露珠环+雨滴坠击+孢子弹+菌伞旋刃 | 宽檐菌帽+湿润苔衣+晨光菌丝+露水叶片": {
+    "n": 4,
+    "won": 4
+   },
+   "露珠环+落叶回旋镖+孢子弹+菌伞旋刃 | 湿润苔衣": {
+    "n": 1,
+    "won": 0
+   },
+   "落叶回旋镖+雨滴坠击+孢子弹+菌伞旋刃 | 宽檐菌帽+湿润苔衣+晨光菌丝+蕨叶轻靴": {
+    "n": 2,
+    "won": 2
+   },
+   "露珠环+落叶回旋镖+孢子弹+菌伞旋刃 | 宽檐菌帽+湿润苔衣+蕨叶轻靴": {
+    "n": 1,
+    "won": 0
+   },
+   "落叶回旋镖+孢子弹+菌伞旋刃 | 湿润苔衣+孢子罗盘+露水叶片+蕨叶轻靴": {
+    "n": 1,
+    "won": 0
+   },
+   "露珠环+落叶回旋镖+孢子弹+菌伞旋刃 | 宽檐菌帽+湿润苔衣+晨光菌丝+露水叶片": {
+    "n": 1,
+    "won": 1
+   },
+   "露珠环+落叶回旋镖+孢子弹+菌伞旋刃 | 宽檐菌帽+湿润苔衣+露水叶片": {
+    "n": 1,
+    "won": 1
+   },
+   "露珠环+落叶回旋镖+孢子弹+菌伞旋刃 | 宽檐菌帽+湿润苔衣+晨光菌丝+蕨叶轻靴": {
+    "n": 1,
+    "won": 1
+   }
+  },
+  "weaponCount": {
+   "2": 1,
+   "3": 2,
+   "4": 21
+  },
+  "passiveCount": {
+   "1": 2,
+   "3": 5,
+   "4": 17
+  },
+  "capSkipped": 7076,
+  "dropped": {
+   "enemies": 0,
+   "shots": 0,
+   "bubbles": 0,
+   "pickups": 0
+  },
+  "capSkippedPickups": 0,
+  "droppedTimeMax": 0,
+  "wonBuilds": 7,
+  "evoRuns": 9,
+  "evoWon": 9,
+  "noEvoRuns": 15,
+  "noEvoWon": 5,
+  "wonEvo": 9,
+  "evoCount": {
+   "0": 15,
+   "1": 9
+  },
+  "evoFirstMedian": 419.14999999994745,
+  "evoFirstMin": 373.0166666666561,
+  "evoFirstMax": 597.8166666664516,
+  "evoBeforeBoss": 5,
+  "evoOfferedRuns": 9,
+  "evoById": {
+   "spore_shot": 4,
+   "raindrop": 2,
+   "leaf_boomerang": 2,
+   "dew_ring": 1
+  },
+  "evoWonById": {
+   "spore_shot": 4,
+   "raindrop": 2,
+   "leaf_boomerang": 2,
+   "dew_ring": 1
+  },
+  "eliteSpawned": 24,
+  "eliteKilled": 14,
+  "eliteKillMedian": 65.29999999994061,
+  "drops": {
+   "dew": {
+    "spawned": 164,
+    "picked": 146,
+    "heal": 474.44750000000727
+   },
+   "bigDew": {
+    "spawned": 14,
+    "picked": 13,
+    "heal": 158.5000000000021
+   },
+   "wind": {
+    "spawned": 58,
+    "picked": 52,
+    "xp": 2679
+   },
+   "unseen": 0,
+   "windRuns": 16
+  },
+  "regenRuns": 14,
+  "regenHealMean": 34.28571428571423,
+  "magnetRuns": 4,
+  "collectMagnet": 0.8305759242601689,
+  "collectNoMagnet": 0.9150714942277387
+ },
+ "cards": {
+  "all": {
+   "offered": {
+    "leaf_boomerang": 108,
+    "area": 153,
+    "dew_ring": 136,
+    "cooldown": 174,
+    "umbrella_blades": 163,
+    "regen": 131,
+    "raindrop": 57,
+    "spore_shot": 150,
+    "magnet": 93,
+    "might": 155,
+    "speed": 102,
+    "evo:spore_shot": 4,
+    "evo:raindrop": 2,
+    "evo:leaf_boomerang": 2,
+    "evo:dew_ring": 1
+   },
+   "picked": {
+    "leaf_boomerang": 61,
+    "cooldown": 40,
+    "raindrop": 37,
+    "dew_ring": 73,
+    "might": 28,
+    "spore_shot": 77,
+    "area": 28,
+    "magnet": 5,
+    "speed": 21,
+    "regen": 18,
+    "umbrella_blades": 80,
+    "evo:spore_shot": 4,
+    "evo:raindrop": 2,
+    "evo:leaf_boomerang": 2,
+    "evo:dew_ring": 1
+   }
+  },
+  "random": {
+   "offered": {
+    "leaf_boomerang": 25,
+    "area": 16,
+    "dew_ring": 19,
+    "cooldown": 19,
+    "umbrella_blades": 11,
+    "regen": 11,
+    "raindrop": 14,
+    "spore_shot": 21,
+    "magnet": 23,
+    "might": 16,
+    "speed": 10,
+    "evo:spore_shot": 1
+   },
+   "picked": {
+    "leaf_boomerang": 6,
+    "cooldown": 11,
+    "raindrop": 5,
+    "dew_ring": 5,
+    "might": 4,
+    "spore_shot": 10,
+    "area": 5,
+    "magnet": 5,
+    "speed": 5,
+    "regen": 4,
+    "evo:spore_shot": 1,
+    "umbrella_blades": 1
+   }
+  }
+ },
+ "runs": [
+  {
+   "seed": "balance-0",
+   "move": "flee",
+   "pick": "random",
+   "ruleset": "xianxia",
+   "outcome": "lost",
+   "survivalSec": 354.81666666667263,
+   "killer": "mist_bubble",
+   "level": 16,
+   "levelAt": {
+    "60": 5,
+    "180": 10,
+    "300": 14
+   },
+   "firstLevelUpSec": 13.016666666666893,
+   "bossSpawnSec": null,
+   "bossLevel": null,
+   "bossDefeatSec": null,
+   "extractOpenSec": null,
+   "wonSec": null,
+   "offered": {
+    "leaf_boomerang": 6,
+    "area": 5,
+    "dew_ring": 6,
+    "cooldown": 5,
+    "umbrella_blades": 1,
+    "regen": 2,
+    "raindrop": 4,
+    "spore_shot": 6,
+    "magnet": 6,
+    "might": 3,
+    "speed": 1
+   },
+   "picked": {
+    "leaf_boomerang": 1,
+    "cooldown": 4,
+    "raindrop": 1,
+    "dew_ring": 2,
+    "might": 2,
+    "spore_shot": 3,
+    "area": 1,
+    "magnet": 1
+   },
+   "picks": [
+    "13.0:leaf_boomerang",
+    "22.0:cooldown",
+    "36.5:raindrop",
+    "52.5:dew_ring",
+    "79.8:might",
+    "99.8:cooldown",
+    "119.4:cooldown",
+    "151.6:spore_shot",
+    "172.8:cooldown",
+    "193.4:area",
+    "232.8:spore_shot",
+    "256.0:might",
+    "291.1:dew_ring",
+    "332.6:magnet",
+    "353.2:spore_shot"
+   ],
+   "weapons": [
+    {
+     "id": "spore_shot",
+     "level": 4,
+     "evolved": false
+    },
+    {
+     "id": "leaf_boomerang",
+     "level": 1,
+     "evolved": false
+    },
+    {
+     "id": "raindrop",
+     "level": 1,
+     "evolved": false
+    },
+    {
+     "id": "dew_ring",
+     "level": 2,
+     "evolved": false
+    }
+   ],
+   "passives": [
+    {
+     "id": "cooldown",
+     "level": 4
+    },
+    {
+     "id": "might",
+     "level": 2
+    },
+    {
+     "id": "area",
+     "level": 1
+    },
+    {
+     "id": "magnet",
+     "level": 1
+    }
+   ],
+   "spawned": 979,
+   "purifiedCombat": 813,
+   "purifiedCleansing": 0,
+   "spawnedPreBoss": null,
+   "purifiedPreBoss": null,
+   "xpDropped": 1382,
+   "xpBanked": 867,
+   "capSkipped": {
+    "enemies": 4,
+    "pickups": 0
+   },
+   "dropped": {
+    "enemies": 0,
+    "shots": 0,
+    "bubbles": 0,
+    "zones": 0,
+    "pickups": 0
+   },
+   "droppedTime": 0,
+   "hpAtBossSpawn": null,
+   "hpAtBossDefeat": null,
+   "evolveOffered": 0,
+   "evolveFirstOfferSec": null,
+   "evolutions": [],
+   "eliteSpawnSec": 300.0166666667225,
+   "eliteDefeatSec": null,
+   "drops": {
+    "dew": {
+     "spawned": 6,
+     "picked": 4,
+     "heal": 0
+    },
+    "bigDew": {
+     "spawned": 0,
+     "picked": 0,
+     "heal": 0
+    },
+    "wind": {
+     "spawned": 1,
+     "picked": 0,
+     "xp": 0
+    }
+   },
+   "regenHeal": 0,
+   "maxPickupRadius": 184.79999999999998,
+   "minutes": [
+    {
+     "enemies": 8.9,
+     "purified": 68,
+     "hurt": 0
+    },
+    {
+     "enemies": 15.466666666666667,
+     "purified": 89,
+     "hurt": 0
+    },
+    {
+     "enemies": 34.983333333333334,
+     "purified": 161,
+     "hurt": 4
+    },
+    {
+     "enemies": 47.75,
+     "purified": 164,
+     "hurt": 0
+    },
+    {
+     "enemies": 77.08333333333333,
+     "purified": 174,
+     "hurt": 4
+    }
+   ],
+   "finalHp": 0,
+   "dropsUnseen": 0,
+   "config": "保守逃跑·随机选卡"
+  },
+  {
+   "seed": "balance-1",
+   "move": "flee",
+   "pick": "random",
+   "ruleset": "xianxia",
+   "outcome": "lost",
+   "survivalSec": 311.1166666667124,
+   "killer": "beetle",
+   "level": 8,
+   "levelAt": {
+    "60": 4,
+    "180": 7,
+    "300": 8
+   },
+   "firstLevelUpSec": 12.116666666666848,
+   "bossSpawnSec": null,
+   "bossLevel": null,
+   "bossDefeatSec": null,
+   "extractOpenSec": null,
+   "wonSec": null,
+   "offered": {
+    "umbrella_blades": 3,
+    "area": 1,
+    "speed": 3,
+    "magnet": 3,
+    "leaf_boomerang": 2,
+    "cooldown": 3,
+    "might": 2,
+    "regen": 2,
+    "dew_ring": 1,
+    "spore_shot": 1
+   },
+   "picked": {
+    "speed": 2,
+    "magnet": 1,
+    "leaf_boomerang": 1,
+    "regen": 1,
+    "cooldown": 1,
+    "spore_shot": 1
+   },
+   "picks": [
+    "12.1:speed",
+    "22.5:magnet",
+    "39.1:leaf_boomerang",
+    "62.4:regen",
+    "96.1:cooldown",
+    "123.1:speed",
+    "240.6:spore_shot"
+   ],
+   "weapons": [
+    {
+     "id": "spore_shot",
+     "level": 2,
+     "evolved": false
+    },
+    {
+     "id": "leaf_boomerang",
+     "level": 1,
+     "evolved": false
+    }
+   ],
+   "passives": [
+    {
+     "id": "speed",
+     "level": 2
+    },
+    {
+     "id": "magnet",
+     "level": 1
+    },
+    {
+     "id": "regen",
+     "level": 1
+    },
+    {
+     "id": "cooldown",
+     "level": 1
+    }
+   ],
+   "spawned": 407,
+   "purifiedCombat": 231,
+   "purifiedCleansing": 0,
+   "spawnedPreBoss": null,
+   "purifiedPreBoss": null,
+   "xpDropped": 279,
+   "xpBanked": 214,
+   "capSkipped": {
+    "enemies": 401,
+    "pickups": 0
+   },
+   "dropped": {
+    "enemies": 0,
+    "shots": 0,
+    "bubbles": 0,
+    "zones": 0,
+    "pickups": 0
+   },
+   "droppedTime": 0,
+   "hpAtBossSpawn": null,
+   "hpAtBossDefeat": null,
+   "evolveOffered": 0,
+   "evolveFirstOfferSec": null,
+   "evolutions": [],
+   "eliteSpawnSec": 300.0166666667225,
+   "eliteDefeatSec": null,
+   "drops": {
+    "dew": {
+     "spawned": 2,
+     "picked": 2,
+     "heal": 0
+    },
+    "bigDew": {
+     "spawned": 0,
+     "picked": 0,
+     "heal": 0
+    },
+    "wind": {
+     "spawned": 0,
+     "picked": 0,
+     "xp": 0
+    }
+   },
+   "regenHeal": 31.79999999999992,
+   "maxPickupRadius": 168,
+   "minutes": [
+    {
+     "enemies": 13.1,
+     "purified": 57,
+     "hurt": 0
+    },
+    {
+     "enemies": 36.9,
+     "purified": 74,
+     "hurt": 0
+    },
+    {
+     "enemies": 82.33333333333333,
+     "purified": 23,
+     "hurt": 7
+    },
+    {
+     "enemies": 105.3,
+     "purified": 52,
+     "hurt": 3
+    },
+    {
+     "enemies": 138.56666666666666,
+     "purified": 20,
+     "hurt": 4
+    }
+   ],
+   "finalHp": 0,
+   "dropsUnseen": 0,
+   "config": "保守逃跑·随机选卡"
+  },
+  {
+   "seed": "balance-0",
+   "move": "flee",
+   "pick": "prefer:spore_shot",
+   "ruleset": "xianxia",
+   "outcome": "won",
+   "survivalSec": 653.6833333330675,
+   "killer": "",
+   "level": 26,
+   "levelAt": {
+    "60": 5,
+    "180": 10,
+    "300": 16,
+    "420": 20
+   },
+   "firstLevelUpSec": 13.016666666666893,
+   "bossSpawnSec": 420.03333333328,
+   "bossLevel": 20,
+   "bossDefeatSec": 649.1833333330716,
+   "extractOpenSec": 650.6833333330702,
+   "wonSec": 653.6833333330675,
+   "offered": {
+    "leaf_boomerang": 7,
+    "area": 2,
+    "dew_ring": 9,
+    "cooldown": 9,
+    "umbrella_blades": 10,
+    "regen": 11,
+    "might": 10,
+    "spore_shot": 4,
+    "magnet": 5,
+    "speed": 7,
+    "evo:spore_shot": 1
+   },
+   "picked": {
+    "leaf_boomerang": 5,
+    "umbrella_blades": 5,
+    "spore_shot": 4,
+    "dew_ring": 4,
+    "cooldown": 3,
+    "regen": 1,
+    "might": 1,
+    "speed": 1,
+    "evo:spore_shot": 1
+   },
+   "picks": [
+    "13.0:leaf_boomerang",
+    "22.0:umbrella_blades",
+    "37.2:leaf_boomerang",
+    "53.0:spore_shot",
+    "76.9:dew_ring",
+    "99.6:spore_shot",
+    "126.2:spore_shot",
+    "151.6:spore_shot",
+    "167.9:cooldown",
+    "183.1:regen",
+    "188.1:leaf_boomerang",
+    "209.5:umbrella_blades",
+    "230.1:umbrella_blades",
+    "247.2:might",
+    "282.0:speed",
+    "323.8:leaf_boomerang",
+    "378.6:leaf_boomerang",
+    "402.6:umbrella_blades",
+    "407.0:umbrella_blades",
+    "432.6:dew_ring",
+    "453.5:dew_ring",
+    "486.0:dew_ring",
+    "519.2:cooldown",
+    "544.0:cooldown",
+    "597.8:evo:spore_shot"
+   ],
+   "weapons": [
+    {
+     "id": "spore_shot",
+     "level": 5,
+     "evolved": true
+    },
+    {
+     "id": "leaf_boomerang",
+     "level": 5,
+     "evolved": false
+    },
+    {
+     "id": "umbrella_blades",
+     "level": 5,
+     "evolved": false
+    },
+    {
+     "id": "dew_ring",
+     "level": 4,
+     "evolved": false
+    }
+   ],
+   "passives": [
+    {
+     "id": "cooldown",
+     "level": 3
+    },
+    {
+     "id": "regen",
+     "level": 1
+    },
+    {
+     "id": "might",
+     "level": 1
+    },
+    {
+     "id": "speed",
+     "level": 1
+    }
+   ],
+   "spawned": 1674,
+   "purifiedCombat": 1651,
+   "purifiedCleansing": 8,
+   "spawnedPreBoss": 1078,
+   "purifiedPreBoss": 903,
+   "xpDropped": 2918,
+   "xpBanked": 2764,
+   "capSkipped": {
+    "enemies": 311,
+    "pickups": 0
+   },
+   "dropped": {
+    "enemies": 0,
+    "shots": 0,
+    "bubbles": 0,
+    "zones": 0,
+    "pickups": 0
+   },
+   "droppedTime": 0,
+   "hpAtBossSpawn": 215,
+   "hpAtBossDefeat": 245,
+   "evolveOffered": 1,
+   "evolveFirstOfferSec": 597.8166666664516,
+   "evolutions": [
+    {
+     "id": "spore_shot",
+     "t": 597.8166666664516
+    }
+   ],
+   "eliteSpawnSec": 300.0166666667225,
+   "eliteDefeatSec": 617.4833333331004,
+   "drops": {
+    "dew": {
+     "spawned": 11,
+     "picked": 10,
+     "heal": 70.70000000000178
+    },
+    "bigDew": {
+     "spawned": 1,
+     "picked": 0,
+     "heal": 0
+    },
+    "wind": {
+     "spawned": 5,
+     "picked": 4,
+     "xp": 523
+    }
+   },
+   "regenHeal": 42.40000000000006,
+   "maxPickupRadius": 168,
+   "minutes": [
+    {
+     "enemies": 10.683333333333334,
+     "purified": 66,
+     "hurt": 0
+    },
+    {
+     "enemies": 19,
+     "purified": 84,
+     "hurt": 0
+    },
+    {
+     "enemies": 35.516666666666666,
+     "purified": 172,
+     "hurt": 0
+    },
+    {
+     "enemies": 40.583333333333336,
+     "purified": 182,
+     "hurt": 0
+    },
+    {
+     "enemies": 64.78333333333333,
+     "purified": 149,
+     "hurt": 2
+    },
+    {
+     "enemies": 147.33333333333334,
+     "purified": 107,
+     "hurt": 0
+    },
+    {
+     "enemies": 159.81666666666666,
+     "purified": 143,
+     "hurt": 2
+    },
+    {
+     "enemies": 114.7,
+     "purified": 175,
+     "hurt": 5
+    },
+    {
+     "enemies": 52.1,
+     "purified": 221,
+     "hurt": 1
+    },
+    {
+     "enemies": 29.666666666666668,
+     "purified": 201,
+     "hurt": 0
+    }
+   ],
+   "finalHp": 245,
+   "dropsUnseen": 0,
+   "config": "保守逃跑·偏好孢子弹"
+  },
+  {
+   "seed": "balance-1",
+   "move": "flee",
+   "pick": "prefer:spore_shot",
+   "ruleset": "xianxia",
+   "outcome": "lost",
+   "survivalSec": 436.78333333326475,
+   "killer": "snail",
+   "level": 12,
+   "levelAt": {
+    "60": 5,
+    "180": 6,
+    "300": 8,
+    "420": 11
+   },
+   "firstLevelUpSec": 12.116666666666848,
+   "bossSpawnSec": 420.03333333328,
+   "bossLevel": 11,
+   "bossDefeatSec": null,
+   "extractOpenSec": null,
+   "wonSec": null,
+   "offered": {
+    "umbrella_blades": 6,
+    "area": 6,
+    "speed": 2,
+    "magnet": 2,
+    "dew_ring": 4,
+    "cooldown": 3,
+    "regen": 3,
+    "might": 1,
+    "spore_shot": 4,
+    "raindrop": 2
+   },
+   "picked": {
+    "umbrella_blades": 2,
+    "dew_ring": 2,
+    "cooldown": 1,
+    "area": 1,
+    "regen": 1,
+    "spore_shot": 4
+   },
+   "picks": [
+    "12.1:umbrella_blades",
+    "21.5:dew_ring",
+    "37.0:cooldown",
+    "59.5:area",
+    "118.4:umbrella_blades",
+    "191.7:regen",
+    "249.5:spore_shot",
+    "309.5:spore_shot",
+    "379.7:spore_shot",
+    "406.2:spore_shot",
+    "428.8:dew_ring"
+   ],
+   "weapons": [
+    {
+     "id": "spore_shot",
+     "level": 5,
+     "evolved": false
+    },
+    {
+     "id": "umbrella_blades",
+     "level": 2,
+     "evolved": false
+    },
+    {
+     "id": "dew_ring",
+     "level": 2,
+     "evolved": false
+    }
+   ],
+   "passives": [
+    {
+     "id": "cooldown",
+     "level": 1
+    },
+    {
+     "id": "area",
+     "level": 1
+    },
+    {
+     "id": "regen",
+     "level": 1
+    }
+   ],
+   "spawned": 572,
+   "purifiedCombat": 408,
+   "purifiedCleansing": 0,
+   "spawnedPreBoss": 548,
+   "purifiedPreBoss": 374,
+   "xpDropped": 572,
+   "xpBanked": 461,
+   "capSkipped": {
+    "enemies": 783,
+    "pickups": 0
+   },
+   "dropped": {
+    "enemies": 0,
+    "shots": 0,
+    "bubbles": 0,
+    "zones": 0,
+    "pickups": 0
+   },
+   "droppedTime": 0,
+   "hpAtBossSpawn": 97.04000000000006,
+   "hpAtBossDefeat": null,
+   "evolveOffered": 0,
+   "evolveFirstOfferSec": null,
+   "evolutions": [],
+   "eliteSpawnSec": 300.0166666667225,
+   "eliteDefeatSec": null,
+   "drops": {
+    "dew": {
+     "spawned": 2,
+     "picked": 2,
+     "heal": 0
+    },
+    "bigDew": {
+     "spawned": 0,
+     "picked": 0,
+     "heal": 0
+    },
+    "wind": {
+     "spawned": 0,
+     "picked": 0,
+     "xp": 0
+    }
+   },
+   "regenHeal": 35.79999999999997,
+   "maxPickupRadius": 154,
+   "minutes": [
+    {
+     "enemies": 11.7,
+     "purified": 59,
+     "hurt": 0
+    },
+    {
+     "enemies": 36.86666666666667,
+     "purified": 55,
+     "hurt": 0
+    },
+    {
+     "enemies": 77.03333333333333,
+     "purified": 45,
+     "hurt": 0
+    },
+    {
+     "enemies": 107.75,
+     "purified": 24,
+     "hurt": 0
+    },
+    {
+     "enemies": 137.28333333333333,
+     "purified": 47,
+     "hurt": 1
+    },
+    {
+     "enemies": 158.28333333333333,
+     "purified": 48,
+     "hurt": 1
+    },
+    {
+     "enemies": 158.86666666666667,
+     "purified": 96,
+     "hurt": 6
+    }
+   ],
+   "finalHp": 0,
+   "dropsUnseen": 0,
+   "config": "保守逃跑·偏好孢子弹"
+  },
+  {
+   "seed": "balance-0",
+   "move": "flee",
+   "pick": "prefer:umbrella_blades",
+   "ruleset": "xianxia",
+   "outcome": "lost",
+   "survivalSec": 500.0166666665406,
+   "killer": "gnat",
+   "level": 11,
+   "levelAt": {
+    "60": 5,
+    "180": 7,
+    "300": 8,
+    "420": 9
+   },
+   "firstLevelUpSec": 13.016666666666893,
+   "bossSpawnSec": 420.03333333328,
+   "bossLevel": 9,
+   "bossDefeatSec": null,
+   "extractOpenSec": null,
+   "wonSec": null,
+   "offered": {
+    "leaf_boomerang": 2,
+    "area": 1,
+    "dew_ring": 5,
+    "cooldown": 3,
+    "umbrella_blades": 4,
+    "regen": 2,
+    "might": 3,
+    "spore_shot": 5,
+    "magnet": 3,
+    "speed": 2
+   },
+   "picked": {
+    "leaf_boomerang": 2,
+    "umbrella_blades": 4,
+    "dew_ring": 2,
+    "speed": 1,
+    "spore_shot": 1
+   },
+   "picks": [
+    "13.0:leaf_boomerang",
+    "22.0:umbrella_blades",
+    "37.2:leaf_boomerang",
+    "53.0:umbrella_blades",
+    "85.6:dew_ring",
+    "139.3:dew_ring",
+    "244.6:umbrella_blades",
+    "383.3:speed",
+    "423.2:spore_shot",
+    "426.7:umbrella_blades"
+   ],
+   "weapons": [
+    {
+     "id": "spore_shot",
+     "level": 2,
+     "evolved": false
+    },
+    {
+     "id": "leaf_boomerang",
+     "level": 2,
+     "evolved": false
+    },
+    {
+     "id": "umbrella_blades",
+     "level": 4,
+     "evolved": false
+    },
+    {
+     "id": "dew_ring",
+     "level": 2,
+     "evolved": false
+    }
+   ],
+   "passives": [
+    {
+     "id": "speed",
+     "level": 1
+    }
+   ],
+   "spawned": 550,
+   "purifiedCombat": 346,
+   "purifiedCleansing": 0,
+   "spawnedPreBoss": 427,
+   "purifiedPreBoss": 251,
+   "xpDropped": 480,
+   "xpBanked": 426,
+   "capSkipped": {
+    "enemies": 996,
+    "pickups": 0
+   },
+   "dropped": {
+    "enemies": 0,
+    "shots": 0,
+    "bubbles": 0,
+    "zones": 0,
+    "pickups": 0
+   },
+   "droppedTime": 0,
+   "hpAtBossSpawn": 98.05,
+   "hpAtBossDefeat": null,
+   "evolveOffered": 0,
+   "evolveFirstOfferSec": null,
+   "evolutions": [],
+   "eliteSpawnSec": 300.0166666667225,
+   "eliteDefeatSec": null,
+   "drops": {
+    "dew": {
+     "spawned": 4,
+     "picked": 3,
+     "heal": 20
+    },
+    "bigDew": {
+     "spawned": 0,
+     "picked": 0,
+     "heal": 0
+    },
+    "wind": {
+     "spawned": 1,
+     "picked": 1,
+     "xp": 84
+    }
+   },
+   "regenHeal": 0,
+   "maxPickupRadius": 154,
+   "minutes": [
+    {
+     "enemies": 10.683333333333334,
+     "purified": 66,
+     "hurt": 0
+    },
+    {
+     "enemies": 32.78333333333333,
+     "purified": 55,
+     "hurt": 0
+    },
+    {
+     "enemies": 80.4,
+     "purified": 42,
+     "hurt": 0
+    },
+    {
+     "enemies": 107.91666666666667,
+     "purified": 23,
+     "hurt": 0
+    },
+    {
+     "enemies": 138.5,
+     "purified": 17,
+     "hurt": 0
+    },
+    {
+     "enemies": 159.25,
+     "purified": 19,
+     "hurt": 2
+    },
+    {
+     "enemies": 162.68333333333334,
+     "purified": 29,
+     "hurt": 0
+    },
+    {
+     "enemies": 120.55,
+     "purified": 88,
+     "hurt": 6
+    }
+   ],
+   "finalHp": 0,
+   "dropsUnseen": 0,
+   "config": "保守逃跑·偏好菌伞旋刃"
+  },
+  {
+   "seed": "balance-1",
+   "move": "flee",
+   "pick": "prefer:umbrella_blades",
+   "ruleset": "xianxia",
+   "outcome": "lost",
+   "survivalSec": 439.2999999999291,
+   "killer": "moth",
+   "level": 11,
+   "levelAt": {
+    "60": 5,
+    "180": 6,
+    "300": 7,
+    "420": 9
+   },
+   "firstLevelUpSec": 12.116666666666848,
+   "bossSpawnSec": 420.03333333328,
+   "bossLevel": 9,
+   "bossDefeatSec": null,
+   "extractOpenSec": null,
+   "wonSec": null,
+   "offered": {
+    "umbrella_blades": 5,
+    "area": 7,
+    "speed": 2,
+    "magnet": 2,
+    "dew_ring": 2,
+    "cooldown": 3,
+    "regen": 2,
+    "might": 1,
+    "spore_shot": 4,
+    "raindrop": 2
+   },
+   "picked": {
+    "umbrella_blades": 5,
+    "cooldown": 1,
+    "area": 1,
+    "might": 1,
+    "dew_ring": 1,
+    "raindrop": 1
+   },
+   "picks": [
+    "12.1:umbrella_blades",
+    "21.5:umbrella_blades",
+    "37.0:cooldown",
+    "59.5:area",
+    "126.2:umbrella_blades",
+    "250.7:might",
+    "300.1:dew_ring",
+    "363.4:umbrella_blades",
+    "421.1:umbrella_blades",
+    "425.3:raindrop"
+   ],
+   "weapons": [
+    {
+     "id": "spore_shot",
+     "level": 1,
+     "evolved": false
+    },
+    {
+     "id": "umbrella_blades",
+     "level": 5,
+     "evolved": false
+    },
+    {
+     "id": "dew_ring",
+     "level": 1,
+     "evolved": false
+    },
+    {
+     "id": "raindrop",
+     "level": 1,
+     "evolved": false
+    }
+   ],
+   "passives": [
+    {
+     "id": "cooldown",
+     "level": 1
+    },
+    {
+     "id": "area",
+     "level": 1
+    },
+    {
+     "id": "might",
+     "level": 1
+    }
+   ],
+   "spawned": 476,
+   "purifiedCombat": 381,
+   "purifiedCleansing": 0,
+   "spawnedPreBoss": 443,
+   "purifiedPreBoss": 261,
+   "xpDropped": 538,
+   "xpBanked": 416,
+   "capSkipped": {
+    "enemies": 883,
+    "pickups": 0
+   },
+   "dropped": {
+    "enemies": 0,
+    "shots": 0,
+    "bubbles": 0,
+    "zones": 0,
+    "pickups": 0
+   },
+   "droppedTime": 0,
+   "hpAtBossSpawn": 41.55,
+   "hpAtBossDefeat": null,
+   "evolveOffered": 0,
+   "evolveFirstOfferSec": null,
+   "evolutions": [],
+   "eliteSpawnSec": 300.0166666667225,
+   "eliteDefeatSec": null,
+   "drops": {
+    "dew": {
+     "spawned": 2,
+     "picked": 2,
+     "heal": 0
+    },
+    "bigDew": {
+     "spawned": 0,
+     "picked": 0,
+     "heal": 0
+    },
+    "wind": {
+     "spawned": 0,
+     "picked": 0,
+     "xp": 0
+    }
+   },
+   "regenHeal": 0,
+   "maxPickupRadius": 154,
+   "minutes": [
+    {
+     "enemies": 11.7,
+     "purified": 59,
+     "hurt": 0
+    },
+    {
+     "enemies": 35.6,
+     "purified": 60,
+     "hurt": 0
+    },
+    {
+     "enemies": 81.38333333333334,
+     "purified": 39,
+     "hurt": 0
+    },
+    {
+     "enemies": 108.18333333333334,
+     "purified": 11,
+     "hurt": 0
+    },
+    {
+     "enemies": 137.75,
+     "purified": 37,
+     "hurt": 4
+    },
+    {
+     "enemies": 158.73333333333332,
+     "purified": 23,
+     "hurt": 0
+    },
+    {
+     "enemies": 164.35,
+     "purified": 32,
+     "hurt": 3
+    }
+   ],
+   "finalHp": 0,
+   "dropsUnseen": 0,
+   "config": "保守逃跑·偏好菌伞旋刃"
+  },
+  {
+   "seed": "balance-0",
+   "move": "flee",
+   "pick": "prefer:dew_ring",
+   "ruleset": "xianxia",
+   "outcome": "won",
+   "survivalSec": 505.93333333320186,
+   "killer": "",
+   "level": 27,
+   "levelAt": {
+    "60": 5,
+    "180": 11,
+    "300": 17,
+    "420": 23
+   },
+   "firstLevelUpSec": 13.016666666666893,
+   "bossSpawnSec": 420.03333333328,
+   "bossLevel": 23,
+   "bossDefeatSec": 501.36666666653934,
+   "extractOpenSec": 502.866666666538,
+   "wonSec": 505.93333333320186,
+   "offered": {
+    "leaf_boomerang": 1,
+    "area": 10,
+    "dew_ring": 5,
+    "cooldown": 9,
+    "umbrella_blades": 10,
+    "regen": 8,
+    "might": 12,
+    "spore_shot": 9,
+    "magnet": 5,
+    "raindrop": 7,
+    "speed": 2
+   },
+   "picked": {
+    "dew_ring": 5,
+    "umbrella_blades": 5,
+    "spore_shot": 4,
+    "raindrop": 5,
+    "might": 3,
+    "area": 2,
+    "cooldown": 1,
+    "regen": 1
+   },
+   "picks": [
+    "13.0:dew_ring",
+    "21.9:umbrella_blades",
+    "36.6:dew_ring",
+    "59.2:spore_shot",
+    "80.2:raindrop",
+    "95.1:raindrop",
+    "118.0:might",
+    "140.6:raindrop",
+    "155.9:spore_shot",
+    "173.5:area",
+    "195.0:dew_ring",
+    "210.8:dew_ring",
+    "230.4:dew_ring",
+    "243.5:cooldown",
+    "265.6:regen",
+    "295.0:spore_shot",
+    "310.4:spore_shot",
+    "329.8:umbrella_blades",
+    "344.0:umbrella_blades",
+    "362.4:umbrella_blades",
+    "386.2:raindrop",
+    "415.9:umbrella_blades",
+    "420.7:might",
+    "421.0:might",
+    "443.8:area",
+    "450.1:raindrop"
+   ],
+   "weapons": [
+    {
+     "id": "spore_shot",
+     "level": 5,
+     "evolved": false
+    },
+    {
+     "id": "dew_ring",
+     "level": 5,
+     "evolved": false
+    },
+    {
+     "id": "umbrella_blades",
+     "level": 5,
+     "evolved": false
+    },
+    {
+     "id": "raindrop",
+     "level": 5,
+     "evolved": false
+    }
+   ],
+   "passives": [
+    {
+     "id": "might",
+     "level": 3
+    },
+    {
+     "id": "area",
+     "level": 2
+    },
+    {
+     "id": "cooldown",
+     "level": 1
+    },
+    {
+     "id": "regen",
+     "level": 1
+    }
+   ],
+   "spawned": 1531,
+   "purifiedCombat": 1514,
+   "purifiedCleansing": 11,
+   "spawnedPreBoss": 1306,
+   "purifiedPreBoss": 1191,
+   "xpDropped": 3170,
+   "xpBanked": 3113,
+   "capSkipped": {
+    "enemies": 17,
+    "pickups": 0
+   },
+   "dropped": {
+    "enemies": 0,
+    "shots": 0,
+    "bubbles": 0,
+    "zones": 0,
+    "pickups": 0
+   },
+   "droppedTime": 0,
+   "hpAtBossSpawn": 230,
+   "hpAtBossDefeat": 250,
+   "evolveOffered": 0,
+   "evolveFirstOfferSec": null,
+   "evolutions": [],
+   "eliteSpawnSec": 300.0166666667225,
+   "eliteDefeatSec": 419.56666666661374,
+   "drops": {
+    "dew": {
+     "spawned": 11,
+     "picked": 9,
+     "heal": 29.00000000000003
+    },
+    "bigDew": {
+     "spawned": 1,
+     "picked": 1,
+     "heal": 0
+    },
+    "wind": {
+     "spawned": 5,
+     "picked": 4,
+     "xp": 870
+    }
+   },
+   "regenHeal": 25.79999999999994,
+   "maxPickupRadius": 168,
+   "minutes": [
+    {
+     "enemies": 11.583333333333334,
+     "purified": 60,
+     "hurt": 0
+    },
+    {
+     "enemies": 15.416666666666666,
+     "purified": 99,
+     "hurt": 0
+    },
+    {
+     "enemies": 26.15,
+     "purified": 167,
+     "hurt": 2
+    },
+    {
+     "enemies": 35.416666666666664,
+     "purified": 181,
+     "hurt": 0
+    },
+    {
+     "enemies": 49.45,
+     "purified": 187,
+     "hurt": 1
+    },
+    {
+     "enemies": 71.35,
+     "purified": 216,
+     "hurt": 4
+    },
+    {
+     "enemies": 97.43333333333334,
+     "purified": 281,
+     "hurt": 1
+    },
+    {
+     "enemies": 41.81666666666667,
+     "purified": 252,
+     "hurt": 2
+    }
+   ],
+   "finalHp": 250,
+   "dropsUnseen": 0,
+   "config": "保守逃跑·偏好露珠环"
+  },
+  {
+   "seed": "balance-1",
+   "move": "flee",
+   "pick": "prefer:dew_ring",
+   "ruleset": "xianxia",
+   "outcome": "lost",
+   "survivalSec": 516.6833333331921,
+   "killer": "gnat",
+   "level": 12,
+   "levelAt": {
+    "60": 5,
+    "180": 6,
+    "300": 8,
+    "420": 9
+   },
+   "firstLevelUpSec": 12.116666666666848,
+   "bossSpawnSec": 420.03333333328,
+   "bossLevel": 9,
+   "bossDefeatSec": null,
+   "extractOpenSec": null,
+   "wonSec": null,
+   "offered": {
+    "umbrella_blades": 6,
+    "area": 3,
+    "speed": 3,
+    "magnet": 2,
+    "dew_ring": 5,
+    "cooldown": 2,
+    "regen": 2,
+    "leaf_boomerang": 4,
+    "spore_shot": 5,
+    "might": 1
+   },
+   "picked": {
+    "umbrella_blades": 2,
+    "dew_ring": 5,
+    "cooldown": 1,
+    "leaf_boomerang": 1,
+    "spore_shot": 2
+   },
+   "picks": [
+    "12.1:umbrella_blades",
+    "21.5:dew_ring",
+    "37.0:cooldown",
+    "59.5:dew_ring",
+    "122.4:umbrella_blades",
+    "207.1:dew_ring",
+    "297.4:dew_ring",
+    "346.7:leaf_boomerang",
+    "423.2:spore_shot",
+    "425.4:spore_shot",
+    "497.3:dew_ring"
+   ],
+   "weapons": [
+    {
+     "id": "spore_shot",
+     "level": 3,
+     "evolved": false
+    },
+    {
+     "id": "umbrella_blades",
+     "level": 2,
+     "evolved": false
+    },
+    {
+     "id": "dew_ring",
+     "level": 5,
+     "evolved": false
+    },
+    {
+     "id": "leaf_boomerang",
+     "level": 1,
+     "evolved": false
+    }
+   ],
+   "passives": [
+    {
+     "id": "cooldown",
+     "level": 1
+    }
+   ],
+   "spawned": 580,
+   "purifiedCombat": 403,
+   "purifiedCleansing": 0,
+   "spawnedPreBoss": 436,
+   "purifiedPreBoss": 250,
+   "xpDropped": 562,
+   "xpBanked": 497,
+   "capSkipped": {
+    "enemies": 1015,
+    "pickups": 0
+   },
+   "dropped": {
+    "enemies": 0,
+    "shots": 0,
+    "bubbles": 0,
+    "zones": 0,
+    "pickups": 0
+   },
+   "droppedTime": 0,
+   "hpAtBossSpawn": 70.33999999999999,
+   "hpAtBossDefeat": null,
+   "evolveOffered": 0,
+   "evolveFirstOfferSec": null,
+   "evolutions": [],
+   "eliteSpawnSec": 300.0166666667225,
+   "eliteDefeatSec": null,
+   "drops": {
+    "dew": {
+     "spawned": 2,
+     "picked": 2,
+     "heal": 0
+    },
+    "bigDew": {
+     "spawned": 0,
+     "picked": 0,
+     "heal": 0
+    },
+    "wind": {
+     "spawned": 0,
+     "picked": 0,
+     "xp": 0
+    }
+   },
+   "regenHeal": 0,
+   "maxPickupRadius": 154,
+   "minutes": [
+    {
+     "enemies": 11.7,
+     "purified": 59,
+     "hurt": 0
+    },
+    {
+     "enemies": 36.85,
+     "purified": 57,
+     "hurt": 0
+    },
+    {
+     "enemies": 77.38333333333334,
+     "purified": 40,
+     "hurt": 1
+    },
+    {
+     "enemies": 107.73333333333333,
+     "purified": 20,
+     "hurt": 0
+    },
+    {
+     "enemies": 139.53333333333333,
+     "purified": 22,
+     "hurt": 0
+    },
+    {
+     "enemies": 158.63333333333333,
+     "purified": 42,
+     "hurt": 4
+    },
+    {
+     "enemies": 166.18333333333334,
+     "purified": 10,
+     "hurt": 0
+    },
+    {
+     "enemies": 117.2,
+     "purified": 106,
+     "hurt": 7
+    }
+   ],
+   "finalHp": 0,
+   "dropsUnseen": 0,
+   "config": "保守逃跑·偏好露珠环"
+  },
+  {
+   "seed": "balance-0",
+   "move": "flee",
+   "pick": "prefer:raindrop",
+   "ruleset": "xianxia",
+   "outcome": "won",
+   "survivalSec": 452.7833333332502,
+   "killer": "",
+   "level": 26,
+   "levelAt": {
+    "60": 5,
+    "180": 11,
+    "300": 18,
+    "420": 26
+   },
+   "firstLevelUpSec": 13.016666666666893,
+   "bossSpawnSec": 420.03333333328,
+   "bossLevel": 26,
+   "bossDefeatSec": 448.2833333332543,
+   "extractOpenSec": 449.7833333332529,
+   "wonSec": 452.7833333332502,
+   "offered": {
+    "leaf_boomerang": 10,
+    "area": 8,
+    "dew_ring": 1,
+    "cooldown": 11,
+    "umbrella_blades": 6,
+    "regen": 4,
+    "might": 9,
+    "raindrop": 5,
+    "spore_shot": 9,
+    "magnet": 5,
+    "speed": 6,
+    "evo:raindrop": 1
+   },
+   "picked": {
+    "leaf_boomerang": 5,
+    "umbrella_blades": 3,
+    "might": 3,
+    "raindrop": 5,
+    "cooldown": 1,
+    "spore_shot": 4,
+    "area": 2,
+    "speed": 1,
+    "evo:raindrop": 1
+   },
+   "picks": [
+    "13.0:leaf_boomerang",
+    "22.0:umbrella_blades",
+    "37.2:might",
+    "53.0:raindrop",
+    "74.4:raindrop",
+    "91.4:raindrop",
+    "119.6:raindrop",
+    "136.0:raindrop",
+    "153.4:cooldown",
+    "167.5:umbrella_blades",
+    "191.4:spore_shot",
+    "207.9:leaf_boomerang",
+    "223.4:area",
+    "244.7:area",
+    "262.8:speed",
+    "277.8:spore_shot",
+    "293.2:spore_shot",
+    "307.6:spore_shot",
+    "330.4:leaf_boomerang",
+    "345.5:leaf_boomerang",
+    "360.1:umbrella_blades",
+    "370.6:leaf_boomerang",
+    "389.9:might",
+    "403.6:might",
+    "419.1:evo:raindrop"
+   ],
+   "weapons": [
+    {
+     "id": "spore_shot",
+     "level": 5,
+     "evolved": false
+    },
+    {
+     "id": "leaf_boomerang",
+     "level": 5,
+     "evolved": false
+    },
+    {
+     "id": "umbrella_blades",
+     "level": 3,
+     "evolved": false
+    },
+    {
+     "id": "raindrop",
+     "level": 5,
+     "evolved": true
+    }
+   ],
+   "passives": [
+    {
+     "id": "might",
+     "level": 3
+    },
+    {
+     "id": "cooldown",
+     "level": 1
+    },
+    {
+     "id": "area",
+     "level": 2
+    },
+    {
+     "id": "speed",
+     "level": 1
+    }
+   ],
+   "spawned": 1384,
+   "purifiedCombat": 1368,
+   "purifiedCleansing": 11,
+   "spawnedPreBoss": 1306,
+   "purifiedPreBoss": 1250,
+   "xpDropped": 2977,
+   "xpBanked": 2804,
+   "capSkipped": {
+    "enemies": 0,
+    "pickups": 0
+   },
+   "dropped": {
+    "enemies": 0,
+    "shots": 0,
+    "bubbles": 0,
+    "zones": 0,
+    "pickups": 0
+   },
+   "droppedTime": 0,
+   "hpAtBossSpawn": 245,
+   "hpAtBossDefeat": 207.4,
+   "evolveOffered": 1,
+   "evolveFirstOfferSec": 419.14999999994745,
+   "evolutions": [
+    {
+     "id": "raindrop",
+     "t": 419.14999999994745
+    }
+   ],
+   "eliteSpawnSec": 300.0166666667225,
+   "eliteDefeatSec": 362.4166666666657,
+   "drops": {
+    "dew": {
+     "spawned": 10,
+     "picked": 7,
+     "heal": 0
+    },
+    "bigDew": {
+     "spawned": 1,
+     "picked": 1,
+     "heal": 8.699999999999989
+    },
+    "wind": {
+     "spawned": 4,
+     "picked": 3,
+     "xp": 137
+    }
+   },
+   "regenHeal": 0,
+   "maxPickupRadius": 168,
+   "minutes": [
+    {
+     "enemies": 10.266666666666667,
+     "purified": 70,
+     "hurt": 0
+    },
+    {
+     "enemies": 13.85,
+     "purified": 88,
+     "hurt": 0
+    },
+    {
+     "enemies": 20.6,
+     "purified": 170,
+     "hurt": 0
+    },
+    {
+     "enemies": 27.533333333333335,
+     "purified": 186,
+     "hurt": 0
+    },
+    {
+     "enemies": 35.36666666666667,
+     "purified": 204,
+     "hurt": 0
+    },
+    {
+     "enemies": 50.233333333333334,
+     "purified": 232,
+     "hurt": 1
+    },
+    {
+     "enemies": 56.88333333333333,
+     "purified": 300,
+     "hurt": 0
+    }
+   ],
+   "finalHp": 222.4,
+   "dropsUnseen": 0,
+   "config": "保守逃跑·偏好雨滴坠击"
+  },
+  {
+   "seed": "balance-1",
+   "move": "flee",
+   "pick": "prefer:raindrop",
+   "ruleset": "xianxia",
+   "outcome": "lost",
+   "survivalSec": 434.96666666659974,
+   "killer": "mist_bubble",
+   "level": 9,
+   "levelAt": {
+    "60": 5,
+    "180": 6,
+    "300": 7,
+    "420": 9
+   },
+   "firstLevelUpSec": 12.116666666666848,
+   "bossSpawnSec": 420.03333333328,
+   "bossLevel": 9,
+   "bossDefeatSec": null,
+   "extractOpenSec": null,
+   "wonSec": null,
+   "offered": {
+    "umbrella_blades": 4,
+    "area": 3,
+    "speed": 2,
+    "magnet": 2,
+    "dew_ring": 3,
+    "cooldown": 3,
+    "regen": 2,
+    "might": 2,
+    "spore_shot": 2,
+    "raindrop": 1
+   },
+   "picked": {
+    "umbrella_blades": 2,
+    "dew_ring": 1,
+    "cooldown": 1,
+    "area": 1,
+    "might": 1,
+    "spore_shot": 1,
+    "raindrop": 1
+   },
+   "picks": [
+    "12.1:umbrella_blades",
+    "21.5:dew_ring",
+    "37.0:cooldown",
+    "59.5:area",
+    "118.4:umbrella_blades",
+    "191.7:might",
+    "307.8:spore_shot",
+    "393.2:raindrop"
+   ],
+   "weapons": [
+    {
+     "id": "spore_shot",
+     "level": 2,
+     "evolved": false
+    },
+    {
+     "id": "umbrella_blades",
+     "level": 2,
+     "evolved": false
+    },
+    {
+     "id": "dew_ring",
+     "level": 1,
+     "evolved": false
+    },
+    {
+     "id": "raindrop",
+     "level": 1,
+     "evolved": false
+    }
+   ],
+   "passives": [
+    {
+     "id": "cooldown",
+     "level": 1
+    },
+    {
+     "id": "area",
+     "level": 1
+    },
+    {
+     "id": "might",
+     "level": 1
+    }
+   ],
+   "spawned": 525,
+   "purifiedCombat": 372,
+   "purifiedCleansing": 0,
+   "spawnedPreBoss": 513,
+   "purifiedPreBoss": 337,
+   "xpDropped": 494,
+   "xpBanked": 282,
+   "capSkipped": {
+    "enemies": 815,
+    "pickups": 0
+   },
+   "dropped": {
+    "enemies": 0,
+    "shots": 0,
+    "bubbles": 0,
+    "zones": 0,
+    "pickups": 0
+   },
+   "droppedTime": 0,
+   "hpAtBossSpawn": 76.525,
+   "hpAtBossDefeat": null,
+   "evolveOffered": 0,
+   "evolveFirstOfferSec": null,
+   "evolutions": [],
+   "eliteSpawnSec": 300.0166666667225,
+   "eliteDefeatSec": null,
+   "drops": {
+    "dew": {
+     "spawned": 2,
+     "picked": 2,
+     "heal": 0
+    },
+    "bigDew": {
+     "spawned": 0,
+     "picked": 0,
+     "heal": 0
+    },
+    "wind": {
+     "spawned": 0,
+     "picked": 0,
+     "xp": 0
+    }
+   },
+   "regenHeal": 0,
+   "maxPickupRadius": 140,
+   "minutes": [
+    {
+     "enemies": 11.7,
+     "purified": 59,
+     "hurt": 0
+    },
+    {
+     "enemies": 36.86666666666667,
+     "purified": 55,
+     "hurt": 0
+    },
+    {
+     "enemies": 77.03333333333333,
+     "purified": 45,
+     "hurt": 0
+    },
+    {
+     "enemies": 107.8,
+     "purified": 22,
+     "hurt": 0
+    },
+    {
+     "enemies": 140.01666666666668,
+     "purified": 16,
+     "hurt": 1
+    },
+    {
+     "enemies": 159.28333333333333,
+     "purified": 24,
+     "hurt": 1
+    },
+    {
+     "enemies": 153.83333333333334,
+     "purified": 116,
+     "hurt": 3
+    }
+   ],
+   "finalHp": 0,
+   "dropsUnseen": 0,
+   "config": "保守逃跑·偏好雨滴坠击"
+  },
+  {
+   "seed": "balance-0",
+   "move": "flee",
+   "pick": "prefer:leaf_boomerang",
+   "ruleset": "xianxia",
+   "outcome": "lost",
+   "survivalSec": 423.9499999999431,
+   "killer": "snail",
+   "level": 18,
+   "levelAt": {
+    "60": 5,
+    "180": 9,
+    "300": 13,
+    "420": 16
+   },
+   "firstLevelUpSec": 13.016666666666893,
+   "bossSpawnSec": 420.03333333328,
+   "bossLevel": 16,
+   "bossDefeatSec": null,
+   "extractOpenSec": null,
+   "wonSec": null,
+   "offered": {
+    "leaf_boomerang": 5,
+    "area": 2,
+    "dew_ring": 7,
+    "cooldown": 6,
+    "umbrella_blades": 6,
+    "regen": 4,
+    "might": 5,
+    "spore_shot": 8,
+    "magnet": 5,
+    "speed": 3
+   },
+   "picked": {
+    "leaf_boomerang": 5,
+    "umbrella_blades": 2,
+    "spore_shot": 4,
+    "dew_ring": 2,
+    "speed": 1,
+    "cooldown": 1,
+    "might": 1,
+    "regen": 1
+   },
+   "picks": [
+    "13.0:leaf_boomerang",
+    "22.0:umbrella_blades",
+    "37.2:leaf_boomerang",
+    "53.0:spore_shot",
+    "76.9:dew_ring",
+    "99.6:dew_ring",
+    "129.4:spore_shot",
+    "152.6:speed",
+    "202.5:spore_shot",
+    "230.3:cooldown",
+    "233.1:leaf_boomerang",
+    "276.7:leaf_boomerang",
+    "341.2:leaf_boomerang",
+    "372.3:might",
+    "396.2:regen",
+    "421.7:spore_shot",
+    "423.9:umbrella_blades"
+   ],
+   "weapons": [
+    {
+     "id": "spore_shot",
+     "level": 5,
+     "evolved": false
+    },
+    {
+     "id": "leaf_boomerang",
+     "level": 5,
+     "evolved": false
+    },
+    {
+     "id": "umbrella_blades",
+     "level": 2,
+     "evolved": false
+    },
+    {
+     "id": "dew_ring",
+     "level": 2,
+     "evolved": false
+    }
+   ],
+   "passives": [
+    {
+     "id": "speed",
+     "level": 1
+    },
+    {
+     "id": "cooldown",
+     "level": 1
+    },
+    {
+     "id": "might",
+     "level": 1
+    },
+    {
+     "id": "regen",
+     "level": 1
+    }
+   ],
+   "spawned": 842,
+   "purifiedCombat": 720,
+   "purifiedCleansing": 0,
+   "spawnedPreBoss": 842,
+   "purifiedPreBoss": 666,
+   "xpDropped": 1281,
+   "xpBanked": 1119,
+   "capSkipped": {
+    "enemies": 469,
+    "pickups": 0
+   },
+   "dropped": {
+    "enemies": 0,
+    "shots": 0,
+    "bubbles": 0,
+    "zones": 0,
+    "pickups": 0
+   },
+   "droppedTime": 0,
+   "hpAtBossSpawn": 85.42000000000006,
+   "hpAtBossDefeat": null,
+   "evolveOffered": 0,
+   "evolveFirstOfferSec": null,
+   "evolutions": [],
+   "eliteSpawnSec": 300.0166666667225,
+   "eliteDefeatSec": null,
+   "drops": {
+    "dew": {
+     "spawned": 6,
+     "picked": 4,
+     "heal": 0
+    },
+    "bigDew": {
+     "spawned": 0,
+     "picked": 0,
+     "heal": 0
+    },
+    "wind": {
+     "spawned": 1,
+     "picked": 1,
+     "xp": 114
+    }
+   },
+   "regenHeal": 5.400000000000002,
+   "maxPickupRadius": 154,
+   "minutes": [
+    {
+     "enemies": 10.683333333333334,
+     "purified": 66,
+     "hurt": 0
+    },
+    {
+     "enemies": 19.666666666666668,
+     "purified": 81,
+     "hurt": 0
+    },
+    {
+     "enemies": 59.46666666666667,
+     "purified": 104,
+     "hurt": 0
+    },
+    {
+     "enemies": 104.9,
+     "purified": 115,
+     "hurt": 0
+    },
+    {
+     "enemies": 131.45,
+     "purified": 110,
+     "hurt": 0
+    },
+    {
+     "enemies": 158.71666666666667,
+     "purified": 80,
+     "hurt": 1
+    },
+    {
+     "enemies": 159.78333333333333,
+     "purified": 110,
+     "hurt": 4
+    }
+   ],
+   "finalHp": 0,
+   "dropsUnseen": 0,
+   "config": "保守逃跑·偏好落叶回旋镖"
+  },
+  {
+   "seed": "balance-1",
+   "move": "flee",
+   "pick": "prefer:leaf_boomerang",
+   "ruleset": "xianxia",
+   "outcome": "lost",
+   "survivalSec": 439.04999999992935,
+   "killer": "mist_bubble",
+   "level": 11,
+   "levelAt": {
+    "60": 5,
+    "180": 7,
+    "300": 9,
+    "420": 11
+   },
+   "firstLevelUpSec": 12.116666666666848,
+   "bossSpawnSec": 420.03333333328,
+   "bossLevel": 11,
+   "bossDefeatSec": null,
+   "extractOpenSec": null,
+   "wonSec": null,
+   "offered": {
+    "umbrella_blades": 5,
+    "area": 6,
+    "speed": 2,
+    "magnet": 2,
+    "dew_ring": 3,
+    "cooldown": 4,
+    "regen": 1,
+    "leaf_boomerang": 2,
+    "might": 1,
+    "spore_shot": 4
+   },
+   "picked": {
+    "umbrella_blades": 1,
+    "dew_ring": 1,
+    "cooldown": 1,
+    "area": 1,
+    "speed": 1,
+    "leaf_boomerang": 2,
+    "spore_shot": 3
+   },
+   "picks": [
+    "12.1:umbrella_blades",
+    "21.5:dew_ring",
+    "37.0:cooldown",
+    "59.5:area",
+    "118.4:speed",
+    "153.2:leaf_boomerang",
+    "200.6:leaf_boomerang",
+    "287.4:spore_shot",
+    "359.8:spore_shot",
+    "393.5:spore_shot"
+   ],
+   "weapons": [
+    {
+     "id": "spore_shot",
+     "level": 4,
+     "evolved": false
+    },
+    {
+     "id": "umbrella_blades",
+     "level": 1,
+     "evolved": false
+    },
+    {
+     "id": "dew_ring",
+     "level": 1,
+     "evolved": false
+    },
+    {
+     "id": "leaf_boomerang",
+     "level": 2,
+     "evolved": false
+    }
+   ],
+   "passives": [
+    {
+     "id": "cooldown",
+     "level": 1
+    },
+    {
+     "id": "area",
+     "level": 1
+    },
+    {
+     "id": "speed",
+     "level": 1
+    }
+   ],
+   "spawned": 578,
+   "purifiedCombat": 394,
+   "purifiedCleansing": 0,
+   "spawnedPreBoss": 554,
+   "purifiedPreBoss": 378,
+   "xpDropped": 571,
+   "xpBanked": 423,
+   "capSkipped": {
+    "enemies": 780,
+    "pickups": 0
+   },
+   "dropped": {
+    "enemies": 0,
+    "shots": 0,
+    "bubbles": 0,
+    "zones": 0,
+    "pickups": 0
+   },
+   "droppedTime": 0,
+   "hpAtBossSpawn": 131.92000000000002,
+   "hpAtBossDefeat": null,
+   "evolveOffered": 0,
+   "evolveFirstOfferSec": null,
+   "evolutions": [],
+   "eliteSpawnSec": 300.0166666667225,
+   "eliteDefeatSec": null,
+   "drops": {
+    "dew": {
+     "spawned": 2,
+     "picked": 2,
+     "heal": 0
+    },
+    "bigDew": {
+     "spawned": 0,
+     "picked": 0,
+     "heal": 0
+    },
+    "wind": {
+     "spawned": 0,
+     "picked": 0,
+     "xp": 0
+    }
+   },
+   "regenHeal": 0,
+   "maxPickupRadius": 154,
+   "minutes": [
+    {
+     "enemies": 11.7,
+     "purified": 59,
+     "hurt": 0
+    },
+    {
+     "enemies": 36.86666666666667,
+     "purified": 55,
+     "hurt": 0
+    },
+    {
+     "enemies": 75.93333333333334,
+     "purified": 63,
+     "hurt": 1
+    },
+    {
+     "enemies": 104.98333333333333,
+     "purified": 58,
+     "hurt": 0
+    },
+    {
+     "enemies": 138.81666666666666,
+     "purified": 35,
+     "hurt": 0
+    },
+    {
+     "enemies": 158.75,
+     "purified": 43,
+     "hurt": 2
+    },
+    {
+     "enemies": 160.36666666666667,
+     "purified": 65,
+     "hurt": 2
+    }
+   ],
+   "finalHp": 0,
+   "dropsUnseen": 0,
+   "config": "保守逃跑·偏好落叶回旋镖"
+  },
+  {
+   "seed": "balance-0",
+   "move": "spore",
+   "pick": "random",
+   "ruleset": "xianxia",
+   "outcome": "won",
+   "survivalSec": 460.9333333332428,
+   "killer": "",
+   "level": 27,
+   "levelAt": {
+    "60": 5,
+    "180": 11,
+    "300": 18,
+    "420": 26
+   },
+   "firstLevelUpSec": 11.250000000000139,
+   "bossSpawnSec": 420.03333333328,
+   "bossLevel": 26,
+   "bossDefeatSec": 456.3666666665803,
+   "extractOpenSec": 457.8666666665789,
+   "wonSec": 460.9333333332428,
+   "offered": {
+    "leaf_boomerang": 11,
+    "area": 9,
+    "dew_ring": 10,
+    "cooldown": 6,
+    "umbrella_blades": 1,
+    "regen": 2,
+    "raindrop": 10,
+    "spore_shot": 8,
+    "magnet": 10,
+    "might": 9,
+    "speed": 1,
+    "evo:spore_shot": 1
+   },
+   "picked": {
+    "leaf_boomerang": 2,
+    "cooldown": 4,
+    "raindrop": 4,
+    "dew_ring": 3,
+    "might": 2,
+    "spore_shot": 4,
+    "area": 4,
+    "magnet": 2,
+    "evo:spore_shot": 1
+   },
+   "picks": [
+    "11.3:leaf_boomerang",
+    "20.4:cooldown",
+    "36.5:raindrop",
+    "51.8:dew_ring",
+    "73.9:might",
+    "93.6:cooldown",
+    "111.8:cooldown",
+    "137.7:spore_shot",
+    "152.5:cooldown",
+    "164.5:area",
+    "184.0:spore_shot",
+    "207.0:might",
+    "222.2:dew_ring",
+    "238.8:magnet",
+    "259.6:spore_shot",
+    "278.8:magnet",
+    "294.4:spore_shot",
+    "309.1:area",
+    "324.7:area",
+    "340.5:dew_ring",
+    "358.7:area",
+    "373.0:evo:spore_shot",
+    "389.3:raindrop",
+    "402.2:raindrop",
+    "415.7:raindrop",
+    "448.9:leaf_boomerang"
+   ],
+   "weapons": [
+    {
+     "id": "spore_shot",
+     "level": 5,
+     "evolved": true
+    },
+    {
+     "id": "leaf_boomerang",
+     "level": 2,
+     "evolved": false
+    },
+    {
+     "id": "raindrop",
+     "level": 4,
+     "evolved": false
+    },
+    {
+     "id": "dew_ring",
+     "level": 3,
+     "evolved": false
+    }
+   ],
+   "passives": [
+    {
+     "id": "cooldown",
+     "level": 4
+    },
+    {
+     "id": "might",
+     "level": 2
+    },
+    {
+     "id": "area",
+     "level": 4
+    },
+    {
+     "id": "magnet",
+     "level": 2
+    }
+   ],
+   "spawned": 1408,
+   "purifiedCombat": 1389,
+   "purifiedCleansing": 6,
+   "spawnedPreBoss": 1306,
+   "purifiedPreBoss": 1248,
+   "xpDropped": 3004,
+   "xpBanked": 2922,
+   "capSkipped": {
+    "enemies": 0,
+    "pickups": 0
+   },
+   "dropped": {
+    "enemies": 0,
+    "shots": 0,
+    "bubbles": 0,
+    "zones": 0,
+    "pickups": 0
+   },
+   "droppedTime": 0,
+   "hpAtBossSpawn": 235.4,
+   "hpAtBossDefeat": 222.9,
+   "evolveOffered": 1,
+   "evolveFirstOfferSec": 373.0166666666561,
+   "evolutions": [
+    {
+     "id": "spore_shot",
+     "t": 373.0166666666561
+    }
+   ],
+   "eliteSpawnSec": 300.0166666667225,
+   "eliteDefeatSec": 372.91666666665617,
+   "drops": {
+    "dew": {
+     "spawned": 10,
+     "picked": 9,
+     "heal": 5.274999999999949
+    },
+    "bigDew": {
+     "spawned": 1,
+     "picked": 1,
+     "heal": 50
+    },
+    "wind": {
+     "spawned": 4,
+     "picked": 4,
+     "xp": 59
+    }
+   },
+   "regenHeal": 0,
+   "maxPickupRadius": 235.2,
+   "minutes": [
+    {
+     "enemies": 9.266666666666667,
+     "purified": 70,
+     "hurt": 0
+    },
+    {
+     "enemies": 13.733333333333333,
+     "purified": 92,
+     "hurt": 0
+    },
+    {
+     "enemies": 23.833333333333332,
+     "purified": 167,
+     "hurt": 0
+    },
+    {
+     "enemies": 32.733333333333334,
+     "purified": 181,
+     "hurt": 0
+    },
+    {
+     "enemies": 45.766666666666666,
+     "purified": 196,
+     "hurt": 2
+    },
+    {
+     "enemies": 50.666666666666664,
+     "purified": 232,
+     "hurt": 5
+    },
+    {
+     "enemies": 48.516666666666666,
+     "purified": 310,
+     "hurt": 2
+    }
+   ],
+   "finalHp": 237.9,
+   "dropsUnseen": 0,
+   "config": "贴孢子·随机选卡"
+  },
+  {
+   "seed": "balance-1",
+   "move": "spore",
+   "pick": "random",
+   "ruleset": "xianxia",
+   "outcome": "lost",
+   "survivalSec": 428.6833333332721,
+   "killer": "beetle",
+   "level": 15,
+   "levelAt": {
+    "60": 5,
+    "180": 8,
+    "300": 11,
+    "420": 15
+   },
+   "firstLevelUpSec": 11.466666666666816,
+   "bossSpawnSec": 420.03333333328,
+   "bossLevel": 15,
+   "bossDefeatSec": null,
+   "extractOpenSec": null,
+   "wonSec": null,
+   "offered": {
+    "umbrella_blades": 6,
+    "area": 1,
+    "speed": 5,
+    "magnet": 4,
+    "leaf_boomerang": 6,
+    "cooldown": 5,
+    "might": 2,
+    "regen": 5,
+    "dew_ring": 2,
+    "spore_shot": 6
+   },
+   "picked": {
+    "speed": 3,
+    "magnet": 1,
+    "leaf_boomerang": 2,
+    "regen": 3,
+    "cooldown": 2,
+    "spore_shot": 2,
+    "umbrella_blades": 1
+   },
+   "picks": [
+    "11.5:speed",
+    "20.5:magnet",
+    "37.5:leaf_boomerang",
+    "57.9:regen",
+    "79.3:cooldown",
+    "117.4:speed",
+    "152.7:spore_shot",
+    "192.3:spore_shot",
+    "229.8:regen",
+    "264.2:umbrella_blades",
+    "301.6:leaf_boomerang",
+    "340.5:speed",
+    "366.6:regen",
+    "410.9:cooldown"
+   ],
+   "weapons": [
+    {
+     "id": "spore_shot",
+     "level": 3,
+     "evolved": false
+    },
+    {
+     "id": "leaf_boomerang",
+     "level": 2,
+     "evolved": false
+    },
+    {
+     "id": "umbrella_blades",
+     "level": 1,
+     "evolved": false
+    }
+   ],
+   "passives": [
+    {
+     "id": "speed",
+     "level": 3
+    },
+    {
+     "id": "magnet",
+     "level": 1
+    },
+    {
+     "id": "regen",
+     "level": 3
+    },
+    {
+     "id": "cooldown",
+     "level": 2
+    }
+   ],
+   "spawned": 729,
+   "purifiedCombat": 543,
+   "purifiedCleansing": 0,
+   "spawnedPreBoss": 717,
+   "purifiedPreBoss": 543,
+   "xpDropped": 804,
+   "xpBanked": 768,
+   "capSkipped": {
+    "enemies": 602,
+    "pickups": 0
+   },
+   "dropped": {
+    "enemies": 0,
+    "shots": 0,
+    "bubbles": 0,
+    "zones": 0,
+    "pickups": 0
+   },
+   "droppedTime": 0,
+   "hpAtBossSpawn": 34.317500000000365,
+   "hpAtBossDefeat": null,
+   "evolveOffered": 0,
+   "evolveFirstOfferSec": null,
+   "evolutions": [],
+   "eliteSpawnSec": 300.0166666667225,
+   "eliteDefeatSec": null,
+   "drops": {
+    "dew": {
+     "spawned": 2,
+     "picked": 2,
+     "heal": 0
+    },
+    "bigDew": {
+     "spawned": 0,
+     "picked": 0,
+     "heal": 0
+    },
+    "wind": {
+     "spawned": 0,
+     "picked": 0,
+     "xp": 0
+    }
+   },
+   "regenHeal": 90.59999999999962,
+   "maxPickupRadius": 184.79999999999998,
+   "minutes": [
+    {
+     "enemies": 12.816666666666666,
+     "purified": 59,
+     "hurt": 0
+    },
+    {
+     "enemies": 29.033333333333335,
+     "purified": 68,
+     "hurt": 0
+    },
+    {
+     "enemies": 76.91666666666667,
+     "purified": 64,
+     "hurt": 4
+    },
+    {
+     "enemies": 104.5,
+     "purified": 89,
+     "hurt": 1
+    },
+    {
+     "enemies": 137.1,
+     "purified": 83,
+     "hurt": 4
+    },
+    {
+     "enemies": 156.75,
+     "purified": 105,
+     "hurt": 4
+    },
+    {
+     "enemies": 162.2,
+     "purified": 75,
+     "hurt": 7
+    }
+   ],
+   "finalHp": 0,
+   "dropsUnseen": 0,
+   "config": "贴孢子·随机选卡"
+  },
+  {
+   "seed": "balance-0",
+   "move": "spore",
+   "pick": "prefer:spore_shot",
+   "ruleset": "xianxia",
+   "outcome": "won",
+   "survivalSec": 494.04999999987933,
+   "killer": "",
+   "level": 27,
+   "levelAt": {
+    "60": 5,
+    "180": 11,
+    "300": 18,
+    "420": 26
+   },
+   "firstLevelUpSec": 11.250000000000139,
+   "bossSpawnSec": 420.03333333328,
+   "bossLevel": 26,
+   "bossDefeatSec": 489.5499999998834,
+   "extractOpenSec": 491.04999999988206,
+   "wonSec": 494.04999999987933,
+   "offered": {
+    "leaf_boomerang": 7,
+    "area": 2,
+    "dew_ring": 10,
+    "cooldown": 10,
+    "umbrella_blades": 10,
+    "regen": 11,
+    "might": 10,
+    "spore_shot": 4,
+    "magnet": 5,
+    "speed": 8,
+    "evo:spore_shot": 1
+   },
+   "picked": {
+    "leaf_boomerang": 5,
+    "umbrella_blades": 5,
+    "spore_shot": 4,
+    "dew_ring": 5,
+    "cooldown": 3,
+    "regen": 1,
+    "might": 1,
+    "speed": 1,
+    "evo:spore_shot": 1
+   },
+   "picks": [
+    "11.3:leaf_boomerang",
+    "20.4:umbrella_blades",
+    "32.8:leaf_boomerang",
+    "51.3:spore_shot",
+    "75.1:dew_ring",
+    "93.2:spore_shot",
+    "113.8:spore_shot",
+    "135.2:spore_shot",
+    "152.0:cooldown",
+    "165.6:regen",
+    "187.4:leaf_boomerang",
+    "206.6:umbrella_blades",
+    "223.1:umbrella_blades",
+    "242.1:might",
+    "261.0:speed",
+    "276.3:leaf_boomerang",
+    "295.3:leaf_boomerang",
+    "311.4:umbrella_blades",
+    "328.7:umbrella_blades",
+    "342.8:dew_ring",
+    "356.5:dew_ring",
+    "374.0:dew_ring",
+    "390.5:cooldown",
+    "405.7:cooldown",
+    "416.6:evo:spore_shot",
+    "450.4:dew_ring"
+   ],
+   "weapons": [
+    {
+     "id": "spore_shot",
+     "level": 5,
+     "evolved": true
+    },
+    {
+     "id": "leaf_boomerang",
+     "level": 5,
+     "evolved": false
+    },
+    {
+     "id": "umbrella_blades",
+     "level": 5,
+     "evolved": false
+    },
+    {
+     "id": "dew_ring",
+     "level": 5,
+     "evolved": false
+    }
+   ],
+   "passives": [
+    {
+     "id": "cooldown",
+     "level": 3
+    },
+    {
+     "id": "regen",
+     "level": 1
+    },
+    {
+     "id": "might",
+     "level": 1
+    },
+    {
+     "id": "speed",
+     "level": 1
+    }
+   ],
+   "spawned": 1506,
+   "purifiedCombat": 1486,
+   "purifiedCleansing": 8,
+   "spawnedPreBoss": 1306,
+   "purifiedPreBoss": 1239,
+   "xpDropped": 3142,
+   "xpBanked": 3118,
+   "capSkipped": {
+    "enemies": 0,
+    "pickups": 0
+   },
+   "dropped": {
+    "enemies": 0,
+    "shots": 0,
+    "bubbles": 0,
+    "zones": 0,
+    "pickups": 0
+   },
+   "droppedTime": 0,
+   "hpAtBossSpawn": 227.5999999999999,
+   "hpAtBossDefeat": 250,
+   "evolveOffered": 1,
+   "evolveFirstOfferSec": 416.6166666666164,
+   "evolutions": [
+    {
+     "id": "spore_shot",
+     "t": 416.6166666666164
+    }
+   ],
+   "eliteSpawnSec": 300.0166666667225,
+   "eliteDefeatSec": 342.4166666666839,
+   "drops": {
+    "dew": {
+     "spawned": 11,
+     "picked": 10,
+     "heal": 43.70000000000124
+    },
+    "bigDew": {
+     "spawned": 1,
+     "picked": 1,
+     "heal": 14.00000000000017
+    },
+    "wind": {
+     "spawned": 5,
+     "picked": 4,
+     "xp": 164
+    }
+   },
+   "regenHeal": 31.99999999999992,
+   "maxPickupRadius": 168,
+   "minutes": [
+    {
+     "enemies": 8.866666666666667,
+     "purified": 68,
+     "hurt": 0
+    },
+    {
+     "enemies": 15.4,
+     "purified": 91,
+     "hurt": 0
+    },
+    {
+     "enemies": 22.416666666666668,
+     "purified": 168,
+     "hurt": 0
+    },
+    {
+     "enemies": 32.68333333333333,
+     "purified": 182,
+     "hurt": 0
+    },
+    {
+     "enemies": 46.38333333333333,
+     "purified": 199,
+     "hurt": 1
+    },
+    {
+     "enemies": 63.06666666666667,
+     "purified": 224,
+     "hurt": 4
+    },
+    {
+     "enemies": 70.41666666666667,
+     "purified": 307,
+     "hurt": 6
+    },
+    {
+     "enemies": 15.733333333333333,
+     "purified": 222,
+     "hurt": 0
+    }
+   ],
+   "finalHp": 250,
+   "dropsUnseen": 0,
+   "config": "贴孢子·偏好孢子弹"
+  },
+  {
+   "seed": "balance-1",
+   "move": "spore",
+   "pick": "prefer:spore_shot",
+   "ruleset": "xianxia",
+   "outcome": "won",
+   "survivalSec": 539.549999999838,
+   "killer": "",
+   "level": 28,
+   "levelAt": {
+    "60": 5,
+    "180": 11,
+    "300": 18,
+    "420": 25
+   },
+   "firstLevelUpSec": 11.466666666666816,
+   "bossSpawnSec": 420.03333333328,
+   "bossLevel": 25,
+   "bossDefeatSec": 534.9833333331754,
+   "extractOpenSec": 536.4833333331741,
+   "wonSec": 539.549999999838,
+   "offered": {
+    "umbrella_blades": 11,
+    "area": 13,
+    "speed": 2,
+    "magnet": 2,
+    "dew_ring": 7,
+    "cooldown": 10,
+    "regen": 16,
+    "might": 7,
+    "spore_shot": 4,
+    "raindrop": 2,
+    "leaf_boomerang": 6,
+    "evo:spore_shot": 1
+   },
+   "picked": {
+    "umbrella_blades": 5,
+    "dew_ring": 5,
+    "cooldown": 3,
+    "area": 2,
+    "regen": 1,
+    "spore_shot": 4,
+    "leaf_boomerang": 5,
+    "might": 1,
+    "evo:spore_shot": 1
+   },
+   "picks": [
+    "11.5:umbrella_blades",
+    "20.6:dew_ring",
+    "32.9:cooldown",
+    "51.7:area",
+    "74.7:umbrella_blades",
+    "92.7:regen",
+    "117.4:spore_shot",
+    "138.1:spore_shot",
+    "153.1:spore_shot",
+    "166.1:spore_shot",
+    "187.1:dew_ring",
+    "205.8:dew_ring",
+    "222.8:leaf_boomerang",
+    "241.2:might",
+    "260.0:dew_ring",
+    "275.5:umbrella_blades",
+    "294.0:area",
+    "313.9:umbrella_blades",
+    "330.2:dew_ring",
+    "346.0:leaf_boomerang",
+    "362.5:leaf_boomerang",
+    "373.0:leaf_boomerang",
+    "392.4:leaf_boomerang",
+    "404.7:umbrella_blades",
+    "423.6:cooldown",
+    "447.3:cooldown",
+    "518.4:evo:spore_shot"
+   ],
+   "weapons": [
+    {
+     "id": "spore_shot",
+     "level": 5,
+     "evolved": true
+    },
+    {
+     "id": "umbrella_blades",
+     "level": 5,
+     "evolved": false
+    },
+    {
+     "id": "dew_ring",
+     "level": 5,
+     "evolved": false
+    },
+    {
+     "id": "leaf_boomerang",
+     "level": 5,
+     "evolved": false
+    }
+   ],
+   "passives": [
+    {
+     "id": "cooldown",
+     "level": 3
+    },
+    {
+     "id": "area",
+     "level": 2
+    },
+    {
+     "id": "regen",
+     "level": 1
+    },
+    {
+     "id": "might",
+     "level": 1
+    }
+   ],
+   "spawned": 1646,
+   "purifiedCombat": 1624,
+   "purifiedCleansing": 8,
+   "spawnedPreBoss": 1306,
+   "purifiedPreBoss": 1228,
+   "xpDropped": 3238,
+   "xpBanked": 3212,
+   "capSkipped": {
+    "enemies": 0,
+    "pickups": 0
+   },
+   "dropped": {
+    "enemies": 0,
+    "shots": 0,
+    "bubbles": 0,
+    "zones": 0,
+    "pickups": 0
+   },
+   "droppedTime": 0,
+   "hpAtBossSpawn": 240,
+   "hpAtBossDefeat": 233.89999999999992,
+   "evolveOffered": 1,
+   "evolveFirstOfferSec": 518.3666666665239,
+   "evolutions": [
+    {
+     "id": "spore_shot",
+     "t": 518.3666666665239
+    }
+   ],
+   "eliteSpawnSec": 300.0166666667225,
+   "eliteDefeatSec": 362.7333333333321,
+   "drops": {
+    "dew": {
+     "spawned": 8,
+     "picked": 8,
+     "heal": 28.712500000001114
+    },
+    "bigDew": {
+     "spawned": 1,
+     "picked": 1,
+     "heal": 9.80000000000041
+    },
+    "wind": {
+     "spawned": 3,
+     "picked": 3,
+     "xp": 11
+    }
+   },
+   "regenHeal": 36.999999999999986,
+   "maxPickupRadius": 168,
+   "minutes": [
+    {
+     "enemies": 8.65,
+     "purified": 68,
+     "hurt": 0
+    },
+    {
+     "enemies": 13.883333333333333,
+     "purified": 90,
+     "hurt": 0
+    },
+    {
+     "enemies": 25.15,
+     "purified": 167,
+     "hurt": 0
+    },
+    {
+     "enemies": 33.31666666666667,
+     "purified": 180,
+     "hurt": 0
+    },
+    {
+     "enemies": 42.016666666666666,
+     "purified": 198,
+     "hurt": 1
+    },
+    {
+     "enemies": 56.483333333333334,
+     "purified": 232,
+     "hurt": 2
+    },
+    {
+     "enemies": 62.46666666666667,
+     "purified": 293,
+     "hurt": 2
+    },
+    {
+     "enemies": 24.9,
+     "purified": 227,
+     "hurt": 1
+    }
+   ],
+   "finalHp": 249.69999999999987,
+   "dropsUnseen": 0,
+   "config": "贴孢子·偏好孢子弹"
+  },
+  {
+   "seed": "balance-0",
+   "move": "spore",
+   "pick": "prefer:umbrella_blades",
+   "ruleset": "xianxia",
+   "outcome": "won",
+   "survivalSec": 493.53333333321314,
+   "killer": "",
+   "level": 27,
+   "levelAt": {
+    "60": 5,
+    "180": 11,
+    "300": 18,
+    "420": 26
+   },
+   "firstLevelUpSec": 11.250000000000139,
+   "bossSpawnSec": 420.03333333328,
+   "bossLevel": 26,
+   "bossDefeatSec": 489.16666666655044,
+   "extractOpenSec": 490.6666666665491,
+   "wonSec": 493.53333333321314,
+   "offered": {
+    "leaf_boomerang": 8,
+    "area": 2,
+    "dew_ring": 9,
+    "cooldown": 11,
+    "umbrella_blades": 5,
+    "regen": 9,
+    "might": 8,
+    "spore_shot": 10,
+    "magnet": 5,
+    "speed": 10,
+    "evo:leaf_boomerang": 1
+   },
+   "picked": {
+    "leaf_boomerang": 5,
+    "umbrella_blades": 5,
+    "dew_ring": 5,
+    "speed": 3,
+    "spore_shot": 4,
+    "cooldown": 1,
+    "might": 1,
+    "regen": 1,
+    "evo:leaf_boomerang": 1
+   },
+   "picks": [
+    "11.3:leaf_boomerang",
+    "20.4:umbrella_blades",
+    "32.8:leaf_boomerang",
+    "51.3:umbrella_blades",
+    "74.9:dew_ring",
+    "92.1:dew_ring",
+    "113.5:umbrella_blades",
+    "133.3:speed",
+    "151.5:spore_shot",
+    "165.6:umbrella_blades",
+    "188.0:umbrella_blades",
+    "205.7:spore_shot",
+    "221.6:cooldown",
+    "240.4:might",
+    "261.2:regen",
+    "278.6:spore_shot",
+    "291.9:spore_shot",
+    "310.5:leaf_boomerang",
+    "327.7:leaf_boomerang",
+    "342.4:leaf_boomerang",
+    "360.3:dew_ring",
+    "373.8:dew_ring",
+    "387.9:speed",
+    "403.0:speed",
+    "416.2:evo:leaf_boomerang",
+    "449.1:dew_ring"
+   ],
+   "weapons": [
+    {
+     "id": "spore_shot",
+     "level": 5,
+     "evolved": false
+    },
+    {
+     "id": "leaf_boomerang",
+     "level": 5,
+     "evolved": true
+    },
+    {
+     "id": "umbrella_blades",
+     "level": 5,
+     "evolved": false
+    },
+    {
+     "id": "dew_ring",
+     "level": 5,
+     "evolved": false
+    }
+   ],
+   "passives": [
+    {
+     "id": "speed",
+     "level": 3
+    },
+    {
+     "id": "cooldown",
+     "level": 1
+    },
+    {
+     "id": "might",
+     "level": 1
+    },
+    {
+     "id": "regen",
+     "level": 1
+    }
+   ],
+   "spawned": 1505,
+   "purifiedCombat": 1486,
+   "purifiedCleansing": 9,
+   "spawnedPreBoss": 1306,
+   "purifiedPreBoss": 1234,
+   "xpDropped": 3142,
+   "xpBanked": 3139,
+   "capSkipped": {
+    "enemies": 0,
+    "pickups": 0
+   },
+   "dropped": {
+    "enemies": 0,
+    "shots": 0,
+    "bubbles": 0,
+    "zones": 0,
+    "pickups": 0
+   },
+   "droppedTime": 0,
+   "hpAtBossSpawn": 240.99999999999974,
+   "hpAtBossDefeat": 250,
+   "evolveOffered": 1,
+   "evolveFirstOfferSec": 416.23333333328344,
+   "evolutions": [
+    {
+     "id": "leaf_boomerang",
+     "t": 416.23333333328344
+    }
+   ],
+   "eliteSpawnSec": 300.0166666667225,
+   "eliteDefeatSec": 360.2333333333344,
+   "drops": {
+    "dew": {
+     "spawned": 11,
+     "picked": 11,
+     "heal": 77.56000000000117
+    },
+    "bigDew": {
+     "spawned": 1,
+     "picked": 1,
+     "heal": 19.100000000000364
+    },
+    "wind": {
+     "spawned": 5,
+     "picked": 4,
+     "xp": 82
+    }
+   },
+   "regenHeal": 34.799999999999955,
+   "maxPickupRadius": 168,
+   "minutes": [
+    {
+     "enemies": 8.816666666666666,
+     "purified": 69,
+     "hurt": 0
+    },
+    {
+     "enemies": 14.583333333333334,
+     "purified": 91,
+     "hurt": 0
+    },
+    {
+     "enemies": 22.25,
+     "purified": 168,
+     "hurt": 0
+    },
+    {
+     "enemies": 31.1,
+     "purified": 181,
+     "hurt": 0
+    },
+    {
+     "enemies": 46.21666666666667,
+     "purified": 206,
+     "hurt": 7
+    },
+    {
+     "enemies": 55.86666666666667,
+     "purified": 215,
+     "hurt": 3
+    },
+    {
+     "enemies": 67.81666666666666,
+     "purified": 304,
+     "hurt": 6
+    },
+    {
+     "enemies": 20.133333333333333,
+     "purified": 224,
+     "hurt": 1
+    }
+   ],
+   "finalHp": 250,
+   "dropsUnseen": 0,
+   "config": "贴孢子·偏好菌伞旋刃"
+  },
+  {
+   "seed": "balance-1",
+   "move": "spore",
+   "pick": "prefer:umbrella_blades",
+   "ruleset": "xianxia",
+   "outcome": "won",
+   "survivalSec": 480.2833333332252,
+   "killer": "",
+   "level": 27,
+   "levelAt": {
+    "60": 5,
+    "180": 11,
+    "300": 18,
+    "420": 25
+   },
+   "firstLevelUpSec": 11.466666666666816,
+   "bossSpawnSec": 420.03333333328,
+   "bossLevel": 25,
+   "bossDefeatSec": 475.7166666665627,
+   "extractOpenSec": 477.2166666665613,
+   "wonSec": 480.2833333332252,
+   "offered": {
+    "umbrella_blades": 5,
+    "area": 14,
+    "speed": 2,
+    "magnet": 2,
+    "dew_ring": 9,
+    "cooldown": 9,
+    "regen": 7,
+    "might": 13,
+    "spore_shot": 10,
+    "raindrop": 7
+   },
+   "picked": {
+    "umbrella_blades": 5,
+    "cooldown": 3,
+    "area": 2,
+    "might": 1,
+    "dew_ring": 5,
+    "raindrop": 5,
+    "spore_shot": 4,
+    "regen": 1
+   },
+   "picks": [
+    "11.5:umbrella_blades",
+    "20.6:umbrella_blades",
+    "33.7:cooldown",
+    "51.8:area",
+    "74.8:umbrella_blades",
+    "92.6:might",
+    "116.6:dew_ring",
+    "139.1:umbrella_blades",
+    "152.1:umbrella_blades",
+    "164.6:raindrop",
+    "186.4:raindrop",
+    "205.2:raindrop",
+    "221.7:spore_shot",
+    "240.6:regen",
+    "261.7:dew_ring",
+    "277.2:spore_shot",
+    "295.5:area",
+    "313.9:spore_shot",
+    "329.7:dew_ring",
+    "347.4:raindrop",
+    "360.9:raindrop",
+    "375.3:dew_ring",
+    "393.0:dew_ring",
+    "405.9:spore_shot",
+    "426.2:cooldown",
+    "468.5:cooldown"
+   ],
+   "weapons": [
+    {
+     "id": "spore_shot",
+     "level": 5,
+     "evolved": false
+    },
+    {
+     "id": "umbrella_blades",
+     "level": 5,
+     "evolved": false
+    },
+    {
+     "id": "dew_ring",
+     "level": 5,
+     "evolved": false
+    },
+    {
+     "id": "raindrop",
+     "level": 5,
+     "evolved": false
+    }
+   ],
+   "passives": [
+    {
+     "id": "cooldown",
+     "level": 3
+    },
+    {
+     "id": "area",
+     "level": 2
+    },
+    {
+     "id": "might",
+     "level": 1
+    },
+    {
+     "id": "regen",
+     "level": 1
+    }
+   ],
+   "spawned": 1461,
+   "purifiedCombat": 1442,
+   "purifiedCleansing": 9,
+   "spawnedPreBoss": 1306,
+   "purifiedPreBoss": 1246,
+   "xpDropped": 2967,
+   "xpBanked": 2919,
+   "capSkipped": {
+    "enemies": 0,
+    "pickups": 0
+   },
+   "dropped": {
+    "enemies": 0,
+    "shots": 0,
+    "bubbles": 0,
+    "zones": 0,
+    "pickups": 0
+   },
+   "droppedTime": 0,
+   "hpAtBossSpawn": 240,
+   "hpAtBossDefeat": 250,
+   "evolveOffered": 0,
+   "evolveFirstOfferSec": null,
+   "evolutions": [],
+   "eliteSpawnSec": 300.0166666667225,
+   "eliteDefeatSec": 361.7999999999996,
+   "drops": {
+    "dew": {
+     "spawned": 7,
+     "picked": 7,
+     "heal": 18.200000000000955
+    },
+    "bigDew": {
+     "spawned": 1,
+     "picked": 1,
+     "heal": 13.000000000000227
+    },
+    "wind": {
+     "spawned": 2,
+     "picked": 2,
+     "xp": 23
+    }
+   },
+   "regenHeal": 20.999999999999957,
+   "maxPickupRadius": 168,
+   "minutes": [
+    {
+     "enemies": 8.883333333333333,
+     "purified": 68,
+     "hurt": 0
+    },
+    {
+     "enemies": 13.816666666666666,
+     "purified": 91,
+     "hurt": 0
+    },
+    {
+     "enemies": 22.583333333333332,
+     "purified": 168,
+     "hurt": 0
+    },
+    {
+     "enemies": 29.816666666666666,
+     "purified": 184,
+     "hurt": 0
+    },
+    {
+     "enemies": 37.733333333333334,
+     "purified": 200,
+     "hurt": 2
+    },
+    {
+     "enemies": 50.1,
+     "purified": 242,
+     "hurt": 2
+    },
+    {
+     "enemies": 51.81666666666667,
+     "purified": 293,
+     "hurt": 2
+    },
+    {
+     "enemies": 14.716666666666667,
+     "purified": 196,
+     "hurt": 0
+    }
+   ],
+   "finalHp": 250,
+   "dropsUnseen": 0,
+   "config": "贴孢子·偏好菌伞旋刃"
+  },
+  {
+   "seed": "balance-0",
+   "move": "spore",
+   "pick": "prefer:dew_ring",
+   "ruleset": "xianxia",
+   "outcome": "won",
+   "survivalSec": 484.48333333322137,
+   "killer": "",
+   "level": 27,
+   "levelAt": {
+    "60": 5,
+    "180": 11,
+    "300": 18,
+    "420": 26
+   },
+   "firstLevelUpSec": 11.250000000000139,
+   "bossSpawnSec": 420.03333333328,
+   "bossLevel": 26,
+   "bossDefeatSec": 479.91666666655885,
+   "extractOpenSec": 481.4166666665575,
+   "wonSec": 484.48333333322137,
+   "offered": {
+    "leaf_boomerang": 1,
+    "area": 10,
+    "dew_ring": 5,
+    "cooldown": 9,
+    "umbrella_blades": 10,
+    "regen": 8,
+    "might": 12,
+    "spore_shot": 9,
+    "magnet": 5,
+    "raindrop": 7,
+    "speed": 2
+   },
+   "picked": {
+    "dew_ring": 5,
+    "umbrella_blades": 5,
+    "spore_shot": 4,
+    "raindrop": 5,
+    "might": 3,
+    "area": 2,
+    "cooldown": 1,
+    "regen": 1
+   },
+   "picks": [
+    "11.3:dew_ring",
+    "21.2:umbrella_blades",
+    "32.6:dew_ring",
+    "51.8:spore_shot",
+    "75.4:raindrop",
+    "91.4:raindrop",
+    "112.9:might",
+    "135.9:raindrop",
+    "152.1:spore_shot",
+    "169.3:area",
+    "186.3:dew_ring",
+    "205.7:dew_ring",
+    "221.6:dew_ring",
+    "240.2:cooldown",
+    "259.3:regen",
+    "277.3:spore_shot",
+    "290.6:spore_shot",
+    "303.7:umbrella_blades",
+    "319.5:umbrella_blades",
+    "334.6:umbrella_blades",
+    "356.2:raindrop",
+    "368.4:umbrella_blades",
+    "383.1:might",
+    "400.5:might",
+    "415.6:area",
+    "444.6:raindrop"
+   ],
+   "weapons": [
+    {
+     "id": "spore_shot",
+     "level": 5,
+     "evolved": false
+    },
+    {
+     "id": "dew_ring",
+     "level": 5,
+     "evolved": false
+    },
+    {
+     "id": "umbrella_blades",
+     "level": 5,
+     "evolved": false
+    },
+    {
+     "id": "raindrop",
+     "level": 5,
+     "evolved": false
+    }
+   ],
+   "passives": [
+    {
+     "id": "might",
+     "level": 3
+    },
+    {
+     "id": "area",
+     "level": 2
+    },
+    {
+     "id": "cooldown",
+     "level": 1
+    },
+    {
+     "id": "regen",
+     "level": 1
+    }
+   ],
+   "spawned": 1479,
+   "purifiedCombat": 1463,
+   "purifiedCleansing": 7,
+   "spawnedPreBoss": 1306,
+   "purifiedPreBoss": 1231,
+   "xpDropped": 3127,
+   "xpBanked": 3121,
+   "capSkipped": {
+    "enemies": 0,
+    "pickups": 0
+   },
+   "dropped": {
+    "enemies": 0,
+    "shots": 0,
+    "bubbles": 0,
+    "zones": 0,
+    "pickups": 0
+   },
+   "droppedTime": 0,
+   "hpAtBossSpawn": 245,
+   "hpAtBossDefeat": 249.49999999999937,
+   "evolveOffered": 0,
+   "evolveFirstOfferSec": null,
+   "evolutions": [],
+   "eliteSpawnSec": 300.0166666667225,
+   "eliteDefeatSec": 357.86666666666986,
+   "drops": {
+    "dew": {
+     "spawned": 11,
+     "picked": 9,
+     "heal": 29.200000000000017
+    },
+    "bigDew": {
+     "spawned": 1,
+     "picked": 1,
+     "heal": 8.2000000000005
+    },
+    "wind": {
+     "spawned": 5,
+     "picked": 5,
+     "xp": 93
+    }
+   },
+   "regenHeal": 26.399999999999938,
+   "maxPickupRadius": 168,
+   "minutes": [
+    {
+     "enemies": 9.05,
+     "purified": 69,
+     "hurt": 0
+    },
+    {
+     "enemies": 13.5,
+     "purified": 94,
+     "hurt": 0
+    },
+    {
+     "enemies": 21.083333333333332,
+     "purified": 168,
+     "hurt": 0
+    },
+    {
+     "enemies": 30.383333333333333,
+     "purified": 180,
+     "hurt": 0
+    },
+    {
+     "enemies": 44.21666666666667,
+     "purified": 201,
+     "hurt": 1
+    },
+    {
+     "enemies": 49.35,
+     "purified": 229,
+     "hurt": 2
+    },
+    {
+     "enemies": 57.96666666666667,
+     "purified": 290,
+     "hurt": 1
+    },
+    {
+     "enemies": 23.316666666666666,
+     "purified": 232,
+     "hurt": 3
+    }
+   ],
+   "finalHp": 250,
+   "dropsUnseen": 0,
+   "config": "贴孢子·偏好露珠环"
+  },
+  {
+   "seed": "balance-1",
+   "move": "spore",
+   "pick": "prefer:dew_ring",
+   "ruleset": "xianxia",
+   "outcome": "won",
+   "survivalSec": 540.98333333317,
+   "killer": "",
+   "level": 28,
+   "levelAt": {
+    "60": 5,
+    "180": 11,
+    "300": 18,
+    "420": 26
+   },
+   "firstLevelUpSec": 11.466666666666816,
+   "bossSpawnSec": 420.03333333328,
+   "bossLevel": 26,
+   "bossDefeatSec": 536.4166666665075,
+   "extractOpenSec": 537.9166666665061,
+   "wonSec": 540.98333333317,
+   "offered": {
+    "umbrella_blades": 10,
+    "area": 14,
+    "speed": 3,
+    "magnet": 4,
+    "dew_ring": 5,
+    "cooldown": 8,
+    "regen": 11,
+    "leaf_boomerang": 10,
+    "spore_shot": 9,
+    "might": 6,
+    "evo:dew_ring": 1
+   },
+   "picked": {
+    "umbrella_blades": 5,
+    "dew_ring": 5,
+    "cooldown": 1,
+    "leaf_boomerang": 5,
+    "spore_shot": 4,
+    "regen": 3,
+    "area": 3,
+    "evo:dew_ring": 1
+   },
+   "picks": [
+    "11.5:umbrella_blades",
+    "20.6:dew_ring",
+    "32.9:cooldown",
+    "51.7:dew_ring",
+    "74.8:umbrella_blades",
+    "92.6:dew_ring",
+    "116.2:dew_ring",
+    "138.1:leaf_boomerang",
+    "152.8:spore_shot",
+    "165.1:spore_shot",
+    "186.2:dew_ring",
+    "206.0:leaf_boomerang",
+    "222.3:regen",
+    "242.7:area",
+    "268.3:umbrella_blades",
+    "284.4:spore_shot",
+    "296.5:regen",
+    "319.4:spore_shot",
+    "336.4:umbrella_blades",
+    "350.9:leaf_boomerang",
+    "362.7:leaf_boomerang",
+    "380.6:leaf_boomerang",
+    "398.6:area",
+    "405.1:umbrella_blades",
+    "419.4:regen",
+    "446.0:evo:dew_ring",
+    "511.2:area"
+   ],
+   "weapons": [
+    {
+     "id": "spore_shot",
+     "level": 5,
+     "evolved": false
+    },
+    {
+     "id": "umbrella_blades",
+     "level": 5,
+     "evolved": false
+    },
+    {
+     "id": "dew_ring",
+     "level": 5,
+     "evolved": true
+    },
+    {
+     "id": "leaf_boomerang",
+     "level": 5,
+     "evolved": false
+    }
+   ],
+   "passives": [
+    {
+     "id": "cooldown",
+     "level": 1
+    },
+    {
+     "id": "regen",
+     "level": 3
+    },
+    {
+     "id": "area",
+     "level": 3
+    }
+   ],
+   "spawned": 1648,
+   "purifiedCombat": 1626,
+   "purifiedCleansing": 10,
+   "spawnedPreBoss": 1306,
+   "purifiedPreBoss": 1235,
+   "xpDropped": 3258,
+   "xpBanked": 3251,
+   "capSkipped": {
+    "enemies": 0,
+    "pickups": 0
+   },
+   "dropped": {
+    "enemies": 0,
+    "shots": 0,
+    "bubbles": 0,
+    "zones": 0,
+    "pickups": 0
+   },
+   "droppedTime": 0,
+   "hpAtBossSpawn": 245,
+   "hpAtBossDefeat": 250,
+   "evolveOffered": 1,
+   "evolveFirstOfferSec": 445.9833333332564,
+   "evolutions": [
+    {
+     "id": "dew_ring",
+     "t": 445.9833333332564
+    }
+   ],
+   "eliteSpawnSec": 300.0166666667225,
+   "eliteDefeatSec": 400.0166666666315,
+   "drops": {
+    "dew": {
+     "spawned": 8,
+     "picked": 8,
+     "heal": 17.900000000000347
+    },
+    "bigDew": {
+     "spawned": 1,
+     "picked": 1,
+     "heal": 10.79999999999987
+    },
+    "wind": {
+     "spawned": 3,
+     "picked": 3,
+     "xp": 52
+    }
+   },
+   "regenHeal": 37.60000000000004,
+   "maxPickupRadius": 168,
+   "minutes": [
+    {
+     "enemies": 8.65,
+     "purified": 68,
+     "hurt": 0
+    },
+    {
+     "enemies": 13.933333333333334,
+     "purified": 91,
+     "hurt": 0
+    },
+    {
+     "enemies": 24.15,
+     "purified": 168,
+     "hurt": 0
+    },
+    {
+     "enemies": 30.933333333333334,
+     "purified": 179,
+     "hurt": 0
+    },
+    {
+     "enemies": 52.15,
+     "purified": 207,
+     "hurt": 1
+    },
+    {
+     "enemies": 68.41666666666667,
+     "purified": 219,
+     "hurt": 1
+    },
+    {
+     "enemies": 69.86666666666666,
+     "purified": 303,
+     "hurt": 3
+    },
+    {
+     "enemies": 24.666666666666668,
+     "purified": 220,
+     "hurt": 2
+    },
+    {
+     "enemies": 11.533333333333333,
+     "purified": 171,
+     "hurt": 0
+    }
+   ],
+   "finalHp": 250,
+   "dropsUnseen": 0,
+   "config": "贴孢子·偏好露珠环"
+  },
+  {
+   "seed": "balance-0",
+   "move": "spore",
+   "pick": "prefer:raindrop",
+   "ruleset": "xianxia",
+   "outcome": "won",
+   "survivalSec": 452.34999999991726,
+   "killer": "",
+   "level": 26,
+   "levelAt": {
+    "60": 5,
+    "180": 11,
+    "300": 18,
+    "420": 26
+   },
+   "firstLevelUpSec": 11.250000000000139,
+   "bossSpawnSec": 420.03333333328,
+   "bossLevel": 26,
+   "bossDefeatSec": 447.84999999992135,
+   "extractOpenSec": 449.34999999992,
+   "wonSec": 452.34999999991726,
+   "offered": {
+    "leaf_boomerang": 10,
+    "area": 8,
+    "dew_ring": 1,
+    "cooldown": 11,
+    "umbrella_blades": 6,
+    "regen": 4,
+    "might": 9,
+    "raindrop": 5,
+    "spore_shot": 9,
+    "magnet": 5,
+    "speed": 6,
+    "evo:raindrop": 1
+   },
+   "picked": {
+    "leaf_boomerang": 5,
+    "umbrella_blades": 3,
+    "might": 3,
+    "raindrop": 5,
+    "cooldown": 1,
+    "spore_shot": 4,
+    "area": 2,
+    "speed": 1,
+    "evo:raindrop": 1
+   },
+   "picks": [
+    "11.3:leaf_boomerang",
+    "20.4:umbrella_blades",
+    "32.8:might",
+    "51.3:raindrop",
+    "74.4:raindrop",
+    "91.5:raindrop",
+    "114.7:raindrop",
+    "136.7:raindrop",
+    "152.7:cooldown",
+    "170.4:umbrella_blades",
+    "183.2:spore_shot",
+    "206.0:leaf_boomerang",
+    "223.5:area",
+    "245.7:area",
+    "263.8:speed",
+    "277.4:spore_shot",
+    "292.3:spore_shot",
+    "310.5:spore_shot",
+    "325.8:leaf_boomerang",
+    "339.4:leaf_boomerang",
+    "351.6:umbrella_blades",
+    "368.9:leaf_boomerang",
+    "388.8:might",
+    "406.5:might",
+    "415.7:evo:raindrop"
+   ],
+   "weapons": [
+    {
+     "id": "spore_shot",
+     "level": 5,
+     "evolved": false
+    },
+    {
+     "id": "leaf_boomerang",
+     "level": 5,
+     "evolved": false
+    },
+    {
+     "id": "umbrella_blades",
+     "level": 3,
+     "evolved": false
+    },
+    {
+     "id": "raindrop",
+     "level": 5,
+     "evolved": true
+    }
+   ],
+   "passives": [
+    {
+     "id": "might",
+     "level": 3
+    },
+    {
+     "id": "cooldown",
+     "level": 1
+    },
+    {
+     "id": "area",
+     "level": 2
+    },
+    {
+     "id": "speed",
+     "level": 1
+    }
+   ],
+   "spawned": 1383,
+   "purifiedCombat": 1375,
+   "purifiedCleansing": 7,
+   "spawnedPreBoss": 1306,
+   "purifiedPreBoss": 1268,
+   "xpDropped": 2952,
+   "xpBanked": 2859,
+   "capSkipped": {
+    "enemies": 0,
+    "pickups": 0
+   },
+   "dropped": {
+    "enemies": 0,
+    "shots": 0,
+    "bubbles": 0,
+    "zones": 0,
+    "pickups": 0
+   },
+   "droppedTime": 0,
+   "hpAtBossSpawn": 245,
+   "hpAtBossDefeat": 245,
+   "evolveOffered": 1,
+   "evolveFirstOfferSec": 415.6666666666173,
+   "evolutions": [
+    {
+     "id": "raindrop",
+     "t": 415.6666666666173
+    }
+   ],
+   "eliteSpawnSec": 300.0166666667225,
+   "eliteDefeatSec": 350.41666666667663,
+   "drops": {
+    "dew": {
+     "spawned": 10,
+     "picked": 8,
+     "heal": 0
+    },
+    "bigDew": {
+     "spawned": 1,
+     "picked": 1,
+     "heal": 8.699999999999989
+    },
+    "wind": {
+     "spawned": 4,
+     "picked": 4,
+     "xp": 188
+    }
+   },
+   "regenHeal": 0,
+   "maxPickupRadius": 168,
+   "minutes": [
+    {
+     "enemies": 8.733333333333333,
+     "purified": 69,
+     "hurt": 0
+    },
+    {
+     "enemies": 11.65,
+     "purified": 92,
+     "hurt": 0
+    },
+    {
+     "enemies": 20.266666666666666,
+     "purified": 170,
+     "hurt": 0
+    },
+    {
+     "enemies": 25.616666666666667,
+     "purified": 180,
+     "hurt": 0
+    },
+    {
+     "enemies": 35.233333333333334,
+     "purified": 215,
+     "hurt": 0
+    },
+    {
+     "enemies": 43.7,
+     "purified": 228,
+     "hurt": 1
+    },
+    {
+     "enemies": 52.53333333333333,
+     "purified": 314,
+     "hurt": 0
+    }
+   ],
+   "finalHp": 245,
+   "dropsUnseen": 0,
+   "config": "贴孢子·偏好雨滴坠击"
+  },
+  {
+   "seed": "balance-1",
+   "move": "spore",
+   "pick": "prefer:raindrop",
+   "ruleset": "xianxia",
+   "outcome": "won",
+   "survivalSec": 481.01666666655785,
+   "killer": "",
+   "level": 27,
+   "levelAt": {
+    "60": 5,
+    "180": 11,
+    "300": 18,
+    "420": 25
+   },
+   "firstLevelUpSec": 11.466666666666816,
+   "bossSpawnSec": 420.03333333328,
+   "bossLevel": 25,
+   "bossDefeatSec": 476.44999999989534,
+   "extractOpenSec": 477.949999999894,
+   "wonSec": 481.01666666655785,
+   "offered": {
+    "umbrella_blades": 12,
+    "area": 11,
+    "speed": 2,
+    "magnet": 2,
+    "dew_ring": 8,
+    "cooldown": 12,
+    "regen": 5,
+    "might": 15,
+    "spore_shot": 6,
+    "raindrop": 5
+   },
+   "picked": {
+    "umbrella_blades": 5,
+    "dew_ring": 5,
+    "cooldown": 2,
+    "area": 2,
+    "might": 2,
+    "spore_shot": 4,
+    "raindrop": 5,
+    "regen": 1
+   },
+   "picks": [
+    "11.5:umbrella_blades",
+    "20.6:dew_ring",
+    "32.9:cooldown",
+    "51.7:area",
+    "74.7:umbrella_blades",
+    "92.7:might",
+    "116.2:spore_shot",
+    "138.0:raindrop",
+    "152.4:spore_shot",
+    "165.8:spore_shot",
+    "187.4:raindrop",
+    "206.9:raindrop",
+    "221.0:spore_shot",
+    "244.7:regen",
+    "263.6:dew_ring",
+    "278.3:umbrella_blades",
+    "295.3:area",
+    "315.2:raindrop",
+    "330.3:dew_ring",
+    "345.3:raindrop",
+    "365.0:dew_ring",
+    "375.8:dew_ring",
+    "394.1:might",
+    "405.3:umbrella_blades",
+    "429.7:cooldown",
+    "474.0:umbrella_blades"
+   ],
+   "weapons": [
+    {
+     "id": "spore_shot",
+     "level": 5,
+     "evolved": false
+    },
+    {
+     "id": "umbrella_blades",
+     "level": 5,
+     "evolved": false
+    },
+    {
+     "id": "dew_ring",
+     "level": 5,
+     "evolved": false
+    },
+    {
+     "id": "raindrop",
+     "level": 5,
+     "evolved": false
+    }
+   ],
+   "passives": [
+    {
+     "id": "cooldown",
+     "level": 2
+    },
+    {
+     "id": "area",
+     "level": 2
+    },
+    {
+     "id": "might",
+     "level": 2
+    },
+    {
+     "id": "regen",
+     "level": 1
+    }
+   ],
+   "spawned": 1474,
+   "purifiedCombat": 1455,
+   "purifiedCleansing": 12,
+   "spawnedPreBoss": 1306,
+   "purifiedPreBoss": 1246,
+   "xpDropped": 2997,
+   "xpBanked": 2903,
+   "capSkipped": {
+    "enemies": 0,
+    "pickups": 0
+   },
+   "dropped": {
+    "enemies": 0,
+    "shots": 0,
+    "bubbles": 0,
+    "zones": 0,
+    "pickups": 0
+   },
+   "droppedTime": 0,
+   "hpAtBossSpawn": 223.59999999999985,
+   "hpAtBossDefeat": 225.6649999999992,
+   "evolveOffered": 0,
+   "evolveFirstOfferSec": null,
+   "evolutions": [],
+   "eliteSpawnSec": 300.0166666667225,
+   "eliteDefeatSec": 367.89999999999407,
+   "drops": {
+    "dew": {
+     "spawned": 7,
+     "picked": 6,
+     "heal": 21.900000000000375
+    },
+    "bigDew": {
+     "spawned": 1,
+     "picked": 1,
+     "heal": 0
+    },
+    "wind": {
+     "spawned": 2,
+     "picked": 2,
+     "xp": 92
+    }
+   },
+   "regenHeal": 22.99999999999995,
+   "maxPickupRadius": 168,
+   "minutes": [
+    {
+     "enemies": 8.65,
+     "purified": 68,
+     "hurt": 0
+    },
+    {
+     "enemies": 13.833333333333334,
+     "purified": 90,
+     "hurt": 0
+    },
+    {
+     "enemies": 22.6,
+     "purified": 172,
+     "hurt": 0
+    },
+    {
+     "enemies": 28.95,
+     "purified": 178,
+     "hurt": 0
+    },
+    {
+     "enemies": 37.5,
+     "purified": 215,
+     "hurt": 0
+    },
+    {
+     "enemies": 48.766666666666666,
+     "purified": 228,
+     "hurt": 2
+    },
+    {
+     "enemies": 55.75,
+     "purified": 295,
+     "hurt": 2
+    },
+    {
+     "enemies": 16.366666666666667,
+     "purified": 209,
+     "hurt": 2
+    }
+   ],
+   "finalHp": 241.66499999999914,
+   "dropsUnseen": 0,
+   "config": "贴孢子·偏好雨滴坠击"
+  },
+  {
+   "seed": "balance-0",
+   "move": "spore",
+   "pick": "prefer:leaf_boomerang",
+   "ruleset": "xianxia",
+   "outcome": "won",
+   "survivalSec": 491.1999999998819,
+   "killer": "",
+   "level": 27,
+   "levelAt": {
+    "60": 5,
+    "180": 11,
+    "300": 18,
+    "420": 25
+   },
+   "firstLevelUpSec": 11.250000000000139,
+   "bossSpawnSec": 420.03333333328,
+   "bossLevel": 25,
+   "bossDefeatSec": 486.83333333321923,
+   "extractOpenSec": 488.33333333321787,
+   "wonSec": 491.1999999998819,
+   "offered": {
+    "leaf_boomerang": 5,
+    "area": 2,
+    "dew_ring": 10,
+    "cooldown": 11,
+    "umbrella_blades": 9,
+    "regen": 9,
+    "might": 8,
+    "spore_shot": 8,
+    "magnet": 5,
+    "speed": 10,
+    "evo:leaf_boomerang": 1
+   },
+   "picked": {
+    "leaf_boomerang": 5,
+    "umbrella_blades": 5,
+    "spore_shot": 4,
+    "dew_ring": 5,
+    "speed": 3,
+    "cooldown": 1,
+    "might": 1,
+    "regen": 1,
+    "evo:leaf_boomerang": 1
+   },
+   "picks": [
+    "11.3:leaf_boomerang",
+    "20.4:umbrella_blades",
+    "32.8:leaf_boomerang",
+    "51.3:spore_shot",
+    "75.1:dew_ring",
+    "93.2:dew_ring",
+    "113.9:spore_shot",
+    "136.0:speed",
+    "151.4:spore_shot",
+    "165.8:cooldown",
+    "187.8:leaf_boomerang",
+    "207.9:leaf_boomerang",
+    "225.5:leaf_boomerang",
+    "243.8:might",
+    "261.2:regen",
+    "280.2:spore_shot",
+    "294.1:umbrella_blades",
+    "315.6:umbrella_blades",
+    "331.2:umbrella_blades",
+    "345.0:umbrella_blades",
+    "364.7:dew_ring",
+    "378.1:dew_ring",
+    "394.4:speed",
+    "407.3:speed",
+    "420.2:evo:leaf_boomerang",
+    "451.0:dew_ring"
+   ],
+   "weapons": [
+    {
+     "id": "spore_shot",
+     "level": 5,
+     "evolved": false
+    },
+    {
+     "id": "leaf_boomerang",
+     "level": 5,
+     "evolved": true
+    },
+    {
+     "id": "umbrella_blades",
+     "level": 5,
+     "evolved": false
+    },
+    {
+     "id": "dew_ring",
+     "level": 5,
+     "evolved": false
+    }
+   ],
+   "passives": [
+    {
+     "id": "speed",
+     "level": 3
+    },
+    {
+     "id": "cooldown",
+     "level": 1
+    },
+    {
+     "id": "might",
+     "level": 1
+    },
+    {
+     "id": "regen",
+     "level": 1
+    }
+   ],
+   "spawned": 1502,
+   "purifiedCombat": 1481,
+   "purifiedCleansing": 8,
+   "spawnedPreBoss": 1306,
+   "purifiedPreBoss": 1227,
+   "xpDropped": 3103,
+   "xpBanked": 3093,
+   "capSkipped": {
+    "enemies": 0,
+    "pickups": 0
+   },
+   "dropped": {
+    "enemies": 0,
+    "shots": 0,
+    "bubbles": 0,
+    "zones": 0,
+    "pickups": 0
+   },
+   "droppedTime": 0,
+   "hpAtBossSpawn": 240,
+   "hpAtBossDefeat": 222.76499999999945,
+   "evolveOffered": 1,
+   "evolveFirstOfferSec": 420.24999999994645,
+   "evolutions": [
+    {
+     "id": "leaf_boomerang",
+     "t": 420.24999999994645
+    }
+   ],
+   "eliteSpawnSec": 300.0166666667225,
+   "eliteDefeatSec": 374.5833333333213,
+   "drops": {
+    "dew": {
+     "spawned": 11,
+     "picked": 11,
+     "heal": 50.40000000000035
+    },
+    "bigDew": {
+     "spawned": 1,
+     "picked": 1,
+     "heal": 6.600000000000591
+    },
+    "wind": {
+     "spawned": 5,
+     "picked": 5,
+     "xp": 118
+    }
+   },
+   "regenHeal": 36.39999999999998,
+   "maxPickupRadius": 168,
+   "minutes": [
+    {
+     "enemies": 8.866666666666667,
+     "purified": 68,
+     "hurt": 0
+    },
+    {
+     "enemies": 15.233333333333333,
+     "purified": 91,
+     "hurt": 0
+    },
+    {
+     "enemies": 23.683333333333334,
+     "purified": 165,
+     "hurt": 0
+    },
+    {
+     "enemies": 33.55,
+     "purified": 183,
+     "hurt": 0
+    },
+    {
+     "enemies": 42.56666666666667,
+     "purified": 202,
+     "hurt": 6
+    },
+    {
+     "enemies": 56.166666666666664,
+     "purified": 218,
+     "hurt": 4
+    },
+    {
+     "enemies": 77.1,
+     "purified": 300,
+     "hurt": 3
+    },
+    {
+     "enemies": 24.116666666666667,
+     "purified": 229,
+     "hurt": 3
+    }
+   ],
+   "finalHp": 233.7649999999994,
+   "dropsUnseen": 0,
+   "config": "贴孢子·偏好落叶回旋镖"
+  },
+  {
+   "seed": "balance-1",
+   "move": "spore",
+   "pick": "prefer:leaf_boomerang",
+   "ruleset": "xianxia",
+   "outcome": "won",
+   "survivalSec": 580.866666666467,
+   "killer": "",
+   "level": 28,
+   "levelAt": {
+    "60": 5,
+    "180": 11,
+    "300": 18,
+    "420": 25
+   },
+   "firstLevelUpSec": 11.466666666666816,
+   "bossSpawnSec": 420.03333333328,
+   "bossLevel": 25,
+   "bossDefeatSec": 576.4999999998043,
+   "extractOpenSec": 577.999999999803,
+   "wonSec": 580.866666666467,
+   "offered": {
+    "umbrella_blades": 12,
+    "area": 13,
+    "speed": 16,
+    "magnet": 2,
+    "dew_ring": 9,
+    "cooldown": 11,
+    "regen": 1,
+    "leaf_boomerang": 5,
+    "might": 6,
+    "spore_shot": 6
+   },
+   "picked": {
+    "umbrella_blades": 5,
+    "dew_ring": 5,
+    "cooldown": 2,
+    "area": 2,
+    "speed": 3,
+    "leaf_boomerang": 5,
+    "spore_shot": 4,
+    "might": 1
+   },
+   "picks": [
+    "11.5:umbrella_blades",
+    "20.6:dew_ring",
+    "32.9:cooldown",
+    "51.7:area",
+    "74.7:speed",
+    "93.4:leaf_boomerang",
+    "117.2:leaf_boomerang",
+    "139.9:spore_shot",
+    "153.0:spore_shot",
+    "164.8:spore_shot",
+    "186.9:leaf_boomerang",
+    "207.7:leaf_boomerang",
+    "224.2:spore_shot",
+    "244.9:might",
+    "264.6:dew_ring",
+    "279.9:umbrella_blades",
+    "296.9:area",
+    "314.5:leaf_boomerang",
+    "328.4:umbrella_blades",
+    "349.6:dew_ring",
+    "370.1:dew_ring",
+    "379.3:dew_ring",
+    "393.8:speed",
+    "405.7:umbrella_blades",
+    "421.6:cooldown",
+    "448.9:umbrella_blades",
+    "514.7:speed"
+   ],
+   "weapons": [
+    {
+     "id": "spore_shot",
+     "level": 5,
+     "evolved": false
+    },
+    {
+     "id": "umbrella_blades",
+     "level": 5,
+     "evolved": false
+    },
+    {
+     "id": "dew_ring",
+     "level": 5,
+     "evolved": false
+    },
+    {
+     "id": "leaf_boomerang",
+     "level": 5,
+     "evolved": false
+    }
+   ],
+   "passives": [
+    {
+     "id": "cooldown",
+     "level": 2
+    },
+    {
+     "id": "area",
+     "level": 2
+    },
+    {
+     "id": "speed",
+     "level": 3
+    },
+    {
+     "id": "might",
+     "level": 1
+    }
+   ],
+   "spawned": 1768,
+   "purifiedCombat": 1747,
+   "purifiedCleansing": 11,
+   "spawnedPreBoss": 1306,
+   "purifiedPreBoss": 1229,
+   "xpDropped": 3386,
+   "xpBanked": 3376,
+   "capSkipped": {
+    "enemies": 0,
+    "pickups": 0
+   },
+   "dropped": {
+    "enemies": 0,
+    "shots": 0,
+    "bubbles": 0,
+    "zones": 0,
+    "pickups": 0
+   },
+   "droppedTime": 0,
+   "hpAtBossSpawn": 230.4,
+   "hpAtBossDefeat": 232.5,
+   "evolveOffered": 0,
+   "evolveFirstOfferSec": null,
+   "evolutions": [],
+   "eliteSpawnSec": 300.0166666667225,
+   "eliteDefeatSec": 378.4333333333178,
+   "drops": {
+    "dew": {
+     "spawned": 8,
+     "picked": 8,
+     "heal": 61.900000000000006
+    },
+    "bigDew": {
+     "spawned": 1,
+     "picked": 1,
+     "heal": 9.599999999999994
+    },
+    "wind": {
+     "spawned": 3,
+     "picked": 3,
+     "xp": 69
+    }
+   },
+   "regenHeal": 0,
+   "maxPickupRadius": 168,
+   "minutes": [
+    {
+     "enemies": 8.65,
+     "purified": 68,
+     "hurt": 0
+    },
+    {
+     "enemies": 14.2,
+     "purified": 89,
+     "hurt": 0
+    },
+    {
+     "enemies": 27.416666666666668,
+     "purified": 167,
+     "hurt": 0
+    },
+    {
+     "enemies": 33,
+     "purified": 173,
+     "hurt": 0
+    },
+    {
+     "enemies": 47.56666666666667,
+     "purified": 207,
+     "hurt": 2
+    },
+    {
+     "enemies": 58.3,
+     "purified": 224,
+     "hurt": 2
+    },
+    {
+     "enemies": 70.23333333333333,
+     "purified": 301,
+     "hurt": 3
+    },
+    {
+     "enemies": 25.183333333333334,
+     "purified": 230,
+     "hurt": 1
+    },
+    {
+     "enemies": 12.816666666666666,
+     "purified": 175,
+     "hurt": 2
+    }
+   ],
+   "finalHp": 242.5,
+   "dropsUnseen": 0,
+   "config": "贴孢子·偏好落叶回旋镖"
+  }
+ ]
+}

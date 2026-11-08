@@ -5,8 +5,8 @@ import { createFixedWeapon } from '../js/xianxia/TowerWeapons.js'
 import { createFixedEquipment } from '../js/xianxia/TowerEquipment.js'
 import { cultivationLevelXp } from '../js/xianxia/TowerProfile.js'
 
-function fixture(ringId = 'eq_ring_wenpo') {
-  const weapon = createFixedWeapon('eq_sword_panxi', 'prediction-weapon')
+function fixture(ringId = 'eq_ring_wenpo', weaponId = 'eq_sword_panxi') {
+  const weapon = createFixedWeapon(weaponId, 'prediction-weapon')
   const ring = createFixedEquipment(ringId, 'prediction-ring')
   const run = new TowerRun({ attemptId: 1, floor: 1, seed: 419,
     xp: cultivationLevelXp(30), hp: 100,
@@ -54,4 +54,16 @@ test('御剑预测使用发射时戒指，且不提前承诺暴击', () => {
   const hp = target.hp
   run._damageEnemy(hit)
   assert.ok(hp - target.hp > actual)
+})
+
+test('流血武器只预约即时伤害，不把未来流血当作在途飞剑扣血', () => {
+  for (const weapon of ['eq_sword_caiyun', 'eq_sword_lingxi']) {
+    const {run,target,hit,actual}=fixture('eq_ring_wenmai',weapon)
+    assert.ok(Math.abs(run._yujianDamage(target,hit.damage,hit.castContext.loadout)-actual)<1e-7,weapon)
+    target.hp=actual*1.5
+    run.state.projectiles=[{targetId:target.id,damage:hit.damage,castContext:hit.castContext,
+      yujianSlot:0,dissolveAt:null,expiresAt:run.state.time+1,hitIds:[]}]
+    assert.ok(run._yujianUnreservedHp(target)>0,'one converted hit cannot reserve 1.5 hits of HP')
+    assert.ok(run._yujianUnreservedHp(target,[hit])<0,'two direct receipts can cover the target')
+  }
 })

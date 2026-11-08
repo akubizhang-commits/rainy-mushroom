@@ -27,10 +27,10 @@ test('level thresholds are increasing, natural XP cannot cross either manual bar
  for(let level=2;level<=30;level++)assert.ok(cultivationLevelXp(level)>cultivationLevelXp(level-1))
  for(const [xp,cap] of [[0,1800],[1800,1800],[1801,6600],[6600,6600],[6601,14400]])assert.equal(cultivationXpCap(xp),cap)
 })
-test('extra tenth layers retain skill point budget and realm gates',()=>{
- assert.equal(GROWTH_POINT_CAP,80)
- for(const [before,after] of [[1200,1485],[5400,5985],[12600,13485]])assert.equal(realmPoints(after),realmPoints(before))
- assert.equal(realmPoints(14400),48)
+test('tenth layers grant one point, breakthroughs add three, and realm gates remain',()=>{
+ assert.equal(GROWTH_POINT_CAP,35)
+ for(const [before,after] of [[1200,1485],[5400,5985],[12600,13485]])assert.equal(realmPoints(after),realmPoints(before)+1)
+ assert.equal(realmPoints(14400),35)
  const {store}=fixture({xp:6600})
  assert.equal(skillRequirement(store.state,'evo_wanjian').reason,'stage-locked')
  assert.equal(canUseEquipmentTier('ling',20),false);assert.equal(canUseEquipmentTier('ling',21),true)

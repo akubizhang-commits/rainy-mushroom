@@ -98,6 +98,8 @@ export function validPickups(s){
    if(!take(id))return false
    const r=expected.get(id)
    if(r.kind!==d.kind||r.itemId!==d.itemId||r.rank!==d.rank)return false
+   // A merged stack retains the first receipt's origin kill.
+   if(id===d.receipts[0]&&d.killId!==r.killId)return false
    amount+=r.amount
   }
   if(amount!==d.amount)return false

@@ -1,0 +1,78 @@
+[
+  {
+    "at": "2026-10-28T03:17:22.767Z",
+    "report": "ui-browser-playtest-first.json",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "label": "playtest-isolation",
+    "error": "AssertionError [ERR_ASSERTION]: normal raw unchanged across complete assisted roundtrip\n+ actual - expected\n\n+ '{\"format\":\"xianxia-sect-tower-campaign\",\"schema\":3,\"data\":\"{\\\\\"xp\\\\\":50,\\\\\"hp\\\\\":100.13615620833333,\\\\\"cores\\\\\":20,\\\\\"contribution\\\\\":280,\\\\\"pills\\\\\":{\\\\\"huichun\\\\\":3,\\\\\"peiyuan\\\\\":0},\\\\\"skills\\\\\":{\\\\\"sj_yujian\\\\\":1},\\\\\"evolutions\\\\\":[],\\\\\"books\\\\\":[],\\\\\"evolutionRanks\\\\\":{},\\\\\"researchPurchases\\\\\":0,\\\\\"tutorialWaves\\\\\":0,\\\\\"weapons\\\\\":{\\\\\"eq_sword_suwen\\\\\":{\\\\\"quality\\\\\":1,\\\\\"refine\\\\\":0}},\\\\\"loadouts\\\\\":[{\\\\\"name\\\\\":\\\\\"配装一\\\\\",\\\\\"weaponId\\\\\":\\\\\"eq_sword_suwen\\\\\",\\\\\"active\\\\\":[\\\\\"sj_yujian\\\\\"],\\\\\"passive\\\\\":[],\\\\\"evolutions\\\\\":[]},{\\\\\"name\\\\\":\\\\\"配装二\\\\\",\\\\\"weaponId\\\\\":\\\\\"eq_sword_suwen\\\\\",\\\\\"active\\\\\":[\\\\\"sj_yujian\\\\\"],\\\\\"passive\\\\\":[],\\\\\"evolutions\\\\\":[]},{\\\\\"name\\\\\":\\\\\"配装三\\\\\",\\\\\"weaponId\\\\\":\\\\\"eq_sword_suwen\\\\\",\\\\\"active\\\\\":[\\\\\"sj_yujian\\\\\"],\\\\\"passive\\\\\":[],\\\\\"evolutions\\\\\":[]}],\\\\\"selectedLoadout\\\\\":0,\\\\\"clearedFloor\\\\\":0,\\\\\"normalCoreCounter\\\\\":0,\\\\\"weaponPity\\\\\":0,\\\\\"rng\\\\\":3987242609,\\\\\"restAt\\\\\":1793157442560,\\\\\"attemptSequence\\\\\":0,\\\\\"activeRun\\\\\":null,\\\\\"tutorialDone\\\\\":false,\\\\\"lastResult\\\\\":null}\",\"checksum\":\"186ff523\"}'\n- '{\"format\":\"xianxia-sect-tower-campaign\",\"schema\":3,\"data\":\"{\\\\\"xp\\\\\":50,\\\\\"hp\\\\\":100,\\\\\"cores\\\\\":20,\\\\\"contribution\\\\\":280,\\\\\"pills\\\\\":{\\\\\"huichun\\\\\":3,\\\\\"peiyuan\\\\\":0},\\\\\"skills\\\\\":{\\\\\"sj_yujian\\\\\":1},\\\\\"evolutions\\\\\":[],\\\\\"books\\\\\":[],\\\\\"evolutionRanks\\\\\":{},\\\\\"researchPurchases\\\\\":0,\\\\\"tutorialWaves\\\\\":0,\\\\\"weapons\\\\\":{\\\\\"eq_sword_suwen\\\\\":{\\\\\"quality\\\\\":1,\\\\\"refine\\\\\":0}},\\\\\"loadouts\\\\\":[{\\\\\"name\\\\\":\\\\\"配装一\\\\\",\\\\\"weaponId\\\\\":\\\\\"eq_sword_suwen\\\\\",\\\\\"active\\\\\":[\\\\\"sj_yujian\\\\\"],\\\\\"passive\\\\\":[],\\\\\"evolutions\\\\\":[]},{\\\\\"name\\\\\":\\\\\"配装二\\\\\",\\\\\"weaponId\\\\\":\\\\\"eq_sword_suwen\\\\\",\\\\\"active\\\\\":[\\\\\"sj_yujian\\\\\"],\\\\\"passive\\\\\":[],\\\\\"evolutions\\\\\":[]},{\\\\\"name\\\\\":\\\\\"配装三\\\\\",\\\\\"weaponId\\\\\":\\\\\"eq_sword_suwen\\\\\",\\\\\"active\\\\\":[\\\\\"sj_yujian\\\\\"],\\\\\"passive\\\\\":[],\\\\\"evolutions\\\\\":[]}],\\\\\"selectedLoadout\\\\\":0,\\\\\"clearedFloor\\\\\":0,\\\\\"normalCoreCounter\\\\\":0,\\\\\"weaponPity\\\\\":0,\\\\\"rng\\\\\":3987242609,\\\\\"restAt\\\\\":1793157434411,\\\\\"attemptSequence\\\\\":0,\\\\\"activeRun\\\\\":null,\\\\\"tutorialDone\\\\\":false,\\\\\"lastResult\\\\\":null}\",\"checksum\":\"915df9b2\"}'\n\n    at /Users/zhangnu/WeChatProjects/rainy-mushroom/scripts/verify-tower-growth-ui.cjs:539:11\n    at async scenario (/Users/zhangnu/WeChatProjects/rainy-mushroom/scripts/verify-tower-growth-ui.cjs:237:4)\n    at async main (/Users/zhangnu/WeChatProjects/rainy-mushroom/scripts/verify-tower-growth-ui.cjs:411:3)",
+    "actions": [
+      "丹鼎阁",
+      "购买一颗 · 20贡献",
+      "服用一颗",
+      "宗门",
+      "体验工具",
+      "进入独立体验档",
+      "游戏速度 ×2",
+      "游戏速度 ×1",
+      "无敌秒杀：关闭",
+      "返回宗门",
+      "锁妖塔",
+      "继续挑战第1层",
+      "暂停",
+      "体验工具",
+      "游戏速度 ×3",
+      "返回战斗",
+      "暂停",
+      "体验工具",
+      "返回战斗",
+      "体验工具",
+      "切回普通档"
+    ],
+    "errors": [],
+    "consoleErrors": [],
+    "httpErrors": [],
+    "classification": "TEST_POLICY_ADJUSTMENT",
+    "status": "superseded-by-user-clarification",
+    "resolution": "体验中/刷新普通raw不变；切回只允许真实墙钟hp/restAt恢复，其余字段不变。"
+  },
+  {
+    "at": "2026-10-28T03:18:31.708Z",
+    "report": "ui-browser-fixtures-first.json",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "label": "aura1-fixture",
+    "error": "AssertionError [ERR_ASSERTION]: simulation did not reach requested boundary: won/20\n    at Object.simulate (/Users/zhangnu/WeChatProjects/rainy-mushroom/scripts/verify-tower-growth-ui.cjs:228:11)\n    at async /Users/zhangnu/WeChatProjects/rainy-mushroom/scripts/verify-tower-growth-ui.cjs:403:39\n    at async scenario (/Users/zhangnu/WeChatProjects/rainy-mushroom/scripts/verify-tower-growth-ui.cjs:237:4)\n    at async main (/Users/zhangnu/WeChatProjects/rainy-mushroom/scripts/verify-tower-growth-ui.cjs:391:5)",
+    "actions": [
+      "锁妖塔",
+      "重访第1层",
+      "暂停",
+      "继续挑战"
+    ],
+    "errors": [],
+    "consoleErrors": [],
+    "httpErrors": [],
+    "classification": "FIXTURE_PRESSURE_INSUFFICIENT",
+    "status": "resolved-in-floor9-fixture",
+    "resolution": "原第1层站桩真实胜利，已改合法第9层真实死亡，全部3尺寸1/6心法通过。"
+  },
+  {
+    "classification": "VISUAL_REVIEW",
+    "status": "human-reviewed-observation-retained",
+    "severity": "P2",
+    "title": "光环在正常截图中对比度很低，1/6种不能清晰辨认",
+    "evidence": [
+      "ui-390x844-aura1-fixture-playing.png",
+      "ui-360x640-aura6-fixture-playing.png",
+      "ui-1280x800-aura6-fixture-playing.png"
+    ],
+    "limitation": "暂停弹窗遮挡角色，完整快照不变不能独立证明光环像素静止；真实死亡已返回结算页无残留，未捕获独立死亡战斗帧。",
+    "latestEvidence": "ui-final-360x640-aura6-fixture-playing.png",
+    "finalFunctionalReport": "ui-browser-final.json",
+    "humanReview": "用户确认已目视技能树、六光环、实际IAB工具面板；原对比度意见保留，不作为未完成的功能故障。"
+  }
+]

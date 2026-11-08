@@ -29,7 +29,7 @@ test('before first clear, stock confirmation and owned pills cannot bypass the o
       { type: 'usePill', id, confirmed: true },
     ]) {
       const before = store.state, raw = disk.raw
-      assert.equal(store.act(action, 0).reason, 'cultivation-floor-locked')
+      assert.equal(store.act(action, 0).reason, action.type==='buyPill'&&id==='ningqi'?'craft-only':'cultivation-floor-locked')
       assert.equal(store.state, before)
       assert.equal(disk.raw, raw)
     }
@@ -39,10 +39,11 @@ test('before first clear, stock confirmation and owned pills cannot bypass the o
   }
 })
 
-test('first clear and reload unlock purchase, crafting and use with the same six-dose limit', () => {
+test('first clear unlocks cultivation crafting and use while advanced pills remain craft-only', () => {
   const { disk, store } = fixture(1)
   assert.equal(cultivationPillAllowance(store.state).purchasable, 6)
-  assert.equal(store.act({ type: 'buyPill', id: 'ningqi', count: 1 }, 0).ok, true)
+  assert.equal(store.act({ type: 'buyPill', id: 'ningqi', count: 1 }, 0).reason, 'craft-only')
+  assert.equal(store.act({ type: 'buyPill', id: 'peiyuan', count: 1 }, 0).ok, true)
   assert.equal(store.act({ type: 'craftPill', id: 'ningqi', count: 1, sequence: 1, requestId: 'unlock' }, 0).ok, true)
   const reloaded = new TowerCampaignStore(disk, 0)
   assert.equal(reloaded.act({ type: 'usePill', id: 'ningqi' }, 0).gained, 90)

@@ -134,7 +134,7 @@ test('flight purchase, reload, downgrade and full respec spend and refund exactl
 test('flight preview and learned panel expose the same speed and slow resistance', () => {
   const { store } = fixture()
   const preview = skillPresentation(store.state, 'sj_flight')
-  assert.ok(preview.requirementLines.includes('功法点 1'))
+  assert.ok(preview.requirementLines.includes('悟道点 1'))
   assert.deepEqual(preview.statLines, ['移速加成 25%', '减速抗性 50%'])
   assert.equal(store.act({ type: 'learnSkill', id: 'sj_flight' }, 0).ok, true)
   const learned = skillPresentation(store.state, 'sj_flight')
@@ -150,7 +150,7 @@ test('flight rejects forged low-level or excess ranks and retains passive first-
   ]) assert.equal(fixture(patch).store.error, 'corrupt')
   const locked = fixture({ xp: (cultivationLevelXp(11) - 1) })
   reject(locked.store, locked.disk, { type: 'learnSkill', id: 'sj_flight' }, 'stage-locked')
-  const poor = fixture({ tutorialWaves: 3, skills: { ...giftSkills(3), sj_yujian: 3, sj_arc: 7, sj_wanjian: 7, sj_spirit: 1 } })
+  const poor = fixture({ tutorialWaves: 3, skills: { ...giftSkills(3), sj_yujian: 5, sj_arc: 7, sj_bone: 2 } }) // 11级共14点（含赠送1级）
   assert.equal(poor.store.readOnly, false)
   assert.equal(growthSummary(poor.store.state).available, 0)
   reject(poor.store, poor.disk, { type: 'learnSkill', id: 'sj_flight' }, 'insufficient-points')

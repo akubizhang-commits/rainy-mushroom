@@ -66,14 +66,14 @@ for(const d of EQUIPMENT_ROSTER){
  if(d.category==='armor')base.vitality=choose('vitality',slot.vitality,d.id==='eq_armor_wugou'?0:.5)
  const affixes=[],add=(type,value,target)=>{if(value)affixes.push({type,value,...(target?{target}:{})})}
  if(d.category==='weapon'){
-  const flow=affinity(d)==='general'||d.id==='eq_sword_zhaoyuan'?0:({fa:6,bao:8,ling:12}[d.tier]??0)
+  const flow=d.id==='eq_sword_zhaodan'?3:affinity(d)==='general'||d.id==='eq_sword_zhaoyuan'?0:({fa:6,bao:8,ling:12}[d.tier]??0)
   const element=({bao:2,ling:4}[d.tier]??0)
-  const total=choose('budget',skillIds[d.id]?(d.tier==='fa'?[12,24]:[24,42]):o.budget)
+  const total=choose('budget',skillIds[d.id]?(d.tier==='fa'?[12,25]:[24,42]):o.budget)
   add('physical',total-flow-element);add('magic',total-flow-element)
   add('attackSpeed',choose('speed',o.weaponSpeed,0))
   const attached=({fan:2,fa:2,bao:3,ling:5})[d.tier]
   if(WEAPON_BLEED_IDS.includes(d.id)){add('bleedConversion',50);add('bleed',attached)}else add('onHit',attached)
-  add('flow',flow,affinity(d));add('element',element,'all')
+  add('flow',flow,d.id==='eq_sword_zhaodan'?'qi':affinity(d));add('element',element,'all')
   if(skillIds[d.id])add('skillLevel',1,skillIds[d.id])
  }else if(d.category==='armor'){
   add(caster?'castSpeed':'attackSpeed',choose('speed',caster?o.castSpeed:o.armorSpeed,0))

@@ -28,6 +28,8 @@ test('fixed bases visibly specialize and matched flow maintains its appropriate 
   assert.ok(weaponFlatMagicAttack(formation)>weaponFlatMagicAttack(qi))
   assert.ok((weaponFlatAttack(formation)+weaponFlatMagicAttack(formation))/2>(weaponFlatAttack(qi)+weaponFlatMagicAttack(qi))/2)
   for(let lv=equipmentTier(tier).minLevel;lv<=30;lv++)for(const bone of [0,1,2,3,4])for(const id of ['sj_arc','sj_cross','sj_line','sj_wanjian','sj_formation']){
+   // 法器阶剑阵武器也加流云斩（2026-11-06），两类武器在流云斩上不再分高低。
+   if(tier==='fa'&&id==='sj_arc')continue
    const array=['sj_wanjian','sj_formation'].includes(id),good=array?formation:qi,bad=array?qi:formation
    assert.ok(Number.isFinite(value(general,id,lv,bone)))
    const gain=value(good,id,lv,bone)/value(bad,id,lv,bone)-1

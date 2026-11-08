@@ -6,7 +6,7 @@ import { runInNewContext } from 'node:vm'
 import { swordQiVisualLift } from '../js/xianxia/TowerSwordQi.js'
 function fixture(){
  const pending=[]
- class Node{constructor(){this.isValid=true;this.children=[];this.layer=1}addChild(n){n.parent=this;this.children.push(n)}addComponent(C){return new C()}setPosition(x,y){this.x=x;this.y=y}removeFromParent(){this.parent=null}destroy(){this.isValid=false}}
+ class Node{constructor(){this.isValid=true;this.children=[];this.layer=1}addChild(n){n.parent=this;this.children.push(n)}addComponent(C){return new C()}setPosition(x,y){this.x=x;this.y=y}setScale(x,y){this.scaleX=x;this.scaleY=y}removeFromParent(){this.parent=null}destroy(){this.isValid=false}}
  class UITransform{setAnchorPoint(){}setContentSize(w,h){this.width=w;this.height=h}}
  class Sprite{static SizeMode={CUSTOM:1}}
  class Graphics{constructor(){this.calls=[]}clear(){this.calls=[]}moveTo(x,y){this.calls.push(['m',x,y])}lineTo(x,y){this.calls.push(['l',x,y])}close(){}fill(){this.calls.push(['f',this.fillColor])}stroke(){this.calls.push(['s',this.strokeColor])}}
@@ -43,28 +43,23 @@ test('dead, hostile, malformed, future and expired bursts never render',()=>{
  assert.equal(f.art.syncTower(f.parent,invalid,2.2,{x:0,y:0}).size,0)
  f.art.destroy();assert.equal(f.art.syncTower(f.parent,[e],2.2,{x:0,y:0}).size,0)
 })
-test('slanted crescents overlap in time while blooming outward',()=>{
+test('white-violet crescents stay fixed at full size throughout their local slash',()=>{
  const f=fixture();f.art.preload();f.load()
- for(const radius of [180,220,270])for(const seed of [123,999,328478]){
-  const occupied=new Set(),previous=new Map()
-  for(let age=.01;age<.9;age+=.02)for(let i=0;i<6;i++){
-   const p=f.art.pose(i,radius,age,seed);if(!p.active)continue
-   const base=radius*(.32+[.02,-.015,.035,0,.01,-.025][i])
-   assert.ok(p.size>=base*2.1*.38&&p.size<=base*2.1)
-   const distance=Math.hypot(p.x,p.y)
-   assert.ok(distance>=18+radius*.12&&distance<=18+radius*.27,'compact outward center path')
-   const heading=p.angle*Math.PI/180
-   const outward=(p.x*Math.cos(heading)+p.y*Math.sin(heading))/distance
-   assert.ok(outward>.7&&outward<.94,'blade points outward at a crossing angle')
-   const last=previous.get(i)
-   if(last){assert.ok(distance>last.distance,'blades move outward');assert.ok(p.size>last.size,'blades unfold')}
-   previous.set(i,{distance,size:p.size})
-   assert.ok(Number.isFinite(p.angle))
-   occupied.add((Math.floor((Math.atan2(p.y,p.x)+Math.PI*2)/(Math.PI/2)))%4)
-  }
-  assert.equal(occupied.size,4,'blades cover all four surrounding quadrants')
+ for(const r of [180,220,270])for(const seed of [123,999])for(let i=0;i<2;i++){
+  const poses=[.26,.32,.42].map(age=>f.art.pose(i,r,age,seed));
+  assert.ok(poses.every(p=>p.active));
+  for(const p of poses.slice(1))for(const key of ['x','y','angle','size'])assert.equal(p[key],poses[0][key],key+' cannot fly or expand');
+  assert.ok(poses[0].size>r*.6);assert.ok(Math.hypot(poses[0].x,poses[0].y)+poses[0].size*.55<r*1.1);
  }
- assert.equal(Array.from({length:6},(_,i)=>f.art.pose(i,270,.04,123)).filter(p=>p.active).length,1)
- assert.notDeepEqual(f.art.pose(2,270,.35,123),f.art.pose(2,270,.35,999))
- assert.equal(Array.from({length:6},(_,i)=>f.art.pose(i,270,.30,123)).filter(p=>p.active&&p.alpha>.15).length,6,'all six visibly overlap during the bloom')
-})
+ f.art.syncTower(f.parent,[e],2.32,{x:0,y:0});const a=f.art.actors.get(e.id);
+ assert.equal(new Set(a.arcs.map(p=>p.sprite.spriteFrame)).size,2,'front pale echo and rear blue-black tail use distinct paintings');
+ assert.equal(a.arcs.length,2);assert.ok(a.arcs.every(p=>p.node.active));
+ assert.ok(a.arcs.every(p=>p.node.x>0));assert.equal(a.arcs[0].node.angle,0);assert.equal(a.arcs[1].node.angle,0);assert.equal(a.arcs[0].node.x,a.arcs[1].node.x);
+});
+
+test('left-facing slash preserves the reference handedness instead of flipping its long tail upward',()=>{
+ const f=fixture();f.art.preload();f.load();
+ f.art.syncTower(f.parent,[{...e,dirX:-1,dirY:0}],2.2,{x:0,y:0});
+ const a=f.art.actors.get(e.id);assert.equal(a.node.angle,180);assert.equal(a.node.scaleY,-1);
+ f.art.syncTower(f.parent,[{...e,dirX:1,dirY:0}],2.2,{x:0,y:0});assert.equal(a.node.scaleY,1);
+});

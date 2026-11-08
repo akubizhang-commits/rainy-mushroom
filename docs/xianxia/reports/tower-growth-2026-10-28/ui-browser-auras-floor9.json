@@ -1,0 +1,741 @@
+{
+  "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/index.html?ruleset=xianxia&tower=1",
+  "status": "AUTOMATED_CHECKS_PASSED_VISUAL_REVIEW_PENDING",
+  "selection": {
+    "cases": [
+      "aura"
+    ],
+    "sizes": []
+  },
+  "startedAt": "2026-10-28T03:18:56.246Z",
+  "results": [
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "label": "aura1-fixture",
+      "kind": "ARTIFICIAL VALIDATED CAMP FIXTURE — NOT NATURAL PROGRESSION",
+      "fixture": {
+        "sources": {
+          "xp": 10920,
+          "clearedFloor": 9,
+          "cores": 2000,
+          "tutorialWaves": 3,
+          "hp": 120
+        },
+        "transactions": [
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_heart"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_heart",
+              "level": 1,
+              "cost": 1,
+              "bookCost": 0
+            }
+          }
+        ]
+      },
+      "checks": [
+        {
+          "name": "暂停快照完全静止",
+          "passed": true,
+          "passiveCount": 1
+        },
+        {
+          "name": "真实不走位死亡模拟",
+          "phase": "lost",
+          "clearedWaves": [
+            1
+          ],
+          "earned": {
+            "xp": 0,
+            "cores": 1,
+            "contribution": 2
+          },
+          "time": 24.533333333333335,
+          "passed": true
+        }
+      ],
+      "actions": [
+        "锁妖塔",
+        "重访第9层",
+        "暂停",
+        "继续挑战"
+      ],
+      "screenshots": [
+        "ui-390x844-aura1-fixture-playing.png",
+        "ui-390x844-aura1-fixture-paused-a.png",
+        "ui-390x844-aura1-fixture-paused-b.png",
+        "ui-390x844-aura1-fixture-dead.png"
+      ],
+      "errors": [],
+      "consoleErrors": [],
+      "httpErrors": [],
+      "ok": true,
+      "build": {
+        "scripts": [
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/polyfills.bundle.5adbf.js",
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/system.bundle.cc789.js",
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/import-map.14612.json"
+        ],
+        "growthVersion": null
+      },
+      "visualReview": {
+        "status": "REQUIRES_IMAGE_REVIEW",
+        "expectedRings": 1,
+        "checks": [
+          "实际显示对应1/6种光环",
+          "暂停光环不动",
+          "真实死亡后光环消失"
+        ],
+        "deathEvidence": "宿主真实死亡后立即返回结算页；此截图只能证明结算页无残留光环，不声称捕获了独立死亡战斗帧。"
+      }
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "label": "aura6-fixture",
+      "kind": "ARTIFICIAL VALIDATED CAMP FIXTURE — NOT NATURAL PROGRESSION",
+      "fixture": {
+        "sources": {
+          "xp": 10920,
+          "clearedFloor": 9,
+          "cores": 2000,
+          "tutorialWaves": 3,
+          "hp": 120
+        },
+        "transactions": [
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_heart"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_heart",
+              "level": 1,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "vajra"
+            },
+            "result": {
+              "ok": true,
+              "id": "vajra",
+              "level": 1,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "magnet"
+            },
+            "result": {
+              "ok": true,
+              "id": "magnet",
+              "level": 1,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_mark"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_mark",
+              "level": 1,
+              "cost": 1,
+              "bookCost": 10
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_bone"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_bone",
+              "level": 1,
+              "cost": 1,
+              "bookCost": 10
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_gate"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_gate",
+              "level": 1,
+              "cost": 1,
+              "bookCost": 10
+            }
+          }
+        ]
+      },
+      "checks": [
+        {
+          "name": "暂停快照完全静止",
+          "passed": true,
+          "passiveCount": 6
+        },
+        {
+          "name": "真实不走位死亡模拟",
+          "phase": "lost",
+          "clearedWaves": [
+            1
+          ],
+          "earned": {
+            "xp": 0,
+            "cores": 2,
+            "contribution": 2
+          },
+          "time": 28.816666666666666,
+          "passed": true
+        }
+      ],
+      "actions": [
+        "锁妖塔",
+        "重访第9层",
+        "暂停",
+        "继续挑战"
+      ],
+      "screenshots": [
+        "ui-390x844-aura6-fixture-playing.png",
+        "ui-390x844-aura6-fixture-paused-a.png",
+        "ui-390x844-aura6-fixture-paused-b.png",
+        "ui-390x844-aura6-fixture-dead.png"
+      ],
+      "errors": [],
+      "consoleErrors": [],
+      "httpErrors": [],
+      "ok": true,
+      "build": {
+        "scripts": [
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/polyfills.bundle.5adbf.js",
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/system.bundle.cc789.js",
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/import-map.14612.json"
+        ],
+        "growthVersion": null
+      },
+      "visualReview": {
+        "status": "REQUIRES_IMAGE_REVIEW",
+        "expectedRings": 6,
+        "checks": [
+          "实际显示对应1/6种光环",
+          "暂停光环不动",
+          "真实死亡后光环消失"
+        ],
+        "deathEvidence": "宿主真实死亡后立即返回结算页；此截图只能证明结算页无残留光环，不声称捕获了独立死亡战斗帧。"
+      }
+    },
+    {
+      "viewport": {
+        "width": 360,
+        "height": 640
+      },
+      "label": "aura1-fixture",
+      "kind": "ARTIFICIAL VALIDATED CAMP FIXTURE — NOT NATURAL PROGRESSION",
+      "fixture": {
+        "sources": {
+          "xp": 10920,
+          "clearedFloor": 9,
+          "cores": 2000,
+          "tutorialWaves": 3,
+          "hp": 120
+        },
+        "transactions": [
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_heart"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_heart",
+              "level": 1,
+              "cost": 1,
+              "bookCost": 0
+            }
+          }
+        ]
+      },
+      "checks": [
+        {
+          "name": "暂停快照完全静止",
+          "passed": true,
+          "passiveCount": 1
+        },
+        {
+          "name": "真实不走位死亡模拟",
+          "phase": "lost",
+          "clearedWaves": [
+            1
+          ],
+          "earned": {
+            "xp": 0,
+            "cores": 1,
+            "contribution": 2
+          },
+          "time": 25.733333333333334,
+          "passed": true
+        }
+      ],
+      "actions": [
+        "锁妖塔",
+        "重访第9层",
+        "暂停",
+        "继续挑战"
+      ],
+      "screenshots": [
+        "ui-360x640-aura1-fixture-playing.png",
+        "ui-360x640-aura1-fixture-paused-a.png",
+        "ui-360x640-aura1-fixture-paused-b.png",
+        "ui-360x640-aura1-fixture-dead.png"
+      ],
+      "errors": [],
+      "consoleErrors": [],
+      "httpErrors": [],
+      "ok": true,
+      "build": {
+        "scripts": [
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/polyfills.bundle.5adbf.js",
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/system.bundle.cc789.js",
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/import-map.14612.json"
+        ],
+        "growthVersion": null
+      },
+      "visualReview": {
+        "status": "REQUIRES_IMAGE_REVIEW",
+        "expectedRings": 1,
+        "checks": [
+          "实际显示对应1/6种光环",
+          "暂停光环不动",
+          "真实死亡后光环消失"
+        ],
+        "deathEvidence": "宿主真实死亡后立即返回结算页；此截图只能证明结算页无残留光环，不声称捕获了独立死亡战斗帧。"
+      }
+    },
+    {
+      "viewport": {
+        "width": 360,
+        "height": 640
+      },
+      "label": "aura6-fixture",
+      "kind": "ARTIFICIAL VALIDATED CAMP FIXTURE — NOT NATURAL PROGRESSION",
+      "fixture": {
+        "sources": {
+          "xp": 10920,
+          "clearedFloor": 9,
+          "cores": 2000,
+          "tutorialWaves": 3,
+          "hp": 120
+        },
+        "transactions": [
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_heart"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_heart",
+              "level": 1,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "vajra"
+            },
+            "result": {
+              "ok": true,
+              "id": "vajra",
+              "level": 1,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "magnet"
+            },
+            "result": {
+              "ok": true,
+              "id": "magnet",
+              "level": 1,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_mark"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_mark",
+              "level": 1,
+              "cost": 1,
+              "bookCost": 10
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_bone"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_bone",
+              "level": 1,
+              "cost": 1,
+              "bookCost": 10
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_gate"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_gate",
+              "level": 1,
+              "cost": 1,
+              "bookCost": 10
+            }
+          }
+        ]
+      },
+      "checks": [
+        {
+          "name": "暂停快照完全静止",
+          "passed": true,
+          "passiveCount": 6
+        },
+        {
+          "name": "真实不走位死亡模拟",
+          "phase": "lost",
+          "clearedWaves": [
+            1
+          ],
+          "earned": {
+            "xp": 0,
+            "cores": 1,
+            "contribution": 2
+          },
+          "time": 27.766666666666666,
+          "passed": true
+        }
+      ],
+      "actions": [
+        "锁妖塔",
+        "重访第9层",
+        "暂停",
+        "继续挑战"
+      ],
+      "screenshots": [
+        "ui-360x640-aura6-fixture-playing.png",
+        "ui-360x640-aura6-fixture-paused-a.png",
+        "ui-360x640-aura6-fixture-paused-b.png",
+        "ui-360x640-aura6-fixture-dead.png"
+      ],
+      "errors": [],
+      "consoleErrors": [],
+      "httpErrors": [],
+      "ok": true,
+      "build": {
+        "scripts": [
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/polyfills.bundle.5adbf.js",
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/system.bundle.cc789.js",
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/import-map.14612.json"
+        ],
+        "growthVersion": null
+      },
+      "visualReview": {
+        "status": "REQUIRES_IMAGE_REVIEW",
+        "expectedRings": 6,
+        "checks": [
+          "实际显示对应1/6种光环",
+          "暂停光环不动",
+          "真实死亡后光环消失"
+        ],
+        "deathEvidence": "宿主真实死亡后立即返回结算页；此截图只能证明结算页无残留光环，不声称捕获了独立死亡战斗帧。"
+      }
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "label": "aura1-fixture",
+      "kind": "ARTIFICIAL VALIDATED CAMP FIXTURE — NOT NATURAL PROGRESSION",
+      "fixture": {
+        "sources": {
+          "xp": 10920,
+          "clearedFloor": 9,
+          "cores": 2000,
+          "tutorialWaves": 3,
+          "hp": 120
+        },
+        "transactions": [
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_heart"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_heart",
+              "level": 1,
+              "cost": 1,
+              "bookCost": 0
+            }
+          }
+        ]
+      },
+      "checks": [
+        {
+          "name": "暂停快照完全静止",
+          "passed": true,
+          "passiveCount": 1
+        },
+        {
+          "name": "真实不走位死亡模拟",
+          "phase": "lost",
+          "clearedWaves": [
+            1
+          ],
+          "earned": {
+            "xp": 0,
+            "cores": 1,
+            "contribution": 2
+          },
+          "time": 24.533333333333335,
+          "passed": true
+        }
+      ],
+      "actions": [
+        "锁妖塔",
+        "重访第9层",
+        "暂停",
+        "继续挑战"
+      ],
+      "screenshots": [
+        "ui-1280x800-aura1-fixture-playing.png",
+        "ui-1280x800-aura1-fixture-paused-a.png",
+        "ui-1280x800-aura1-fixture-paused-b.png",
+        "ui-1280x800-aura1-fixture-dead.png"
+      ],
+      "errors": [],
+      "consoleErrors": [],
+      "httpErrors": [],
+      "ok": true,
+      "build": {
+        "scripts": [
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/polyfills.bundle.5adbf.js",
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/system.bundle.cc789.js",
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/import-map.14612.json"
+        ],
+        "growthVersion": null
+      },
+      "visualReview": {
+        "status": "REQUIRES_IMAGE_REVIEW",
+        "expectedRings": 1,
+        "checks": [
+          "实际显示对应1/6种光环",
+          "暂停光环不动",
+          "真实死亡后光环消失"
+        ],
+        "deathEvidence": "宿主真实死亡后立即返回结算页；此截图只能证明结算页无残留光环，不声称捕获了独立死亡战斗帧。"
+      }
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "label": "aura6-fixture",
+      "kind": "ARTIFICIAL VALIDATED CAMP FIXTURE — NOT NATURAL PROGRESSION",
+      "fixture": {
+        "sources": {
+          "xp": 10920,
+          "clearedFloor": 9,
+          "cores": 2000,
+          "tutorialWaves": 3,
+          "hp": 120
+        },
+        "transactions": [
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_heart"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_heart",
+              "level": 1,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "vajra"
+            },
+            "result": {
+              "ok": true,
+              "id": "vajra",
+              "level": 1,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "magnet"
+            },
+            "result": {
+              "ok": true,
+              "id": "magnet",
+              "level": 1,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_mark"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_mark",
+              "level": 1,
+              "cost": 1,
+              "bookCost": 10
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_bone"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_bone",
+              "level": 1,
+              "cost": 1,
+              "bookCost": 10
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_gate"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_gate",
+              "level": 1,
+              "cost": 1,
+              "bookCost": 10
+            }
+          }
+        ]
+      },
+      "checks": [
+        {
+          "name": "暂停快照完全静止",
+          "passed": true,
+          "passiveCount": 6
+        },
+        {
+          "name": "真实不走位死亡模拟",
+          "phase": "lost",
+          "clearedWaves": [
+            1
+          ],
+          "earned": {
+            "xp": 0,
+            "cores": 1,
+            "contribution": 2
+          },
+          "time": 25.733333333333334,
+          "passed": true
+        }
+      ],
+      "actions": [
+        "锁妖塔",
+        "重访第9层",
+        "暂停",
+        "继续挑战"
+      ],
+      "screenshots": [
+        "ui-1280x800-aura6-fixture-playing.png",
+        "ui-1280x800-aura6-fixture-paused-a.png",
+        "ui-1280x800-aura6-fixture-paused-b.png",
+        "ui-1280x800-aura6-fixture-dead.png"
+      ],
+      "errors": [],
+      "consoleErrors": [],
+      "httpErrors": [],
+      "ok": true,
+      "build": {
+        "scripts": [
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/polyfills.bundle.5adbf.js",
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/system.bundle.cc789.js",
+          "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/import-map.14612.json"
+        ],
+        "growthVersion": null
+      },
+      "visualReview": {
+        "status": "REQUIRES_IMAGE_REVIEW",
+        "expectedRings": 6,
+        "checks": [
+          "实际显示对应1/6种光环",
+          "暂停光环不动",
+          "真实死亡后光环消失"
+        ],
+        "deathEvidence": "宿主真实死亡后立即返回结算页；此截图只能证明结算页无残留光环，不声称捕获了独立死亡战斗帧。"
+      }
+    }
+  ],
+  "evidencePolicy": "自然路径仅购丹/真实模拟/Store事务；高进度fixture单列，不写用户存档。光环截图需人工视觉复核。",
+  "sourceHashes": {
+    "js/xianxia/TowerGrowth.js": "24543c0059d60a64c80fca40ac976b7055bd3783d5402cefd5c0900119ab38d0",
+    "js/xianxia/TowerCampaign.js": "b7ed35b634fd14c3a48d7fa4b9baa43fe778e7eace859972ad83e260350be592",
+    "js/xianxia/TowerRun.js": "274ca5e3fa962bdbc2583f45a4340112f06db46cad581c932c71a606b8d57e2a",
+    "js/xianxia/TowerPlaytest.js": "2b4af1b3700e8f298c5e921d25a13fd2b50b808a03393368b225a03bb111f4b6",
+    "cocos-pilot/assets/scripts/TowerMenu.ts": "43f845ab406c6ef4153cb104decf8937c22ca25d02a53453c4e99c60a2bea4ac",
+    "cocos-pilot/assets/scripts/TowerView.ts": "c334b2e7df6005557cd8c5c2bca586e09d67a2d324e604434976d7a01e0a79d5"
+  },
+  "finishedAt": "2026-10-28T03:19:25.581Z",
+  "failures": 0
+}

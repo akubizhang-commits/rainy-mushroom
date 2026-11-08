@@ -5,7 +5,7 @@ import {TowerRun,validateTowerSnapshot} from '../js/xianxia/TowerRun.js'
 import {checksum} from '../js/xianxia/Checksum.js'
 import {DIANJUAN_DRAW_COST,DIANJUAN_STARTER,FIRST_CLEAR_REWARDS,DIANJUAN_CAMPAIGN_TOTAL} from '../js/xianxia/TowerEconomy.js'
 
-test('nine real floor ledgers yield three ten-pulls plus the starter ten-pull; repeats and failed saves cannot mint more',()=>{
+test('nine real floor ledgers yield six ten-pulls plus the starter ten-pull; repeats and failed saves cannot mint more',()=>{
  const disk={raw:null,fail:false,getItem(){return this.raw},setItem(k,v){if(this.fail)throw Error('full');this.raw=v}}
  let store=new TowerCampaignStore(disk,0);assert.equal(store.state.contribution,1000);store.act({type:'sync'},0)
  // Only combat progression is accelerated. All currency comes from real reward ledgers.
@@ -24,13 +24,13 @@ test('nine real floor ledgers yield three ten-pulls plus the starter ten-pull; r
   assert.equal(run.state.phase,'won');const snapshot=run.snapshot();assert.equal(validateTowerSnapshot(snapshot),true);assert.equal(snapshot.earned.contribution,0)
   const before=store.state,raw=disk.raw;disk.fail=true;assert.equal(store.act({type:'finishFloor',snapshot},0).reason,'save-failed');assert.equal(store.state,before);assert.equal(disk.raw,raw);disk.fail=false
   assert.equal(store.act({type:'finishFloor',snapshot},0).ok,true)
-  assert.equal(store.state.contribution,DIANJUAN_STARTER+Math.floor(floor/3)*1000)
+  assert.equal(store.state.contribution,DIANJUAN_STARTER+[1,4,7].filter(f=>f<=floor).length*2000)
   const settled=disk.raw;assert.equal(store.act({type:'finishFloor',snapshot},0).ok,false);assert.equal(disk.raw,settled)
   store=new TowerCampaignStore(disk,0);assert.equal(store.readOnly,false)
  }
- assert.equal(store.state.contribution,40*DIANJUAN_DRAW_COST)
- for(let i=1;i<=4;i++){const r=store.act({type:'drawMixed',tier:'fa',count:10,sequence:i,requestId:'budget-'+i},0);assert.equal(r.ok,true,r.reason);assert.equal(r.rewards.length,10);assert.equal(store.state.contribution,4000-i*1000)}
- assert.equal(store.act({type:'drawMixed',tier:'fa',count:1,sequence:5,requestId:'empty'},0).reason,'insufficient-dianjuan')
+ assert.equal(store.state.contribution,70*DIANJUAN_DRAW_COST)
+ for(let i=1;i<=7;i++){const r=store.act({type:'drawMixed',tier:'fa',count:10,sequence:i,requestId:'budget-'+i},0);assert.equal(r.ok,true,r.reason);assert.equal(r.rewards.length,10);assert.equal(store.state.contribution,7000-i*1000)}
+ assert.equal(store.act({type:'drawMixed',tier:'fa',count:1,sequence:8,requestId:'empty'},0).reason,'insufficient-dianjuan')
  assert.equal(new TowerCampaignStore(disk,0).state.contribution,0)
 })
 

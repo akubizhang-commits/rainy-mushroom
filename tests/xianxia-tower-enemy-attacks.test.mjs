@@ -13,7 +13,8 @@ function enemy(id) {
   return { family, role: a.role, radius, damage: a.damage }
 }
 
-for (const [role, cooldown] of [['normal', 5], ['elite', 4.5], ['boss', 4]]) {
+// 83号：普通怪冲锋是低频技能，路径缩到240；精英／Boss 保留原冲锋。
+for (const [role, cooldown] of [['elite', 4.5], ['boss', 4]]) {
   test(`boar ${role}: charge waits for its exact cooldown and can bite independently`, () => {
     const e = enemy(`boar_${role}`)
     const ready = enemyAttackSpec(e, 240, 10, {})
@@ -37,30 +38,57 @@ for (const [role, cooldown] of [['normal', 5], ['elite', 4.5], ['boss', 4]]) {
   })
 }
 
-test('normal boar charges at 130 and 270, approaches through the gap and outside range', () => {
+test('normal boar charges at 130 and 240, approaches through the gap and outside range', () => {
   const e = enemy('boar_normal')
-  for (const d of [130, 270]) assert.equal(enemyAttackSpec(e, d, 0)?.kind, 'charge')
-  for (const d of [98.001, 129.999, 270.001, 360, 480]) {
+  for (const d of [130, 240]) {
+    const spec = enemyAttackSpec(e, d, 0)
+    assert.equal(spec?.kind, 'charge')
+    assert.equal(spec.range, 240)
+    assert.equal(spec.speed, 460)
+    assert.ok(spec.active * spec.speed >= spec.range)
+  }
+  for (const d of [98.001, 129.999, 240.001, 270, 360, 480]) {
     assert.equal(enemyAttackSpec(e, d, 0), null, `distance ${d}`)
   }
   assert.equal(enemyAttackSpec(e, 98, 0)?.kind, 'bite')
   assert.equal(enemyAttackSpec(e, 130, 0, { charge: 5 }), null, 'cooling charge must permit approach')
+  assert.equal(enemyAttackSpec(e, 60, 0, { charge: 5 })?.kind, 'bite')
+  assert.equal(enemyAttackSpec(e, 200, 0, {}, { skillBlocked: true }), null, 'a blocked skill cannot be selected')
+})
+
+test('normal enemies: one small bite as the ordinary attack; every skill stays within the normal caps', () => {
+  for (const a of ARCHETYPES.filter(item => item.role === 'normal')) {
+    const e = enemy(a.id)
+    const bite = enemyAttackSpec(e, 60, 0, {}, { skillBlocked: true })
+    assert.equal(bite?.kind, 'bite', a.id)
+    assert.equal(bite.angle, 100, a.id)
+    assert.equal(bite.range, e.radius + 54, a.id)
+    for (const d of [60, 100, 130, 200, 240, 300, 480]) {
+      const spec = enemyAttackSpec(e, d, 0)
+      if (!spec || spec.kind === 'bite') continue
+      assert.notEqual(spec.shape, 'circle', `${a.id}: normal skills cannot be full circles`)
+      if (spec.shape === 'sector') {
+        assert.ok(spec.angle <= 130 && spec.range <= e.radius + 90, `${a.id} ${spec.kind}`)
+      }
+      if (spec.kind === 'charge') assert.ok(spec.range <= 240, a.id)
+    }
+  }
 })
 
 for (const [id, kind, shape, range, angle] of [
-  ['wolf_normal', 'bite', 'sector', 104, 110],
+  ['wolf_normal', 'sweep', 'sector', 104, 120],
   ['wolf_elite', 'bite', 'sector', 124, 120],
   ['wolf_boss', 'bite', 'sector', 150, 130],
-  ['bear_normal', 'slam', 'circle', 127, 0],
+  ['bear_normal', 'slam', 'sector', 122, 130],
   ['bear_elite', 'slam', 'circle', 142, 0],
   ['bear_boss', 'slam', 'circle', 164, 0],
-  ['tiger_normal', 'sweep', 'sector', 123, 140],
+  ['tiger_normal', 'sweep', 'sector', 118, 130],
   ['tiger_elite', 'sweep', 'sector', 142, 155],
   ['tiger_boss', 'sweep', 'sector', 164, 170],
-  ['crocodile_normal', 'sweep', 'sector', 125, 160],
+  ['crocodile_normal', 'sweep', 'sector', 120, 130],
   ['crocodile_elite', 'sweep', 'sector', 142, 175],
   ['crocodile_boss', 'sweep', 'sector', 164, 190],
-  ['ape_normal', 'slam', 'circle', 123, 0],
+  ['ape_normal', 'slam', 'sector', 118, 120],
   ['ape_elite', 'slam', 'circle', 142, 0],
   ['ape_boss', 'slam', 'circle', 164, 0],
   ['centipede_normal', 'sweep', 'sector', 102, 130],
@@ -87,7 +115,23 @@ for (const [id, kind, shape, range, angle] of [
 for (const [family, element] of [
   ['snake', 'poison'], ['scorpion', 'poison'], ['falcon', 'feather'], ['bat', 'sonic'],
 ]) {
-  for (const role of ['normal', 'elite', 'boss']) {
+  test(`${family} normal: bites up close and shoots only after pulling back to 150`, () => {
+    const e = enemy(`${family}_normal`)
+    assert.equal(enemyAttackSpec(e, 60, 12), null, 'a ready shot pulls back instead of biting')
+    assert.equal(enemyAttackSpec(e, 149.999, 12), null)
+    assert.equal(enemyAttackSpec(e, 60, 12, { shot: 99 })?.kind, 'bite')
+    assert.equal(enemyAttackSpec(e, e.radius + 54 + 18.001, 12, { shot: 99 }), null)
+    for (const d of [150, 240, 480]) {
+      const spec = enemyAttackSpec(e, d, 12)
+      assert.equal(spec?.kind, 'shot', `distance ${d}`)
+      assert.equal(spec.element, element)
+      assert.equal(spec.damage, e.damage)
+    }
+    assert.equal(enemyAttackSpec(e, 480.000001, 12), null)
+    assert.equal(enemyAttackSpec(e, 240, 12, { shot: 12.000001 }), null)
+    assert.equal(enemyAttackSpec(e, 60, 12, { shot: 99 })?.kind, 'bite')
+  })
+  for (const role of ['elite', 'boss']) {
     test(`${family} ${role}: shoots from its preferred band and uses a shot cooldown`, () => {
       const e = enemy(`${family}_${role}`)
       assert.deepEqual(enemyCombatStyle(e), { ranged: true, preferredMin: 180, preferredMax: 300 })

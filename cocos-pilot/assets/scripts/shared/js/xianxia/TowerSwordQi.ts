@@ -5,6 +5,8 @@ import { TOWER_PILLARS, PILLAR_FOOTPRINT } from './TowerObstacles'
 
 // Coordinates are relative to the leading edge. The renderer and collision
 // share this geometry; a broad bounding rectangle is never a damage region.
+// Preserve the original arc's single/triple flying-blade sequence.
+export const swordQiPoseIndex = item => item.pulseIndex || 1
 const cache = new Map()
 const crescentTipBack = .7 * (1 - Math.SQRT1_2)
 const crescentPoint = i => {

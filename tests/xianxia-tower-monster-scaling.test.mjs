@@ -90,6 +90,42 @@ test('generated constants remain identical to their source tables and generation
   assert.equal(run.status, 0, run.stdout + run.stderr)
 })
 
+test('generator rejects drifting first-floor aliases before rendering content', () => {
+  const run = spawnSync('python3', ['-c', `
+import copy, importlib.util, json
+spec = importlib.util.spec_from_file_location("content", "scripts/build-tower-content.py")
+module = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(module)
+data = {}
+for name, (filename, key) in module.tables.items():
+    value = json.loads((module.source / filename).read_text())
+    data[name] = value[key] if key else value
+canonical = {a["id"]: a for a in data["ARCHETYPES"]}
+for id, alias in data["FLOOR01"]["enemies"].items():
+    data["FLOOR01"]["enemies"][id] = {**canonical[id], "body_radius": alias["body_radius"]}
+module.validate_monster_scaling(data)
+id = next(iter(data["FLOOR01"]["enemies"]))
+for field, value in [("hp", -1), ("damage", 999), ("name", "drift"), ("body_radius", 0)]:
+    invalid = copy.deepcopy(data)
+    invalid["FLOOR01"]["enemies"][id][field] = value
+    try:
+        module.validate_monster_scaling(invalid)
+    except AssertionError:
+        pass
+    else:
+        raise RuntimeError("Accepted drifting alias: " + field)
+invalid = copy.deepcopy(data)
+invalid["FLOOR01"]["enemies"]["unknown"] = invalid["FLOOR01"]["enemies"].pop(id)
+try:
+    module.validate_monster_scaling(invalid)
+except AssertionError:
+    pass
+else:
+    raise RuntimeError("Accepted unknown alias")
+`], { cwd: new URL('..', import.meta.url), encoding: 'utf8' })
+  assert.equal(run.status, 0, run.stdout + run.stderr)
+})
+
 test('source economy metadata describes ten-layer growth without the stale20-percent cultivation ceiling', () => {
   const cap = ECONOMY.cultivation_cap, f = cap.growth_formula
   assert.equal(ECONOMY.schema_version, 4, 'metadata cleanup is not a save migration')

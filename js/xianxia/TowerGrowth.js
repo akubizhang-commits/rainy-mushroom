@@ -44,13 +44,17 @@ export function skillStage(id) {
 const damageCurve = (base, multiplier) => Array.from({ length: 10 }, (_, i) => base * multiplier ** i)
 // Each skill retains its initial per-rank price through max level (2026-11-02).
 const activeCosts = Array(10).fill(1)
-const specialActiveCosts = Array(10).fill(2)
+// 2026-11-06：悟道点减少后，特殊功法每级从2点降为1点。
+const specialActiveCosts = Array(10).fill(1)
 const passiveCosts = Array(4).fill(1)
 const advancedPassiveCosts = Array(4).fill(2)
 // Standalone casts do not require another skill simply because they share a flow.
 const prerequisites = {}
 // First learning, subsequent training bands and point prices are independent
 // of the display phase, including skills opening on a phase's final level.
+// 2026-11-06（84/85号复测）：御剑术仍2级可学，但1–3/4–6/7–9/10级分别在2/7/11/14级开放，
+// 压低御剑前期强度。各楼层入层时的等级上限与“炼气中期才开放”的试验方案相同。
+const bandLevels = { sj_yujian: [2, 7, 11, 14] }
 const cadenceUnlocks = { sj_line: 13,
   sj_mark: 16, sj_gate: 19, evo_tiandi: 22 }
 const cadencePointCosts = { sj_moon_triple: specialActiveCosts, sj_cross: activeCosts, sj_sancai: activeCosts }
@@ -88,7 +92,8 @@ function skill(id, effects, metadata = oldSkills.get(id)) {
       const phaseOffset = active ? Math.floor(index / 3)
         : id === 'sj_spirit' ? index : Math.floor((index * 2 + 1) / 3)
       const stage = GROWTH_STAGES[GROWTH_STAGES.indexOf(skillStage(id)) + phaseOffset]
-      const characterLevel = cadenceUnlocks[id] !== undefined
+      const characterLevel = bandLevels[id] ? bandLevels[id][phaseOffset]
+        : cadenceUnlocks[id] !== undefined
         ? Math.min(30, learnLevel + phaseOffset * 3) : Math.max(learnLevel, stage.minLevel)
       const realm = GROWTH_STAGES.find(s => characterLevel >= s.minLevel && characterLevel <= s.maxLevel).label
       return { characterLevel, realm }
@@ -105,13 +110,15 @@ function skill(id, effects, metadata = oldSkills.get(id)) {
 }
 
 // Excludes the initial gifted rank (one refundable point).
-export const GROWTH_POINT_CAP = 58
+export const GROWTH_POINT_CAP = 35
 // Retained for shared consumers; research no longer grants skill points.
 export const GROWTH_RESEARCH = freeze([])
 
 export const GROWTH_SKILLS = freeze([
   skill('sj_yujian', {
-    damage: [1.2, 1.5, ...Array.from({ length: 8 }, (_, i) => 1.8 * 1.13 ** i)],
+    // 2026-11-06：1–9级按比例压低，10级不变，御剑前期不再领先、后期保持中庸。
+    damage: [1.2, 1.5, ...Array.from({ length: 8 }, (_, i) => 1.8 * 1.13 ** i)]
+      .map((value, i) => value * [.5, .5, .52, .65, .72, .8, .85, .9, .95, 1][i]),
     // damage retains the one-second budget used by evolution balance.
     generation_interval: Array.from({ length: 10 }, (_, i) => .5 ** (i / 9)),
     sword_damage_share: Array.from({ length: 10 }, (_, i) => .5 ** (i / 9)),
@@ -123,7 +130,8 @@ export const GROWTH_SKILLS = freeze([
     rule: '1级每1秒生成1把飞剑，逐级加快至10级每0.5秒；悬停上限等于等级，最多10把。按目标剩余血量及在途伤害分配飞剑，多余继续悬停；多目标轮流寻敌。每剑伤害按基础生成间隔补偿，保持各级原持续伤害预算；命中后消散，不区分主副剑，不贯穿。damage保留为每秒基础伤害预算，供进化共用。',
   }, { ...oldSkills.get('sj_yujian'), learnLevel: 2 }),
   skill('sj_arc', {
-    damage: [1.5, 2.1, ...Array.from({ length: 8 }, (_, i) => 3 * 1.15 ** i)].map(value => value * .8), cooldown: 4, windup: .18,
+    // 2026-11-06：流云斩是各流派共用的开局过渡技能，只小幅加强：伤害×1.3、冷却4→3.5秒。
+    damage: [1.5, 2.1, ...Array.from({ length: 8 }, (_, i) => 3 * 1.15 ** i)].map(value => value * .8 * 1.3), cooldown: 3.5, windup: .18,
     radius: [140, 140, 150, 150, 160, 170, 170, 180, 180, 190],
     reach: 640, speed: 960,
     width: [140, 140, 150, 150, 160, 170, 170, 180, 180, 190].map(radius => radius * 1.2),
@@ -132,7 +140,9 @@ export const GROWTH_SKILLS = freeze([
     rule: '向身前连续斩出三道月弧，伤害按25%/33%/42%逐斩增强；每斩对同一敌人最多命中一次。',
   }, { ...oldSkills.get('sj_arc'), name: '流云斩' }),
   skill('sj_moon', {
-    damage: damageCurve(1.8, 1.15), cooldown: 6, windup: .18,
+    // 2026-11-06：剑气前期优势放在剑气专属的玄月斩上，冷却6→4秒。1–6级伤害×3，
+    // 7–10级倍率逐级收到×2，保证每升一级伤害都增加（约3.5%）。
+    damage: damageCurve(1.8, 1.15).map((value, i) => value * [3, 3, 3, 3, 3, 3, 2.71, 2.46, 2.22, 2][i]), cooldown: 4, windup: .18,
     radius: 230, reach: 230, width: 460, angle: 300, bladeWidth: 24,
     target_cap: 6, single_dps_factor: 1 / 6, hit_assumption: .55,
     rule: '在原地展开宽阔月弧，横扫周围大范围敌人；每次施放对同一敌人造成一次伤害，最多命中6个目标。',
@@ -163,7 +173,7 @@ export const GROWTH_SKILLS = freeze([
     rule: '发动起冷却6秒，剑环持续4秒；生效期间伤害乘10/7，以每轮最多7击补偿原6秒10击。所有环绕剑对同一目标共用0.6秒命中间隔，不乘剑数。周天剑域保留常驻与原伤害。',
   }, { ...oldSkills.get('sj_wanjian'), pointCosts: [...activeCosts] }),
   skill('sj_line', {
-    damage: damageCurve(8 * 1.8, 1.10), cooldown: 12, windup: .12,
+    damage: damageCurve(8 * 1.8 * 1.5, 1.10), cooldown: 12, windup: .12,
     reach: [450, 450, 490, 490, 530, 560, 560, 600, 600, 640],
     width: 28, target_cap: [3, 3, 4, 4, 4, 5, 5, 5, 5, 6],
     single_dps_factor: 1 / 12, hit_assumption: .65,
@@ -179,7 +189,7 @@ export const GROWTH_SKILLS = freeze([
   }),
   skill('sj_sancai', {
     slow_fraction: FORMATION_SLOWS.sj_sancai,
-    damage: damageCurve(6, 1.12), cooldown: 8, windup: .25,
+    damage: damageCurve(6 * 1.25, 1.12), cooldown: 8, windup: .25,
     reach: 320, duration: 3, hit_interval: 1, pulseCount: 3,
     radius: [150, 150, 150, 165, 165, 165, 180, 180, 180, 180],
     target_cap: 6, single_dps_factor: 1 / 8, hit_assumption: .65,
@@ -188,7 +198,7 @@ export const GROWTH_SKILLS = freeze([
   skill('sj_formation', {
     slow_fraction: FORMATION_SLOWS.sj_formation,
     // Smooth the late foundation/jindan transition without changing entry ranks.
-    damage: damageCurve(32 / 15, 1.15).map((damage, i) => damage * (1 + Math.max(0, i - 5) * .05) * 1.65), cooldown: 12, windup: .12,
+    damage: damageCurve(32 / 15, 1.15).map((damage, i) => damage * (1 + Math.max(0, i - 5) * .05) * 1.65 * (i >= 6 ? 1.25 : 1)), cooldown: 12, windup: .12,
     reach: 360, duration: 8, hit_interval: .5, ticks: 6,
     pulseCount: [12, 12, 12, 14, 14, 14, 16, 16, 16, 16],
     radius: [132, 132, 144, 144, 156, 168, 168, 180, 180, 192],
@@ -321,7 +331,8 @@ export function skillLearnLevel(state, definition) {
 
 export function realmPoints(xp = 0) {
   const level = cultivationAt(xp).level
-  return 2 * (level - 1)
+  // 2026-11-06：每升1级1点；突破筑基（11级）、金丹（21级）各再给3点。满级35点。
+  return (level - 1) + (level >= 11 ? 3 : 0) + (level >= 21 ? 3 : 0)
 }
 
 function pointSources(state) {

@@ -1,0 +1,5467 @@
+{
+  "status": "AUTOMATED_PASS_VISUAL_REVIEW_PENDING",
+  "buildClassification": "final",
+  "scriptHash": "c22c4e557ac72afd02ba8c8a6052004868f13e21ff52adb1a88455fd97bf6df0",
+  "startedAt": "2026-10-28T05:58:14.022Z",
+  "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/index.html?ruleset=xianxia&tower=1",
+  "preparation": {
+    "status": "PREPARED_WAITING_FOR_BUILD_READY",
+    "browserExecuted": false,
+    "preparedAt": "2026-10-28T05:58:13.745Z",
+    "sizes": [
+      {
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "width": 844,
+        "height": 390
+      },
+      {
+        "width": 1024,
+        "height": 768
+      },
+      {
+        "width": 390,
+        "height": 844
+      },
+      {
+        "width": 1920,
+        "height": 280
+      },
+      {
+        "width": 3840,
+        "height": 1080
+      }
+    ],
+    "contract": {
+      "selectors": {
+        "treePanel": "技能树面板",
+        "treeScroll": "技能树二维卷轴",
+        "treeContent": "境界技能树内容",
+        "detail": "技能详情固定栏",
+        "detailScroll": "技能详情独立卷轴",
+        "detailContent": "技能详情栏内容",
+        "name": "技能节点-<id>",
+        "icon": "技能图标-<id>",
+        "level": "技能等级-<id>",
+        "plus": "learnSkill-<id>",
+        "minus": "decreaseSkill-<id>",
+        "joystick": "移动摇杆"
+      },
+      "expectedRealmRows": {
+        "炼气": 12,
+        "金丹": 4
+      },
+      "handoff844LogicalViewports": {
+        "tree": {
+          "width": 820,
+          "height": 297.47
+        },
+        "detail": {
+          "width": 364,
+          "height": 281.47
+        }
+      },
+      "cdMeaning": "Current source displays authored cooldown / hit interval / 常驻, not a live countdown.",
+      "sourceHashes": {
+        "cocos-pilot/assets/scripts/TowerMenu.ts": "195a4db6ea11414fbcd8ab49e45aeb46a0b92feec7b16b5e7269f60f415f5390",
+        "cocos-pilot/assets/scripts/TowerView.ts": "013f50c89d5b64d237b886503b021fe1523bac8ab92bbbb54845b228e96c15ee",
+        "cocos-pilot/assets/scripts/PinePilot.ts": "2159b0491dde3dcf1e770ec226876e601b944c5f946e833e3fedfd44259dff60",
+        "js/xianxia/TowerCampaign.js": "9abd84775cc6475dba457f5d6dcef714dc23216e87d7753fbbcc480416ee0283",
+        "js/xianxia/TowerGrowth.js": "6d380a236d33043757b7525c628b0da0e5bad491c3f503e2aefbce417462ba92",
+        "js/xianxia/TowerRun.js": "79e4a7703d08ceee31670000ba93b4ddcd70855e6c9bb8a210e1f27423a08b0d",
+        "js/xianxia/TowerLoot.js": "f2eeb5dca0ee913fc30250ef46e9515fe58f4d1318855431e55408d2d1cd9761",
+        "js/xianxia/TowerArena.js": "f79cc3c9f5eb833abcf3b2b511046dafa579cf78b7f2e758bc3b6cf7259c43b6",
+        "js/xianxia/TowerEnemyAttacks.js": "586c053dc035220250b7c884ca6b7b456d8a9fe1863b860ac8220c9f2c32e561",
+        "cocos-pilot/assets/scripts/TowerArenaView.ts": "2a70b4c56a4b9a4a0c05c0ab5f18ea8ef60d8c4a565468f6aad71f4833f8e6ad"
+      }
+    },
+    "fixtures": [
+      {
+        "kind": "ARTIFICIAL CAMPAIGN-VALIDATED UI FIXTURE — NOT NATURAL PROGRESSION/BALANCE",
+        "name": "tree",
+        "sources": {
+          "xp": 10920,
+          "hp": 120,
+          "cores": 2000,
+          "clearedFloor": 9,
+          "tutorialWaves": 3
+        },
+        "transactions": [
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_arc"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_arc",
+              "level": 2,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_line"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_line",
+              "level": 1,
+              "cost": 2,
+              "bookCost": 20
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_yujian"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_yujian",
+              "level": 2,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_yujian"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_yujian",
+              "level": 3,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_yujian"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_yujian",
+              "level": 4,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_yujian"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_yujian",
+              "level": 5,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_yujian"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_yujian",
+              "level": 6,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_yujian"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_yujian",
+              "level": 7,
+              "cost": 2,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_yujian"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_yujian",
+              "level": 8,
+              "cost": 2,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_heart"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_heart",
+              "level": 1,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_heart"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_heart",
+              "level": 2,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_heart"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_heart",
+              "level": 3,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_heart"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_heart",
+              "level": 4,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "sj_heart"
+            },
+            "result": {
+              "ok": true,
+              "id": "sj_heart",
+              "level": 5,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "evo_wanjian"
+            },
+            "result": {
+              "ok": true,
+              "id": "evo_wanjian",
+              "level": 1,
+              "cost": 3,
+              "bookCost": 240
+            }
+          },
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "evo_wanjian"
+            },
+            "result": {
+              "ok": true,
+              "id": "evo_wanjian",
+              "level": 2,
+              "cost": 4,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "sync"
+            },
+            "result": {
+              "ok": true,
+              "hp": 120
+            }
+          }
+        ],
+        "rawHash": "b9f42bcecd8203a4f082db2cd2ba4af1e3fef364ca777154702e776b2eca46b5",
+        "growth": {
+          "total": 33,
+          "spent": 24,
+          "available": 9,
+          "realm": 30,
+          "firstClear": 3,
+          "research": 0,
+          "cap": 36
+        },
+        "skills": {
+          "sj_yujian": 8,
+          "sj_arc": 2,
+          "sj_wanjian": 1,
+          "sj_line": 1,
+          "sj_heart": 5
+        },
+        "evolutionRanks": {
+          "evo_wanjian": 2
+        }
+      },
+      {
+        "kind": "ARTIFICIAL CAMPAIGN-VALIDATED UI FIXTURE — NOT NATURAL PROGRESSION/BALANCE",
+        "name": "input",
+        "sources": {
+          "xp": 10920,
+          "hp": 120,
+          "cores": 2000,
+          "clearedFloor": 9,
+          "tutorialWaves": 3
+        },
+        "transactions": [
+          {
+            "action": {
+              "type": "learnSkill",
+              "id": "vajra"
+            },
+            "result": {
+              "ok": true,
+              "id": "vajra",
+              "level": 1,
+              "cost": 1,
+              "bookCost": 0
+            }
+          },
+          {
+            "action": {
+              "type": "sync"
+            },
+            "result": {
+              "ok": true,
+              "hp": 120
+            }
+          }
+        ],
+        "rawHash": "4a7adee74fdc7905a6cbf64eb404bb95fb46be889010ca7768926f9b3bf648bf",
+        "growth": {
+          "total": 33,
+          "spent": 1,
+          "available": 32,
+          "realm": 30,
+          "firstClear": 3,
+          "research": 0,
+          "cap": 36
+        },
+        "skills": {
+          "sj_yujian": 1,
+          "sj_arc": 1,
+          "sj_wanjian": 1,
+          "vajra": 1
+        },
+        "evolutionRanks": {}
+      }
+    ]
+  },
+  "browser": {
+    "version": "155.0.8059.12",
+    "module": "/Users/zhangnu/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright",
+    "executablePath": "/Users/zhangnu/Library/Caches/ms-playwright/chromium_headless_shell-1247/chrome-headless-shell-mac-arm64/chrome-headless-shell"
+  },
+  "results": [
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "kind": "hex",
+      "fixtureHash": "4a7adee74fdc7905a6cbf64eb404bb95fb46be889010ca7768926f9b3bf648bf",
+      "ok": true,
+      "checks": [
+        {
+          "name": "Modal stays inside viewport: delivery tools entry",
+          "passed": true,
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "box": {
+            "left": 0,
+            "right": 1280,
+            "top": 0,
+            "bottom": 720
+          },
+          "controls": [
+            "进入独立体验档",
+            "返回"
+          ]
+        },
+        {
+          "name": "Modal stays inside viewport: delivery tools x3",
+          "passed": true,
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "box": {
+            "left": 0,
+            "right": 1280,
+            "top": 0,
+            "bottom": 720
+          },
+          "controls": [
+            "游戏速度 ×1",
+            "游戏速度 ×2",
+            "游戏速度 ×3 · 当前",
+            "无敌秒杀：开启",
+            "返回宗门",
+            "切回普通档"
+          ]
+        },
+        {
+          "name": "New Campaign arenaVersion=1; actual world and HUD paths contain six hex vertices",
+          "passed": true,
+          "paths": {
+            "world": [
+              {
+                "closed": true,
+                "points": [
+                  {
+                    "x": 0,
+                    "y": 1068
+                  },
+                  {
+                    "x": 945,
+                    "y": 528
+                  },
+                  {
+                    "x": 945,
+                    "y": -552
+                  },
+                  {
+                    "x": 0,
+                    "y": -1092
+                  },
+                  {
+                    "x": -945,
+                    "y": -552
+                  },
+                  {
+                    "x": -945,
+                    "y": 528
+                  },
+                  {
+                    "x": 0,
+                    "y": 1068
+                  }
+                ]
+              },
+              {
+                "closed": true,
+                "points": [
+                  {
+                    "x": 0,
+                    "y": 1003.1999999999999
+                  },
+                  {
+                    "x": 888.3,
+                    "y": 495.59999999999997
+                  },
+                  {
+                    "x": 888.3,
+                    "y": -519.5999999999999
+                  },
+                  {
+                    "x": 0,
+                    "y": -1027.1999999999998
+                  },
+                  {
+                    "x": -888.3,
+                    "y": -519.5999999999999
+                  },
+                  {
+                    "x": -888.3,
+                    "y": 495.59999999999997
+                  }
+                ]
+              },
+              {
+                "closed": true,
+                "points": [
+                  {
+                    "x": 0,
+                    "y": 1068
+                  },
+                  {
+                    "x": 945,
+                    "y": 528
+                  },
+                  {
+                    "x": 945,
+                    "y": -552
+                  },
+                  {
+                    "x": 0,
+                    "y": -1092
+                  },
+                  {
+                    "x": -945,
+                    "y": -552
+                  },
+                  {
+                    "x": -945,
+                    "y": 528
+                  }
+                ]
+              }
+            ],
+            "hud": [
+              {
+                "closed": true,
+                "points": [
+                  {
+                    "x": 571,
+                    "y": 227.42857142857144
+                  },
+                  {
+                    "x": 609,
+                    "y": 205.71428571428572
+                  },
+                  {
+                    "x": 609,
+                    "y": 162.28571428571428
+                  },
+                  {
+                    "x": 571,
+                    "y": 140.57142857142856
+                  },
+                  {
+                    "x": 533,
+                    "y": 162.28571428571428
+                  },
+                  {
+                    "x": 533,
+                    "y": 205.71428571428572
+                  },
+                  {
+                    "x": 571,
+                    "y": 227.42857142857144
+                  }
+                ]
+              },
+              {
+                "closed": true,
+                "points": [
+                  {
+                    "x": 571,
+                    "y": 227.42857142857144
+                  },
+                  {
+                    "x": 609,
+                    "y": 205.71428571428572
+                  },
+                  {
+                    "x": 609,
+                    "y": 162.28571428571428
+                  },
+                  {
+                    "x": 571,
+                    "y": 140.57142857142856
+                  },
+                  {
+                    "x": 533,
+                    "y": 162.28571428571428
+                  },
+                  {
+                    "x": 533,
+                    "y": 205.71428571428572
+                  }
+                ]
+              }
+            ],
+            "camera": {
+              "x": 33,
+              "y": -48
+            }
+          }
+        },
+        {
+          "name": "Real x3 fixed joystick reaches slanted edge; player/enemy circles contained; per-tick viewport follows",
+          "passed": true,
+          "samples": [
+            {
+              "time": 2.216666666666667,
+              "player": {
+                "x": 162.35970478324487,
+                "y": 166.83781670401203,
+                "hp": 120,
+                "xp": 10920,
+                "maxHp": 120,
+                "attack": 127.2,
+                "moveSpeed": 220,
+                "radius": 18,
+                "faceX": 0.49613893835683387,
+                "faceY": 0.8682431421244593
+              },
+              "margins": [
+                658.5718281693597,
+                797.6402952167551,
+                1052.472585624847,
+                1180.833358819472,
+                1056.359704783245,
+                786.932601363985
+              ],
+              "view": {
+                "xmin": -469.640295216755,
+                "xmax": 794.359704783245,
+                "ymin": -101.16218329598797,
+                "ymax": 422.8378167040121,
+                "followPlayer": true
+              },
+              "enemies": 6
+            },
+            {
+              "time": 2.566666666666667,
+              "player": {
+                "x": 200.56240303672084,
+                "y": 233.69253864759543,
+                "hp": 120,
+                "xp": 10920,
+                "maxHp": 120,
+                "attack": 127.2,
+                "moveSpeed": 220,
+                "radius": 18,
+                "faceX": 0.49613893835683387,
+                "faceY": 0.8682431421244593
+              },
+              "margins": [
+                581.5718281693598,
+                759.4375969632791,
+                1091.5648933171547,
+                1257.833358819472,
+                1094.5624030367208,
+                747.840293671677
+              ],
+              "view": {
+                "xmin": -431.43759696327913,
+                "xmax": 832.5624030367209,
+                "ymin": -34.30746135240457,
+                "ymax": 489.6925386475955,
+                "followPlayer": true
+              },
+              "enemies": 8
+            },
+            {
+              "time": 2.9166666666666665,
+              "player": {
+                "x": 238.7651012901968,
+                "y": 300.5472605911788,
+                "hp": 120,
+                "xp": 10920,
+                "maxHp": 120,
+                "attack": 127.2,
+                "moveSpeed": 220,
+                "radius": 18,
+                "faceX": 0.49613893835683387,
+                "faceY": 0.8682431421244593
+              },
+              "margins": [
+                504.57182816935983,
+                721.2348987098032,
+                1130.6572010094626,
+                1334.8333588194716,
+                1132.7651012901968,
+                708.7479859793691
+              ],
+              "view": {
+                "xmin": -393.23489870980313,
+                "xmax": 870.7651012901969,
+                "ymin": 32.547260591178826,
+                "ymax": 556.5472605911789,
+                "followPlayer": true
+              },
+              "enemies": 10
+            },
+            {
+              "time": 3.2666666666666666,
+              "player": {
+                "x": 276.9677995436731,
+                "y": 367.4019825347622,
+                "hp": 120,
+                "xp": 10920,
+                "maxHp": 120,
+                "attack": 127.2,
+                "moveSpeed": 220,
+                "radius": 18,
+                "faceX": 0.49613893835683387,
+                "faceY": 0.8682431421244593
+              },
+              "margins": [
+                427.57182816935983,
+                683.0322004563269,
+                1169.7495087017703,
+                1411.8333588194719,
+                1170.9677995436732,
+                669.6556782870616
+              ],
+              "view": {
+                "xmin": -355.0322004563269,
+                "xmax": 908.9677995436731,
+                "ymin": 99.40198253476223,
+                "ymax": 623.4019825347623,
+                "followPlayer": true
+              },
+              "enemies": 10
+            },
+            {
+              "time": 3.6166666666666667,
+              "player": {
+                "x": 315.17049779714966,
+                "y": 434.2567044783456,
+                "hp": 120,
+                "xp": 10920,
+                "maxHp": 120,
+                "attack": 127.2,
+                "moveSpeed": 220,
+                "radius": 18,
+                "faceX": 0.49613893835683387,
+                "faceY": 0.8682431421244593
+              },
+              "margins": [
+                350.57182816935966,
+                644.8295022028503,
+                1208.8418163940778,
+                1488.833358819472,
+                1209.1704977971497,
+                630.563370594754
+              ],
+              "view": {
+                "xmin": -316.82950220285034,
+                "xmax": 947.1704977971497,
+                "ymin": 166.25670447834563,
+                "ymax": 690.2567044783457,
+                "followPlayer": true
+              },
+              "enemies": 12
+            },
+            {
+              "time": 3.966666666666667,
+              "player": {
+                "x": 353.37319605062623,
+                "y": 501.111426421929,
+                "hp": 120,
+                "xp": 10920,
+                "maxHp": 120,
+                "attack": 127.2,
+                "moveSpeed": 220,
+                "radius": 18,
+                "faceX": 0.49613893835683387,
+                "faceY": 0.8682431421244593
+              },
+              "margins": [
+                273.5718281693594,
+                606.6268039493738,
+                1247.9341240863853,
+                1565.8333588194723,
+                1247.3731960506261,
+                591.4710629024464
+              ],
+              "view": {
+                "xmin": -278.62680394937377,
+                "xmax": 985.3731960506262,
+                "ymin": 233.11142642192902,
+                "ymax": 757.1114264219291,
+                "followPlayer": true
+              },
+              "enemies": 13
+            },
+            {
+              "time": 4.316666666666666,
+              "player": {
+                "x": 391.5758943041028,
+                "y": 567.9661483655124,
+                "hp": 120,
+                "xp": 10920,
+                "maxHp": 120,
+                "attack": 127.2,
+                "moveSpeed": 220,
+                "radius": 18,
+                "faceX": 0.49613893835683387,
+                "faceY": 0.8682431421244593
+              },
+              "margins": [
+                196.5718281693593,
+                568.4241056958972,
+                1287.0264317786928,
+                1642.8333588194723,
+                1285.5758943041028,
+                552.3787552101389
+              ],
+              "view": {
+                "xmin": -240.4241056958972,
+                "xmax": 1023.5758943041029,
+                "ymin": 299.96614836551237,
+                "ymax": 823.9661483655124,
+                "followPlayer": true
+              },
+              "enemies": 14
+            },
+            {
+              "time": 4.666666666666667,
+              "player": {
+                "x": 429.7785925575794,
+                "y": 634.8208703090958,
+                "hp": 120,
+                "xp": 10920,
+                "maxHp": 120,
+                "attack": 127.2,
+                "moveSpeed": 220,
+                "radius": 18,
+                "faceX": 0.49613893835683387,
+                "faceY": 0.8682431421244593
+              },
+              "margins": [
+                119.57182816935907,
+                530.2214074424206,
+                1326.1187394710005,
+                1719.8333588194728,
+                1323.7785925575795,
+                513.2864475178314
+              ],
+              "view": {
+                "xmin": -202.22140744242063,
+                "xmax": 1061.7785925575795,
+                "ymin": 366.82087030909577,
+                "ymax": 890.8208703090958,
+                "followPlayer": true
+              },
+              "enemies": 15
+            },
+            {
+              "time": 5.016666666666667,
+              "player": {
+                "x": 467.98129081105594,
+                "y": 701.6755922526792,
+                "hp": 120,
+                "xp": 10920,
+                "maxHp": 120,
+                "attack": 127.2,
+                "moveSpeed": 220,
+                "radius": 18,
+                "faceX": 0.49613893835683387,
+                "faceY": 0.8682431421244593
+              },
+              "margins": [
+                42.57182816935885,
+                492.0187091889441,
+                1365.211047163308,
+                1796.8333588194728,
+                1361.981290811056,
+                474.1941398255239
+              ],
+              "view": {
+                "xmin": -164.01870918894406,
+                "xmax": 1099.9812908110562,
+                "ymin": 433.67559225267917,
+                "ymax": 957.6755922526793,
+                "followPlayer": true
+              },
+              "enemies": 15
+            },
+            {
+              "time": 5.366666666666666,
+              "player": {
+                "x": 489.10283244291134,
+                "y": 738.6382901084258,
+                "hp": 120,
+                "xp": 10920,
+                "maxHp": 120,
+                "attack": 127.2,
+                "moveSpeed": 220,
+                "radius": 18,
+                "faceX": 0.49613893835683387,
+                "faceY": 0.8682431421244593
+              },
+              "margins": [
+                -3.552713678800501e-15,
+                470.8971675570887,
+                1386.82443684929,
+                1839.4051869888317,
+                1383.1028324429112,
+                452.5807501395417
+              ],
+              "view": {
+                "xmin": -142.89716755708866,
+                "xmax": 1121.1028324429112,
+                "ymin": 470.63829010842585,
+                "ymax": 994.6382901084257,
+                "followPlayer": true
+              },
+              "enemies": 16
+            }
+          ]
+        },
+        {
+          "name": "Modal stays inside viewport: hex pause",
+          "passed": true,
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "box": {
+            "left": 0,
+            "right": 1280,
+            "top": 0,
+            "bottom": 720
+          },
+          "controls": [
+            "继续挑战",
+            "技能树 · 可用32点",
+            "体验工具",
+            "返回宗门"
+          ]
+        },
+        {
+          "name": "learnSkill-vajra: allocation, selection, two-axis tree pan and detail pan retained",
+          "passed": true,
+          "beforeHost": {
+            "screen": "skills",
+            "landscape": true,
+            "size": {
+              "width": 1280,
+              "height": 720
+            },
+            "selected": "vajra",
+            "menuPage": "library",
+            "treePan": {
+              "x": 0,
+              "y": 0
+            },
+            "detailPan": {
+              "x": 0,
+              "y": 0
+            },
+            "stick": {
+              "x": -492,
+              "y": -202,
+              "dx": 0,
+              "dy": 0
+            },
+            "touch": null,
+            "keys": [],
+            "phase": "paused",
+            "input": {
+              "x": 1,
+              "y": 0
+            },
+            "camera": {
+              "x": 555.4412939813722,
+              "y": 712.730597800734
+            },
+            "tools": {
+              "speed": 3,
+              "invincible": true
+            }
+          },
+          "afterHost": {
+            "screen": "skills",
+            "landscape": true,
+            "size": {
+              "width": 1280,
+              "height": 720
+            },
+            "selected": "vajra",
+            "menuPage": "library",
+            "treePan": {
+              "x": 0,
+              "y": 0
+            },
+            "detailPan": {
+              "x": 0,
+              "y": 0
+            },
+            "stick": {
+              "x": -492,
+              "y": -202,
+              "dx": 0,
+              "dy": 0
+            },
+            "touch": null,
+            "keys": [],
+            "phase": "paused",
+            "input": {
+              "x": 1,
+              "y": 0
+            },
+            "camera": {
+              "x": 555.4412939813722,
+              "y": 712.730597800734
+            },
+            "tools": {
+              "speed": 3,
+              "invincible": true
+            }
+          },
+          "quote": {
+            "ok": true,
+            "nextLevel": 2,
+            "cost": 1,
+            "bookCost": 0
+          }
+        },
+        {
+          "name": "Modal stays inside viewport: hex reload pause",
+          "passed": true,
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "box": {
+            "left": 0,
+            "right": 1280,
+            "top": 0,
+            "bottom": 720
+          },
+          "controls": [
+            "继续挑战",
+            "技能树 · 可用31点",
+            "体验工具",
+            "返回宗门"
+          ]
+        },
+        {
+          "name": "Hex pause/resume, disabled minus, paused plus, input reset, frozen CD, orientation and reload/save isolation",
+          "passed": true,
+          "pausedHash": "0a6d25150d1eafb06cf72ee4e132e6268407077151bc7f37d83821efd1074569",
+          "activeRunHash": "c43499eeb456f72e83377e3286cbf67136341acab5c7a6213edab770c3b0bbd3",
+          "hp": 120,
+          "rng": 1500481632
+        }
+      ],
+      "actions": [
+        {
+          "type": "pointer-click",
+          "target": "体验工具",
+          "x": 640,
+          "y": 308,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "进入独立体验档",
+          "x": 384,
+          "y": 505.99999999999994,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "无敌秒杀：关闭",
+          "x": 896,
+          "y": 469,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "游戏速度 ×3",
+          "x": 384,
+          "y": 469,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "返回宗门",
+          "x": 384,
+          "y": 559,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "锁妖塔",
+          "x": 488,
+          "y": 672,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "重访第9层",
+          "x": 640,
+          "y": 345.99999999999994,
+          "enabled": true
+        },
+        {
+          "type": "pointer-drag",
+          "label": "fixed joystick toward northeast diagonal wall",
+          "from": {
+            "x": 147.99999999999997,
+            "y": 562
+          },
+          "to": {
+            "x": 183.99999999999997,
+            "y": 499
+          },
+          "holdMs": 0,
+          "release": false
+        },
+        {
+          "type": "pointer-release",
+          "target": "移动摇杆 diagonal wall"
+        },
+        {
+          "type": "pointer-drag",
+          "label": "right-side field negative",
+          "from": {
+            "x": 972.8,
+            "y": 381.6
+          },
+          "to": {
+            "x": 937.8,
+            "y": 406.6
+          },
+          "holdMs": 150,
+          "release": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "暂停",
+          "x": 1215,
+          "y": 45,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "继续挑战",
+          "x": 384,
+          "y": 432,
+          "enabled": true
+        },
+        {
+          "type": "key-down",
+          "key": "d"
+        },
+        {
+          "type": "pointer-click",
+          "target": "技能树",
+          "x": 1189,
+          "y": 668,
+          "enabled": true
+        },
+        {
+          "type": "key-up",
+          "key": "d"
+        },
+        {
+          "type": "pointer-click",
+          "target": "技能图标-vajra",
+          "x": 187.99999999999997,
+          "y": 280.99999999999994,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "decreaseSkill-vajra",
+          "x": 144,
+          "y": 453,
+          "enabled": false
+        },
+        {
+          "type": "pointer-click",
+          "target": "learnSkill-vajra",
+          "x": 231.99999999999994,
+          "y": 453,
+          "enabled": true
+        },
+        {
+          "type": "viewport-resize",
+          "size": {
+            "width": 390,
+            "height": 844
+          }
+        },
+        {
+          "type": "viewport-resize",
+          "size": {
+            "width": 1280,
+            "height": 720
+          }
+        },
+        {
+          "type": "pointer-click",
+          "target": "继续挑战",
+          "x": 384,
+          "y": 432,
+          "enabled": true
+        }
+      ],
+      "screenshots": [
+        "ui-delivery-rest-1280x720-hex-tools-modal.png",
+        "ui-delivery-rest-1280x720-hex-hex-spawn.png",
+        "ui-delivery-rest-1280x720-hex-hex-diagonal-wall.png",
+        "ui-delivery-rest-1280x720-hex-hex-pause.png",
+        "ui-delivery-rest-1280x720-hex-hex-paused-skills.png",
+        "ui-delivery-rest-1280x720-hex-hex-orientation-390x844.png",
+        "ui-delivery-rest-1280x720-hex-hex-orientation-1280x720.png",
+        "ui-delivery-rest-1280x720-hex-hex-reload.png"
+      ],
+      "pageErrors": [],
+      "console": [
+        {
+          "type": "warning",
+          "text": "[.WebGL-0x13c00438a00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+        },
+        {
+          "type": "warning",
+          "text": "[.WebGL-0x13c00438a00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+        },
+        {
+          "type": "warning",
+          "text": "[.WebGL-0x13c00438a00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+        },
+        {
+          "type": "warning",
+          "text": "[.WebGL-0x13c00438a00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (setting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.setFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "Setting window size is not supported."
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (setting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.setFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "Setting window size is not supported."
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (setting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.setFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "Setting window size is not supported."
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (setting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.setFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "Setting window size is not supported."
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        }
+      ],
+      "httpErrors": [],
+      "requestFailures": [],
+      "assets": [
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/polyfills.bundle.5adbf.js",
+          "status": 200,
+          "sha256": "f1e4ced3322168d6b9915e782e4c1cf1055d75f66f2b38e7fcd60f48cf89082b"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/system.bundle.cc789.js",
+          "status": 200,
+          "sha256": "5d1a25de07cc11276a6b1d6479cac7f12c0c561dd06941b8339e568c9d94f900"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/index.9dfc9.js",
+          "status": 200,
+          "sha256": "45ff755b782b689a74542e2cb550ec8e092e2f0f6dc2321dcd5dfda73bc68668"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/application.6230d.js",
+          "status": 200,
+          "sha256": "9724f071e4f4ed8e65df5a695185e7b4d0df90785a0d2bcda109c07f9593b17f"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/cocos-js/cc.c2df8.js",
+          "status": 200,
+          "sha256": "a670bba566ce7e3a2c25e17b7eb104efc0463a62d85c3d4974d2be9b586eee89"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/chunks/bundle.e2cd5.js",
+          "status": 200,
+          "sha256": "c0ab1af06c40484eba8e9d40042b2162a8355e8d8d1d914ea5a21d4d420dc1d5"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/assets/internal/index.4e53f.js",
+          "status": 200,
+          "sha256": "d842bf596127320ad8cd42ce506a2817cd8a6402fbec6735e6b13af359a40757"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/assets/main/index.272d1.js",
+          "status": 200,
+          "sha256": "c70cb27788d9c4952c5ed5a19b28d66c934d186fe2e6dd7045f6f86a8f6a1956"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/polyfills.bundle.5adbf.js",
+          "status": 200,
+          "sha256": "f1e4ced3322168d6b9915e782e4c1cf1055d75f66f2b38e7fcd60f48cf89082b"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/system.bundle.cc789.js",
+          "status": 200,
+          "sha256": "5d1a25de07cc11276a6b1d6479cac7f12c0c561dd06941b8339e568c9d94f900"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/index.9dfc9.js",
+          "status": 200,
+          "sha256": "45ff755b782b689a74542e2cb550ec8e092e2f0f6dc2321dcd5dfda73bc68668"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/application.6230d.js",
+          "status": 200,
+          "sha256": "9724f071e4f4ed8e65df5a695185e7b4d0df90785a0d2bcda109c07f9593b17f"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/cocos-js/cc.c2df8.js",
+          "status": 200,
+          "sha256": "a670bba566ce7e3a2c25e17b7eb104efc0463a62d85c3d4974d2be9b586eee89"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/chunks/bundle.e2cd5.js",
+          "status": 200,
+          "sha256": "c0ab1af06c40484eba8e9d40042b2162a8355e8d8d1d914ea5a21d4d420dc1d5"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/assets/internal/index.4e53f.js",
+          "status": 200,
+          "sha256": "d842bf596127320ad8cd42ce506a2817cd8a6402fbec6735e6b13af359a40757"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/assets/main/index.272d1.js",
+          "status": 200,
+          "sha256": "c70cb27788d9c4952c5ed5a19b28d66c934d186fe2e6dd7045f6f86a8f6a1956"
+        }
+      ],
+      "invalidLabels": []
+    },
+    {
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "kind": "hex",
+      "fixtureHash": "4a7adee74fdc7905a6cbf64eb404bb95fb46be889010ca7768926f9b3bf648bf",
+      "ok": true,
+      "checks": [
+        {
+          "name": "Modal stays inside viewport: delivery tools entry",
+          "passed": true,
+          "viewport": {
+            "width": 1024,
+            "height": 768
+          },
+          "box": {
+            "left": 0,
+            "right": 1024,
+            "top": 0,
+            "bottom": 768
+          },
+          "controls": [
+            "进入独立体验档",
+            "返回"
+          ]
+        },
+        {
+          "name": "Modal stays inside viewport: delivery tools x3",
+          "passed": true,
+          "viewport": {
+            "width": 1024,
+            "height": 768
+          },
+          "box": {
+            "left": 0,
+            "right": 1024,
+            "top": 0,
+            "bottom": 768
+          },
+          "controls": [
+            "游戏速度 ×1",
+            "游戏速度 ×2",
+            "游戏速度 ×3 · 当前",
+            "无敌秒杀：开启",
+            "返回宗门",
+            "切回普通档"
+          ]
+        },
+        {
+          "name": "New Campaign arenaVersion=1; actual world and HUD paths contain six hex vertices",
+          "passed": true,
+          "paths": {
+            "world": [
+              {
+                "closed": true,
+                "points": [
+                  {
+                    "x": 0,
+                    "y": 1068
+                  },
+                  {
+                    "x": 945,
+                    "y": 528
+                  },
+                  {
+                    "x": 945,
+                    "y": -552
+                  },
+                  {
+                    "x": 0,
+                    "y": -1092
+                  },
+                  {
+                    "x": -945,
+                    "y": -552
+                  },
+                  {
+                    "x": -945,
+                    "y": 528
+                  },
+                  {
+                    "x": 0,
+                    "y": 1068
+                  }
+                ]
+              },
+              {
+                "closed": true,
+                "points": [
+                  {
+                    "x": 0,
+                    "y": 1003.1999999999999
+                  },
+                  {
+                    "x": 888.3,
+                    "y": 495.59999999999997
+                  },
+                  {
+                    "x": 888.3,
+                    "y": -519.5999999999999
+                  },
+                  {
+                    "x": 0,
+                    "y": -1027.1999999999998
+                  },
+                  {
+                    "x": -888.3,
+                    "y": -519.5999999999999
+                  },
+                  {
+                    "x": -888.3,
+                    "y": 495.59999999999997
+                  }
+                ]
+              },
+              {
+                "closed": true,
+                "points": [
+                  {
+                    "x": 0,
+                    "y": 1068
+                  },
+                  {
+                    "x": 945,
+                    "y": 528
+                  },
+                  {
+                    "x": 945,
+                    "y": -552
+                  },
+                  {
+                    "x": 0,
+                    "y": -1092
+                  },
+                  {
+                    "x": -945,
+                    "y": -552
+                  },
+                  {
+                    "x": -945,
+                    "y": 528
+                  }
+                ]
+              }
+            ],
+            "hud": [
+              {
+                "closed": true,
+                "points": [
+                  {
+                    "x": 571,
+                    "y": 347.42857142857144
+                  },
+                  {
+                    "x": 609,
+                    "y": 325.7142857142857
+                  },
+                  {
+                    "x": 609,
+                    "y": 282.2857142857143
+                  },
+                  {
+                    "x": 571,
+                    "y": 260.57142857142856
+                  },
+                  {
+                    "x": 533,
+                    "y": 282.2857142857143
+                  },
+                  {
+                    "x": 533,
+                    "y": 325.7142857142857
+                  },
+                  {
+                    "x": 571,
+                    "y": 347.42857142857144
+                  }
+                ]
+              },
+              {
+                "closed": true,
+                "points": [
+                  {
+                    "x": 571,
+                    "y": 347.42857142857144
+                  },
+                  {
+                    "x": 609,
+                    "y": 325.7142857142857
+                  },
+                  {
+                    "x": 609,
+                    "y": 282.2857142857143
+                  },
+                  {
+                    "x": 571,
+                    "y": 260.57142857142856
+                  },
+                  {
+                    "x": 533,
+                    "y": 282.2857142857143
+                  },
+                  {
+                    "x": 533,
+                    "y": 325.7142857142857
+                  }
+                ]
+              }
+            ],
+            "camera": {
+              "x": 33,
+              "y": -48
+            }
+          }
+        },
+        {
+          "name": "Real x3 fixed joystick reaches slanted edge; player/enemy circles contained; per-tick viewport follows",
+          "passed": true,
+          "samples": [
+            {
+              "time": 2.283333333333333,
+              "player": {
+                "x": 159.4551145980223,
+                "y": 165.27074762214195,
+                "hp": 120,
+                "xp": 10920,
+                "maxHp": 120,
+                "attack": 127.2,
+                "moveSpeed": 220,
+                "radius": 18,
+                "faceX": 0.4920572566679019,
+                "faceY": 0.8705628387201342
+              },
+              "margins": [
+                661.3735054437868,
+                800.5448854019777,
+                1052.553068932136,
+                1178.0316815450449,
+                1053.4551145980222,
+                786.8521180566958
+              ],
+              "view": {
+                "xmin": -472.5448854019777,
+                "xmax": 791.4551145980224,
+                "ymin": -222.72925237785807,
+                "ymax": 541.2707476221419,
+                "followPlayer": true
+              },
+              "enemies": 7
+            },
+            {
+              "time": 2.5833333333333335,
+              "player": {
+                "x": 191.93089353810365,
+                "y": 222.72789497767056,
+                "hp": 120,
+                "xp": 10920,
+                "maxHp": 120,
+                "attack": 127.2,
+                "moveSpeed": 220,
+                "radius": 18,
+                "faceX": 0.4920572566679019,
+                "faceY": 0.8705628387201342
+              },
+              "margins": [
+                595.3742328006714,
+                768.0691064618964,
+                1086.327344603965,
+                1244.0309541881604,
+                1085.9308935381036,
+                753.0778423848668
+              ],
+              "view": {
+                "xmin": -440.06910646189635,
+                "xmax": 823.9308935381039,
+                "ymin": -165.27210502232944,
+                "ymax": 598.7278949776705,
+                "followPlayer": true
+              },
+              "enemies": 8
+            },
+            {
+              "time": 2.933333333333333,
+              "player": {
+                "x": 229.81930230153188,
+                "y": 289.7612335591206,
+                "hp": 120,
+                "xp": 10920,
+                "maxHp": 120,
+                "attack": 127.2,
+                "moveSpeed": 220,
+                "radius": 18,
+                "faceX": 0.4920572566679019,
+                "faceY": 0.8705628387201342
+              },
+              "margins": [
+                518.3750813837033,
+                730.1806976984681,
+                1125.730666221099,
+                1321.0301056051285,
+                1123.819302301532,
+                713.674520767733
+              ],
+              "view": {
+                "xmin": -402.1806976984681,
+                "xmax": 861.8193023015319,
+                "ymin": -98.23876644087937,
+                "ymax": 665.7612335591206,
+                "followPlayer": true
+              },
+              "enemies": 10
+            },
+            {
+              "time": 3.283333333333333,
+              "player": {
+                "x": 267.7077110649601,
+                "y": 356.79457214057066,
+                "hp": 120,
+                "xp": 10920,
+                "maxHp": 120,
+                "attack": 127.2,
+                "moveSpeed": 220,
+                "radius": 18,
+                "faceX": 0.4920572566679019,
+                "faceY": 0.8705628387201342
+              },
+              "margins": [
+                441.3759299667355,
+                692.2922889350399,
+                1165.1339878382328,
+                1398.029257022096,
+                1161.7077110649602,
+                674.2711991505992
+              ],
+              "view": {
+                "xmin": -364.2922889350399,
+                "xmax": 899.7077110649602,
+                "ymin": -31.205427859429335,
+                "ymax": 732.7945721405707,
+                "followPlayer": true
+              },
+              "enemies": 10
+            },
+            {
+              "time": 3.6333333333333333,
+              "player": {
+                "x": 305.59611982838834,
+                "y": 423.8279107220207,
+                "hp": 120,
+                "xp": 10920,
+                "maxHp": 120,
+                "attack": 127.2,
+                "moveSpeed": 220,
+                "radius": 18,
+                "faceX": 0.4920572566679019,
+                "faceY": 0.8705628387201342
+              },
+              "margins": [
+                364.37677854976744,
+                654.4038801716117,
+                1204.5373094553668,
+                1475.0284084390642,
+                1199.5961198283883,
+                634.8678775334652
+              ],
+              "view": {
+                "xmin": -326.40388017161166,
+                "xmax": 937.5961198283885,
+                "ymin": 35.827910722020704,
+                "ymax": 799.8279107220206,
+                "followPlayer": true
+              },
+              "enemies": 12
+            },
+            {
+              "time": 3.9833333333333334,
+              "player": {
+                "x": 343.48452859181657,
+                "y": 490.86124930347074,
+                "hp": 120,
+                "xp": 10920,
+                "maxHp": 120,
+                "attack": 127.2,
+                "moveSpeed": 220,
+                "radius": 18,
+                "faceX": 0.4920572566679019,
+                "faceY": 0.8705628387201342
+              },
+              "margins": [
+                287.3776271327996,
+                616.5154714081834,
+                1243.9406310725005,
+                1552.0275598560322,
+                1237.4845285918166,
+                595.4645559163313
+              ],
+              "view": {
+                "xmin": -288.51547140818343,
+                "xmax": 975.4845285918168,
+                "ymin": 102.86124930347074,
+                "ymax": 866.8612493034708,
+                "followPlayer": true
+              },
+              "enemies": 14
+            },
+            {
+              "time": 4.333333333333333,
+              "player": {
+                "x": 381.3729373552448,
+                "y": 557.8945878849208,
+                "hp": 120,
+                "xp": 10920,
+                "maxHp": 120,
+                "attack": 127.2,
+                "moveSpeed": 220,
+                "radius": 18,
+                "faceX": 0.4920572566679019,
+                "faceY": 0.8705628387201342
+              },
+              "margins": [
+                210.3784757158315,
+                578.6270626447551,
+                1283.3439526896345,
+                1629.0267112730003,
+                1275.3729373552449,
+                556.0612342991974
+              ],
+              "view": {
+                "xmin": -250.6270626447552,
+                "xmax": 1013.3729373552449,
+                "ymin": 169.89458788492084,
+                "ymax": 933.894587884921,
+                "followPlayer": true
+              },
+              "enemies": 14
+            },
+            {
+              "time": 4.683333333333334,
+              "player": {
+                "x": 419.26134611867303,
+                "y": 624.9279264663709,
+                "hp": 120,
+                "xp": 10920,
+                "maxHp": 120,
+                "attack": 127.2,
+                "moveSpeed": 220,
+                "radius": 18,
+                "faceX": 0.2651900771300687,
+                "faceY": -0.9641961537943139
+              },
+              "margins": [
+                133.37932429886354,
+                540.738653881327,
+                1322.7472743067685,
+                1706.0258626899683,
+                1313.261346118673,
+                516.6579126820635
+              ],
+              "view": {
+                "xmin": -212.73865388132697,
+                "xmax": 1051.2613461186731,
+                "ymin": 236.92792646637088,
+                "ymax": 1000.9279264663709,
+                "followPlayer": true
+              },
+              "enemies": 14
+            },
+            {
+              "time": 5.033333333333333,
+              "player": {
+                "x": 457.14975488210126,
+                "y": 691.9612650478209,
+                "hp": 120,
+                "xp": 10920,
+                "maxHp": 120,
+                "attack": 127.2,
+                "moveSpeed": 220,
+                "radius": 18,
+                "faceX": 0.4920572566679019,
+                "faceY": 0.8705628387201342
+              },
+              "margins": [
+                56.38017288189559,
+                502.8502451178988,
+                1362.1505959239023,
+                1783.0250141069362,
+                1351.1497548821012,
+                477.2545910649295
+              ],
+              "view": {
+                "xmin": -174.85024511789874,
+                "xmax": 1089.1497548821014,
+                "ymin": 303.9612650478209,
+                "ymax": 1067.9612650478211,
+                "followPlayer": true
+              },
+              "enemies": 15
+            },
+            {
+              "time": 5.383333333333334,
+              "player": {
+                "x": 484.8082855251363,
+                "y": 741.092316918583,
+                "hp": 120,
+                "xp": 10920,
+                "maxHp": 120,
+                "attack": 127.2,
+                "moveSpeed": 220,
+                "radius": 18,
+                "faceX": 0.4920572566679019,
+                "faceY": 0.8705628387201342
+              },
+              "margins": [
+                -5.684341886080802e-14,
+                475.19171447486366,
+                1391.085820746307,
+                1839.405186988832,
+                1378.8082855251364,
+                448.3193662425247
+              ],
+              "view": {
+                "xmin": -147.19171447486372,
+                "xmax": 1116.8082855251364,
+                "ymin": 353.09231691858304,
+                "ymax": 1117.092316918583,
+                "followPlayer": true
+              },
+              "enemies": 16
+            }
+          ]
+        },
+        {
+          "name": "Modal stays inside viewport: hex pause",
+          "passed": true,
+          "viewport": {
+            "width": 1024,
+            "height": 768
+          },
+          "box": {
+            "left": 0,
+            "right": 1024,
+            "top": 0,
+            "bottom": 768
+          },
+          "controls": [
+            "继续挑战",
+            "技能树 · 可用32点",
+            "体验工具",
+            "返回宗门"
+          ]
+        },
+        {
+          "name": "learnSkill-vajra: allocation, selection, two-axis tree pan and detail pan retained",
+          "passed": true,
+          "beforeHost": {
+            "screen": "skills",
+            "landscape": true,
+            "size": {
+              "width": 1280,
+              "height": 960
+            },
+            "selected": "vajra",
+            "menuPage": "library",
+            "treePan": {
+              "x": 0,
+              "y": 0
+            },
+            "detailPan": {
+              "x": 0,
+              "y": 0
+            },
+            "stick": {
+              "x": -492,
+              "y": -322,
+              "dx": 0,
+              "dy": 0
+            },
+            "touch": null,
+            "keys": [],
+            "phase": "paused",
+            "input": {
+              "x": 1,
+              "y": 0
+            },
+            "camera": {
+              "x": 542.8544393712897,
+              "y": 719.9230861493526
+            },
+            "tools": {
+              "speed": 3,
+              "invincible": true
+            }
+          },
+          "afterHost": {
+            "screen": "skills",
+            "landscape": true,
+            "size": {
+              "width": 1280,
+              "height": 960
+            },
+            "selected": "vajra",
+            "menuPage": "library",
+            "treePan": {
+              "x": 0,
+              "y": 0
+            },
+            "detailPan": {
+              "x": 0,
+              "y": 0
+            },
+            "stick": {
+              "x": -492,
+              "y": -322,
+              "dx": 0,
+              "dy": 0
+            },
+            "touch": null,
+            "keys": [],
+            "phase": "paused",
+            "input": {
+              "x": 1,
+              "y": 0
+            },
+            "camera": {
+              "x": 542.8544393712897,
+              "y": 719.9230861493526
+            },
+            "tools": {
+              "speed": 3,
+              "invincible": true
+            }
+          },
+          "quote": {
+            "ok": true,
+            "nextLevel": 2,
+            "cost": 1,
+            "bookCost": 0
+          }
+        },
+        {
+          "name": "Modal stays inside viewport: hex reload pause",
+          "passed": true,
+          "viewport": {
+            "width": 1024,
+            "height": 768
+          },
+          "box": {
+            "left": 0,
+            "right": 1024,
+            "top": 0,
+            "bottom": 768
+          },
+          "controls": [
+            "继续挑战",
+            "技能树 · 可用31点",
+            "体验工具",
+            "返回宗门"
+          ]
+        },
+        {
+          "name": "Hex pause/resume, disabled minus, paused plus, input reset, frozen CD, orientation and reload/save isolation",
+          "passed": true,
+          "pausedHash": "166daeafbfc89fe324d5bdc39418d733534307e3b21a36e025379560249b4a4b",
+          "activeRunHash": "42e827a2486c235a0a93d41b50ced2e02f3fe8668bcf33e52638b44f8e6d2640",
+          "hp": 120,
+          "rng": 107316497
+        }
+      ],
+      "actions": [
+        {
+          "type": "pointer-click",
+          "target": "体验工具",
+          "x": 512,
+          "y": 246.39999999999998,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "进入独立体验档",
+          "x": 307.2,
+          "y": 500.8,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "无敌秒杀：关闭",
+          "x": 716.8,
+          "y": 471.2,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "游戏速度 ×3",
+          "x": 307.2,
+          "y": 471.2,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "返回宗门",
+          "x": 307.2,
+          "y": 543.2,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "锁妖塔",
+          "x": 390.4,
+          "y": 729.5999999999999,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "重访第9层",
+          "x": 512,
+          "y": 276.79999999999995,
+          "enabled": true
+        },
+        {
+          "type": "pointer-drag",
+          "label": "fixed joystick toward northeast diagonal wall",
+          "from": {
+            "x": 118.39999999999998,
+            "y": 641.6
+          },
+          "to": {
+            "x": 147.2,
+            "y": 591.2
+          },
+          "holdMs": 0,
+          "release": false
+        },
+        {
+          "type": "pointer-release",
+          "target": "移动摇杆 diagonal wall"
+        },
+        {
+          "type": "pointer-drag",
+          "label": "right-side field negative",
+          "from": {
+            "x": 778.24,
+            "y": 407.04
+          },
+          "to": {
+            "x": 750.24,
+            "y": 427.04
+          },
+          "holdMs": 150,
+          "release": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "暂停",
+          "x": 972,
+          "y": 36,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "继续挑战",
+          "x": 307.2,
+          "y": 441.59999999999997,
+          "enabled": true
+        },
+        {
+          "type": "key-down",
+          "key": "d"
+        },
+        {
+          "type": "pointer-click",
+          "target": "技能树",
+          "x": 951.2,
+          "y": 726.4,
+          "enabled": true
+        },
+        {
+          "type": "key-up",
+          "key": "d"
+        },
+        {
+          "type": "pointer-click",
+          "target": "技能图标-vajra",
+          "x": 150.39999999999998,
+          "y": 224.79999999999993,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "decreaseSkill-vajra",
+          "x": 115.19999999999999,
+          "y": 362.40000000000003,
+          "enabled": false
+        },
+        {
+          "type": "pointer-click",
+          "target": "learnSkill-vajra",
+          "x": 185.59999999999997,
+          "y": 362.40000000000003,
+          "enabled": true
+        },
+        {
+          "type": "viewport-resize",
+          "size": {
+            "width": 390,
+            "height": 844
+          }
+        },
+        {
+          "type": "viewport-resize",
+          "size": {
+            "width": 1024,
+            "height": 768
+          }
+        },
+        {
+          "type": "pointer-click",
+          "target": "继续挑战",
+          "x": 307.2,
+          "y": 441.59999999999997,
+          "enabled": true
+        }
+      ],
+      "screenshots": [
+        "ui-delivery-rest-1024x768-hex-tools-modal.png",
+        "ui-delivery-rest-1024x768-hex-hex-spawn.png",
+        "ui-delivery-rest-1024x768-hex-hex-diagonal-wall.png",
+        "ui-delivery-rest-1024x768-hex-hex-pause.png",
+        "ui-delivery-rest-1024x768-hex-hex-paused-skills.png",
+        "ui-delivery-rest-1024x768-hex-hex-orientation-390x844.png",
+        "ui-delivery-rest-1024x768-hex-hex-orientation-1024x768.png",
+        "ui-delivery-rest-1024x768-hex-hex-reload.png"
+      ],
+      "pageErrors": [],
+      "console": [
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (setting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.setFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "Setting window size is not supported."
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (setting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.setFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "Setting window size is not supported."
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (setting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.setFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "Setting window size is not supported."
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (setting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.setFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "Setting window size is not supported."
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        }
+      ],
+      "httpErrors": [],
+      "requestFailures": [],
+      "assets": [
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/polyfills.bundle.5adbf.js",
+          "status": 200,
+          "sha256": "f1e4ced3322168d6b9915e782e4c1cf1055d75f66f2b38e7fcd60f48cf89082b"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/system.bundle.cc789.js",
+          "status": 200,
+          "sha256": "5d1a25de07cc11276a6b1d6479cac7f12c0c561dd06941b8339e568c9d94f900"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/index.9dfc9.js",
+          "status": 200,
+          "sha256": "45ff755b782b689a74542e2cb550ec8e092e2f0f6dc2321dcd5dfda73bc68668"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/application.6230d.js",
+          "status": 200,
+          "sha256": "9724f071e4f4ed8e65df5a695185e7b4d0df90785a0d2bcda109c07f9593b17f"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/cocos-js/cc.c2df8.js",
+          "status": 200,
+          "sha256": "a670bba566ce7e3a2c25e17b7eb104efc0463a62d85c3d4974d2be9b586eee89"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/chunks/bundle.e2cd5.js",
+          "status": 200,
+          "sha256": "c0ab1af06c40484eba8e9d40042b2162a8355e8d8d1d914ea5a21d4d420dc1d5"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/assets/internal/index.4e53f.js",
+          "status": 200,
+          "sha256": "d842bf596127320ad8cd42ce506a2817cd8a6402fbec6735e6b13af359a40757"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/assets/main/index.272d1.js",
+          "status": 200,
+          "sha256": "c70cb27788d9c4952c5ed5a19b28d66c934d186fe2e6dd7045f6f86a8f6a1956"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/polyfills.bundle.5adbf.js",
+          "status": 200,
+          "sha256": "f1e4ced3322168d6b9915e782e4c1cf1055d75f66f2b38e7fcd60f48cf89082b"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/system.bundle.cc789.js",
+          "status": 200,
+          "sha256": "5d1a25de07cc11276a6b1d6479cac7f12c0c561dd06941b8339e568c9d94f900"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/index.9dfc9.js",
+          "status": 200,
+          "sha256": "45ff755b782b689a74542e2cb550ec8e092e2f0f6dc2321dcd5dfda73bc68668"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/application.6230d.js",
+          "status": 200,
+          "sha256": "9724f071e4f4ed8e65df5a695185e7b4d0df90785a0d2bcda109c07f9593b17f"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/cocos-js/cc.c2df8.js",
+          "status": 200,
+          "sha256": "a670bba566ce7e3a2c25e17b7eb104efc0463a62d85c3d4974d2be9b586eee89"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/chunks/bundle.e2cd5.js",
+          "status": 200,
+          "sha256": "c0ab1af06c40484eba8e9d40042b2162a8355e8d8d1d914ea5a21d4d420dc1d5"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/assets/internal/index.4e53f.js",
+          "status": 200,
+          "sha256": "d842bf596127320ad8cd42ce506a2817cd8a6402fbec6735e6b13af359a40757"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/assets/main/index.272d1.js",
+          "status": 200,
+          "sha256": "c70cb27788d9c4952c5ed5a19b28d66c934d186fe2e6dd7045f6f86a8f6a1956"
+        }
+      ],
+      "invalidLabels": []
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "kind": "hex",
+      "fixtureHash": "4a7adee74fdc7905a6cbf64eb404bb95fb46be889010ca7768926f9b3bf648bf",
+      "ok": true,
+      "checks": [
+        {
+          "name": "Modal stays inside viewport: delivery tools entry",
+          "passed": true,
+          "viewport": {
+            "width": 390,
+            "height": 844
+          },
+          "box": {
+            "left": 0,
+            "right": 390,
+            "top": 0,
+            "bottom": 844
+          },
+          "controls": [
+            "进入独立体验档",
+            "返回"
+          ]
+        },
+        {
+          "name": "Modal stays inside viewport: delivery tools x3",
+          "passed": true,
+          "viewport": {
+            "width": 390,
+            "height": 844
+          },
+          "box": {
+            "left": 0,
+            "right": 390,
+            "top": 0,
+            "bottom": 844
+          },
+          "controls": [
+            "游戏速度 ×1",
+            "游戏速度 ×2",
+            "游戏速度 ×3 · 当前",
+            "无敌秒杀：开启",
+            "返回宗门",
+            "切回普通档"
+          ]
+        },
+        {
+          "name": "New Campaign arenaVersion=1; actual world and HUD paths contain six hex vertices",
+          "passed": true,
+          "paths": {
+            "world": [
+              {
+                "closed": true,
+                "points": [
+                  {
+                    "x": 0,
+                    "y": 1040
+                  },
+                  {
+                    "x": 945,
+                    "y": 500
+                  },
+                  {
+                    "x": 945,
+                    "y": -580
+                  },
+                  {
+                    "x": 0,
+                    "y": -1120
+                  },
+                  {
+                    "x": -945,
+                    "y": -580
+                  },
+                  {
+                    "x": -945,
+                    "y": 500
+                  },
+                  {
+                    "x": 0,
+                    "y": 1040
+                  }
+                ]
+              },
+              {
+                "closed": true,
+                "points": [
+                  {
+                    "x": 0,
+                    "y": 975.1999999999999
+                  },
+                  {
+                    "x": 888.3,
+                    "y": 467.59999999999997
+                  },
+                  {
+                    "x": 888.3,
+                    "y": -547.5999999999999
+                  },
+                  {
+                    "x": 0,
+                    "y": -1055.1999999999998
+                  },
+                  {
+                    "x": -888.3,
+                    "y": -547.5999999999999
+                  },
+                  {
+                    "x": -888.3,
+                    "y": 467.59999999999997
+                  }
+                ]
+              },
+              {
+                "closed": true,
+                "points": [
+                  {
+                    "x": 0,
+                    "y": 1040
+                  },
+                  {
+                    "x": 945,
+                    "y": 500
+                  },
+                  {
+                    "x": 945,
+                    "y": -580
+                  },
+                  {
+                    "x": 0,
+                    "y": -1120
+                  },
+                  {
+                    "x": -945,
+                    "y": -580
+                  },
+                  {
+                    "x": -945,
+                    "y": 500
+                  }
+                ]
+              }
+            ],
+            "hud": [
+              {
+                "closed": true,
+                "points": [
+                  {
+                    "x": 291,
+                    "y": 593.5054945054945
+                  },
+                  {
+                    "x": 329,
+                    "y": 571.7912087912088
+                  },
+                  {
+                    "x": 329,
+                    "y": 528.3626373626374
+                  },
+                  {
+                    "x": 291,
+                    "y": 506.64835164835165
+                  },
+                  {
+                    "x": 253,
+                    "y": 528.3626373626374
+                  },
+                  {
+                    "x": 253,
+                    "y": 571.7912087912088
+                  },
+                  {
+                    "x": 291,
+                    "y": 593.5054945054945
+                  }
+                ]
+              },
+              {
+                "closed": true,
+                "points": [
+                  {
+                    "x": 291,
+                    "y": 593.5054945054945
+                  },
+                  {
+                    "x": 329,
+                    "y": 571.7912087912088
+                  },
+                  {
+                    "x": 329,
+                    "y": 528.3626373626374
+                  },
+                  {
+                    "x": 291,
+                    "y": 506.64835164835165
+                  },
+                  {
+                    "x": 253,
+                    "y": 528.3626373626374
+                  },
+                  {
+                    "x": 253,
+                    "y": 571.7912087912088
+                  }
+                ]
+              }
+            ],
+            "camera": {
+              "x": 33,
+              "y": -20
+            }
+          }
+        },
+        {
+          "name": "Real x3 fixed joystick reaches slanted edge; player/enemy circles contained; per-tick viewport follows",
+          "passed": true,
+          "samples": [
+            {
+              "time": 2.033333333333333,
+              "player": {
+                "x": 156.34751236524937,
+                "y": 166.8612489600336,
+                "hp": 120,
+                "xp": 10920,
+                "maxHp": 120,
+                "attack": 127.2,
+                "moveSpeed": 220,
+                "radius": 18,
+                "faceX": 0.4800422579096155,
+                "faceY": 0.8772453651180142
+              },
+              "margins": [
+                661.5343660372257,
+                803.6524876347506,
+                1055.4758132839036,
+                1177.8708209516058,
+                1050.3475123652493,
+                783.9293737049281
+              ],
+              "view": {
+                "xmin": -195.65248763475063,
+                "xmax": 508.3475123652494,
+                "ymin": -478.21567411688955,
+                "ymax": 816.9381720369566,
+                "followPlayer": true
+              },
+              "enemies": 6
+            },
+            {
+              "time": 2.3333333333333335,
+              "player": {
+                "x": 188.03030138728423,
+                "y": 224.75944305782264,
+                "hp": 120,
+                "xp": 10920,
+                "maxHp": 120,
+                "attack": 127.2,
+                "moveSpeed": 220,
+                "radius": 18,
+                "faceX": 0.4800422579096155,
+                "faceY": 0.8772453651180142
+              },
+              "margins": [
+                595.5455907608538,
+                771.9696986127158,
+                1090.0264579411235,
+                1243.859596227978,
+                1082.0303013872842,
+                749.378729047708
+              ],
+              "view": {
+                "xmin": -163.96969861271577,
+                "xmax": 540.030301387284,
+                "ymin": -420.31748001910057,
+                "ymax": 874.8363661347456,
+                "followPlayer": true
+              },
+              "enemies": 7
+            },
+            {
+              "time": 2.683333333333333,
+              "player": {
+                "x": 224.9935552463249,
+                "y": 292.3073361719095,
+                "hp": 120,
+                "xp": 10920,
+                "maxHp": 120,
+                "attack": 127.2,
+                "moveSpeed": 220,
+                "radius": 18,
+                "faceX": 0.4800422579096155,
+                "faceY": 0.8772453651180142
+              },
+              "margins": [
+                518.5586862717532,
+                735.0064447536752,
+                1130.3355433745471,
+                1320.8465007170787,
+                1118.9935552463248,
+                709.0696436142847
+              ],
+              "view": {
+                "xmin": -127.00644475367511,
+                "xmax": 576.9935552463248,
+                "ymin": -352.76958690501357,
+                "ymax": 942.3842592488327,
+                "followPlayer": true
+              },
+              "enemies": 9
+            },
+            {
+              "time": 3,
+              "player": {
+                "x": 258.43649921402834,
+                "y": 353.4220966084641,
+                "hp": 120,
+                "xp": 10920,
+                "maxHp": 120,
+                "attack": 127.2,
+                "moveSpeed": 220,
+                "radius": 18,
+                "faceX": 0.4800422579096155,
+                "faceY": 0.8772453651180142
+              },
+              "margins": [
+                448.9038679244722,
+                701.5635007859717,
+                1166.805668290501,
+                1390.5013190643597,
+                1152.4364992140283,
+                672.5995186983305
+              ],
+              "view": {
+                "xmin": -93.56350078597166,
+                "xmax": 610.4364992140281,
+                "ymin": -291.654826468459,
+                "ymax": 1003.4990196853871,
+                "followPlayer": true
+              },
+              "enemies": 10
+            },
+            {
+              "time": 3.3,
+              "player": {
+                "x": 290.1192882360632,
+                "y": 411.3202907062526,
+                "hp": 120,
+                "xp": 10920,
+                "maxHp": 120,
+                "attack": 127.2,
+                "moveSpeed": 220,
+                "radius": 18,
+                "faceX": 0.4800422579096155,
+                "faceY": 0.8772453651180142
+              },
+              "margins": [
+                382.91509264810054,
+                669.8807117639368,
+                1201.3563129477209,
+                1456.4900943407313,
+                1184.1192882360633,
+                638.0488740411108
+              ],
+              "view": {
+                "xmin": -61.8807117639368,
+                "xmax": 642.1192882360631,
+                "ymin": -233.7566323706705,
+                "ymax": 1061.3972137831752,
+                "followPlayer": true
+              },
+              "enemies": 10
+            },
+            {
+              "time": 3.6333333333333333,
+              "player": {
+                "x": 325.32238714943526,
+                "y": 475.65161748157317,
+                "hp": 120,
+                "xp": 10920,
+                "maxHp": 120,
+                "attack": 127.2,
+                "moveSpeed": 220,
+                "radius": 18,
+                "faceX": 0.4800422579096155,
+                "faceY": 0.8772453651180142
+              },
+              "margins": [
+                309.5942312299098,
+                634.6776128505647,
+                1239.7459181224094,
+                1529.810955758922,
+                1219.3223871494351,
+                599.659268866422
+              ],
+              "view": {
+                "xmin": -26.677612850564742,
+                "xmax": 677.3223871494351,
+                "ymin": -169.42530559534993,
+                "ymax": 1125.7285405584962,
+                "followPlayer": true
+              },
+              "enemies": 12
+            },
+            {
+              "time": 3.933333333333333,
+              "player": {
+                "x": 357.0051761714701,
+                "y": 533.5498115793617,
+                "hp": 120,
+                "xp": 10920,
+                "maxHp": 120,
+                "attack": 127.2,
+                "moveSpeed": 220,
+                "radius": 18,
+                "faceX": 0.4800422579096155,
+                "faceY": 0.8772453651180142
+              },
+              "margins": [
+                243.605455953538,
+                602.9948238285299,
+                1274.2965627796293,
+                1595.7997310352937,
+                1251.00517617147,
+                565.1086242092023
+              ],
+              "view": {
+                "xmin": 5.0051761714701115,
+                "xmax": 709.0051761714699,
+                "ymin": -111.52711149756135,
+                "ymax": 1183.6267346562845,
+                "followPlayer": true
+              },
+              "enemies": 13
+            },
+            {
+              "time": 4.283333333333333,
+              "player": {
+                "x": 393.9684300305108,
+                "y": 601.0977046934483,
+                "hp": 120,
+                "xp": 10920,
+                "maxHp": 120,
+                "attack": 127.2,
+                "moveSpeed": 220,
+                "radius": 18,
+                "faceX": 0.4800422579096155,
+                "faceY": 0.8772453651180142
+              },
+              "margins": [
+                166.6185514644378,
+                566.0315699694893,
+                1314.6056482130527,
+                1672.786635524394,
+                1287.9684300305107,
+                524.7995387757791
+              ],
+              "view": {
+                "xmin": 41.968430030510774,
+                "xmax": 745.9684300305107,
+                "ymin": -43.979218383474745,
+                "ymax": 1251.174627770371,
+                "followPlayer": true
+              },
+              "enemies": 14
+            },
+            {
+              "time": 4.583333333333333,
+              "player": {
+                "x": 425.6512190525456,
+                "y": 658.9958987912369,
+                "hp": 120,
+                "xp": 10920,
+                "maxHp": 120,
+                "attack": 127.2,
+                "moveSpeed": 220,
+                "radius": 18,
+                "faceX": 0.4800422579096155,
+                "faceY": 0.8772453651180142
+              },
+              "margins": [
+                100.62977618806617,
+                534.3487809474543,
+                1349.1562928702722,
+                1738.7754108007655,
+                1319.6512190525457,
+                490.24889411855935
+              ],
+              "view": {
+                "xmin": 73.65121905254563,
+                "xmax": 777.6512190525455,
+                "ymin": 13.918975714313774,
+                "ymax": 1309.0728218681597,
+                "followPlayer": true
+              },
+              "enemies": 13
+            },
+            {
+              "time": 4.883333333333334,
+              "player": {
+                "x": 457.3340080745805,
+                "y": 716.8940928890254,
+                "hp": 120,
+                "xp": 10920,
+                "maxHp": 120,
+                "attack": 127.2,
+                "moveSpeed": 220,
+                "radius": 18,
+                "faceX": 0.4800422579096155,
+                "faceY": 0.8772453651180142
+              },
+              "margins": [
+                34.64100091169452,
+                502.6659919254196,
+                1383.7069375274923,
+                1804.7641860771373,
+                1351.3340080745804,
+                455.6982494613395
+              ],
+              "view": {
+                "xmin": 105.33400807458048,
+                "xmax": 809.3340080745804,
+                "ymin": 71.81716981210229,
+                "ymax": 1366.971015965948,
+                "followPlayer": true
+              },
+              "enemies": 15
+            },
+            {
+              "time": 5.233333333333333,
+              "player": {
+                "x": 473.2878102889662,
+                "y": 747.675445624966,
+                "hp": 120,
+                "xp": 10920,
+                "maxHp": 120,
+                "attack": 127.2,
+                "moveSpeed": 220,
+                "radius": 18,
+                "faceX": 0.4800422579096155,
+                "faceY": 0.8772453651180142
+              },
+              "margins": [
+                -5.684341886080802e-14,
+                486.71218971103383,
+                1402.5173334523865,
+                1839.405186988832,
+                1367.2878102889663,
+                436.8878535364455
+              ],
+              "view": {
+                "xmin": 121.28781028896623,
+                "xmax": 825.2878102889663,
+                "ymin": 102.59852254804287,
+                "ymax": 1397.7523687018888,
+                "followPlayer": true
+              },
+              "enemies": 16
+            }
+          ]
+        },
+        {
+          "name": "Modal stays inside viewport: hex pause",
+          "passed": true,
+          "viewport": {
+            "width": 390,
+            "height": 844
+          },
+          "box": {
+            "left": 0,
+            "right": 390,
+            "top": 0,
+            "bottom": 844
+          },
+          "controls": [
+            "继续挑战",
+            "技能树 · 可用32点",
+            "体验工具",
+            "返回宗门"
+          ]
+        },
+        {
+          "name": "learnSkill-vajra: allocation, selection, two-axis tree pan and detail pan retained",
+          "passed": true,
+          "beforeHost": {
+            "screen": "skills",
+            "landscape": false,
+            "size": {
+              "width": 720,
+              "height": 1558.1538461538462
+            },
+            "selected": "vajra",
+            "menuPage": "library",
+            "treePan": {
+              "x": 0,
+              "y": 0
+            },
+            "detailPan": {
+              "x": 0,
+              "y": 0
+            },
+            "stick": {
+              "x": -212,
+              "y": -621.0769230769231,
+              "dx": 0,
+              "dy": 0
+            },
+            "touch": null,
+            "keys": [],
+            "phase": "paused",
+            "input": {
+              "x": 1,
+              "y": 0
+            },
+            "camera": {
+              "x": 523.0416564428123,
+              "y": 759.2446763941969
+            },
+            "tools": {
+              "speed": 3,
+              "invincible": true
+            }
+          },
+          "afterHost": {
+            "screen": "skills",
+            "landscape": false,
+            "size": {
+              "width": 720,
+              "height": 1558.1538461538462
+            },
+            "selected": "vajra",
+            "menuPage": "library",
+            "treePan": {
+              "x": 0,
+              "y": 0
+            },
+            "detailPan": {
+              "x": 0,
+              "y": 0
+            },
+            "stick": {
+              "x": -212,
+              "y": -621.0769230769231,
+              "dx": 0,
+              "dy": 0
+            },
+            "touch": null,
+            "keys": [],
+            "phase": "paused",
+            "input": {
+              "x": 1,
+              "y": 0
+            },
+            "camera": {
+              "x": 523.0416564428123,
+              "y": 759.2446763941969
+            },
+            "tools": {
+              "speed": 3,
+              "invincible": true
+            }
+          },
+          "quote": {
+            "ok": true,
+            "nextLevel": 2,
+            "cost": 1,
+            "bookCost": 0
+          }
+        },
+        {
+          "name": "Modal stays inside viewport: hex reload pause",
+          "passed": true,
+          "viewport": {
+            "width": 390,
+            "height": 844
+          },
+          "box": {
+            "left": 0,
+            "right": 390,
+            "top": 0,
+            "bottom": 844
+          },
+          "controls": [
+            "继续挑战",
+            "技能树 · 可用31点",
+            "体验工具",
+            "返回宗门"
+          ]
+        },
+        {
+          "name": "Hex pause/resume, disabled minus, paused plus, input reset, frozen CD, orientation and reload/save isolation",
+          "passed": true,
+          "pausedHash": "61c0e60f9e22fc8c66f5589c927c268bcf1f01ece68391309dd1ea6bc392b0a7",
+          "activeRunHash": "3c4474c5868a370c08d621099bd2be0d9468487833d4bf9bd9a320b8c071a822",
+          "hp": 120,
+          "rng": 4280044371
+        }
+      ],
+      "actions": [
+        {
+          "type": "pointer-click",
+          "target": "体验工具",
+          "x": 195,
+          "y": 268.66666666666663,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "进入独立体验档",
+          "x": 115.91666666666667,
+          "y": 501.08333333333326,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "无敌秒杀：关闭",
+          "x": 195,
+          "y": 505.4166666666667,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "游戏速度 ×3",
+          "x": 195,
+          "y": 456.6666666666667,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "返回宗门",
+          "x": 195,
+          "y": 554.1666666666666,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "锁妖塔",
+          "x": 148.41666666666666,
+          "y": 810.4166666666666,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "重访第9层",
+          "x": 195,
+          "y": 268.66666666666663,
+          "enabled": true
+        },
+        {
+          "type": "pointer-drag",
+          "label": "fixed joystick toward northeast diagonal wall",
+          "from": {
+            "x": 80.16666666666666,
+            "y": 758.4166666666666
+          },
+          "to": {
+            "x": 99.66666666666666,
+            "y": 724.2916666666666
+          },
+          "holdMs": 0,
+          "release": false
+        },
+        {
+          "type": "pointer-release",
+          "target": "移动摇杆 diagonal wall"
+        },
+        {
+          "type": "pointer-drag",
+          "label": "right-side field negative",
+          "from": {
+            "x": 296.4,
+            "y": 447.32000000000005
+          },
+          "to": {
+            "x": 277.44166666666666,
+            "y": 460.86166666666674
+          },
+          "holdMs": 150,
+          "release": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "暂停",
+          "x": 354.7916666666667,
+          "y": 24.375000000000025,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "继续挑战",
+          "x": 195,
+          "y": 412.25000000000006,
+          "enabled": true
+        },
+        {
+          "type": "key-down",
+          "key": "d"
+        },
+        {
+          "type": "pointer-click",
+          "target": "暂停",
+          "x": 354.7916666666667,
+          "y": 24.375000000000025,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "技能树 · 可用32点",
+          "x": 195,
+          "y": 461,
+          "enabled": true
+        },
+        {
+          "type": "key-up",
+          "key": "d"
+        },
+        {
+          "type": "pointer-click",
+          "target": "技能图标-vajra",
+          "x": 117,
+          "y": 237.7916666666666,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "decreaseSkill-vajra",
+          "x": 88.83333333333331,
+          "y": 335.2916666666667,
+          "enabled": false
+        },
+        {
+          "type": "pointer-click",
+          "target": "learnSkill-vajra",
+          "x": 145.16666666666666,
+          "y": 335.2916666666667,
+          "enabled": true
+        },
+        {
+          "type": "viewport-resize",
+          "size": {
+            "width": 844,
+            "height": 390
+          }
+        },
+        {
+          "type": "viewport-resize",
+          "size": {
+            "width": 390,
+            "height": 844
+          }
+        },
+        {
+          "type": "pointer-click",
+          "target": "继续挑战",
+          "x": 195,
+          "y": 412.25000000000006,
+          "enabled": true
+        }
+      ],
+      "screenshots": [
+        "ui-delivery-rest-390x844-hex-tools-modal.png",
+        "ui-delivery-rest-390x844-hex-hex-spawn.png",
+        "ui-delivery-rest-390x844-hex-hex-diagonal-wall.png",
+        "ui-delivery-rest-390x844-hex-hex-pause.png",
+        "ui-delivery-rest-390x844-hex-hex-paused-skills.png",
+        "ui-delivery-rest-390x844-hex-hex-orientation-844x390.png",
+        "ui-delivery-rest-390x844-hex-hex-orientation-390x844.png",
+        "ui-delivery-rest-390x844-hex-hex-reload.png"
+      ],
+      "pageErrors": [],
+      "console": [
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (setting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.setFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "Setting window size is not supported."
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (setting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.setFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "Setting window size is not supported."
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (setting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.setFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "Setting window size is not supported."
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (setting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.setFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "Setting window size is not supported."
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        }
+      ],
+      "httpErrors": [],
+      "requestFailures": [],
+      "assets": [
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/polyfills.bundle.5adbf.js",
+          "status": 200,
+          "sha256": "f1e4ced3322168d6b9915e782e4c1cf1055d75f66f2b38e7fcd60f48cf89082b"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/system.bundle.cc789.js",
+          "status": 200,
+          "sha256": "5d1a25de07cc11276a6b1d6479cac7f12c0c561dd06941b8339e568c9d94f900"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/index.9dfc9.js",
+          "status": 200,
+          "sha256": "45ff755b782b689a74542e2cb550ec8e092e2f0f6dc2321dcd5dfda73bc68668"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/application.6230d.js",
+          "status": 200,
+          "sha256": "9724f071e4f4ed8e65df5a695185e7b4d0df90785a0d2bcda109c07f9593b17f"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/cocos-js/cc.c2df8.js",
+          "status": 200,
+          "sha256": "a670bba566ce7e3a2c25e17b7eb104efc0463a62d85c3d4974d2be9b586eee89"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/chunks/bundle.e2cd5.js",
+          "status": 200,
+          "sha256": "c0ab1af06c40484eba8e9d40042b2162a8355e8d8d1d914ea5a21d4d420dc1d5"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/assets/internal/index.4e53f.js",
+          "status": 200,
+          "sha256": "d842bf596127320ad8cd42ce506a2817cd8a6402fbec6735e6b13af359a40757"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/assets/main/index.272d1.js",
+          "status": 200,
+          "sha256": "c70cb27788d9c4952c5ed5a19b28d66c934d186fe2e6dd7045f6f86a8f6a1956"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/polyfills.bundle.5adbf.js",
+          "status": 200,
+          "sha256": "f1e4ced3322168d6b9915e782e4c1cf1055d75f66f2b38e7fcd60f48cf89082b"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/system.bundle.cc789.js",
+          "status": 200,
+          "sha256": "5d1a25de07cc11276a6b1d6479cac7f12c0c561dd06941b8339e568c9d94f900"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/index.9dfc9.js",
+          "status": 200,
+          "sha256": "45ff755b782b689a74542e2cb550ec8e092e2f0f6dc2321dcd5dfda73bc68668"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/application.6230d.js",
+          "status": 200,
+          "sha256": "9724f071e4f4ed8e65df5a695185e7b4d0df90785a0d2bcda109c07f9593b17f"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/cocos-js/cc.c2df8.js",
+          "status": 200,
+          "sha256": "a670bba566ce7e3a2c25e17b7eb104efc0463a62d85c3d4974d2be9b586eee89"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/chunks/bundle.e2cd5.js",
+          "status": 200,
+          "sha256": "c0ab1af06c40484eba8e9d40042b2162a8355e8d8d1d914ea5a21d4d420dc1d5"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/assets/internal/index.4e53f.js",
+          "status": 200,
+          "sha256": "d842bf596127320ad8cd42ce506a2817cd8a6402fbec6735e6b13af359a40757"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/assets/main/index.272d1.js",
+          "status": 200,
+          "sha256": "c70cb27788d9c4952c5ed5a19b28d66c934d186fe2e6dd7045f6f86a8f6a1956"
+        }
+      ],
+      "invalidLabels": []
+    },
+    {
+      "viewport": {
+        "width": 1920,
+        "height": 280
+      },
+      "kind": "hex",
+      "fixtureHash": "4a7adee74fdc7905a6cbf64eb404bb95fb46be889010ca7768926f9b3bf648bf",
+      "ok": true,
+      "checks": [
+        {
+          "name": "Extreme frame fits complete 1280x560 SHOW_ALL canvas",
+          "passed": true,
+          "host": {
+            "screen": "camp",
+            "landscape": true,
+            "size": {
+              "width": 1280,
+              "height": 560
+            },
+            "selected": "sj_yujian",
+            "menuPage": "library",
+            "treePan": {
+              "x": 0,
+              "y": 0
+            },
+            "detailPan": {
+              "x": 0,
+              "y": 0
+            },
+            "stick": {
+              "x": 0,
+              "y": 0,
+              "dx": 0,
+              "dy": 0
+            },
+            "touch": null,
+            "keys": [],
+            "camera": {
+              "x": 0,
+              "y": 0
+            },
+            "tools": {
+              "speed": 1,
+              "invincible": false
+            }
+          },
+          "root": {
+            "left": 640.0000000000001,
+            "right": 1280,
+            "top": 0,
+            "bottom": 280
+          }
+        },
+        {
+          "name": "Modal stays inside viewport: delivery tools entry",
+          "passed": true,
+          "viewport": {
+            "width": 1920,
+            "height": 280
+          },
+          "box": {
+            "left": 640.0000000000001,
+            "right": 1280,
+            "top": 0,
+            "bottom": 280
+          },
+          "controls": [
+            "进入独立体验档",
+            "返回"
+          ]
+        },
+        {
+          "name": "Modal stays inside viewport: delivery tools x3",
+          "passed": true,
+          "viewport": {
+            "width": 1920,
+            "height": 280
+          },
+          "box": {
+            "left": 640.0000000000001,
+            "right": 1280,
+            "top": 0,
+            "bottom": 280
+          },
+          "controls": [
+            "游戏速度 ×1",
+            "游戏速度 ×2",
+            "游戏速度 ×3 · 当前",
+            "无敌秒杀：开启",
+            "返回宗门",
+            "切回普通档"
+          ]
+        },
+        {
+          "name": "New Campaign arenaVersion=1; actual world and HUD paths contain six hex vertices",
+          "passed": true,
+          "paths": {
+            "world": [
+              {
+                "closed": true,
+                "points": [
+                  {
+                    "x": 0,
+                    "y": 1068
+                  },
+                  {
+                    "x": 945,
+                    "y": 528
+                  },
+                  {
+                    "x": 945,
+                    "y": -552
+                  },
+                  {
+                    "x": 0,
+                    "y": -1092
+                  },
+                  {
+                    "x": -945,
+                    "y": -552
+                  },
+                  {
+                    "x": -945,
+                    "y": 528
+                  },
+                  {
+                    "x": 0,
+                    "y": 1068
+                  }
+                ]
+              },
+              {
+                "closed": true,
+                "points": [
+                  {
+                    "x": 0,
+                    "y": 1003.1999999999999
+                  },
+                  {
+                    "x": 888.3,
+                    "y": 495.59999999999997
+                  },
+                  {
+                    "x": 888.3,
+                    "y": -519.5999999999999
+                  },
+                  {
+                    "x": 0,
+                    "y": -1027.1999999999998
+                  },
+                  {
+                    "x": -888.3,
+                    "y": -519.5999999999999
+                  },
+                  {
+                    "x": -888.3,
+                    "y": 495.59999999999997
+                  }
+                ]
+              },
+              {
+                "closed": true,
+                "points": [
+                  {
+                    "x": 0,
+                    "y": 1068
+                  },
+                  {
+                    "x": 945,
+                    "y": 528
+                  },
+                  {
+                    "x": 945,
+                    "y": -552
+                  },
+                  {
+                    "x": 0,
+                    "y": -1092
+                  },
+                  {
+                    "x": -945,
+                    "y": -552
+                  },
+                  {
+                    "x": -945,
+                    "y": 528
+                  }
+                ]
+              }
+            ],
+            "hud": [
+              {
+                "closed": true,
+                "points": [
+                  {
+                    "x": 571,
+                    "y": 147.42857142857144
+                  },
+                  {
+                    "x": 609,
+                    "y": 125.71428571428572
+                  },
+                  {
+                    "x": 609,
+                    "y": 82.28571428571428
+                  },
+                  {
+                    "x": 571,
+                    "y": 60.57142857142857
+                  },
+                  {
+                    "x": 533,
+                    "y": 82.28571428571428
+                  },
+                  {
+                    "x": 533,
+                    "y": 125.71428571428572
+                  },
+                  {
+                    "x": 571,
+                    "y": 147.42857142857144
+                  }
+                ]
+              },
+              {
+                "closed": true,
+                "points": [
+                  {
+                    "x": 571,
+                    "y": 147.42857142857144
+                  },
+                  {
+                    "x": 609,
+                    "y": 125.71428571428572
+                  },
+                  {
+                    "x": 609,
+                    "y": 82.28571428571428
+                  },
+                  {
+                    "x": 571,
+                    "y": 60.57142857142857
+                  },
+                  {
+                    "x": 533,
+                    "y": 82.28571428571428
+                  },
+                  {
+                    "x": 533,
+                    "y": 125.71428571428572
+                  }
+                ]
+              }
+            ],
+            "camera": {
+              "x": 33,
+              "y": -48
+            }
+          }
+        },
+        {
+          "name": "Real x3 fixed joystick reaches slanted edge; player/enemy circles contained; per-tick viewport follows",
+          "passed": true,
+          "samples": [
+            {
+              "time": 1.9333333333333333,
+              "player": {
+                "x": 157.30187867970514,
+                "y": 162.8484016034265,
+                "hp": 120,
+                "xp": 10920,
+                "maxHp": 120,
+                "attack": 127.2,
+                "moveSpeed": 220,
+                "radius": 18,
+                "faceX": 0.49026123963255896,
+                "faceY": 0.8715755371245493
+              },
+              "margins": [
+                664.5449949449345,
+                802.6981213202948,
+                1051.5181877960795,
+                1174.860192043897,
+                1051.3018786797052,
+                787.8869991927523
+              ],
+              "view": {
+                "xmin": -474.69812132029483,
+                "xmax": 789.3018786797052,
+                "ymin": -25.15159839657349,
+                "ymax": 338.8484016034265,
+                "followPlayer": true
+              },
+              "enemies": 5
+            },
+            {
+              "time": 2.25,
+              "player": {
+                "x": 191.45674504077363,
+                "y": 223.56816402310358,
+                "hp": 120,
+                "xp": 10920,
+                "maxHp": 120,
+                "attack": 127.2,
+                "moveSpeed": 220,
+                "radius": 18,
+                "faceX": 0.49026123963255896,
+                "faceY": 0.8715755371245493
+              },
+              "margins": [
+                594.8799184965235,
+                768.5432549592264,
+                1087.2921459722904,
+                1244.5252684923082,
+                1085.4567450407735,
+                752.1130410165413
+              ],
+              "view": {
+                "xmin": -440.54325495922626,
+                "xmax": 823.4567450407737,
+                "ymin": 35.56816402310358,
+                "ymax": 399.5681640231036,
+                "followPlayer": true
+              },
+              "enemies": 7
+            },
+            {
+              "time": 2.6,
+              "player": {
+                "x": 229.2068604924809,
+                "y": 290.679480381694,
+                "hp": 120,
+                "xp": 10920,
+                "maxHp": 120,
+                "attack": 127.2,
+                "moveSpeed": 220,
+                "radius": 18,
+                "faceX": 0.49026123963255896,
+                "faceY": 0.8715755371245493
+              },
+              "margins": [
+                517.8816761061744,
+                730.7931395075191,
+                1126.8317839565236,
+                1321.5235108826575,
+                1123.206860492481,
+                712.5734030323081
+              ],
+              "view": {
+                "xmin": -402.79313950751896,
+                "xmax": 861.206860492481,
+                "ymin": 102.67948038169402,
+                "ymax": 466.679480381694,
+                "followPlayer": true
+              },
+              "enemies": 8
+            },
+            {
+              "time": 2.8833333333333333,
+              "player": {
+                "x": 259.76647776291054,
+                "y": 345.0076888624577,
+                "hp": 120,
+                "xp": 10920,
+                "maxHp": 120,
+                "attack": 127.2,
+                "moveSpeed": 220,
+                "radius": 18,
+                "faceX": 0.49026123963255896,
+                "faceY": 0.8715755371245493
+              },
+              "margins": [
+                455.54976559970123,
+                700.2335222370895,
+                1158.8400623247126,
+                1383.8554213891305,
+                1153.7664777629107,
+                680.5651246641194
+              ],
+              "view": {
+                "xmin": -372.23352223708946,
+                "xmax": 891.7664777629107,
+                "ymin": 157.0076888624577,
+                "ymax": 521.0076888624577,
+                "followPlayer": true
+              },
+              "enemies": 10
+            },
+            {
+              "time": 3.183333333333333,
+              "player": {
+                "x": 292.1237195786591,
+                "y": 402.5316743126781,
+                "hp": 120,
+                "xp": 10920,
+                "maxHp": 120,
+                "attack": 127.2,
+                "moveSpeed": 220,
+                "radius": 18,
+                "faceX": 0.49026123963255896,
+                "faceY": 0.8715755371245493
+              },
+              "margins": [
+                389.55127212225943,
+                667.8762804213409,
+                1192.7311805969127,
+                1449.8539148665725,
+                1186.1237195786591,
+                646.6740063919191
+              ],
+              "view": {
+                "xmin": -339.8762804213409,
+                "xmax": 924.1237195786593,
+                "ymin": 214.5316743126781,
+                "ymax": 578.5316743126781,
+                "followPlayer": true
+              },
+              "enemies": 10
+            },
+            {
+              "time": 3.533333333333333,
+              "player": {
+                "x": 329.8738350303658,
+                "y": 469.64299067126854,
+                "hp": 120,
+                "xp": 10920,
+                "maxHp": 120,
+                "attack": 127.2,
+                "moveSpeed": 220,
+                "radius": 18,
+                "faceX": 0.49026123963255896,
+                "faceY": 0.8715755371245493
+              },
+              "margins": [
+                312.55302973191056,
+                630.1261649696341,
+                1232.2708185811462,
+                1526.8521572569211,
+                1223.8738350303659,
+                607.1343684076857
+              ],
+              "view": {
+                "xmin": -302.1261649696342,
+                "xmax": 961.8738350303659,
+                "ymin": 281.64299067126854,
+                "ymax": 645.6429906712685,
+                "followPlayer": true
+              },
+              "enemies": 11
+            },
+            {
+              "time": 3.8333333333333335,
+              "player": {
+                "x": 362.2310768461144,
+                "y": 527.1669761214889,
+                "hp": 120,
+                "xp": 10920,
+                "maxHp": 120,
+                "attack": 127.2,
+                "moveSpeed": 220,
+                "radius": 18,
+                "faceX": 0.49026123963255896,
+                "faceY": 0.8715755371245493
+              },
+              "margins": [
+                246.5545362544687,
+                597.7689231538857,
+                1266.1619368533463,
+                1592.850650734363,
+                1256.2310768461143,
+                573.2432501354854
+              ],
+              "view": {
+                "xmin": -269.7689231538856,
+                "xmax": 994.2310768461145,
+                "ymin": 339.1669761214889,
+                "ymax": 703.1669761214889,
+                "followPlayer": true
+              },
+              "enemies": 13
+            },
+            {
+              "time": 4.183333333333334,
+              "player": {
+                "x": 399.98119229782105,
+                "y": 594.2782924800794,
+                "hp": 120,
+                "xp": 10920,
+                "maxHp": 120,
+                "attack": 127.2,
+                "moveSpeed": 220,
+                "radius": 18,
+                "faceX": 0.49026123963255896,
+                "faceY": 0.8715755371245493
+              },
+              "margins": [
+                169.5562938641199,
+                560.018807702179,
+                1305.70157483758,
+                1669.848893124712,
+                1293.981192297821,
+                533.703612151252
+              ],
+              "view": {
+                "xmin": -232.01880770217895,
+                "xmax": 1031.9811922978213,
+                "ymin": 406.27829248007936,
+                "ymax": 770.2782924800794,
+                "followPlayer": true
+              },
+              "enemies": 13
+            },
+            {
+              "time": 4.5,
+              "player": {
+                "x": 434.136058658889,
+                "y": 654.9980548997564,
+                "hp": 120,
+                "xp": 10920,
+                "maxHp": 120,
+                "attack": 127.2,
+                "moveSpeed": 220,
+                "radius": 18,
+                "faceX": 0.49026123963255896,
+                "faceY": 0.8715755371245493
+              },
+              "margins": [
+                99.89121741570901,
+                525.8639413411111,
+                1341.4755330137914,
+                1739.513969573123,
+                1328.136058658889,
+                497.92965397504065
+              ],
+              "view": {
+                "xmin": -197.863941341111,
+                "xmax": 1066.1360586588892,
+                "ymin": 466.9980548997564,
+                "ymax": 830.9980548997564,
+                "followPlayer": true
+              },
+              "enemies": 13
+            },
+            {
+              "time": 4.85,
+              "player": {
+                "x": 471.8861741105957,
+                "y": 722.1093712583469,
+                "hp": 120,
+                "xp": 10920,
+                "maxHp": 120,
+                "attack": 127.2,
+                "moveSpeed": 220,
+                "radius": 18,
+                "faceX": 0.49026123963255896,
+                "faceY": 0.8715755371245493
+              },
+              "margins": [
+                22.892975025360165,
+                488.1138258894043,
+                1381.0151709980248,
+                1816.5122119634716,
+                1365.8861741105957,
+                458.39001599080706
+              ],
+              "view": {
+                "xmin": -160.11382588940432,
+                "xmax": 1103.886174110596,
+                "ymin": 534.1093712583469,
+                "ymax": 898.1093712583469,
+                "followPlayer": true
+              },
+              "enemies": 14
+            },
+            {
+              "time": 5.133333333333334,
+              "player": {
+                "x": 482.8785998015018,
+                "y": 742.1949944749456,
+                "hp": 120,
+                "xp": 10920,
+                "maxHp": 120,
+                "attack": 127.2,
+                "moveSpeed": 220,
+                "radius": 18,
+                "faceX": 0.49026123963255896,
+                "faceY": 0.8715755371245493
+              },
+              "margins": [
+                -5.684341886080802e-14,
+                477.12140019849824,
+                1393.0006051988796,
+                1839.4051869888317,
+                1376.8785998015019,
+                446.404581789952
+              ],
+              "view": {
+                "xmin": -149.12140019849818,
+                "xmax": 1114.8785998015019,
+                "ymin": 554.1949944749456,
+                "ymax": 918.1949944749455,
+                "followPlayer": true
+              },
+              "enemies": 16
+            }
+          ]
+        },
+        {
+          "name": "Modal stays inside viewport: hex pause",
+          "passed": true,
+          "viewport": {
+            "width": 1920,
+            "height": 280
+          },
+          "box": {
+            "left": 640.0000000000001,
+            "right": 1280,
+            "top": 0,
+            "bottom": 280
+          },
+          "controls": [
+            "继续挑战",
+            "技能树 · 可用32点",
+            "体验工具",
+            "返回宗门"
+          ]
+        },
+        {
+          "name": "learnSkill-vajra: allocation, selection, two-axis tree pan and detail pan retained",
+          "passed": true,
+          "beforeHost": {
+            "screen": "skills",
+            "landscape": true,
+            "size": {
+              "width": 1280,
+              "height": 560
+            },
+            "selected": "vajra",
+            "menuPage": "library",
+            "treePan": {
+              "x": 0,
+              "y": 122
+            },
+            "detailPan": {
+              "x": 0,
+              "y": 0
+            },
+            "stick": {
+              "x": -492,
+              "y": -122,
+              "dx": 0,
+              "dy": 0
+            },
+            "touch": null,
+            "keys": [],
+            "phase": "paused",
+            "input": {
+              "x": 1,
+              "y": 0
+            },
+            "camera": {
+              "x": 529.8038132793617,
+              "y": 727.3805867733114
+            },
+            "tools": {
+              "speed": 3,
+              "invincible": true
+            }
+          },
+          "afterHost": {
+            "screen": "skills",
+            "landscape": true,
+            "size": {
+              "width": 1280,
+              "height": 560
+            },
+            "selected": "vajra",
+            "menuPage": "library",
+            "treePan": {
+              "x": 0,
+              "y": 122
+            },
+            "detailPan": {
+              "x": 0,
+              "y": 0
+            },
+            "stick": {
+              "x": -492,
+              "y": -122,
+              "dx": 0,
+              "dy": 0
+            },
+            "touch": null,
+            "keys": [],
+            "phase": "paused",
+            "input": {
+              "x": 1,
+              "y": 0
+            },
+            "camera": {
+              "x": 529.8038132793617,
+              "y": 727.3805867733114
+            },
+            "tools": {
+              "speed": 3,
+              "invincible": true
+            }
+          },
+          "quote": {
+            "ok": true,
+            "nextLevel": 2,
+            "cost": 1,
+            "bookCost": 0
+          }
+        },
+        {
+          "name": "Modal stays inside viewport: hex reload pause",
+          "passed": true,
+          "viewport": {
+            "width": 1920,
+            "height": 280
+          },
+          "box": {
+            "left": 640.0000000000001,
+            "right": 1280,
+            "top": 0,
+            "bottom": 280
+          },
+          "controls": [
+            "继续挑战",
+            "技能树 · 可用31点",
+            "体验工具",
+            "返回宗门"
+          ]
+        },
+        {
+          "name": "Hex pause/resume, disabled minus, paused plus, input reset, frozen CD, orientation and reload/save isolation",
+          "passed": true,
+          "pausedHash": "0acfb08c47976c106ab4bb3b2d84d68688f574b805790266e25145114ed23f90",
+          "activeRunHash": "ec0ff30a11450c5d931a9228a3c64e7a74a5b904550e8482192a4e1dfda13229",
+          "hp": 120,
+          "rng": 1006867842
+        }
+      ],
+      "actions": [
+        {
+          "type": "pointer-click",
+          "target": "技能树",
+          "x": 1036,
+          "y": 256,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "宗门",
+          "x": 732,
+          "y": 256,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "体验工具",
+          "x": 960,
+          "y": 154,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "进入独立体验档",
+          "x": 832,
+          "y": 213,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "无敌秒杀：关闭",
+          "x": 1088,
+          "y": 194.5,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "游戏速度 ×3",
+          "x": 832,
+          "y": 194.5,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "返回宗门",
+          "x": 832,
+          "y": 239.50000000000003,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "锁妖塔",
+          "x": 884,
+          "y": 256,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "重访第9层",
+          "x": 960,
+          "y": 173,
+          "enabled": true
+        },
+        {
+          "type": "pointer-drag",
+          "label": "fixed joystick toward northeast diagonal wall",
+          "from": {
+            "x": 714,
+            "y": 201
+          },
+          "to": {
+            "x": 732,
+            "y": 169.5
+          },
+          "holdMs": 0,
+          "release": false
+        },
+        {
+          "type": "pointer-release",
+          "target": "移动摇杆 diagonal wall"
+        },
+        {
+          "type": "pointer-drag",
+          "label": "right-side field negative",
+          "from": {
+            "x": 1126.4,
+            "y": 148.4
+          },
+          "to": {
+            "x": 1108.9,
+            "y": 160.9
+          },
+          "holdMs": 150,
+          "release": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "暂停",
+          "x": 1247.5,
+          "y": 22.500000000000014,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "继续挑战",
+          "x": 832,
+          "y": 176,
+          "enabled": true
+        },
+        {
+          "type": "key-down",
+          "key": "d"
+        },
+        {
+          "type": "pointer-click",
+          "target": "技能树",
+          "x": 1234.5,
+          "y": 254,
+          "enabled": true
+        },
+        {
+          "type": "key-up",
+          "key": "d"
+        },
+        {
+          "type": "pointer-click",
+          "target": "技能图标-vajra",
+          "x": 734,
+          "y": 140.5,
+          "enabled": true
+        },
+        {
+          "type": "pointer-drag",
+          "label": "reveal decreaseSkill-vajra",
+          "from": {
+            "x": 861,
+            "y": 195.75
+          },
+          "to": {
+            "x": 861,
+            "y": 134.25
+          },
+          "holdMs": 0,
+          "release": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "decreaseSkill-vajra",
+          "x": 712,
+          "y": 165.5,
+          "enabled": false
+        },
+        {
+          "type": "pointer-click",
+          "target": "learnSkill-vajra",
+          "x": 756,
+          "y": 165.5,
+          "enabled": true
+        },
+        {
+          "type": "viewport-resize",
+          "size": {
+            "width": 390,
+            "height": 844
+          }
+        },
+        {
+          "type": "viewport-resize",
+          "size": {
+            "width": 1920,
+            "height": 280
+          }
+        },
+        {
+          "type": "pointer-click",
+          "target": "继续挑战",
+          "x": 832,
+          "y": 176,
+          "enabled": true
+        }
+      ],
+      "screenshots": [
+        "ui-delivery-rest-1920x280-hex-tree-current-build.png",
+        "ui-delivery-rest-1920x280-hex-tools-modal.png",
+        "ui-delivery-rest-1920x280-hex-hex-spawn.png",
+        "ui-delivery-rest-1920x280-hex-hex-diagonal-wall.png",
+        "ui-delivery-rest-1920x280-hex-hex-pause.png",
+        "ui-delivery-rest-1920x280-hex-hex-paused-skills.png",
+        "ui-delivery-rest-1920x280-hex-hex-orientation-390x844.png",
+        "ui-delivery-rest-1920x280-hex-hex-orientation-1920x280.png",
+        "ui-delivery-rest-1920x280-hex-hex-reload.png"
+      ],
+      "pageErrors": [],
+      "console": [
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (setting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.setFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "Setting window size is not supported."
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (setting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.setFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "Setting window size is not supported."
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (setting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.setFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "Setting window size is not supported."
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (setting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.setFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "Setting window size is not supported."
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        }
+      ],
+      "httpErrors": [],
+      "requestFailures": [],
+      "assets": [
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/polyfills.bundle.5adbf.js",
+          "status": 200,
+          "sha256": "f1e4ced3322168d6b9915e782e4c1cf1055d75f66f2b38e7fcd60f48cf89082b"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/system.bundle.cc789.js",
+          "status": 200,
+          "sha256": "5d1a25de07cc11276a6b1d6479cac7f12c0c561dd06941b8339e568c9d94f900"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/index.9dfc9.js",
+          "status": 200,
+          "sha256": "45ff755b782b689a74542e2cb550ec8e092e2f0f6dc2321dcd5dfda73bc68668"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/application.6230d.js",
+          "status": 200,
+          "sha256": "9724f071e4f4ed8e65df5a695185e7b4d0df90785a0d2bcda109c07f9593b17f"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/cocos-js/cc.c2df8.js",
+          "status": 200,
+          "sha256": "a670bba566ce7e3a2c25e17b7eb104efc0463a62d85c3d4974d2be9b586eee89"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/chunks/bundle.e2cd5.js",
+          "status": 200,
+          "sha256": "c0ab1af06c40484eba8e9d40042b2162a8355e8d8d1d914ea5a21d4d420dc1d5"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/assets/internal/index.4e53f.js",
+          "status": 200,
+          "sha256": "d842bf596127320ad8cd42ce506a2817cd8a6402fbec6735e6b13af359a40757"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/assets/main/index.272d1.js",
+          "status": 200,
+          "sha256": "c70cb27788d9c4952c5ed5a19b28d66c934d186fe2e6dd7045f6f86a8f6a1956"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/polyfills.bundle.5adbf.js",
+          "status": 200,
+          "sha256": "f1e4ced3322168d6b9915e782e4c1cf1055d75f66f2b38e7fcd60f48cf89082b"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/system.bundle.cc789.js",
+          "status": 200,
+          "sha256": "5d1a25de07cc11276a6b1d6479cac7f12c0c561dd06941b8339e568c9d94f900"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/index.9dfc9.js",
+          "status": 200,
+          "sha256": "45ff755b782b689a74542e2cb550ec8e092e2f0f6dc2321dcd5dfda73bc68668"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/application.6230d.js",
+          "status": 200,
+          "sha256": "9724f071e4f4ed8e65df5a695185e7b4d0df90785a0d2bcda109c07f9593b17f"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/cocos-js/cc.c2df8.js",
+          "status": 200,
+          "sha256": "a670bba566ce7e3a2c25e17b7eb104efc0463a62d85c3d4974d2be9b586eee89"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/chunks/bundle.e2cd5.js",
+          "status": 200,
+          "sha256": "c0ab1af06c40484eba8e9d40042b2162a8355e8d8d1d914ea5a21d4d420dc1d5"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/assets/internal/index.4e53f.js",
+          "status": 200,
+          "sha256": "d842bf596127320ad8cd42ce506a2817cd8a6402fbec6735e6b13af359a40757"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/assets/main/index.272d1.js",
+          "status": 200,
+          "sha256": "c70cb27788d9c4952c5ed5a19b28d66c934d186fe2e6dd7045f6f86a8f6a1956"
+        }
+      ],
+      "invalidLabels": []
+    },
+    {
+      "viewport": {
+        "width": 3840,
+        "height": 1080
+      },
+      "kind": "hex",
+      "fixtureHash": "4a7adee74fdc7905a6cbf64eb404bb95fb46be889010ca7768926f9b3bf648bf",
+      "ok": true,
+      "checks": [
+        {
+          "name": "Extreme frame fits complete 1280x560 SHOW_ALL canvas",
+          "passed": true,
+          "host": {
+            "screen": "camp",
+            "landscape": true,
+            "size": {
+              "width": 1280,
+              "height": 560
+            },
+            "selected": "sj_yujian",
+            "menuPage": "library",
+            "treePan": {
+              "x": 0,
+              "y": 0
+            },
+            "detailPan": {
+              "x": 0,
+              "y": 0
+            },
+            "stick": {
+              "x": 0,
+              "y": 0,
+              "dx": 0,
+              "dy": 0
+            },
+            "touch": null,
+            "keys": [],
+            "camera": {
+              "x": 0,
+              "y": 0
+            },
+            "tools": {
+              "speed": 1,
+              "invincible": false
+            }
+          },
+          "root": {
+            "left": 685.7142857142857,
+            "right": 3154.285714285714,
+            "top": 0,
+            "bottom": 1080
+          }
+        },
+        {
+          "name": "Modal stays inside viewport: delivery tools entry",
+          "passed": true,
+          "viewport": {
+            "width": 3840,
+            "height": 1080
+          },
+          "box": {
+            "left": 685.7142857142857,
+            "right": 3154.285714285714,
+            "top": 0,
+            "bottom": 1080
+          },
+          "controls": [
+            "进入独立体验档",
+            "返回"
+          ]
+        },
+        {
+          "name": "Modal stays inside viewport: delivery tools x3",
+          "passed": true,
+          "viewport": {
+            "width": 3840,
+            "height": 1080
+          },
+          "box": {
+            "left": 685.7142857142857,
+            "right": 3154.285714285714,
+            "top": 0,
+            "bottom": 1080
+          },
+          "controls": [
+            "游戏速度 ×1",
+            "游戏速度 ×2",
+            "游戏速度 ×3 · 当前",
+            "无敌秒杀：开启",
+            "返回宗门",
+            "切回普通档"
+          ]
+        },
+        {
+          "name": "New Campaign arenaVersion=1; actual world and HUD paths contain six hex vertices",
+          "passed": true,
+          "paths": {
+            "world": [
+              {
+                "closed": true,
+                "points": [
+                  {
+                    "x": 0,
+                    "y": 1068
+                  },
+                  {
+                    "x": 945,
+                    "y": 528
+                  },
+                  {
+                    "x": 945,
+                    "y": -552
+                  },
+                  {
+                    "x": 0,
+                    "y": -1092
+                  },
+                  {
+                    "x": -945,
+                    "y": -552
+                  },
+                  {
+                    "x": -945,
+                    "y": 528
+                  },
+                  {
+                    "x": 0,
+                    "y": 1068
+                  }
+                ]
+              },
+              {
+                "closed": true,
+                "points": [
+                  {
+                    "x": 0,
+                    "y": 1003.1999999999999
+                  },
+                  {
+                    "x": 888.3,
+                    "y": 495.59999999999997
+                  },
+                  {
+                    "x": 888.3,
+                    "y": -519.5999999999999
+                  },
+                  {
+                    "x": 0,
+                    "y": -1027.1999999999998
+                  },
+                  {
+                    "x": -888.3,
+                    "y": -519.5999999999999
+                  },
+                  {
+                    "x": -888.3,
+                    "y": 495.59999999999997
+                  }
+                ]
+              },
+              {
+                "closed": true,
+                "points": [
+                  {
+                    "x": 0,
+                    "y": 1068
+                  },
+                  {
+                    "x": 945,
+                    "y": 528
+                  },
+                  {
+                    "x": 945,
+                    "y": -552
+                  },
+                  {
+                    "x": 0,
+                    "y": -1092
+                  },
+                  {
+                    "x": -945,
+                    "y": -552
+                  },
+                  {
+                    "x": -945,
+                    "y": 528
+                  }
+                ]
+              }
+            ],
+            "hud": [
+              {
+                "closed": true,
+                "points": [
+                  {
+                    "x": 571,
+                    "y": 147.42857142857144
+                  },
+                  {
+                    "x": 609,
+                    "y": 125.71428571428572
+                  },
+                  {
+                    "x": 609,
+                    "y": 82.28571428571428
+                  },
+                  {
+                    "x": 571,
+                    "y": 60.57142857142857
+                  },
+                  {
+                    "x": 533,
+                    "y": 82.28571428571428
+                  },
+                  {
+                    "x": 533,
+                    "y": 125.71428571428572
+                  },
+                  {
+                    "x": 571,
+                    "y": 147.42857142857144
+                  }
+                ]
+              },
+              {
+                "closed": true,
+                "points": [
+                  {
+                    "x": 571,
+                    "y": 147.42857142857144
+                  },
+                  {
+                    "x": 609,
+                    "y": 125.71428571428572
+                  },
+                  {
+                    "x": 609,
+                    "y": 82.28571428571428
+                  },
+                  {
+                    "x": 571,
+                    "y": 60.57142857142857
+                  },
+                  {
+                    "x": 533,
+                    "y": 82.28571428571428
+                  },
+                  {
+                    "x": 533,
+                    "y": 125.71428571428572
+                  }
+                ]
+              }
+            ],
+            "camera": {
+              "x": 33,
+              "y": -48
+            }
+          }
+        },
+        {
+          "name": "Real x3 fixed joystick reaches slanted edge; player/enemy circles contained; per-tick viewport follows",
+          "passed": true,
+          "samples": [
+            {
+              "time": 8.833333333333334,
+              "player": {
+                "x": 395.2445094664409,
+                "y": 589.4570581141024,
+                "hp": 120,
+                "xp": 10920,
+                "maxHp": 120,
+                "attack": 127.2,
+                "moveSpeed": 220,
+                "radius": 18,
+                "faceX": 0.4890997369941595,
+                "faceY": 0.8722278643062511
+              },
+              "margins": [
+                176.09235033024808,
+                564.7554905335592,
+                1303.8656239540396,
+                1663.3128366585836,
+                1289.2445094664408,
+                535.5395630347921
+              ],
+              "view": {
+                "xmin": -236.7554905335591,
+                "xmax": 1027.2445094664408,
+                "ymin": 401.45705811410244,
+                "ymax": 765.4570581141024,
+                "followPlayer": true
+              },
+              "enemies": 20
+            },
+            {
+              "time": 9.266666666666667,
+              "player": {
+                "x": 441.8720177265507,
+                "y": 672.6094478446321,
+                "hp": 120,
+                "xp": 10920,
+                "maxHp": 120,
+                "attack": 127.2,
+                "moveSpeed": 220,
+                "radius": 18,
+                "faceX": 0.4890997369941595,
+                "faceY": 0.8722278643062511
+              },
+              "margins": [
+                80.76213574906005,
+                518.1279822734493,
+                1352.928393642437,
+                1758.6430512397715,
+                1335.8720177265507,
+                486.4767933463948
+              ],
+              "view": {
+                "xmin": -190.12798227344928,
+                "xmax": 1073.87201772655,
+                "ymin": 484.6094478446321,
+                "ymax": 848.6094478446321,
+                "followPlayer": true
+              },
+              "enemies": 20
+            },
+            {
+              "time": 9.633333333333333,
+              "player": {
+                "x": 481.3260631774129,
+                "y": 742.9691622320033,
+                "hp": 120,
+                "xp": 10920,
+                "maxHp": 120,
+                "attack": 127.2,
+                "moveSpeed": 220,
+                "radius": 18,
+                "faceX": 0.4890997369941595,
+                "faceY": 0.8722278643062511
+              },
+              "margins": [
+                0.09810802651628947,
+                478.67393682258717,
+                1394.4430449172346,
+                1839.3070789623155,
+                1375.3260631774128,
+                444.9621420715971
+              ],
+              "view": {
+                "xmin": -150.6739368225871,
+                "xmax": 1113.3260631774124,
+                "ymin": 554.9691622320033,
+                "ymax": 918.9691622320033,
+                "followPlayer": true
+              },
+              "enemies": 19
+            }
+          ]
+        },
+        {
+          "name": "Modal stays inside viewport: hex pause",
+          "passed": true,
+          "viewport": {
+            "width": 3840,
+            "height": 1080
+          },
+          "box": {
+            "left": 685.7142857142857,
+            "right": 3154.285714285714,
+            "top": 0,
+            "bottom": 1080
+          },
+          "controls": [
+            "继续挑战",
+            "技能树 · 可用32点",
+            "体验工具",
+            "返回宗门"
+          ]
+        },
+        {
+          "name": "learnSkill-vajra: allocation, selection, two-axis tree pan and detail pan retained",
+          "passed": true,
+          "beforeHost": {
+            "screen": "skills",
+            "landscape": true,
+            "size": {
+              "width": 1280,
+              "height": 560
+            },
+            "selected": "vajra",
+            "menuPage": "library",
+            "treePan": {
+              "x": 0,
+              "y": 123.40779999999995
+            },
+            "detailPan": {
+              "x": 0,
+              "y": 0
+            },
+            "stick": {
+              "x": -492,
+              "y": -122,
+              "dx": 0,
+              "dy": 0
+            },
+            "touch": null,
+            "keys": [],
+            "phase": "paused",
+            "input": {
+              "x": 1,
+              "y": 0
+            },
+            "camera": {
+              "x": 580.6764235601382,
+              "y": 698.3105237557248
+            },
+            "tools": {
+              "speed": 3,
+              "invincible": true
+            }
+          },
+          "afterHost": {
+            "screen": "skills",
+            "landscape": true,
+            "size": {
+              "width": 1280,
+              "height": 560
+            },
+            "selected": "vajra",
+            "menuPage": "library",
+            "treePan": {
+              "x": 0,
+              "y": 123.40779999999995
+            },
+            "detailPan": {
+              "x": 0,
+              "y": 0
+            },
+            "stick": {
+              "x": -492,
+              "y": -122,
+              "dx": 0,
+              "dy": 0
+            },
+            "touch": null,
+            "keys": [],
+            "phase": "paused",
+            "input": {
+              "x": 1,
+              "y": 0
+            },
+            "camera": {
+              "x": 580.6764235601382,
+              "y": 698.3105237557248
+            },
+            "tools": {
+              "speed": 3,
+              "invincible": true
+            }
+          },
+          "quote": {
+            "ok": true,
+            "nextLevel": 2,
+            "cost": 1,
+            "bookCost": 0
+          }
+        },
+        {
+          "name": "Modal stays inside viewport: hex reload pause",
+          "passed": true,
+          "viewport": {
+            "width": 3840,
+            "height": 1080
+          },
+          "box": {
+            "left": 685.7142857142857,
+            "right": 3154.285714285714,
+            "top": 0,
+            "bottom": 1080
+          },
+          "controls": [
+            "继续挑战",
+            "技能树 · 可用31点",
+            "体验工具",
+            "返回宗门"
+          ]
+        },
+        {
+          "name": "Hex pause/resume, disabled minus, paused plus, input reset, frozen CD, orientation and reload/save isolation",
+          "passed": true,
+          "pausedHash": "8ef4fde9779d9ea4a8da7654ca3289948e6807205b480aa8f2269d69ae53325f",
+          "activeRunHash": "bfe2a0fc4eb54b8d20f0f024f1a9713684c2e77ad2e3e970382818241698e6c9",
+          "hp": 120,
+          "rng": 2983714196
+        }
+      ],
+      "actions": [
+        {
+          "type": "pointer-click",
+          "target": "技能树",
+          "x": 2213.1428571428573,
+          "y": 987.4285714285714,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "宗门",
+          "x": 1040.5714285714284,
+          "y": 987.4285714285714,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "体验工具",
+          "x": 1920,
+          "y": 594,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "进入独立体验档",
+          "x": 1426.2857142857142,
+          "y": 821.5714285714287,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "无敌秒杀：关闭",
+          "x": 2413.714285714286,
+          "y": 750.2142857142857,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "游戏速度 ×3",
+          "x": 1426.2857142857142,
+          "y": 750.2142857142857,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "返回宗门",
+          "x": 1426.2857142857142,
+          "y": 923.7857142857143,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "锁妖塔",
+          "x": 1626.857142857143,
+          "y": 987.4285714285714,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "重访第9层",
+          "x": 1920,
+          "y": 667.2857142857143,
+          "enabled": true
+        },
+        {
+          "type": "pointer-drag",
+          "label": "fixed joystick toward northeast diagonal wall",
+          "from": {
+            "x": 971.142857142857,
+            "y": 775.2857142857143
+          },
+          "to": {
+            "x": 1040.5714285714284,
+            "y": 653.7857142857142
+          },
+          "holdMs": 0,
+          "release": false
+        },
+        {
+          "type": "pointer-release",
+          "target": "移动摇杆 diagonal wall"
+        },
+        {
+          "type": "pointer-drag",
+          "label": "right-side field negative",
+          "from": {
+            "x": 2561.828571428571,
+            "y": 572.4
+          },
+          "to": {
+            "x": 2494.328571428571,
+            "y": 620.6142857142858
+          },
+          "holdMs": 150,
+          "release": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "暂停",
+          "x": 3028.9285714285716,
+          "y": 86.78571428571422,
+          "enabled": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "继续挑战",
+          "x": 1426.2857142857142,
+          "y": 678.8571428571429,
+          "enabled": true
+        },
+        {
+          "type": "key-down",
+          "key": "d"
+        },
+        {
+          "type": "pointer-click",
+          "target": "技能树",
+          "x": 2978.785714285714,
+          "y": 979.7142857142857,
+          "enabled": true
+        },
+        {
+          "type": "key-up",
+          "key": "d"
+        },
+        {
+          "type": "pointer-click",
+          "target": "技能图标-vajra",
+          "x": 1048.285714285714,
+          "y": 541.9285714285714,
+          "enabled": true
+        },
+        {
+          "type": "pointer-drag",
+          "label": "reveal decreaseSkill-vajra",
+          "from": {
+            "x": 1538.1428571428573,
+            "y": 755.0357142857142
+          },
+          "to": {
+            "x": 1538.1428571428573,
+            "y": 517.8214285714284
+          },
+          "holdMs": 0,
+          "release": true
+        },
+        {
+          "type": "pointer-drag",
+          "label": "reveal decreaseSkill-vajra",
+          "from": {
+            "x": 1538.1428571428573,
+            "y": 495.3535714285713
+          },
+          "to": {
+            "x": 1538.1428571428573,
+            "y": 777.5035714285714
+          },
+          "holdMs": 0,
+          "release": true
+        },
+        {
+          "type": "pointer-drag",
+          "label": "reveal decreaseSkill-vajra",
+          "from": {
+            "x": 1538.1428571428573,
+            "y": 755.0357142857142
+          },
+          "to": {
+            "x": 1538.1428571428573,
+            "y": 517.8214285714284
+          },
+          "holdMs": 0,
+          "release": true
+        },
+        {
+          "type": "pointer-click",
+          "target": "decreaseSkill-vajra",
+          "x": 963.4285714285714,
+          "y": 635.6420999999999,
+          "enabled": false
+        },
+        {
+          "type": "pointer-click",
+          "target": "learnSkill-vajra",
+          "x": 1133.142857142857,
+          "y": 635.6420999999999,
+          "enabled": true
+        },
+        {
+          "type": "viewport-resize",
+          "size": {
+            "width": 390,
+            "height": 844
+          }
+        },
+        {
+          "type": "viewport-resize",
+          "size": {
+            "width": 3840,
+            "height": 1080
+          }
+        },
+        {
+          "type": "pointer-click",
+          "target": "继续挑战",
+          "x": 1426.2857142857142,
+          "y": 678.8571428571429,
+          "enabled": true
+        }
+      ],
+      "screenshots": [
+        "ui-delivery-rest-3840x1080-hex-tree-current-build.png",
+        "ui-delivery-rest-3840x1080-hex-tools-modal.png",
+        "ui-delivery-rest-3840x1080-hex-hex-spawn.png",
+        "ui-delivery-rest-3840x1080-hex-hex-diagonal-wall.png",
+        "ui-delivery-rest-3840x1080-hex-hex-pause.png",
+        "ui-delivery-rest-3840x1080-hex-hex-paused-skills.png",
+        "ui-delivery-rest-3840x1080-hex-hex-orientation-390x844.png",
+        "ui-delivery-rest-3840x1080-hex-hex-orientation-3840x1080.png",
+        "ui-delivery-rest-3840x1080-hex-hex-reload.png"
+      ],
+      "pageErrors": [],
+      "console": [
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (setting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.setFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "Setting window size is not supported."
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (setting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.setFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "Setting window size is not supported."
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (setting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.setFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "Setting window size is not supported."
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (setting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.setFrameSize"
+        },
+        {
+          "type": "warning",
+          "text": "Setting window size is not supported."
+        },
+        {
+          "type": "warning",
+          "text": "'%s' is deprecated. (getting size in CSS pixels is not recommended, please use screen.windowSize instead.) View.prototype.getFrameSize"
+        }
+      ],
+      "httpErrors": [],
+      "requestFailures": [],
+      "assets": [
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/system.bundle.cc789.js",
+          "status": 200,
+          "sha256": "5d1a25de07cc11276a6b1d6479cac7f12c0c561dd06941b8339e568c9d94f900"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/polyfills.bundle.5adbf.js",
+          "status": 200,
+          "sha256": "f1e4ced3322168d6b9915e782e4c1cf1055d75f66f2b38e7fcd60f48cf89082b"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/index.9dfc9.js",
+          "status": 200,
+          "sha256": "45ff755b782b689a74542e2cb550ec8e092e2f0f6dc2321dcd5dfda73bc68668"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/application.6230d.js",
+          "status": 200,
+          "sha256": "9724f071e4f4ed8e65df5a695185e7b4d0df90785a0d2bcda109c07f9593b17f"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/cocos-js/cc.c2df8.js",
+          "status": 200,
+          "sha256": "a670bba566ce7e3a2c25e17b7eb104efc0463a62d85c3d4974d2be9b586eee89"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/chunks/bundle.e2cd5.js",
+          "status": 200,
+          "sha256": "c0ab1af06c40484eba8e9d40042b2162a8355e8d8d1d914ea5a21d4d420dc1d5"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/assets/internal/index.4e53f.js",
+          "status": 200,
+          "sha256": "d842bf596127320ad8cd42ce506a2817cd8a6402fbec6735e6b13af359a40757"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/assets/main/index.272d1.js",
+          "status": 200,
+          "sha256": "c70cb27788d9c4952c5ed5a19b28d66c934d186fe2e6dd7045f6f86a8f6a1956"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/polyfills.bundle.5adbf.js",
+          "status": 304,
+          "bodyReadError": "Error: response.body: Response body is unavailable for redirect responses"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/system.bundle.cc789.js",
+          "status": 304,
+          "bodyReadError": "Error: response.body: Response body is unavailable for redirect responses"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/index.9dfc9.js",
+          "status": 304,
+          "bodyReadError": "Error: response.body: Response body is unavailable for redirect responses"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/application.6230d.js",
+          "status": 304,
+          "bodyReadError": "Error: response.body: Response body is unavailable for redirect responses"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/cocos-js/cc.c2df8.js",
+          "status": 304,
+          "bodyReadError": "Error: response.body: Response body is unavailable for redirect responses"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/src/chunks/bundle.e2cd5.js",
+          "status": 304,
+          "bodyReadError": "Error: response.body: Response body is unavailable for redirect responses"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/assets/internal/index.4e53f.js",
+          "status": 304,
+          "bodyReadError": "Error: response.body: Response body is unavailable for redirect responses"
+        },
+        {
+          "url": "http://127.0.0.1:8767/cocos-pilot/build/web-mobile/assets/main/index.272d1.js",
+          "status": 304,
+          "bodyReadError": "Error: response.body: Response body is unavailable for redirect responses"
+        }
+      ],
+      "invalidLabels": []
+    }
+  ],
+  "failures": 0,
+  "visualReview": "PENDING: actual circle geometry, row labels, fixed pane, joystick and modal images.",
+  "finishedAt": "2026-10-28T06:00:03.106Z"
+}
