@@ -3,7 +3,7 @@ import assert from 'node:assert/strict'
 import { readFileSync } from 'node:fs'
 import { stripTypeScriptTypes } from 'node:module'
 import { runInNewContext } from 'node:vm'
-import { skillForm, qinglianPetalPose } from '../js/xianxia/TowerSkillForms.js'
+import { skillForm, qinglianPetalPose, QINGLIAN_BLADE_HALF_WIDTH } from '../js/xianxia/TowerSkillForms.js'
 
 const source = stripTypeScriptTypes(
   readFileSync(new URL('../cocos-pilot/assets/scripts/QinglianFormationArt.ts', import.meta.url), 'utf8')
@@ -12,24 +12,25 @@ const source = stripTypeScriptTypes(
 ).replace(/^export /gm, '')
 const art = runInNewContext(
   `(()=>{${source};return {qinglianPetals,QINGLIAN_PALETTE}})()`,
-  { skillForm, qinglianPetalPose },
+  { skillForm, qinglianPetalPose, QINGLIAN_BLADE_HALF_WIDTH },
 )
 const { qinglianPetals, QINGLIAN_PALETTE } = art
 
-test('qinglian petals draw 8/12/16 visual petals and only even petals are judgment blades', () => {
+test('qinglian petals draw 8/12/16 blades, all of them judgment blades from the eye to radius 200', () => {
   const petals = qinglianPetals(.4, [1, 1, 1], [], 1)
   for (const ring of [0, 1, 2]) {
     const mine = petals.filter(petal => petal.ring === ring)
     assert.equal(mine.length, [8, 12, 16][ring])
-    assert.equal(mine.filter(petal => petal.judgment).length, [4, 6, 8][ring])
+    for (const petal of mine) {
+      assert.ok(Math.abs(Math.hypot(petal.base.x, petal.base.y)) < 1e-6)
+      assert.ok(Math.abs(Math.hypot(petal.tip.x, petal.tip.y) - 200) < 1e-6)
+    }
   }
-  const judged = petals.filter(petal => petal.judgment).length
-  assert.equal(judged, 18)
 })
 
 test('outer ring fades below the inner ring and windup outlines stay limited', () => {
   const petals = qinglianPetals(.4, [1, 1, 1], [], 1)
-  const alpha = ring => petals.find(petal => petal.ring === ring && petal.judgment).alpha
+  const alpha = ring => petals.find(petal => petal.ring === ring).alpha
   assert.ok(alpha(2) < alpha(0))
   const windup = qinglianPetals(.1, [.6, 0, 0], [4, 0, 0], 1)
   assert.equal(windup.length, 4)

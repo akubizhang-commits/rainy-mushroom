@@ -114,11 +114,13 @@ export const GROWTH_POINT_CAP = 35
 // Retained for shared consumers; research no longer grants skill points.
 export const GROWTH_RESEARCH = freeze([])
 
-// 青莲剑阵的三层判定环。swords 为判定剑数；视觉瓣数为 2 × swords，偶数瓣为判定剑。
+// 青莲剑阵的三层判定环，index 0 为内环。每一瓣都是判定剑，三环共用半径 200，
+// 判定剑从阵眼辐射到外环半径。share 为该环一轮的整招预算占比（外 20% → 中 35% → 内 45%）；
+// 一轮内每一瓣对范围内目标各结算一次，单瓣伤害 = share ÷ visualPetals。
 export const QINGLIAN_RINGS = freeze([
-  { radius: 90, share: .20, swords: 4, visualPetals: 8, alpha: .80 },
-  { radius: 150, share: .35, swords: 6, visualPetals: 12, alpha: .70 },
-  { radius: 200, share: .45, swords: 8, visualPetals: 16, alpha: .60 },
+  { radius: 200, share: .45, swords: 8, visualPetals: 8, alpha: .80 },
+  { radius: 200, share: .35, swords: 12, visualPetals: 12, alpha: .70 },
+  { radius: 200, share: .20, swords: 16, visualPetals: 16, alpha: .60 },
 ])
 
 export const GROWTH_SKILLS = freeze([
@@ -179,12 +181,12 @@ export const GROWTH_SKILLS = freeze([
     target_cap: 6, single_dps_factor: 1 / .6, hit_assumption: .6,
     rule: '发动起冷却6秒，剑环持续4秒；生效期间伤害乘10/7，以每轮最多7击补偿原6秒10击。所有环绕剑对同一目标共用0.6秒命中间隔，不乘剑数。周天剑域保留常驻与原伤害。',
   }, { ...oldSkills.get('sj_wanjian'), pointCosts: [...activeCosts] }),
-  // 青莲剑阵：三层判定环共用一招预算。share 为每次判定的预算比例；只有判定剑扫过的环结算。
+  // 青莲剑阵：持续3秒，每秒一轮，外层→中层→内层依次判定；同一目标三轮合计36次命中，伤害合计为整招预算。
   skill('sj_qinglian', {
-    damage: damageCurve(8, 1.15), cooldown: 9, windup: .8, duration: 1,
-    hit_interval: .5, reach: QINGLIAN_RINGS.at(-1).radius, target_cap: 6,
+    damage: damageCurve(8, 1.15), cooldown: 9, windup: .8, duration: 3,
+    hit_interval: 1, reach: QINGLIAN_RINGS[0].radius, target_cap: null,
     single_dps_factor: 1 / 9, hit_assumption: .6,
-    rule: '起阵0.3秒、成阵0.5秒后三层莲瓣剑环爆发1秒，每0.5秒判定一次。内4剑、中6剑、外8剑，半径0.6m、1.2m、2.0m（约90、150、200像素），预算分配20%/35%/45%。每次判定仅被判定剑扫过的环结算，同目标一招最多结算整招预算；最多6个目标，不减速敌人。',
+    rule: '起阵0.8秒后三层莲瓣剑环旋转爆发3秒，每秒一轮。第一轮外层16瓣占整招预算20%，第二轮中层12瓣占35%，第三轮内层8瓣占45%；每瓣对范围内每个目标各结算一次，同一目标三轮合计36次命中。攻击目标数不限，不减速敌人。',
   }, { name: '青莲剑阵', kind: 'active', clear: 0 }),
   skill('sj_line', {
     damage: damageCurve(8 * 1.8 * 1.5, 1.10), cooldown: 12, windup: .12,
