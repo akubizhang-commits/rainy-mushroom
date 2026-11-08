@@ -37,9 +37,16 @@ test('outer ring fades below the inner ring and windup outlines stay limited', (
 })
 
 test('palette stays in the cool blue-white range without green', () => {
-  for (const colour of Object.values(QINGLIAN_PALETTE)) {
-    const [r, g, b] = colour
-    assert.ok(g >= r && b >= r, `colour ${colour} must lean cyan, not warm or green`)
-    assert.ok(g < 250 || r < 250)
+  // Hue in degrees: green sits near 120, cyan 180, blue 240. The palette must stay in 180–200.
+  const hue = ([r, g, b]) => {
+    const max = Math.max(r, g, b), min = Math.min(r, g, b), d = max - min
+    if (d === 0) return 0
+    if (max === r) return (60 * ((g - b) / d) + 360) % 360
+    if (max === g) return 60 * ((b - r) / d) + 120
+    return 60 * ((r - g) / d) + 240
+  }
+  for (const [name, colour] of Object.entries(QINGLIAN_PALETTE)) {
+    const h = hue(colour)
+    assert.ok(h >= 180 && h <= 200, `${name} hue ${h.toFixed(1)} must sit in the 180–200 cyan band`)
   }
 })

@@ -25,6 +25,8 @@ const routes = {
  qi: [['sj_arc',3],['sj_yujian',3],['vajra',2],['sj_arc',6],['sj_line',3],['sj_mark',2],['sj_arc',9],['sj_line',6],['sj_heart',3]],
  array: [['sj_wanjian',3],['sj_yujian',3],['vajra',2],['sj_wanjian',6],['sj_formation',3],['sj_gate',2],['sj_wanjian',9],['sj_formation',6],['sj_bone',3]],
  mixed: [['sj_arc',3],['sj_wanjian',3],['sj_yujian',3],['vajra',2],['sj_formation',3],['sj_line',3],['sj_arc',6],['sj_wanjian',6],['sj_heart',3]],
+ formation: [['sj_wanjian',3],['vajra',2],['sj_formation',3],['sj_wanjian',6],['sj_formation',6],['sj_bone',3],['sj_formation',9],['sj_wanjian',9],['sj_formation',10]],
+ yujian: [['sj_yujian',3],['vajra',2],['sj_arc',3],['sj_yujian',6],['sj_shadow',3],['sj_arc',6],['sj_yujian',9],['sj_shadow',6],['sj_arc',9],['sj_yujian',10],['sj_shadow',10]],
 }
 export function fixture(floor, route, quality=2, {mode='entry'}={}) {
  assert.ok(['entry','reference'].includes(mode), 'Unknown fixture mode')
