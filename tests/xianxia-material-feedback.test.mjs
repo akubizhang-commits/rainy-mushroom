@@ -37,6 +37,6 @@ test('training suppresses feedback and pause freezes notice time',()=>{
 });
 test('clearing battle feedback discards all pending material notices',()=>{
  const host=fixture();host.queueMaterialNotice(host.run.state,0);
- for(const name of ['debuffIcons','sancaiArt','burstArt','qingpingAudio','arcArt','lineArt','convergenceArt','shadowArt','tiandiArt','hitArt','crossBurstArt','qiArt','orbitArt','formationArt','sixiangArt'])host[name]={reset(){}};
+ for(const name of ['debuffIcons','targetDebuffIcons','sancaiArt','burstArt','qingpingAudio','arcArt','lineArt','convergenceArt','shadowArt','tiandiArt','hitArt','crossBurstArt','qiArt','orbitArt','formationArt','sixiangArt'])host[name]={reset(){}};
  host.ritualAudio={stop(){}};host.formationSprites=new Map();host.clearBattleFeedback();assert.equal(host.notices.length,0);assert.equal(host.breakthroughText,'');
 });
