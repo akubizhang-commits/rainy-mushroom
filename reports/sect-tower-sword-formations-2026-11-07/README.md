@@ -36,3 +36,23 @@ See balance/comparison.md. Only the formation route (纯剑阵) and mixed/lance/
 ## Open decisions for the user
 - Whether to merge codex/sect-tower-sword-formations into codex/crafting-minigames. Not done here.
 - Whether the live check should be retried with a real-GPU browser or the baseline build checked for the same headless failure.
+
+## Browser boot investigation (2026-11-07, follow-up)
+Question: does the load-failure screen come from the changes?
+
+- Baseline 3b64a74e built from an exported snapshot (node scripts/cocos/build.mjs web-mobile, exit 0). Served and loaded with headless shell at 1280x720: same "画面未能载入，请检查网络后重试" screen. Evidence: live/boot-evidence/baseline-headless-shell-1280x720.png.
+- Baseline with software GL flags (--use-gl=swiftshader --enable-unsafe-swiftshader): same screen. Evidence: baseline-headless-shell-swiftshader-1280x720.png.
+- Baseline with full Chrome for Testing (cached chromium-1247): same screen. Evidence: baseline-chrome-for-testing-1280x720.png.
+- Changed build (HEAD 3ccb49ac) with headless shell: same screen at 1280x720 and 844x390. Evidence: changed-headless-shell-*.png.
+- Network: no failed requests and no 4xx responses during baseline boot (requestfailed/response listener).
+- DOM text is empty in all runs because the message is drawn on the canvas, so DOM text cannot distinguish outcomes.
+
+Conclusion: the load failure reproduces on the unchanged baseline in every configuration tried. It is not caused by this change. Its root cause is not identified.
+
+## Unverified in this delivery
+- Live in-game checks of 周天剑阵 (学习 at 炼气中期) and 青莲剑阵 (学习 at 炼气巅峰): cast, judgment hits, cooldown 6s/9s, pause, resume, death, exit cleanup. Not run; the game does not reach the tower screen in this environment.
+- Screen recordings and gameplay screenshots at 1280x720 and 844x390: not produced.
+- Verified instead: unit/geometry/runtime tests, full suite with zero regressions, build with zero TypeScript errors, natural balance harness before/after.
+
+## Merge status
+- Not merged. codex/crafting-minigames is checked out in the main checkout, which has uncommitted changes. Fast-forwarding it requires updating the main checkout's HEAD and working tree, which was not done. Ancestry is valid (`git merge-base --is-ancestor codex/crafting-minigames codex/sect-tower-sword-formations` succeeds). Merge must be run from the main checkout by the user, or the user must approve a different route.
