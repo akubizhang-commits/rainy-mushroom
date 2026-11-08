@@ -4,6 +4,8 @@ import {ARCHETYPES} from './shared/js/xianxia/TowerContent';
 import { Color, Graphics, ImageAsset, isValid, JsonAsset, Node, Rect, Size, Sprite, SpriteFrame, Texture2D, UITransform } from 'cc';
 
 type Entry = { done: boolean; image: ImageAsset | null; texture: Texture2D | null; frame: SpriteFrame | null };
+// Spider death has no delivered clip, so its existing on-screen pose stays this long before cleanup removes it.
+const SPIDER_DEATH_HOLD_SECONDS = 1.5;
 type Actor = { node: Node; sprite: Sprite; transform: UITransform; family: string; x: number; facing: number; seen: boolean; top?:number; worldY?:number; enraged?:boolean; diedAt?:number; motionTime?:number; moving?:boolean; bodySize?:number };
 const families = new Set(['boar', 'wolf', 'bear', 'tiger', 'tiger-humanoid', 'white-tiger', 'ape', 'snake', 'crocodile', 'scorpion', 'centipede', 'rhino', 'yak', 'falcon', 'spider-lady', 'spider', 'bat', 'spider-queen', 'snake-lady', 'bear-humanoid', 'crocodile-humanoid', 'wolf-humanoid', 'falcon-humanoid', 'ape-humanoid', 'bat-humanoid', 'boar-humanoid', 'scorpion-humanoid','centipede-humanoid']);
 export type MonsterMotion = {
@@ -282,6 +284,11 @@ export class TowerMonsterArt {
   for(const renderer of this.speciesRenderers.values())renderer.endFrame(time,killed,project);
   for (const [id, actor] of this.actors) if (!actor.seen) {
    const clip=this.motionAtlas?.clips.death;
+   // Spider atlas has no death clip: the pose on screen at death is held until cleanup.
+   if(!clip && this.motionFamily==='spider' && actor.family==='spider' && time!==undefined && (actor.diedAt!==undefined || killed?.has(id))) {
+    actor.diedAt??=time;
+    if(time-actor.diedAt < SPIDER_DEATH_HOLD_SECONDS) continue;
+   }
    if(time!==undefined && clip && actor.family===this.motionFamily && (actor.diedAt!==undefined || killed?.has(id))) {
     actor.diedAt??=time;actor.enraged=false;
     const age=Math.max(0,time-actor.diedAt);

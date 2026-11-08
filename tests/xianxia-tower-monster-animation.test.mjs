@@ -321,9 +321,10 @@ test('low-rank spider owns its atlas, phases and frontal pose; death holds front
  }
  render(9,{hp:90});assert.match(name(),/^hit-/);render(9.2,{hp:80});assert.equal(name(),'hit-000');
  assert.equal(actor.sprite.spriteFrame.rect.width,256);assert.equal(actor.transform.anchor.y,1-data.anchor[1]);assert.equal(actor.node.position.y,30);
- f.art.beginFrame();f.art.endFrame(10,new Set(['spider1']));assert.equal(spider.actors.size,1);assert.equal(name(),'death-000');assert.equal(actor.node.scale.x,1);
- f.art.beginFrame();f.art.endFrame(10,new Set(['spider1']));assert.equal(name(),'death-000');
- f.art.beginFrame();f.art.endFrame(11,new Set(['spider1']));assert.equal(name(),'death-018');
+ // Spider atlas has no death clip: the existing hit-000 pose on screen at death is held until cleanup.
+ f.art.beginFrame();f.art.endFrame(10,new Set(['spider1']));assert.equal(spider.actors.size,1);assert.equal(name(),'hit-000');assert.equal(actor.node.scale.x,1);
+ f.art.beginFrame();f.art.endFrame(10,new Set(['spider1']));assert.equal(name(),'hit-000');
+ f.art.beginFrame();f.art.endFrame(11,new Set(['spider1']));assert.equal(name(),'hit-000');
  f.art.beginFrame();f.art.endFrame(13,new Set(['spider1']));assert.equal(spider.actors.size,0);
  assert.equal(f.art.constructor.artFamily('spider','spider_boss'),'spider-lady');
  const png=readFileSync(resource('spider-v1.png'));assert.equal(png.readUInt32BE(16),data.width);assert.equal(png.readUInt32BE(20),data.height);assert.equal(png[25],6);assert.equal(createHash('sha256').update(png).digest('hex'),data.sourceSha256);
