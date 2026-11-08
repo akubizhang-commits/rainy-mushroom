@@ -74,3 +74,10 @@ Conclusion: the load failure reproduces on the unchanged baseline in every confi
 
 ## Merge status
 - codex/crafting-minigames is at 7a2bb33f (merged earlier, per user). This report commit is on codex/sect-tower-sword-formations and is not merged.
+
+## Skill page (功法) blank-tree finding (2026-11-07)
+- First uncaught exception when opening 功法 in the browser: `ReferenceError: bonus is not defined` at TowerMenu.skillIcon (cocos-pilot/assets/scripts/TowerMenu.ts, the skill badge `${this.skillLevel(skill)+bonus}`). The stack continues through TowerMenu.skillTree and TowerMenu.library. Matches the baseline failing tests named "bonus is not defined".
+- Pre-existing: the same line exists in bf2c50ff (before the feature work). Not introduced by 青莲/周天 commits.
+- The user's hypothesis (visibleSkills.find(...)! undefined) was not the first exception. The find-based lookups were not the failing point in this run.
+- Fix in worktree (uncommitted to main line): badge shows `this.skillLevel(skill)` (current rank), with the undefined `+bonus` term removed.
+- Verification status: NOT verified. After the rebuild the headless load is intermittent (some boots stop at the 画面未能载入 screen). Post-fix skill-page screenshots were taken from the loading screen, so they do not show the tree. Needs a successful load to confirm all tiers render.

@@ -1590,7 +1590,7 @@ export class TowerMenu {
   }
   const badge = this.node(`功法等级-${skill.id}`, icon, 34, 34); badge.setPosition(0, -67);
   const bg = badge.addComponent(Graphics); bg.fillColor = new Color(C.primary); bg.circle(0, 0, 17); bg.fill();
-  this.label(badge, `${this.skillLevel(skill)+bonus}`, 0, 0, 34, 34, 22, C.onPrimary, true);
+  this.label(badge, `${this.skillLevel(skill)}`, 0, 0, 34, 34, 22, C.onPrimary, true);
   // Use the same quote as the action: an arrow promises an available purchase,
   // not merely a rank below the skill's absolute maximum.
   if (!this.growthQuote(skill).reason) {
