@@ -56,3 +56,21 @@ Conclusion: the load failure reproduces on the unchanged baseline in every confi
 
 ## Merge status
 - Not merged. codex/crafting-minigames is checked out in the main checkout, which has uncommitted changes. Fast-forwarding it requires updating the main checkout's HEAD and working tree, which was not done. Ancestry is valid (`git merge-base --is-ancestor codex/crafting-minigames codex/sect-tower-sword-formations` succeeds). Merge must be run from the main checkout by the user, or the user must approve a different route.
+
+## Load-failure root cause (2026-11-07, supersedes the earlier "environmental" conclusion)
+- Cause: cocos-pilot/assets/resources/tower-status-icons/ (spirit.png, bleed.png, scar.png and .meta) is untracked in the main checkout and was never committed. TowerStatusIconArt.ts loads these at boot; TowerAssetQueue marks them failed after three attempts, and TowerLoadingScreen keeps "画面未能载入，请检查网络后重试" on screen.
+- Evidence: headless boot logged `[TowerAssets] tower-status-icons/spirit: resource unavailable ... Bundle resources doesn't contain tower-status-icons/spirit`. The baseline 3b64a74e has the same missing folder, so every earlier configuration failed.
+- Verification-only fix: the folder was copied into the worktree as untracked files (not committed), and web-mobile was rebuilt (exit 0). The console then shows no TowerAssets messages, and the game reaches the sect map (live/boot-evidence/fixed-tower-status-icons-1280x720.png and -844x390.png).
+- Required decision: codex/crafting-minigames (7a2bb33f) contains TowerStatusIconArt.ts without these assets. They must be added to git (on crafting-minigames, or via a new commit approved by the user). This was not done.
+
+## Balance: 8 floors × 3 schools
+- The 2026-11-06 reports (qi/formation/yujian, floors 2–9, modes move/half) are produced by a harness that is not in this repo. scripts/verify-monster-mechanics-balance.mjs uses modes entry/reference, and the natural harness has no yujian route.
+- Comparable slice run here: natural harness, floors 1–9 (floors 2–9 correspond to the 8 floors), routes qi, formation (pure sword) and array (周天-heavy), seeds 101 and 202, before (3b64a74e) and after. Table: balance/comparison.md. Floors 2–9 for qi are unchanged; formation floor 4 and array floors change as described there.
+- Not claimed: a like-for-like numeric match against the 2026-11-06 files, and a yujian natural route.
+
+## Browser checks: status
+- Verified: the game boots to the sect map at 1280×720 after the asset fix (verification build only).
+- Not verified: entering the tower, learning 周天剑阵 (炼气中期) and 青莲剑阵 (炼气巅峰), casting, judgment hits, cooldowns, pause, resume, death, exit cleanup, and the 844×390 gameplay recordings. Reason: the UI navigation to the tower and the in-game recording harness were not built in this session.
+
+## Merge status
+- codex/crafting-minigames is at 7a2bb33f (merged earlier, per user). This report commit is on codex/sect-tower-sword-formations and is not merged.
