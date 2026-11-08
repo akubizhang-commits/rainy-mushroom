@@ -1658,6 +1658,10 @@ export class TowerRun {
         s.cooldowns[id] = s.time + skillCooldown(GEVO[form.id]?.cooldown ?? GS[id].cooldown, loadout)
       }
       this._notifySkill(onCast, form.id, c.releaseAt + form.initialDelay, dir, 1, c.pulseCount)
+      // 起阵/成阵 is a windup-only effect; it is removed when the burst zone starts.
+      if (form.id === 'sj_qinglian') c.windupEffectId = this._effect('qinglian', p.x, p.y, form.radius,
+        { ...formGeometry(form, 0, s.time), dirX: dir.x, dirY: dir.y, faceX: dir.x, faceY: dir.y,
+          phase: 'windup', expiresAt: c.releaseAt }).id
       if (form.id === 'evo_tiandi') c.windupEffectId = this._effect('tiandi_windup', p.x, p.y, form.width / 2,
         { ...formGeometry(form, 0, s.time), dirX: dir.x, dirY: dir.y, faceX: dir.x, faceY: dir.y,
           toX: p.x + dir.x * form.reach, toY: p.y + dir.y * form.reach,

@@ -1554,6 +1554,7 @@ export class TowerMenu {
    case 'sj_line': line(-29, -29, 29, 29); sword(0, 0, -.7); break;
    case 'sj_shadow': sword(-13, -4, -.25); sword(13, 4, -.25); break;
    case 'sj_wanjian': ring(29); sword(0, 0, .4); break;
+   case 'sj_qinglian': ring(29); ring(16); g.circle(0, 0, 4); g.stroke(); break;
    case 'sj_formation': ring(28); line(-28, 0, 28, 0); g.circle(-12, 9, 5); g.circle(12, -9, 5); g.stroke(); break;
    case 'sj_sancai':
     g.moveTo(0, 30); g.lineTo(-26, -15); g.lineTo(26, -15); g.close(); g.stroke();

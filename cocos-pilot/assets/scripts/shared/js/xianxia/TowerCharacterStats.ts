@@ -8,7 +8,7 @@ import { classProfile, classBaseAttributes } from './TowerClassProfiles'
 export const BIRTH_ATTRIBUTES = classProfile().birth
 export const MANA_COSTS = Object.freeze({
   sj_sancai:5,
-  sj_yujian:2,sj_arc:4,sj_moon:5,sj_moon_triple:8,sj_cross:8,sj_line:10,sj_shadow:10,sj_wanjian:8,sj_formation:12,
+  sj_yujian:2,sj_arc:4,sj_moon:5,sj_moon_triple:8,sj_cross:8,sj_line:10,sj_shadow:10,sj_wanjian:8,sj_formation:12,sj_qinglian:8,
   evo_wanjian:16,evo_tiandi:20,evo_wuwo:18,evo_sixiang:24,
 })
 export function characterAwareness(loadout, xp=0) {

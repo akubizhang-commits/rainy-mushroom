@@ -60,7 +60,7 @@ const CAST_STYLE:Record<string,{priority:number;style:string}>={
  sj_cross:{priority:4,style:'sweep'},
  sj_line:{priority:4,style:'thrust'},sj_shadow:{priority:2,style:'seal'},
  sj_sancai:{priority:5,style:'seal'},sj_formation:{priority:5,style:'seal'},evo_sixiang:{priority:5,style:'seal'},
- sj_wanjian:{priority:5,style:'seal'},evo_wuwo:{priority:5,style:'seal'},
+ sj_wanjian:{priority:5,style:'seal'},sj_qinglian:{priority:5,style:'seal'},evo_wuwo:{priority:5,style:'seal'},
  evo_wanjian:{priority:6,style:'command'},evo_tiandi:{priority:7,style:'heavy'},
 };
 

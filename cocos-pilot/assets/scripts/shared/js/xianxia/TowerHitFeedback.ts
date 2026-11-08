@@ -13,6 +13,7 @@ export const HIT_PROFILES = Object.freeze({
   sj_moon_triple: { shape: 'slash', strength: 1, duration: .15 },
   sj_cross: { shape: 'cross', strength: 1.2, duration: .16 },
   sj_wanjian: { shape: 'graze', strength: .55, duration: .11 },
+  sj_qinglian: { shape: 'graze', strength: .6, duration: .12 },
   evo_wuwo: { shape: 'graze', strength: .72, duration: .12 },
   sj_sancai: { shape: 'rain', strength: .85, duration: .16 },
   sj_formation: { shape: 'rain', strength: .65, duration: .14 },
