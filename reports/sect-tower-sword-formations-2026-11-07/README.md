@@ -81,3 +81,13 @@ Conclusion: the load failure reproduces on the unchanged baseline in every confi
 - The user's hypothesis (visibleSkills.find(...)! undefined) was not the first exception. The find-based lookups were not the failing point in this run.
 - Fix in worktree (uncommitted to main line): badge shows `this.skillLevel(skill)` (current rank), with the undefined `+bonus` term removed.
 - Verification status: NOT verified. After the rebuild the headless load is intermittent (some boots stop at the 画面未能载入 screen). Post-fix skill-page screenshots were taken from the loading screen, so they do not show the tree. Needs a successful load to confirm all tiers render.
+
+## Skill page: final root cause and verification (2026-11-07)
+Symptom: 功法 page shows only the first 炼气初期 card on the mainline.
+Causes (two, both pre-existing; neither from the 青莲/周天 feature commits):
+1. Render exception: `ReferenceError: bonus is not defined` in TowerMenu.skillIcon (the badge `${this.skillLevel(skill)+bonus}`). It throws during skillTree, so cards after the first are never drawn. Fixed in worktree commit 922e9586 (badge shows the skill's current rank).
+2. Blocking asset gap: tower-skill-icons/sj_moon, sj_moon_triple and sj_sancai exist only in the main checkout and are not in git. The loader marks them failed and the loading overlay returns when the skill page opens. Verification copies are present untracked in the worktree only.
+Verified in worktree (headless, the same build): skill page shows 炼气初期 (流云斩, 御剑术, 剑骨), 中期 (玄月斩, 周天剑阵, 护体剑罡) and 巅峰 (青莲剑阵); no TowerAssets warnings; screenshot at live/skill-page-worktree.png.
+Tests: node --test tests/*.test.mjs: 2399 tests, 2367 pass, 32 fail. Zero names fail that passed at baseline (cmp against baseline/full-tap.txt). The bonus fix clears 71 tests that failed in the previous after-run. Output: full-tap-final.txt.
+Build: node scripts/cocos/build.mjs web-mobile, exit 0 with zero error TS lines.
+Open item: the three skill icons and their .meta files need the same git decision as the status icons. The mainline (codex/crafting-minigames) still lacks them.
