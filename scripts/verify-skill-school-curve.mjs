@@ -12,6 +12,7 @@ import { TowerRun, stats, validateTowerSnapshot } from '../js/xianxia/TowerRun.j
 import { TowerCampaignStore, combatLoadout, TOWER_CAMPAIGN_KEY } from '../js/xianxia/TowerCampaign.js'
 import { growthSummary } from '../js/xianxia/TowerGrowth.js'
 import { createFixedWeapon } from '../js/xianxia/TowerWeapons.js'
+import { EQUIPMENT_ROSTER } from '../js/xianxia/TowerEquipmentRoster.js'
 import { createFixedEquipment } from '../js/xianxia/TowerEquipment.js'
 import { checksum } from '../js/xianxia/Checksum.js'
 
@@ -63,7 +64,12 @@ function fixture(floor) {
     clearedFloor: floor - 1, spiritStones: 50000 }
   if (entry.gear) {
     const [w, a, r] = entry.gear
-    const weapon = createFixedWeapon(w, 'weapon-1')
+    // --weapon=matched：换成同阶同品质、与本流派对应的剑（剑气→qi、剑阵→formation、御剑→general）。
+    const role = { qi: 'qi', formation: 'formation', yujian: 'general' }[school]
+    const base = EQUIPMENT_ROSTER.find(d => d.id === w)
+    const matched = option('weapon', 'fixed') === 'matched' && role
+      ? EQUIPMENT_ROSTER.find(d => d.category === 'weapon' && d.tier === base.tier && d.quality === base.quality && d.role === role)?.id ?? w : w
+    const weapon = createFixedWeapon(matched, 'weapon-1')
     const armor = createFixedEquipment(a, 'gear-1'), ring = createFixedEquipment(r, 'gear-2')
     state.weapons[weapon.id] = weapon; state.weaponCounters[weapon.id] = 0; state.weaponSequence = 1; state.equipmentSequence = 2
     for (const item of [armor, ring]) { state.equipment[item.id] = item; if (item.category === 'ring') state.equipmentCounters[item.id] = 0 }

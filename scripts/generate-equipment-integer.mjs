@@ -66,14 +66,20 @@ for(const d of EQUIPMENT_ROSTER){
  if(d.category==='armor')base.vitality=choose('vitality',slot.vitality,d.id==='eq_armor_wugou'?0:.5)
  const affixes=[],add=(type,value,target)=>{if(value)affixes.push({type,value,...(target?{target}:{})})}
  if(d.category==='weapon'){
-  const flow=d.id==='eq_sword_zhaodan'?3:affinity(d)==='general'||d.id==='eq_sword_zhaoyuan'?0:({fa:6,bao:8,ling:12}[d.tier]??0)
+  // 2026-11-06：下品至上品的通用剑改为御剑流派剑（御剑术、分光连斩、万剑归宗），与剑气、剑阵剑同价。
+  const yujian=d.role==='general'
+  const flow=d.id==='eq_sword_zhaodan'?3:(affinity(d)==='general'&&!yujian)||d.id==='eq_sword_zhaoyuan'?0:({fa:6,bao:8,ling:12}[d.tier]??0)
+  const flowTarget=d.id==='eq_sword_zhaodan'?'qi':yujian?'yujian':affinity(d)
   const element=({bao:2,ling:4}[d.tier]??0)
   const total=choose('budget',skillIds[d.id]?(d.tier==='fa'?[12,25]:[24,42]):o.budget)
   add('physical',total-flow-element);add('magic',total-flow-element)
   add('attackSpeed',choose('speed',o.weaponSpeed,0))
   const attached=({fan:2,fa:2,bao:3,ling:5})[d.tier]
   if(WEAPON_BLEED_IDS.includes(d.id)){add('bleedConversion',50);add('bleed',attached)}else add('onHit',attached)
-  add('flow',flow,d.id==='eq_sword_zhaodan'?'qi':affinity(d));add('element',element,'all')
+  // 2026-11-06：炼气期只有周天剑阵，法器阶剑阵剑改加流云斩（剑阵前期靠流云斩过渡）。
+  if(d.tier==='fa'&&flowTarget==='formation')add('skill',flow,'sj_arc')
+  else add('flow',flow,flowTarget)
+  add('element',element,'all')
   if(skillIds[d.id])add('skillLevel',1,skillIds[d.id])
  }else if(d.category==='armor'){
   add(caster?'castSpeed':'attackSpeed',choose('speed',caster?o.castSpeed:o.armorSpeed,0))

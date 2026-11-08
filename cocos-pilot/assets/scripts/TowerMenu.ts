@@ -873,12 +873,13 @@ export class TowerMenu {
   row('法术防御',number(combat.magicDefense));
   row('物理伤害减免',pct(combat.physicalReduction));
   row('法术伤害减免',pct(combat.magicReduction));
-  const specialBonuses=combat.conditionalDamageIncreases.filter(bonus=>bonus.type!=='skill');
+  const specialBonuses=combat.conditionalDamageIncreases;
   if(specialBonuses.length)section('特殊属性');
   const elementNames:Record<string,string>={none:'无属性',fire:'火',wind:'风',thunder:'雷',all:'全元素'};
   for(const bonus of specialBonuses){
    const name=bonus.type==='element'?`${elementNames[bonus.target]}属性`
-    :(bonus.target==='qi'?'剑气流派':'剑阵流派');
+    :bonus.type==='skill'?(GROWTH_SKILLS.find(row=>row.id===bonus.target)?.name||'功法')
+    :`${({qi:'剑气',yujian:'御剑',formation:'剑阵'} as Record<string,string>)[bonus.target]||''}流派`;
    row(`${name}伤害增加`,`+${pct(bonus.increase)}`);
   }
 

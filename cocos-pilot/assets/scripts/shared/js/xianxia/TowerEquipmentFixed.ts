@@ -86,11 +86,11 @@ export const FIXED_EQUIPMENT=freeze({
     "affixes": [
       {
         "type": "physical",
-        "value": 10
+        "value": 4
       },
       {
         "type": "magic",
-        "value": 10
+        "value": 4
       },
       {
         "type": "attackSpeed",
@@ -99,6 +99,11 @@ export const FIXED_EQUIPMENT=freeze({
       {
         "type": "onHit",
         "value": 2
+      },
+      {
+        "type": "flow",
+        "value": 6,
+        "target": "yujian"
       }
     ]
   },
@@ -173,11 +178,11 @@ export const FIXED_EQUIPMENT=freeze({
     "affixes": [
       {
         "type": "physical",
-        "value": 20
+        "value": 14
       },
       {
         "type": "magic",
-        "value": 20
+        "value": 14
       },
       {
         "type": "attackSpeed",
@@ -186,6 +191,11 @@ export const FIXED_EQUIPMENT=freeze({
       {
         "type": "onHit",
         "value": 2
+      },
+      {
+        "type": "flow",
+        "value": 6,
+        "target": "yujian"
       }
     ]
   },
@@ -265,11 +275,11 @@ export const FIXED_EQUIPMENT=freeze({
     "affixes": [
       {
         "type": "physical",
-        "value": 22
+        "value": 16
       },
       {
         "type": "magic",
-        "value": 22
+        "value": 16
       },
       {
         "type": "attackSpeed",
@@ -282,6 +292,11 @@ export const FIXED_EQUIPMENT=freeze({
       {
         "type": "bleed",
         "value": 2
+      },
+      {
+        "type": "flow",
+        "value": 6,
+        "target": "yujian"
       }
     ]
   },
@@ -426,11 +441,11 @@ export const FIXED_EQUIPMENT=freeze({
     "affixes": [
       {
         "type": "physical",
-        "value": 22
+        "value": 14
       },
       {
         "type": "magic",
-        "value": 22
+        "value": 14
       },
       {
         "type": "attackSpeed",
@@ -439,6 +454,11 @@ export const FIXED_EQUIPMENT=freeze({
       {
         "type": "onHit",
         "value": 3
+      },
+      {
+        "type": "flow",
+        "value": 8,
+        "target": "yujian"
       },
       {
         "type": "element",
@@ -528,11 +548,11 @@ export const FIXED_EQUIPMENT=freeze({
     "affixes": [
       {
         "type": "physical",
-        "value": 30
+        "value": 22
       },
       {
         "type": "magic",
-        "value": 30
+        "value": 22
       },
       {
         "type": "attackSpeed",
@@ -541,6 +561,11 @@ export const FIXED_EQUIPMENT=freeze({
       {
         "type": "onHit",
         "value": 3
+      },
+      {
+        "type": "flow",
+        "value": 8,
+        "target": "yujian"
       },
       {
         "type": "element",
@@ -631,11 +656,11 @@ export const FIXED_EQUIPMENT=freeze({
     "affixes": [
       {
         "type": "physical",
-        "value": 39
+        "value": 31
       },
       {
         "type": "magic",
-        "value": 39
+        "value": 31
       },
       {
         "type": "attackSpeed",
@@ -648,6 +673,11 @@ export const FIXED_EQUIPMENT=freeze({
       {
         "type": "bleed",
         "value": 3
+      },
+      {
+        "type": "flow",
+        "value": 8,
+        "target": "yujian"
       },
       {
         "type": "element",
@@ -816,11 +846,11 @@ export const FIXED_EQUIPMENT=freeze({
     "affixes": [
       {
         "type": "physical",
-        "value": 33
+        "value": 21
       },
       {
         "type": "magic",
-        "value": 33
+        "value": 21
       },
       {
         "type": "attackSpeed",
@@ -829,6 +859,11 @@ export const FIXED_EQUIPMENT=freeze({
       {
         "type": "onHit",
         "value": 5
+      },
+      {
+        "type": "flow",
+        "value": 12,
+        "target": "yujian"
       },
       {
         "type": "element",
@@ -918,11 +953,11 @@ export const FIXED_EQUIPMENT=freeze({
     "affixes": [
       {
         "type": "physical",
-        "value": 44
+        "value": 32
       },
       {
         "type": "magic",
-        "value": 44
+        "value": 32
       },
       {
         "type": "attackSpeed",
@@ -931,6 +966,11 @@ export const FIXED_EQUIPMENT=freeze({
       {
         "type": "onHit",
         "value": 5
+      },
+      {
+        "type": "flow",
+        "value": 12,
+        "target": "yujian"
       },
       {
         "type": "element",
@@ -1021,11 +1061,11 @@ export const FIXED_EQUIPMENT=freeze({
     "affixes": [
       {
         "type": "physical",
-        "value": 56
+        "value": 44
       },
       {
         "type": "magic",
-        "value": 56
+        "value": 44
       },
       {
         "type": "attackSpeed",
@@ -1038,6 +1078,11 @@ export const FIXED_EQUIPMENT=freeze({
       {
         "type": "bleed",
         "value": 5
+      },
+      {
+        "type": "flow",
+        "value": 12,
+        "target": "yujian"
       },
       {
         "type": "element",

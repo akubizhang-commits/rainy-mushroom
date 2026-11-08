@@ -55,8 +55,8 @@ test('weapon specialization is added once and evolution families inherit it',()=
   for(const [base,evo] of [['sj_line','evo_tiandi'],['sj_yujian','evo_wanjian'],['sj_formation','evo_sixiang'],['sj_wanjian','evo_wuwo']])
    assert.equal(output(d,base),output(d,evo))
   if(flow){
-   const selected=flow.target==='qi'?'sj_arc':'sj_formation'
-   const other=flow.target==='qi'?'sj_formation':'sj_arc'
+   const selected={qi:'sj_arc',yujian:'sj_shadow',formation:'sj_formation'}[flow.target]
+   const other=flow.target==='formation'?'sj_arc':'sj_formation'
    assert.ok(Math.abs(output(d,selected)-output(d,other)-flow.value/100)<1e-10,d.id)
   }
  }

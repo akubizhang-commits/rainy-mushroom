@@ -17,7 +17,9 @@ test('fixed weapons have universal type coverage and only their declared family 
  for(const d of ordinary){
   const w=fixed(d);assert.ok(validateWeapon(w));assert.deepEqual(w,fixed(d))
   assert.ok(w.affixes.filter(a=>a.type==='flow').length<=1)
-  for(const a of w.affixes){assert.ok(['physical','magic','skill','flow','attackSpeed','onHit','bleedConversion','bleed','element','critChance','critBonus','skillLevel'].includes(a.type));if(a.type==='flow')assert.ok(['qi','formation'].includes(a.target))
+  for(const a of w.affixes){assert.ok(['physical','magic','skill','flow','attackSpeed','onHit','bleedConversion','bleed','element','critChance','critBonus','skillLevel'].includes(a.type));if(a.type==='flow')assert.ok(['qi','yujian','formation'].includes(a.target))
+   // 2026-11-06：下品至上品通用剑改为御剑流派剑。
+   if(a.type==='flow'&&a.target==='yujian')assert.ok(d.role==='general'&&d.quality<4,d.id)
    // 2026-11-06：法器阶剑阵武器的特殊词条改为流云斩伤害（剑阵前期靠流云斩过渡）。
    if(a.type==='skill')assert.ok(d.tier==='fa'&&d.role!=='qi'&&a.target==='sj_arc',d.id)}
   const m=weaponDamageModifiers(w,'sj_arc','physical');assert.equal(m.critChance,0);assert.equal(m.critBonus,0);assert.equal(m.special,0);assert.equal(m.lifesteal,0)

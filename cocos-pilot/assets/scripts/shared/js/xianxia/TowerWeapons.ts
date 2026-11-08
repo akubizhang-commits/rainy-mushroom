@@ -50,7 +50,8 @@ export const WEAPON_FIXED_ATTACK_RANGES = freeze(Object.fromEntries(
   Object.entries(WEAPON_AFFIX_RANGES).map(([tier, specs]) => [tier, specs.map(spec =>
     spec && spec.A.map(amount => Math.max(.1, Math.floor(amount * .008 * WEAPON_ATTACK_REFERENCE[tier] * 10 + 1e-8) / 10)))])))
 const families = freeze({
-  general: ['sj_yujian', 'sj_shadow'], qi: ['sj_arc', 'sj_moon', 'sj_moon_triple', 'sj_line', 'sj_cross'], formation: ['sj_wanjian', 'sj_formation', 'sj_sancai'],
+  // 2026-11-06：御剑流派与85号共鸣一致（御剑术、分光连斩，万剑归宗经进化归属继承）。
+  yujian: ['sj_yujian', 'sj_shadow'], qi: ['sj_arc', 'sj_moon', 'sj_moon_triple', 'sj_line', 'sj_cross'], formation: ['sj_wanjian', 'sj_formation', 'sj_sancai'],
 })
 const evolutionFamilies = freeze({
   evo_wanjian: 'sj_yujian', evo_tiandi: 'sj_line', evo_wuwo: 'sj_wanjian', evo_sixiang: 'sj_formation',
@@ -164,7 +165,7 @@ export function weaponDamageModifiers(instance, skillId, damageType, element = s
   result.critChance = (instance.affixes.find(a => a.type === 'critChance')?.value ?? 0) / 100
   result.critBonus = (instance.affixes.find(a => a.type === 'critBonus')?.value ?? 0) / 100
   const family = own(evolutionFamilies, skillId) ? evolutionFamilies[skillId] : skillId
-  const flow = families.qi.includes(family) ? 'qi' : families.formation.includes(family) ? 'formation' : null
+  const flow = families.qi.includes(family) ? 'qi' : families.formation.includes(family) ? 'formation' : families.yujian.includes(family) ? 'yujian' : null
   for (const a of instance.affixes) {
     const v = a.value / 100
     if (a.type === 'physical' || a.type === 'magic') {
@@ -190,7 +191,7 @@ function weaponSections(instance) {
       case 'physical': return `物理伤害 +${v}%`
       case 'magic': return `法术伤害 +${v}%`
       case 'skill': return `${skillNames[a.target]}${Object.values(evolutionFamilies).includes(a.target) ? '及其进化' : ''}伤害 +${v}%`
-      case 'flow': return `${a.target === 'qi' ? '剑气' : '剑阵'}流派伤害 +${v}%`
+      case 'flow': return `${({ qi: '剑气', yujian: '御剑', formation: '剑阵' })[a.target]}流派伤害 +${v}%`
       case 'attackSpeed': return `普攻速度 +${v}%`
       case 'critChance': return `物理／法术暴击率 +${v}%`
       case 'critBonus': return `物理／法术暴击伤害 +${v}%`

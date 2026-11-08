@@ -1,5 +1,8 @@
 # Balance Check: 装备基础属性分工
 
+> 2026-11-04更新：本文保留当时的检查记录。现行防御常量已由1000改为500，Boss／精英机制技能预算见 `docs/xianxia/sect-tower-v1/82-boss-skill-defense-budget.md`；防具负责物防、戒指负责法防。
+
+
 日期：2026-11-02。开发已接入。**Health Summary: NOT ASSESSED**（新增绝对数值尚无正式平衡目标；结构与结算已验证，不能据此宣称整体平衡）。
 
 ## Data Sources Analyzed
