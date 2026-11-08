@@ -4312,7 +4312,9 @@ test('monster mechanics remain above every friendly effect and reuse world label
   state.monsterMechanics.zones=[{id:'view-test',ownerId:'view-owner',skillId:'M19',name:'六门避劫',shape:'safe-gates',x:p.x,y:p.y,radius:2400,phase:'windup',startedAt:state.time,activatesAt:state.time+3,expiresAt:state.time+3.2,safeZones:[{x:p.x+80,y:p.y,radius:55}]}];
   game.draw();
   const renderer=game.monsterMechanics, layer=renderer.graphics.node, children=game.battle.children;
-  for(const friendly of [game.arcLayer,game.lineLayer,game.tiandiLayer,game.formationLayer,game.qiLayer,game.foreground.node]) assert.ok(children.indexOf(layer)>children.indexOf(friendly));
+  for(const friendly of [game.arcLayer,game.tiandiLayer,game.formationLayer,game.qiLayer,game.foreground.node]) assert.ok(children.indexOf(layer)>children.indexOf(friendly));
+  // 剑破虚空 stays above warnings by user decision (2026-11-08); it is the only friendly layer allowed there.
+  assert.ok(children.indexOf(game.lineLayer)>children.indexOf(layer));
   assert.ok(renderer.labels.some(label=>label.node.active&&label.string.includes('安全门区')));
   assert.ok(renderer.labels.some(label=>label.node.active&&label.string.includes('3.0秒')));
   const nodes=[...layer.children], serialized=JSON.stringify(state);
