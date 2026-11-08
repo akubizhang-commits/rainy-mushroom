@@ -68,7 +68,7 @@ test('longhong reserves one action through recovery, moves during windup and res
 
 for (const [id, evolution] of [
   ['sj_yujian', null], ['sj_arc', null], ['sj_cross', null], ['sj_line', null],
-  ['sj_shadow', null], ['sj_formation', null], ['sj_wanjian', null],
+  ['sj_shadow', null], ['sj_formation', null], ['sj_wanjian', null], ['sj_qinglian', null],
   ['sj_yujian', 'evo_wanjian'], ['sj_line', 'evo_tiandi'],
   ['sj_wanjian', 'evo_wuwo'], ['sj_formation', 'evo_sixiang'],
 ]) test(`${evolution ?? id}: all action phases validate and resume deterministically`, () => {

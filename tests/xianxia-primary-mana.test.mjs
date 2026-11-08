@@ -30,7 +30,7 @@ test('birth, level growth and derived attack apply once; awareness drives castin
  assert.equal(primaryAttributes(0,l).awareness,130);near(equipmentCastSpeed(l),.3)
 })
 test('every current active form has cost, basics and passives are free',()=>{
- for(const id of ['sj_yujian','sj_arc','sj_cross','sj_line','sj_shadow','sj_wanjian','sj_formation','evo_wanjian','evo_tiandi','evo_wuwo','evo_sixiang'])assert.ok(MANA_COSTS[id]>0,id)
+ for(const id of ['sj_yujian','sj_arc','sj_cross','sj_line','sj_shadow','sj_wanjian','sj_qinglian','sj_formation','evo_wanjian','evo_tiandi','evo_wuwo','evo_sixiang'])assert.ok(MANA_COSTS[id]>0,id)
  for(const id of ['basic_attack','sj_spirit','sj_bone','sj_gate'])assert.equal(skillManaCost(id),0)
 })
 test('starter flying swords remain sustainable, while whole-catalog spam has a cost',()=>{

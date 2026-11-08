@@ -4,7 +4,7 @@ export const SCAR_DURATION=3
 export const SCAR_COOLDOWN=10
 export const SCAR_VULNERABILITY=.2
 // Orbit contacts use the combat engine's direct flag, but are continuous skills.
-const periodicSources=new Set(['sj_wanjian','orbit','evo_wuwo','wuwo','sj_formation','formation','evo_sixiang','sj_sancai','sancai'])
+const periodicSources=new Set(['sj_wanjian','sj_qinglian','orbit','evo_wuwo','wuwo','sj_formation','formation','evo_sixiang','sj_sancai','sancai'])
 export const isScarDirectHit=hit=>!!hit.direct&&!hit.scaled&&!periodicSources.has(hit.source)
 export function scarDamageMultiplier(enemy,time,hit){
  const d=enemy.scarDebuff

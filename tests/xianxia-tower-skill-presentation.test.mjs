@@ -250,7 +250,7 @@ test('all definitions own explicit damage types and presentation follows metadat
  const expected={
   sj_yujian:'physical',sj_arc:'physical',sj_moon:'physical',sj_moon_triple:'physical',sj_cross:'physical',sj_line:'physical',sj_shadow:'hybrid',
   evo_wanjian:'physical',evo_tiandi:'physical',sj_mark:'none',sj_gate:'hybrid',
-  sj_wanjian:'hybrid',sj_formation:'hybrid',sj_sancai:'hybrid',evo_wuwo:'hybrid',evo_sixiang:'hybrid',
+  sj_wanjian:'hybrid',sj_qinglian:'hybrid',sj_formation:'hybrid',sj_sancai:'hybrid',evo_wuwo:'hybrid',evo_sixiang:'hybrid',
   sj_spirit:'none',sj_heart:'none',sj_bone:'none',vajra:'none',sj_flight:'none',
  }
  const labels={physical:'物理攻击',hybrid:'物理＋法术攻击',magic:'法术攻击',inherited:'伤害类型继承',none:'被动功法'}
@@ -325,7 +325,7 @@ test('real cooldown ring applies its damage and awareness too, preserves hit uni
  // its primary stats and damage affixes separately from the 15% cooldown cut.
  s.equipment[ring.id]=ring;s.equipmentCounters[ring.id]=0;s.loadouts[0].ringId=ring.id
  const before=JSON.stringify(s)
- for(const id of ['sj_yujian','sj_arc','sj_line','sj_shadow','sj_formation','sj_wanjian','evo_wanjian','evo_tiandi','evo_sixiang']){
+ for(const id of ['sj_yujian','sj_arc','sj_line','sj_shadow','sj_formation','sj_wanjian','sj_qinglian','evo_wanjian','evo_tiandi','evo_sixiang']){
   const p=skillPresentation(s,id),plain=baseline[id]
   close(p.cooldown,plain.cooldown*.85)
   for(const row of plain.stats){
