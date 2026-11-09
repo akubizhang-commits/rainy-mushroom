@@ -64,6 +64,8 @@ const bandLevels = { sj_yujian: [2, 7, 11, 14] }
 const cadenceUnlocks = { sj_line: 21, sj_gate: 19 }
 const cadencePointCosts = { sj_moon_triple: specialActiveCosts, sj_cross: activeCosts, sj_sancai: activeCosts }
 
+// 2026-11-09 用户确认方案B2：周天剑阵、青莲剑阵 1–7 级伤害压低，8 级起不变，恢复剑阵“前期最弱”定位，后期不受影响。
+const FORMATION_EARLY_DAMAGE = [.5, .5, .52, .6, .68, .78, .9, 1, 1, 1]
 const oldSkills = new Map(SKILLS.map(skill => [skill.id, skill]))
 
 // Hybrid spends one attack budget equally on physical and spell damage.
@@ -179,7 +181,7 @@ export const GROWTH_SKILLS = freeze([
     rule: '向前方原地斩出两道白紫交叉剑气，蓝黑剑气衬于底层，整招不向外飞行；攻击前方180°范围；1–3级距离180，4–6级220，7–10级270；最多命中8个可见目标，每次施放同敌只结算一次，后续弧光与消散不追加伤害。',
   }, { name: '双月斩', kind: 'active', clear: 0 }),
   skill('sj_wanjian', {
-    damage: damageCurve(.30, 1.20), hit_interval: .6,
+    damage: damageCurve(.30, 1.20).map((d, i) => d * FORMATION_EARLY_DAMAGE[i]), hit_interval: .6,
     // Seven possible hits per activation replace ten per old six-second cycle.
     cooldown: 6, duration: 4, cycle_damage_multiplier: 10 / 7,
     radius: [90, 90, 95, 95, 100, 105, 105, 110, 110, 120],
@@ -190,7 +192,7 @@ export const GROWTH_SKILLS = freeze([
   // 青莲剑阵：持续3秒，每秒一轮，外层→中层→内层依次判定；同一目标三轮合计36次命中，伤害合计为整招预算。
   skill('sj_qinglian', {
     // 2026-11-09：冷却9→8秒，每次施放伤害不变（先测试再看）。
-    damage: damageCurve(8, 1.15), cooldown: 8, windup: .8, duration: 3,
+    damage: damageCurve(8, 1.15).map((d, i) => d * FORMATION_EARLY_DAMAGE[i]), cooldown: 8, windup: .8, duration: 3,
     hit_interval: 1, reach: QINGLIAN_RINGS[0].radius, target_cap: null,
     single_dps_factor: 1 / 8, hit_assumption: .6,
     rule: '起阵0.8秒后三层莲瓣剑环旋转爆发3秒，每秒一轮。第一轮外层16瓣占整招预算20%，第二轮中层12瓣占35%，第三轮内层8瓣占45%；每瓣对范围内每个目标各结算一次，同一目标三轮合计36次命中。攻击目标数不限，不减速敌人。',

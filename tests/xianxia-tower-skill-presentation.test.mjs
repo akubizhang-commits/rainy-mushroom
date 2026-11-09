@@ -267,10 +267,10 @@ test('all definitions own explicit damage types and presentation follows metadat
 })
 test('damage type definitions preserve unsplit total damage for all six active skills',()=>{
  const s=fresh()
- // 2026-11-06：御剑1级×0.5，流云斩×1.3，剑破虚空×1.5；2026-11-09：剑破虚空再×1.5。
+ // 2026-11-06：御剑1级×0.5，流云斩×1.3，剑破虚空×1.5；2026-11-09：剑破虚空再×1.5，周天剑阵1级×0.5（方案B2）。
  const examples=[['sj_yujian','roundDamage',60],['sj_arc','fullDamage',156],
   ['sj_line','hitDamage',3240],['sj_shadow','hitDamage',640],
- ['sj_wanjian','tickDamage',300/7],['sj_formation','tickDamage',176]]
+ ['sj_wanjian','tickDamage',300/7*.5],['sj_formation','tickDamage',176]]
  const run=new TowerRun({attemptId:1,floor:1,seed:123,hp:100,xp:0,loadout:combatLoadout(s)})
  run._random=()=>1
  for (const [id,key,expected] of examples) {

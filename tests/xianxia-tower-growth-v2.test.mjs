@@ -25,7 +25,9 @@ test('all 29 level transitions compound without rounding and breakthroughs repla
 
 // 2026-11-06（84/85号复测）基础数值调整：御剑1–9级按比例压低，流云斩×1.3，剑破虚空×1.5，两仪7–10级×1.25。
 // 2026-11-09：剑破虚空改为金丹初期可学，再×1.5（合计×2.25）。
-const EXTRA = { sj_yujian: [.5,.5,.52,.65,.72,.8,.85,.9,.95,1], sj_arc: Array(10).fill(1.3), sj_line: Array(10).fill(1.5 * 1.5), sj_formation: [1,1,1,1,1,1,1.25,1.25,1.25,1.25] }
+const EXTRA = { sj_yujian: [.5,.5,.52,.65,.72,.8,.85,.9,.95,1], sj_arc: Array(10).fill(1.3), sj_line: Array(10).fill(1.5 * 1.5), sj_formation: [1,1,1,1,1,1,1.25,1.25,1.25,1.25],
+  // 2026-11-09 方案B2：周天剑阵 1–7 级伤害压低。
+  sj_wanjian: [.5,.5,.52,.6,.68,.78,.9,1,1,1] }
 const extra = (id, i) => EXTRA[id]?.[i] ?? 1
 test('six active curves have distinct starting damage and exact per-rank growth with distinct cadence', () => {
   for (const [id, base, multiplier, interval] of [
@@ -44,10 +46,12 @@ test('six active curves have distinct starting damage and exact per-rank growth 
     }
   }
   const dps = (id, rank) => skill(id).damage[rank - 1] * skill(id).single_dps_factor
-  // 2026-11-06（85号第10节）：流云斩只小幅加强，周天剑阵5–6级单体仍略高；
+  // 2026-11-09 方案B2：周天剑阵前7级伤害压低以恢复剑阵“前期最弱”，5–6级单体改为低于流云斩；
+  // 8级起不压低，保持原曲线（此前85号第10节为“5–6级单体仍略高”）。
   // 剑破虚空×1.5后，6级与10级单体都高于分光连斩。
-  assert.ok(dps('sj_wanjian', 5) > dps('sj_arc', 5))
-  assert.ok(dps('sj_wanjian', 6) > dps('sj_arc', 6))
+  assert.ok(dps('sj_wanjian', 5) < dps('sj_arc', 5))
+  assert.ok(dps('sj_wanjian', 6) < dps('sj_arc', 6))
+  near(skill('sj_wanjian').damage[7], .30 * 1.2 ** 7)
   assert.ok(dps('sj_line', 6) > dps('sj_shadow', 6))
   assert.ok(dps('sj_line', 10) > dps('sj_shadow', 10))
   assert.equal(skill('sj_shadow').target_cap, 3)
