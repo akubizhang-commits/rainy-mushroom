@@ -13,7 +13,7 @@ const path = require('node:path')
 const { createServer } = require('node:http')
 const { pathToFileURL } = require('node:url')
 const ROOT = path.resolve(__dirname, '..')
-const OUT = path.join(ROOT, 'docs/xianxia/reports/qinglian-redo-2026-11-09/live')
+const OUT = path.join(ROOT, 'docs/xianxia/reports/qinglian-redo-2026-11-09/browser')
 const { chromium } = require(process.env.PLAYWRIGHT_MODULE ||
   '/Users/zhangnu/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright')
 const VIEWPORTS = [{ width: 1280, height: 720 }, { width: 844, height: 390 }]

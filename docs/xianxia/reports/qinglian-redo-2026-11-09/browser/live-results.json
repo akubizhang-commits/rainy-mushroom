@@ -1,0 +1,685 @@
+{
+  "status": "PASS",
+  "geometry": {
+    "rings": [
+      {
+        "index": 0,
+        "radius": 200,
+        "petals": 8,
+        "share": 0.45,
+        "angularSpeedRadPerSec": 10.05
+      },
+      {
+        "index": 1,
+        "radius": 200,
+        "petals": 12,
+        "share": 0.35,
+        "angularSpeedRadPerSec": 8.17
+      },
+      {
+        "index": 2,
+        "radius": 200,
+        "petals": 16,
+        "share": 0.2,
+        "angularSpeedRadPerSec": 6.6
+      }
+    ],
+    "clockwise": true,
+    "outerCoversRoundRad": 6.6
+  },
+  "viewports": [
+    {
+      "viewport": "1280x720",
+      "learn": {
+        "wanjianAtLv3": 0,
+        "wanjianAtLv4": 1,
+        "qinglianAtLv6": 0,
+        "qinglianAtLv7": 1
+      },
+      "combat": {
+        "sj_wanjian": {
+          "cooldownEvents": [
+            {
+              "time": 0.02,
+              "readyAt": 6.02
+            },
+            {
+              "time": 6.05,
+              "readyAt": 12.02
+            },
+            {
+              "time": 12.08,
+              "readyAt": 18.02
+            }
+          ],
+          "cooldownIntervals": [
+            6,
+            6
+          ],
+          "pulses": [],
+          "pulseLog": [],
+          "hitsPerTarget": [
+            {
+              "id": "live-0",
+              "distance": 60,
+              "hitsWholeWindow": 0
+            },
+            {
+              "id": "live-1",
+              "distance": 130,
+              "hitsWholeWindow": 0
+            },
+            {
+              "id": "live-2",
+              "distance": 185,
+              "hitsWholeWindow": 0
+            }
+          ],
+          "hpDealtPerEnemy": [
+            1377,
+            907.74,
+            0
+          ],
+          "hpDealtTotal": 2284.74,
+          "pauseProbe": {
+            "time": 6.083333333333333,
+            "phase": "paused",
+            "pulse": null
+          },
+          "paused": {
+            "time": 6.083333333333333,
+            "phase": "paused",
+            "pulse": null
+          },
+          "resumed": {
+            "time": 6.366666666666666,
+            "phase": "playing"
+          },
+          "death": {
+            "phaseAfterAdvance": "lost",
+            "zonesAfterLoss": 0,
+            "afterFrame": {
+              "runAlive": false,
+              "screen": "camp"
+            },
+            "phase": "lost"
+          },
+          "exit": {
+            "runAlive": false,
+            "screen": "camp"
+          }
+        },
+        "sj_qinglian": {
+          "cooldownEvents": [
+            {
+              "time": 0.02,
+              "readyAt": 9.02
+            },
+            {
+              "time": 9.02,
+              "readyAt": 18.02
+            }
+          ],
+          "cooldownIntervals": [
+            9
+          ],
+          "pulses": [
+            {
+              "time": 1.35,
+              "pulse": 1
+            },
+            {
+              "time": 1.78,
+              "pulse": 2
+            },
+            {
+              "time": 2.8,
+              "pulse": 3
+            },
+            {
+              "time": 9.8,
+              "pulse": 1
+            },
+            {
+              "time": 10.85,
+              "pulse": 2
+            },
+            {
+              "time": 11.78,
+              "pulse": 3
+            }
+          ],
+          "pulseLog": [
+            {
+              "pulse": 1,
+              "time": 0.783,
+              "zoneSeconds": 3,
+              "perTarget": {
+                "live-0": 16,
+                "live-1": 16,
+                "live-2": 16,
+                "live-3": 16,
+                "live-4": 16,
+                "live-5": 16,
+                "live-6": 16,
+                "live-7": 16,
+                "live-8": 16,
+                "live-9": 16
+              }
+            },
+            {
+              "pulse": 2,
+              "time": 1.783,
+              "zoneSeconds": 3,
+              "perTarget": {
+                "live-0": 12,
+                "live-1": 12,
+                "live-2": 12,
+                "live-3": 12,
+                "live-4": 12,
+                "live-5": 12,
+                "live-6": 12,
+                "live-7": 12,
+                "live-8": 12,
+                "live-9": 12
+              }
+            },
+            {
+              "pulse": 3,
+              "time": 2.783,
+              "zoneSeconds": 3,
+              "perTarget": {
+                "live-0": 8,
+                "live-1": 8,
+                "live-2": 8,
+                "live-3": 8,
+                "live-4": 8,
+                "live-5": 8,
+                "live-6": 8,
+                "live-7": 8,
+                "live-8": 8,
+                "live-9": 8
+              }
+            },
+            {
+              "pulse": 1,
+              "time": 9.783,
+              "zoneSeconds": 3,
+              "perTarget": {
+                "live-0": 16,
+                "live-1": 16,
+                "live-2": 16,
+                "live-3": 16,
+                "live-4": 16,
+                "live-5": 16,
+                "live-6": 16,
+                "live-7": 16,
+                "live-8": 16,
+                "live-9": 16
+              }
+            },
+            {
+              "pulse": 2,
+              "time": 10.783,
+              "zoneSeconds": 3,
+              "perTarget": {
+                "live-0": 12,
+                "live-1": 12,
+                "live-2": 12,
+                "live-3": 12,
+                "live-4": 12,
+                "live-5": 12,
+                "live-6": 12,
+                "live-7": 12,
+                "live-8": 12,
+                "live-9": 12
+              }
+            },
+            {
+              "pulse": 3,
+              "time": 11.783,
+              "zoneSeconds": 3,
+              "perTarget": {
+                "live-0": 8,
+                "live-1": 8,
+                "live-2": 8,
+                "live-3": 8,
+                "live-4": 8,
+                "live-5": 8,
+                "live-6": 8,
+                "live-7": 8,
+                "live-8": 8,
+                "live-9": 8
+              }
+            }
+          ],
+          "hitsPerTarget": [
+            {
+              "id": "live-0",
+              "distance": 25,
+              "hitsWholeWindow": 72
+            },
+            {
+              "id": "live-1",
+              "distance": 55,
+              "hitsWholeWindow": 72
+            },
+            {
+              "id": "live-2",
+              "distance": 85,
+              "hitsWholeWindow": 72
+            },
+            {
+              "id": "live-3",
+              "distance": 115,
+              "hitsWholeWindow": 72
+            },
+            {
+              "id": "live-4",
+              "distance": 145,
+              "hitsWholeWindow": 72
+            },
+            {
+              "id": "live-5",
+              "distance": 165,
+              "hitsWholeWindow": 72
+            },
+            {
+              "id": "live-6",
+              "distance": 180,
+              "hitsWholeWindow": 72
+            },
+            {
+              "id": "live-7",
+              "distance": 190,
+              "hitsWholeWindow": 72
+            },
+            {
+              "id": "live-8",
+              "distance": 196,
+              "hitsWholeWindow": 72
+            },
+            {
+              "id": "live-9",
+              "distance": 198,
+              "hitsWholeWindow": 72
+            },
+            {
+              "id": "live-10",
+              "distance": 262,
+              "hitsWholeWindow": 0
+            }
+          ],
+          "hpDealtPerEnemy": [
+            2915.76,
+            2358.99,
+            2358.99,
+            2358.99,
+            2358.99,
+            2358.99,
+            2358.99,
+            2358.99,
+            2358.99,
+            2358.99,
+            0
+          ],
+          "hpDealtTotal": 24146.67,
+          "pauseProbe": {
+            "time": 0.8166666666666667,
+            "phase": "paused",
+            "pulse": 1
+          },
+          "paused": {
+            "time": 0.8166666666666667,
+            "phase": "paused",
+            "pulse": 1
+          },
+          "resumed": {
+            "time": 1.1,
+            "phase": "playing"
+          },
+          "death": {
+            "phaseAfterAdvance": "lost",
+            "zonesAfterLoss": 0,
+            "afterFrame": {
+              "runAlive": false,
+              "screen": "camp"
+            },
+            "phase": "lost"
+          },
+          "exit": {
+            "runAlive": false,
+            "screen": "camp"
+          }
+        }
+      }
+    },
+    {
+      "viewport": "844x390",
+      "learn": {
+        "wanjianAtLv3": 0,
+        "wanjianAtLv4": 1,
+        "qinglianAtLv6": 0,
+        "qinglianAtLv7": 1
+      },
+      "combat": {
+        "sj_wanjian": {
+          "cooldownEvents": [
+            {
+              "time": 0.07,
+              "readyAt": 6.02
+            },
+            {
+              "time": 6.02,
+              "readyAt": 12.02
+            },
+            {
+              "time": 12.05,
+              "readyAt": 18.02
+            }
+          ],
+          "cooldownIntervals": [
+            6,
+            6
+          ],
+          "pulses": [],
+          "pulseLog": [],
+          "hitsPerTarget": [
+            {
+              "id": "live-0",
+              "distance": 60,
+              "hitsWholeWindow": 0
+            },
+            {
+              "id": "live-1",
+              "distance": 130,
+              "hitsWholeWindow": 0
+            },
+            {
+              "id": "live-2",
+              "distance": 185,
+              "hitsWholeWindow": 0
+            }
+          ],
+          "hpDealtPerEnemy": [
+            1377,
+            907.74,
+            0
+          ],
+          "hpDealtTotal": 2284.74,
+          "pauseProbe": {
+            "time": 6.016666666666667,
+            "phase": "paused",
+            "pulse": null
+          },
+          "paused": {
+            "time": 6.016666666666667,
+            "phase": "paused",
+            "pulse": null
+          },
+          "resumed": {
+            "time": 6.316666666666666,
+            "phase": "playing"
+          },
+          "death": {
+            "phaseAfterAdvance": "lost",
+            "zonesAfterLoss": 0,
+            "afterFrame": {
+              "runAlive": false,
+              "screen": "camp"
+            },
+            "phase": "lost"
+          },
+          "exit": {
+            "runAlive": false,
+            "screen": "camp"
+          }
+        },
+        "sj_qinglian": {
+          "cooldownEvents": [
+            {
+              "time": 0.1,
+              "readyAt": 9.02
+            },
+            {
+              "time": 9.03,
+              "readyAt": 18.02
+            }
+          ],
+          "cooldownIntervals": [
+            9
+          ],
+          "pulses": [
+            {
+              "time": 0.78,
+              "pulse": 1
+            },
+            {
+              "time": 1.78,
+              "pulse": 2
+            },
+            {
+              "time": 2.88,
+              "pulse": 3
+            },
+            {
+              "time": 9.78,
+              "pulse": 1
+            },
+            {
+              "time": 10.83,
+              "pulse": 2
+            },
+            {
+              "time": 11.87,
+              "pulse": 3
+            }
+          ],
+          "pulseLog": [
+            {
+              "pulse": 1,
+              "time": 0.783,
+              "zoneSeconds": 3,
+              "perTarget": {
+                "live-0": 16,
+                "live-1": 16,
+                "live-2": 16,
+                "live-3": 16,
+                "live-4": 16,
+                "live-5": 16,
+                "live-6": 16,
+                "live-7": 16,
+                "live-8": 16,
+                "live-9": 16
+              }
+            },
+            {
+              "pulse": 2,
+              "time": 1.783,
+              "zoneSeconds": 3,
+              "perTarget": {
+                "live-0": 12,
+                "live-1": 12,
+                "live-2": 12,
+                "live-3": 12,
+                "live-4": 12,
+                "live-5": 12,
+                "live-6": 12,
+                "live-7": 12,
+                "live-8": 12,
+                "live-9": 12
+              }
+            },
+            {
+              "pulse": 3,
+              "time": 2.783,
+              "zoneSeconds": 3,
+              "perTarget": {
+                "live-0": 8,
+                "live-1": 8,
+                "live-2": 8,
+                "live-3": 8,
+                "live-4": 8,
+                "live-5": 8,
+                "live-6": 8,
+                "live-7": 8,
+                "live-8": 8,
+                "live-9": 8
+              }
+            },
+            {
+              "pulse": 1,
+              "time": 9.783,
+              "zoneSeconds": 3,
+              "perTarget": {
+                "live-0": 16,
+                "live-1": 16,
+                "live-2": 16,
+                "live-3": 16,
+                "live-4": 16,
+                "live-5": 16,
+                "live-6": 16,
+                "live-7": 16,
+                "live-8": 16,
+                "live-9": 16
+              }
+            },
+            {
+              "pulse": 2,
+              "time": 10.783,
+              "zoneSeconds": 3,
+              "perTarget": {
+                "live-0": 12,
+                "live-1": 12,
+                "live-2": 12,
+                "live-3": 12,
+                "live-4": 12,
+                "live-5": 12,
+                "live-6": 12,
+                "live-7": 12,
+                "live-8": 12,
+                "live-9": 12
+              }
+            },
+            {
+              "pulse": 3,
+              "time": 11.783,
+              "zoneSeconds": 3,
+              "perTarget": {
+                "live-0": 8,
+                "live-1": 8,
+                "live-2": 8,
+                "live-3": 8,
+                "live-4": 8,
+                "live-5": 8,
+                "live-6": 8,
+                "live-7": 8,
+                "live-8": 8,
+                "live-9": 8
+              }
+            }
+          ],
+          "hitsPerTarget": [
+            {
+              "id": "live-0",
+              "distance": 25,
+              "hitsWholeWindow": 72
+            },
+            {
+              "id": "live-1",
+              "distance": 55,
+              "hitsWholeWindow": 72
+            },
+            {
+              "id": "live-2",
+              "distance": 85,
+              "hitsWholeWindow": 72
+            },
+            {
+              "id": "live-3",
+              "distance": 115,
+              "hitsWholeWindow": 72
+            },
+            {
+              "id": "live-4",
+              "distance": 145,
+              "hitsWholeWindow": 72
+            },
+            {
+              "id": "live-5",
+              "distance": 165,
+              "hitsWholeWindow": 72
+            },
+            {
+              "id": "live-6",
+              "distance": 180,
+              "hitsWholeWindow": 72
+            },
+            {
+              "id": "live-7",
+              "distance": 190,
+              "hitsWholeWindow": 72
+            },
+            {
+              "id": "live-8",
+              "distance": 196,
+              "hitsWholeWindow": 72
+            },
+            {
+              "id": "live-9",
+              "distance": 198,
+              "hitsWholeWindow": 72
+            },
+            {
+              "id": "live-10",
+              "distance": 262,
+              "hitsWholeWindow": 0
+            }
+          ],
+          "hpDealtPerEnemy": [
+            2915.76,
+            2358.99,
+            2358.99,
+            2358.99,
+            2358.99,
+            2358.99,
+            2358.99,
+            2358.99,
+            2358.99,
+            2358.99,
+            0
+          ],
+          "hpDealtTotal": 24146.67,
+          "pauseProbe": {
+            "time": 0.8833333333333333,
+            "phase": "paused",
+            "pulse": 1
+          },
+          "paused": {
+            "time": 0.8833333333333333,
+            "phase": "paused",
+            "pulse": 1
+          },
+          "resumed": {
+            "time": 1.1833333333333333,
+            "phase": "playing"
+          },
+          "death": {
+            "phaseAfterAdvance": "lost",
+            "zonesAfterLoss": 0,
+            "afterFrame": {
+              "runAlive": false,
+              "screen": "camp"
+            },
+            "phase": "lost"
+          },
+          "exit": {
+            "runAlive": false,
+            "screen": "camp"
+          }
+        }
+      }
+    }
+  ],
+  "errors": []
+}
