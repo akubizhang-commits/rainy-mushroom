@@ -1,0 +1,49 @@
+# npm test 基线（62de5b02，临时 detached worktree）
+# tests 2403
+# pass 2402
+# fail 1
+失败：
+not ok 723 - encyclopedia shows fixed stats, unique quality and explicit art gaps
+
+# npm test 改动后（本分支，测试更新后）
+# tests 2403
+# pass 2402
+# fail 1
+失败：
+not ok 723 - encyclopedia shows fixed stats, unique quality and explicit art gaps
+
+# 改动后、更新测试前的首次全量（用于列出受影响的测试）
+# tests 2403
+# pass 2372
+# fail 31
+not ok 157 - every current skill stays at its approved phase and column, with genuine blank cells
+not ok 422 - cross is an independent ten-rank qi active at the Zhuji peak without extending the classic catalog
+not ok 423 - cross rank caps follow its four authored realm gates, including the exact XP boundaries
+not ok 424 - cross quotes enforce current stage, next-rank realm and exact costs
+not ok 426 - campaign rejects cross ranks above each realm gate even when points are sufficient
+not ok 428 - cross detail requirements show the next realm at ranks zero, three, six and nine
+not ok 723 - encyclopedia shows fixed stats, unique quality and explicit art gaps
+not ok 986 - sword techniques follow approved first learning gates with stable prices
+not ok 987 - relocated rank bands require further growth and preserve evolution prerequisites
+not ok 988 - moon techniques occupy Zhuji middle and late phases with realm-aligned training bands
+not ok 1077 - sword qi skills unlock at the approved realm phases
+not ok 1437 - special skills use their own current level gates without floor prerequisites
+not ok 1440 - six active curves have distinct starting damage and exact per-rank growth with distinct cadence
+not ok 1456 - all four evolutions have independent realm gates and approved costs
+not ok 1461 - six active curves preserve normalized per-target budgets and constant attack frequency
+not ok 1539 - nine-stage UI evo_tiandi first-rank condition matches its stage without changing higher-rank gates
+not ok 1540 - nine-stage UI evo_wuwo first-rank condition matches its stage without changing higher-rank gates
+not ok 2158 - qinglian casts on a 9 second cooldown, judges three rounds one second apart, lasts 3 seconds and survives snapshot restore
+not ok 2187 - damage type definitions preserve unsplit total damage for all six active skills
+not ok 2191 - nine immutable stages cover all 30 levels with the approved 6/10/5 allocation
+not ok 2199 - sj_line first learning and further investment obey its Lv13 stage boundary
+not ok 2204 - sj_moon_triple first learning and further investment obey its Lv14 stage boundary
+not ok 2205 - sj_mark first learning and further investment obey its Lv16 stage boundary
+not ok 2206 - sj_cross first learning and further investment obey its Lv17 stage boundary
+not ok 2211 - evo_tiandi first learning and further investment obey its Lv22 stage boundary
+not ok 2212 - evo_wuwo first learning and further investment obey its Lv24 stage boundary
+not ok 2219 - evo_tiandi at its current unlock stays valid through reload, downgrade and battle
+not ok 2220 - evo_wuwo at its current unlock stays valid through reload, downgrade and battle
+not ok 2222 - retained-evolution compatibility keeps the pre-existing realm, book, parent and SP validation
+not ok 2329 - ready basic survives frequent skill readiness and skill windups never overlap a swing
+not ok 2350 - realm belongs to skill unlock realm, unlearned skills never appear, all applies once

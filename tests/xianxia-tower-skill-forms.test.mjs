@@ -702,7 +702,7 @@ test('qinglian lands 36 hits in total on a single target and nothing beyond 200 
   close(perRound.reduce((sum, share) => sum + share, 0), 1)
 })
 
-test('qinglian casts on a 9 second cooldown, judges three rounds one second apart, lasts 3 seconds and survives snapshot restore', () => {
+test('qinglian casts on an 8 second cooldown, judges three rounds one second apart, lasts 3 seconds and survives snapshot restore', () => {
   const run = new TowerRun({ attemptId: 11, floor: 9, seed: 123, xp: 0, hp: 100,
     loadout: { growthVersion: 1, active: { sj_yujian: 1, sj_qinglian: 1 }, passive: {}, evolutions: [], evolutionLevels: {},
       tutorialWaves: 0, weaponId: 'eq_sword_suwen', weaponQuality: 1, weaponRefine: 0 } })
@@ -713,7 +713,7 @@ test('qinglian casts on a 9 second cooldown, judges three rounds one second apar
   run.state.cooldowns.sj_qinglian = 0
   run.advance(STEP)
   const started = run.state.time
-  close(run.state.cooldowns.sj_qinglian, started + 9)
+  close(run.state.cooldowns.sj_qinglian, started + 8)
   const pulseTimes = new Map()
   let zone = null
   for (let i = 0; i < Math.round(4 * 60); i++) {

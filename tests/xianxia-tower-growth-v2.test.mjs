@@ -24,7 +24,8 @@ test('all 29 level transitions compound without rounding and breakthroughs repla
 })
 
 // 2026-11-06（84/85号复测）基础数值调整：御剑1–9级按比例压低，流云斩×1.3，剑破虚空×1.5，两仪7–10级×1.25。
-const EXTRA = { sj_yujian: [.5,.5,.52,.65,.72,.8,.85,.9,.95,1], sj_arc: Array(10).fill(1.3), sj_line: Array(10).fill(1.5), sj_formation: [1,1,1,1,1,1,1.25,1.25,1.25,1.25] }
+// 2026-11-09：剑破虚空改为金丹初期可学，再×1.5（合计×2.25）。
+const EXTRA = { sj_yujian: [.5,.5,.52,.65,.72,.8,.85,.9,.95,1], sj_arc: Array(10).fill(1.3), sj_line: Array(10).fill(1.5 * 1.5), sj_formation: [1,1,1,1,1,1,1.25,1.25,1.25,1.25] }
 const extra = (id, i) => EXTRA[id]?.[i] ?? 1
 test('six active curves have distinct starting damage and exact per-rank growth with distinct cadence', () => {
   for (const [id, base, multiplier, interval] of [

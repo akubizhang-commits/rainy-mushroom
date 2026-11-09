@@ -13,15 +13,17 @@ function freeze(value) {
 }
 
 // Each skill opens rank bands relative to its own starting realm phase.
+// 2026-11-09（技能可学等级调整）：蚀骨剑意→炼气巅峰，逐月斩→筑基初期，双月斩→筑基中期，
+// 剑破虚空、周天剑域→金丹初期，一剑开天→金丹中期。
 export const GROWTH_STAGES = freeze([
   { id: 'lianqi-early', realm: '炼气', phase: '初期', skillIds: ['sj_arc', 'sj_yujian', 'sj_bone'] },
   { id: 'lianqi-middle', realm: '炼气', phase: '中期', skillIds: ['sj_moon', 'vajra', 'sj_wanjian'] },
-  { id: 'lianqi-peak', realm: '炼气', phase: '巅峰', skillIds: ['sj_qinglian'] },
-  { id: 'zhuji-early', realm: '筑基', phase: '初期', skillIds: ['sj_line', 'sj_shadow', 'sj_sancai', 'sj_flight', 'sj_spirit'] },
-  { id: 'zhuji-middle', realm: '筑基', phase: '中期', skillIds: ['sj_moon_triple', 'sj_mark'] },
-  { id: 'zhuji-peak', realm: '筑基', phase: '巅峰', skillIds: ['sj_cross', 'sj_gate', 'sj_formation'] },
-  { id: 'jindan-early', realm: '金丹', phase: '初期', skillIds: ['sj_heart', 'evo_wanjian', 'evo_tiandi'] },
-  { id: 'jindan-middle', realm: '金丹', phase: '中期', skillIds: ['evo_wuwo'] },
+  { id: 'lianqi-peak', realm: '炼气', phase: '巅峰', skillIds: ['sj_qinglian', 'sj_mark'] },
+  { id: 'zhuji-early', realm: '筑基', phase: '初期', skillIds: ['sj_moon_triple', 'sj_shadow', 'sj_sancai', 'sj_flight', 'sj_spirit'] },
+  { id: 'zhuji-middle', realm: '筑基', phase: '中期', skillIds: ['sj_cross'] },
+  { id: 'zhuji-peak', realm: '筑基', phase: '巅峰', skillIds: ['sj_gate', 'sj_formation'] },
+  { id: 'jindan-early', realm: '金丹', phase: '初期', skillIds: ['sj_line', 'sj_heart', 'evo_wanjian', 'evo_wuwo'] },
+  { id: 'jindan-middle', realm: '金丹', phase: '中期', skillIds: ['evo_tiandi'] },
   { id: 'jindan-peak', realm: '金丹', phase: '巅峰', skillIds: ['evo_sixiang'] },
 ].map((stage, index) => ({
   ...stage, label: `${stage.realm}${stage.phase}`,
@@ -55,8 +57,9 @@ const prerequisites = {}
 // 2026-11-06（84/85号复测）：御剑术仍2级可学，但1–3/4–6/7–9/10级分别在2/7/11/14级开放，
 // 压低御剑前期强度。各楼层入层时的等级上限与“炼气中期才开放”的试验方案相同。
 const bandLevels = { sj_yujian: [2, 7, 11, 14] }
-const cadenceUnlocks = { sj_line: 13,
-  sj_mark: 16, sj_gate: 19, evo_tiandi: 22 }
+// 2026-11-09：剑破虚空改为金丹初期21级可学，1–3/4–6/7–9/10级在21/24/27/30级开放
+// （金丹之后没有下一阶段，第10级沿用每段3级的节奏落在30级）。蚀骨剑意与一剑开天改按所在阶段起始等级开放。
+const cadenceUnlocks = { sj_line: 21, sj_gate: 19 }
 const cadencePointCosts = { sj_moon_triple: specialActiveCosts, sj_cross: activeCosts, sj_sancai: activeCosts }
 
 const oldSkills = new Map(SKILLS.map(skill => [skill.id, skill]))
@@ -161,7 +164,7 @@ export const GROWTH_SKILLS = freeze([
     radius: 140, reach: 420, speed: 800, width: 180, bladeWidth: 12,
     target_cap: 6, single_dps_factor: 1 / 10, hit_assumption: .5,
     rule: '窄斜月、扁横月、深弧月依次飞出，每道沿固定方向飞行420距离；三道均分整招伤害，各道同敌最多命中一次。所有等级保持三道，碰到地形提前消散。',
-  }, { name: '逐月斩', kind: 'active', clear: 0, learnLevel: 14 }),
+  }, { name: '逐月斩', kind: 'active', clear: 0 }),
   // Growth-only skill; the historical five-rank catalog remains unchanged.
   skill('sj_cross', {
     damage: [1.5, 2.1, ...Array.from({ length: 8 }, (_, i) => 3 * 1.15 ** i)].map(value => value * 2), cooldown: 12, windup: .18,
@@ -183,13 +186,15 @@ export const GROWTH_SKILLS = freeze([
   }, { ...oldSkills.get('sj_wanjian'), pointCosts: [...activeCosts] }),
   // 青莲剑阵：持续3秒，每秒一轮，外层→中层→内层依次判定；同一目标三轮合计36次命中，伤害合计为整招预算。
   skill('sj_qinglian', {
-    damage: damageCurve(8, 1.15), cooldown: 9, windup: .8, duration: 3,
+    // 2026-11-09：冷却9→8秒，每次施放伤害不变（先测试再看）。
+    damage: damageCurve(8, 1.15), cooldown: 8, windup: .8, duration: 3,
     hit_interval: 1, reach: QINGLIAN_RINGS[0].radius, target_cap: null,
-    single_dps_factor: 1 / 9, hit_assumption: .6,
+    single_dps_factor: 1 / 8, hit_assumption: .6,
     rule: '起阵0.8秒后三层莲瓣剑环旋转爆发3秒，每秒一轮。第一轮外层16瓣占整招预算20%，第二轮中层12瓣占35%，第三轮内层8瓣占45%；每瓣对范围内每个目标各结算一次，同一目标三轮合计36次命中。攻击目标数不限，不减速敌人。',
   }, { name: '青莲剑阵', kind: 'active', clear: 0 }),
   skill('sj_line', {
-    damage: damageCurve(8 * 1.8 * 1.5, 1.10), cooldown: 12, windup: .12,
+    // 2026-11-09：改为金丹初期可学，各级伤害×1.5（一剑开天按既有继承规则同步）。
+    damage: damageCurve(8 * 1.8 * 1.5 * 1.5, 1.10), cooldown: 12, windup: .12,
     reach: [450, 450, 490, 490, 530, 560, 560, 600, 600, 640],
     width: 28, target_cap: [3, 3, 4, 4, 4, 5, 5, 5, 5, 6],
     single_dps_factor: 1 / 12, hit_assumption: .65,
@@ -205,10 +210,11 @@ export const GROWTH_SKILLS = freeze([
   }),
   skill('sj_sancai', {
     slow_fraction: FORMATION_SLOWS.sj_sancai,
-    damage: damageCurve(6 * 1.25, 1.12), cooldown: 8, windup: .25,
+    // 2026-11-09：冷却8→10秒，每次施放伤害不变（先测试再看）。
+    damage: damageCurve(6 * 1.25, 1.12), cooldown: 10, windup: .25,
     reach: 320, duration: 3, hit_interval: 1, pulseCount: 3,
     radius: [150, 150, 150, 165, 165, 165, 180, 180, 180, 180],
-    target_cap: 6, single_dps_factor: 1 / 8, hit_assumption: .65,
+    target_cap: 6, single_dps_factor: 1 / 10, hit_assumption: .65,
     rule: '前方敌群脚下布下固定三角剑阵，0.35/1.35/2.35秒三剑依次落下，三击均分整阵伤害，每击最多6目标。阵内怪物行走减速20%，含精英与Boss；离阵或3秒到期立即解除，重叠只取最强，不影响攻击、冲锋或跳跃。',
   }, { name: '三才剑阵', kind: 'active', clear: 0 }),
   skill('sj_formation', {
@@ -287,7 +293,7 @@ const evolutionRequirements = [
 ]
 const requirementsForEvolution = id => evolutionRequirements.map((row, index) =>
   id === 'evo_sixiang' && index === 1 ? { ...row, characterLevel: 30, realm: '金丹十层' }
-    : id === 'evo_tiandi' && index === 0 ? { ...row, characterLevel: 22, realm: '金丹二层' } : row)
+    : id === 'evo_tiandi' && index === 0 ? { ...row, characterLevel: 24, realm: '金丹中期' } : row)
 // Rank three is intentionally undefined until the next realm is designed.
 const evolutionBudgets = {
   // Second ranks add 30% over the first rank; equal-SP calibration is recorded

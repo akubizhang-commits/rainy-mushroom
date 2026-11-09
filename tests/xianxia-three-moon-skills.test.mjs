@@ -9,7 +9,7 @@ import {createIronWeapon} from '../js/xianxia/TowerWeapons.js'
 const ids=['sj_arc','sj_moon','sj_moon_triple']
 const xpAt=level=>{for(let xp=0;xp<=14400;xp++)if(cultivationAt(xp).level===level)return xp;throw Error('level')}
 test('sword qi skills unlock at the approved realm phases',()=>{
- for(const [id,name,level] of [['sj_arc','流云斩',1],['sj_moon','玄月斩',4],['sj_cross','双月斩',17],['sj_moon_triple','逐月斩',14]]){
+ for(const [id,name,level] of [['sj_arc','流云斩',1],['sj_moon','玄月斩',4],['sj_cross','双月斩',14],['sj_moon_triple','逐月斩',11]]){
   const d=GROWTH_SKILLS.find(d=>d.id===id);assert.ok(d,id);assert.equal(d.name,name);assert.equal(d.learnLevel,level);assert.equal(skillStage(id).minLevel,level)
   const s={xp:xpAt(level),skills:{},evolutionRanks:{},books:[],clearedFloor:0,researchPurchases:0,skillsInitialized:true,playtestSkillPoints:100}
   assert.equal(skillRequirement(s,id).ok,true,id)

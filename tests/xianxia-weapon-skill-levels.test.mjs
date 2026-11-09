@@ -17,7 +17,7 @@ test('fixed identity validation rejects spreading the rare affix to other weapon
 })
 test('realm belongs to skill unlock realm, unlearned skills never appear, all applies once',()=>{
  const qi=applyEquipmentSkillLevels(loadout('eq_sword_zhaodan'));assert.equal(qi.active.sj_arc,11);assert.equal(qi.active.sj_line,10);assert.equal(qi.passive.sj_heart,4);assert.equal(qi.active.sj_yujian,undefined)
- const goldInput=loadout('eq_sword_taiheng');goldInput.weapon.affixes.find(a=>a.type==='skillLevel').target='金丹';const gold=applyEquipmentSkillLevels(goldInput);assert.equal(gold.evolutionLevels.evo_tiandi,3);assert.equal(gold.active.sj_line,10)
+ const goldInput=loadout('eq_sword_taiheng');goldInput.weapon.affixes.find(a=>a.type==='skillLevel').target='金丹';const gold=applyEquipmentSkillLevels(goldInput);assert.equal(gold.evolutionLevels.evo_tiandi,3);assert.equal(gold.active.sj_line,11)
  const all=applyEquipmentSkillLevels(loadout('eq_sword_taiheng'));assert.equal(all.active.sj_arc,11);assert.equal(all.active.sj_line,11);assert.equal(all.evolutionLevels.evo_tiandi,3);assert.equal(all.passive.sj_bone,5)
  assert.deepEqual(applyEquipmentSkillLevels(all),all);assert.ok(validEquipmentSkillLevels(all))
  const bad=structuredClone(all);bad.active.sj_arc=12;assert.equal(validEquipmentSkillLevels(bad),false)

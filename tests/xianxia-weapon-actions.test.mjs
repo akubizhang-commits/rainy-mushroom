@@ -83,6 +83,8 @@ test('unlearned skills still allow a visible basic hit, with no damage before it
 
 test('ready basic survives frequent skill readiness and skill windups never overlap a swing', () => {
   const run = runWith({ sj_arc: 1, sj_line: 1 }), enemy = targetFor(run), events = []
+  // 2026-11-09：剑破虚空×1.5后单击可打满本层普通怪血量；加厚目标血量，只检验出手排程。
+  enemy.maxHp = 1e6
   // Keep a durable actual authored target; stop before killing it by inspecting starts.
   for (let i = 0; i < 150; i++) {
     enemy.hp = enemy.maxHp

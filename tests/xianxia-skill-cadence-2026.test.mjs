@@ -8,7 +8,7 @@ import {createIronWeapon} from '../js/xianxia/TowerWeapons.js'
 const find=id=>[...GROWTH_SKILLS,...GROWTH_EVOLUTIONS].find(s=>s.id===id)
 const state=level=>({xp:cultivationLevelXp(level),skills:{},evolutionRanks:{},books:[],clearedFloor:0,researchPurchases:0,skillsInitialized:true,playtestSkillPoints:100})
 test('sword techniques follow approved first learning gates with stable prices',()=>{
- for(const [id,level,cost] of [['sj_arc',1,1],['sj_moon',4,1],['sj_moon_triple',14,1],['sj_cross',17,1],['sj_line',13,1],['sj_mark',16,1],['sj_gate',19,1],['evo_tiandi',22,2]]){
+ for(const [id,level,cost] of [['sj_arc',1,1],['sj_moon',4,1],['sj_moon_triple',11,1],['sj_cross',14,1],['sj_line',21,1],['sj_mark',7,1],['sj_gate',19,1],['evo_tiandi',24,2]]){
   assert.equal(find(id).learnLevel,level,id);assert.equal(find(id).pointCosts[0],cost,id)
   const s=state(level);if(id==='evo_tiandi')s.skills.sj_line=1;
   assert.equal(skillRequirement(s,id).ok,true,id)
@@ -16,19 +16,19 @@ test('sword techniques follow approved first learning gates with stable prices',
  }
 })
 test('relocated rank bands require further growth and preserve evolution prerequisites',()=>{
- for(const [id,first] of [['sj_line',13]]){
+ for(const [id,first] of [['sj_line',21]]){
   assert.equal(rankCap(id,cultivationLevelXp(first)),3)
   assert.equal(rankCap(id,cultivationLevelXp(first+2)),3)
   assert.equal(rankCap(id,cultivationLevelXp(first+3)),6)
   assert.equal(rankCap(id,cultivationLevelXp(first+9)),10)
  }
- assert.equal(skillRequirement(state(22),'evo_tiandi').reason,'parent-required')
+ assert.equal(skillRequirement(state(24),'evo_tiandi').reason,'parent-required')
  const s=state(26);s.skills.sj_line=1;s.evolutionRanks.evo_tiandi=1
  assert.equal(skillRequirement(s,'evo_tiandi').reason,'realm-locked')
  s.xp=cultivationLevelXp(27);assert.equal(skillRequirement(s,'evo_tiandi').ok,true)
 })
-test('moon techniques occupy Zhuji middle and late phases with realm-aligned training bands',()=>{
- for(const [id,stage,gates] of [['sj_moon_triple','zhuji-middle',[14,17,21,24]],['sj_cross','zhuji-peak',[17,21,24,27]]]){
+test('moon techniques occupy Zhuji early and middle phases with realm-aligned training bands',()=>{
+ for(const [id,stage,gates] of [['sj_moon_triple','zhuji-early',[11,14,17,21]],['sj_cross','zhuji-middle',[14,17,21,24]]]){
   assert.equal(skillStage(id).id,stage)
   for(let band=0;band<gates.length;band++){
    assert.equal(rankCap(id,cultivationLevelXp(gates[band])-1),band*3)
