@@ -336,12 +336,27 @@ export class TowerMonsterArt {
  private motionFrame(id: string | number, motion: MonsterMotion): SpriteFrame | null {
   const atlas=this.motionAtlas,ai=motion.ai,m=motion.mechanic;
   if(!atlas||!this.motionTexture||!ai)return null;
+  // 2026-11-09: the rhino Boss charges only through M06, and through M20 once it starts charging a pillar; both play the charge clip by mechanic phase.
+  // 2026-11-09: Boss skill clips by mechanic phase: bear-humanoid M07 stomp / M04 guard / M09 heave (Meowa), rhino M07 stomp, yak M15 roar. Other skills stay static.
+  const skillClip=this.motionFamily==='rhino'&&(m?.skillId==='M06'||m?.skillId==='M20'&&m.chargeStarted)?'charge'
+   :({'bear-humanoid':{M07:'stomp',M04:'guard',M09:'heave'},rhino:{M07:'stomp'},yak:{M15:'roar'}} as Record<string,Record<string,string>>)[this.motionFamily]?.[m?.skillId??'']||'';
+  if(skillClip&&m&&['windup','active','recovery'].includes(m.phase||'')&&atlas.clips[skillClip]?.phases?.[m.phase!]) {
+   const clip=atlas.clips[skillClip];let [offset,count]=clip.phases![m.phase!];
+   // M07/M09/M15 resolve on the impact tick (no mechanic active phase), so their recovery opens with the clip's impact frames.
+   const instant=['M07','M09','M15'].includes(m.skillId),act=clip.phases!.active;
+   if(instant&&m.phase==='recovery'&&act&&act[0]+act[1]===offset){offset=act[0];count+=act[1];}
+   const key=`${skillClip}:${m.skillId}:${m.phase}:${m.startedAt??''}`;let track=this.phaseTracks.get(id);
+   if(!track||track.key!==key||motion.time<track.time){track={key,start:m.phase==='windup'?Math.min(m.startedAt??motion.time,motion.time):motion.time,time:motion.time,seen:true};this.phaseTracks.set(id,track);}
+   track.time=motion.time;track.seen=true;
+   const span=Math.max(1e-6,(m.until??motion.time)-track.start),k=Math.min(count-1,Math.floor(Math.max(0,motion.time-track.start)/span*count));
+   return this.motionFrames.get(clip.frames[offset+k])||null;
+  }
   // Crocodile sweep follows the existing combat phases; mechanics retain their own presentation.
   // 83号：普通熊掌抓、虎爪是普通攻击 bite，复用各自的挥击动作，避免出招时静止。
-  if((this.motionFamily==='crocodile'||this.motionFamily==='bear'&&['slam','bite'].includes(ai.attack?.kind??'')||this.motionFamily==='tiger'&&['sweep','bite'].includes(ai.attack?.kind??'')||(this.motionFamily==='wolf-humanoid'||this.motionFamily==='tiger-humanoid')&&['sweep','bite'].includes(ai.attack?.kind??'')||this.motionFamily==='falcon-humanoid'&&ai.attack?.kind==='bite'||(this.motionFamily==='snake'||this.motionFamily==='boar-humanoid')&&ai.attack?.kind==='bite'||this.motionFamily==='boar-humanoid'&&ai.attack?.kind==='charge'||this.motionFamily==='bear-humanoid'&&['slam','bite'].includes(ai.attack?.kind??'')||this.motionFamily==='rhino'&&ai.attack?.kind==='sweep'||this.motionFamily==='yak'&&ai.attack?.kind==='slam'||(this.motionFamily==='bat'||this.motionFamily==='falcon')&&ai.attack?.kind==='bite') && ai.attack && ['windup','active','recovery'].includes(ai.mode)
+  if((this.motionFamily==='crocodile'||this.motionFamily==='bear'&&['slam','bite'].includes(ai.attack?.kind??'')||this.motionFamily==='tiger'&&['sweep','bite'].includes(ai.attack?.kind??'')||(this.motionFamily==='wolf-humanoid'||this.motionFamily==='tiger-humanoid')&&['sweep','bite'].includes(ai.attack?.kind??'')||this.motionFamily==='falcon-humanoid'&&ai.attack?.kind==='bite'||(this.motionFamily==='snake'||this.motionFamily==='boar-humanoid')&&ai.attack?.kind==='bite'||this.motionFamily==='boar-humanoid'&&ai.attack?.kind==='charge'||this.motionFamily==='bear-humanoid'&&['slam','bite'].includes(ai.attack?.kind??'')||this.motionFamily==='rhino'&&['sweep','charge'].includes(ai.attack?.kind??'')||this.motionFamily==='yak'&&ai.attack?.kind==='slam'||(this.motionFamily==='bat'||this.motionFamily==='falcon')&&ai.attack?.kind==='bite') && ai.attack && ['windup','active','recovery'].includes(ai.mode)
     && !['windup','active','recovery'].includes(m?.phase||'')) {
    // 低阶妖蝠、妖隼普攻：飞行帧+程序前扑残影（2026-11-06用户验收）；音波/羽弹 shot 仍保持立绘。
-   const clip=atlas.clips[this.motionFamily==='boar-humanoid'&&ai.attack.kind==='charge'?'charge':(this.motionFamily==='bear'||this.motionFamily==='bear-humanoid'||this.motionFamily==='yak')?'slam':(this.motionFamily==='bat'||this.motionFamily==='falcon'||this.motionFamily==='snake'||this.motionFamily==='boar-humanoid')?'bite':'sweep'],range=clip?.phases?.[ai.mode];
+   const clip=atlas.clips[(this.motionFamily==='boar-humanoid'||this.motionFamily==='rhino')&&ai.attack.kind==='charge'?'charge':(this.motionFamily==='bear'||this.motionFamily==='bear-humanoid'||this.motionFamily==='yak')?'slam':(this.motionFamily==='bat'||this.motionFamily==='falcon'||this.motionFamily==='snake'||this.motionFamily==='boar-humanoid')?'bite':'sweep'],range=clip?.phases?.[ai.mode];
    if(!clip||!range)return null;
    const [offset,count]=range;
    const duration=ai.mode==='windup'?ai.until-ai.attack.startedAt:
@@ -454,7 +469,7 @@ export class TowerMonsterArt {
   }
   return Object.entries(value.clips).every(([name, raw]) => {
    const clip = raw as MotionClip;
-   return ['move','gore','bite','sweep','slam','howl','cast','charge','charge-start','charge-loop','charge-end','enrage','hit','death'].includes(name) && clip
+   return ['move','gore','bite','sweep','slam','howl','cast','charge','stomp','guard','roar','heave','charge-start','charge-loop','charge-end','enrage','hit','death'].includes(name) && clip
     && Number.isFinite(clip.fps) && clip.fps > 0 && typeof clip.loop === 'boolean'
     && (['move','charge-loop'].includes(name) || !clip.loop) && Array.isArray(clip.frames) && clip.frames.length > 0
     && clip.frames.every(key => Object.prototype.hasOwnProperty.call(value.frames, key));

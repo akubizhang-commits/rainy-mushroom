@@ -1,0 +1,5291 @@
+{
+  "results": [
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "archetype": "spider_boss",
+      "fam": "spider-lady",
+      "floor": 3,
+      "direction": 1,
+      "authored": {
+        "role": "boss",
+        "rank": 4,
+        "name": "盘丝蛛后",
+        "skills": [
+          "M10",
+          "M22",
+          "M11"
+        ]
+      },
+      "labels": [
+        "盘丝蛛后 · 4阶  99999/100000"
+      ],
+      "movement": {
+        "x0": -360,
+        "x1": -312.3333333333335,
+        "mode": "approach"
+      },
+      "moving": {
+        "family": "spider-lady",
+        "frame": [
+          480,
+          480
+        ],
+        "texture": [
+          1920,
+          1920
+        ],
+        "size": 250.56932038834958,
+        "position": [
+          -312.3333333333335,
+          -12
+        ],
+        "scale": -1,
+        "anchorTop": 0.9,
+        "pose": "move-005"
+      },
+      "loop": [
+        "move-000",
+        "move-001",
+        "move-002",
+        "move-003",
+        "move-004",
+        "move-005",
+        "move-006",
+        "move-007",
+        "move-008",
+        "move-009",
+        "move-010",
+        "move-011",
+        "move-012",
+        "move-013",
+        "move-014",
+        "move-015",
+        "move-000"
+      ],
+      "combat": [
+        {
+          "mode": "windup",
+          "family": "spider-lady",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 250.56932038834958,
+          "position": [
+            -308.0833333333335,
+            88.22772815533983
+          ],
+          "scale": -1,
+          "anchorTop": 0.5,
+          "pose": "static"
+        },
+        {
+          "mode": "active",
+          "family": "spider-lady",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 250.56932038834958,
+          "position": [
+            -308.0833333333335,
+            88.22772815533983
+          ],
+          "scale": -1,
+          "anchorTop": 0.5,
+          "pose": "static"
+        },
+        {
+          "mode": "recovery",
+          "family": "spider-lady",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 250.56932038834958,
+          "position": [
+            -308.0833333333335,
+            88.22772815533983
+          ],
+          "scale": -1,
+          "anchorTop": 0.5,
+          "pose": "static"
+        }
+      ],
+      "mechanics": [
+        {
+          "skillId": "M10",
+          "phase": "windup"
+        },
+        {
+          "skillId": "M10",
+          "phase": "active"
+        },
+        {
+          "skillId": "M10",
+          "phase": "recovery"
+        },
+        {
+          "skillId": "M22",
+          "phase": "windup"
+        },
+        {
+          "skillId": "M22",
+          "phase": "active"
+        },
+        {
+          "skillId": "M22",
+          "phase": "recovery"
+        },
+        {
+          "skillId": "M11",
+          "phase": "windup"
+        },
+        {
+          "skillId": "M11",
+          "phase": "active"
+        },
+        {
+          "skillId": "M11",
+          "phase": "recovery"
+        }
+      ],
+      "death": {
+        "lowRemaining": false,
+        "highRemaining": false,
+        "kills": 1
+      },
+      "paused": true
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "archetype": "spider_boss",
+      "fam": "spider-lady",
+      "floor": 3,
+      "direction": -1,
+      "authored": {
+        "role": "boss",
+        "rank": 4,
+        "name": "盘丝蛛后",
+        "skills": [
+          "M10",
+          "M22",
+          "M11"
+        ]
+      },
+      "labels": [
+        "盘丝蛛后 · 4阶  99999/100000"
+      ],
+      "movement": {
+        "x0": 360,
+        "x1": 312.3333333333335,
+        "mode": "approach"
+      },
+      "moving": {
+        "family": "spider-lady",
+        "frame": [
+          480,
+          480
+        ],
+        "texture": [
+          1920,
+          1920
+        ],
+        "size": 250.56932038834958,
+        "position": [
+          312.3333333333335,
+          -12
+        ],
+        "scale": 1,
+        "anchorTop": 0.9,
+        "pose": "move-005"
+      },
+      "loop": [
+        "move-000",
+        "move-001",
+        "move-002",
+        "move-003",
+        "move-004",
+        "move-005",
+        "move-006",
+        "move-007",
+        "move-008",
+        "move-009",
+        "move-010",
+        "move-011",
+        "move-012",
+        "move-013",
+        "move-014",
+        "move-015",
+        "move-000"
+      ],
+      "combat": [
+        {
+          "mode": "windup",
+          "family": "spider-lady",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 250.56932038834958,
+          "position": [
+            316.5833333333335,
+            88.22772815533983
+          ],
+          "scale": 1,
+          "anchorTop": 0.5,
+          "pose": "static"
+        },
+        {
+          "mode": "active",
+          "family": "spider-lady",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 250.56932038834958,
+          "position": [
+            316.5833333333335,
+            88.22772815533983
+          ],
+          "scale": 1,
+          "anchorTop": 0.5,
+          "pose": "static"
+        },
+        {
+          "mode": "recovery",
+          "family": "spider-lady",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 250.56932038834958,
+          "position": [
+            316.5833333333335,
+            88.22772815533983
+          ],
+          "scale": 1,
+          "anchorTop": 0.5,
+          "pose": "static"
+        }
+      ],
+      "mechanics": [
+        {
+          "skillId": "M10",
+          "phase": "windup"
+        },
+        {
+          "skillId": "M10",
+          "phase": "active"
+        },
+        {
+          "skillId": "M10",
+          "phase": "recovery"
+        },
+        {
+          "skillId": "M22",
+          "phase": "windup"
+        },
+        {
+          "skillId": "M22",
+          "phase": "active"
+        },
+        {
+          "skillId": "M22",
+          "phase": "recovery"
+        },
+        {
+          "skillId": "M11",
+          "phase": "windup"
+        },
+        {
+          "skillId": "M11",
+          "phase": "active"
+        },
+        {
+          "skillId": "M11",
+          "phase": "recovery"
+        }
+      ],
+      "death": {
+        "lowRemaining": false,
+        "highRemaining": false,
+        "kills": 1
+      },
+      "paused": true
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "archetype": "spider_normal_r4",
+      "fam": "spider-lady",
+      "floor": 5,
+      "direction": 1,
+      "authored": {
+        "role": "normal",
+        "rank": 4,
+        "name": "赤绡蛛姬",
+        "skills": []
+      },
+      "labels": [
+        "赤绡蛛姬 · 4阶  99999/100000"
+      ],
+      "movement": {
+        "x0": -360,
+        "x1": -312.3333333333335,
+        "mode": "approach"
+      },
+      "moving": {
+        "family": "spider-lady",
+        "frame": [
+          480,
+          480
+        ],
+        "texture": [
+          1920,
+          1920
+        ],
+        "size": 105.13398058252427,
+        "position": [
+          -312.3333333333335,
+          -12
+        ],
+        "scale": -1,
+        "anchorTop": 0.9,
+        "pose": "move-005"
+      },
+      "loop": [
+        "move-000",
+        "move-001",
+        "move-002",
+        "move-003",
+        "move-004",
+        "move-005",
+        "move-006",
+        "move-007",
+        "move-008",
+        "move-009",
+        "move-010",
+        "move-011",
+        "move-012",
+        "move-013",
+        "move-014",
+        "move-015",
+        "move-000"
+      ],
+      "combat": [
+        {
+          "mode": "windup",
+          "family": "spider-lady",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 105.13398058252427,
+          "position": [
+            -308.0833333333335,
+            30.05359223300971
+          ],
+          "scale": -1,
+          "anchorTop": 0.5,
+          "pose": "static"
+        },
+        {
+          "mode": "active",
+          "family": "spider-lady",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 105.13398058252427,
+          "position": [
+            -308.0833333333335,
+            30.05359223300971
+          ],
+          "scale": -1,
+          "anchorTop": 0.5,
+          "pose": "static"
+        },
+        {
+          "mode": "recovery",
+          "family": "spider-lady",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 105.13398058252427,
+          "position": [
+            -308.0833333333335,
+            30.05359223300971
+          ],
+          "scale": -1,
+          "anchorTop": 0.5,
+          "pose": "static"
+        }
+      ],
+      "mechanics": [],
+      "death": {
+        "lowRemaining": false,
+        "highRemaining": false,
+        "kills": 1
+      },
+      "paused": true
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "archetype": "spider_normal_r4",
+      "fam": "spider-lady",
+      "floor": 5,
+      "direction": -1,
+      "authored": {
+        "role": "normal",
+        "rank": 4,
+        "name": "赤绡蛛姬",
+        "skills": []
+      },
+      "labels": [
+        "赤绡蛛姬 · 4阶  99999/100000"
+      ],
+      "movement": {
+        "x0": 360,
+        "x1": 312.3333333333335,
+        "mode": "approach"
+      },
+      "moving": {
+        "family": "spider-lady",
+        "frame": [
+          480,
+          480
+        ],
+        "texture": [
+          1920,
+          1920
+        ],
+        "size": 105.13398058252427,
+        "position": [
+          312.3333333333335,
+          -12
+        ],
+        "scale": 1,
+        "anchorTop": 0.9,
+        "pose": "move-005"
+      },
+      "loop": [
+        "move-000",
+        "move-001",
+        "move-002",
+        "move-003",
+        "move-004",
+        "move-005",
+        "move-006",
+        "move-007",
+        "move-008",
+        "move-009",
+        "move-010",
+        "move-011",
+        "move-012",
+        "move-013",
+        "move-014",
+        "move-015",
+        "move-000"
+      ],
+      "combat": [
+        {
+          "mode": "windup",
+          "family": "spider-lady",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 105.13398058252427,
+          "position": [
+            316.5833333333335,
+            30.05359223300971
+          ],
+          "scale": 1,
+          "anchorTop": 0.5,
+          "pose": "static"
+        },
+        {
+          "mode": "active",
+          "family": "spider-lady",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 105.13398058252427,
+          "position": [
+            316.5833333333335,
+            30.05359223300971
+          ],
+          "scale": 1,
+          "anchorTop": 0.5,
+          "pose": "static"
+        },
+        {
+          "mode": "recovery",
+          "family": "spider-lady",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 105.13398058252427,
+          "position": [
+            316.5833333333335,
+            30.05359223300971
+          ],
+          "scale": 1,
+          "anchorTop": 0.5,
+          "pose": "static"
+        }
+      ],
+      "mechanics": [],
+      "death": {
+        "lowRemaining": false,
+        "highRemaining": false,
+        "kills": 1
+      },
+      "paused": true
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "archetype": "spider_elite_f5_w15_n4",
+      "fam": "spider-lady",
+      "floor": 5,
+      "direction": 1,
+      "authored": {
+        "role": "elite",
+        "rank": 4,
+        "name": "绛丝",
+        "skills": [
+          "M10"
+        ]
+      },
+      "labels": [
+        "绛丝 · 4阶  99999/100000"
+      ],
+      "movement": {
+        "x0": -360,
+        "x1": -312.3333333333335,
+        "mode": "approach"
+      },
+      "moving": {
+        "family": "spider-lady",
+        "frame": [
+          480,
+          480
+        ],
+        "texture": [
+          1920,
+          1920
+        ],
+        "size": 170.84271844660194,
+        "position": [
+          -312.3333333333335,
+          -12
+        ],
+        "scale": -1,
+        "anchorTop": 0.9,
+        "pose": "move-005"
+      },
+      "loop": [
+        "move-000",
+        "move-001",
+        "move-002",
+        "move-003",
+        "move-004",
+        "move-005",
+        "move-006",
+        "move-007",
+        "move-008",
+        "move-009",
+        "move-010",
+        "move-011",
+        "move-012",
+        "move-013",
+        "move-014",
+        "move-015",
+        "move-000"
+      ],
+      "combat": [
+        {
+          "mode": "windup",
+          "family": "spider-lady",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 170.84271844660194,
+          "position": [
+            -308.0833333333335,
+            56.337087378640774
+          ],
+          "scale": -1,
+          "anchorTop": 0.5,
+          "pose": "static"
+        },
+        {
+          "mode": "active",
+          "family": "spider-lady",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 170.84271844660194,
+          "position": [
+            -308.0833333333335,
+            56.337087378640774
+          ],
+          "scale": -1,
+          "anchorTop": 0.5,
+          "pose": "static"
+        },
+        {
+          "mode": "recovery",
+          "family": "spider-lady",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 170.84271844660194,
+          "position": [
+            -308.0833333333335,
+            56.337087378640774
+          ],
+          "scale": -1,
+          "anchorTop": 0.5,
+          "pose": "static"
+        }
+      ],
+      "mechanics": [
+        {
+          "skillId": "M10",
+          "phase": "windup"
+        },
+        {
+          "skillId": "M10",
+          "phase": "active"
+        },
+        {
+          "skillId": "M10",
+          "phase": "recovery"
+        }
+      ],
+      "death": {
+        "lowRemaining": false,
+        "highRemaining": false,
+        "kills": 1
+      },
+      "paused": true
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "archetype": "spider_elite_f5_w15_n4",
+      "fam": "spider-lady",
+      "floor": 5,
+      "direction": -1,
+      "authored": {
+        "role": "elite",
+        "rank": 4,
+        "name": "绛丝",
+        "skills": [
+          "M10"
+        ]
+      },
+      "labels": [
+        "绛丝 · 4阶  99999/100000"
+      ],
+      "movement": {
+        "x0": 360,
+        "x1": 312.3333333333335,
+        "mode": "approach"
+      },
+      "moving": {
+        "family": "spider-lady",
+        "frame": [
+          480,
+          480
+        ],
+        "texture": [
+          1920,
+          1920
+        ],
+        "size": 170.84271844660194,
+        "position": [
+          312.3333333333335,
+          -12
+        ],
+        "scale": 1,
+        "anchorTop": 0.9,
+        "pose": "move-005"
+      },
+      "loop": [
+        "move-000",
+        "move-001",
+        "move-002",
+        "move-003",
+        "move-004",
+        "move-005",
+        "move-006",
+        "move-007",
+        "move-008",
+        "move-009",
+        "move-010",
+        "move-011",
+        "move-012",
+        "move-013",
+        "move-014",
+        "move-015",
+        "move-000"
+      ],
+      "combat": [
+        {
+          "mode": "windup",
+          "family": "spider-lady",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 170.84271844660194,
+          "position": [
+            316.5833333333335,
+            56.337087378640774
+          ],
+          "scale": 1,
+          "anchorTop": 0.5,
+          "pose": "static"
+        },
+        {
+          "mode": "active",
+          "family": "spider-lady",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 170.84271844660194,
+          "position": [
+            316.5833333333335,
+            56.337087378640774
+          ],
+          "scale": 1,
+          "anchorTop": 0.5,
+          "pose": "static"
+        },
+        {
+          "mode": "recovery",
+          "family": "spider-lady",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 170.84271844660194,
+          "position": [
+            316.5833333333335,
+            56.337087378640774
+          ],
+          "scale": 1,
+          "anchorTop": 0.5,
+          "pose": "static"
+        }
+      ],
+      "mechanics": [
+        {
+          "skillId": "M10",
+          "phase": "windup"
+        },
+        {
+          "skillId": "M10",
+          "phase": "active"
+        },
+        {
+          "skillId": "M10",
+          "phase": "recovery"
+        }
+      ],
+      "death": {
+        "lowRemaining": false,
+        "highRemaining": false,
+        "kills": 1
+      },
+      "paused": true
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "archetype": "snake_boss",
+      "fam": "snake-lady",
+      "floor": 5,
+      "direction": 1,
+      "authored": {
+        "role": "boss",
+        "rank": 5,
+        "name": "赤鳞蟒王",
+        "skills": [
+          "M03",
+          "M16",
+          "M11"
+        ]
+      },
+      "labels": [
+        "赤鳞蟒王 · 5阶  99999/100000"
+      ],
+      "movement": {
+        "x0": -360,
+        "x1": -305,
+        "mode": "approach"
+      },
+      "moving": {
+        "family": "snake-lady",
+        "frame": [
+          480,
+          480
+        ],
+        "texture": [
+          1920,
+          1920
+        ],
+        "size": 245.2380582524272,
+        "position": [
+          -305,
+          -12
+        ],
+        "scale": -1,
+        "anchorTop": 0.9,
+        "pose": "move-001"
+      },
+      "loop": [
+        "move-000",
+        "move-001",
+        "move-002",
+        "move-003",
+        "move-004",
+        "move-005",
+        "move-006",
+        "move-007",
+        "move-008",
+        "move-009",
+        "move-010",
+        "move-011",
+        "move-012",
+        "move-013",
+        "move-014",
+        "move-015",
+        "move-000"
+      ],
+      "combat": [
+        {
+          "mode": "windup",
+          "family": "snake-lady",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 245.2380582524272,
+          "position": [
+            -300.75,
+            -12
+          ],
+          "scale": -1,
+          "anchorTop": 0.9,
+          "pose": "static"
+        },
+        {
+          "mode": "active",
+          "family": "snake-lady",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 245.2380582524272,
+          "position": [
+            -300.75,
+            -12
+          ],
+          "scale": -1,
+          "anchorTop": 0.9,
+          "pose": "static"
+        },
+        {
+          "mode": "recovery",
+          "family": "snake-lady",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 245.2380582524272,
+          "position": [
+            -300.75,
+            -12
+          ],
+          "scale": -1,
+          "anchorTop": 0.9,
+          "pose": "static"
+        }
+      ],
+      "mechanics": [
+        {
+          "skillId": "M03",
+          "phase": "windup"
+        },
+        {
+          "skillId": "M03",
+          "phase": "active"
+        },
+        {
+          "skillId": "M03",
+          "phase": "recovery"
+        },
+        {
+          "skillId": "M16",
+          "phase": "windup"
+        },
+        {
+          "skillId": "M16",
+          "phase": "active"
+        },
+        {
+          "skillId": "M16",
+          "phase": "recovery"
+        },
+        {
+          "skillId": "M11",
+          "phase": "windup"
+        },
+        {
+          "skillId": "M11",
+          "phase": "active"
+        },
+        {
+          "skillId": "M11",
+          "phase": "recovery"
+        }
+      ],
+      "death": {
+        "lowRemaining": false,
+        "highRemaining": false,
+        "kills": 1
+      },
+      "paused": true
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "archetype": "snake_boss",
+      "fam": "snake-lady",
+      "floor": 5,
+      "direction": -1,
+      "authored": {
+        "role": "boss",
+        "rank": 5,
+        "name": "赤鳞蟒王",
+        "skills": [
+          "M03",
+          "M16",
+          "M11"
+        ]
+      },
+      "labels": [
+        "赤鳞蟒王 · 5阶  99999/100000"
+      ],
+      "movement": {
+        "x0": 360,
+        "x1": 305,
+        "mode": "approach"
+      },
+      "moving": {
+        "family": "snake-lady",
+        "frame": [
+          480,
+          480
+        ],
+        "texture": [
+          1920,
+          1920
+        ],
+        "size": 245.2380582524272,
+        "position": [
+          305,
+          -12
+        ],
+        "scale": 1,
+        "anchorTop": 0.9,
+        "pose": "move-001"
+      },
+      "loop": [
+        "move-000",
+        "move-001",
+        "move-002",
+        "move-003",
+        "move-004",
+        "move-005",
+        "move-006",
+        "move-007",
+        "move-008",
+        "move-009",
+        "move-010",
+        "move-011",
+        "move-012",
+        "move-013",
+        "move-014",
+        "move-015",
+        "move-000"
+      ],
+      "combat": [
+        {
+          "mode": "windup",
+          "family": "snake-lady",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 245.2380582524272,
+          "position": [
+            309.25,
+            -12
+          ],
+          "scale": 1,
+          "anchorTop": 0.9,
+          "pose": "static"
+        },
+        {
+          "mode": "active",
+          "family": "snake-lady",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 245.2380582524272,
+          "position": [
+            309.25,
+            -12
+          ],
+          "scale": 1,
+          "anchorTop": 0.9,
+          "pose": "static"
+        },
+        {
+          "mode": "recovery",
+          "family": "snake-lady",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 245.2380582524272,
+          "position": [
+            309.25,
+            -12
+          ],
+          "scale": 1,
+          "anchorTop": 0.9,
+          "pose": "static"
+        }
+      ],
+      "mechanics": [
+        {
+          "skillId": "M03",
+          "phase": "windup"
+        },
+        {
+          "skillId": "M03",
+          "phase": "active"
+        },
+        {
+          "skillId": "M03",
+          "phase": "recovery"
+        },
+        {
+          "skillId": "M16",
+          "phase": "windup"
+        },
+        {
+          "skillId": "M16",
+          "phase": "active"
+        },
+        {
+          "skillId": "M16",
+          "phase": "recovery"
+        },
+        {
+          "skillId": "M11",
+          "phase": "windup"
+        },
+        {
+          "skillId": "M11",
+          "phase": "active"
+        },
+        {
+          "skillId": "M11",
+          "phase": "recovery"
+        }
+      ],
+      "death": {
+        "lowRemaining": false,
+        "highRemaining": false,
+        "kills": 1
+      },
+      "paused": true
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "archetype": "snake_normal_r4",
+      "fam": "snake-lady",
+      "floor": 8,
+      "direction": 1,
+      "authored": {
+        "role": "normal",
+        "rank": 4,
+        "name": "赤鳞蛇姬",
+        "skills": []
+      },
+      "labels": [
+        "赤鳞蛇姬 · 4阶  99999/100000"
+      ],
+      "movement": {
+        "x0": -360,
+        "x1": -305,
+        "mode": "approach"
+      },
+      "moving": {
+        "family": "snake-lady",
+        "frame": [
+          480,
+          480
+        ],
+        "texture": [
+          1920,
+          1920
+        ],
+        "size": 102.89708737864078,
+        "position": [
+          -305,
+          -12
+        ],
+        "scale": -1,
+        "anchorTop": 0.9,
+        "pose": "move-001"
+      },
+      "loop": [
+        "move-000",
+        "move-001",
+        "move-002",
+        "move-003",
+        "move-004",
+        "move-005",
+        "move-006",
+        "move-007",
+        "move-008",
+        "move-009",
+        "move-010",
+        "move-011",
+        "move-012",
+        "move-013",
+        "move-014",
+        "move-015",
+        "move-000"
+      ],
+      "combat": [
+        {
+          "mode": "windup",
+          "family": "snake-lady",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 102.89708737864078,
+          "position": [
+            -300.75,
+            -12
+          ],
+          "scale": -1,
+          "anchorTop": 0.9,
+          "pose": "static"
+        },
+        {
+          "mode": "active",
+          "family": "snake-lady",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 102.89708737864078,
+          "position": [
+            -300.75,
+            -12
+          ],
+          "scale": -1,
+          "anchorTop": 0.9,
+          "pose": "static"
+        },
+        {
+          "mode": "recovery",
+          "family": "snake-lady",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 102.89708737864078,
+          "position": [
+            -300.75,
+            -12
+          ],
+          "scale": -1,
+          "anchorTop": 0.9,
+          "pose": "static"
+        }
+      ],
+      "mechanics": [],
+      "death": {
+        "lowRemaining": false,
+        "highRemaining": false,
+        "kills": 1
+      },
+      "paused": true
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "archetype": "snake_normal_r4",
+      "fam": "snake-lady",
+      "floor": 8,
+      "direction": -1,
+      "authored": {
+        "role": "normal",
+        "rank": 4,
+        "name": "赤鳞蛇姬",
+        "skills": []
+      },
+      "labels": [
+        "赤鳞蛇姬 · 4阶  99999/100000"
+      ],
+      "movement": {
+        "x0": 360,
+        "x1": 305,
+        "mode": "approach"
+      },
+      "moving": {
+        "family": "snake-lady",
+        "frame": [
+          480,
+          480
+        ],
+        "texture": [
+          1920,
+          1920
+        ],
+        "size": 102.89708737864078,
+        "position": [
+          305,
+          -12
+        ],
+        "scale": 1,
+        "anchorTop": 0.9,
+        "pose": "move-001"
+      },
+      "loop": [
+        "move-000",
+        "move-001",
+        "move-002",
+        "move-003",
+        "move-004",
+        "move-005",
+        "move-006",
+        "move-007",
+        "move-008",
+        "move-009",
+        "move-010",
+        "move-011",
+        "move-012",
+        "move-013",
+        "move-014",
+        "move-015",
+        "move-000"
+      ],
+      "combat": [
+        {
+          "mode": "windup",
+          "family": "snake-lady",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 102.89708737864078,
+          "position": [
+            309.25,
+            -12
+          ],
+          "scale": 1,
+          "anchorTop": 0.9,
+          "pose": "static"
+        },
+        {
+          "mode": "active",
+          "family": "snake-lady",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 102.89708737864078,
+          "position": [
+            309.25,
+            -12
+          ],
+          "scale": 1,
+          "anchorTop": 0.9,
+          "pose": "static"
+        },
+        {
+          "mode": "recovery",
+          "family": "snake-lady",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 102.89708737864078,
+          "position": [
+            309.25,
+            -12
+          ],
+          "scale": 1,
+          "anchorTop": 0.9,
+          "pose": "static"
+        }
+      ],
+      "mechanics": [],
+      "death": {
+        "lowRemaining": false,
+        "highRemaining": false,
+        "kills": 1
+      },
+      "paused": true
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "archetype": "snake_elite_f8_w10_n2",
+      "fam": "snake-lady",
+      "floor": 8,
+      "direction": 1,
+      "authored": {
+        "role": "elite",
+        "rank": 4,
+        "name": "绯冠",
+        "skills": [
+          "M07"
+        ]
+      },
+      "labels": [
+        "绯冠 · 4阶  99999/100000"
+      ],
+      "movement": {
+        "x0": -360,
+        "x1": -305,
+        "mode": "approach"
+      },
+      "moving": {
+        "family": "snake-lady",
+        "frame": [
+          480,
+          480
+        ],
+        "texture": [
+          1920,
+          1920
+        ],
+        "size": 167.20776699029128,
+        "position": [
+          -305,
+          -12
+        ],
+        "scale": -1,
+        "anchorTop": 0.9,
+        "pose": "move-001"
+      },
+      "loop": [
+        "move-000",
+        "move-001",
+        "move-002",
+        "move-003",
+        "move-004",
+        "move-005",
+        "move-006",
+        "move-007",
+        "move-008",
+        "move-009",
+        "move-010",
+        "move-011",
+        "move-012",
+        "move-013",
+        "move-014",
+        "move-015",
+        "move-000"
+      ],
+      "combat": [
+        {
+          "mode": "windup",
+          "family": "snake-lady",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 167.20776699029128,
+          "position": [
+            -300.75,
+            -12
+          ],
+          "scale": -1,
+          "anchorTop": 0.9,
+          "pose": "static"
+        },
+        {
+          "mode": "active",
+          "family": "snake-lady",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 167.20776699029128,
+          "position": [
+            -300.75,
+            -12
+          ],
+          "scale": -1,
+          "anchorTop": 0.9,
+          "pose": "static"
+        },
+        {
+          "mode": "recovery",
+          "family": "snake-lady",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 167.20776699029128,
+          "position": [
+            -300.75,
+            -12
+          ],
+          "scale": -1,
+          "anchorTop": 0.9,
+          "pose": "static"
+        }
+      ],
+      "mechanics": [
+        {
+          "skillId": "M07",
+          "phase": "windup"
+        },
+        {
+          "skillId": "M07",
+          "phase": "active"
+        },
+        {
+          "skillId": "M07",
+          "phase": "recovery"
+        }
+      ],
+      "death": {
+        "lowRemaining": false,
+        "highRemaining": false,
+        "kills": 1
+      },
+      "paused": true
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "archetype": "snake_elite_f8_w10_n2",
+      "fam": "snake-lady",
+      "floor": 8,
+      "direction": -1,
+      "authored": {
+        "role": "elite",
+        "rank": 4,
+        "name": "绯冠",
+        "skills": [
+          "M07"
+        ]
+      },
+      "labels": [
+        "绯冠 · 4阶  99999/100000"
+      ],
+      "movement": {
+        "x0": 360,
+        "x1": 305,
+        "mode": "approach"
+      },
+      "moving": {
+        "family": "snake-lady",
+        "frame": [
+          480,
+          480
+        ],
+        "texture": [
+          1920,
+          1920
+        ],
+        "size": 167.20776699029128,
+        "position": [
+          305,
+          -12
+        ],
+        "scale": 1,
+        "anchorTop": 0.9,
+        "pose": "move-001"
+      },
+      "loop": [
+        "move-000",
+        "move-001",
+        "move-002",
+        "move-003",
+        "move-004",
+        "move-005",
+        "move-006",
+        "move-007",
+        "move-008",
+        "move-009",
+        "move-010",
+        "move-011",
+        "move-012",
+        "move-013",
+        "move-014",
+        "move-015",
+        "move-000"
+      ],
+      "combat": [
+        {
+          "mode": "windup",
+          "family": "snake-lady",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 167.20776699029128,
+          "position": [
+            309.25,
+            -12
+          ],
+          "scale": 1,
+          "anchorTop": 0.9,
+          "pose": "static"
+        },
+        {
+          "mode": "active",
+          "family": "snake-lady",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 167.20776699029128,
+          "position": [
+            309.25,
+            -12
+          ],
+          "scale": 1,
+          "anchorTop": 0.9,
+          "pose": "static"
+        },
+        {
+          "mode": "recovery",
+          "family": "snake-lady",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 167.20776699029128,
+          "position": [
+            309.25,
+            -12
+          ],
+          "scale": 1,
+          "anchorTop": 0.9,
+          "pose": "static"
+        }
+      ],
+      "mechanics": [
+        {
+          "skillId": "M07",
+          "phase": "windup"
+        },
+        {
+          "skillId": "M07",
+          "phase": "active"
+        },
+        {
+          "skillId": "M07",
+          "phase": "recovery"
+        }
+      ],
+      "death": {
+        "lowRemaining": false,
+        "highRemaining": false,
+        "kills": 1
+      },
+      "paused": true
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "archetype": "bat_normal_r4",
+      "fam": "bat-humanoid",
+      "floor": 4,
+      "direction": 1,
+      "authored": {
+        "role": "normal",
+        "rank": 4,
+        "name": "摄魂蝠妖",
+        "skills": []
+      },
+      "labels": [
+        "摄魂蝠妖 · 4阶  99999/100000"
+      ],
+      "movement": {
+        "x0": -360,
+        "x1": -286.468776273065,
+        "mode": "approach"
+      },
+      "moving": {
+        "family": "bat-humanoid",
+        "frame": [
+          480,
+          480
+        ],
+        "texture": [
+          1920,
+          1920
+        ],
+        "size": 110.04878048780488,
+        "position": [
+          -286.468776273065,
+          -34.78372783489582
+        ],
+        "scale": -1,
+        "anchorTop": 0.9,
+        "pose": "move-008"
+      },
+      "loop": [
+        "move-000",
+        "move-001",
+        "move-002",
+        "move-003",
+        "move-004",
+        "move-005",
+        "move-006",
+        "move-007",
+        "move-008",
+        "move-009",
+        "move-010",
+        "move-011",
+        "move-012",
+        "move-013",
+        "move-014",
+        "move-015",
+        "move-000"
+      ],
+      "combat": [
+        {
+          "mode": "windup",
+          "family": "bat-humanoid",
+          "frame": [
+            512,
+            512
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 110.04878048780488,
+          "position": [
+            -282.218776273065,
+            -34.78372783489582
+          ],
+          "scale": -1,
+          "anchorTop": 0.9,
+          "pose": "static"
+        },
+        {
+          "mode": "active",
+          "family": "bat-humanoid",
+          "frame": [
+            512,
+            512
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 110.04878048780488,
+          "position": [
+            -282.218776273065,
+            -34.78372783489582
+          ],
+          "scale": -1,
+          "anchorTop": 0.9,
+          "pose": "static"
+        },
+        {
+          "mode": "recovery",
+          "family": "bat-humanoid",
+          "frame": [
+            512,
+            512
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 110.04878048780488,
+          "position": [
+            -282.218776273065,
+            -34.78372783489582
+          ],
+          "scale": -1,
+          "anchorTop": 0.9,
+          "pose": "static"
+        }
+      ],
+      "mechanics": [],
+      "death": {
+        "lowRemaining": false,
+        "highRemaining": false,
+        "kills": 1
+      },
+      "paused": true
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "archetype": "bat_normal_r4",
+      "fam": "bat-humanoid",
+      "floor": 4,
+      "direction": -1,
+      "authored": {
+        "role": "normal",
+        "rank": 4,
+        "name": "摄魂蝠妖",
+        "skills": []
+      },
+      "labels": [
+        "摄魂蝠妖 · 4阶  99999/100000"
+      ],
+      "movement": {
+        "x0": 360,
+        "x1": 286.468776273065,
+        "mode": "approach"
+      },
+      "moving": {
+        "family": "bat-humanoid",
+        "frame": [
+          480,
+          480
+        ],
+        "texture": [
+          1920,
+          1920
+        ],
+        "size": 110.04878048780488,
+        "position": [
+          286.468776273065,
+          10.78372783489582
+        ],
+        "scale": 1,
+        "anchorTop": 0.9,
+        "pose": "move-008"
+      },
+      "loop": [
+        "move-000",
+        "move-001",
+        "move-002",
+        "move-003",
+        "move-004",
+        "move-005",
+        "move-006",
+        "move-007",
+        "move-008",
+        "move-009",
+        "move-010",
+        "move-011",
+        "move-012",
+        "move-013",
+        "move-014",
+        "move-015",
+        "move-000"
+      ],
+      "combat": [
+        {
+          "mode": "windup",
+          "family": "bat-humanoid",
+          "frame": [
+            512,
+            512
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 110.04878048780488,
+          "position": [
+            290.718776273065,
+            10.78372783489582
+          ],
+          "scale": 1,
+          "anchorTop": 0.9,
+          "pose": "static"
+        },
+        {
+          "mode": "active",
+          "family": "bat-humanoid",
+          "frame": [
+            512,
+            512
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 110.04878048780488,
+          "position": [
+            290.718776273065,
+            10.78372783489582
+          ],
+          "scale": 1,
+          "anchorTop": 0.9,
+          "pose": "static"
+        },
+        {
+          "mode": "recovery",
+          "family": "bat-humanoid",
+          "frame": [
+            512,
+            512
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 110.04878048780488,
+          "position": [
+            290.718776273065,
+            10.78372783489582
+          ],
+          "scale": 1,
+          "anchorTop": 0.9,
+          "pose": "static"
+        }
+      ],
+      "mechanics": [],
+      "death": {
+        "lowRemaining": false,
+        "highRemaining": false,
+        "kills": 1
+      },
+      "paused": true
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "archetype": "bat_elite_f4_w15_n4",
+      "fam": "bat-humanoid",
+      "floor": 4,
+      "direction": 1,
+      "authored": {
+        "role": "elite",
+        "rank": 4,
+        "name": "噬声",
+        "skills": [
+          "M07"
+        ]
+      },
+      "labels": [
+        "噬声 · 4阶  99999/100000"
+      ],
+      "movement": {
+        "x0": -360,
+        "x1": -300,
+        "mode": "approach"
+      },
+      "moving": {
+        "family": "bat-humanoid",
+        "frame": [
+          480,
+          480
+        ],
+        "texture": [
+          1920,
+          1920
+        ],
+        "size": 178.8292682926829,
+        "position": [
+          -300,
+          -12
+        ],
+        "scale": -1,
+        "anchorTop": 0.9,
+        "pose": "move-008"
+      },
+      "loop": [
+        "move-000",
+        "move-001",
+        "move-002",
+        "move-003",
+        "move-004",
+        "move-005",
+        "move-006",
+        "move-007",
+        "move-008",
+        "move-009",
+        "move-010",
+        "move-011",
+        "move-012",
+        "move-013",
+        "move-014",
+        "move-015",
+        "move-000"
+      ],
+      "combat": [
+        {
+          "mode": "windup",
+          "family": "bat-humanoid",
+          "frame": [
+            512,
+            512
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 178.8292682926829,
+          "position": [
+            -295.75,
+            -12
+          ],
+          "scale": -1,
+          "anchorTop": 0.9,
+          "pose": "static"
+        },
+        {
+          "mode": "active",
+          "family": "bat-humanoid",
+          "frame": [
+            512,
+            512
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 178.8292682926829,
+          "position": [
+            -295.75,
+            -12
+          ],
+          "scale": -1,
+          "anchorTop": 0.9,
+          "pose": "static"
+        },
+        {
+          "mode": "recovery",
+          "family": "bat-humanoid",
+          "frame": [
+            512,
+            512
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 178.8292682926829,
+          "position": [
+            -295.75,
+            -12
+          ],
+          "scale": -1,
+          "anchorTop": 0.9,
+          "pose": "static"
+        }
+      ],
+      "mechanics": [
+        {
+          "skillId": "M07",
+          "phase": "windup"
+        },
+        {
+          "skillId": "M07",
+          "phase": "active"
+        },
+        {
+          "skillId": "M07",
+          "phase": "recovery"
+        }
+      ],
+      "death": {
+        "lowRemaining": false,
+        "highRemaining": false,
+        "kills": 1
+      },
+      "paused": true
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "archetype": "bat_elite_f4_w15_n4",
+      "fam": "bat-humanoid",
+      "floor": 4,
+      "direction": -1,
+      "authored": {
+        "role": "elite",
+        "rank": 4,
+        "name": "噬声",
+        "skills": [
+          "M07"
+        ]
+      },
+      "labels": [
+        "噬声 · 4阶  99999/100000"
+      ],
+      "movement": {
+        "x0": 360,
+        "x1": 300,
+        "mode": "approach"
+      },
+      "moving": {
+        "family": "bat-humanoid",
+        "frame": [
+          480,
+          480
+        ],
+        "texture": [
+          1920,
+          1920
+        ],
+        "size": 178.8292682926829,
+        "position": [
+          300,
+          -12
+        ],
+        "scale": 1,
+        "anchorTop": 0.9,
+        "pose": "move-008"
+      },
+      "loop": [
+        "move-000",
+        "move-001",
+        "move-002",
+        "move-003",
+        "move-004",
+        "move-005",
+        "move-006",
+        "move-007",
+        "move-008",
+        "move-009",
+        "move-010",
+        "move-011",
+        "move-012",
+        "move-013",
+        "move-014",
+        "move-015",
+        "move-000"
+      ],
+      "combat": [
+        {
+          "mode": "windup",
+          "family": "bat-humanoid",
+          "frame": [
+            512,
+            512
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 178.8292682926829,
+          "position": [
+            304.25,
+            -12
+          ],
+          "scale": 1,
+          "anchorTop": 0.9,
+          "pose": "static"
+        },
+        {
+          "mode": "active",
+          "family": "bat-humanoid",
+          "frame": [
+            512,
+            512
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 178.8292682926829,
+          "position": [
+            304.25,
+            -12
+          ],
+          "scale": 1,
+          "anchorTop": 0.9,
+          "pose": "static"
+        },
+        {
+          "mode": "recovery",
+          "family": "bat-humanoid",
+          "frame": [
+            512,
+            512
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 178.8292682926829,
+          "position": [
+            304.25,
+            -12
+          ],
+          "scale": 1,
+          "anchorTop": 0.9,
+          "pose": "static"
+        }
+      ],
+      "mechanics": [
+        {
+          "skillId": "M07",
+          "phase": "windup"
+        },
+        {
+          "skillId": "M07",
+          "phase": "active"
+        },
+        {
+          "skillId": "M07",
+          "phase": "recovery"
+        }
+      ],
+      "death": {
+        "lowRemaining": false,
+        "highRemaining": false,
+        "kills": 1
+      },
+      "paused": true
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "archetype": "bat_elite_f6_w15_n4",
+      "fam": "bat-humanoid",
+      "floor": 6,
+      "direction": 1,
+      "authored": {
+        "role": "elite",
+        "rank": 5,
+        "name": "摄魂",
+        "skills": [
+          "M07"
+        ]
+      },
+      "labels": [
+        "摄魂 · 5阶  99999/100000"
+      ],
+      "movement": {
+        "x0": -360,
+        "x1": -300,
+        "mode": "approach"
+      },
+      "moving": {
+        "family": "bat-humanoid",
+        "frame": [
+          480,
+          480
+        ],
+        "texture": [
+          1920,
+          1920
+        ],
+        "size": 178.8292682926829,
+        "position": [
+          -300,
+          -12
+        ],
+        "scale": -1,
+        "anchorTop": 0.9,
+        "pose": "move-008"
+      },
+      "loop": [
+        "move-000",
+        "move-001",
+        "move-002",
+        "move-003",
+        "move-004",
+        "move-005",
+        "move-006",
+        "move-007",
+        "move-008",
+        "move-009",
+        "move-010",
+        "move-011",
+        "move-012",
+        "move-013",
+        "move-014",
+        "move-015",
+        "move-000"
+      ],
+      "combat": [
+        {
+          "mode": "windup",
+          "family": "bat-humanoid",
+          "frame": [
+            512,
+            512
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 178.8292682926829,
+          "position": [
+            -295.75,
+            -12
+          ],
+          "scale": -1,
+          "anchorTop": 0.9,
+          "pose": "static"
+        },
+        {
+          "mode": "active",
+          "family": "bat-humanoid",
+          "frame": [
+            512,
+            512
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 178.8292682926829,
+          "position": [
+            -295.75,
+            -12
+          ],
+          "scale": -1,
+          "anchorTop": 0.9,
+          "pose": "static"
+        },
+        {
+          "mode": "recovery",
+          "family": "bat-humanoid",
+          "frame": [
+            512,
+            512
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 178.8292682926829,
+          "position": [
+            -295.75,
+            -12
+          ],
+          "scale": -1,
+          "anchorTop": 0.9,
+          "pose": "static"
+        }
+      ],
+      "mechanics": [
+        {
+          "skillId": "M07",
+          "phase": "windup"
+        },
+        {
+          "skillId": "M07",
+          "phase": "active"
+        },
+        {
+          "skillId": "M07",
+          "phase": "recovery"
+        }
+      ],
+      "death": {
+        "lowRemaining": false,
+        "highRemaining": false,
+        "kills": 1
+      },
+      "paused": true
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "archetype": "bat_elite_f6_w15_n4",
+      "fam": "bat-humanoid",
+      "floor": 6,
+      "direction": -1,
+      "authored": {
+        "role": "elite",
+        "rank": 5,
+        "name": "摄魂",
+        "skills": [
+          "M07"
+        ]
+      },
+      "labels": [
+        "摄魂 · 5阶  99999/100000"
+      ],
+      "movement": {
+        "x0": 360,
+        "x1": 300,
+        "mode": "approach"
+      },
+      "moving": {
+        "family": "bat-humanoid",
+        "frame": [
+          480,
+          480
+        ],
+        "texture": [
+          1920,
+          1920
+        ],
+        "size": 178.8292682926829,
+        "position": [
+          300,
+          -12
+        ],
+        "scale": 1,
+        "anchorTop": 0.9,
+        "pose": "move-008"
+      },
+      "loop": [
+        "move-000",
+        "move-001",
+        "move-002",
+        "move-003",
+        "move-004",
+        "move-005",
+        "move-006",
+        "move-007",
+        "move-008",
+        "move-009",
+        "move-010",
+        "move-011",
+        "move-012",
+        "move-013",
+        "move-014",
+        "move-015",
+        "move-000"
+      ],
+      "combat": [
+        {
+          "mode": "windup",
+          "family": "bat-humanoid",
+          "frame": [
+            512,
+            512
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 178.8292682926829,
+          "position": [
+            304.25,
+            -12
+          ],
+          "scale": 1,
+          "anchorTop": 0.9,
+          "pose": "static"
+        },
+        {
+          "mode": "active",
+          "family": "bat-humanoid",
+          "frame": [
+            512,
+            512
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 178.8292682926829,
+          "position": [
+            304.25,
+            -12
+          ],
+          "scale": 1,
+          "anchorTop": 0.9,
+          "pose": "static"
+        },
+        {
+          "mode": "recovery",
+          "family": "bat-humanoid",
+          "frame": [
+            512,
+            512
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 178.8292682926829,
+          "position": [
+            304.25,
+            -12
+          ],
+          "scale": 1,
+          "anchorTop": 0.9,
+          "pose": "static"
+        }
+      ],
+      "mechanics": [
+        {
+          "skillId": "M07",
+          "phase": "windup"
+        },
+        {
+          "skillId": "M07",
+          "phase": "active"
+        },
+        {
+          "skillId": "M07",
+          "phase": "recovery"
+        }
+      ],
+      "death": {
+        "lowRemaining": false,
+        "highRemaining": false,
+        "kills": 1
+      },
+      "paused": true
+    },
+    {
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "archetype": "spider_boss",
+      "fam": "spider-lady",
+      "floor": 3,
+      "direction": 1,
+      "authored": {
+        "role": "boss",
+        "rank": 4,
+        "name": "盘丝蛛后",
+        "skills": [
+          "M10",
+          "M22",
+          "M11"
+        ]
+      },
+      "labels": [
+        "盘丝蛛后 · 4阶  99999/100000"
+      ],
+      "movement": {
+        "x0": -360,
+        "x1": -312.3333333333335,
+        "mode": "approach"
+      },
+      "moving": {
+        "family": "spider-lady",
+        "frame": [
+          480,
+          480
+        ],
+        "texture": [
+          1920,
+          1920
+        ],
+        "size": 250.56932038834958,
+        "position": [
+          -312.3333333333335,
+          -12
+        ],
+        "scale": -1,
+        "anchorTop": 0.9,
+        "pose": "move-005"
+      },
+      "loop": [
+        "move-000",
+        "move-001",
+        "move-002",
+        "move-003",
+        "move-004",
+        "move-005",
+        "move-006",
+        "move-007",
+        "move-008",
+        "move-009",
+        "move-010",
+        "move-011",
+        "move-012",
+        "move-013",
+        "move-014",
+        "move-015",
+        "move-000"
+      ],
+      "combat": [
+        {
+          "mode": "windup",
+          "family": "spider-lady",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 250.56932038834958,
+          "position": [
+            -308.0833333333335,
+            88.22772815533983
+          ],
+          "scale": -1,
+          "anchorTop": 0.5,
+          "pose": "static"
+        },
+        {
+          "mode": "active",
+          "family": "spider-lady",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 250.56932038834958,
+          "position": [
+            -308.0833333333335,
+            88.22772815533983
+          ],
+          "scale": -1,
+          "anchorTop": 0.5,
+          "pose": "static"
+        },
+        {
+          "mode": "recovery",
+          "family": "spider-lady",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 250.56932038834958,
+          "position": [
+            -308.0833333333335,
+            88.22772815533983
+          ],
+          "scale": -1,
+          "anchorTop": 0.5,
+          "pose": "static"
+        }
+      ],
+      "mechanics": [
+        {
+          "skillId": "M10",
+          "phase": "windup"
+        },
+        {
+          "skillId": "M10",
+          "phase": "active"
+        },
+        {
+          "skillId": "M10",
+          "phase": "recovery"
+        },
+        {
+          "skillId": "M22",
+          "phase": "windup"
+        },
+        {
+          "skillId": "M22",
+          "phase": "active"
+        },
+        {
+          "skillId": "M22",
+          "phase": "recovery"
+        },
+        {
+          "skillId": "M11",
+          "phase": "windup"
+        },
+        {
+          "skillId": "M11",
+          "phase": "active"
+        },
+        {
+          "skillId": "M11",
+          "phase": "recovery"
+        }
+      ],
+      "death": {
+        "lowRemaining": false,
+        "highRemaining": false,
+        "kills": 1
+      },
+      "paused": true
+    },
+    {
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "archetype": "spider_boss",
+      "fam": "spider-lady",
+      "floor": 3,
+      "direction": -1,
+      "authored": {
+        "role": "boss",
+        "rank": 4,
+        "name": "盘丝蛛后",
+        "skills": [
+          "M10",
+          "M22",
+          "M11"
+        ]
+      },
+      "labels": [
+        "盘丝蛛后 · 4阶  99999/100000"
+      ],
+      "movement": {
+        "x0": 360,
+        "x1": 312.3333333333335,
+        "mode": "approach"
+      },
+      "moving": {
+        "family": "spider-lady",
+        "frame": [
+          480,
+          480
+        ],
+        "texture": [
+          1920,
+          1920
+        ],
+        "size": 250.56932038834958,
+        "position": [
+          312.3333333333335,
+          -12
+        ],
+        "scale": 1,
+        "anchorTop": 0.9,
+        "pose": "move-005"
+      },
+      "loop": [
+        "move-000",
+        "move-001",
+        "move-002",
+        "move-003",
+        "move-004",
+        "move-005",
+        "move-006",
+        "move-007",
+        "move-008",
+        "move-009",
+        "move-010",
+        "move-011",
+        "move-012",
+        "move-013",
+        "move-014",
+        "move-015",
+        "move-000"
+      ],
+      "combat": [
+        {
+          "mode": "windup",
+          "family": "spider-lady",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 250.56932038834958,
+          "position": [
+            316.5833333333335,
+            88.22772815533983
+          ],
+          "scale": 1,
+          "anchorTop": 0.5,
+          "pose": "static"
+        },
+        {
+          "mode": "active",
+          "family": "spider-lady",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 250.56932038834958,
+          "position": [
+            316.5833333333335,
+            88.22772815533983
+          ],
+          "scale": 1,
+          "anchorTop": 0.5,
+          "pose": "static"
+        },
+        {
+          "mode": "recovery",
+          "family": "spider-lady",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 250.56932038834958,
+          "position": [
+            316.5833333333335,
+            88.22772815533983
+          ],
+          "scale": 1,
+          "anchorTop": 0.5,
+          "pose": "static"
+        }
+      ],
+      "mechanics": [
+        {
+          "skillId": "M10",
+          "phase": "windup"
+        },
+        {
+          "skillId": "M10",
+          "phase": "active"
+        },
+        {
+          "skillId": "M10",
+          "phase": "recovery"
+        },
+        {
+          "skillId": "M22",
+          "phase": "windup"
+        },
+        {
+          "skillId": "M22",
+          "phase": "active"
+        },
+        {
+          "skillId": "M22",
+          "phase": "recovery"
+        },
+        {
+          "skillId": "M11",
+          "phase": "windup"
+        },
+        {
+          "skillId": "M11",
+          "phase": "active"
+        },
+        {
+          "skillId": "M11",
+          "phase": "recovery"
+        }
+      ],
+      "death": {
+        "lowRemaining": false,
+        "highRemaining": false,
+        "kills": 1
+      },
+      "paused": true
+    },
+    {
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "archetype": "spider_normal_r4",
+      "fam": "spider-lady",
+      "floor": 5,
+      "direction": 1,
+      "authored": {
+        "role": "normal",
+        "rank": 4,
+        "name": "赤绡蛛姬",
+        "skills": []
+      },
+      "labels": [
+        "赤绡蛛姬 · 4阶  99999/100000"
+      ],
+      "movement": {
+        "x0": -360,
+        "x1": -312.3333333333335,
+        "mode": "approach"
+      },
+      "moving": {
+        "family": "spider-lady",
+        "frame": [
+          480,
+          480
+        ],
+        "texture": [
+          1920,
+          1920
+        ],
+        "size": 105.13398058252427,
+        "position": [
+          -312.3333333333335,
+          -12
+        ],
+        "scale": -1,
+        "anchorTop": 0.9,
+        "pose": "move-005"
+      },
+      "loop": [
+        "move-000",
+        "move-001",
+        "move-002",
+        "move-003",
+        "move-004",
+        "move-005",
+        "move-006",
+        "move-007",
+        "move-008",
+        "move-009",
+        "move-010",
+        "move-011",
+        "move-012",
+        "move-013",
+        "move-014",
+        "move-015",
+        "move-000"
+      ],
+      "combat": [
+        {
+          "mode": "windup",
+          "family": "spider-lady",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 105.13398058252427,
+          "position": [
+            -308.0833333333335,
+            30.05359223300971
+          ],
+          "scale": -1,
+          "anchorTop": 0.5,
+          "pose": "static"
+        },
+        {
+          "mode": "active",
+          "family": "spider-lady",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 105.13398058252427,
+          "position": [
+            -308.0833333333335,
+            30.05359223300971
+          ],
+          "scale": -1,
+          "anchorTop": 0.5,
+          "pose": "static"
+        },
+        {
+          "mode": "recovery",
+          "family": "spider-lady",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 105.13398058252427,
+          "position": [
+            -308.0833333333335,
+            30.05359223300971
+          ],
+          "scale": -1,
+          "anchorTop": 0.5,
+          "pose": "static"
+        }
+      ],
+      "mechanics": [],
+      "death": {
+        "lowRemaining": false,
+        "highRemaining": false,
+        "kills": 1
+      },
+      "paused": true
+    },
+    {
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "archetype": "spider_normal_r4",
+      "fam": "spider-lady",
+      "floor": 5,
+      "direction": -1,
+      "authored": {
+        "role": "normal",
+        "rank": 4,
+        "name": "赤绡蛛姬",
+        "skills": []
+      },
+      "labels": [
+        "赤绡蛛姬 · 4阶  99999/100000"
+      ],
+      "movement": {
+        "x0": 360,
+        "x1": 312.3333333333335,
+        "mode": "approach"
+      },
+      "moving": {
+        "family": "spider-lady",
+        "frame": [
+          480,
+          480
+        ],
+        "texture": [
+          1920,
+          1920
+        ],
+        "size": 105.13398058252427,
+        "position": [
+          312.3333333333335,
+          -12
+        ],
+        "scale": 1,
+        "anchorTop": 0.9,
+        "pose": "move-005"
+      },
+      "loop": [
+        "move-000",
+        "move-001",
+        "move-002",
+        "move-003",
+        "move-004",
+        "move-005",
+        "move-006",
+        "move-007",
+        "move-008",
+        "move-009",
+        "move-010",
+        "move-011",
+        "move-012",
+        "move-013",
+        "move-014",
+        "move-015",
+        "move-000"
+      ],
+      "combat": [
+        {
+          "mode": "windup",
+          "family": "spider-lady",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 105.13398058252427,
+          "position": [
+            316.5833333333335,
+            30.05359223300971
+          ],
+          "scale": 1,
+          "anchorTop": 0.5,
+          "pose": "static"
+        },
+        {
+          "mode": "active",
+          "family": "spider-lady",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 105.13398058252427,
+          "position": [
+            316.5833333333335,
+            30.05359223300971
+          ],
+          "scale": 1,
+          "anchorTop": 0.5,
+          "pose": "static"
+        },
+        {
+          "mode": "recovery",
+          "family": "spider-lady",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 105.13398058252427,
+          "position": [
+            316.5833333333335,
+            30.05359223300971
+          ],
+          "scale": 1,
+          "anchorTop": 0.5,
+          "pose": "static"
+        }
+      ],
+      "mechanics": [],
+      "death": {
+        "lowRemaining": false,
+        "highRemaining": false,
+        "kills": 1
+      },
+      "paused": true
+    },
+    {
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "archetype": "spider_elite_f5_w15_n4",
+      "fam": "spider-lady",
+      "floor": 5,
+      "direction": 1,
+      "authored": {
+        "role": "elite",
+        "rank": 4,
+        "name": "绛丝",
+        "skills": [
+          "M10"
+        ]
+      },
+      "labels": [
+        "绛丝 · 4阶  99999/100000"
+      ],
+      "movement": {
+        "x0": -360,
+        "x1": -312.3333333333335,
+        "mode": "approach"
+      },
+      "moving": {
+        "family": "spider-lady",
+        "frame": [
+          480,
+          480
+        ],
+        "texture": [
+          1920,
+          1920
+        ],
+        "size": 170.84271844660194,
+        "position": [
+          -312.3333333333335,
+          -12
+        ],
+        "scale": -1,
+        "anchorTop": 0.9,
+        "pose": "move-005"
+      },
+      "loop": [
+        "move-000",
+        "move-001",
+        "move-002",
+        "move-003",
+        "move-004",
+        "move-005",
+        "move-006",
+        "move-007",
+        "move-008",
+        "move-009",
+        "move-010",
+        "move-011",
+        "move-012",
+        "move-013",
+        "move-014",
+        "move-015",
+        "move-000"
+      ],
+      "combat": [
+        {
+          "mode": "windup",
+          "family": "spider-lady",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 170.84271844660194,
+          "position": [
+            -308.0833333333335,
+            56.337087378640774
+          ],
+          "scale": -1,
+          "anchorTop": 0.5,
+          "pose": "static"
+        },
+        {
+          "mode": "active",
+          "family": "spider-lady",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 170.84271844660194,
+          "position": [
+            -308.0833333333335,
+            56.337087378640774
+          ],
+          "scale": -1,
+          "anchorTop": 0.5,
+          "pose": "static"
+        },
+        {
+          "mode": "recovery",
+          "family": "spider-lady",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 170.84271844660194,
+          "position": [
+            -308.0833333333335,
+            56.337087378640774
+          ],
+          "scale": -1,
+          "anchorTop": 0.5,
+          "pose": "static"
+        }
+      ],
+      "mechanics": [
+        {
+          "skillId": "M10",
+          "phase": "windup"
+        },
+        {
+          "skillId": "M10",
+          "phase": "active"
+        },
+        {
+          "skillId": "M10",
+          "phase": "recovery"
+        }
+      ],
+      "death": {
+        "lowRemaining": false,
+        "highRemaining": false,
+        "kills": 1
+      },
+      "paused": true
+    },
+    {
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "archetype": "spider_elite_f5_w15_n4",
+      "fam": "spider-lady",
+      "floor": 5,
+      "direction": -1,
+      "authored": {
+        "role": "elite",
+        "rank": 4,
+        "name": "绛丝",
+        "skills": [
+          "M10"
+        ]
+      },
+      "labels": [
+        "绛丝 · 4阶  99999/100000"
+      ],
+      "movement": {
+        "x0": 360,
+        "x1": 312.3333333333335,
+        "mode": "approach"
+      },
+      "moving": {
+        "family": "spider-lady",
+        "frame": [
+          480,
+          480
+        ],
+        "texture": [
+          1920,
+          1920
+        ],
+        "size": 170.84271844660194,
+        "position": [
+          312.3333333333335,
+          -12
+        ],
+        "scale": 1,
+        "anchorTop": 0.9,
+        "pose": "move-005"
+      },
+      "loop": [
+        "move-000",
+        "move-001",
+        "move-002",
+        "move-003",
+        "move-004",
+        "move-005",
+        "move-006",
+        "move-007",
+        "move-008",
+        "move-009",
+        "move-010",
+        "move-011",
+        "move-012",
+        "move-013",
+        "move-014",
+        "move-015",
+        "move-000"
+      ],
+      "combat": [
+        {
+          "mode": "windup",
+          "family": "spider-lady",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 170.84271844660194,
+          "position": [
+            316.5833333333335,
+            56.337087378640774
+          ],
+          "scale": 1,
+          "anchorTop": 0.5,
+          "pose": "static"
+        },
+        {
+          "mode": "active",
+          "family": "spider-lady",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 170.84271844660194,
+          "position": [
+            316.5833333333335,
+            56.337087378640774
+          ],
+          "scale": 1,
+          "anchorTop": 0.5,
+          "pose": "static"
+        },
+        {
+          "mode": "recovery",
+          "family": "spider-lady",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 170.84271844660194,
+          "position": [
+            316.5833333333335,
+            56.337087378640774
+          ],
+          "scale": 1,
+          "anchorTop": 0.5,
+          "pose": "static"
+        }
+      ],
+      "mechanics": [
+        {
+          "skillId": "M10",
+          "phase": "windup"
+        },
+        {
+          "skillId": "M10",
+          "phase": "active"
+        },
+        {
+          "skillId": "M10",
+          "phase": "recovery"
+        }
+      ],
+      "death": {
+        "lowRemaining": false,
+        "highRemaining": false,
+        "kills": 1
+      },
+      "paused": true
+    },
+    {
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "archetype": "snake_boss",
+      "fam": "snake-lady",
+      "floor": 5,
+      "direction": 1,
+      "authored": {
+        "role": "boss",
+        "rank": 5,
+        "name": "赤鳞蟒王",
+        "skills": [
+          "M03",
+          "M16",
+          "M11"
+        ]
+      },
+      "labels": [
+        "赤鳞蟒王 · 5阶  99999/100000"
+      ],
+      "movement": {
+        "x0": -360,
+        "x1": -305,
+        "mode": "approach"
+      },
+      "moving": {
+        "family": "snake-lady",
+        "frame": [
+          480,
+          480
+        ],
+        "texture": [
+          1920,
+          1920
+        ],
+        "size": 245.2380582524272,
+        "position": [
+          -305,
+          -12
+        ],
+        "scale": -1,
+        "anchorTop": 0.9,
+        "pose": "move-001"
+      },
+      "loop": [
+        "move-000",
+        "move-001",
+        "move-002",
+        "move-003",
+        "move-004",
+        "move-005",
+        "move-006",
+        "move-007",
+        "move-008",
+        "move-009",
+        "move-010",
+        "move-011",
+        "move-012",
+        "move-013",
+        "move-014",
+        "move-015",
+        "move-000"
+      ],
+      "combat": [
+        {
+          "mode": "windup",
+          "family": "snake-lady",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 245.2380582524272,
+          "position": [
+            -300.75,
+            -12
+          ],
+          "scale": -1,
+          "anchorTop": 0.9,
+          "pose": "static"
+        },
+        {
+          "mode": "active",
+          "family": "snake-lady",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 245.2380582524272,
+          "position": [
+            -300.75,
+            -12
+          ],
+          "scale": -1,
+          "anchorTop": 0.9,
+          "pose": "static"
+        },
+        {
+          "mode": "recovery",
+          "family": "snake-lady",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 245.2380582524272,
+          "position": [
+            -300.75,
+            -12
+          ],
+          "scale": -1,
+          "anchorTop": 0.9,
+          "pose": "static"
+        }
+      ],
+      "mechanics": [
+        {
+          "skillId": "M03",
+          "phase": "windup"
+        },
+        {
+          "skillId": "M03",
+          "phase": "active"
+        },
+        {
+          "skillId": "M03",
+          "phase": "recovery"
+        },
+        {
+          "skillId": "M16",
+          "phase": "windup"
+        },
+        {
+          "skillId": "M16",
+          "phase": "active"
+        },
+        {
+          "skillId": "M16",
+          "phase": "recovery"
+        },
+        {
+          "skillId": "M11",
+          "phase": "windup"
+        },
+        {
+          "skillId": "M11",
+          "phase": "active"
+        },
+        {
+          "skillId": "M11",
+          "phase": "recovery"
+        }
+      ],
+      "death": {
+        "lowRemaining": false,
+        "highRemaining": false,
+        "kills": 1
+      },
+      "paused": true
+    },
+    {
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "archetype": "snake_boss",
+      "fam": "snake-lady",
+      "floor": 5,
+      "direction": -1,
+      "authored": {
+        "role": "boss",
+        "rank": 5,
+        "name": "赤鳞蟒王",
+        "skills": [
+          "M03",
+          "M16",
+          "M11"
+        ]
+      },
+      "labels": [
+        "赤鳞蟒王 · 5阶  99999/100000"
+      ],
+      "movement": {
+        "x0": 360,
+        "x1": 305,
+        "mode": "approach"
+      },
+      "moving": {
+        "family": "snake-lady",
+        "frame": [
+          480,
+          480
+        ],
+        "texture": [
+          1920,
+          1920
+        ],
+        "size": 245.2380582524272,
+        "position": [
+          305,
+          -12
+        ],
+        "scale": 1,
+        "anchorTop": 0.9,
+        "pose": "move-001"
+      },
+      "loop": [
+        "move-000",
+        "move-001",
+        "move-002",
+        "move-003",
+        "move-004",
+        "move-005",
+        "move-006",
+        "move-007",
+        "move-008",
+        "move-009",
+        "move-010",
+        "move-011",
+        "move-012",
+        "move-013",
+        "move-014",
+        "move-015",
+        "move-000"
+      ],
+      "combat": [
+        {
+          "mode": "windup",
+          "family": "snake-lady",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 245.2380582524272,
+          "position": [
+            309.25,
+            -12
+          ],
+          "scale": 1,
+          "anchorTop": 0.9,
+          "pose": "static"
+        },
+        {
+          "mode": "active",
+          "family": "snake-lady",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 245.2380582524272,
+          "position": [
+            309.25,
+            -12
+          ],
+          "scale": 1,
+          "anchorTop": 0.9,
+          "pose": "static"
+        },
+        {
+          "mode": "recovery",
+          "family": "snake-lady",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 245.2380582524272,
+          "position": [
+            309.25,
+            -12
+          ],
+          "scale": 1,
+          "anchorTop": 0.9,
+          "pose": "static"
+        }
+      ],
+      "mechanics": [
+        {
+          "skillId": "M03",
+          "phase": "windup"
+        },
+        {
+          "skillId": "M03",
+          "phase": "active"
+        },
+        {
+          "skillId": "M03",
+          "phase": "recovery"
+        },
+        {
+          "skillId": "M16",
+          "phase": "windup"
+        },
+        {
+          "skillId": "M16",
+          "phase": "active"
+        },
+        {
+          "skillId": "M16",
+          "phase": "recovery"
+        },
+        {
+          "skillId": "M11",
+          "phase": "windup"
+        },
+        {
+          "skillId": "M11",
+          "phase": "active"
+        },
+        {
+          "skillId": "M11",
+          "phase": "recovery"
+        }
+      ],
+      "death": {
+        "lowRemaining": false,
+        "highRemaining": false,
+        "kills": 1
+      },
+      "paused": true
+    },
+    {
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "archetype": "snake_normal_r4",
+      "fam": "snake-lady",
+      "floor": 8,
+      "direction": 1,
+      "authored": {
+        "role": "normal",
+        "rank": 4,
+        "name": "赤鳞蛇姬",
+        "skills": []
+      },
+      "labels": [
+        "赤鳞蛇姬 · 4阶  99999/100000"
+      ],
+      "movement": {
+        "x0": -360,
+        "x1": -305,
+        "mode": "approach"
+      },
+      "moving": {
+        "family": "snake-lady",
+        "frame": [
+          480,
+          480
+        ],
+        "texture": [
+          1920,
+          1920
+        ],
+        "size": 102.89708737864078,
+        "position": [
+          -305,
+          -12
+        ],
+        "scale": -1,
+        "anchorTop": 0.9,
+        "pose": "move-001"
+      },
+      "loop": [
+        "move-000",
+        "move-001",
+        "move-002",
+        "move-003",
+        "move-004",
+        "move-005",
+        "move-006",
+        "move-007",
+        "move-008",
+        "move-009",
+        "move-010",
+        "move-011",
+        "move-012",
+        "move-013",
+        "move-014",
+        "move-015",
+        "move-000"
+      ],
+      "combat": [
+        {
+          "mode": "windup",
+          "family": "snake-lady",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 102.89708737864078,
+          "position": [
+            -300.75,
+            -12
+          ],
+          "scale": -1,
+          "anchorTop": 0.9,
+          "pose": "static"
+        },
+        {
+          "mode": "active",
+          "family": "snake-lady",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 102.89708737864078,
+          "position": [
+            -300.75,
+            -12
+          ],
+          "scale": -1,
+          "anchorTop": 0.9,
+          "pose": "static"
+        },
+        {
+          "mode": "recovery",
+          "family": "snake-lady",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 102.89708737864078,
+          "position": [
+            -300.75,
+            -12
+          ],
+          "scale": -1,
+          "anchorTop": 0.9,
+          "pose": "static"
+        }
+      ],
+      "mechanics": [],
+      "death": {
+        "lowRemaining": false,
+        "highRemaining": false,
+        "kills": 1
+      },
+      "paused": true
+    },
+    {
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "archetype": "snake_normal_r4",
+      "fam": "snake-lady",
+      "floor": 8,
+      "direction": -1,
+      "authored": {
+        "role": "normal",
+        "rank": 4,
+        "name": "赤鳞蛇姬",
+        "skills": []
+      },
+      "labels": [
+        "赤鳞蛇姬 · 4阶  99999/100000"
+      ],
+      "movement": {
+        "x0": 360,
+        "x1": 305,
+        "mode": "approach"
+      },
+      "moving": {
+        "family": "snake-lady",
+        "frame": [
+          480,
+          480
+        ],
+        "texture": [
+          1920,
+          1920
+        ],
+        "size": 102.89708737864078,
+        "position": [
+          305,
+          -12
+        ],
+        "scale": 1,
+        "anchorTop": 0.9,
+        "pose": "move-001"
+      },
+      "loop": [
+        "move-000",
+        "move-001",
+        "move-002",
+        "move-003",
+        "move-004",
+        "move-005",
+        "move-006",
+        "move-007",
+        "move-008",
+        "move-009",
+        "move-010",
+        "move-011",
+        "move-012",
+        "move-013",
+        "move-014",
+        "move-015",
+        "move-000"
+      ],
+      "combat": [
+        {
+          "mode": "windup",
+          "family": "snake-lady",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 102.89708737864078,
+          "position": [
+            309.25,
+            -12
+          ],
+          "scale": 1,
+          "anchorTop": 0.9,
+          "pose": "static"
+        },
+        {
+          "mode": "active",
+          "family": "snake-lady",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 102.89708737864078,
+          "position": [
+            309.25,
+            -12
+          ],
+          "scale": 1,
+          "anchorTop": 0.9,
+          "pose": "static"
+        },
+        {
+          "mode": "recovery",
+          "family": "snake-lady",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 102.89708737864078,
+          "position": [
+            309.25,
+            -12
+          ],
+          "scale": 1,
+          "anchorTop": 0.9,
+          "pose": "static"
+        }
+      ],
+      "mechanics": [],
+      "death": {
+        "lowRemaining": false,
+        "highRemaining": false,
+        "kills": 1
+      },
+      "paused": true
+    },
+    {
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "archetype": "snake_elite_f8_w10_n2",
+      "fam": "snake-lady",
+      "floor": 8,
+      "direction": 1,
+      "authored": {
+        "role": "elite",
+        "rank": 4,
+        "name": "绯冠",
+        "skills": [
+          "M07"
+        ]
+      },
+      "labels": [
+        "绯冠 · 4阶  99999/100000"
+      ],
+      "movement": {
+        "x0": -360,
+        "x1": -305,
+        "mode": "approach"
+      },
+      "moving": {
+        "family": "snake-lady",
+        "frame": [
+          480,
+          480
+        ],
+        "texture": [
+          1920,
+          1920
+        ],
+        "size": 167.20776699029128,
+        "position": [
+          -305,
+          -12
+        ],
+        "scale": -1,
+        "anchorTop": 0.9,
+        "pose": "move-001"
+      },
+      "loop": [
+        "move-000",
+        "move-001",
+        "move-002",
+        "move-003",
+        "move-004",
+        "move-005",
+        "move-006",
+        "move-007",
+        "move-008",
+        "move-009",
+        "move-010",
+        "move-011",
+        "move-012",
+        "move-013",
+        "move-014",
+        "move-015",
+        "move-000"
+      ],
+      "combat": [
+        {
+          "mode": "windup",
+          "family": "snake-lady",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 167.20776699029128,
+          "position": [
+            -300.75,
+            -12
+          ],
+          "scale": -1,
+          "anchorTop": 0.9,
+          "pose": "static"
+        },
+        {
+          "mode": "active",
+          "family": "snake-lady",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 167.20776699029128,
+          "position": [
+            -300.75,
+            -12
+          ],
+          "scale": -1,
+          "anchorTop": 0.9,
+          "pose": "static"
+        },
+        {
+          "mode": "recovery",
+          "family": "snake-lady",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 167.20776699029128,
+          "position": [
+            -300.75,
+            -12
+          ],
+          "scale": -1,
+          "anchorTop": 0.9,
+          "pose": "static"
+        }
+      ],
+      "mechanics": [
+        {
+          "skillId": "M07",
+          "phase": "windup"
+        },
+        {
+          "skillId": "M07",
+          "phase": "active"
+        },
+        {
+          "skillId": "M07",
+          "phase": "recovery"
+        }
+      ],
+      "death": {
+        "lowRemaining": false,
+        "highRemaining": false,
+        "kills": 1
+      },
+      "paused": true
+    },
+    {
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "archetype": "snake_elite_f8_w10_n2",
+      "fam": "snake-lady",
+      "floor": 8,
+      "direction": -1,
+      "authored": {
+        "role": "elite",
+        "rank": 4,
+        "name": "绯冠",
+        "skills": [
+          "M07"
+        ]
+      },
+      "labels": [
+        "绯冠 · 4阶  99999/100000"
+      ],
+      "movement": {
+        "x0": 360,
+        "x1": 305,
+        "mode": "approach"
+      },
+      "moving": {
+        "family": "snake-lady",
+        "frame": [
+          480,
+          480
+        ],
+        "texture": [
+          1920,
+          1920
+        ],
+        "size": 167.20776699029128,
+        "position": [
+          305,
+          -12
+        ],
+        "scale": 1,
+        "anchorTop": 0.9,
+        "pose": "move-001"
+      },
+      "loop": [
+        "move-000",
+        "move-001",
+        "move-002",
+        "move-003",
+        "move-004",
+        "move-005",
+        "move-006",
+        "move-007",
+        "move-008",
+        "move-009",
+        "move-010",
+        "move-011",
+        "move-012",
+        "move-013",
+        "move-014",
+        "move-015",
+        "move-000"
+      ],
+      "combat": [
+        {
+          "mode": "windup",
+          "family": "snake-lady",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 167.20776699029128,
+          "position": [
+            309.25,
+            -12
+          ],
+          "scale": 1,
+          "anchorTop": 0.9,
+          "pose": "static"
+        },
+        {
+          "mode": "active",
+          "family": "snake-lady",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 167.20776699029128,
+          "position": [
+            309.25,
+            -12
+          ],
+          "scale": 1,
+          "anchorTop": 0.9,
+          "pose": "static"
+        },
+        {
+          "mode": "recovery",
+          "family": "snake-lady",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 167.20776699029128,
+          "position": [
+            309.25,
+            -12
+          ],
+          "scale": 1,
+          "anchorTop": 0.9,
+          "pose": "static"
+        }
+      ],
+      "mechanics": [
+        {
+          "skillId": "M07",
+          "phase": "windup"
+        },
+        {
+          "skillId": "M07",
+          "phase": "active"
+        },
+        {
+          "skillId": "M07",
+          "phase": "recovery"
+        }
+      ],
+      "death": {
+        "lowRemaining": false,
+        "highRemaining": false,
+        "kills": 1
+      },
+      "paused": true
+    },
+    {
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "archetype": "bat_normal_r4",
+      "fam": "bat-humanoid",
+      "floor": 4,
+      "direction": 1,
+      "authored": {
+        "role": "normal",
+        "rank": 4,
+        "name": "摄魂蝠妖",
+        "skills": []
+      },
+      "labels": [
+        "摄魂蝠妖 · 4阶  99999/100000"
+      ],
+      "movement": {
+        "x0": -360,
+        "x1": -286.468776273065,
+        "mode": "approach"
+      },
+      "moving": {
+        "family": "bat-humanoid",
+        "frame": [
+          480,
+          480
+        ],
+        "texture": [
+          1920,
+          1920
+        ],
+        "size": 110.04878048780488,
+        "position": [
+          -286.468776273065,
+          -34.78372783489582
+        ],
+        "scale": -1,
+        "anchorTop": 0.9,
+        "pose": "move-008"
+      },
+      "loop": [
+        "move-000",
+        "move-001",
+        "move-002",
+        "move-003",
+        "move-004",
+        "move-005",
+        "move-006",
+        "move-007",
+        "move-008",
+        "move-009",
+        "move-010",
+        "move-011",
+        "move-012",
+        "move-013",
+        "move-014",
+        "move-015",
+        "move-000"
+      ],
+      "combat": [
+        {
+          "mode": "windup",
+          "family": "bat-humanoid",
+          "frame": [
+            512,
+            512
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 110.04878048780488,
+          "position": [
+            -282.218776273065,
+            -34.78372783489582
+          ],
+          "scale": -1,
+          "anchorTop": 0.9,
+          "pose": "static"
+        },
+        {
+          "mode": "active",
+          "family": "bat-humanoid",
+          "frame": [
+            512,
+            512
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 110.04878048780488,
+          "position": [
+            -282.218776273065,
+            -34.78372783489582
+          ],
+          "scale": -1,
+          "anchorTop": 0.9,
+          "pose": "static"
+        },
+        {
+          "mode": "recovery",
+          "family": "bat-humanoid",
+          "frame": [
+            512,
+            512
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 110.04878048780488,
+          "position": [
+            -282.218776273065,
+            -34.78372783489582
+          ],
+          "scale": -1,
+          "anchorTop": 0.9,
+          "pose": "static"
+        }
+      ],
+      "mechanics": [],
+      "death": {
+        "lowRemaining": false,
+        "highRemaining": false,
+        "kills": 1
+      },
+      "paused": true
+    },
+    {
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "archetype": "bat_normal_r4",
+      "fam": "bat-humanoid",
+      "floor": 4,
+      "direction": -1,
+      "authored": {
+        "role": "normal",
+        "rank": 4,
+        "name": "摄魂蝠妖",
+        "skills": []
+      },
+      "labels": [
+        "摄魂蝠妖 · 4阶  99999/100000"
+      ],
+      "movement": {
+        "x0": 360,
+        "x1": 286.468776273065,
+        "mode": "approach"
+      },
+      "moving": {
+        "family": "bat-humanoid",
+        "frame": [
+          480,
+          480
+        ],
+        "texture": [
+          1920,
+          1920
+        ],
+        "size": 110.04878048780488,
+        "position": [
+          286.468776273065,
+          10.78372783489582
+        ],
+        "scale": 1,
+        "anchorTop": 0.9,
+        "pose": "move-008"
+      },
+      "loop": [
+        "move-000",
+        "move-001",
+        "move-002",
+        "move-003",
+        "move-004",
+        "move-005",
+        "move-006",
+        "move-007",
+        "move-008",
+        "move-009",
+        "move-010",
+        "move-011",
+        "move-012",
+        "move-013",
+        "move-014",
+        "move-015",
+        "move-000"
+      ],
+      "combat": [
+        {
+          "mode": "windup",
+          "family": "bat-humanoid",
+          "frame": [
+            512,
+            512
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 110.04878048780488,
+          "position": [
+            290.718776273065,
+            10.78372783489582
+          ],
+          "scale": 1,
+          "anchorTop": 0.9,
+          "pose": "static"
+        },
+        {
+          "mode": "active",
+          "family": "bat-humanoid",
+          "frame": [
+            512,
+            512
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 110.04878048780488,
+          "position": [
+            290.718776273065,
+            10.78372783489582
+          ],
+          "scale": 1,
+          "anchorTop": 0.9,
+          "pose": "static"
+        },
+        {
+          "mode": "recovery",
+          "family": "bat-humanoid",
+          "frame": [
+            512,
+            512
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 110.04878048780488,
+          "position": [
+            290.718776273065,
+            10.78372783489582
+          ],
+          "scale": 1,
+          "anchorTop": 0.9,
+          "pose": "static"
+        }
+      ],
+      "mechanics": [],
+      "death": {
+        "lowRemaining": false,
+        "highRemaining": false,
+        "kills": 1
+      },
+      "paused": true
+    },
+    {
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "archetype": "bat_elite_f4_w15_n4",
+      "fam": "bat-humanoid",
+      "floor": 4,
+      "direction": 1,
+      "authored": {
+        "role": "elite",
+        "rank": 4,
+        "name": "噬声",
+        "skills": [
+          "M07"
+        ]
+      },
+      "labels": [
+        "噬声 · 4阶  99999/100000"
+      ],
+      "movement": {
+        "x0": -360,
+        "x1": -300,
+        "mode": "approach"
+      },
+      "moving": {
+        "family": "bat-humanoid",
+        "frame": [
+          480,
+          480
+        ],
+        "texture": [
+          1920,
+          1920
+        ],
+        "size": 178.8292682926829,
+        "position": [
+          -300,
+          -12
+        ],
+        "scale": -1,
+        "anchorTop": 0.9,
+        "pose": "move-008"
+      },
+      "loop": [
+        "move-000",
+        "move-001",
+        "move-002",
+        "move-003",
+        "move-004",
+        "move-005",
+        "move-006",
+        "move-007",
+        "move-008",
+        "move-009",
+        "move-010",
+        "move-011",
+        "move-012",
+        "move-013",
+        "move-014",
+        "move-015",
+        "move-000"
+      ],
+      "combat": [
+        {
+          "mode": "windup",
+          "family": "bat-humanoid",
+          "frame": [
+            512,
+            512
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 178.8292682926829,
+          "position": [
+            -295.75,
+            -12
+          ],
+          "scale": -1,
+          "anchorTop": 0.9,
+          "pose": "static"
+        },
+        {
+          "mode": "active",
+          "family": "bat-humanoid",
+          "frame": [
+            512,
+            512
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 178.8292682926829,
+          "position": [
+            -295.75,
+            -12
+          ],
+          "scale": -1,
+          "anchorTop": 0.9,
+          "pose": "static"
+        },
+        {
+          "mode": "recovery",
+          "family": "bat-humanoid",
+          "frame": [
+            512,
+            512
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 178.8292682926829,
+          "position": [
+            -295.75,
+            -12
+          ],
+          "scale": -1,
+          "anchorTop": 0.9,
+          "pose": "static"
+        }
+      ],
+      "mechanics": [
+        {
+          "skillId": "M07",
+          "phase": "windup"
+        },
+        {
+          "skillId": "M07",
+          "phase": "active"
+        },
+        {
+          "skillId": "M07",
+          "phase": "recovery"
+        }
+      ],
+      "death": {
+        "lowRemaining": false,
+        "highRemaining": false,
+        "kills": 1
+      },
+      "paused": true
+    },
+    {
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "archetype": "bat_elite_f4_w15_n4",
+      "fam": "bat-humanoid",
+      "floor": 4,
+      "direction": -1,
+      "authored": {
+        "role": "elite",
+        "rank": 4,
+        "name": "噬声",
+        "skills": [
+          "M07"
+        ]
+      },
+      "labels": [
+        "噬声 · 4阶  99999/100000"
+      ],
+      "movement": {
+        "x0": 360,
+        "x1": 300,
+        "mode": "approach"
+      },
+      "moving": {
+        "family": "bat-humanoid",
+        "frame": [
+          480,
+          480
+        ],
+        "texture": [
+          1920,
+          1920
+        ],
+        "size": 178.8292682926829,
+        "position": [
+          300,
+          -12
+        ],
+        "scale": 1,
+        "anchorTop": 0.9,
+        "pose": "move-008"
+      },
+      "loop": [
+        "move-000",
+        "move-001",
+        "move-002",
+        "move-003",
+        "move-004",
+        "move-005",
+        "move-006",
+        "move-007",
+        "move-008",
+        "move-009",
+        "move-010",
+        "move-011",
+        "move-012",
+        "move-013",
+        "move-014",
+        "move-015",
+        "move-000"
+      ],
+      "combat": [
+        {
+          "mode": "windup",
+          "family": "bat-humanoid",
+          "frame": [
+            512,
+            512
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 178.8292682926829,
+          "position": [
+            304.25,
+            -12
+          ],
+          "scale": 1,
+          "anchorTop": 0.9,
+          "pose": "static"
+        },
+        {
+          "mode": "active",
+          "family": "bat-humanoid",
+          "frame": [
+            512,
+            512
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 178.8292682926829,
+          "position": [
+            304.25,
+            -12
+          ],
+          "scale": 1,
+          "anchorTop": 0.9,
+          "pose": "static"
+        },
+        {
+          "mode": "recovery",
+          "family": "bat-humanoid",
+          "frame": [
+            512,
+            512
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 178.8292682926829,
+          "position": [
+            304.25,
+            -12
+          ],
+          "scale": 1,
+          "anchorTop": 0.9,
+          "pose": "static"
+        }
+      ],
+      "mechanics": [
+        {
+          "skillId": "M07",
+          "phase": "windup"
+        },
+        {
+          "skillId": "M07",
+          "phase": "active"
+        },
+        {
+          "skillId": "M07",
+          "phase": "recovery"
+        }
+      ],
+      "death": {
+        "lowRemaining": false,
+        "highRemaining": false,
+        "kills": 1
+      },
+      "paused": true
+    },
+    {
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "archetype": "bat_elite_f6_w15_n4",
+      "fam": "bat-humanoid",
+      "floor": 6,
+      "direction": 1,
+      "authored": {
+        "role": "elite",
+        "rank": 5,
+        "name": "摄魂",
+        "skills": [
+          "M07"
+        ]
+      },
+      "labels": [
+        "摄魂 · 5阶  99999/100000"
+      ],
+      "movement": {
+        "x0": -360,
+        "x1": -300,
+        "mode": "approach"
+      },
+      "moving": {
+        "family": "bat-humanoid",
+        "frame": [
+          480,
+          480
+        ],
+        "texture": [
+          1920,
+          1920
+        ],
+        "size": 178.8292682926829,
+        "position": [
+          -300,
+          -12
+        ],
+        "scale": -1,
+        "anchorTop": 0.9,
+        "pose": "move-008"
+      },
+      "loop": [
+        "move-000",
+        "move-001",
+        "move-002",
+        "move-003",
+        "move-004",
+        "move-005",
+        "move-006",
+        "move-007",
+        "move-008",
+        "move-009",
+        "move-010",
+        "move-011",
+        "move-012",
+        "move-013",
+        "move-014",
+        "move-015",
+        "move-000"
+      ],
+      "combat": [
+        {
+          "mode": "windup",
+          "family": "bat-humanoid",
+          "frame": [
+            512,
+            512
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 178.8292682926829,
+          "position": [
+            -295.75,
+            -12
+          ],
+          "scale": -1,
+          "anchorTop": 0.9,
+          "pose": "static"
+        },
+        {
+          "mode": "active",
+          "family": "bat-humanoid",
+          "frame": [
+            512,
+            512
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 178.8292682926829,
+          "position": [
+            -295.75,
+            -12
+          ],
+          "scale": -1,
+          "anchorTop": 0.9,
+          "pose": "static"
+        },
+        {
+          "mode": "recovery",
+          "family": "bat-humanoid",
+          "frame": [
+            512,
+            512
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 178.8292682926829,
+          "position": [
+            -295.75,
+            -12
+          ],
+          "scale": -1,
+          "anchorTop": 0.9,
+          "pose": "static"
+        }
+      ],
+      "mechanics": [
+        {
+          "skillId": "M07",
+          "phase": "windup"
+        },
+        {
+          "skillId": "M07",
+          "phase": "active"
+        },
+        {
+          "skillId": "M07",
+          "phase": "recovery"
+        }
+      ],
+      "death": {
+        "lowRemaining": false,
+        "highRemaining": false,
+        "kills": 1
+      },
+      "paused": true
+    },
+    {
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "archetype": "bat_elite_f6_w15_n4",
+      "fam": "bat-humanoid",
+      "floor": 6,
+      "direction": -1,
+      "authored": {
+        "role": "elite",
+        "rank": 5,
+        "name": "摄魂",
+        "skills": [
+          "M07"
+        ]
+      },
+      "labels": [
+        "摄魂 · 5阶  99999/100000"
+      ],
+      "movement": {
+        "x0": 360,
+        "x1": 300,
+        "mode": "approach"
+      },
+      "moving": {
+        "family": "bat-humanoid",
+        "frame": [
+          480,
+          480
+        ],
+        "texture": [
+          1920,
+          1920
+        ],
+        "size": 178.8292682926829,
+        "position": [
+          300,
+          -12
+        ],
+        "scale": 1,
+        "anchorTop": 0.9,
+        "pose": "move-008"
+      },
+      "loop": [
+        "move-000",
+        "move-001",
+        "move-002",
+        "move-003",
+        "move-004",
+        "move-005",
+        "move-006",
+        "move-007",
+        "move-008",
+        "move-009",
+        "move-010",
+        "move-011",
+        "move-012",
+        "move-013",
+        "move-014",
+        "move-015",
+        "move-000"
+      ],
+      "combat": [
+        {
+          "mode": "windup",
+          "family": "bat-humanoid",
+          "frame": [
+            512,
+            512
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 178.8292682926829,
+          "position": [
+            304.25,
+            -12
+          ],
+          "scale": 1,
+          "anchorTop": 0.9,
+          "pose": "static"
+        },
+        {
+          "mode": "active",
+          "family": "bat-humanoid",
+          "frame": [
+            512,
+            512
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 178.8292682926829,
+          "position": [
+            304.25,
+            -12
+          ],
+          "scale": 1,
+          "anchorTop": 0.9,
+          "pose": "static"
+        },
+        {
+          "mode": "recovery",
+          "family": "bat-humanoid",
+          "frame": [
+            512,
+            512
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 178.8292682926829,
+          "position": [
+            304.25,
+            -12
+          ],
+          "scale": 1,
+          "anchorTop": 0.9,
+          "pose": "static"
+        }
+      ],
+      "mechanics": [
+        {
+          "skillId": "M07",
+          "phase": "windup"
+        },
+        {
+          "skillId": "M07",
+          "phase": "active"
+        },
+        {
+          "skillId": "M07",
+          "phase": "recovery"
+        }
+      ],
+      "death": {
+        "lowRemaining": false,
+        "highRemaining": false,
+        "kills": 1
+      },
+      "paused": true
+    }
+  ],
+  "errors": [],
+  "fixture": "Real compiled Cocos renderer with smoke in-memory storage; authored archetypes, no roster edits.",
+  "status": "PASS"
+}

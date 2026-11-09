@@ -1,0 +1,29 @@
+{
+  "status": "prepared_waiting_quota",
+  "date": "2026-11-06",
+  "why": "Procedural deformation preview (design/xianxia-low-bite-procedural/bear-humanoid) was rejected by the user on 2026-11-06: far below expectations, no arm motion.",
+  "scope": "bear-humanoid ordinary attack: normal bite+slam, elite and floor-6 boss slam only (124 placements). One clip reused for slam and bite like the low-rank bear. Mechanics M04/M07/M09/M02 keep their current presentation.",
+  "reference": {
+    "file": "../xianxia-bear-humanoid-walk-scenario/reference-green.png",
+    "assetId": "asset_5nXhj1vCDLrQWmom2Lvep7rc",
+    "bbox1024": {"x": [224, 798], "y": [102, 921]},
+    "note": "Same reference as the accepted walk, so the clip shares the walk scale and feet line (no displayScale). Left margin 22%, top 10%: the prompt keeps the fists at about head height instead of fully overhead to avoid top clipping."
+  },
+  "dryRun": {"creativeUnitsCost": 10},
+  "modelId": "model_pruna-p-video-2-pro",
+  "parameters": {
+    "image": "asset_5nXhj1vCDLrQWmom2Lvep7rc",
+    "lastFrameImage": "asset_5nXhj1vCDLrQWmom2Lvep7rc",
+    "duration": 5,
+    "resolution": "480p",
+    "mode": "cost",
+    "promptUpsampler": "off",
+    "seed": 202611073,
+    "prompt": "The exact upright brown bear warrior in the reference performs ONE ordinary ground slam, staying in place on its two planted feet. From the resting pose it slowly raises both clawed fists to about head height and leans back slightly, then makes one fast heavy downward smash with both fists in front of its body toward screen left, bending its knees as the fists hit the ground, then straightens and calmly returns to the exact original standing pose and holds it. Exactly two arms and two legs, both feet stay planted. Keep the same three-quarter left view, bear head, fur, shoulder armor, bracers, belt and kilt. Fixed camera, fixed size, pure uniform bright green #00FF00 background. The whole character and both fists stay inside the frame with clear margins at all times. No leap, walking, turning, second attack, extra limbs, weapon, dust, rocks, particles, shadow or text. Motion beats: first second prepare, second second raise the fists, a brief smash around the middle, then recover and hold the original pose."
+  },
+  "nextSteps": [
+    "After 08:00 Beijing: check usage, submit together with the snake bite (max 2 parallel).",
+    "Export like design/xianxia-humanoid-attacks-2026-11-06/export.py: green key, feet at y=432, no scaling, 20-frame slam clip 9/3/8, walk frames byte-identical.",
+    "Route bear-humanoid slam+bite to the clip in TowerMonsterArt.ts; verify normal, elite and floor-6 boss in game."
+  ]
+}

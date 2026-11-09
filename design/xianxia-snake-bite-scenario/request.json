@@ -1,0 +1,29 @@
+{
+  "status": "prepared_waiting_quota",
+  "date": "2026-11-06",
+  "scope": "Low-rank beast snake (art_family=snake) ordinary bite only. 316 placements. Not snake-lady. shot keeps the still portrait (emissionLandmark).",
+  "quotaAtPrep": "Scenario 50/50 CU used on 2026-11-06 (Beijing); resets 2026-11-07 08:00 Beijing. Nothing submitted.",
+  "reference": {
+    "source": "design/xianxia-snake-walk-meowa/v2-scenario/reference-green-padded.png (accepted walk v2 reference, asset_Ed1mG7dJu5orvgX8JELepNWS)",
+    "file": "reference-green-leftpad.png",
+    "sha256_16": "0c24386647d4a62f",
+    "assetId": "asset_zH9DimfALdCi84zTenwg28ii",
+    "edit": "Same 1024 canvas shifted 120 px right on #00FF00: subject x 153-726 -> 273-846, left margin for the head strike, tail keeps 178 px on the right. Scale unchanged, so walk displayScale/anchor stay valid. No redraw."
+  },
+  "modelId": "model_pruna-p-video-2-pro",
+  "parameters": {
+    "image": "asset_zH9DimfALdCi84zTenwg28ii",
+    "lastFrameImage": "asset_zH9DimfALdCi84zTenwg28ii",
+    "duration": 5,
+    "resolution": "480p",
+    "mode": "cost",
+    "promptUpsampler": "off",
+    "seed": 202611072,
+    "prompt": "The exact coiled brown demonic snake in the reference performs ONE ordinary bite strike, staying in place. From the resting pose it slowly draws its raised head and neck back into an S curve and opens its jaws, then makes one fast short strike forward and slightly downward toward screen left with a snapping bite, then pulls the neck back and calmly returns to the exact original raised pose and holds it. The coiled body stays on the ground and does not slide; the tail stays curled on the right and only twitches slightly, never straightening. One head, no limbs. Keep the same three-quarter left view, scale pattern, pale belly scales and red eye. Fixed camera, fixed size, pure uniform bright green #00FF00 background. The whole snake, the striking head and the tail tip stay inside the frame with clear margins at all times. No slithering, turning, second strike, extra heads, venom, particles, trails, shadow or text. Motion beats: first second rest, second second draw back, a brief strike around the middle, then recover and hold the original pose."
+  },
+  "nextSteps": [
+    "Dry-run, then submit together with the bat bite (2 parallel max).",
+    "Export like design/xianxia-snake-walk-meowa/v2-scenario/export.py (same displayScale/anchor); 20-frame bite clip 9/3/8; keep the walk frames byte-identical.",
+    "Known walk issue to keep in the record: tail straightens mid-loop."
+  ]
+}

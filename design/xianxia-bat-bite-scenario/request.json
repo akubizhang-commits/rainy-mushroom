@@ -1,0 +1,33 @@
+{
+  "status": "not_needed_superseded",
+  "supersededBy": "design/xianxia-bat-bite-procedural (zero-cost procedural lunge, user approved variant B and it is integrated). Do not submit this job. The uploaded reference asset stays for possible reuse.",
+  "date": "2026-11-06",
+  "scope": "Low-rank beast bat (art_family=bat) ordinary bite only. 348 placements. Not bat-humanoid. shot keeps the still portrait (emissionLandmark).",
+  "quotaAtPrep": "Scenario 50/50 CU used on 2026-11-06 (Beijing); resets 2026-11-07 08:00 Beijing. Meowa 0 (daily 10 already claimed today). Nothing submitted.",
+  "reference": {
+    "source": "design/xianxia-bat-actions-2026-11-01/review-01/reference-green.png (same mother art as the accepted flight, asset_ML5XxKqAk5YvwwzjvzKPon4i)",
+    "file": "reference-green-leftpad.png",
+    "sha256_16": "76493a583c688d12",
+    "assetId": "asset_KzTT52a3t8YmFNy7hL3yKHkr",
+    "edit": "1024 source pasted at (256,128) on a 1280x1280 #00FF00 canvas: left margin 112->368 px so the forward lunge and wing tips do not hit the left edge (known clipping issue from the humanoid attacks). No redraw.",
+    "scaleNote": "Subject is 0.8x of the flight reference in the 480 output. Integration must use one fixed displayScale per clip (1.25x relative to flight frames, re-measured on the delivered frames), never per-frame bbox scaling and never pixel upscaling."
+  },
+  "dryRun": {"creativeUnitsCost": 10},
+  "modelId": "model_pruna-p-video-2-pro",
+  "parameters": {
+    "image": "asset_KzTT52a3t8YmFNy7hL3yKHkr",
+    "lastFrameImage": "asset_KzTT52a3t8YmFNy7hL3yKHkr",
+    "duration": 5,
+    "resolution": "480p",
+    "mode": "cost",
+    "promptUpsampler": "off",
+    "seed": 202611071,
+    "prompt": "The exact demonic bat in the reference performs ONE ordinary bite attack while hovering. From the resting pose it keeps beating its wings, pulls its head and body slightly back and up, opens its jaws, then makes one fast short lunge forward and slightly downward toward screen left with a snapping bite, then flies back and calmly returns to the exact original hovering pose and position. Exactly two wings with their original finger bones and membranes, two hind feet, two ears, gray-purple body, dark red eyes. Same three-quarter front-left view. Fixed camera, fixed size, pure uniform bright green #00FF00 background. The whole bat, both wing tips and the lunging head stay inside the frame with clear margins at all times. No turning, traveling across the frame, second attack, extra limbs, particles, bite trails, blood, shadow or text. Motion beats: first second hover, second second wind up, a brief bite around the middle, then recover and hover in the original pose."
+  },
+  "nextSteps": [
+    "Re-check usage after 08:00 Beijing, then submit with wait=false (max 2 parallel).",
+    "Export: green key, 20-frame bite clip split windup 9 / active 3 / recovery 8 like design/xianxia-humanoid-attacks-2026-11-06/export.py; keep the 13 flight frames byte-identical; bat is airborne so anchor follows bat-v1.json (0.5,0.72), not feet y=432.",
+    "Route bat bite in TowerMonsterArt.ts motionFrame; copy the file here first as TowerMonsterArt.before.ts.",
+    "Check enemyAttackSpec for which bat archetypes actually bite (elite bat only shoots)."
+  ]
+}

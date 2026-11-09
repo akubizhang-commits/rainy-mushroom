@@ -1,3 +1,9 @@
+## 熊王 M09 掀浪已接入；明日 5 条技能请求已备好（2026-11-09 晚，Meowa 15 积分）
+熊王 M09 用 Meowa 生成，去掉了自带的土块和裂缝，12 帧接入，熊王三个技能都有动作了。定向测试 102/102，实机 8 组通过；全量测试 2398/2399，唯一失败是装备图鉴美术缺口，和怪物无关。明日请求在 design/xianxia-boss-skills-2026-11-10-prep/（牛魔王 M19、犀王 M20 架势、狼妖精英 M05、虎妖和隼妖精英 M07，共 50 CU）。详见 design/xianxia-boss-skills-2026-11-09b/README.md。
+## 熊王、犀王、牛魔王第一批技能动作已接入（2026-11-09，Scenario 40 CU）
+熊王 M07 重踏、M04 岩甲蛰伏，犀王 M07 重踏，牛魔王 M15 环形震波，各 16 帧，按技能阶段播放；M07/M15 没有 active 阶段，recovery 从冲击帧开始。其余技能仍是立绘。没有改玩法。定向测试 102/102 通过，构建成功，实机 24 组通过。图集最大 3840×4000，真机内存待验证。今日 Scenario 50/50 CU，Meowa 20 积分未动。详见 design/xianxia-boss-skills-2026-11-09/README.md。
+## 震岳犀王冲锋已接入（2026-11-09，Scenario 10 CU）
+犀王冲锋只通过 M06 裂岩冲锋（和开始冲锋后的 M20）出现，按技能阶段播放 20 帧冲锋片段，没有改玩法。定向测试 102/102 通过，构建成功，实机 8 组通过（M06 和 sweep 各 4 组）。普攻缺口已全部补齐。今日 Scenario 已用 10/50 CU，Meowa 20 积分未动。详见 design/xianxia-rhino-charge-2026-11-09/README.md。
 ## 赤鬃猪妖冲锋已接入（2026-11-08，Meowa 15 积分）
 charge 普攻播放 20 帧冲锋片段，bite 和 M06 不变。定向测试 102/102 通过，构建成功，实机 8 组通过（bite 和 charge 各 4 组）。图集变为 3840×3360（约 49 MiB），微信真机内存待验证。今日 Scenario 50/50 CU，Meowa 余额 5。详见 design/xianxia-boar-humanoid-charge-meowa/README.md。
 ## 犀王横扫、牛魔王重击已接入（2026-11-08，Scenario 20 CU）

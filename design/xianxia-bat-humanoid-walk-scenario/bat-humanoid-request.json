@@ -1,0 +1,31 @@
+{
+  "status": "prepared_waiting_quota",
+  "date": "2026-11-07",
+  "scope": "bat-humanoid walk only, plays on displacement; attacks and skills keep the portrait",
+  "reference": {
+    "file": "bat-humanoid-reference-green.png",
+    "unfilled": "bat-humanoid-reference-green-holes.png",
+    "source": "xianxia-bat-humanoid-2026-11-02/reference-alpha.png",
+    "assetId": "asset_QKDPGAGzk63QanMt5L4jCGaq",
+    "filledHolePx": 542,
+    "note": "Approved 1024 alpha reference on #00FF00, subject height 80%, feet at 90%; interior alpha holes filled with neighbour colours (white-tiger 11-07 lesson)."
+  },
+  "dryRun": {
+    "creativeUnitsCost": 10
+  },
+  "modelId": "model_pruna-p-video-2-pro",
+  "parameters": {
+    "image": "asset_QKDPGAGzk63QanMt5L4jCGaq",
+    "lastFrameImage": "asset_QKDPGAGzk63QanMt5L4jCGaq",
+    "duration": 5,
+    "resolution": "480p",
+    "mode": "cost",
+    "promptUpsampler": "off",
+    "seed": 202611083,
+    "prompt": "The exact upright bat warrior in the reference walks in place slowly and steadily in one complete walking loop. The clawed feet lift and set down alternately and land firmly, the knees bend, the arms swing slightly in opposition, the torso rises and sinks a little with each step, the large wings stay half open behind the shoulders and only sway slightly with the steps. It stays at the same spot and size and does not move across the frame. Keep the same three-quarter left view, bat head and ears, grey fur, kilt and belt, exactly two arms, two legs and two wings. Fixed camera, fixed size, pure uniform bright green #00FF00 background. The whole body and both wing tips stay inside the frame with clear margins at all times. No flying, flapping, turning, attack, jump, extra limbs, weapon, dust, particles, shadow or text. End in the exact starting pose."
+  },
+  "nextSteps": [
+    "After 08:00 Beijing check usage; at most 2 parallel jobs.",
+    "Export with design/xianxia-walks-2026-11-07/export.py (add a JOBS entry), wire like crocodile-humanoid/white-tiger, verify all deployed archetypes in game."
+  ]
+}

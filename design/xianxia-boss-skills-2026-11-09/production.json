@@ -1,0 +1,209 @@
+{
+ "date": "2026-11-09",
+ "tool": "Scenario MCP",
+ "totalCU": 40,
+ "common": {
+  "model": "model_pruna-p-video-2-pro",
+  "resolution": "480p",
+  "duration": 5,
+  "mode": "cost",
+  "promptUpsampler": "off",
+  "lastFrameImage": "same as image",
+  "cuEach": 10
+ },
+ "clips": [
+  {
+   "family": "bear-humanoid",
+   "clip": "stomp",
+   "skill": "M07 裂地重踏",
+   "sourceDir": "bear-m07",
+   "job": "job_neuk5nP5dCuUKiiQTkMz19nM",
+   "asset": "asset_DQ4cLAf1seecyESQBiVU7ZyV",
+   "seed": 202611092,
+   "reference": "asset_5nXhj1vCDLrQWmom2Lvep7rc",
+   "originalSha256": "8d3068c205eb4053d0de61799981cc31881f6af57839746f7bd8d7514a02ebc6",
+   "sourceIndices": [
+    6,
+    13,
+    20,
+    27,
+    34,
+    41,
+    48,
+    52,
+    56,
+    64,
+    72,
+    80,
+    88,
+    96,
+    104,
+    112
+   ],
+   "phases": {
+    "windup": [
+     0,
+     6
+    ],
+    "active": [
+     6,
+     2
+    ],
+    "recovery": [
+     8,
+     8
+    ]
+   },
+   "atlas": [
+    3840,
+    3552
+   ],
+   "cell": 384
+  },
+  {
+   "family": "bear-humanoid",
+   "clip": "guard",
+   "skill": "M04 岩甲蛰伏",
+   "sourceDir": "bear-m04",
+   "job": "job_5GEea6AxRDYrKE8Z5NMBfupe",
+   "asset": "asset_YSfRWvi81iRRp8KcHHkmykpZ",
+   "seed": 202611093,
+   "reference": "asset_5nXhj1vCDLrQWmom2Lvep7rc",
+   "originalSha256": "9a7888e1ed716a202fa42ce1b7c6f5f3b4645e7c3882a72d738d5cba74a00768",
+   "sourceIndices": [
+    6,
+    10,
+    14,
+    18,
+    22,
+    26,
+    30,
+    57,
+    84,
+    88,
+    92,
+    96,
+    100,
+    104,
+    108,
+    112
+   ],
+   "phases": {
+    "windup": [
+     0,
+     6
+    ],
+    "active": [
+     6,
+     2
+    ],
+    "recovery": [
+     8,
+     8
+    ]
+   },
+   "atlas": [
+    3840,
+    3552
+   ],
+   "cell": 384
+  },
+  {
+   "family": "rhino",
+   "clip": "stomp",
+   "skill": "M07 裂地重踏",
+   "sourceDir": "rhino-m07",
+   "job": "job_RRFzHvZspStwDN7GgFVywDgA",
+   "asset": "asset_pj2JL62veKFXhGycy2j5dneh",
+   "seed": 202611094,
+   "reference": "asset_xHFnkJEhmdCehpxpxQSjEUEk",
+   "originalSha256": "c71d317b65bf6317bf26808ba347c2a37344ef369d4e350c0965a6abe79b3dff",
+   "sourceIndices": [
+    6,
+    12,
+    18,
+    24,
+    30,
+    36,
+    42,
+    46,
+    50,
+    59,
+    68,
+    76,
+    85,
+    94,
+    102,
+    111
+   ],
+   "phases": {
+    "windup": [
+     0,
+     6
+    ],
+    "active": [
+     6,
+     2
+    ],
+    "recovery": [
+     8,
+     8
+    ]
+   },
+   "atlas": [
+    3840,
+    4000
+   ],
+   "cell": 320
+  },
+  {
+   "family": "yak",
+   "clip": "roar",
+   "skill": "M15 环形震波",
+   "sourceDir": "yak-m15",
+   "job": "job_29acSkBf651wdJ3PxkpdwUfK",
+   "asset": "asset_DgWqnaVBVmpCwoTd5jZF5uzg",
+   "seed": 202611095,
+   "reference": "asset_8RR6aGBxSrQNvXhgcQZb5Aqs",
+   "originalSha256": "4219f7bbeb9e8656b9c31db778ae636fe7af1c7b45fe120cd1073d23b60692d6",
+   "sourceIndices": [
+    8,
+    14,
+    21,
+    27,
+    33,
+    40,
+    46,
+    50,
+    54,
+    62,
+    70,
+    77,
+    85,
+    93,
+    100,
+    108
+   ],
+   "phases": {
+    "windup": [
+     0,
+     6
+    ],
+    "active": [
+     6,
+     2
+    ],
+    "recovery": [
+     8,
+     8
+    ]
+   },
+   "atlas": [
+    3840,
+    3168
+   ],
+   "cell": 384
+  }
+ ],
+ "note": "An earlier working table listed the two bear jobs swapped; job metadata (prompt + seed) confirms the mapping above. Prompts: scenario job_get verbose=true."
+}

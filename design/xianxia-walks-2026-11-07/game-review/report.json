@@ -1,0 +1,2539 @@
+{
+  "results": [
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "archetype": "crocodile_boss",
+      "fam": "crocodile-humanoid",
+      "floor": 4,
+      "direction": 1,
+      "authored": {
+        "role": "boss",
+        "rank": 4,
+        "name": "伏潭鳄王",
+        "skills": [
+          "M08",
+          "M12",
+          "M02"
+        ]
+      },
+      "labels": [
+        "伏潭鳄王 · 4阶  99999/100000"
+      ],
+      "movement": {
+        "x0": -360,
+        "x1": -323.70000000000005,
+        "mode": "approach"
+      },
+      "moving": {
+        "family": "crocodile-humanoid",
+        "frame": [
+          480,
+          480
+        ],
+        "texture": [
+          1920,
+          1920
+        ],
+        "size": 310.5281596893204,
+        "position": [
+          -323.70000000000005,
+          -12
+        ],
+        "scale": -1,
+        "pose": "move-012"
+      },
+      "loop": [
+        "move-000",
+        "move-001",
+        "move-002",
+        "move-003",
+        "move-004",
+        "move-005",
+        "move-006",
+        "move-007",
+        "move-008",
+        "move-009",
+        "move-010",
+        "move-011",
+        "move-012",
+        "move-013",
+        "move-014",
+        "move-015",
+        "move-000"
+      ],
+      "combat": [
+        {
+          "mode": "windup",
+          "family": "crocodile-humanoid",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 307.8803883495146,
+          "position": [
+            -319.45000000000005,
+            -12
+          ],
+          "scale": -1,
+          "pose": "static"
+        },
+        {
+          "mode": "active",
+          "family": "crocodile-humanoid",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 307.8803883495146,
+          "position": [
+            -319.45000000000005,
+            -12
+          ],
+          "scale": -1,
+          "pose": "static"
+        },
+        {
+          "mode": "recovery",
+          "family": "crocodile-humanoid",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 307.8803883495146,
+          "position": [
+            -319.45000000000005,
+            -12
+          ],
+          "scale": -1,
+          "pose": "static"
+        }
+      ],
+      "mechanics": [
+        {
+          "skillId": "M08",
+          "phase": "windup"
+        },
+        {
+          "skillId": "M08",
+          "phase": "active"
+        },
+        {
+          "skillId": "M08",
+          "phase": "recovery"
+        },
+        {
+          "skillId": "M12",
+          "phase": "windup"
+        },
+        {
+          "skillId": "M12",
+          "phase": "active"
+        },
+        {
+          "skillId": "M12",
+          "phase": "recovery"
+        },
+        {
+          "skillId": "M02",
+          "phase": "windup"
+        },
+        {
+          "skillId": "M02",
+          "phase": "active"
+        },
+        {
+          "skillId": "M02",
+          "phase": "recovery"
+        }
+      ],
+      "death": {
+        "lowRemaining": false,
+        "highRemaining": false,
+        "kills": 1
+      },
+      "paused": true
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "archetype": "crocodile_boss",
+      "fam": "crocodile-humanoid",
+      "floor": 4,
+      "direction": -1,
+      "authored": {
+        "role": "boss",
+        "rank": 4,
+        "name": "伏潭鳄王",
+        "skills": [
+          "M08",
+          "M12",
+          "M02"
+        ]
+      },
+      "labels": [
+        "伏潭鳄王 · 4阶  99999/100000"
+      ],
+      "movement": {
+        "x0": 360,
+        "x1": 323.70000000000005,
+        "mode": "approach"
+      },
+      "moving": {
+        "family": "crocodile-humanoid",
+        "frame": [
+          480,
+          480
+        ],
+        "texture": [
+          1920,
+          1920
+        ],
+        "size": 310.5281596893204,
+        "position": [
+          323.70000000000005,
+          -12
+        ],
+        "scale": 1,
+        "pose": "move-012"
+      },
+      "loop": [
+        "move-000",
+        "move-001",
+        "move-002",
+        "move-003",
+        "move-004",
+        "move-005",
+        "move-006",
+        "move-007",
+        "move-008",
+        "move-009",
+        "move-010",
+        "move-011",
+        "move-012",
+        "move-013",
+        "move-014",
+        "move-015",
+        "move-000"
+      ],
+      "combat": [
+        {
+          "mode": "windup",
+          "family": "crocodile-humanoid",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 307.8803883495146,
+          "position": [
+            327.95000000000005,
+            -12
+          ],
+          "scale": 1,
+          "pose": "static"
+        },
+        {
+          "mode": "active",
+          "family": "crocodile-humanoid",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 307.8803883495146,
+          "position": [
+            327.95000000000005,
+            -12
+          ],
+          "scale": 1,
+          "pose": "static"
+        },
+        {
+          "mode": "recovery",
+          "family": "crocodile-humanoid",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 307.8803883495146,
+          "position": [
+            327.95000000000005,
+            -12
+          ],
+          "scale": 1,
+          "pose": "static"
+        }
+      ],
+      "mechanics": [
+        {
+          "skillId": "M08",
+          "phase": "windup"
+        },
+        {
+          "skillId": "M08",
+          "phase": "active"
+        },
+        {
+          "skillId": "M08",
+          "phase": "recovery"
+        },
+        {
+          "skillId": "M12",
+          "phase": "windup"
+        },
+        {
+          "skillId": "M12",
+          "phase": "active"
+        },
+        {
+          "skillId": "M12",
+          "phase": "recovery"
+        },
+        {
+          "skillId": "M02",
+          "phase": "windup"
+        },
+        {
+          "skillId": "M02",
+          "phase": "active"
+        },
+        {
+          "skillId": "M02",
+          "phase": "recovery"
+        }
+      ],
+      "death": {
+        "lowRemaining": false,
+        "highRemaining": false,
+        "kills": 1
+      },
+      "paused": true
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "archetype": "crocodile_elite_f5_w10_n2",
+      "fam": "crocodile-humanoid",
+      "floor": 5,
+      "direction": 1,
+      "authored": {
+        "role": "elite",
+        "rank": 4,
+        "name": "玄潭",
+        "skills": [
+          "M08"
+        ]
+      },
+      "labels": [
+        "玄潭 · 4阶  99999/100000"
+      ],
+      "movement": {
+        "x0": -360,
+        "x1": -323.70000000000005,
+        "mode": "approach"
+      },
+      "moving": {
+        "family": "crocodile-humanoid",
+        "frame": [
+          480,
+          480
+        ],
+        "texture": [
+          1920,
+          1920
+        ],
+        "size": 211.72374524271845,
+        "position": [
+          -323.70000000000005,
+          -12
+        ],
+        "scale": -1,
+        "pose": "move-012"
+      },
+      "loop": [
+        "move-000",
+        "move-001",
+        "move-002",
+        "move-003",
+        "move-004",
+        "move-005",
+        "move-006",
+        "move-007",
+        "move-008",
+        "move-009",
+        "move-010",
+        "move-011",
+        "move-012",
+        "move-013",
+        "move-014",
+        "move-015",
+        "move-000"
+      ],
+      "combat": [
+        {
+          "mode": "windup",
+          "family": "crocodile-humanoid",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 209.91844660194175,
+          "position": [
+            -319.45000000000005,
+            -12
+          ],
+          "scale": -1,
+          "pose": "static"
+        },
+        {
+          "mode": "active",
+          "family": "crocodile-humanoid",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 209.91844660194175,
+          "position": [
+            -319.45000000000005,
+            -12
+          ],
+          "scale": -1,
+          "pose": "static"
+        },
+        {
+          "mode": "recovery",
+          "family": "crocodile-humanoid",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 209.91844660194175,
+          "position": [
+            -319.45000000000005,
+            -12
+          ],
+          "scale": -1,
+          "pose": "static"
+        }
+      ],
+      "mechanics": [
+        {
+          "skillId": "M08",
+          "phase": "windup"
+        },
+        {
+          "skillId": "M08",
+          "phase": "active"
+        },
+        {
+          "skillId": "M08",
+          "phase": "recovery"
+        }
+      ],
+      "death": {
+        "lowRemaining": false,
+        "highRemaining": false,
+        "kills": 1
+      },
+      "paused": true
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "archetype": "crocodile_elite_f5_w10_n2",
+      "fam": "crocodile-humanoid",
+      "floor": 5,
+      "direction": -1,
+      "authored": {
+        "role": "elite",
+        "rank": 4,
+        "name": "玄潭",
+        "skills": [
+          "M08"
+        ]
+      },
+      "labels": [
+        "玄潭 · 4阶  99999/100000"
+      ],
+      "movement": {
+        "x0": 360,
+        "x1": 323.70000000000005,
+        "mode": "approach"
+      },
+      "moving": {
+        "family": "crocodile-humanoid",
+        "frame": [
+          480,
+          480
+        ],
+        "texture": [
+          1920,
+          1920
+        ],
+        "size": 211.72374524271845,
+        "position": [
+          323.70000000000005,
+          -12
+        ],
+        "scale": 1,
+        "pose": "move-012"
+      },
+      "loop": [
+        "move-000",
+        "move-001",
+        "move-002",
+        "move-003",
+        "move-004",
+        "move-005",
+        "move-006",
+        "move-007",
+        "move-008",
+        "move-009",
+        "move-010",
+        "move-011",
+        "move-012",
+        "move-013",
+        "move-014",
+        "move-015",
+        "move-000"
+      ],
+      "combat": [
+        {
+          "mode": "windup",
+          "family": "crocodile-humanoid",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 209.91844660194175,
+          "position": [
+            327.95000000000005,
+            -12
+          ],
+          "scale": 1,
+          "pose": "static"
+        },
+        {
+          "mode": "active",
+          "family": "crocodile-humanoid",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 209.91844660194175,
+          "position": [
+            327.95000000000005,
+            -12
+          ],
+          "scale": 1,
+          "pose": "static"
+        },
+        {
+          "mode": "recovery",
+          "family": "crocodile-humanoid",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 209.91844660194175,
+          "position": [
+            327.95000000000005,
+            -12
+          ],
+          "scale": 1,
+          "pose": "static"
+        }
+      ],
+      "mechanics": [
+        {
+          "skillId": "M08",
+          "phase": "windup"
+        },
+        {
+          "skillId": "M08",
+          "phase": "active"
+        },
+        {
+          "skillId": "M08",
+          "phase": "recovery"
+        }
+      ],
+      "death": {
+        "lowRemaining": false,
+        "highRemaining": false,
+        "kills": 1
+      },
+      "paused": true
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "archetype": "crocodile_elite_f5_w10_n3",
+      "fam": "crocodile-humanoid",
+      "floor": 5,
+      "direction": 1,
+      "authored": {
+        "role": "elite",
+        "rank": 4,
+        "name": "裂颚",
+        "skills": [
+          "M08"
+        ]
+      },
+      "labels": [
+        "裂颚 · 4阶  99999/100000"
+      ],
+      "movement": {
+        "x0": -360,
+        "x1": -323.70000000000005,
+        "mode": "approach"
+      },
+      "moving": {
+        "family": "crocodile-humanoid",
+        "frame": [
+          480,
+          480
+        ],
+        "texture": [
+          1920,
+          1920
+        ],
+        "size": 211.72374524271845,
+        "position": [
+          -323.70000000000005,
+          -12
+        ],
+        "scale": -1,
+        "pose": "move-012"
+      },
+      "loop": [
+        "move-000",
+        "move-001",
+        "move-002",
+        "move-003",
+        "move-004",
+        "move-005",
+        "move-006",
+        "move-007",
+        "move-008",
+        "move-009",
+        "move-010",
+        "move-011",
+        "move-012",
+        "move-013",
+        "move-014",
+        "move-015",
+        "move-000"
+      ],
+      "combat": [
+        {
+          "mode": "windup",
+          "family": "crocodile-humanoid",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 209.91844660194175,
+          "position": [
+            -319.45000000000005,
+            -12
+          ],
+          "scale": -1,
+          "pose": "static"
+        },
+        {
+          "mode": "active",
+          "family": "crocodile-humanoid",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 209.91844660194175,
+          "position": [
+            -319.45000000000005,
+            -12
+          ],
+          "scale": -1,
+          "pose": "static"
+        },
+        {
+          "mode": "recovery",
+          "family": "crocodile-humanoid",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 209.91844660194175,
+          "position": [
+            -319.45000000000005,
+            -12
+          ],
+          "scale": -1,
+          "pose": "static"
+        }
+      ],
+      "mechanics": [
+        {
+          "skillId": "M08",
+          "phase": "windup"
+        },
+        {
+          "skillId": "M08",
+          "phase": "active"
+        },
+        {
+          "skillId": "M08",
+          "phase": "recovery"
+        }
+      ],
+      "death": {
+        "lowRemaining": false,
+        "highRemaining": false,
+        "kills": 1
+      },
+      "paused": true
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "archetype": "crocodile_elite_f5_w10_n3",
+      "fam": "crocodile-humanoid",
+      "floor": 5,
+      "direction": -1,
+      "authored": {
+        "role": "elite",
+        "rank": 4,
+        "name": "裂颚",
+        "skills": [
+          "M08"
+        ]
+      },
+      "labels": [
+        "裂颚 · 4阶  99999/100000"
+      ],
+      "movement": {
+        "x0": 360,
+        "x1": 323.70000000000005,
+        "mode": "approach"
+      },
+      "moving": {
+        "family": "crocodile-humanoid",
+        "frame": [
+          480,
+          480
+        ],
+        "texture": [
+          1920,
+          1920
+        ],
+        "size": 211.72374524271845,
+        "position": [
+          323.70000000000005,
+          -12
+        ],
+        "scale": 1,
+        "pose": "move-012"
+      },
+      "loop": [
+        "move-000",
+        "move-001",
+        "move-002",
+        "move-003",
+        "move-004",
+        "move-005",
+        "move-006",
+        "move-007",
+        "move-008",
+        "move-009",
+        "move-010",
+        "move-011",
+        "move-012",
+        "move-013",
+        "move-014",
+        "move-015",
+        "move-000"
+      ],
+      "combat": [
+        {
+          "mode": "windup",
+          "family": "crocodile-humanoid",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 209.91844660194175,
+          "position": [
+            327.95000000000005,
+            -12
+          ],
+          "scale": 1,
+          "pose": "static"
+        },
+        {
+          "mode": "active",
+          "family": "crocodile-humanoid",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 209.91844660194175,
+          "position": [
+            327.95000000000005,
+            -12
+          ],
+          "scale": 1,
+          "pose": "static"
+        },
+        {
+          "mode": "recovery",
+          "family": "crocodile-humanoid",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 209.91844660194175,
+          "position": [
+            327.95000000000005,
+            -12
+          ],
+          "scale": 1,
+          "pose": "static"
+        }
+      ],
+      "mechanics": [
+        {
+          "skillId": "M08",
+          "phase": "windup"
+        },
+        {
+          "skillId": "M08",
+          "phase": "active"
+        },
+        {
+          "skillId": "M08",
+          "phase": "recovery"
+        }
+      ],
+      "death": {
+        "lowRemaining": false,
+        "highRemaining": false,
+        "kills": 1
+      },
+      "paused": true
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "archetype": "tiger_boss_zhenyan",
+      "fam": "white-tiger",
+      "floor": 9,
+      "direction": 1,
+      "authored": {
+        "role": "boss",
+        "rank": 7,
+        "name": "镇魇白虎",
+        "skills": [
+          "M06",
+          "M01",
+          "M19",
+          "M02"
+        ]
+      },
+      "labels": [
+        "镇魇白虎 · 7阶  99999/100000"
+      ],
+      "movement": {
+        "x0": -360,
+        "x1": -293.9999999999998,
+        "mode": "approach"
+      },
+      "moving": {
+        "family": "white-tiger",
+        "frame": [
+          480,
+          480
+        ],
+        "texture": [
+          1920,
+          1920
+        ],
+        "size": 286.1110679611651,
+        "position": [
+          -293.9999999999998,
+          -12
+        ],
+        "scale": -1,
+        "pose": "move-005"
+      },
+      "loop": [
+        "move-000",
+        "move-001",
+        "move-002",
+        "move-003",
+        "move-004",
+        "move-005",
+        "move-006",
+        "move-007",
+        "move-008",
+        "move-009",
+        "move-010",
+        "move-011",
+        "move-012",
+        "move-013",
+        "move-014",
+        "move-015",
+        "move-000"
+      ],
+      "combat": [
+        {
+          "mode": "windup",
+          "family": "white-tiger",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 286.1110679611651,
+          "position": [
+            -289.7499999999998,
+            -12
+          ],
+          "scale": -1,
+          "pose": "static"
+        },
+        {
+          "mode": "active",
+          "family": "white-tiger",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 286.1110679611651,
+          "position": [
+            -289.7499999999998,
+            -12
+          ],
+          "scale": -1,
+          "pose": "static"
+        },
+        {
+          "mode": "recovery",
+          "family": "white-tiger",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 286.1110679611651,
+          "position": [
+            -289.7499999999998,
+            -12
+          ],
+          "scale": -1,
+          "pose": "static"
+        }
+      ],
+      "mechanics": [
+        {
+          "skillId": "M06",
+          "phase": "windup"
+        },
+        {
+          "skillId": "M06",
+          "phase": "active"
+        },
+        {
+          "skillId": "M06",
+          "phase": "recovery"
+        },
+        {
+          "skillId": "M01",
+          "phase": "windup"
+        },
+        {
+          "skillId": "M01",
+          "phase": "active"
+        },
+        {
+          "skillId": "M01",
+          "phase": "recovery"
+        },
+        {
+          "skillId": "M19",
+          "phase": "windup"
+        },
+        {
+          "skillId": "M19",
+          "phase": "active"
+        },
+        {
+          "skillId": "M19",
+          "phase": "recovery"
+        },
+        {
+          "skillId": "M02",
+          "phase": "windup"
+        },
+        {
+          "skillId": "M02",
+          "phase": "active"
+        },
+        {
+          "skillId": "M02",
+          "phase": "recovery"
+        }
+      ],
+      "death": {
+        "lowRemaining": false,
+        "highRemaining": false,
+        "kills": 1
+      },
+      "paused": true
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "archetype": "tiger_boss_zhenyan",
+      "fam": "white-tiger",
+      "floor": 9,
+      "direction": -1,
+      "authored": {
+        "role": "boss",
+        "rank": 7,
+        "name": "镇魇白虎",
+        "skills": [
+          "M06",
+          "M01",
+          "M19",
+          "M02"
+        ]
+      },
+      "labels": [
+        "镇魇白虎 · 7阶  99999/100000"
+      ],
+      "movement": {
+        "x0": 360,
+        "x1": 293.9999999999998,
+        "mode": "approach"
+      },
+      "moving": {
+        "family": "white-tiger",
+        "frame": [
+          480,
+          480
+        ],
+        "texture": [
+          1920,
+          1920
+        ],
+        "size": 286.1110679611651,
+        "position": [
+          293.9999999999998,
+          -12
+        ],
+        "scale": 1,
+        "pose": "move-005"
+      },
+      "loop": [
+        "move-000",
+        "move-001",
+        "move-002",
+        "move-003",
+        "move-004",
+        "move-005",
+        "move-006",
+        "move-007",
+        "move-008",
+        "move-009",
+        "move-010",
+        "move-011",
+        "move-012",
+        "move-013",
+        "move-014",
+        "move-015",
+        "move-000"
+      ],
+      "combat": [
+        {
+          "mode": "windup",
+          "family": "white-tiger",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 286.1110679611651,
+          "position": [
+            298.2499999999998,
+            -12
+          ],
+          "scale": 1,
+          "pose": "static"
+        },
+        {
+          "mode": "active",
+          "family": "white-tiger",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 286.1110679611651,
+          "position": [
+            298.2499999999998,
+            -12
+          ],
+          "scale": 1,
+          "pose": "static"
+        },
+        {
+          "mode": "recovery",
+          "family": "white-tiger",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 286.1110679611651,
+          "position": [
+            298.2499999999998,
+            -12
+          ],
+          "scale": 1,
+          "pose": "static"
+        }
+      ],
+      "mechanics": [
+        {
+          "skillId": "M06",
+          "phase": "windup"
+        },
+        {
+          "skillId": "M06",
+          "phase": "active"
+        },
+        {
+          "skillId": "M06",
+          "phase": "recovery"
+        },
+        {
+          "skillId": "M01",
+          "phase": "windup"
+        },
+        {
+          "skillId": "M01",
+          "phase": "active"
+        },
+        {
+          "skillId": "M01",
+          "phase": "recovery"
+        },
+        {
+          "skillId": "M19",
+          "phase": "windup"
+        },
+        {
+          "skillId": "M19",
+          "phase": "active"
+        },
+        {
+          "skillId": "M19",
+          "phase": "recovery"
+        },
+        {
+          "skillId": "M02",
+          "phase": "windup"
+        },
+        {
+          "skillId": "M02",
+          "phase": "active"
+        },
+        {
+          "skillId": "M02",
+          "phase": "recovery"
+        }
+      ],
+      "death": {
+        "lowRemaining": false,
+        "highRemaining": false,
+        "kills": 1
+      },
+      "paused": true
+    },
+    {
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "archetype": "crocodile_boss",
+      "fam": "crocodile-humanoid",
+      "floor": 4,
+      "direction": 1,
+      "authored": {
+        "role": "boss",
+        "rank": 4,
+        "name": "伏潭鳄王",
+        "skills": [
+          "M08",
+          "M12",
+          "M02"
+        ]
+      },
+      "labels": [
+        "伏潭鳄王 · 4阶  99999/100000"
+      ],
+      "movement": {
+        "x0": -360,
+        "x1": -323.70000000000005,
+        "mode": "approach"
+      },
+      "moving": {
+        "family": "crocodile-humanoid",
+        "frame": [
+          480,
+          480
+        ],
+        "texture": [
+          1920,
+          1920
+        ],
+        "size": 310.5281596893204,
+        "position": [
+          -323.70000000000005,
+          -12
+        ],
+        "scale": -1,
+        "pose": "move-012"
+      },
+      "loop": [
+        "move-000",
+        "move-001",
+        "move-002",
+        "move-003",
+        "move-004",
+        "move-005",
+        "move-006",
+        "move-007",
+        "move-008",
+        "move-009",
+        "move-010",
+        "move-011",
+        "move-012",
+        "move-013",
+        "move-014",
+        "move-015",
+        "move-000"
+      ],
+      "combat": [
+        {
+          "mode": "windup",
+          "family": "crocodile-humanoid",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 307.8803883495146,
+          "position": [
+            -319.45000000000005,
+            -12
+          ],
+          "scale": -1,
+          "pose": "static"
+        },
+        {
+          "mode": "active",
+          "family": "crocodile-humanoid",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 307.8803883495146,
+          "position": [
+            -319.45000000000005,
+            -12
+          ],
+          "scale": -1,
+          "pose": "static"
+        },
+        {
+          "mode": "recovery",
+          "family": "crocodile-humanoid",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 307.8803883495146,
+          "position": [
+            -319.45000000000005,
+            -12
+          ],
+          "scale": -1,
+          "pose": "static"
+        }
+      ],
+      "mechanics": [
+        {
+          "skillId": "M08",
+          "phase": "windup"
+        },
+        {
+          "skillId": "M08",
+          "phase": "active"
+        },
+        {
+          "skillId": "M08",
+          "phase": "recovery"
+        },
+        {
+          "skillId": "M12",
+          "phase": "windup"
+        },
+        {
+          "skillId": "M12",
+          "phase": "active"
+        },
+        {
+          "skillId": "M12",
+          "phase": "recovery"
+        },
+        {
+          "skillId": "M02",
+          "phase": "windup"
+        },
+        {
+          "skillId": "M02",
+          "phase": "active"
+        },
+        {
+          "skillId": "M02",
+          "phase": "recovery"
+        }
+      ],
+      "death": {
+        "lowRemaining": false,
+        "highRemaining": false,
+        "kills": 1
+      },
+      "paused": true
+    },
+    {
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "archetype": "crocodile_boss",
+      "fam": "crocodile-humanoid",
+      "floor": 4,
+      "direction": -1,
+      "authored": {
+        "role": "boss",
+        "rank": 4,
+        "name": "伏潭鳄王",
+        "skills": [
+          "M08",
+          "M12",
+          "M02"
+        ]
+      },
+      "labels": [
+        "伏潭鳄王 · 4阶  99999/100000"
+      ],
+      "movement": {
+        "x0": 360,
+        "x1": 323.70000000000005,
+        "mode": "approach"
+      },
+      "moving": {
+        "family": "crocodile-humanoid",
+        "frame": [
+          480,
+          480
+        ],
+        "texture": [
+          1920,
+          1920
+        ],
+        "size": 310.5281596893204,
+        "position": [
+          323.70000000000005,
+          -12
+        ],
+        "scale": 1,
+        "pose": "move-012"
+      },
+      "loop": [
+        "move-000",
+        "move-001",
+        "move-002",
+        "move-003",
+        "move-004",
+        "move-005",
+        "move-006",
+        "move-007",
+        "move-008",
+        "move-009",
+        "move-010",
+        "move-011",
+        "move-012",
+        "move-013",
+        "move-014",
+        "move-015",
+        "move-000"
+      ],
+      "combat": [
+        {
+          "mode": "windup",
+          "family": "crocodile-humanoid",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 307.8803883495146,
+          "position": [
+            327.95000000000005,
+            -12
+          ],
+          "scale": 1,
+          "pose": "static"
+        },
+        {
+          "mode": "active",
+          "family": "crocodile-humanoid",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 307.8803883495146,
+          "position": [
+            327.95000000000005,
+            -12
+          ],
+          "scale": 1,
+          "pose": "static"
+        },
+        {
+          "mode": "recovery",
+          "family": "crocodile-humanoid",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 307.8803883495146,
+          "position": [
+            327.95000000000005,
+            -12
+          ],
+          "scale": 1,
+          "pose": "static"
+        }
+      ],
+      "mechanics": [
+        {
+          "skillId": "M08",
+          "phase": "windup"
+        },
+        {
+          "skillId": "M08",
+          "phase": "active"
+        },
+        {
+          "skillId": "M08",
+          "phase": "recovery"
+        },
+        {
+          "skillId": "M12",
+          "phase": "windup"
+        },
+        {
+          "skillId": "M12",
+          "phase": "active"
+        },
+        {
+          "skillId": "M12",
+          "phase": "recovery"
+        },
+        {
+          "skillId": "M02",
+          "phase": "windup"
+        },
+        {
+          "skillId": "M02",
+          "phase": "active"
+        },
+        {
+          "skillId": "M02",
+          "phase": "recovery"
+        }
+      ],
+      "death": {
+        "lowRemaining": false,
+        "highRemaining": false,
+        "kills": 1
+      },
+      "paused": true
+    },
+    {
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "archetype": "crocodile_elite_f5_w10_n2",
+      "fam": "crocodile-humanoid",
+      "floor": 5,
+      "direction": 1,
+      "authored": {
+        "role": "elite",
+        "rank": 4,
+        "name": "玄潭",
+        "skills": [
+          "M08"
+        ]
+      },
+      "labels": [
+        "玄潭 · 4阶  99999/100000"
+      ],
+      "movement": {
+        "x0": -360,
+        "x1": -323.70000000000005,
+        "mode": "approach"
+      },
+      "moving": {
+        "family": "crocodile-humanoid",
+        "frame": [
+          480,
+          480
+        ],
+        "texture": [
+          1920,
+          1920
+        ],
+        "size": 211.72374524271845,
+        "position": [
+          -323.70000000000005,
+          -12
+        ],
+        "scale": -1,
+        "pose": "move-012"
+      },
+      "loop": [
+        "move-000",
+        "move-001",
+        "move-002",
+        "move-003",
+        "move-004",
+        "move-005",
+        "move-006",
+        "move-007",
+        "move-008",
+        "move-009",
+        "move-010",
+        "move-011",
+        "move-012",
+        "move-013",
+        "move-014",
+        "move-015",
+        "move-000"
+      ],
+      "combat": [
+        {
+          "mode": "windup",
+          "family": "crocodile-humanoid",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 209.91844660194175,
+          "position": [
+            -319.45000000000005,
+            -12
+          ],
+          "scale": -1,
+          "pose": "static"
+        },
+        {
+          "mode": "active",
+          "family": "crocodile-humanoid",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 209.91844660194175,
+          "position": [
+            -319.45000000000005,
+            -12
+          ],
+          "scale": -1,
+          "pose": "static"
+        },
+        {
+          "mode": "recovery",
+          "family": "crocodile-humanoid",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 209.91844660194175,
+          "position": [
+            -319.45000000000005,
+            -12
+          ],
+          "scale": -1,
+          "pose": "static"
+        }
+      ],
+      "mechanics": [
+        {
+          "skillId": "M08",
+          "phase": "windup"
+        },
+        {
+          "skillId": "M08",
+          "phase": "active"
+        },
+        {
+          "skillId": "M08",
+          "phase": "recovery"
+        }
+      ],
+      "death": {
+        "lowRemaining": false,
+        "highRemaining": false,
+        "kills": 1
+      },
+      "paused": true
+    },
+    {
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "archetype": "crocodile_elite_f5_w10_n2",
+      "fam": "crocodile-humanoid",
+      "floor": 5,
+      "direction": -1,
+      "authored": {
+        "role": "elite",
+        "rank": 4,
+        "name": "玄潭",
+        "skills": [
+          "M08"
+        ]
+      },
+      "labels": [
+        "玄潭 · 4阶  99999/100000"
+      ],
+      "movement": {
+        "x0": 360,
+        "x1": 323.70000000000005,
+        "mode": "approach"
+      },
+      "moving": {
+        "family": "crocodile-humanoid",
+        "frame": [
+          480,
+          480
+        ],
+        "texture": [
+          1920,
+          1920
+        ],
+        "size": 211.72374524271845,
+        "position": [
+          323.70000000000005,
+          -12
+        ],
+        "scale": 1,
+        "pose": "move-012"
+      },
+      "loop": [
+        "move-000",
+        "move-001",
+        "move-002",
+        "move-003",
+        "move-004",
+        "move-005",
+        "move-006",
+        "move-007",
+        "move-008",
+        "move-009",
+        "move-010",
+        "move-011",
+        "move-012",
+        "move-013",
+        "move-014",
+        "move-015",
+        "move-000"
+      ],
+      "combat": [
+        {
+          "mode": "windup",
+          "family": "crocodile-humanoid",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 209.91844660194175,
+          "position": [
+            327.95000000000005,
+            -12
+          ],
+          "scale": 1,
+          "pose": "static"
+        },
+        {
+          "mode": "active",
+          "family": "crocodile-humanoid",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 209.91844660194175,
+          "position": [
+            327.95000000000005,
+            -12
+          ],
+          "scale": 1,
+          "pose": "static"
+        },
+        {
+          "mode": "recovery",
+          "family": "crocodile-humanoid",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 209.91844660194175,
+          "position": [
+            327.95000000000005,
+            -12
+          ],
+          "scale": 1,
+          "pose": "static"
+        }
+      ],
+      "mechanics": [
+        {
+          "skillId": "M08",
+          "phase": "windup"
+        },
+        {
+          "skillId": "M08",
+          "phase": "active"
+        },
+        {
+          "skillId": "M08",
+          "phase": "recovery"
+        }
+      ],
+      "death": {
+        "lowRemaining": false,
+        "highRemaining": false,
+        "kills": 1
+      },
+      "paused": true
+    },
+    {
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "archetype": "crocodile_elite_f5_w10_n3",
+      "fam": "crocodile-humanoid",
+      "floor": 5,
+      "direction": 1,
+      "authored": {
+        "role": "elite",
+        "rank": 4,
+        "name": "裂颚",
+        "skills": [
+          "M08"
+        ]
+      },
+      "labels": [
+        "裂颚 · 4阶  99999/100000"
+      ],
+      "movement": {
+        "x0": -360,
+        "x1": -323.70000000000005,
+        "mode": "approach"
+      },
+      "moving": {
+        "family": "crocodile-humanoid",
+        "frame": [
+          480,
+          480
+        ],
+        "texture": [
+          1920,
+          1920
+        ],
+        "size": 211.72374524271845,
+        "position": [
+          -323.70000000000005,
+          -12
+        ],
+        "scale": -1,
+        "pose": "move-012"
+      },
+      "loop": [
+        "move-000",
+        "move-001",
+        "move-002",
+        "move-003",
+        "move-004",
+        "move-005",
+        "move-006",
+        "move-007",
+        "move-008",
+        "move-009",
+        "move-010",
+        "move-011",
+        "move-012",
+        "move-013",
+        "move-014",
+        "move-015",
+        "move-000"
+      ],
+      "combat": [
+        {
+          "mode": "windup",
+          "family": "crocodile-humanoid",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 209.91844660194175,
+          "position": [
+            -319.45000000000005,
+            -12
+          ],
+          "scale": -1,
+          "pose": "static"
+        },
+        {
+          "mode": "active",
+          "family": "crocodile-humanoid",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 209.91844660194175,
+          "position": [
+            -319.45000000000005,
+            -12
+          ],
+          "scale": -1,
+          "pose": "static"
+        },
+        {
+          "mode": "recovery",
+          "family": "crocodile-humanoid",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 209.91844660194175,
+          "position": [
+            -319.45000000000005,
+            -12
+          ],
+          "scale": -1,
+          "pose": "static"
+        }
+      ],
+      "mechanics": [
+        {
+          "skillId": "M08",
+          "phase": "windup"
+        },
+        {
+          "skillId": "M08",
+          "phase": "active"
+        },
+        {
+          "skillId": "M08",
+          "phase": "recovery"
+        }
+      ],
+      "death": {
+        "lowRemaining": false,
+        "highRemaining": false,
+        "kills": 1
+      },
+      "paused": true
+    },
+    {
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "archetype": "crocodile_elite_f5_w10_n3",
+      "fam": "crocodile-humanoid",
+      "floor": 5,
+      "direction": -1,
+      "authored": {
+        "role": "elite",
+        "rank": 4,
+        "name": "裂颚",
+        "skills": [
+          "M08"
+        ]
+      },
+      "labels": [
+        "裂颚 · 4阶  99999/100000"
+      ],
+      "movement": {
+        "x0": 360,
+        "x1": 323.70000000000005,
+        "mode": "approach"
+      },
+      "moving": {
+        "family": "crocodile-humanoid",
+        "frame": [
+          480,
+          480
+        ],
+        "texture": [
+          1920,
+          1920
+        ],
+        "size": 211.72374524271845,
+        "position": [
+          323.70000000000005,
+          -12
+        ],
+        "scale": 1,
+        "pose": "move-012"
+      },
+      "loop": [
+        "move-000",
+        "move-001",
+        "move-002",
+        "move-003",
+        "move-004",
+        "move-005",
+        "move-006",
+        "move-007",
+        "move-008",
+        "move-009",
+        "move-010",
+        "move-011",
+        "move-012",
+        "move-013",
+        "move-014",
+        "move-015",
+        "move-000"
+      ],
+      "combat": [
+        {
+          "mode": "windup",
+          "family": "crocodile-humanoid",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 209.91844660194175,
+          "position": [
+            327.95000000000005,
+            -12
+          ],
+          "scale": 1,
+          "pose": "static"
+        },
+        {
+          "mode": "active",
+          "family": "crocodile-humanoid",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 209.91844660194175,
+          "position": [
+            327.95000000000005,
+            -12
+          ],
+          "scale": 1,
+          "pose": "static"
+        },
+        {
+          "mode": "recovery",
+          "family": "crocodile-humanoid",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 209.91844660194175,
+          "position": [
+            327.95000000000005,
+            -12
+          ],
+          "scale": 1,
+          "pose": "static"
+        }
+      ],
+      "mechanics": [
+        {
+          "skillId": "M08",
+          "phase": "windup"
+        },
+        {
+          "skillId": "M08",
+          "phase": "active"
+        },
+        {
+          "skillId": "M08",
+          "phase": "recovery"
+        }
+      ],
+      "death": {
+        "lowRemaining": false,
+        "highRemaining": false,
+        "kills": 1
+      },
+      "paused": true
+    },
+    {
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "archetype": "tiger_boss_zhenyan",
+      "fam": "white-tiger",
+      "floor": 9,
+      "direction": 1,
+      "authored": {
+        "role": "boss",
+        "rank": 7,
+        "name": "镇魇白虎",
+        "skills": [
+          "M06",
+          "M01",
+          "M19",
+          "M02"
+        ]
+      },
+      "labels": [
+        "镇魇白虎 · 7阶  99999/100000"
+      ],
+      "movement": {
+        "x0": -360,
+        "x1": -293.9999999999998,
+        "mode": "approach"
+      },
+      "moving": {
+        "family": "white-tiger",
+        "frame": [
+          480,
+          480
+        ],
+        "texture": [
+          1920,
+          1920
+        ],
+        "size": 286.1110679611651,
+        "position": [
+          -293.9999999999998,
+          -12
+        ],
+        "scale": -1,
+        "pose": "move-005"
+      },
+      "loop": [
+        "move-000",
+        "move-001",
+        "move-002",
+        "move-003",
+        "move-004",
+        "move-005",
+        "move-006",
+        "move-007",
+        "move-008",
+        "move-009",
+        "move-010",
+        "move-011",
+        "move-012",
+        "move-013",
+        "move-014",
+        "move-015",
+        "move-000"
+      ],
+      "combat": [
+        {
+          "mode": "windup",
+          "family": "white-tiger",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 286.1110679611651,
+          "position": [
+            -289.7499999999998,
+            -12
+          ],
+          "scale": -1,
+          "pose": "static"
+        },
+        {
+          "mode": "active",
+          "family": "white-tiger",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 286.1110679611651,
+          "position": [
+            -289.7499999999998,
+            -12
+          ],
+          "scale": -1,
+          "pose": "static"
+        },
+        {
+          "mode": "recovery",
+          "family": "white-tiger",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 286.1110679611651,
+          "position": [
+            -289.7499999999998,
+            -12
+          ],
+          "scale": -1,
+          "pose": "static"
+        }
+      ],
+      "mechanics": [
+        {
+          "skillId": "M06",
+          "phase": "windup"
+        },
+        {
+          "skillId": "M06",
+          "phase": "active"
+        },
+        {
+          "skillId": "M06",
+          "phase": "recovery"
+        },
+        {
+          "skillId": "M01",
+          "phase": "windup"
+        },
+        {
+          "skillId": "M01",
+          "phase": "active"
+        },
+        {
+          "skillId": "M01",
+          "phase": "recovery"
+        },
+        {
+          "skillId": "M19",
+          "phase": "windup"
+        },
+        {
+          "skillId": "M19",
+          "phase": "active"
+        },
+        {
+          "skillId": "M19",
+          "phase": "recovery"
+        },
+        {
+          "skillId": "M02",
+          "phase": "windup"
+        },
+        {
+          "skillId": "M02",
+          "phase": "active"
+        },
+        {
+          "skillId": "M02",
+          "phase": "recovery"
+        }
+      ],
+      "death": {
+        "lowRemaining": false,
+        "highRemaining": false,
+        "kills": 1
+      },
+      "paused": true
+    },
+    {
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "archetype": "tiger_boss_zhenyan",
+      "fam": "white-tiger",
+      "floor": 9,
+      "direction": -1,
+      "authored": {
+        "role": "boss",
+        "rank": 7,
+        "name": "镇魇白虎",
+        "skills": [
+          "M06",
+          "M01",
+          "M19",
+          "M02"
+        ]
+      },
+      "labels": [
+        "镇魇白虎 · 7阶  99999/100000"
+      ],
+      "movement": {
+        "x0": 360,
+        "x1": 293.9999999999998,
+        "mode": "approach"
+      },
+      "moving": {
+        "family": "white-tiger",
+        "frame": [
+          480,
+          480
+        ],
+        "texture": [
+          1920,
+          1920
+        ],
+        "size": 286.1110679611651,
+        "position": [
+          293.9999999999998,
+          -12
+        ],
+        "scale": 1,
+        "pose": "move-005"
+      },
+      "loop": [
+        "move-000",
+        "move-001",
+        "move-002",
+        "move-003",
+        "move-004",
+        "move-005",
+        "move-006",
+        "move-007",
+        "move-008",
+        "move-009",
+        "move-010",
+        "move-011",
+        "move-012",
+        "move-013",
+        "move-014",
+        "move-015",
+        "move-000"
+      ],
+      "combat": [
+        {
+          "mode": "windup",
+          "family": "white-tiger",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 286.1110679611651,
+          "position": [
+            298.2499999999998,
+            -12
+          ],
+          "scale": 1,
+          "pose": "static"
+        },
+        {
+          "mode": "active",
+          "family": "white-tiger",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 286.1110679611651,
+          "position": [
+            298.2499999999998,
+            -12
+          ],
+          "scale": 1,
+          "pose": "static"
+        },
+        {
+          "mode": "recovery",
+          "family": "white-tiger",
+          "frame": [
+            256,
+            256
+          ],
+          "texture": [
+            2048,
+            2048
+          ],
+          "size": 286.1110679611651,
+          "position": [
+            298.2499999999998,
+            -12
+          ],
+          "scale": 1,
+          "pose": "static"
+        }
+      ],
+      "mechanics": [
+        {
+          "skillId": "M06",
+          "phase": "windup"
+        },
+        {
+          "skillId": "M06",
+          "phase": "active"
+        },
+        {
+          "skillId": "M06",
+          "phase": "recovery"
+        },
+        {
+          "skillId": "M01",
+          "phase": "windup"
+        },
+        {
+          "skillId": "M01",
+          "phase": "active"
+        },
+        {
+          "skillId": "M01",
+          "phase": "recovery"
+        },
+        {
+          "skillId": "M19",
+          "phase": "windup"
+        },
+        {
+          "skillId": "M19",
+          "phase": "active"
+        },
+        {
+          "skillId": "M19",
+          "phase": "recovery"
+        },
+        {
+          "skillId": "M02",
+          "phase": "windup"
+        },
+        {
+          "skillId": "M02",
+          "phase": "active"
+        },
+        {
+          "skillId": "M02",
+          "phase": "recovery"
+        }
+      ],
+      "death": {
+        "lowRemaining": false,
+        "highRemaining": false,
+        "kills": 1
+      },
+      "paused": true
+    }
+  ],
+  "errors": [],
+  "fixture": "Real compiled Cocos renderer with smoke in-memory storage; authored archetypes, no roster edits.",
+  "status": "PASS"
+}

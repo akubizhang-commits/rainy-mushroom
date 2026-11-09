@@ -1,0 +1,52 @@
+{
+  "status": "integrated_browser_verified",
+  "date": "2026-11-06",
+  "tool": "Scenario model_pruna-p-video-2-pro (480p, 5s, mode cost, promptUpsampler off, seed 202611061, lastFrameImage = first)",
+  "teamId": "team_Ur9UBLcjfvXmu2iaNKV7cFVh",
+  "projectId": "proj_k6xCHLGuh1JrUQ7Vzo8vsZYV",
+  "referenceAssetId": "asset_Ed1mG7dJu5orvgX8JELepNWS",
+  "referenceSha256": "758089dfaedfc5c78ab01c32a06b6ee1ab7a8003025ecaa4ef79364726f9db4e",
+  "referenceNote": "same approved 512 demonic snake cutout, scaled to 72% and placed left-biased (294px right margin) to leave tail room",
+  "jobId": "job_gDCFiZUsCSSp262z1ZZ8khAd",
+  "videoAssetId": "asset_YPMThDxTMG7gsfYHJdtGSBDA",
+  "sourceVideoSha256": "ae05641305782a7384cff2d84bc4da42d4a929a801bb4860114fb29e190b205e",
+  "quotedCU": 10,
+  "actualCU": 10,
+  "source": "480x480, 24fps, 124 frames; union subject bbox x72-445 y155-421 (no frame touches the edge)",
+  "candidate": {
+    "sourceStart": 59,
+    "sourceLength": 63,
+    "frames": 16,
+    "loopSeconds": 2.625,
+    "seamRatio": 0.832,
+    "rejectedWindow": "candidate-try1-s28-l60 seam 1.36"
+  },
+  "observation": "tail uncurls and extends to the right around source frames 40-50 and 98-110; body remains one continuous head/tail; awaiting user look approval",
+  "runtimeIntegrated": true,
+  "pendingJobs": false,
+  "userApproval": "2026-11-06 用户：先接入，实测效果不好后面再优化",
+  "runtime": {
+    "atlas": "tower-monsters-motion/snake-v1.png",
+    "frames": 16,
+    "cell": 384,
+    "atlasSize": [
+      1536,
+      1536
+    ],
+    "rgbaMiB": 9.0,
+    "displayScale": 1.3068,
+    "anchor": [
+      0.3646,
+      0.9896
+    ],
+    "fps": 6.095,
+    "cropNoResample": true
+  },
+  "testsTargeted": {
+    "passed": 96,
+    "failed": 0
+  },
+  "browserGroupsPassed": 8,
+  "browserNote": "snake_normal_r2/r3 x both directions x 1280/844; first assertion compared node y although portrait and frames use different anchors, corrected to ground point",
+  "phoneVerified": false
+}

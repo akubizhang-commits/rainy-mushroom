@@ -1,0 +1,24 @@
+{
+  "status": "integrated_browser_verified",
+  "date": "2026-11-06",
+  "tool": "Scenario model_pruna-p-video-2-pro, 480p, 5s, mode cost, promptUpsampler off, lastFrameImage = first",
+  "teamId": "team_Ur9UBLcjfvXmu2iaNKV7cFVh", "projectId": "proj_k6xCHLGuh1JrUQ7Vzo8vsZYV",
+  "jobs": {
+    "wolf-humanoid": {"jobId": "job_5n1rfpUjoRjjbMZDyL8kYxAz", "videoAssetId": "asset_quLHpyoeDNdTV9WsSjfUUvJ1", "referenceAssetId": "asset_87AF2wWiZgmFzqAFAAYHviZr", "seed": 202611062, "cu": 10},
+    "tiger-humanoid": {"jobId": "job_Jzv3vj1DDVWcRAbBpBL3kFPq", "videoAssetId": "asset_RDRhXbXW5gAKm5HDRv6BqnFF", "referenceAssetId": "asset_iR5Xv6ZUFcozbFsY1GuUPBPg", "seed": 202611063, "cu": 10},
+    "falcon-humanoid": {"jobId": "job_cGN2tyay5wcxbWEkP9WQiAf6", "videoAssetId": "asset_yiPqCRbLvtSS768amXTCKT6b", "referenceAssetId": "asset_PonxRtFMjLhF8q3gSyNdzyjd", "seed": 202611064, "cu": 10, "note": "first submit refused 429 parallel-custom-jobs limit 2 (no job, no charge), resubmitted once"}
+  },
+  "sources": "design/xianxia-{wolf,tiger,falcon}-humanoid-attack-scenario/original-v1.mp4 + raw-frames (480x480, 24fps, 124 frames each)",
+  "runtime": {"clip": "sweep", "frames": 20, "phases": {"windup": [0, 9], "active": [9, 3], "recovery": [12, 8]}, "frameSize": 480, "atlas": [2880, 2880], "rgbaMiBEach": 31.64, "moveFramesByteIdentical": true},
+  "playback": "real attack timeline: wolf/tiger normal bite+sweep, wolf elite bite, tiger elite sweep, falcon normal bite; falcon feather shot, mechanics, still and walk keep previous behaviour",
+  "knownIssues": [
+    "wolf claw tip touches left canvas edge in source frames 46-54 (runtime sweep-011/012); a few px clipped",
+    "tiger claw tip touches left edge in source frame 40 (runtime sweep-010)",
+    "falcon outstretched hand touches left edge in source frames 36-61 (runtime sweep-011/015)",
+    "tiger strike has a strong body twist; user approved integrating now and optimizing later"
+  ],
+  "testsTargeted": {"passed": 96, "failed": 0},
+  "browser": {"groups": "6 archetypes x 2 directions x 2 viewports, each attack kind on the real timeline; 8 falcon shot checks", "status": "PASS", "earlierRuns": ["browser-run1-timeout.json: page load timeout before any check", "browser-run2-elite-sweep.json: fixture wrongly expected elites to use the normal-only sweep skill"]},
+  "fullTests": {"passed": 2347, "failed": 35, "note": "3 pre-existing as before; 32 new failures are player-skill tests (convergence, liangyi, sixiang, sword beats) while another session was editing TowerYujian/TowerSkillTiming/TowerResonance; none touch monster rendering"},
+  "phoneVerified": false
+}

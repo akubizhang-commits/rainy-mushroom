@@ -1,0 +1,18 @@
+{
+  "status": "integrated_browser_verified",
+  "date": "2026-11-06",
+  "scope": "boar-humanoid walk only (boar_normal_r4, 87 deployments on floors 6/7)",
+  "tool": "Scenario model_pruna-p-video-2-pro, 480p, 5s, mode cost, promptUpsampler off, seed 202611065, lastFrameImage = first",
+  "referenceAssetId": "asset_Biu1ThAfYQWXwhNFhKnJFndX",
+  "referenceNote": "approved xianxia-boar-humanoid-2026-11-02/reference-alpha.png scaled to 80% with margins on green; upload complete failed once with 400 then succeeded on retry (no extra generation)",
+  "jobId": "job_py1z7HBvEPdpn4sNuXhEDP2L",
+  "videoAssetId": "asset_KYi6evMv3zoN7UBvopb3gYZU",
+  "cu": 10,
+  "source": "480x480, 24fps, 124 frames; front hoof touches the bottom edge in source frames 28-31, 69-72, 110-112",
+  "runtime": {"sourceStart": 62, "sourceLength": 43, "frames": 16, "loopSeconds": 1.79, "seamRatio": 0.236, "scale": 1.0277, "atlas": [1920, 1920], "rgbaMiB": 14.06},
+  "knownIssues": ["source hoof bottom-edge contact in 4 of the loop's source frames (src 69-72) may show a slightly flat hoof", "facing sways between three-quarter left and near-frontal during the stride", "fixed scale is 1.03x (slight upscale) to match the portrait"],
+  "testsTargeted": {"passed": 97, "failed": 0},
+  "browserGroupsPassed": 4,
+  "incident": "A timed-out comparison command from the attack step kept running and copied an older TowerMonsterArt.ts back at 11:46, undoing the first boar patch; detected by the failing test, patch reapplied, no other files affected.",
+  "phoneVerified": false
+}
