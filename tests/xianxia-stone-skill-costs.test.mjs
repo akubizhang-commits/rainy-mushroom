@@ -14,7 +14,8 @@ const state = (extra = {}) => ({
 const prerequisites = row => row.kind === 'evolution'
   ? { [row.parent]: 6, [row.passive]: GROWTH_SKILLS.find(skill=>skill.id===row.passive).maxLevel }
   : row.prerequisites
-const definitions = [...GROWTH_SKILLS, ...GROWTH_EVOLUTIONS]
+// 2026-11-09：周天剑域（evo_wuwo）并入周天剑阵后退役，不可学习。
+const definitions = [...GROWTH_SKILLS, ...GROWTH_EVOLUTIONS].filter(row => row.id !== 'evo_wuwo')
 
 test('all special book quotes use the approved lower-grade spirit stone prices', () => {
   for (const row of definitions.filter(row => row.special)) {

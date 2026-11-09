@@ -15,9 +15,10 @@ const copy = value => JSON.parse(JSON.stringify(value))
 const stageLevels = [1, 4, 7, 11, 14, 17, 21, 24, 27]
 const thresholds = stageLevels.map(cultivationLevelXp)
 const allocation = [
-  ['sj_arc', 'sj_yujian', 'sj_bone'], ['sj_moon', 'vajra', 'sj_wanjian'], ['sj_qinglian', 'sj_mark'],
-  ['sj_moon_triple', 'sj_shadow', 'sj_sancai', 'sj_flight', 'sj_spirit'], ['sj_cross'], ['sj_gate', 'sj_formation'],
-  ['sj_line', 'sj_heart', 'evo_wanjian', 'evo_wuwo'], ['evo_tiandi'], ['evo_sixiang'],
+  // 2026-11-09：青莲→筑基初期，三才→筑基巅峰，两仪→金丹初期；周天剑域（evo_wuwo）退役但仍留在阶段表中供旧逻辑计算。
+  ['sj_arc', 'sj_yujian', 'sj_bone'], ['sj_moon', 'vajra', 'sj_wanjian'], ['sj_mark'],
+  ['sj_moon_triple', 'sj_shadow', 'sj_qinglian', 'sj_flight', 'sj_spirit'], ['sj_cross'], ['sj_gate', 'sj_sancai'],
+  ['sj_line', 'sj_heart', 'sj_formation', 'evo_wanjian', 'evo_wuwo'], ['evo_tiandi'], ['evo_sixiang'],
 ]
 // 2026-11-09：剑破虚空21级、蚀骨剑意7级、一剑开天24级均与所在阶段起始等级一致，不再单列。
 const authoredUnlocks = {sj_yujian:2,sj_gate:19}
@@ -66,11 +67,11 @@ function reject(store, storage, action, reason) {
   assert.equal(storage.writes, writes)
 }
 
-test('nine immutable stages cover all 30 levels with the approved 8/8/6 allocation', () => {
+test('nine immutable stages cover all 30 levels with the approved 7/8/7 allocation', () => {
   assert.equal(GROWTH_STAGES.length, 9)
   assert.deepEqual(GROWTH_STAGES.map(stage => stage.skillIds), allocation)
   assert.deepEqual(['炼气', '筑基', '金丹'].map(realm =>
-    GROWTH_STAGES.filter(stage => stage.realm === realm).flatMap(stage => stage.skillIds).length), [8, 8, 6])
+    GROWTH_STAGES.filter(stage => stage.realm === realm).flatMap(stage => stage.skillIds).length), [7, 8, 7])
   assert.deepEqual(allocation.flat().slice().sort(), definitions.map(row => row.id).sort())
   for (const [i, stage] of GROWTH_STAGES.entries()) {
     assert.equal(stage.minLevel, stageLevels[i])
@@ -97,7 +98,7 @@ test('nine immutable stages cover all 30 levels with the approved 8/8/6 allocati
   for (const xp of [-1, 0.5, TOWER_XP_CAP + 1, NaN]) assert.throws(() => growthStageAt(xp), RangeError)
 })
 
-for (const [index, ids] of allocation.entries()) for (const id of ids) {
+for (const [index, ids] of allocation.entries()) for (const id of ids.filter(id => id !== 'evo_wuwo')) {
   test(`${id} first learning and further investment obey its Lv${authoredUnlocks[id] ?? stageLevels[index]} stage boundary`, () => {
     const at = stateFor(id, cultivationLevelXp(authoredUnlocks[id] ?? stageLevels[index])), original = copy(at)
     if (index === 0) {
@@ -196,7 +197,7 @@ test('current-schema investments below their starting realm are rejected without
   assert.equal(storage.raw, raw)
 })
 
-for (const id of ['evo_tiandi', 'evo_wuwo', 'evo_sixiang']) {
+for (const id of ['evo_tiandi', 'evo_sixiang']) {
   test(`${id} at its current unlock stays valid through reload, downgrade and battle`, () => {
     const row = GROWTH_EVOLUTIONS.find(row => row.id === id)
     const patch = stateFor(id, cultivationLevelXp(id==='evo_tiandi'?24:21))
@@ -245,7 +246,7 @@ test('retained-evolution compatibility keeps the pre-existing realm, book, paren
 })
 
 test('each evolution can be learned and upgraded without its paired passive, with atomic book payment', () => {
-  for (const row of GROWTH_EVOLUTIONS) {
+  for (const row of GROWTH_EVOLUTIONS.filter(row => row.id !== 'evo_wuwo')) {
     const patch = stateFor(row.id, TOWER_XP_CAP)
     patch.skills[row.parent] = 8
     patch.books = GROWTH_SKILLS.filter(skill => patch.skills[skill.id] && skill.special).map(skill => skill.id)
@@ -276,7 +277,7 @@ test('class rank caps follow new growth and evolution rank two retains its origi
     assert.equal(rankCap(row.id, 0, 9), row.learnLevel === 1 ? (row.id === 'sj_bone' ? 1 : 3) : 0)
     assert.equal(rankCap(row.id, TOWER_XP_CAP, 9), row.maxLevel)
   }
-  for (const row of GROWTH_EVOLUTIONS) {
+  for (const row of GROWTH_EVOLUTIONS.filter(row => row.id !== 'evo_wuwo')) {
     const state = stateFor(row.id, TOWER_XP_CAP)
     state.skills[row.parent] = 1
     state.evolutionRanks[row.id] = 1

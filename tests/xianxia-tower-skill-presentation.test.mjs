@@ -146,7 +146,8 @@ test('next-rank effects cross actual form thresholds without changing the frozen
  assert.equal(arc.learnedLevel,6,'uses the battle rank, not the higher camp rank')
  const orbit=skillPresentation(s,'sj_wanjian')
  assert.equal(orbit.currentForm.hits,null);assert.equal(orbit.nextForm.hits,null)
- assert.equal(orbit.currentForm.swords,5);assert.equal(orbit.nextForm.swords,6)
+ // 2026-11-09 方案A：剑数 6/8/10/12，5 级 8 柄、6 级 10 柄。
+ assert.equal(orbit.currentForm.swords,8);assert.equal(orbit.nextForm.swords,10)
  const evolution=skillPresentation(s,'evo_sixiang')
  assert.equal(evolution.learnedLevel,1);assert.equal(evolution.currentForm.hits,16);assert.equal(evolution.nextForm.hits,20)
  assert.equal(evolution.currentForm.radius,288,'current presentation keeps the battle evolution rank')
@@ -166,11 +167,12 @@ test('unchanged forms still explain the next rank, and maximum rank has no predi
  const max=skillPresentation(s,'sj_arc')
  assert.equal(max.nextPreview,null);assert.equal(max.nextForm,null);assert.deepEqual(max.nextFormLines,[])
 })
-test('all four evolution numbers match sampled casts and independent main-hit resolution',()=>{
+// 2026-11-09：周天剑域（evo_wuwo）并入周天剑阵后退役。
+test('all learnable evolution numbers match sampled casts and independent main-hit resolution',()=>{
  const s=fresh();s.xp=TOWER_XP_CAP;s.tutorialWaves=3
  s.skills={sj_yujian:8,sj_arc:3,sj_line:8,sj_wanjian:8,sj_formation:8,sj_heart:3,sj_bone:3,sj_gate:2}
- s.evolutionRanks={evo_wanjian:2,evo_tiandi:2,evo_wuwo:2,evo_sixiang:2};equip(s)
- for(const [evo,parent,key]of[['evo_wanjian','sj_yujian','rainTickDamage'],['evo_tiandi','sj_line','hitDamage'],['evo_wuwo','sj_wanjian','tickDamage'],['evo_sixiang','sj_formation','tickDamage']]){
+ s.evolutionRanks={evo_wanjian:2,evo_tiandi:2,evo_sixiang:2};equip(s)
+ for(const [evo,parent,key]of[['evo_wanjian','sj_yujian','rainTickDamage'],['evo_tiandi','sj_line','hitDamage'],['evo_sixiang','sj_formation','tickDamage']]){
   const loadout=combatLoadout(s);loadout.active={[parent]:8};loadout.evolutions=[evo];loadout.evolutionLevels={[evo]:2}
   const run=new TowerRun({attemptId:1,floor:1,seed:12,hp:100,xp:s.xp,loadout})
   const enemy={id:'panel',hp:1e7,x:120,y:0,radius:5,woundBudget:0,orbitNextAt:0}
@@ -189,7 +191,7 @@ test('all four evolution numbers match sampled casts and independent main-hit re
 })
 test('requirement lines include actual book/floor costs, known books are not charged again',()=>{
  const s=fresh();let p=skillPresentation(s,'sj_formation')
- assert.deepEqual(p.requirementLines,['角色筑基 · 巅峰','悟道点 1','经卷 2中品灵石'])
+ assert.deepEqual(p.requirementLines,['角色金丹 · 初期','悟道点 1','经卷 2中品灵石']) // 2026-11-09：两仪剑阵→金丹初期
  s.books=['sj_formation'];p=skillPresentation(s,'sj_formation')
  assert.ok(!p.requirementLines.some(x=>x.startsWith('经卷')))
  p=skillPresentation(s,'sj_flight');assert.deepEqual(p.requirementLines,['角色筑基 · 初期','悟道点 1'])
@@ -199,7 +201,7 @@ test('requirement lines include actual book/floor costs, known books are not cha
 })
 test('retained investments still display the learning-stage floor on their next rank',()=>{
  const s=fresh();s.skills.vajra=1;s.skills.sj_heart=1;s.skills.sj_formation=1
- for (const [id,stage,level] of [['vajra','炼气 · 巅峰',7],['sj_heart','金丹 · 中期',24],['sj_formation','筑基 · 巅峰',17]]) {
+ for (const [id,stage,level] of [['vajra','炼气 · 巅峰',7],['sj_heart','金丹 · 中期',24],['sj_formation','金丹 · 初期',21]]) {
   const p=skillPresentation(s,id)
   assert.equal(p.requirementLines[0],`角色${stage}`)
   assert.equal(p.nextRequirement.characterLevel,level)
@@ -218,7 +220,7 @@ test('player descriptions avoid implementation jargon and preserve damage units'
  assert.match(skillPresentation(s,'sj_yujian').description,/伤害已计入当前装备与被动，未计暴击/)
 })
 test('special affordability uses spirit stones only, at the exact book-price boundary',()=>{
- for (const def of [...GROWTH_SKILLS,...GROWTH_EVOLUTIONS].filter(row=>row.special)) {
+ for (const def of [...GROWTH_SKILLS,...GROWTH_EVOLUTIONS].filter(row=>row.special&&row.id!=='evo_wuwo')) {
   const s=fresh();s.xp=10920;s.clearedFloor=9;s.researchPurchases=0;s.tutorialWaves=3
   s.skills={sj_yujian:1,sj_arc:1,sj_wanjian:1,...(def.kind==='evolution'
    ? {[def.parent]:6} : def.prerequisites)}
@@ -291,7 +293,7 @@ test('dependency hints omit former special/passive gates and retain exact evolut
   assert.deepEqual(p.nextRequirement.prerequisites,{})
   assert.equal(p.nextRequirement.canUpgrade,true,id)
  }
- for(const row of GROWTH_EVOLUTIONS) for(const [rank,parentLevel] of [[0,6],[1,8],[2,8]]){
+ for(const row of GROWTH_EVOLUTIONS.filter(r=>r.id!=='evo_wuwo')) for(const [rank,parentLevel] of [[0,6],[1,8],[2,8]]){ // 周天剑域已退役
   const s=fresh();s.xp=TOWER_XP_CAP;s.clearedFloor=9;s.tutorialWaves=3;s.researchPurchases=0;s.spiritStones=10000
   s.skills={sj_yujian:1,sj_arc:1,sj_wanjian:1,[row.parent]:parentLevel}
   s.evolutionRanks=rank?{[row.id]:rank}:{}

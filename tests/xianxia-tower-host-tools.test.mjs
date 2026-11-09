@@ -1280,7 +1280,7 @@ const stageRows = [
   ['zhuji-middle', '筑基·中期', ['sj_mark', 'sj_bone']],
   ['zhuji-peak', '筑基·巅峰', ['sj_gate']],
   ['jindan-early', '金丹·初期', ['evo_wanjian']],
-  ['jindan-middle', '金丹·中期', ['evo_tiandi', 'evo_wuwo']],
+  ['jindan-middle', '金丹·中期', ['evo_tiandi']],
   ['jindan-peak', '金丹·巅峰', ['evo_sixiang']],
   ['yuanying-early', '元婴·初期', ['future_taixu']],
   ['yuanying-middle', '元婴·中期', ['future_yingling']],
@@ -1478,7 +1478,8 @@ function assertSkillPan(game, treeOffset, detailY, selected) {
 
 }
 
-const currentSkillArtIds = [...growth.GROWTH_SKILLS, ...growth.GROWTH_EVOLUTIONS].map(skill => skill.id)
+// 2026-11-09：周天剑域（evo_wuwo）并入周天剑阵后退役，不在技能树中显示，也不加载图标。
+const currentSkillArtIds = [...growth.GROWTH_SKILLS, ...growth.GROWTH_EVOLUTIONS].map(skill => skill.id).filter(id => id !== 'evo_wuwo')
 
 async function completeSkillImages(icons, failedId = null) {
   // Deliver outside the menu's initial call stack. The production loader owns
@@ -1771,7 +1772,7 @@ for (const frame of [{ width: 1280, height: 720 }, { width: 844, height: 390 }, 
     press(game, '功法')
     const strokes = () => named(game.menu.root, '功法前置连线').getComponent(Graphics).segments
     assert.equal(strokes().length, 0)
-    for (const evolution of growth.GROWTH_EVOLUTIONS) {
+    for (const evolution of growth.GROWTH_EVOLUTIONS.filter(evolution => evolution.id !== 'evo_wuwo')) {
       press(game, `功法节点-${evolution.id}`)
       const tree = named(game.menu.root, '境界功法树内容'), lines = strokes()
       assert.equal(lines.length, 7, 'one five-segment path plus two arrowhead segments')
@@ -1805,7 +1806,8 @@ for (const frame of [{ width: 1280, height: 720 }, { width: 844, height: 390 }, 
     }
     assert.deepEqual(ids(), [...allDisplayedSkillIds].sort())
     const tree = named(game.menu.root, '境界功法树内容')
-    const stages = [...growth.GROWTH_STAGES.map(s => ({ id: s.id, ids: s.skillIds })),
+    // 2026-11-09：退役的周天剑域仍在阶段表中，但技能树不显示。
+    const stages = [...growth.GROWTH_STAGES.map(s => ({ id: s.id, ids: s.skillIds.filter(id => id !== 'evo_wuwo') })),
       ...stageRows.filter(s => s[2][0].startsWith('future_')).map(s => ({ id: s[0], ids: s[2] }))]
     const blocks = ['炼气', '筑基', '金丹', '元婴', '化神', '炼虚'].map(r => named(tree, `功法境界-${r}`))
     for (const [i, block] of blocks.entries()) {
@@ -2127,7 +2129,7 @@ test('failed learning keeps scroll and loaded assets, shows a fixed error, and r
 
 for (const [id, stage, level, higherLevel] of [
   ['evo_wanjian', '金丹一层*初期', 21, 27], ['evo_tiandi', '金丹四层*中期', 24, 27],
-  ['evo_wuwo', '金丹一层*初期', 21, 27], ['evo_sixiang', '金丹七层*巅峰', 27, 30],
+  ['evo_sixiang', '金丹七层*巅峰', 27, 30],
 ]) {
   test(`nine-stage UI ${id} first-rank condition matches its stage without changing higher-rank gates`, t => {
     const storage = disk(); seed(storage)

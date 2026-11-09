@@ -64,9 +64,10 @@ test('rank caps unlock on the approved levels and do not bypass learning, floor 
       assert.equal(rankCap(row.id, xpAt(level), 9), expected, `${row.id} at ${level}`)
     }
   }
-  const state = { xp: xpAt(17), clearedFloor: 2, skills: { sj_yujian: 1 }, books: [] }
+  // 2026-11-09：两仪剑阵移到金丹初期（21 级）。
+  const state = { xp: xpAt(21), clearedFloor: 2, skills: { sj_yujian: 1 }, books: [] }
   assert.deepEqual(skillRequirement(state, 'sj_formation'), { ok: true, nextLevel: 1, cost: 1, bookCost: 200 })
-  assert.equal(skillRequirement({ ...state, xp: xpAt(17) - 1 }, 'sj_formation').reason, 'stage-locked')
+  assert.equal(skillRequirement({ ...state, xp: xpAt(21) - 1 }, 'sj_formation').reason, 'stage-locked')
   assert.equal(skillRequirement({ ...state, clearedFloor: 1 }, 'sj_formation').ok, true)
   assert.equal(skillRequirement(state, 'sj_formation', { inTower: true }).ok, true)
 })

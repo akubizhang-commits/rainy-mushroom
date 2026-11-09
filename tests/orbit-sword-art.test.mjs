@@ -60,35 +60,36 @@ test('orbit sprites hide in cooldown and reappear for the next active window', (
   s.loadout.growthVersion = 1
   s.orbitUntil = 4
   art.syncTower(parent, s, camera)
-  assert.equal(active(art).length, 4)
+  // 2026-11-09：周天剑阵改用剑域形态，1–3 级 6 柄。
+  assert.equal(active(art).length, 6)
   s.time = 4
   art.syncTower(parent, s, camera)
   assert.equal(active(art).length, 0)
   s.time = 6; s.orbitUntil = 10
   art.syncTower(parent, s, camera)
-  assert.equal(active(art).length, 4)
+  assert.equal(active(art).length, 6)
 })
 
 test('approved sword span tracks combat at every count tier, reusing one base pool', () => {
   const { art, parent, requests } = ready(), s = state()
   assert.equal(requests[0].path, 'tower-skill-fx/orbit-sword-v1')
   let pool
-  for (const [level, count] of [[1, 4], [3, 5], [6, 6], [10, 8], [1, 4]]) {
+  for (const [level, count] of [[1, 6], [3, 8], [6, 10], [10, 12], [1, 6]]) {
     s.loadout.active.sj_wanjian = level
     const before = JSON.stringify(s), f = skillForm('sj_wanjian', level)
     assert.equal(art.syncTower(parent, s, camera), true)
     assert.equal(JSON.stringify(s), before, 'presentation cannot mutate combat')
     assert.equal(active(art).length, count)
-    assert.equal(art.actors.length, 8)
+    assert.equal(art.actors.length, 12)
     if (pool) assert.deepEqual(art.actors.map(a => a.node), pool)
     pool = art.actors.map(a => a.node)
     for (const [i, a] of active(art).entries()) {
       const p = orbitSwordPose(f, s.time, i)
       close(a.node.x, s.player.x + p.x - camera.x)
       close(a.node.y, s.player.y + 57 + p.y - camera.y)
-      close(a.node.towerGroundY, s.player.y + p.y)
+      close(a.node.towerGroundY, s.player.y + p.depthY)
       close(a.node.angle, p.angle * 180 / Math.PI)
-      close(a.ui.width * 496 / 544, f.bladeLength)
+      close(a.ui.width * 496 / 544, p.length)
       close(a.ui.height * 88 / 128, f.bladeWidth)
       assert.equal(a.ui.anchorX, .5); assert.equal(a.ui.anchorY, .5)
     }
@@ -105,7 +106,7 @@ test('evolution grows to twelve pooled swords and downgrading hides surplus acto
   assert.equal(art.actors[0], first)
   s.loadout.evolutions = []; s.loadout.evolutionLevels = {}
   art.syncTower(parent, s, camera)
-  assert.equal(active(art).length, 8); assert.equal(art.actors.length, 12)
+  assert.equal(active(art).length, 12); assert.equal(art.actors.length, 12)
 })
 
 test('wuwo uses the supplied waist anchor, shared tangent span and unlifted depth',()=>{
@@ -140,8 +141,9 @@ test('wuwo ground ring stays optional, follows feet rather than waist, and relea
  close(f.art.flowNode.y,s.player.y-camera.y)
  assert.equal(f.art.flowFrames.length,16)
  const frame=f.art.flowFrame,texture=f.art.flowTexture
+ // 2026-11-09：基础周天剑阵也使用剑域形态，卸下进阶后地环仍随剑阵显示。
  s.loadout.evolutions=[];f.art.syncTower(f.parent,s,camera)
- assert.equal(f.art.flowNode.active,false)
+ assert.equal(f.art.flowNode.active,true)
  f.art.destroy();assert.equal(image.refs,0);assert.ok(frame.dead&&texture.dead)
 })
 
@@ -188,10 +190,11 @@ test('movement uses historical world positions while pause reuses geometry and b
   }
   assert.equal(art.historyTime, buffer); assert.equal(art.historyCount, 64)
   assert.equal(a.lastTrail[0].points, points)
-  const first = points[0], angle = first.time * art.form.angularSpeed
-  close(first.time, s.time - .18)
-  close(first.worldX, s.player.x - .18 * 120 + Math.cos(angle) * a.lastTrail[0].radial)
-  close(first.worldY, s.player.y + 57 + Math.sin(angle) * a.lastTrail[0].radial)
+  // 2026-11-09：周天剑阵改用剑域形态，尾迹从剑柄沿变速游剑的实际路径发出（同剑域）。
+  const first = points[0], pose = orbitSwordPose(art.form, first.time, 0), offset = -pose.length / 2
+  assert.ok(s.time - first.time >= .64)
+  close(first.worldX, 100 + 120 * first.time + pose.x + Math.cos(pose.angle) * offset)
+  close(first.worldY, s.player.y + 57 + pose.y + Math.sin(pose.angle) * offset)
   const calls = JSON.stringify(a.tail.calls), clears = a.tail.clears, history = art.historyCount
   art.syncTower(parent, s, { x: 20, y: 30 })
   assert.equal(JSON.stringify(a.tail.calls), calls, 'camera-only redraw does not replay the trail')
@@ -249,7 +252,7 @@ test('skill removal, death, re-entry and destruction release bindings without st
   assert.ok(nodes.every(n => !n.isValid && !n.parent))
   const next = new f.Node('new battle')
   f.art.syncTower(next, state(3, 0), camera)
-  assert.equal(active(f.art).length, 5); assert.equal(f.art.historyCount, 1)
+  assert.equal(active(f.art).length, 8); assert.equal(f.art.historyCount, 1)
   assert.ok(f.art.actors.every(a => a.node.parent === next))
   const frame = f.art.frame, texture = f.art.texture
   f.art.destroy(); f.art.destroy()

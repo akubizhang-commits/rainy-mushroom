@@ -19,7 +19,8 @@ function fixture() {
 }
 function learn(store,id,n=1) { for(let i=0;i<n;i++) assert.equal(store.act({type:'learnSkill',id},0).ok,true,id) }
 
-for(const evo of GROWTH_EVOLUTIONS) {
+// 2026-11-09：周天剑域（evo_wuwo）并入周天剑阵后退役，不可学习。
+for(const evo of GROWTH_EVOLUTIONS.filter(e=>e.id!=='evo_wuwo')) {
  test(`${evo.id}: fixed price determines full-route budget`,()=>{
   const parent=GROWTH_SKILLS.find(s=>s.id===evo.parent)
   const expected={evo_wanjian:[12,14],evo_wuwo:[14,18],evo_tiandi:[12,14],evo_sixiang:[14,18]}[evo.id]
@@ -68,7 +69,7 @@ for(const evo of GROWTH_EVOLUTIONS) {
  })
 }
 
-for(const evo of GROWTH_EVOLUTIONS) test(`${evo.id}: paused base upgrade, rollback and resumed snapshots retain actual rank`,()=>{
+for(const evo of GROWTH_EVOLUTIONS.filter(e=>e.id!=='evo_wuwo')) test(`${evo.id}: paused base upgrade, rollback and resumed snapshots retain actual rank`,()=>{
  const {store,disk,block,data}=fixture();learn(store,evo.parent);learn(store,evo.id)
  const start=store.act({type:'startFloor',floor:1,seed:12},0);assert.equal(start.ok,true)
  let run=TowerRun.restore(start.snapshot)

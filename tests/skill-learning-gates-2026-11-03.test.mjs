@@ -121,29 +121,31 @@ test('orbit starts at refining middle and reaches rank ten at foundation peak',(
  assert.deepEqual(definition.pointCosts,Array(10).fill(1))
  assert.equal(definition.cooldown,6);assert.equal(definition.duration,4)
  assert.match(skillPresentation(ready.store.state,'sj_wanjian').requirementLines[0],/炼气.*中期/)
+ // 2026-11-09：周天剑域并入周天剑阵后退役，不可再学习。
  const evolve=fixture(24,{sj_wanjian:1})
- assert.equal(evolve.store.act({type:'learnSkill',id:'evo_wuwo'},0).level,1)
- assert.equal(new TowerCampaignStore(evolve.disk,0).state.evolutionRanks.evo_wuwo,1)
+ assert.equal(evolve.store.act({type:'learnSkill',id:'evo_wuwo'},0).reason,'retired')
+ assert.equal(new TowerCampaignStore(evolve.disk,0).state.evolutionRanks.evo_wuwo??0,0)
 })
 
-test('liangyi starts at foundation peak with atomic learning and persistent ranks',()=>{
- const early=fixture(16),before=JSON.stringify(early.store.state),raw=early.disk.raw
+// 2026-11-09：两仪剑阵移到金丹初期（21 级），等级段 21/24/27/30。
+test('liangyi starts at golden-core early with atomic learning and persistent ranks',()=>{
+ const early=fixture(20),before=JSON.stringify(early.store.state),raw=early.disk.raw
  assert.equal(early.store.act({type:'learnSkill',id:'sj_formation'},0).reason,'stage-locked')
  assert.equal(JSON.stringify(early.store.state),before)
  assert.equal(early.disk.raw,raw)
- const ready=fixture(17)
+ const ready=fixture(21)
  const definition=GROWTH_SKILLS.find(s=>s.id==='sj_formation')
- assert.equal(definition.learnLevel,17)
+ assert.equal(definition.learnLevel,21)
  assert.deepEqual(definition.pointCosts,Array(10).fill(1))
  assert.equal(definition.bookCost,200)
- assert.match(skillPresentation(ready.store.state,'sj_formation').requirementLines[0],/筑基.*巅峰/)
+ assert.match(skillPresentation(ready.store.state,'sj_formation').requirementLines[0],/金丹.*初期/)
  const stones=ready.store.state.spiritStones
  assert.equal(ready.store.act({type:'learnSkill',id:'sj_formation'},0).level,1)
  assert.equal(ready.store.state.spiritStones,stones-200)
  assert.equal(new TowerCampaignStore(ready.disk,0).state.skills.sj_formation,1)
- for(const [level,cap] of [[16,0],[17,3],[20,3],[21,6],[23,6],[24,9],[26,9],[27,10]])
+ for(const [level,cap] of [[20,0],[21,3],[23,3],[24,6],[26,6],[27,9],[29,9],[30,10]])
   assert.equal(rankCap('sj_formation',cultivationLevelXp(level)),cap)
- const failed=fixture(17),state=JSON.stringify(failed.store.state),saved=failed.disk.raw
+ const failed=fixture(21),state=JSON.stringify(failed.store.state),saved=failed.disk.raw
  failed.disk.fail=true
  assert.equal(failed.store.act({type:'learnSkill',id:'sj_formation'},0).reason,'save-failed')
  assert.equal(JSON.stringify(failed.store.state),state)

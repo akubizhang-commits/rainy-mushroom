@@ -16,8 +16,9 @@ function fixture(level=30) {
  const store=new TowerCampaignStore(disk,0);assert.equal(store.readOnly,false)
  return {store,disk}
 }
+// 2026-11-09：周天剑域（evo_wuwo）并入周天剑阵后退役，不可学习。
 test('all skills can be learned and fully upgraded with zero cleared floors',()=>{
- for(const row of [...GROWTH_SKILLS,...GROWTH_EVOLUTIONS]) {
+ for(const row of [...GROWTH_SKILLS,...GROWTH_EVOLUTIONS].filter(r=>r.id!=='evo_wuwo')) {
   const {store,disk}=fixture()
   if(row.kind==='evolution') assert.equal(store.act({type:'learnSkill',id:row.parent},0).ok,true)
   assert.equal(skillRequirement(store.state,row.id).ok,true,row.id)
@@ -46,7 +47,7 @@ test('rank caps change only on an authored learning or rank threshold',()=>{
  }
 })
 test('advanced skills retain actual parent rank across casts and partial refunds',()=>{
- for(const row of GROWTH_EVOLUTIONS){
+ for(const row of GROWTH_EVOLUTIONS.filter(r=>r.id!=='evo_wuwo')){
   const {store,disk}=fixture()
   assert.equal(store.act({type:'learnSkill',id:row.parent},0).ok,true)
   assert.equal(store.act({type:'learnSkill',id:row.id},0).ok,true)

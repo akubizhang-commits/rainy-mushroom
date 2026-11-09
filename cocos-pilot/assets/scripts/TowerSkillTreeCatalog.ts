@@ -6,14 +6,14 @@ export const TREE_COLUMNS = [
  { name: '剑气', ids: ['sj_arc', 'sj_moon', 'sj_moon_triple', 'sj_cross', 'sj_line', 'evo_tiandi', 'future_taixu', 'future_shenxiao', 'future_liexu'] },
  // 85号：分光连斩归入御剑流派，参与御剑共鸣。
  { name: '御剑', ids: ['sj_yujian', 'sj_shadow', 'evo_wanjian'] },
- { name: '剑阵', ids: ['sj_wanjian', 'sj_qinglian', 'sj_sancai', 'sj_formation', 'evo_wuwo', 'evo_sixiang', 'future_xinghe', 'future_duankong'] },
+ { name: '剑阵', ids: ['sj_wanjian', 'sj_qinglian', 'sj_sancai', 'sj_formation', 'evo_sixiang', 'future_xinghe', 'future_duankong'] },
  { name: '心法', ids: ['sj_spirit', 'sj_heart', 'sj_bone', 'vajra', 'future_yingling', 'future_shenshi', 'future_xubu'] },
 ];
 
 /** Display-only grouping from approved proposal 38; never a purchase prerequisite. */
 export const TREE_BRANCHES = [
  { name: '剑气', ids: ['sj_arc', 'sj_moon', 'sj_moon_triple', 'sj_cross', 'sj_line', 'sj_mark', 'evo_tiandi'] },
- { name: '剑阵', ids: ['sj_wanjian', 'sj_qinglian', 'sj_sancai', 'sj_formation', 'evo_wuwo', 'evo_sixiang'] },
+ { name: '剑阵', ids: ['sj_wanjian', 'sj_qinglian', 'sj_sancai', 'sj_formation', 'evo_sixiang'] },
 ];
 
 /** Shared display membership: each existing skill appears and is purchased once. */
@@ -135,7 +135,8 @@ const phases = [
 
 /** Current stages are copied; the domain's frozen growth table stays untouched. */
 export const DISPLAY_STAGES: DisplayStage[] = [
- ...GROWTH_STAGES.map(stage => ({ ...stage, skillIds: [...stage.skillIds], future: false })),
+ // 2026-11-09：只显示技能树列中仍存在的技能；退役的周天剑域（evo_wuwo）不在任何列中，因此不显示。
+ ...GROWTH_STAGES.map(stage => ({ ...stage, skillIds: stage.skillIds.filter(id => TREE_COLUMNS.some(c => c.ids.includes(id))), future: false })),
  ...futureRealms.flatMap((realm, realmIndex) => phases.map((phase, phaseIndex) => {
   const id = `${realm.id}-${phase.id}`;
   const minLevel = 31 + realmIndex * 10 + phaseIndex * 3;

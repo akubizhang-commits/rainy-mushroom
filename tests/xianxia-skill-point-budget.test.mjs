@@ -20,7 +20,8 @@ test('every skill charges and refunds its fixed price through max rank and reloa
  const prices={sj_arc:1,sj_wanjian:1,sj_qinglian:1,sj_yujian:1,sj_cross:1,sj_moon:1,sj_moon_triple:1,sj_sancai:1,sj_spirit:1,sj_heart:1,vajra:1,
   sj_line:1,sj_shadow:1,sj_formation:1,sj_mark:1,sj_bone:1,sj_gate:1,sj_flight:1,
   evo_wanjian:2,evo_wuwo:4,evo_tiandi:2,evo_sixiang:4}
- for(const d of [...GROWTH_SKILLS,...GROWTH_EVOLUTIONS]){
+ // 2026-11-09：周天剑域（evo_wuwo）并入周天剑阵后退役，不可学习。
+ for(const d of [...GROWTH_SKILLS,...GROWTH_EVOLUTIONS].filter(d=>d.id!=='evo_wuwo')){
   const price=prices[d.id];assert.ok(price,d.id)
   const skills={sj_spirit:3,...(d.parent?{[d.parent]:1}:{})};delete skills[d.id]
   const books=GROWTH_SKILLS.filter(row=>skills[row.id]&&row.special).map(row=>row.id)
@@ -54,8 +55,9 @@ test('level points replace clear and research rewards',()=>{
   assert.equal(f.store.act({type:'researchPoint'},0).reason,'retired-research');assert.deepEqual(f.store.state,before)
  }
 })
-test('all four ultimates charge both ranks and refund exactly the actual investment',()=>{
- for(const [id,costs] of Object.entries({evo_wanjian:[2,2],evo_wuwo:[4,4],evo_tiandi:[2,2],evo_sixiang:[4,4]})){
+// 2026-11-09：周天剑域（evo_wuwo）并入周天剑阵后退役，不可学习。
+test('all three learnable ultimates charge both ranks and refund exactly the actual investment',()=>{
+ for(const [id,costs] of Object.entries({evo_wanjian:[2,2],evo_tiandi:[2,2],evo_sixiang:[4,4]})){
   const f=fixture({xp:TOWER_XP_CAP,clearedFloor:9,spiritStones:10000,researchPurchases:0})
   const parent=GROWTH_EVOLUTIONS.find(row=>row.id===id).parent
   assert.equal(f.store.act({type:'learnSkill',id:parent},0).ok,true)

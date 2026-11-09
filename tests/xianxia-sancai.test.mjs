@@ -29,15 +29,16 @@ function placedFixture(rank=1) {
  return {run,s,p,enemy}
 }
 
-test('Sancai learns independently at 11, has phased ranks and a fixed three-hit budget',()=>{
+// 2026-11-09：三才剑阵移到筑基巅峰（17 级），等级段 17/21/24/27。
+test('Sancai learns independently at 17, has phased ranks and a fixed three-hit budget',()=>{
  const d=definition();assert.ok(d,'Sancai exists')
- assert.equal(d.name,'三才剑阵');assert.equal(d.learnLevel,11);assert.equal(d.damageType,'hybrid')
+ assert.equal(d.name,'三才剑阵');assert.equal(d.learnLevel,17);assert.equal(d.damageType,'hybrid')
  assert.deepEqual(d.prerequisites,{});assert.deepEqual(d.pointCosts,Array(10).fill(1))
- const state={xp:cultivationLevelXp(11),skills:{},evolutionRanks:{},books:[],
+ const state={xp:cultivationLevelXp(17),skills:{},evolutionRanks:{},books:[],
   clearedFloor:0,researchPurchases:0,skillsInitialized:true,playtestSkillPoints:100}
  assert.equal(skillRequirement(state,d.id).ok,true)
- assert.equal(skillRequirement({...state,xp:cultivationLevelXp(10)},d.id).reason,'stage-locked')
- for(const [level,cap] of [[11,3],[14,6],[17,9],[21,10]])assert.equal(rankCap(d.id,cultivationLevelXp(level)),cap)
+ assert.equal(skillRequirement({...state,xp:cultivationLevelXp(16)},d.id).reason,'stage-locked')
+ for(const [level,cap] of [[17,3],[21,6],[24,9],[27,10]])assert.equal(rankCap(d.id,cultivationLevelXp(level)),cap)
  const combat=COMBAT_SKILLS.find(s=>s.id===d.id)
  for(let rank=1;rank<=11;rank++){
   near(combat.damage[rank-1],6*1.25*1.12**(rank-1)) // 2026-11-06：三才伤害×1.25
@@ -173,7 +174,7 @@ test('learning and refunds preserve save atomicity and active field contexts',as
   setItem(k,v){if(this.fail)throw Error('full');this.raw=v}}
  const initial=new TowerCampaignStore(disk,0);initial.act({type:'sync'},0)
  const envelope=JSON.parse(disk.raw),data=JSON.parse(envelope.data)
- Object.assign(data,{xp:cultivationLevelXp(11),skills:{},skillsInitialized:true,playtestSkillPoints:100})
+ Object.assign(data,{xp:cultivationLevelXp(17),skills:{},skillsInitialized:true,playtestSkillPoints:100})
  envelope.data=JSON.stringify(data);envelope.checksum=checksum(envelope.data);disk.raw=JSON.stringify(envelope)
  const store=new TowerCampaignStore(disk,0),before=store.state,raw=disk.raw
  disk.fail=true

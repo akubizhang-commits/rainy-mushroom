@@ -138,8 +138,9 @@ test('an unrelated decrement preserves legacy special investments allowed by the
   assert.equal(store.state.skills.sj_shadow, 2)
 })
 
+// 2026-11-09：周天剑域（evo_wuwo）退役，存档中不得再出现。
 test('all paired passives can be fully refunded without reducing evolution ranks or changing their combat form', () => {
-  for (const row of Growth.GROWTH_EVOLUTIONS) {
+  for (const row of Growth.GROWTH_EVOLUTIONS.filter(r => r.id !== 'evo_wuwo')) {
     const books = [row.id, ...Growth.GROWTH_SKILLS.filter(s => s.special && [row.parent, row.passive].includes(s.id)).map(s => s.id)]
     const passiveMax=Growth.GROWTH_SKILLS.find(s=>s.id===row.passive).maxLevel
     const { store, disk } = fixture({
@@ -165,7 +166,7 @@ test('all paired passives can be fully refunded without reducing evolution ranks
 })
 
 test('refunding parent ranks lowers inherited evolution strength without removing its rank', () => {
-  for (const row of Growth.GROWTH_EVOLUTIONS) {
+  for (const row of Growth.GROWTH_EVOLUTIONS.filter(r => r.id !== 'evo_wuwo')) {
     const special = Growth.GROWTH_SKILLS.find(skill => skill.id === row.parent).special
     const { store, disk } = fixture({
       skills: { ...gifts, [row.parent]: 9 }, books: special ? [row.parent, row.id] : [row.id],
@@ -188,9 +189,9 @@ test('refunding parent ranks lowers inherited evolution strength without removin
 
 test('direct evolution decrease refunds only its rank and preserves another evolution and legacy presets', () => {
   const { store, disk } = fixture({
-    skills: { ...gifts, sj_yujian: 8, sj_heart: 3, sj_wanjian: 6, sj_bone: 4 },
-    books: ['evo_wanjian', 'evo_wuwo'],
-    evolutionRanks: { evo_wanjian: 2, evo_wuwo: 1 }, evolutions: ['evo_wanjian', 'evo_wuwo'],
+    skills: { ...gifts, sj_yujian: 8, sj_heart: 3, sj_wanjian: 6, sj_bone: 4, sj_formation: 6 },
+    books: ['evo_wanjian', 'sj_formation', 'evo_sixiang'],
+    evolutionRanks: { evo_wanjian: 2, evo_sixiang: 1 }, evolutions: ['evo_wanjian', 'evo_sixiang'],
     selectedLoadout: 1,
     loadouts: [
       { name: 'legacy', weaponId: 'iron', armorId: 'basic-armor', ringId: 'basic-ring', active: ['sj_yujian'], passive: ['sj_heart'],
@@ -201,7 +202,7 @@ test('direct evolution decrease refunds only its rank and preserves another evol
   })
   committed(store, disk, 'evo_wanjian', 2, [{ id: 'evo_wanjian', from: 2, to: 1 }])
   committed(store, disk, 'evo_wanjian', 2, [{ id: 'evo_wanjian', from: 1, to: 0 }])
-  assert.deepEqual(store.state.evolutions, ['evo_wuwo'])
+  assert.deepEqual(store.state.evolutions, ['evo_sixiang'])
   assert.equal(store.state.skills.sj_yujian, 8)
   assert.equal(store.state.skills.sj_heart, 3)
   assert.equal(store.act({ type: 'learnSkill', id: 'evo_wanjian' }, 0).bookCost, 0)

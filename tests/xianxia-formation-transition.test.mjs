@@ -13,9 +13,10 @@ test('formation transition raises only ranks 7–10 by the approved graduated am
  }
  assert.equal(formation.cooldown,12);assert.equal(formation.duration,8);assert.equal(formation.ticks,6)
  assert.deepEqual(formation.radius,[132,132,144,144,156,168,168,180,180,192])
- assert.equal(formation.learnLevel,17)
- assert.equal(rankCap('sj_formation',cultivationLevelXp(26)),9)
- assert.equal(rankCap('sj_formation',cultivationLevelXp(27)),10)
+ // 2026-11-09：两仪剑阵移到金丹初期，等级段 21/24/27/30。
+ assert.equal(formation.learnLevel,21)
+ assert.equal(rankCap('sj_formation',cultivationLevelXp(29)),9)
+ assert.equal(rankCap('sj_formation',cultivationLevelXp(30)),10)
 })
 
 test('equipment rank eleven keeps its original 15% marginal gain after transition tuning',()=>{

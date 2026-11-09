@@ -301,7 +301,7 @@ export class TowerSkillEffects {
    this.orbitForm=skillForm(evo?'evo_wuwo':'sj_wanjian',evo||level,level);
   }
   const f=this.orbitForm,x=s.player.x-this.cx,y=s.player.y-this.cy;
-  if(evo&&f.innerRadius){
+  if((evo||f.motion==='wuwo')&&f.innerRadius){
    // Ground coverage stays understated; the waist-centered flow is decorative.
    this.lineColor(g,145,220,228,18,1);g.circle(x,y,f.innerRadius);g.stroke();
   }

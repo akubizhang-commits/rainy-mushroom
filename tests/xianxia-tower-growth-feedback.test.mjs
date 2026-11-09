@@ -56,7 +56,7 @@ test('nominal full-clear XP remains deterministic with the Foundation barrier at
   assert.equal(cumulative,10920)
 })
 test('special skills use their own current level gates without floor prerequisites',()=>{
-  for(const [id,level] of [['sj_line',21],['sj_shadow',11],['sj_formation',17]]){
+  for(const [id,level] of [['sj_line',21],['sj_shadow',11],['sj_formation',21]]){ // 2026-11-09：两仪剑阵→金丹初期
     const state=fresh();state.xp=cultivationLevelXp(level);state.clearedFloor=0
     assert.equal(skillRequirement(state,id).ok,true)
     assert.equal(skillPresentation(state,id).nextRequirement.characterLevel,level)

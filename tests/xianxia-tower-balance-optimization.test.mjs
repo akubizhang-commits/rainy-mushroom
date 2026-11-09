@@ -109,7 +109,7 @@ test('floor four eases the five pre-breakthrough waves and preserves fixed enemy
  assert.ok(Math.abs(early-later*.7)<1e-9);const first=towerEnemyStats(boar,1,1);assert.equal(first.hp,172.5*monsterHealthMultiplier(first))
 })
 test('evolution purchases and compensated active zones survive pause/save/reload with atomic failure',()=>{
- for(const evo of GROWTH_EVOLUTIONS){
+ for(const evo of GROWTH_EVOLUTIONS.filter(e=>e.id!=='evo_wuwo')){ // 周天剑域已退役
   const disk={raw:null,fail:false,getItem(){return this.raw},setItem(k,v){if(this.fail)throw Error('disk full');this.raw=v}}
   const s=fresh();Object.assign(s,{xp:10920,spiritStones:10000})
   const data=JSON.stringify(s);disk.raw=JSON.stringify({format:'xianxia-sect-tower-campaign',schema:currentCampaignSchema,data,checksum:checksum(data)})

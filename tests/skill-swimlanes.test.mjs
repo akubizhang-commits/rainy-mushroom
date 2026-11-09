@@ -21,15 +21,17 @@ test('heart appears in the early golden core passive column',()=>{
 test('every current skill stays at its approved phase and column, with genuine blank cells',()=>{
  const layout=draw()
  const expected=[
-  ['sj_arc','lianqi-early',1],['sj_moon','lianqi-middle',1],['sj_moon_triple','zhuji-early',1],['sj_sancai','zhuji-early',3],['sj_wanjian','lianqi-middle',3],['sj_qinglian','lianqi-peak',3],['sj_spirit','zhuji-early',4],
+  ['sj_arc','lianqi-early',1],['sj_moon','lianqi-middle',1],['sj_moon_triple','zhuji-early',1],['sj_sancai','zhuji-peak',3],['sj_wanjian','lianqi-middle',3],['sj_qinglian','zhuji-early',3],['sj_spirit','zhuji-early',4],
   ['sj_yujian','lianqi-early',2],['vajra','lianqi-middle',4],
   ['sj_cross','zhuji-middle',1],['sj_heart','jindan-early',4],
-  ['sj_line','jindan-early',1],['sj_formation','zhuji-peak',3],['sj_shadow','zhuji-early',2],['sj_flight','zhuji-early',0],
+  ['sj_line','jindan-early',1],['sj_formation','jindan-early',3],['sj_shadow','zhuji-early',2],['sj_flight','zhuji-early',0],
   ['sj_bone','lianqi-early',4],['sj_mark','lianqi-peak',0],['sj_gate','zhuji-peak',0],
-  ['evo_wanjian','jindan-early',2],['evo_tiandi','jindan-middle',1],['evo_wuwo','jindan-early',3],['evo_sixiang','jindan-peak',3],
+  ['evo_wanjian','jindan-early',2],['evo_tiandi','jindan-middle',1],['evo_sixiang','jindan-peak',3],
  ]
  assert.equal(layout.columns,5)
- assert.equal(Object.keys(layout.positions).length,22)
+ // 2026-11-09：周天剑域退役，不再显示。
+ assert.equal(Object.keys(layout.positions).length,21)
+ assert.equal(layout.positions.evo_wuwo,undefined)
  for(const [id,stage,column] of expected){
   assert.equal(layout.positions[id].stageId,stage,id)
   assert.equal(layout.positions[id].column,column,id)
@@ -52,7 +54,7 @@ test('future realms collapse independently without moving any current skill',()=
 test('only the selected real evolution relation is highlighted, with no implied same-column prerequisites',()=>{
  assert.equal(draw().edges.length,0)
  assert.equal(draw({selectedId:'sj_arc'}).edges.length,0)
- for(const [base,evolution] of [['sj_yujian','evo_wanjian'],['sj_wanjian','evo_wuwo'],['sj_line','evo_tiandi'],['sj_formation','evo_sixiang']]){
+ for(const [base,evolution] of [['sj_yujian','evo_wanjian'],['sj_line','evo_tiandi'],['sj_formation','evo_sixiang']]){
   for(const id of [base,evolution]){
    const layout=draw({selectedId:id})
    assert.equal(layout.edges.length,1,id)
@@ -78,7 +80,7 @@ test('five columns fit the viewport; source order and learning state never rearr
  const before=JSON.stringify({definitions,stages:catalog.DISPLAY_STAGES})
  const narrow=draw({},400),wide=draw({},1500),reversed=draw({},400,[...definitions].reverse())
  assert.equal(narrow.width,400)
- for(const d of [...GROWTH_SKILLS,...GROWTH_EVOLUTIONS]){
+ for(const d of [...GROWTH_SKILLS,...GROWTH_EVOLUTIONS].filter(d=>d.id!=='evo_wuwo')){
   assert.deepEqual(narrow.positions[d.id],reversed.positions[d.id])
   assert.equal(wide.positions[d.id].stageId,narrow.positions[d.id].stageId)
   assert.equal(wide.positions[d.id].column,narrow.positions[d.id].column)

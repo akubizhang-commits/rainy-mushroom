@@ -199,11 +199,13 @@ test('shadow slashes retain their ground mark after the target leaves it', () =>
   assert.equal(hits.length, 0)
 })
 
-test('orbit swords leave a real inner gap instead of damaging the whole disc', () => {
+// 2026-11-09 方案A：周天剑阵改用剑域形态，近身剑意覆盖内圈，贴身敌人也会被命中，伤害与外圈相同。
+test('orbit inner field hits close targets at the normal per-window damage', () => {
   const { run, enemy } = make('sj_wanjian', 1)
   enemy.x = run.state.player.x + 20
-  assert.equal(sample(run, .55).length, 0)
-  close(enemy.hp, 1e6)
+  const hits = sample(run, .55)
+  assert.equal(hits.length, 1)
+  close(hits[0].damage, attackFor(run, 'sj_wanjian') * coefficient('sj_wanjian', 1) * 10 / 7)
 })
 
 test('orbit blades sweep the annulus while sharing one target interval', () => {
@@ -216,13 +218,13 @@ test('orbit blades sweep the annulus while sharing one target interval', () => {
 })
 
 test('each additional orbit sword tier expands both the ring and its outer reach', () => {
-  const stages = [[1, 4], [3, 5], [6, 6], [10, 8]]
+  const stages = [[1, 6], [3, 8], [6, 10], [10, 12]]
   let previous
   for (const [rank, count] of stages) {
     const form = skillForm('sj_wanjian', rank)
     const outer = form.radius + form.bladeLength / 2 + form.bladeWidth / 2
     assert.equal(form.swords, count)
-    assert.equal(form.innerRadius, 67, 'upgrades preserve the basic skill’s close gap')
+    assert.equal(form.innerRadius, 90, 'the close field keeps one radius across upgrades')
     if (previous) {
       assert.ok(form.radius > previous.radius, 'more swords orbit farther from the player')
       assert.ok(form.bladeLength > previous.bladeLength, 'the blade coverage also grows')

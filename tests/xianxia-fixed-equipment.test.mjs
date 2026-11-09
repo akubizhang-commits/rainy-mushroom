@@ -47,12 +47,12 @@ test('rolls sample every legal identity with one RNG call and never sample retir
     for (const d of pool) assert.equal(equipmentSource(d.id),tier==='fan'?'shopOnly':'qualityPool')
   }
 })
-const skills = ['sj_yujian','sj_shadow','sj_arc','sj_line','sj_cross','sj_wanjian','sj_formation','evo_wanjian','evo_tiandi','evo_wuwo','evo_sixiang']
+const skills = ['sj_yujian','sj_shadow','sj_arc','sj_line','sj_cross','sj_wanjian','sj_formation','evo_wanjian','evo_tiandi','evo_sixiang'] // 周天剑域已退役
 const output = (d, skill, type='physical') => 1 + weapons.weaponDamageModifiers(create(d),skill,type).flat
 test('weapon specialization is added once and evolution families inherit it',()=>{
  for(const d of expected.filter(d=>d.category==='weapon'&&d.quality)){
   const w=create(d),flow=w.affixes.find(a=>a.type==='flow')
-  for(const [base,evo] of [['sj_line','evo_tiandi'],['sj_yujian','evo_wanjian'],['sj_formation','evo_sixiang'],['sj_wanjian','evo_wuwo']])
+  for(const [base,evo] of [['sj_line','evo_tiandi'],['sj_yujian','evo_wanjian'],['sj_formation','evo_sixiang']])
    assert.equal(output(d,base),output(d,evo))
   if(flow){
    const selected={qi:'sj_arc',yujian:'sj_shadow',formation:'sj_formation'}[flow.target]

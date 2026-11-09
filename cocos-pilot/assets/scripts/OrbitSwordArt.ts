@@ -75,7 +75,8 @@ export class OrbitSwordArt {
   if(this.state!==s||formChanged||time<this.lastTime
    ||time===this.lastTime&&(originX!==this.lastX||originY!==this.lastY))this.historyCount=0;
   const changed=this.state!==s||formChanged||time!==this.lastTime||originX!==this.lastX||originY!==this.lastY;
-  const capacity=f.swords>8?12:8;
+  // 剑域形态的周天剑阵最多 12 柄：固定一个 12 柄的复用池，升级时不重建节点。
+  const capacity=f.swords>8||f.motion==='wuwo'?12:8;
   while(this.actors.length<capacity)this.actors.push(this.createActor(parent));
   if(changed)this.remember(time,originX,originY);
   for(let i=0;i<this.actors.length;i++){
@@ -87,7 +88,8 @@ export class OrbitSwordArt {
    actor.ui.setContentSize(ART.width*('length' in pose?pose.length:f.bladeLength)/ART.span,ART.height*f.bladeWidth/ART.thickness);
    if(changed||bindingsChanged)this.drawTail(actor,f,time,pose.angle,x,y,i);
   }
-  this.drawFlow(parent,evolution?f:null,time,p.x-camera.x,p.y-camera.y,p.y);
+  // 2026-11-09：周天剑阵改用剑域形态（motion==='wuwo'），同样显示脚下冰蓝光环。
+  this.drawFlow(parent,evolution||f.motion==='wuwo'?f:null,time,p.x-camera.x,p.y-camera.y,p.y);
   this.state=s;this.lastTime=time;this.lastX=originX;this.lastY=originY;
   return true;
  }
@@ -164,7 +166,7 @@ export class OrbitSwordArt {
  private drawTail(actor:Actor,f:any,time:number,angle:number,x:number,y:number,index:number){
   const g=actor.tail,dx=Math.cos(angle),dy=Math.sin(angle);g.clear();
   const current=orbitSwordPose(f,time,index);
-  const evolved=f.id==='evo_wuwo',speed='speedFactor' in current?current.speedFactor:1;
+  const evolved=f.id==='evo_wuwo'||f.motion==='wuwo',speed='speedFactor' in current?current.speedFactor:1;
   const steps=evolved?TRAIL_SEGMENTS:8;
   const wake=evolved?.65+.25*Math.max(0,(speed-.4)/1.2):TRAIL_SECONDS;
   const depth='depthY' in current&&current.depthY>0?.85:1;
@@ -178,7 +180,7 @@ export class OrbitSwordArt {
    for(let j=0;j<=steps;j++){
     const point=points[j],t=Math.max(0,time-wake*(1-j/steps));
     this.samplePlayer(t);
-    if(f.id==='evo_wuwo'){
+    if(evolved){
      // Emit from the hilt, so the visible wake is behind the sword rather
      // than buried under its body. Both glow and core follow this same path.
      const pose=orbitSwordPose(f,t,index),offset=-('length' in pose?pose.length:f.bladeLength)/2;

@@ -20,11 +20,12 @@ function freeze(value) {
 export const GROWTH_STAGES = freeze([
   { id: 'lianqi-early', realm: '炼气', phase: '初期', skillIds: ['sj_arc', 'sj_yujian', 'sj_bone'] },
   { id: 'lianqi-middle', realm: '炼气', phase: '中期', skillIds: ['sj_moon', 'vajra', 'sj_wanjian'] },
-  { id: 'lianqi-peak', realm: '炼气', phase: '巅峰', skillIds: ['sj_qinglian', 'sj_mark'] },
-  { id: 'zhuji-early', realm: '筑基', phase: '初期', skillIds: ['sj_moon_triple', 'sj_shadow', 'sj_sancai', 'sj_flight', 'sj_spirit'] },
+  // 2026-11-09 用户确认：青莲剑阵→筑基初期，三才剑阵→筑基巅峰，两仪剑阵→金丹初期；周天剑域并入周天剑阵后退役。
+  { id: 'lianqi-peak', realm: '炼气', phase: '巅峰', skillIds: ['sj_mark'] },
+  { id: 'zhuji-early', realm: '筑基', phase: '初期', skillIds: ['sj_moon_triple', 'sj_shadow', 'sj_qinglian', 'sj_flight', 'sj_spirit'] },
   { id: 'zhuji-middle', realm: '筑基', phase: '中期', skillIds: ['sj_cross'] },
-  { id: 'zhuji-peak', realm: '筑基', phase: '巅峰', skillIds: ['sj_gate', 'sj_formation'] },
-  { id: 'jindan-early', realm: '金丹', phase: '初期', skillIds: ['sj_line', 'sj_heart', 'evo_wanjian', 'evo_wuwo'] },
+  { id: 'zhuji-peak', realm: '筑基', phase: '巅峰', skillIds: ['sj_gate', 'sj_sancai'] },
+  { id: 'jindan-early', realm: '金丹', phase: '初期', skillIds: ['sj_line', 'sj_heart', 'sj_formation', 'evo_wanjian', 'evo_wuwo'] },
   { id: 'jindan-middle', realm: '金丹', phase: '中期', skillIds: ['evo_tiandi'] },
   { id: 'jindan-peak', realm: '金丹', phase: '巅峰', skillIds: ['evo_sixiang'] },
 ].map((stage, index) => ({
@@ -33,6 +34,9 @@ export const GROWTH_STAGES = freeze([
   maxLevel: Math.floor(index / 3) * 10 + (index % 3 === 2 ? 10 : (index % 3 + 1) * 3),
   minRank: index % 3 * 3 + 1, maxRank: index % 3 * 3 + 3,
 })))
+
+// 2026-11-09：周天剑域的形态并入炼气中期的周天剑阵，进阶本身退役：保留数据以免破坏旧逻辑，但不可学习、不显示。
+export const RETIRED_SKILL_IDS = freeze(['evo_wuwo'])
 
 export function growthStageAt(xp = 0) {
   const c = cultivationAt(xp)
@@ -61,7 +65,8 @@ const prerequisites = {}
 const bandLevels = { sj_yujian: [2, 7, 11, 14] }
 // 2026-11-09：剑破虚空改为金丹初期21级可学，1–3/4–6/7–9/10级在21/24/27/30级开放
 // （金丹之后没有下一阶段，第10级沿用每段3级的节奏落在30级）。蚀骨剑意与一剑开天改按所在阶段起始等级开放。
-const cadenceUnlocks = { sj_line: 21, sj_gate: 19 }
+const cadenceUnlocks = { // 两仪剑阵移到金丹初期后与剑破虚空相同：21/24/27/30 级开放各等级段。
+  sj_formation: 21, sj_line: 21, sj_gate: 19 }
 const cadencePointCosts = { sj_moon_triple: specialActiveCosts, sj_cross: activeCosts, sj_sancai: activeCosts }
 
 // 2026-11-09 用户确认方案B2：周天剑阵、青莲剑阵 1–7 级伤害压低，8 级起不变，恢复剑阵“前期最弱”定位，后期不受影响。
@@ -187,9 +192,10 @@ export const GROWTH_SKILLS = freeze([
     // Seven possible hits per activation replace ten per old six-second cycle.
     cooldown: 6, duration: 4, cycle_damage_multiplier: 10 / 7,
     radius: [90, 90, 95, 95, 100, 105, 105, 110, 110, 120],
-    swords: [4, 4, 5, 5, 5, 6, 6, 6, 6, 8],
+    // 2026-11-09 方案A：剑数改为 6/8/10/12（沿用原分档：1–2/3–5/6–9/10 级），只影响画面与覆盖，伤害共用命中间隔。
+    swords: [6, 6, 8, 8, 8, 10, 10, 10, 10, 12],
     target_cap: 6, single_dps_factor: 1 / .6, hit_assumption: .6,
-    rule: '发动起冷却6秒，剑环持续4秒；生效期间伤害乘10/7，以每轮最多7击补偿原6秒10击。所有环绕剑对同一目标共用0.6秒命中间隔，不乘剑数。周天剑域保留常驻与原伤害。',
+    rule: '发动起冷却6秒，剑阵持续4秒；飞剑变速游走并带近身剑意；生效期间伤害乘10/7，以每轮最多7击补偿原6秒10击。所有环绕剑对同一目标共用0.6秒命中间隔，不乘剑数。周天剑域保留常驻与原伤害。',
   }, { ...oldSkills.get('sj_wanjian'), pointCosts: [...activeCosts] }),
   // 青莲剑阵：持续3秒，每秒一轮，外层→中层→内层依次判定；同一目标三轮合计36次命中，伤害合计为整招预算。
   skill('sj_qinglian', {
@@ -448,6 +454,7 @@ export function skillRequirement(state, id, { inTower = false, ignoreStage = fal
     bookCost: !maxed && current === 0 && !books.includes(id) ? definition.bookCost : 0 }
   const fail = reason => ({ ok: false, reason, ...quote })
   if (maxed) return fail('max-level')
+  if (RETIRED_SKILL_IDS.includes(id)) return fail('retired')
   const xp = state.xp ?? 0, floor = integer(state.clearedFloor ?? 0, 9, 'clearedFloor')
   if (!ignoreStage && cultivationAt(xp).level < definition.learnLevel) return fail('stage-locked')
   if (evolution) {

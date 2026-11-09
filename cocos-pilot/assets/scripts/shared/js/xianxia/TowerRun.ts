@@ -1462,7 +1462,7 @@ export class TowerRun {
   _growthOrbit(level, outgoing, oldPlayer) {
     const s = this.state, p = s.player, loadout = s.loadout
     const form = formFor('sj_wanjian', level, loadout)
-    const evolved = form.id === 'evo_wuwo'
+    const evolved = form.id === 'evo_wuwo', field = evolved || form.motion === 'wuwo'
     if (!s.actions?.orbit || (!evolved && !(s.orbitUntil > s.time + EPS))) return
     const previous = s.actions.orbit.castContext.loadout
     if (previous.active.sj_wanjian !== level
@@ -1482,7 +1482,7 @@ export class TowerRun {
     }
     const radius = form.radius + form.bladeLength / 2 + bladeRadius + distance(p, oldPlayer)
     const hits = this._targets(p, radius).filter(e => e.orbitNextAt <= s.time + EPS
-      && (evolved && distance(e, p) <= form.innerRadius + e.radius
+      && (field && distance(e, p) <= form.innerRadius + e.radius
         || sweeps.some(points => inPolygon(e, points, e.radius + bladeRadius))))
       .slice(0, form.targetCap)
     if (!hits.length) return
@@ -1496,7 +1496,7 @@ export class TowerRun {
           pulseIndex: 1, pulseCount: 1, castId: `${form.id}:${s.time}` } })
       e.orbitNextAt = s.time + form.interval
     }
-    this._effect(evolved ? 'wuwo' : 'orbit', p.x, p.y, form.radius,
+    this._effect(field ? 'wuwo' : 'orbit', p.x, p.y, form.radius,
       { ...formGeometry(form, 1, s.time), innerRadius: form.innerRadius,
         swords: form.swords, targetIds: hits.map(e => e.id) })
   }

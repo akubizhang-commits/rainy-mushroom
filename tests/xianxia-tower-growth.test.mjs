@@ -172,7 +172,7 @@ test('tower quotes permit learned skills and evolutions within current rank gate
   assert.equal(quote(state({ skills: { ...giftSkills(3), sj_mark: 1 } }), 'sj_mark', { inTower: true }).ok, false)
   assert.equal(quote(state({ skills: { ...giftSkills(3), sj_yujian: 3, sj_spirit: 2 } }), 'sj_yujian', { inTower: true }).ok, true)
   assert.equal(quote(state({ skills: { ...giftSkills(3), sj_shadow: 1 } }), 'sj_shadow', { inTower: true }).ok, true)
-  for (const row of GROWTH_EVOLUTIONS) {
+  for (const row of GROWTH_EVOLUTIONS.filter(row => row.id !== 'evo_wuwo')) {
     assert.equal(quote(state({skills:{...giftSkills(3),[row.parent]:1}}), row.id, { inTower: true }).ok, true)
   }
 })
@@ -218,10 +218,9 @@ test('insufficient points and maximum level always return a finite actionable qu
   })
 })
 
-test('all four evolutions have independent realm gates and approved costs', () => {
+test('the three learnable evolutions have independent realm gates and approved costs', () => {
   for (const [id, parent, passive, learnXp] of [
     ['evo_wanjian', 'sj_yujian', 'sj_heart', 6601],
-    ['evo_wuwo', 'sj_wanjian', 'sj_bone', 6601],
     ['evo_tiandi', 'sj_line', 'sj_mark', 8625],
     ['evo_sixiang', 'sj_formation', 'sj_gate', 10920],
   ]) {
