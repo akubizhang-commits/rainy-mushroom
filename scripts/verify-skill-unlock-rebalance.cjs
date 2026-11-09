@@ -33,7 +33,9 @@ const CASES=[
    page.on('pageerror',e=>report.errors.push(e.message));
    page.on('console',m=>{if(m.type()==='error')report.console.push(m.text())});
    await page.goto(`http://127.0.0.1:${server.address().port}/cocos-pilot/build/web-mobile/index.html?ruleset=xianxia&tower=1&smoke=1`);
-   await page.waitForFunction(()=>window.__towerTest?.host?.menu&&!window.__towerTest.host.transitioning,undefined,{timeout:120000});
+   // Scene changes raise the loading screen (PinePilot.assetLoading) until that scene's art is ready.
+   const sceneReady=()=>page.waitForFunction(()=>{const h=window.__towerTest?.host;return !!h&&!h.host.assetLoading?.blocked},undefined,{timeout:120000});
+   await page.waitForFunction(()=>window.__towerTest?.host?.menu,undefined,{timeout:120000});await sceneReady();
    const storage=await page.evaluate(()=>JSON.stringify(localStorage));
    await page.evaluate(()=>{
     const h=window.__towerTest.host;h.campElapsed=-100000;
@@ -82,11 +84,15 @@ const CASES=[
     },{id,stage,level,parents});
     assert.equal(at.rank,1,`${id} learned at Lv${level}`);
     assert.ok(at.inLane,`${id} row in ${stage}, found ${at.lanes}`);
-    await page.waitForTimeout(250);
+    await sceneReady();await page.waitForTimeout(250);
     await page.screenshot({path:path.join(out,`${id}-tree-${viewport.width}x${viewport.height}.png`)});
     // Training: the learned skill fires on a stationary dummy through the real simulation.
+    // Enter first and wait for the training field to finish loading, so the cast is drawn on screen.
+    await page.evaluate(()=>{const h=window.__towerTest.host;h.enterTraining();h.run.pause();});
+    await sceneReady();await page.waitForTimeout(300);
     const cast=await page.evaluate(({id,trigger,sources})=>{
-     const h=window.__towerTest.host;h.enterTraining();const run=h.run;run.pause();const s=run.state;
+     const h=window.__towerTest.host;const run=h.run;run.pause();const s=run.state;
+     if(h.screen!=='battle'||!h.training)throw new Error(`not in training: ${h.screen}`);
      s.player.hp=s.player.maxHp=1e7;s.player.invulnerableUntil=1e9;
      s.enemies=[];s.pending=[];s.reserved=[];s.effects=[];s.projectiles=[];s.zones=[];
      const e=run._enemy({id:'qa-dummy',archetype:'tiger_normal_r4',x:s.player.x+100,y:s.player.y});
@@ -105,6 +111,7 @@ const CASES=[
      return {hits,marked,loadout:{active:run.state.loadout.active,passive:run.state.loadout.passive,evolutions:run.state.loadout.evolutions}};
     },{id,trigger,sources});
     await page.waitForTimeout(150);
+    assert.equal(await page.evaluate(()=>!!window.__towerTest.host.host.assetLoading?.blocked),false,`${id} cast screenshot not covered by the loading screen`);
     await page.screenshot({path:path.join(out,`${id}-cast-${viewport.width}x${viewport.height}.png`)});
     await page.evaluate(()=>{const h=window.__towerTest.host;h.run.abandon();h.finish();});
     const fired=id==='sj_mark'?cast.marked:cast.hits.some(x=>sources.includes(x.source));
