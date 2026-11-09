@@ -50,6 +50,8 @@ SCHOOLS.qiHeavy = [['sj_moon', 10], ['sj_line', 10], ['evo_tiandi', 2], ['sj_cro
 // 2026-11-09 补充：既有 formation 列表不买青莲剑阵。炼气阶段剑阵现在有周天（中期）与青莲（巅峰）两门，
 // 这一列表按开放顺序依次投入，用来衡量带青莲的纯剑阵。不改动既有 formation 列表，便于前后对照。
 SCHOOLS.formationQL = [['sj_wanjian', 10], ['sj_qinglian', 10], ['sj_sancai', 6], ['sj_formation', 10], ['evo_sixiang', 2], ['sj_sancai', 10], ['evo_wuwo', 2], ['sj_arc', 10]]
+// formationQL 会先把青莲点满，导致后期买不到两仪。formationQL2 青莲先点到 6，两仪开放后优先两仪，更接近真实玩家。
+SCHOOLS.formationQL2 = [['sj_wanjian', 10], ['sj_qinglian', 6], ['sj_sancai', 6], ['sj_formation', 10], ['evo_sixiang', 2], ['sj_qinglian', 10], ['sj_sancai', 10], ['evo_wuwo', 2], ['sj_arc', 10]]
 // Mixed builds: formation core plus a second school's skills (does mixing beat staying in one school?)
 SCHOOLS.mixA = [['sj_wanjian', 10], ['sj_formation', 10], ['evo_sixiang', 2], ['sj_yujian', 10], ['sj_sancai', 10], ['sj_arc', 10]]
 SCHOOLS.mixB = [['sj_wanjian', 10], ['sj_formation', 10], ['evo_sixiang', 2], ['sj_shadow', 10], ['sj_sancai', 10], ['sj_arc', 10]]
