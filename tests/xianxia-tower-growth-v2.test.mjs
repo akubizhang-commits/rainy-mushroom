@@ -73,7 +73,7 @@ test('rank caps unlock on the approved levels and do not bypass learning, floor 
 
 test('evolution budgets preserve full parent baseline and only define the two approved ranks', () => {
   const budgets = { evo_wanjian: [1.30, 1.69], evo_tiandi: [1.40 / 1.3, 1.82 / 1.3],
-    evo_wuwo: [1.20, 1.44], evo_sixiang: [2.0, 2.3] }
+    evo_wuwo: [1.8, 2.2], evo_sixiang: [2.0, 2.3] }
   for (const row of GROWTH_EVOLUTIONS) {
     assert.deepEqual(row.budgetMultipliers, budgets[row.id])
     assert.deepEqual(row.pointCosts, {evo_wanjian:[2,2],evo_wuwo:[4,4],evo_tiandi:[2,2],evo_sixiang:[4,4]}[row.id])
@@ -83,7 +83,7 @@ test('evolution budgets preserve full parent baseline and only define the two ap
   }
   const evolution = id => GROWTH_EVOLUTIONS.find(row => row.id === id)
   assert.equal(evolution('evo_wanjian').regularMultiplier, 1)
-  assert.deepEqual(evolution('evo_wuwo').innerMultiplier, [1.2, 1.44])
+  assert.deepEqual(evolution('evo_wuwo').innerMultiplier, [1.8, 2.2])
   near(evolution('evo_tiandi').windup, .45)
   near(evolution('evo_tiandi').windup + evolution('evo_tiandi').release_cooldown, 12)
 })

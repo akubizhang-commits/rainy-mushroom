@@ -355,7 +355,7 @@ test('differentiated evolution budgets do not add a second parent attack channel
       const hit = line.damage[level - 1] * bigLine.cooldown / line.cooldown * bigLine.budgetMultipliers[rank - 1]
       close(hit / bigLine.cooldown / (line.damage[level - 1] / line.cooldown), [1.4 / 1.3, 1.82 / 1.3][rank - 1], 'line cadence')
       const orbit = evolution('evo_wuwo')
-      close(Math.max(orbit.innerMultiplier[rank - 1], orbit.budgetMultipliers[rank - 1]), [1.2, 1.44][rank - 1], 'overlapping rings use max')
+      close(Math.max(orbit.innerMultiplier[rank - 1], orbit.budgetMultipliers[rank - 1]), [1.8, 2.2][rank - 1], 'overlapping rings use max')
       const f = skill('sj_formation'), four = evolution('evo_sixiang')
       close(f.damage[level - 1] * four.budgetMultipliers[rank - 1] * four.ticks / f.cooldown
         / (f.damage[level - 1] * f.ticks / f.cooldown), [2.0, 2.3][rank - 1], 'eyes share one tick budget')

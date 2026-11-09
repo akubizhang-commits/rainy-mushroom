@@ -162,7 +162,8 @@ export const GROWTH_SKILLS = freeze([
     rule: '在原地展开宽阔月弧，横扫周围大范围敌人；每次施放对同一敌人造成一次伤害，最多命中6个目标。',
   }, { name: '玄月斩', kind: 'active', clear: 0, learnLevel: 4 }),
   skill('sj_moon_triple', {
-    damage: damageCurve(6, 1.15), cooldown: 10, windup: .18,
+    // 2026-11-09 用户确认：筑基剑气功法应强于炼气的玄月斩，逐月斩伤害×1.5。
+    damage: damageCurve(6, 1.15).map(d => d * 1.5), cooldown: 10, windup: .18,
     radius: 140, reach: 420, speed: 800, width: 180, bladeWidth: 12,
     target_cap: 6, single_dps_factor: 1 / 10, hit_assumption: .5,
     rule: '窄斜月、扁横月、深弧月依次飞出，每道沿固定方向飞行420距离；三道均分整招伤害，各道同敌最多命中一次。所有等级保持三道，碰到地形提前消散。',
@@ -170,7 +171,8 @@ export const GROWTH_SKILLS = freeze([
   // Growth-only skill; the historical five-rank catalog remains unchanged.
   skill('sj_cross', {
     // 2026-11-09 用户确认：冷却12→10秒，每次施放伤害不变。
-    damage: [1.5, 2.1, ...Array.from({ length: 8 }, (_, i) => 3 * 1.15 ** i)].map(value => value * 2), cooldown: 10, windup: .18,
+    // 2026-11-09 用户确认：双月斩伤害×1.5（每次施放）。
+    damage: [1.5, 2.1, ...Array.from({ length: 8 }, (_, i) => 3 * 1.15 ** i)].map(value => value * 2 * 1.5), cooldown: 10, windup: .18,
     radius: [180, 180, 180, 220, 220, 220, 270, 270, 270, 270],
     reach: [180, 180, 180, 220, 220, 220, 270, 270, 270, 270], speed: 960,
     width: [180, 180, 180, 180, 180, 180, 270, 270, 270, 270],
@@ -275,8 +277,8 @@ const evolutionEffects = {
     rule: '进阶替换御剑；继承御剑术实际等级的伤害，剑雨按原8秒预算及施放期间停火损失计算伤害，基础冷却15秒，各段平分总预算。降低基础等级会同步降低进阶伤害。',
   },
   evo_wuwo: {
-    innerMultiplier: [1.2, 1.44], hit_interval: .6,
-    rule: '进阶替换周天剑阵；继承实际基础等级，外圈每窗口为基础damage×budgetMultiplier，内圈为基础damage的120%/144%；同目标0.6秒只取较高一次。',
+    innerMultiplier: [1.8, 2.2], hit_interval: .6,
+    rule: '进阶替换周天剑阵；继承实际基础等级，外圈每窗口为基础damage×budgetMultiplier，内圈为基础damage的180%/220%；同目标0.6秒只取较高一次。',
   },
   evo_tiandi: {
     // 2026-11-09 用户确认（方案A）：冷却10→12秒，保留单击=冷却比例公式，单击伤害随之×1.2，每秒伤害不变。
@@ -306,7 +308,8 @@ const evolutionBudgets = {
   evo_tiandi: [1.40 / 1.3, 1.82 / 1.3],
   // Four-symbol field trades a fixed location and long cooldown for sustained
   // damage. Equal-SP moving-boss checks: +60%, without changing Liangyi.
-  evo_wuwo: [1.20, 1.44], evo_sixiang: [2.0, 2.3],
+  // 2026-11-09 用户确认：周天剑域倍率 1.2/1.44 → 1.8/2.2（外圈与内圈同步），每阶仍4点。
+  evo_wuwo: [1.8, 2.2], evo_sixiang: [2.0, 2.3],
 }
 const evolutionPointCosts = {
   evo_wanjian: [2, 2], evo_wuwo: [4, 4],
