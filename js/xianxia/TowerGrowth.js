@@ -300,7 +300,8 @@ const requirementsForEvolution = id => evolutionRequirements.map((row, index) =>
 const evolutionBudgets = {
   // Second ranks add 30% over the first rank; equal-SP calibration is recorded
   // in design/balance/skill-second-rank-2026-11-03.md.
-  evo_wanjian: [1.30, 1.69], evo_tiandi: [1.40, 1.82],
+  evo_wanjian: [1.30, 1.69], // 2026-11-09 用户确认（方案B）：剑破虚空×1.5后，一剑开天进阶倍率÷1.3，1阶约为剑破虚空10级的108%。
+  evo_tiandi: [1.40 / 1.3, 1.82 / 1.3],
   // Four-symbol field trades a fixed location and long cooldown for sustained
   // damage. Equal-SP moving-boss checks: +60%, without changing Liangyi.
   evo_wuwo: [1.20, 1.44], evo_sixiang: [2.0, 2.3],

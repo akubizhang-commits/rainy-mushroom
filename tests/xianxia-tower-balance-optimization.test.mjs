@@ -41,7 +41,7 @@ for(const evo of GROWTH_EVOLUTIONS.filter(e=>!['evo_wanjian','evo_tiandi'].inclu
 })
 // Doc 91 / skill-second-rank-2026-11-03 approves authored budget multipliers,
 // not a universal 19% measured DPS gain after mana, range and action scheduling.
-for(const [id,budgets] of [['evo_wanjian',[1.30,1.69]],['evo_tiandi',[1.40,1.82]]])test(`${id}: emitted casts retain the approved first/second-rank budgets`,()=>{
+for(const [id,budgets] of [['evo_wanjian',[1.30,1.69]],['evo_tiandi',[1.40/1.3,1.82/1.3]]])test(`${id}: emitted casts retain the approved first/second-rank budgets`,()=>{
  const definition=GROWTH_EVOLUTIONS.find(e=>e.id===id)
  assert.deepEqual(definition.budgetMultipliers,budgets)
  for(const rank of [1,2]){
