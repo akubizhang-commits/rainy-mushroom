@@ -45,7 +45,7 @@ function fixture() {
     .replace(/^import .*$/gm, '').replace(/\bexport /g, '')
   runInNewContext(stripTypeScriptTypes(source, { mode: 'transform' }) + '\nglobalThis.Art=OrbitSwordArt', context)
   const art = new context.Art(), parent = new Node('actors')
-  return { art, parent, Node, requests, warnings, load(error = null, size = [544, 128]) {
+  return { art, parent, Node, requests, warnings, load(error = null, size = [640, 112]) {
     const image = { width: size[0], height: size[1], refs: 0,
       addRef() { this.refs++ }, decRef() { this.refs-- } }
     requests.at(-1).callback(error, error ? null : image)
@@ -72,7 +72,8 @@ test('orbit sprites hide in cooldown and reappear for the next active window', (
 
 test('approved sword span tracks combat at every count tier, reusing one base pool', () => {
   const { art, parent, requests } = ready(), s = state()
-  assert.equal(requests[0].path, 'tower-skill-fx/orbit-sword-v1')
+  // 2026-11-09：周天剑阵改用修长冷色剑体 v2；画面剑长为判定剑长的 1.25 倍并保持贴图比例。
+  assert.equal(requests[0].path, 'tower-skill-fx/orbit-sword-v2')
   let pool
   for (const [level, count] of [[1, 6], [3, 8], [6, 10], [10, 12], [1, 6]]) {
     s.loadout.active.sj_wanjian = level
@@ -89,8 +90,8 @@ test('approved sword span tracks combat at every count tier, reusing one base po
       close(a.node.y, s.player.y + 57 + p.y - camera.y)
       close(a.node.towerGroundY, s.player.y + p.depthY)
       close(a.node.angle, p.angle * 180 / Math.PI)
-      close(a.ui.width * 496 / 544, p.length)
-      close(a.ui.height * 88 / 128, f.bladeWidth)
+      close(a.ui.width * 628 / 640, p.length * 1.25)
+      close(a.ui.height, a.ui.width * 112 / 640)
       assert.equal(a.ui.anchorX, .5); assert.equal(a.ui.anchorY, .5)
     }
   }
@@ -119,7 +120,7 @@ test('wuwo uses the supplied waist anchor, shared tangent span and unlifted dept
   const p=orbitSwordPose(form,s.time,i)
   close(a.node.x,waist.x+p.x);close(a.node.y,waist.y+p.y)
   close(a.node.towerGroundY,s.player.y+p.depthY)
-  close(a.ui.width*496/544,p.length)
+  close(a.ui.width*628/640,p.length*1.25)
  }
  const ids=active(art).map(a=>a.node)
  s.time+=1/60

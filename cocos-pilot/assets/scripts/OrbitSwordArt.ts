@@ -6,7 +6,12 @@ import {setTowerDepth} from './TowerDepthOrder';
 type TrailPoint={x:number;y:number;worldX:number;worldY:number;time:number};
 type Trail={radial:number;maxAlpha:number;maxWidth:number;points:TrailPoint[]};
 type Actor={node:Node;ui:UITransform;sprite:Sprite;tail:Graphics;lastTrail:Trail[]};
-const ART={path:'tower-skill-fx/orbit-sword-v1',width:544,height:128,span:496,thickness:88};
+// 2026-11-09：周天剑阵改用由剑破虚空白金剑派生的修长冷色剑体（orbit-sword-v2，原图与v1保留）。
+const ART={path:'tower-skill-fx/orbit-sword-v2',width:640,height:112,span:628,thickness:84};
+// 画面剑长为判定剑长的 1.25 倍，并保持贴图比例，避免剑身被横向压扁显得粗短。
+const VISUAL_LENGTH=1.25;
+// 尾迹配色与御剑术一致：宽淡青辉光、青色亮边、细白芯。
+const YUJIAN_GLOW=[109,224,248],YUJIAN_CORE=[237,255,255];
 const TRAIL_SECONDS=.18,TRAIL_SEGMENTS=20,HISTORY_CAP=64;
 
 /** Persistent radial swords. Combat owns their geometry and contacts; this
@@ -85,7 +90,8 @@ export class OrbitSwordArt {
    const pose=orbitSwordPose(f,time,i),x=originX+pose.x,y=originY+pose.y;
    actor.node.setPosition(x-camera.x,y-camera.y);actor.node.angle=pose.angle*180/Math.PI;
    setTowerDepth(actor.node,p.y+('depthY' in pose?pose.depthY:pose.y));
-   actor.ui.setContentSize(ART.width*('length' in pose?pose.length:f.bladeLength)/ART.span,ART.height*f.bladeWidth/ART.thickness);
+   const visible=('length' in pose?pose.length:f.bladeLength)*VISUAL_LENGTH,spriteWidth=ART.width*visible/ART.span;
+   actor.ui.setContentSize(spriteWidth,spriteWidth*ART.height/ART.width);
    if(changed||bindingsChanged)this.drawTail(actor,f,time,pose.angle,x,y,i);
   }
   // 2026-11-09：周天剑阵改用剑域形态（motion==='wuwo'），同样显示脚下冰蓝光环。
@@ -174,8 +180,8 @@ export class OrbitSwordArt {
    const trail=actor.lastTrail[strand],points=trail.points;
    while(points.length<=steps)points.push({x:0,y:0,worldX:0,worldY:0,time:0});
    points.length=steps+1;
-   trail.maxAlpha=evolved?(strand?240:180)*depth:(strand?40:90);
-   trail.maxWidth=evolved?(strand?2.5+speed:8+speed*4):(strand?1:2.5);
+   trail.maxAlpha=evolved?(strand?230:105)*depth:(strand?40:90);
+   trail.maxWidth=evolved?(strand?1.2:4)*(.85+.15*speed):(strand?1:2.5);
    trail.radial=f.radius+f.bladeLength*(strand?-.1:.18);
    for(let j=0;j<=steps;j++){
     const point=points[j],t=Math.max(0,time-wake*(1-j/steps));
@@ -195,9 +201,16 @@ export class OrbitSwordArt {
     const rx=point.worldX-x,ry=point.worldY-y;
     point.x=rx*dx+ry*dy;point.y=-rx*dy+ry*dx;
     if(j===0)continue;
-    this.stroke.r=evolved?(strand?204:58):145;this.stroke.g=evolved?(strand?249:171):226;this.stroke.b=evolved?255:244;
-    this.stroke.a=Math.round(trail.maxAlpha*Math.pow(j/steps,evolved?.9:1.8));
-    g.strokeColor=this.stroke;g.lineWidth=trail.maxWidth*(j/steps*(evolved?.92:.7)+(evolved?.08:.3));
+    const tone=strand?YUJIAN_CORE:YUJIAN_GLOW,fadeIn=Math.pow(j/steps,evolved?.9:1.8),taper=j/steps*(evolved?.92:.7)+(evolved?.08:.3);
+    if(evolved&&!strand){
+     // Broad faint wake under the cyan edge, as on 御剑术.
+     this.stroke.r=YUJIAN_GLOW[0];this.stroke.g=YUJIAN_GLOW[1];this.stroke.b=YUJIAN_GLOW[2];
+     this.stroke.a=Math.round(35*depth*fadeIn);g.strokeColor=this.stroke;g.lineWidth=9*(.85+.15*speed)*taper;
+     g.moveTo(points[j-1].x,points[j-1].y);g.lineTo(point.x,point.y);g.stroke();
+    }
+    this.stroke.r=evolved?tone[0]:145;this.stroke.g=evolved?tone[1]:226;this.stroke.b=evolved?tone[2]:244;
+    this.stroke.a=Math.round(trail.maxAlpha*fadeIn);
+    g.strokeColor=this.stroke;g.lineWidth=trail.maxWidth*taper;
     g.moveTo(points[j-1].x,points[j-1].y);g.lineTo(point.x,point.y);g.stroke();
    }
   }
