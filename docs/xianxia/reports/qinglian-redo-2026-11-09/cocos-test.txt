@@ -1,0 +1,50 @@
+
+> rainy-mushroom-forest@3.8.8 cocos:test
+> node --test tests/cocos-package.test.mjs tests/current-entry.test.mjs
+
+TAP version 13
+# Subtest: WeChat packaging relocates the resources build: internal, main and the resources bundle
+ok 1 - WeChat packaging relocates the resources build: internal, main and the resources bundle
+  ---
+  duration_ms: 6.188834
+  type: 'test'
+  ...
+# Subtest: optional bundles (resources) are appended only when built
+ok 2 - optional bundles (resources) are appended only when built
+  ---
+  duration_ms: 5.137375
+  type: 'test'
+  ...
+# Subtest: WeChat packaging still requires every fixed bundle
+ok 3 - WeChat packaging still requires every fixed bundle
+  ---
+  duration_ms: 1.352166
+  type: 'test'
+  ...
+# Subtest: WeChat packaging keeps the 4 MiB per-subpackage budget for resources
+ok 4 - WeChat packaging keeps the 4 MiB per-subpackage budget for resources
+  ---
+  duration_ms: 4.076625
+  type: 'test'
+  ...
+# Subtest: the scene starts only the current tower game, regardless of legacy query flags
+ok 5 - the scene starts only the current tower game, regardless of legacy query flags
+  ---
+  duration_ms: 0.749542
+  type: 'test'
+  ...
+# Subtest: retired gameplay and its runtime art cannot return to source or shared bundles
+ok 6 - retired gameplay and its runtime art cannot return to source or shared bundles
+  ---
+  duration_ms: 0.230833
+  type: 'test'
+  ...
+1..6
+# tests 6
+# suites 0
+# pass 6
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 76.961833

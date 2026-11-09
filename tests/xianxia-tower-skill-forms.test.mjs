@@ -2,7 +2,7 @@ import test from 'node:test'
 import assert from 'node:assert/strict'
 import { TowerRun, validateTowerSnapshot } from '../js/xianxia/TowerRun.js'
 import { GROWTH_SKILLS } from '../js/xianxia/TowerGrowth.js'
-import { skillForm, orbitSwordPose, qinglianPetalPose, qinglianBladePose, qinglianRingShares } from '../js/xianxia/TowerSkillForms.js'
+import { skillForm, orbitSwordPose, qinglianPetalPose, qinglianRoundHits } from '../js/xianxia/TowerSkillForms.js'
 import { resonanceDamageFactor } from '../js/xianxia/TowerResonance.js'
 
 const STEP = 1 / 60
@@ -649,32 +649,60 @@ test('long rainbow gains real damage reach while Tiandi retains approved ranges'
  }
 })
 
-test('qinglian rings keep 4/6/8 judgment swords inside 8/12/16 visual petals with fading outer rings', () => {
+test('qinglian rings are 8/12/16 judgment petals on one 200 radius, with the outer ring the faintest', () => {
   const form = skillForm('sj_qinglian', 1)
-  assert.deepEqual(form.rings.map(ring => ring.radius), [90, 150, 200])
-  assert.deepEqual(form.rings.map(ring => ring.swords), [4, 6, 8])
+  assert.deepEqual(form.rings.map(ring => ring.radius), [200, 200, 200])
+  assert.deepEqual(form.rings.map(ring => ring.swords), [8, 12, 16])
   assert.deepEqual(form.rings.map(ring => ring.visualPetals), [8, 12, 16])
+  assert.deepEqual(form.rings.map(ring => ring.share), [.45, .35, .20])
   assert.ok(form.rings[2].alpha < form.rings[0].alpha)
-  assert.equal(form.hits, 2)
-  assert.equal(form.interval, .5)
+  assert.equal(form.hits, 3)
+  assert.equal(form.interval, 1)
+  assert.equal(form.duration, 3)
+  assert.equal(form.targetCap, null)
   for (const [k, ring] of form.rings.entries()) {
-    const judgment = Array.from({ length: ring.visualPetals }, (_, j) => j).filter(j => qinglianPetalPose(form, .3, k, j).judgment)
-    assert.deepEqual(judgment, Array.from({ length: ring.swords }, (_, i) => 2 * i))
-    for (let i = 0; i < ring.swords; i++) close(qinglianBladePose(form, .3, k, i).angle, qinglianPetalPose(form, .3, k, 2 * i).angle)
+    // Every visual petal is a judgment blade; each blade starts at the eye and reaches the ring radius.
+    for (let j = 0; j < ring.visualPetals; j++) {
+      const pose = qinglianPetalPose(form, .3, k, j)
+      close(Math.hypot(pose.tipX, pose.tipY), 200)
+      close(Math.hypot(pose.baseX, pose.baseY), 0)
+    }
   }
 })
 
-test('qinglian shares only come from judgment sweeps inside a covering ring and never reach past 200 plus the target radius', () => {
+test('qinglian spins clockwise with inner rings fastest and each round sweeps at least a full turn', () => {
+  const form = skillForm('sj_qinglian', 1)
+  const speed = k => (qinglianPetalPose(form, 0, k, 0).angle - qinglianPetalPose(form, 1, k, 0).angle)
+  assert.ok(speed(0) > speed(1) && speed(1) > speed(2), 'inner > middle > outer')
+  for (const k of [0, 1, 2]) assert.ok(speed(k) >= Math.PI * 2, `ring ${k} turns a full circle in one round`)
+  // Clockwise: the angle decreases with time.
+  assert.ok(qinglianPetalPose(form, .5, 2, 0).angle < qinglianPetalPose(form, 0, 2, 0).angle)
+})
+
+test('qinglian round judges the outer, middle, then inner ring; each petal in reach hits a target once per round', () => {
   const form = skillForm('sj_qinglian', 1), centre = { x: 0, y: 0 }
-  assert.deepEqual(qinglianRingShares(form, centre, { x: 206, y: 0, radius: 5 }, 0, .5), [])
+  for (const [x, radius] of [[10, 5], [60, 5], [120, 8], [185, 5]]) {
+    assert.deepEqual([1, 2, 3].map(pulse => qinglianRoundHits(form, centre, { x, y: 0, radius }, pulse)), [16, 12, 8], `target at ${x}`)
+  }
   for (let i = 0; i < 40; i++) {
-    const shares = qinglianRingShares(form, centre, { x: 50, y: 0, radius: 5 }, i * .1, .5)
-    assert.ok(shares.every(share => [.2, .35, .45].includes(share)))
-    assert.ok(shares.reduce((sum, share) => sum + share, 0) <= 1 + 1e-9)
+    const target = { x: 150 * Math.cos(i), y: 150 * Math.sin(i), radius: 5 }
+    assert.deepEqual([1, 2, 3].map(pulse => qinglianRoundHits(form, centre, target, pulse)), [16, 12, 8])
   }
 })
 
-test('qinglian casts on a 9 second cooldown, pulses twice at 0 and 0.5 seconds and survives snapshot restore', () => {
+test('qinglian lands 36 hits in total on a single target and nothing beyond 200 plus its radius', () => {
+  const form = skillForm('sj_qinglian', 1), centre = { x: 0, y: 0 }
+  const total = target => [1, 2, 3].reduce((sum, pulse) => sum + qinglianRoundHits(form, centre, target, pulse), 0)
+  assert.equal(total({ x: 0, y: 0, radius: 5 }), 36)
+  assert.equal(total({ x: 205, y: 0, radius: 5 }), 36, 'edge exactly at the 200 radius')
+  assert.equal(total({ x: 206, y: 0, radius: 5 }), 0)
+  // Each round's share of the total budget is 20/35/45 percent of the per-target sum.
+  const perRound = [1, 2, 3].map(pulse => form.rings[2 - (pulse - 1)].share)
+  assert.deepEqual(perRound, [.20, .35, .45])
+  close(perRound.reduce((sum, share) => sum + share, 0), 1)
+})
+
+test('qinglian casts on a 9 second cooldown, judges three rounds one second apart, lasts 3 seconds and survives snapshot restore', () => {
   const run = new TowerRun({ attemptId: 11, floor: 9, seed: 123, xp: 0, hp: 100,
     loadout: { growthVersion: 1, active: { sj_yujian: 1, sj_qinglian: 1 }, passive: {}, evolutions: [], evolutionLevels: {},
       tutorialWaves: 0, weaponId: 'eq_sword_suwen', weaponQuality: 1, weaponRefine: 0 } })
@@ -686,21 +714,26 @@ test('qinglian casts on a 9 second cooldown, pulses twice at 0 and 0.5 seconds a
   run.advance(STEP)
   const started = run.state.time
   close(run.state.cooldowns.sj_qinglian, started + 9)
-  let zone = null, seenPulses = new Set()
-  for (let i = 0; i < Math.round(2 * 60); i++) {
+  const pulseTimes = new Map()
+  let zone = null
+  for (let i = 0; i < Math.round(4 * 60); i++) {
     run.advance(STEP)
     const live = run.state.zones.find(z => z.kind === 'qinglian')
     if (live) {
-      zone = { hits: live.hits, pulseIndex: live.pulseIndex, ticks: live.ticks }
-      seenPulses.add(live.pulseIndex)
+      zone = { hits: live.hits, pulseIndex: live.pulseIndex, ticks: live.ticks, expiresAt: live.expiresAt, targetCap: live.targetCap }
+      if (!pulseTimes.has(live.pulseIndex)) pulseTimes.set(live.pulseIndex, run.state.time)
       assert.ok(validateTowerSnapshot(run.snapshot()))
       assert.deepEqual(TowerRun.restore(run.snapshot()).snapshot(), run.snapshot())
     }
   }
   assert.ok(zone, 'the burst zone was created')
-  assert.equal(zone.hits, 2)
-  assert.equal(zone.pulseIndex, 2)
+  assert.equal(zone.hits, 3)
+  assert.equal(zone.pulseIndex, 3)
   assert.equal(zone.ticks, 0)
-  assert.ok(seenPulses.has(2))
+  assert.equal(zone.targetCap, null)
+  assert.deepEqual([...pulseTimes.keys()].sort(), [1, 2, 3])
+  const times = [1, 2, 3].map(p => pulseTimes.get(p))
+  assert.ok(Math.abs(zone.expiresAt - times[0] - 3) <= 2 * STEP, 'the burst lasts 3 seconds from its first round')
+  for (let i = 1; i < 3; i++) assert.ok(Math.abs((times[i] - times[i - 1]) - 1) <= 2 * STEP, `round ${i + 1} follows one second later`)
   assert.equal(run.state.zones.filter(z => z.kind === 'qinglian').length, 0)
 })

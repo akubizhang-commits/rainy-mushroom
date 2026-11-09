@@ -39,7 +39,7 @@ import { newAttackActions, canStartSkill, startSkillAction, validAttackActions, 
 import { validateEquipment, ringDamageModifiers, armorModifiers, equipmentDamageMultiplier, equipmentDefenses } from './TowerEquipment.js'
 import { skillCooldown, castActionTiming, equipmentCastSpeed, equipmentAttackProfile } from './TowerSkillTiming.js'
 import { towerEnemyStats, towerEnemyRadius, ENEMY_INCOMING_DAMAGE_MULTIPLIER } from './TowerEnemyStats.js'
-import { skillForm, skillHitShare, orbitSwordPose, convergenceRainMultiplier, qinglianRingShares } from './TowerSkillForms.js'
+import { skillForm, skillHitShare, orbitSwordPose, convergenceRainMultiplier, qinglianRoundHits, qinglianRingForPulse } from './TowerSkillForms.js'
 import { sancaiContains, sancaiTarget } from './TowerSancai.js'
 import { swordQiPoseIndex, swordQiReleaseOffset, swordQiHits, swordQiTravelLimit } from './TowerSwordQi.js'
 import { newYujianState, yujianGenerationInterval, retimeYujian, turnYujian, yujianHeading, yujianHoverPose, stepYujianFlight,
@@ -430,7 +430,8 @@ function validFormZone(z) {
     && ['radius', 'reach', 'width', 'angle', 'eyes', 'targetCap', 'interval'].every(key => z[key] === form[key])
     && finite(z.startedAt) && finite(z.dirX) && finite(z.dirY)
     && Math.abs(Math.hypot(z.dirX, z.dirY) - 1) <= EPS
-    && Math.abs(z.damage - total / form.hits) <= EPS
+    // A qinglian zone stores the whole cast budget; its hits split it by ring share.
+    && Math.abs(z.damage - (parent === 'sj_qinglian' ? total : total / form.hits)) <= EPS
     && Math.abs(z.nextAt - (z.startedAt + form.initialDelay + z.pulseIndex * form.interval)) <= EPS
     && Math.abs(z.expiresAt - (z.startedAt + form.duration + (parent === 'sj_sancai' || parent === 'sj_qinglian' ? 0 : .2))) <= EPS
     && (parent !== 'sj_sancai' || !z.hostile && z.direct === false)
@@ -794,7 +795,8 @@ export function validateTowerSnapshot(s, legacy = false) {
         // Keep the legacy bound only for zones without a form (rank2 rain has 25 pulses).
         && uint(z.ticks, z.pulseCount ?? 6)
         && uint(z.pulseCount ?? 6, z.formId === undefined ? 24 : Number.MAX_SAFE_INTEGER) && validFormZone(z)
-        && uint(z.targetCap, 8) && z.targetCap >= 1 && typeof z.direct === 'boolean'
+        && (z.kind === 'qinglian' ? z.targetCap === null : uint(z.targetCap, 8) && z.targetCap >= 1)
+        && typeof z.direct === 'boolean'
         && (z.hostile ? z.castContext === undefined : validContext(z))
     })) return false
     if (!validPickups(s)) return false
@@ -1774,8 +1776,8 @@ export class TowerRun {
           dirX: dir.x, dirY: dir.y, faceX: dir.x, faceY: dir.y, toX: end.x, toY: end.y,
           targetIds: targets.map(e => e.id) })
     } else if (id === 'sj_qinglian') {
-      // The formation stays where it was cast. Its two judgment pulses are resolved in _qinglianPulse.
-      this._zone('qinglian', p.x, p.y, form.radius, base / form.hits, 0, form.hits, form.targetCap,
+      // The formation stays where it was cast. Its three judgment rounds are resolved in _qinglianPulse.
+      this._zone('qinglian', p.x, p.y, form.radius, base, 0, form.hits, form.targetCap,
         form.interval, false, true, { ...formGeometry(form, 0, s.time), formId: form.id,
           formLevel: c.level, parentLevel: c.level, dirX: dir.x, dirY: dir.y, faceX: dir.x, faceY: dir.y,
           expiresAt: s.time + form.duration, ...context })
@@ -2082,24 +2084,27 @@ export class TowerRun {
       { ...formGeometry(form, pulse, s.time), shape, ...extra, targetIds: targets.map(e => e.id) })
   }
 
-  // Each judgment pulse covers [now, now + interval). A ring contributes its share
-  // only when one of its judgment blades sweeps the target during that window.
+  // Each round (one second) judges one ring: outer, then middle, then inner. Every petal
+  // of that ring that sweeps a target deals its share of the cast budget, so a target in
+  // reach takes 16 + 12 + 8 = 36 hits per cast. Targets are not capped.
   _qinglianPulse(z, form, outgoing) {
     const s = this.state, pulse = ++z.pulseIndex
-    const hits = this._targets(z, form.radius)
-      .map(e => ({ e, shares: qinglianRingShares(form, z, e, s.time, form.interval) }))
-      .filter(row => row.shares.length)
-      .slice(0, form.targetCap)
-    for (const { e, shares } of hits) {
-      const weight = shares.reduce((sum, share) => sum + share, 0)
-      outgoing.push({ target: e.id, damage: z.damage * weight, direct: true, source: 'sj_qinglian',
-        impact: { skill: form.id, dirX: z.dirX, dirY: z.dirY, pulseIndex: pulse,
-          pulseCount: form.hits, castId: z.id },
-        castContext: z.castContext, weaponCastId: z.weaponCastId })
+    const ring = form.rings[qinglianRingForPulse(form, pulse)]
+    const perHit = z.damage * ring.share / ring.visualPetals
+    const rows = this._targets(z, form.radius)
+      .map(e => ({ e, hits: qinglianRoundHits(form, z, e, pulse) }))
+      .filter(row => row.hits > 0)
+    for (const { e, hits } of rows) {
+      for (let i = 0; i < hits; i++) {
+        outgoing.push({ target: e.id, damage: perHit, direct: true, source: 'sj_qinglian',
+          impact: { skill: form.id, dirX: z.dirX, dirY: z.dirY, pulseIndex: pulse,
+            pulseCount: form.hits, castId: z.id },
+          castContext: z.castContext, weaponCastId: z.weaponCastId })
+      }
     }
     this._effect('qinglian', z.x, z.y, form.radius,
       { ...formGeometry(form, pulse, s.time), shape: 'lotus', rings: form.rings,
-        targetIds: hits.map(row => row.e.id) })
+        targetIds: rows.map(row => row.e.id) })
   }
 
   _zones(incoming, outgoing, onCast) {

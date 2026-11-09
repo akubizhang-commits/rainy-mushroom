@@ -85,9 +85,9 @@ export function skillForm(id, level = 1, parentLevel = 1, trainedLevel = level) 
         form.interval = (form.duration - form.initialDelay) / (form.hits - 1)
         break
       case 'sj_qinglian':
-        // Two judgment pulses at release and +0.5s; each pulse sweeps its window.
-        Object.assign(form, { shape: 'lotus', radius: QINGLIAN_RINGS.at(-1).radius, hits: 2,
-          interval: .5, initialDelay: 0, duration: skill.duration, rings: QINGLIAN_RINGS })
+        // Three judgment rounds at release, +1s and +2s (outer, middle, inner). No target cap.
+        Object.assign(form, { shape: 'lotus', radius: QINGLIAN_RINGS[0].radius, hits: 3,
+          interval: 1, initialDelay: 0, duration: skill.duration, rings: QINGLIAN_RINGS, targetCap: null })
         break
       case 'sj_wanjian':
         Object.assign(form, { shape: 'orbit', hits: null, swords: [4, 5, 6, 8][node],
@@ -122,49 +122,51 @@ export function skillForm(id, level = 1, parentLevel = 1, trainedLevel = level) 
   return result
 }
 
-// 青莲剑阵：第 k 环的瓣以 phi_k + ω_k·t 为基准旋转；内环最快，外环最慢，相邻环错开 π/8。
-// 偶数瓣为判定剑（index 2i 与判定剑 i 同角），奇数瓣只绘制。
-const QINGLIAN_SPIN = [2.4, 1.6, 1.0]
-const QINGLIAN_BLADE_BASE = .35, QINGLIAN_BLADE_WIDTH = 8
+// 青莲剑阵：第 k 环的每一瓣都是判定剑，从阵眼辐射到环半径。第 k 环的瓣以 k·π/8 + j·2π/N − ω_k·t 旋转，
+// 角度递减即顺时针；内环最快、外环最慢，相邻环错开 π/8。
+const QINGLIAN_SPIN = [10.05, 8.17, 6.6]
+// Judgment band half-width, equal to the drawn blade's widest half-width (see QinglianFormationArt).
+export const QINGLIAN_BLADE_HALF_WIDTH = 8
+const TAU = Math.PI * 2
 export function qinglianPetalPose(form, time, ringIndex, petalIndex) {
   const ring = form.rings[ringIndex]
-  const petals = ring.visualPetals
-  const angle = ringIndex * Math.PI / 8 + QINGLIAN_SPIN[ringIndex] * time + petalIndex * Math.PI * 2 / petals
+  const angle = ringIndex * Math.PI / 8 + petalIndex * TAU / ring.visualPetals - QINGLIAN_SPIN[ringIndex] * time
   const dx = Math.cos(angle), dy = Math.sin(angle)
   return { x: dx * ring.radius, y: dy * ring.radius, angle,
-    baseX: dx * ring.radius * QINGLIAN_BLADE_BASE, baseY: dy * ring.radius * QINGLIAN_BLADE_BASE,
-    tipX: dx * ring.radius, tipY: dy * ring.radius, judgment: petalIndex % 2 === 0 }
+    baseX: 0, baseY: 0, tipX: dx * ring.radius, tipY: dy * ring.radius }
 }
-// Judgment sword i of ring k is visual petal 2i, so the damage blades match the drawn ones.
-export function qinglianBladePose(form, time, ringIndex, index) {
-  return qinglianPetalPose(form, time, ringIndex, index * 2)
+// Pulse p (1-based) judges the ring that is shown p-th: outer, middle, inner.
+export function qinglianRingForPulse(form, pulse) {
+  return form.rings.length - pulse
 }
-const segmentDistanceLocal = (px, py, ax, ay, bx, by) => {
-  const vx = bx - ax, vy = by - ay
-  const t = Math.max(0, Math.min(1, ((px - ax) * vx + (py - ay) * vy) / (vx * vx + vy * vy || 1)))
-  return Math.hypot(px - ax - vx * t, py - ay - vy * t)
+// Does a blade whose angle sweeps [s - span, s] (radians, s in [0, 2π)) pass within
+// ±alpha of a bearing at 0 (mod 2π)?
+function sweepTouches(s, span, alpha) {
+  if (span + 2 * alpha >= TAU) return true
+  for (const k of [-1, 0, 1]) {
+    const low = k * TAU - alpha, high = k * TAU + alpha
+    if (s >= low && s - span <= high) return true
+  }
+  return false
 }
-// Returns the shares of the rings whose judgment blades sweep the target during
-// [time, time + window). Coverage uses the target's edge, not its centre.
-export function qinglianRingShares(form, center, target, time, window) {
-  const offset = Math.hypot(target.x - center.x, target.y - center.y)
-  const local = { x: target.x - center.x, y: target.y - center.y }
-  const shares = []
-  form.rings.forEach((ring, k) => {
-    if (offset - (target.radius ?? 0) > ring.radius + 1e-6) return
-    const samples = 8
-    for (let j = 0; j < samples; j++) {
-      const t = time + window * j / samples
-      let hit = false
-      for (let i = 0; i < ring.swords && !hit; i++) {
-        const pose = qinglianBladePose(form, t, k, i)
-        hit = segmentDistanceLocal(local.x, local.y, pose.baseX, pose.baseY, pose.tipX, pose.tipY)
-          <= (target.radius ?? 0) + QINGLIAN_BLADE_WIDTH / 2
-      }
-      if (hit) { shares.push(ring.share); break }
-    }
-  })
-  return shares
+// Judgment hits one target receives from one round: a round is one second, and each
+// petal of the round's ring counts once when its sweep crosses the target. A target
+// is in reach when its edge is within the ring radius (the same test as the target finder).
+export function qinglianRoundHits(form, centre, target, pulse) {
+  const ringIndex = qinglianRingForPulse(form, pulse), ring = form.rings[ringIndex]
+  const r = target.radius ?? 0
+  const dx = target.x - centre.x, dy = target.y - centre.y, d = Math.hypot(dx, dy)
+  if (d - r > ring.radius + 1e-6) return 0
+  const alpha = d <= r + QINGLIAN_BLADE_HALF_WIDTH ? Math.PI : Math.asin((r + QINGLIAN_BLADE_HALF_WIDTH) / d)
+  const bearing = Math.atan2(dy, dx), span = QINGLIAN_SPIN[ringIndex] * form.interval
+  const roundStart = (pulse - 1) * form.interval
+  let hits = 0
+  for (let j = 0; j < ring.visualPetals; j++) {
+    const angle = qinglianPetalPose(form, roundStart, ringIndex, j).angle
+    const s = ((angle - bearing) % TAU + TAU) % TAU
+    if (sweepTouches(s, span, alpha)) hits++
+  }
+  return hits
 }
 
 // Local coordinates: the caller adds the actual player position. Both renderer

@@ -66,7 +66,7 @@ import * as forging from '../js/xianxia/TowerForging.js'
 // Optional post-build regression: TOWER_HOST_BUNDLE=/absolute/path/to/index.*.js
 // runs the same host behavior against Creator's emitted icon loader and Babel
 // helpers. This catches array-only spread lowering that native Node TS cannot.
-const sources = Object.fromEntries(['TowerStatusIconArt', 'TowerPreferences', 'TowerKeyboardNavigation', 'QingpingAudio', 'SwordBurstArt', 'ConvergenceArt', 'TowerHitArt', 'TowerMenuChrome', 'LiangyiPainter', 'SixiangPainter', 'LiangyiFormationArt', 'SixiangFormationArt', 'TowerMonsterMechanicsView', 'SwordArcArt', 'SwordLineArt', 'SwordShadowArt', 'SwordTiandiArt', 'SwordQiArt', 'OrbitSwordArt', 'TowerSkillEffects', 'TowerDepthOrder', 'TowerEnvironmentArt', 'TowerStoneArt', 'TowerProjectileArt', 'TowerSectScene', 'WeaponQualityArt', 'TowerCharacterArt', 'TowerMonsterArt', 'TowerSkillIcons', 'TowerSkillTreeCatalog', 'TowerSkillTreeLayout', 'TowerPlayerHud', 'TowerInventoryPanel', 'TowerMenu', 'TowerArenaView', 'TowerView'].map(name => [
+const sources = Object.fromEntries(['TowerStatusIconArt', 'TowerPreferences', 'TowerKeyboardNavigation', 'QingpingAudio', 'SwordBurstArt', 'ConvergenceArt', 'QinglianVortexArt', 'TowerHitArt', 'TowerMenuChrome', 'LiangyiPainter', 'SixiangPainter', 'LiangyiFormationArt', 'SixiangFormationArt', 'TowerMonsterMechanicsView', 'SwordArcArt', 'SwordLineArt', 'SwordShadowArt', 'SwordTiandiArt', 'SwordQiArt', 'OrbitSwordArt', 'TowerSkillEffects', 'TowerDepthOrder', 'TowerEnvironmentArt', 'TowerStoneArt', 'TowerProjectileArt', 'TowerSectScene', 'WeaponQualityArt', 'TowerCharacterArt', 'TowerMonsterArt', 'TowerSkillIcons', 'TowerSkillTreeCatalog', 'TowerSkillTreeLayout', 'TowerPlayerHud', 'TowerInventoryPanel', 'TowerMenu', 'TowerArenaView', 'TowerView'].map(name => [
   name,
   stripTypeScriptTypes(
     readFileSync(new URL(`../cocos-pilot/assets/scripts/${name}.ts`, import.meta.url), 'utf8')
@@ -422,6 +422,7 @@ function launch(t, storage, { assisted = true, menuOnly = false, frame = { width
   context.QingpingAudio = runInNewContext(`(() => { ${sources.QingpingAudio}\nreturn QingpingAudio })()`, context)
   context.SwordBurstArt = runInNewContext(`(() => { ${sources.SwordBurstArt}\nreturn SwordBurstArt })()`, context)
   context.ConvergenceArt = runInNewContext(`(() => { ${sources.ConvergenceArt}\nreturn ConvergenceArt })()`, context)
+  context.QinglianVortexArt = runInNewContext(`(() => { ${sources.QinglianVortexArt}\nreturn QinglianVortexArt })()`, context)
   context.SwordLineArt = runInNewContext(`(() => { ${sources.SwordLineArt}\nreturn SwordLineArt })()`, context)
   context.SwordShadowArt = runInNewContext(`(() => { ${sources.SwordShadowArt}\nreturn SwordShadowArt })()`, context)
   context.TowerHitArt = runInNewContext(`(() => { ${sources.TowerHitArt}\nreturn TowerHitArt })()`, context)
