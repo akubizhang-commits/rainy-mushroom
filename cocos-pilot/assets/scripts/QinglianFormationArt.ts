@@ -1,7 +1,9 @@
 import {Color, Graphics} from 'cc';
 import {skillForm, qinglianPetalPose, QINGLIAN_BLADE_HALF_WIDTH} from './shared/js/xianxia/TowerSkillForms';
 
-/** 青莲剑阵 is drawn with code-drawn lens-shaped blades over a static vortex layer.
+/** 青莲剑阵 visuals. The judgment blades (qinglianPetals, the source of truth for the 8/12/16 round geometry)
+ * are no longer painted. The look comes from two rotating vortex layers in QinglianVortexArt. This file keeps the
+ * pure geometry for tests and the pool-centre dot.
  * Colours stay in the cool blue-white range: body 青白, edge 淡青, highlight 银青, centre 月白.
  */
 export const QINGLIAN_PALETTE = {
@@ -47,41 +49,30 @@ export function qinglianPetals(time: number, unfold: number[], visible: number[]
 const colour = (rgb: readonly number[], alpha: number) =>
  new Color(rgb[0], rgb[1], rgb[2], Math.round(255 * clamp(alpha)))
 
-function paintPetals(g: Graphics, x: number, y: number, petals: QinglianPetal[]) {
- for (const petal of petals) {
-  const {outline} = petal
-  g.fillColor = colour(QINGLIAN_PALETTE.body, petal.alpha * .5)
-  g.moveTo(x + outline[0].x, y + outline[0].y)
-  for (let i = 1; i < outline.length; i++) g.lineTo(x + outline[i].x, y + outline[i].y)
-  g.close(); g.fill()
-  g.strokeColor = colour(QINGLIAN_PALETTE.edge, petal.alpha)
-  g.lineWidth = 1.5
-  g.moveTo(x + outline[0].x, y + outline[0].y)
-  for (let i = 1; i < outline.length; i++) g.lineTo(x + outline[i].x, y + outline[i].y)
-  g.close(); g.stroke()
-  // Silver cutting edge along the blade's centre line, eye to tip.
-  g.strokeColor = colour(QINGLIAN_PALETTE.silver, petal.alpha * 1.2)
-  g.lineWidth = 1
-  g.moveTo(x + petal.base.x, y + petal.base.y); g.lineTo(x + petal.tip.x, y + petal.tip.y); g.stroke()
- }
-}
-
 function paintCentre(g: Graphics, x: number, y: number, alpha: number) {
  g.fillColor = colour(QINGLIAN_PALETTE.moon, alpha)
  g.circle(x, y, 3); g.fill()
+}
+
+/** Visual spin of the two vortex layers, in degrees. Both turn clockwise (negative angle in Cocos,
+ * whose positive rotation is counter-clockwise). The outer layer is faster than the inner one.
+ * Visual only: the judgment rounds in TowerSkillForms do not depend on this.
+ */
+export const QINGLIAN_SPIN_RAD_PER_SEC = {outer: 1.6, inner: .7} as const;
+export function qinglianVortexSpin(age: number) {
+ const t = Math.max(0, age);
+ return {
+  outer: -QINGLIAN_SPIN_RAD_PER_SEC.outer * t * 180 / Math.PI,
+  inner: -QINGLIAN_SPIN_RAD_PER_SEC.inner * t * 180 / Math.PI,
+ };
 }
 
 /** 起阵 (0–0.8s, windup): a faint rune circle grows and 3–5 outer petals rise.
  * 成阵 (last 0.3s of windup): rings unfold outer → middle → inner.
  */
 export function drawQinglianWindup(g: Graphics, x: number, y: number, age: number, total: number) {
- const a = clamp(age, 0, total), form = skillForm('sj_qinglian', 1), outer = form.rings[2].radius
- const p = clamp(a / Math.max(.001, total * .6))
- g.strokeColor = colour(QINGLIAN_PALETTE.edge, .32 * p)
- g.lineWidth = 2
- g.circle(x, y, outer * .8 * p); g.stroke()
- const unfold = form.rings.map((_: unknown, k: number) => clamp((p - k * .2) / .6))
- paintPetals(g, x, y, qinglianPetals(a, unfold, [3 + Math.round(p * 2), 0, 0], 1))
+ // The judgment blades and thin circles are no longer drawn; the vortex layers carry the look.
+ const a = clamp(age, 0, total), p = clamp(a / Math.max(.001, total * .6))
  paintCentre(g, x, y, p)
 }
 
@@ -90,31 +81,10 @@ export function drawQinglianWindup(g: Graphics, x: number, y: number, age: numbe
  */
 export function drawQinglianBurst(g: Graphics, x: number, y: number, time: number, startedAt: number,
  duration: number, pulseIndex: number) {
- const age = Math.max(0, time - startedAt), form = skillForm('sj_qinglian', 1)
+ const age = Math.max(0, time - startedAt)
  const fade = age < duration - .4 ? 1 : clamp((duration - age) / .4)
  if (fade <= 0) return
- // Round r (1-based) opens at (r - 1) seconds; the outer ring is round 1, the inner ring round 3.
- const unfold = form.rings.map((_: unknown, k: number) => {
-  const round = form.rings.length - k
-  return clamp((age - (round - 1)) / .3)
- })
- const lastFlash = startedAt + Math.max(0, pulseIndex - 1) * 1
- const glow = clamp((time - lastFlash) / .5)
- if (pulseIndex > 0 && glow < 1) {
-  g.strokeColor = colour(QINGLIAN_PALETTE.silver, .3 * (1 - glow) * fade)
-  g.lineWidth = 2
-  g.circle(x, y, form.rings[2].radius * (.6 + .4 * glow)); g.stroke()
- }
- // Decorative outer arc blades at the judgment edge (r≈200). They are not judged, and they turn with the outer ring.
- const outer = form.rings[2], open = clamp(unfold[2])
- if (open > 0) {
-  g.strokeColor = colour(QINGLIAN_PALETTE.silver, .55 * open * fade)
-  g.lineWidth = 2.5
-  for (let k = 0; k < 3; k++) {
-   const start = qinglianPetalPose(form, age, 2, 0).angle + k * Math.PI * 2 / 3
-   g.arc(x, y, outer.radius * open, start, start + .7, false); g.stroke()
-  }
- }
- paintPetals(g, x, y, qinglianPetals(age, unfold, [], fade))
+ // The judgment blades and the thin outer circles are no longer drawn. Pulse index is kept for the signature.
+ void pulseIndex
  paintCentre(g, x, y, fade)
 }

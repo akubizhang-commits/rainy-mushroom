@@ -73,3 +73,22 @@
 - 单目标 d=60：前 1556.3，后 1556.4，基本不变。
 - 10 目标全在 200 px 内：前 7538.2（cap 6，只有 6 个目标受伤），后 13260.9，约 +76%。这是取消 cap 6 的直接结果。
 - 数据与生成方式见 `balance/before-after.md` 的“群怪场景”一节。
+
+## 视觉修改（用户实机反馈，判定规则不变）
+1. 去掉外圈白色细圆线：`QinglianFormationArt.ts` 的起阵圈、爆发闪光圈和 r≈200 装饰弧刃都已移除。
+2. 去掉中心向外的长直尖刃：判定剑不再绘制。`qinglianPetals`、`TowerSkillForms`、判定次数与伤害均未改动，测试仍断言 8/12/16 瓣的判定几何。周天剑阵与流云斩未改动。
+3. 涡旋拆两层：`scripts/art/qinglian_vortex_split.py` 从 `qinglian-vortex-layer-v2.png` 按半径（分界 0.52，羽化 0.05）拆出外层大瓣与内层小瓣，输出 `qinglian-vortex-{outer,inner}-v3.png`（均为正圆、1395×1395）。alpha 之和与 v2 一致（误差 0）。原 v2 图保留。
+4. 压扁：两层在正圆上旋转，父节点 `青莲地面压扁` 的 y 缩放为 897/1395（约 0.643，即 263:409），与参考椭圆一致。阵眼淡光不压扁，保持原 v2 pool 层。
+5. 转速（仅视觉）：外层 1.6 rad/s、内层 0.7 rad/s，均为顺时针；两层同时开始。伤害、判定、三轮、冷却、持续时间、圆形判定半径均未改。
+
+## 验证（本轮）
+- `node --test tests/qinglian-formation-art.test.mjs tests/xianxia-tower-skill-forms.test.mjs tests/xianxia-tower-host-tools.test.mjs tests/xianxia-material-feedback.test.mjs`：292 通过，0 失败。新增断言：旋转方向与快慢，爆发与起阵不再绘制弧刃、判定线和圆线。
+- 全量 `npm test`：2403 个，2402 通过，1 失败。失败为基线项 “encyclopedia shows fixed stats, unique quality and explicit art gaps”，新增失败 0。输出：`full-tap-after-4.txt`。
+- `npm run cocos:build`：成功（exit 0）。日志：`build-web-mobile-3.txt`。
+- `npm run cocos:test`：6 通过，0 失败。输出：`cocos-test-3.txt`。
+- 爆发期截图（正常运行、不暂停）：`burst/burst-{early,mid}-{1280x720,844x390}.png`。截图确认判定线和长直尖刃已消失，阵眼淡光可见，伤害数字正常显示。**冰晶涡旋两层在这组无头截图中仍不可见**，与前一轮的无头截图问题一致。用户实机看到的效果需要以浏览器（localhost:8740，重新构建后）为准，本报告没有以无头截图验证涡旋层。
+
+## 未完成与待确认
+- 涡旋两层的实机可见性：无头截图无法确认，需要用户在浏览器中验收，尤其是外层快、内层慢和压扁的观感。
+- 拆层的分界半径 0.52 为目测选定，可在验收后调整并重跑 `qinglian_vortex_split.py`。
+- 内层小瓣比外层暗，若不满意可在 `QinglianVortexArt` 中调整颜色 alpha。
