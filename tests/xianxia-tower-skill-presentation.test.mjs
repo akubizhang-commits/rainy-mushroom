@@ -85,7 +85,7 @@ test('next requirements follow rank caps, stage and evolution rank not first unl
 test('evolution replacement and conditional budgets retain distinct units',()=>{
  const s=fresh();s.skills={sj_yujian:6,sj_line:6,sj_wanjian:6,sj_formation:6,sj_bone:4,sj_gate:2};s.evolutionRanks={evo_wanjian:1,evo_tiandi:1,evo_wuwo:1,evo_sixiang:1}
  const y=skillPresentation(s,'evo_wanjian'),line=skillPresentation(s,'evo_tiandi'),f=skillPresentation(s,'evo_sixiang')
- assert.equal(line.cooldown,10);assert.equal(y.cooldown,.5**(5/9))
+ assert.equal(line.cooldown,12);assert.equal(y.cooldown,.5**(5/9))
  // 85号：面板数值含主修流派共鸣。
  const res=id=>resonanceDamageFactor(combatLoadout(s),id)
  close(value(y,'rainTickDamage')*19,115*1.25*(1.8*1.13**3)*.8*convergenceRainMultiplier(1)*res('sj_yujian')) // 御剑6级×0.8
@@ -354,7 +354,7 @@ test('real cooldown ring applies its damage and awareness too, preserves hit uni
  // Skills now share the body channel. Measure cooldown from the actual start.
  for(let i=0;i<180&&!run.state.casts.some(c=>c.skill==='sj_line');i++){run.state.ticks++;run.state.time=run.state.ticks/60;run._skills([])}
  const line=run.state.casts.find(c=>c.skill==='sj_line');assert.ok(line)
- close(run.state.cooldowns.sj_line-line.startedAt,10*.85)
+ close(run.state.cooldowns.sj_line-line.startedAt,12*.85)
  close(line.releaseAt-line.startedAt,castActionTiming('evo_tiandi',1,equipmentCastSpeed(combatLoadout(s),s.xp)).windup)
  let rainStart=null
  for(let i=0;i<180&&!run.state.zones.some(z=>z.kind==='sword_rain');i++){
@@ -368,11 +368,11 @@ test('real cooldown ring applies its damage and awareness too, preserves hit uni
  s.activeRun={snapshot:run.snapshot()}
  s.loadouts[0].ringId='basic-ring'
  const frozen=JSON.stringify(s.activeRun)
- close(skillPresentation(s,'evo_tiandi').cooldown,10*.85)
+ close(skillPresentation(s,'evo_tiandi').cooldown,12*.85)
  close(value(skillPresentation(s,'evo_wanjian'),'rainCooldown'),15*.85)
  assert.equal(JSON.stringify(s.activeRun),frozen)
  s.activeRun=null
- close(skillPresentation(s,'evo_tiandi').cooldown,10)
+ close(skillPresentation(s,'evo_tiandi').cooldown,12)
 })
 
 test('independent moon panels keep stable shapes and itemize their complete damage budgets',()=>{

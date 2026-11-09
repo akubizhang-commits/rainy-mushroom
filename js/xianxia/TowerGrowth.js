@@ -167,12 +167,13 @@ export const GROWTH_SKILLS = freeze([
   }, { name: '逐月斩', kind: 'active', clear: 0 }),
   // Growth-only skill; the historical five-rank catalog remains unchanged.
   skill('sj_cross', {
-    damage: [1.5, 2.1, ...Array.from({ length: 8 }, (_, i) => 3 * 1.15 ** i)].map(value => value * 2), cooldown: 12, windup: .18,
+    // 2026-11-09 用户确认：冷却12→10秒，每次施放伤害不变。
+    damage: [1.5, 2.1, ...Array.from({ length: 8 }, (_, i) => 3 * 1.15 ** i)].map(value => value * 2), cooldown: 10, windup: .18,
     radius: [180, 180, 180, 220, 220, 220, 270, 270, 270, 270],
     reach: [180, 180, 180, 220, 220, 220, 270, 270, 270, 270], speed: 960,
     width: [180, 180, 180, 180, 180, 180, 270, 270, 270, 270],
     bladeWidth: [12, 12, 12, 12, 12, 12, 18, 18, 18, 18],
-    target_cap: 8, single_dps_factor: 1 / 12, hit_assumption: .45,
+    target_cap: 8, single_dps_factor: 1 / 10, hit_assumption: .45,
     rule: '向前方原地斩出两道白紫交叉剑气，蓝黑剑气衬于底层，整招不向外飞行；攻击前方180°范围；1–3级距离180，4–6级220，7–10级270；最多命中8个可见目标，每次施放同敌只结算一次，后续弧光与消散不追加伤害。',
   }, { name: '双月斩', kind: 'active', clear: 0 }),
   skill('sj_wanjian', {
@@ -276,8 +277,9 @@ const evolutionEffects = {
     rule: '进阶替换周天剑阵；继承实际基础等级，外圈每窗口为基础damage×budgetMultiplier，内圈为基础damage的120%/144%；同目标0.6秒只取较高一次。',
   },
   evo_tiandi: {
-    cooldown: 10, windup: .45, release_cooldown: 9.55,
-    rule: '进阶替换剑破虚空；继承实际基础等级，10秒为起手到下次起手，单击=基础damage×(10/基础cooldown)×budgetMultiplier；不再叠基础斩。',
+    // 2026-11-09 用户确认（方案A）：冷却10→12秒，保留单击=冷却比例公式，单击伤害随之×1.2，每秒伤害不变。
+    cooldown: 12, windup: .45, release_cooldown: 11.55,
+    rule: '进阶替换剑破虚空；继承实际基础等级，12秒为起手到下次起手，单击=基础damage×(12/基础cooldown)×budgetMultiplier；不再叠基础斩。',
   },
   evo_sixiang: {
     slow_fraction: FORMATION_SLOWS.evo_sixiang,

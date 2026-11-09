@@ -318,7 +318,7 @@ test('each evolution inherits its actual parent rank and current per-window budg
         const hit = output.find(h => h.source === evolution)
         assert.ok(hit, evolution)
         close(hit.damage, base * definition.budgetMultipliers[rank-1]
-          * (evolution === 'evo_tiandi' ? 10 / skill.cooldown : 1))
+          * (evolution === 'evo_tiandi' ? 12 / skill.cooldown : 1))
       }
     }
   }

@@ -37,7 +37,7 @@ test('moon techniques occupy Zhuji early and middle phases with realm-aligned tr
  }
 })
 test('approved cooldowns change only the requested families',()=>{
- for(const [id,cd] of [['sj_arc',3.5],['sj_moon',4],['sj_moon_triple',10],['sj_cross',12],['sj_line',12],['sj_shadow',6],['sj_formation',12],['evo_sixiang',15],['sj_wanjian',6],['sj_yujian',1],['evo_tiandi',10]])assert.equal(find(id).cooldown,cd,id)
+ for(const [id,cd] of [['sj_arc',3.5],['sj_moon',4],['sj_moon_triple',10],['sj_cross',10],['sj_line',12],['sj_shadow',6],['sj_formation',12],['evo_sixiang',15],['sj_wanjian',6],['sj_yujian',1],['evo_tiandi',12]])assert.equal(find(id).cooldown,cd,id)
  assert.equal(find('sj_wanjian').duration,4)
 })
 test('formations have more real attack slots over eight seconds without multiplying their total twice',()=>{

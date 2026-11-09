@@ -81,5 +81,5 @@ test('evolution budgets preserve full parent baseline and only define the two ap
   assert.equal(evolution('evo_wanjian').regularMultiplier, 1)
   assert.deepEqual(evolution('evo_wuwo').innerMultiplier, [1.2, 1.44])
   near(evolution('evo_tiandi').windup, .45)
-  near(evolution('evo_tiandi').windup + evolution('evo_tiandi').release_cooldown, 10)
+  near(evolution('evo_tiandi').windup + evolution('evo_tiandi').release_cooldown, 12)
 })

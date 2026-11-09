@@ -56,7 +56,7 @@ for(const [id,budgets] of [['evo_wanjian',[1.30,1.69]],['evo_tiandi',[1.40,1.82]
    assert.ok(Math.abs(zone.damage*zone.pulseCount-base*((budgets[rank-1]-1)*8+definition.rainDamageDurationByRank[rank-1]))<1e-7)
   }else{
    const hit=out.find(h=>h.source===id);assert.ok(hit)
-   assert.ok(Math.abs(hit.damage-base*(10/defs.sj_line.cooldown)*budgets[rank-1])<1e-7)
+   assert.ok(Math.abs(hit.damage-base*(12/defs.sj_line.cooldown)*budgets[rank-1])<1e-7)
   }
  }
 })

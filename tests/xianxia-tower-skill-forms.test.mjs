@@ -337,7 +337,7 @@ test('tiandi keeps one damage receipt while both ranks have genuinely wider and 
     assert.ok(e.reach > 510)
     if (first) { assert.ok(e.width > first.width); assert.ok(e.reach > first.reach) }
     first = e
-    close(1e6 - enemy.hp, attackFor(run, 'sj_line') * coefficient('sj_line', 10) * 10 / 12 * (rank === 1 ? 1.40 : 1.82))
+    close(1e6 - enemy.hp, attackFor(run, 'sj_line') * coefficient('sj_line', 10) * 12 / 12 * (rank === 1 ? 1.40 : 1.82))
   }
 })
 

@@ -47,6 +47,9 @@ const SCHOOLS = {
 // 2026-11-09 补充：剑气玩家优先点剑气重招（剑破虚空、双月斩、逐月斩），流云斩放最后，
 // 用来量化剑破虚空移出筑基后筑基阶段的变化（qi 列表在筑基期把点数全给了玄月斩和流云斩）。
 SCHOOLS.qiHeavy = [['sj_moon', 10], ['sj_line', 10], ['evo_tiandi', 2], ['sj_cross', 10], ['sj_moon_triple', 10], ['sj_arc', 10]]
+// 2026-11-09 补充：既有 formation 列表不买青莲剑阵。炼气阶段剑阵现在有周天（中期）与青莲（巅峰）两门，
+// 这一列表按开放顺序依次投入，用来衡量带青莲的纯剑阵。不改动既有 formation 列表，便于前后对照。
+SCHOOLS.formationQL = [['sj_wanjian', 10], ['sj_qinglian', 10], ['sj_sancai', 6], ['sj_formation', 10], ['evo_sixiang', 2], ['sj_sancai', 10], ['evo_wuwo', 2], ['sj_arc', 10]]
 // Mixed builds: formation core plus a second school's skills (does mixing beat staying in one school?)
 SCHOOLS.mixA = [['sj_wanjian', 10], ['sj_formation', 10], ['evo_sixiang', 2], ['sj_yujian', 10], ['sj_sancai', 10], ['sj_arc', 10]]
 SCHOOLS.mixB = [['sj_wanjian', 10], ['sj_formation', 10], ['evo_sixiang', 2], ['sj_shadow', 10], ['sj_sancai', 10], ['sj_arc', 10]]
