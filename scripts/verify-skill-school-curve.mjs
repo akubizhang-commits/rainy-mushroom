@@ -41,6 +41,8 @@ const SCHOOLS = {
   // 85号第9节：没有流派功法可点时，玩家会把点数投进开局自带的流云斩过渡。
   yujian: [['sj_yujian', 10], ['sj_shadow', 10], ['evo_wanjian', 2], ['sj_arc', 10]],
   formation: [['sj_wanjian', 10], ['sj_sancai', 6], ['sj_formation', 10], ['evo_sixiang', 2], ['sj_sancai', 10], ['evo_wuwo', 2], ['sj_arc', 10]],
+  // 青莲剑阵 only unlocks at 炼气巅峰 (Lv7); lower floors show the starter-only fallback.
+  qinglian: [['sj_qinglian', 10]],
 }
 // Mixed builds: formation core plus a second school's skills (does mixing beat staying in one school?)
 SCHOOLS.mixA = [['sj_wanjian', 10], ['sj_formation', 10], ['evo_sixiang', 2], ['sj_yujian', 10], ['sj_sancai', 10], ['sj_arc', 10]]

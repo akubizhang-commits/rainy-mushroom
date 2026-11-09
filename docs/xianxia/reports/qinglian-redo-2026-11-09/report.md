@@ -1,44 +1,70 @@
-# 青莲剑阵重做：阶段报告（2026-11-09）
+# 青莲剑阵重做 验收说明
 
-## 状态
+分支 `codex/qinglian-redo-2026-11-09`，基于 `e5b65c59`。未合并主线。
 
-已完成：判定运行时、存档 schema、镜像同步、测试更新、素材layer抠图、Cocos web-mobile 构建。
-未完成：
-- 静态透明层（`qinglian-vortex-layer-v1.png`、`qinglian-pool-v1.png`）已生成并复制到运行时资源目录，但 Cocos 渲染尚未加载它们。
-- 平衡复跑（qi / formation / yujian / qinglian 前后对照）未运行。
-- 浏览器实机录像与截图未采集，`scripts/verify-qinglian-live.cjs` 尚未按新规格更新。
+## 本轮修复（对应 build-review 的三项阻断）
 
-## 已实现的规格
+- B1 视觉接入：新增 `cocos-pilot/assets/scripts/QinglianVortexArt.ts`，用 `resources.load` 加载 `tower-skill-fx/qinglian-vortex-layer-v1` 与 `qinglian-pool-v1`。涡旋层不旋转，位于战斗世界图形之下；阵眼淡光在涡旋层之下。`TowerView.ts` 接入创建、清理、死亡与退出的生命周期。`QinglianFormationArt.ts` 增加 r≈200 的外层装饰弧（不判定，随外层旋转）。
+- B2 平衡复跑：脚本加入 `qinglian` 流派，前后各跑一次（见下）。
+- B3 实机：`scripts/verify-qinglian-live.cjs` 改为三轮、每秒一轮、冷却 9 秒、10 个范围内目标加 1 个范围外目标，并统计每轮每目标命中。两个视口均通过。
+- 测试桩：`tests/xianxia-material-feedback.test.mjs` 与 `tests/xianxia-tower-host-tools.test.mjs` 加入 `qinglianArt`/`QinglianVortexArt`，只补桩，不改断言。
 
-- 冷却 9 秒、法力 8、解锁等级不变。
-- 持续 3 秒，每秒一轮，判定次数 3。
-- 每轮只判定一个环：第 1 轮外层 16 瓣（20%），第 2 轮中层 12 瓣（35%），第 3 轮内层 8 瓣（45%）。单瓣伤害 = 环占比 ÷ 瓣数。
-- 旋转顺时针，内层 10.05 rad/s，中层 8.17 rad/s，外层 6.6 rad/s。外层的 6.6 rad/s 超过一整圈（2π），因此每瓣每轮必然扫过范围内的目标。
-- 目标数不限（`target_cap` 为 null）。同一目标三轮合计 36 次命中，伤害合计为整招预算。
-- 存档 schema 由 89 改为 90，仅影响塔模式存档，旧档按开发期约定重置。
+## 判定规则（运行时，沿用上一次提交）
 
-## 规格冲突与采用的做法（需用户确认）
+- 冷却 9 秒，法力 8，解锁 7 级，阶段不变。
+- 持续 3 秒，三轮，每轮 1 秒，0/1/2 秒施放。顺序：外 16 瓣（20%）→ 中 12 瓣（35%）→ 内 8 瓣（45%）。
+- 转速：内 10.05、中 8.17、外 6.6 rad/s，全部顺时针。外层一轮内转过 6.6 rad，大于 2π，因此每瓣每轮必扫过范围内每个目标。
+- 目标不设上限。同一目标三轮合计 36 次（16+12+8），单次伤害 = 环占比 ÷ 瓣数。
+- 判定剑从阵眼辐射到 r=200，三环共用半径。
 
-1. 原三环半径为 90/150/200。同一目标要获得 36 次命中，三环都必须覆盖目标，因此三环统一为半径 200，环之间的区别只在瓣数、转速与透明度。这改变了视觉上的分层。
-2. 判定剑从阵眼辐射到 200，不再是 0.35R 起点的透镜。
-3. 参考图的环是透视椭圆，判定为俯视圆。参考图只抠出静态底层，不参与旋转和判定。
-4. 三轮判定按一秒一轮进行。每瓣判定只看它在本轮内能否扫过目标方位，超过一圈仍只计一次。
+## 验证结果（真实数字）
 
-## 测试
+- 相关 node --test（4 个文件）：140 通过，0 失败。
+- 宿主桩相关测试：`xianxia-tower-host-tools` + `xianxia-material-feedback`：197 通过，0 失败。
+- 全量 `npm test`：2401 个，2400 通过，1 失败。失败项为 "encyclopedia shows fixed stats, unique quality and explicit art gaps"，即基线失败（见 `baseline/fail-names.txt`）。新增失败 0。输出：`full-tap-after-3.txt`。
+- 注意：`docs/xianxia/reports/monster-mechanics-2026-10-31/baseline-failures.json` 含 210 个名字，与本分支实际基线（1 个失败）不一致。对照以本分支实际基线为准。
+- `npm run cocos:sync`：退出码 0。
+- `npm run cocos:build`（web-mobile）：构建成功，日志 `cocos-pilot/temp/pilot-builds/web-mobile.log` 含 "build Task (web-mobile) Finished"。日志中另有一条 SIGTERM 调试信息，属于构建子进程退出，构建本身完成。
+- `npm run cocos:test`：6 通过，0 失败。输出：`cocos-test.txt`。
+- 实机（`live/live-results.json`，status PASS，0 页面错误）：
+  - 1280×720 与 844×390 两个视口均通过。
+  - 三轮时间为 0.78、1.78、2.78 秒（间隔 1 秒），每轮区间 3 秒。
+  - 冷却间隔 9 秒。
+  - 暂停后时间与轮次冻结，恢复后继续。
+  - 死亡后阶段为 lost，退出后运行清理。
+  - 范围内 10 个目标每个各 36 次命中；范围外目标 0 次。
+  - 录像与截图位于 `live/`：`video-sj_qinglian-*`、`sj_qinglian-{cast,paused,after-resume,death,exit}-*.png`。
+- 注意：截图里 `cast` 拍在 0.6 秒起阵期，涡旋层尚未出现；`paused` 拍到了暂停菜单遮挡画面。因此**涡旋层与阵眼淡光在实机画面中的呈现尚未用截图确认**。这是未完成的验收项。
 
-- `node --test tests/xianxia-tower-skill-forms.test.mjs tests/qinglian-formation-art.test.mjs tests/xianxia-tower-stage-growth.test.mjs tests/xianxia-skill-point-budget.test.mjs tests/xianxia-tower-skill-presentation.test.mjs`：161 通过，0 失败。
-- 全量 `npm test`：2401 个测试，2400 通过，1 失败（"encyclopedia shows fixed stats…"，基线已知失败）。基线为 2399 个测试、2398 通过、1 失败。新增失败为 0。
-- `npm run cocos:build`：成功（web-mobile），日志 `cocos-pilot/temp/pilot-builds/web-mobile.log`。
-- `npm run cocos:test`：6 通过，0 失败。
+## 平衡对照（`balance/before-after.md`）
 
-## 素材
+- qi、yujian、formation 三个流派的前后结果逐项相同。
+- qinglian 流派（由第 3 层起学到 sj_qinglian，第 2 层学不到）：
+  - 胜场：第 3 层由 2/4 升至 3/4，其余层基本持平。第 4 层 2/4 不变。
+  - 玩家受伤：第 6 层由 1034 升至 1476（约 +43%），第 3 层 389 升至 742（约 +91%），第 4 层 523 升至 561；第 8 层由 5002 降至 3925，第 9 层由 5825 降至 4822。
+  - 最低血量比例：第 6 层由 0.31 降至 0.16。
+- 注意：脚本模拟的是普通楼层战斗，不是专门的群怪场景。因此"取消目标上限后群怪伤害上升"无法从此表直接读出。群怪场景没有单独测量，这一点需要专门场景才能量化。
+- 按用户指示，本轮未调数值。
 
-- 脚本：`scripts/art/qinglian_vortex_layer.py`（PIL 13.0.0）。背景实测中位数为 RGB(75,75,74)，与计划中的 70 不同，已按实测使用。
-- 输出：`design/xianxia-qinglian-2026-11-09/processed/qinglian-vortex-layer-v1.png`、`qinglian-pool-v1.png`、`qa-on-dark.png`。
-- 参考原图 sha256 `8c5bd7025457571f0e6660e7f6ac9ba24126f42c166d7700d079300b7eacde1e`，运行后未改动。
-- 未调用 Scenario。
+## 存档
 
-## 未覆盖的风险
+- 本轮未改存档结构。沿用上一次提交：`SCHEMA` 89 → 90，只重置本塔模式存档（`xianxia.sect-tower.campaign.v1`），不删除其他数据。
 
-- 每瓣对同一目标各结算一次，因此每次命中都会单独经过防御计算。群怪场景的伤害会高于旧版（旧版上限为 6 个目标，且每目标只结算一次），平衡数据须跑完后才能给出数字。
-- 命中反馈强度由 0.6 降为 0.35，以免 36 次命中过于频繁。
+## 已知问题与待确认
+
+1. 涡旋层视觉：参考图是透视椭圆，判定与绘制仍是俯视圆。当前按 r=200 的水平宽度等比缩放，保留了参考图的椭圆比例，因此竖向范围小于判定圆。需要用户看实机画面后确认是否接受，或改为压扁到圆。
+2. 涡旋层与阵眼淡光在实机截图中未确认可见（见上）。
+3. 技能图标 `sj_qinglian.png` 未改动。Cocos 构建会把其 `.meta` 的 `hasAlpha` 从 false 改为 true，本分支已还原该 `.meta`，未随提交。是否保留，请确认。
+4. 受击反馈强度 .6 → .35（上次提交，计划中标注为需用户接受）。
+5. 共享镜像由 `npm run cocos:sync` 生成，本轮 JS 运行时未改动，镜像无新差异。
+
+## 工作文件
+
+- 代码：`cocos-pilot/assets/scripts/QinglianVortexArt.ts`（新）、`QinglianFormationArt.ts`、`TowerView.ts`。
+- 脚本：`scripts/verify-qinglian-live.cjs`、`scripts/verify-skill-school-curve.mjs`。
+- 测试：`tests/xianxia-material-feedback.test.mjs`、`tests/xianxia-tower-host-tools.test.mjs`。
+- 报告：`balance/`（before、after、before-after.md）、`live/`、`full-tap-after-3.txt`、`cocos-test.txt`、`build-web-mobile-2.txt`。
+
+## 合并建议
+
+本分支可按用户决定合并到 `codex/crafting-minigames`。合并前请先确认上面第 1、2、3 项。

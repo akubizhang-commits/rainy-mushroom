@@ -105,6 +105,16 @@ export function drawQinglianBurst(g: Graphics, x: number, y: number, time: numbe
   g.lineWidth = 2
   g.circle(x, y, form.rings[2].radius * (.6 + .4 * glow)); g.stroke()
  }
+ // Decorative outer arc blades at the judgment edge (r≈200). They are not judged, and they turn with the outer ring.
+ const outer = form.rings[2], open = clamp(unfold[2])
+ if (open > 0) {
+  g.strokeColor = colour(QINGLIAN_PALETTE.silver, .55 * open * fade)
+  g.lineWidth = 2.5
+  for (let k = 0; k < 3; k++) {
+   const start = qinglianPetalPose(form, age, 2, 0).angle + k * Math.PI * 2 / 3
+   g.arc(x, y, outer.radius * open, start, start + .7, false); g.stroke()
+  }
+ }
  paintPetals(g, x, y, qinglianPetals(age, unfold, [], fade))
  paintCentre(g, x, y, fade)
 }

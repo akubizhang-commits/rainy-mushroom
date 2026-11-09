@@ -20,6 +20,7 @@ import { CAMP_PILLS } from './shared/js/xianxia/TowerProfile';
 import {JianxinAuraArt} from './JianxinAuraArt';
 import {SwordBurstArt} from './SwordBurstArt';
 import {ConvergenceArt} from './ConvergenceArt';
+import {QinglianVortexArt} from './QinglianVortexArt';
 import { drawMenuVeil, drawMenuClose, drawMenuBack, isMenuBack } from './TowerMenuChrome';
 import { isStarterEquipment } from './shared/js/xianxia/TowerEquipmentTiers';
 import {setTowerDepth,sortTowerDepth,TowerBodyFallbacks} from './TowerDepthOrder';
@@ -93,6 +94,7 @@ export class TowerView {
  private jianxinArt=new JianxinAuraArt();private jianxinLayer:Node|null=null;
  private burstArt=new SwordBurstArt();private burstLayer:Node|null=null;
  private convergenceArt=new ConvergenceArt();private convergenceLayer:Node|null=null;
+ private qinglianArt=new QinglianVortexArt();private qinglianLayer:Node|null=null;
  private lineArt=new SwordLineArt();private lineLayer:Node|null=null;
  private shadowArt=new SwordShadowArt();private shadowLayer:Node|null=null;
  private hitArt=new TowerHitArt();
@@ -451,7 +453,7 @@ export class TowerView {
   this.bumieArt.clearBindings();this.bumieLayer=null;
   this.jianxinArt.clearBindings();this.jianxinLayer=null;
   this.arcArt.clearBindings();this.arcLayer=null;
-  this.lineArt.clearBindings();this.lineLayer=null;this.burstArt.clearBindings();this.burstLayer=null;this.convergenceArt.clearBindings();this.convergenceLayer=null;
+  this.lineArt.clearBindings();this.lineLayer=null;this.burstArt.clearBindings();this.burstLayer=null;this.convergenceArt.clearBindings();this.convergenceLayer=null;this.qinglianArt.clearBindings();this.qinglianLayer=null;
   this.shadowArt.clearBindings();this.shadowLayer=null;
   this.tiandiArt.clearBindings();this.tiandiLayer=null;
   this.crossBurstArt.clearBindings();this.qiArt.clearBindings();this.qiLayer=null;
@@ -535,6 +537,8 @@ export class TowerView {
   const W=1280,H=this.height;
   const root=this.battle=this.node('锁妖塔战场',this.root,this.width,this.height);
   this.environmentGround=this.node('青石地面',root);
+  // Static vortex art sits under the world graphics, which draw the rotating judgment blades.
+  this.qinglianLayer=this.node('青莲阵体层',root);this.qinglianArt.preload();
   this.world=this.node('场地与妖兽',root).addComponent(Graphics);
   this.levelBeamLayer=this.node('晋升光柱层',root);this.levelBeam.preload();
   // Passive aura art is reserved for future domain skills; do not load or display it here.
@@ -753,7 +757,7 @@ export class TowerView {
   this.notices=[];this.breakthroughText='';this.breakthroughUntil=0;this.enemyHealth?.clear();this.attackTargetId=null;
   this.levelEffects=[];this.ceremony=null;this.breakthroughLock=0;this.ritual?.close();this.ritualAudio.stop();this.playerMotion={distance:0,moving:false,dx:1,dy:0};this.characterArt.reset();
   this.arcArt.reset();
-  this.lineArt.reset();this.convergenceArt.reset();
+  this.lineArt.reset();this.convergenceArt.reset();this.qinglianArt.reset();
   this.shadowArt.reset();
   this.tiandiArt.reset();this.hitArt.reset();
   this.crossBurstArt.reset();this.qiArt.reset();
@@ -1003,13 +1007,14 @@ export class TowerView {
   const orbitSprites=this.orbitArt.syncTower(this.monsterLayer,s,this.camera,this.characterArt.waistPosition);
   this.formationSprites.clear();
   if(this.convergenceLayer)for(const id of this.convergenceArt.syncTower(this.convergenceLayer,s,this.camera))this.formationSprites.add(id);
+  if(this.qinglianLayer)this.qinglianArt.syncTower(this.qinglianLayer,s,this.camera);
   if(this.formationLayer){
    this.sancaiArt.syncTower(this.world.node,this.formationLayer,s,this.camera,presentationPreferences().reducedMotion)
     .forEach(id=>this.formationSprites.add(id));
    for(const id of this.formationArt.syncTower(this.world.node,this.formationLayer,s,this.camera))this.formationSprites.add(id);
    for(const id of this.sixiangArt.syncTower(this.world.node,this.formationLayer,s,this.camera))this.formationSprites.add(id);
   }
-  if(p.hp<=0){this.arcArt.reset();this.lineArt.reset();this.convergenceArt.reset();this.tiandiArt.reset();this.crossBurstArt.reset();this.qiArt.reset();}
+  if(p.hp<=0){this.arcArt.reset();this.lineArt.reset();this.convergenceArt.reset();this.qinglianArt.reset();this.tiandiArt.reset();this.crossBurstArt.reset();this.qiArt.reset();}
    this.skillEffects?.draw(g,s,this.camera,arcSprites,lineSprites,tiandiSprites,combinedQiSprites,orbitSprites,this.formationSprites,this.characterArt.waistPosition,shadowSprites,this.hitArt.covered);
   this.hitArt.draw(this.foreground,this.camera);
 
@@ -1436,7 +1441,7 @@ export class TowerView {
   this.shadowArt.destroy();this.shadowLayer=null;
   this.sancaiArt.destroy();
   this.monsterMechanics?.destroy();this.monsterMechanics=null;
-  this.clearBattleFeedback();this.ritual?.destroy();this.ritualAudio.destroy();this.skillEffects=null;this.flightSwordArt.destroy();this.flightArt.destroy();this.flightLayer=null;this.ningshenArt.destroy();this.ningshenLayer=null;this.jianguArt.destroy();this.jianguLayer=null;this.bumieArt.destroy();this.bumieLayer=null;this.jianxinArt.destroy();this.jianxinLayer=null;this.arcArt.destroy();this.arcLayer=null;this.burstArt.destroy();this.burstLayer=null;this.convergenceArt.destroy();this.convergenceLayer=null;this.lineArt.destroy();this.lineLayer=null;this.tiandiArt.destroy();this.tiandiLayer=null;this.crossBurstArt.destroy();this.qiArt.destroy();this.qiLayer=null;this.orbitArt.destroy();this.formationArt.destroy();this.sixiangArt.destroy();this.formationLayer=null;this.bodyFallbacks.clear();this.environmentArt.destroy();this.hudArt.destroy();this.stoneArt.destroy();this.projectileArt.destroy();this.monsterArt.destroy();this.characterArt.destroy();this.platform.destroy();this.menu?.destroy();this.root.destroy();
+  this.clearBattleFeedback();this.ritual?.destroy();this.ritualAudio.destroy();this.skillEffects=null;this.flightSwordArt.destroy();this.flightArt.destroy();this.flightLayer=null;this.ningshenArt.destroy();this.ningshenLayer=null;this.jianguArt.destroy();this.jianguLayer=null;this.bumieArt.destroy();this.bumieLayer=null;this.jianxinArt.destroy();this.jianxinLayer=null;this.arcArt.destroy();this.arcLayer=null;this.burstArt.destroy();this.burstLayer=null;this.convergenceArt.destroy();this.convergenceLayer=null;this.qinglianArt.destroy();this.qinglianLayer=null;this.lineArt.destroy();this.lineLayer=null;this.tiandiArt.destroy();this.tiandiLayer=null;this.crossBurstArt.destroy();this.qiArt.destroy();this.qiLayer=null;this.orbitArt.destroy();this.formationArt.destroy();this.sixiangArt.destroy();this.formationLayer=null;this.bodyFallbacks.clear();this.environmentArt.destroy();this.hudArt.destroy();this.stoneArt.destroy();this.projectileArt.destroy();this.monsterArt.destroy();this.characterArt.destroy();this.platform.destroy();this.menu?.destroy();this.root.destroy();
   this.portraitGraphics=null;this.portraitRealm='';
  }
 }
