@@ -36,6 +36,8 @@ function fixture() {
     moveTo(x, y) { this.calls.push(['move', x, y]) }
     lineTo(x, y) { this.calls.push(['line', x, y]) }
     stroke() { this.calls.push(['stroke', this.strokeColor.a, this.lineWidth]) }
+    circle(x, y, r) { this.calls.push(['circle', x, y, r]) }
+    fill() { this.calls.push(['fill', this.fillColor.a]) }
   }
   const context = { Node, UITransform, Sprite, Texture2D, SpriteFrame, Color, Rect, Graphics,
     ImageAsset: class {}, skillForm, orbitSwordPose, setTowerDepth: (n, y) => { n.towerGroundY = y },

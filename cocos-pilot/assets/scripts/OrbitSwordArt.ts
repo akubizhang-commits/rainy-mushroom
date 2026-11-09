@@ -4,6 +4,25 @@ import {skillForm,orbitSwordPose} from './shared/js/xianxia/TowerSkillForms';
 import {setTowerDepth} from './TowerDepthOrder';
 
 type TrailPoint={x:number;y:number;worldX:number;worldY:number;time:number};
+type Decor={node:Node;ui:UITransform;sprite:Sprite};
+const WHITE=new Color(255,255,255,255);
+// 周天剑阵阵形：判定剑之间均匀补装饰剑，环上共约12柄。装饰剑只是阵形，不参与判定。
+// 4/5/6/8 柄判定剑时，每个间隔补 2/1/1/1 柄，合计 12/10/12/16 柄。
+export const ORBIT_DECOR_PER_GAP:Record<number,number>={4:2,5:1,6:1,8:1};
+const DECOR_ALPHA=150,BREATH_AMPLITUDE=.05,BREATH_PERIOD=2;
+const entryEase=(t:number)=>{const k=Math.min(1,Math.max(0,t));return 1-(1-k)*(1-k)*(1-k)};
+/** Fly from the formation eye (radius 0) to the target pose; blade grows from 40%. */
+function entryPose(target:any,k:number){
+ return {...target,x:target.x*k,y:target.y*k,entryScale:.4+.6*k};
+}
+/** Decoration pose: same angular speed as the judgment swords, evenly placed in
+ * each gap, with a gentle breathing radius. Never used by combat. */
+export function orbitDecorPose(form:any,time:number,gap:number,slot:number,perGap:number,breathe=true){
+ const step=Math.PI*2/form.swords;
+ const angle=time*form.angularSpeed+gap*step+(slot+1)*step/(perGap+1);
+ const radius=form.radius*(breathe?1+BREATH_AMPLITUDE*Math.sin(time*Math.PI*2/BREATH_PERIOD):1);
+ return {x:Math.cos(angle)*radius,y:Math.sin(angle)*radius,angle,radius};
+}
 type Trail={radial:number;maxAlpha:number;maxWidth:number;points:TrailPoint[]};
 type Actor={node:Node;ui:UITransform;sprite:Sprite;tail:Graphics;lastTrail:Trail[]};
 const ART={path:'tower-skill-fx/orbit-sword-v1',width:544,height:128,span:496,thickness:88};
@@ -26,6 +45,8 @@ export class OrbitSwordArt {
  private flowRequested=false;private flowImage:ImageAsset|null=null;private flowTexture:Texture2D|null=null;
  private flowFrame:SpriteFrame|null=null;private flowNode:Node|null=null;private flowUI:UITransform|null=null;
  private flowFrames:SpriteFrame[]=[];private flowSprite:Sprite|null=null;
+ private decor:Decor[]=[];private ringNode:Node|null=null;private ring:Graphics|null=null;
+ private ringColor=new Color(175,220,238,70);private eyeColor=new Color(228,244,248,40);
  get ready(){return !!this.frame&&!this.dead}
  preload(){
   if(this.dead||this.requested)return;this.requested=true;
@@ -55,8 +76,11 @@ export class OrbitSwordArt {
   }
   const level=s.loadout?.active?.sj_wanjian||0;
   if(level<=0||s.player.hp<=0){this.hide();return false}
-  if(s.loadout.growthVersion===1&&!s.loadout.evolutions?.includes('evo_wuwo')
-   &&!(s.orbitUntil>s.time+1e-9)){this.hide();return false}
+  const evolved=!!s.loadout.evolutions?.includes('evo_wuwo');
+  // 起阵：结诀期间（真实施法前摇，尚无判定）飞剑从阵眼归位入环。只读战斗状态，不改判定。
+  const entry=s.loadout.growthVersion===1&&!evolved?s.casts?.find((c:any)=>c?.skill==='sj_wanjian'
+   &&c.pulseIndex===0&&c.releaseAt>s.time+1e-9&&c.startedAt<=s.time+1e-9):null;
+  if(s.loadout.growthVersion===1&&!evolved&&!(s.orbitUntil>s.time+1e-9)&&!entry){this.hide();return false}
   this.preload();
   if(!this.frame){this.hide();return false}
   const bindingsChanged=this.parent!==parent||this.actors.some(a=>!isValid(a.node,true)||a.node.parent!==parent);
@@ -78,18 +102,64 @@ export class OrbitSwordArt {
   const capacity=f.swords>8?12:8;
   while(this.actors.length<capacity)this.actors.push(this.createActor(parent));
   if(changed)this.remember(time,originX,originY);
+  // Entry progress 0→1 over the real cast windup; 1 once the ring is active.
+  const enter=entry?entryEase((time-entry.startedAt)/Math.max(1e-6,entry.releaseAt-entry.startedAt)):1;
   for(let i=0;i<this.actors.length;i++){
    const actor=this.actors[i];actor.node.active=i<f.swords;
    if(!actor.node.active)continue;
-   const pose=orbitSwordPose(f,time,i),x=originX+pose.x,y=originY+pose.y;
+   // During entry the swords travel to where they will be at release, so the
+   // first active frame continues the same pose without a jump.
+   const pose=entry?entryPose(orbitSwordPose(f,entry.releaseAt,i),enter):orbitSwordPose(f,time,i);
+   const x=originX+pose.x,y=originY+pose.y;
    actor.node.setPosition(x-camera.x,y-camera.y);actor.node.angle=pose.angle*180/Math.PI;
    setTowerDepth(actor.node,p.y+('depthY' in pose?pose.depthY:pose.y));
-   actor.ui.setContentSize(ART.width*('length' in pose?pose.length:f.bladeLength)/ART.span,ART.height*f.bladeWidth/ART.thickness);
-   if(changed||bindingsChanged)this.drawTail(actor,f,time,pose.angle,x,y,i);
+   const grow='entryScale' in pose?pose.entryScale:1;
+   actor.ui.setContentSize(ART.width*('length' in pose?pose.length:f.bladeLength)*grow/ART.span,ART.height*f.bladeWidth*grow/ART.thickness);
+   actor.sprite.color=entry?new Color(255,255,255,Math.round(255*Math.min(1,enter*1.6))):WHITE;
+   if(entry)actor.tail.clear();
+   else if(changed||bindingsChanged)this.drawTail(actor,f,time,pose.angle,x,y,i);
   }
+  this.drawFormation(parent,evolution?null:f,time,originX,originY,camera,p.y,entry?enter:1,entry?entry.releaseAt:null);
   this.drawFlow(parent,evolution?f:null,time,p.x-camera.x,p.y-camera.y,p.y);
   this.state=s;this.lastTime=time;this.lastX=originX;this.lastY=originY;
   return true;
+ }
+ /** 周天剑阵阵形（仅基础技能）：装饰剑补满剑环、银蓝星轨与阵眼淡光。纯表现，不参与判定。 */
+ private drawFormation(parent:Node,form:any,time:number,originX:number,originY:number,
+  camera:{x:number;y:number},groundY:number,enter:number,entryRelease:number|null){
+  if(!form){for(const d of this.decor)d.node.active=false;if(this.ringNode)this.ringNode.active=false;return}
+  const perGap=ORBIT_DECOR_PER_GAP[form.swords]??1,count=form.swords*perGap;
+  while(this.decor.length<count)this.decor.push(this.createDecor(parent));
+  const fade=Math.min(1,enter*1.6),poseTime=entryRelease??time;
+  for(let i=0;i<this.decor.length;i++){
+   const d=this.decor[i];d.node.active=i<count;
+   if(!d.node.active)continue;
+   const pose=orbitDecorPose(form,poseTime,Math.floor(i/perGap),i%perGap,perGap),grow=.4+.6*enter;
+   const x=originX+pose.x*enter,y=originY+pose.y*enter;
+   d.node.setPosition(x-camera.x,y-camera.y);d.node.angle=pose.angle*180/Math.PI;
+   setTowerDepth(d.node,groundY+pose.y*enter);
+   d.ui.setContentSize(ART.width*form.bladeLength*.88*grow/ART.span,ART.height*form.bladeWidth*.88*grow/ART.thickness);
+   d.sprite.color=new Color(255,255,255,Math.round(DECOR_ALPHA*fade));
+  }
+  if(!this.ringNode){
+   const node=this.ringNode=new Node('周天剑阵·星轨');node.layer=parent.layer;parent.addChild(node);
+   node.addComponent(UITransform).setContentSize(1,1);this.ring=node.addComponent(Graphics);
+  }
+  const g=this.ring!;this.ringNode.active=true;this.ringNode.setPosition(originX-camera.x,originY-camera.y);
+  // Drawn behind the swords and the character, so it never hides either.
+  setTowerDepth(this.ringNode,groundY+form.radius+1);
+  g.clear();
+  const breath=1+BREATH_AMPLITUDE*Math.sin(poseTime*Math.PI*2/BREATH_PERIOD);
+  this.ringColor.a=Math.round(70*fade);g.strokeColor=this.ringColor;g.lineWidth=1.5;
+  g.circle(0,0,form.radius*breath*enter);g.stroke();
+  this.eyeColor.a=Math.round(40*fade);g.fillColor=this.eyeColor;g.circle(0,0,16);g.fill();
+  this.eyeColor.a=Math.round(70*fade);g.fillColor=this.eyeColor;g.circle(0,0,7);g.fill();
+ }
+ private createDecor(parent:Node):Decor{
+  const node=new Node(`环剑·阵形-${this.decor.length}`);node.layer=parent.layer;parent.addChild(node);
+  const ui=node.addComponent(UITransform);ui.setAnchorPoint(.5,.5);
+  const sprite=node.addComponent(Sprite);sprite.sizeMode=Sprite.SizeMode.CUSTOM;sprite.trim=false;sprite.spriteFrame=this.frame;
+  return {node,ui,sprite};
  }
  private drawFlow(parent:Node,form:any,time:number,x:number,y:number,groundY:number){
   if(!form){if(this.flowNode)this.flowNode.active=false;return}
@@ -202,6 +272,8 @@ export class OrbitSwordArt {
  }
  private hide(){
   for(const actor of this.actors)actor.node.active=false;
+  for(const d of this.decor)d.node.active=false;
+  if(this.ringNode)this.ringNode.active=false;
   if(this.flowNode)this.flowNode.active=false;
   this.historyHead=0;this.historyCount=0;this.state=null;this.lastTime=-1;this.lastX=NaN;this.lastY=NaN;
  }
@@ -212,6 +284,10 @@ export class OrbitSwordArt {
    actor.node.removeFromParent();actor.node.destroy();
   }
   this.actors.length=0;this.parent=null;
+  for(const d of this.decor)if(isValid(d.node,true)){d.node.removeFromParent();d.node.destroy()}
+  this.decor.length=0;
+  if(this.ringNode&&isValid(this.ringNode,true)){this.ringNode.removeFromParent();this.ringNode.destroy()}
+  this.ringNode=null;this.ring=null;
   if(this.flowNode&&isValid(this.flowNode,true)){this.flowNode.removeFromParent();this.flowNode.destroy()}
   this.flowNode=null;this.flowUI=null;this.flowSprite=null;
  }
