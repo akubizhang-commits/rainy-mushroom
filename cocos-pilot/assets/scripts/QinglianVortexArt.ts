@@ -6,8 +6,9 @@ import {skillForm} from './shared/js/xianxia/TowerSkillForms';
  * Both are processed from design/xianxia-qinglian-2026-11-09 and never rotate. The rotating
  * judgment blades are drawn on the shared skill graphics by QinglianFormationArt.
  */
-const VORTEX_PATH='tower-skill-fx/qinglian-vortex-layer-v1';
-const POOL_PATH='tower-skill-fx/qinglian-pool-v1';
+// v2 is the v1 layer with alpha × 1.6 (scripts/art/qinglian_vortex_boost.py), for readable contrast in play.
+const VORTEX_PATH='tower-skill-fx/qinglian-vortex-layer-v2';
+const POOL_PATH='tower-skill-fx/qinglian-pool-v2';
 // Processed canvas size of both layers, and the reference ring's width inside it (alpha bbox 16..1379).
 const CANVAS_W=1395,CANVAS_H=897,RING_W=1363;
 
