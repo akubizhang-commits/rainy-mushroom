@@ -2126,8 +2126,8 @@ test('failed learning keeps scroll and loaded assets, shows a fixed error, and r
 })
 
 for (const [id, stage, level, higherLevel] of [
-  ['evo_wanjian', '金丹一层*初期', 21, 27], ['evo_tiandi', '金丹二层*初期', 22, 27],
-  ['evo_wuwo', '金丹四层*中期', 24, 27], ['evo_sixiang', '金丹七层*巅峰', 27, 30],
+  ['evo_wanjian', '金丹一层*初期', 21, 27], ['evo_tiandi', '金丹四层*中期', 24, 27],
+  ['evo_wuwo', '金丹一层*初期', 21, 27], ['evo_sixiang', '金丹七层*巅峰', 27, 30],
 ]) {
   test(`nine-stage UI ${id} first-rank condition matches its stage without changing higher-rank gates`, t => {
     const storage = disk(); seed(storage)

@@ -33,45 +33,46 @@ function reject(store, disk, action, reason) {
   assert.equal(disk.writes, writes)
 }
 
-test('cross is an independent ten-rank qi active at the Zhuji peak without extending the classic catalog', () => {
+test('cross is an independent ten-rank qi active at the Zhuji middle phase without extending the classic catalog', () => {
   const row = GROWTH_SKILLS.find(s => s.id === 'sj_cross')
   assert.ok(row)
   assert.equal(row.name, '双月斩')
   assert.equal(row.kind, 'active')
   assert.equal(row.damageType, 'physical')
-  assert.equal(row.learnLevel, 17)
+  assert.equal(row.learnLevel, 14)
   assert.equal(row.maxLevel, 10)
   assert.equal(row.bookCost, 0)
   assert.equal(row.learnClear, 0)
   assert.deepEqual(row.prerequisites, {})
-  assert.equal(skillStage('sj_cross').id, 'zhuji-peak')
+  assert.equal(skillStage('sj_cross').id, 'zhuji-middle')
   assert.deepEqual(row.pointCosts, [1, 1, 1, 1, 1, 1, 1, 1, 1, 1])
   assert.equal(SKILLS.some(s => s.id === 'sj_cross'), false)
   assert.ok(Object.isFrozen(row))
 })
 
 test('cross rank caps follow its four authored realm gates, including the exact XP boundaries', () => {
-  const cases = [[17, 0, 3], [21, 3, 6], [24, 6, 9], [27, 9, 10]]
+  const cases = [[14, 0, 3], [17, 3, 6], [21, 6, 9], [24, 9, 10]]
   for (const [level, before, after] of cases) {
     assert.equal(rankCap('sj_cross', xpAt(level) - 1), before)
     assert.equal(rankCap('sj_cross', xpAt(level)), after)
   }
   for (let level = 1; level <= 27; level++) {
-    const expected = level < 17 ? 0 : level < 21 ? 3 : level < 24 ? 6 : level < 27 ? 9 : 10
+    const expected = level < 14 ? 0 : level < 17 ? 3 : level < 21 ? 6 : level < 24 ? 9 : 10
     assert.equal(rankCap('sj_cross', xpAt(level), 9), expected)
   }
   assert.equal(rankCap('sj_arc', xpAt(7)), 9, 'early skills reach their third band at lianqi peak')
-  assert.equal(rankCap('sj_line', xpAt(13)), 3)
+  assert.equal(rankCap('sj_line', xpAt(21) - 1), 0)
+  assert.equal(rankCap('sj_line', xpAt(21)), 3)
 })
 
 test('cross quotes enforce current stage, next-rank realm and exact costs', () => {
   const { store } = fixture()
-  for (const [level, rank, reason] of [[16, 0, 'stage-locked'], [20, 3, 'realm-locked'],
-    [23, 6, 'realm-locked'], [26, 9, 'realm-locked']]) {
+  for (const [level, rank, reason] of [[13, 0, 'stage-locked'], [16, 3, 'realm-locked'],
+    [20, 6, 'realm-locked'], [23, 9, 'realm-locked']]) {
     const state = { ...store.state, xp: xpAt(level), skills: { sj_arc: 1, ...(rank ? { sj_cross: rank } : {}) } }
     assert.equal(skillRequirement(state, 'sj_cross').reason, reason)
   }
-  for (const [level, rank, cost] of [[17, 0, 1], [21, 3, 1], [24, 6, 1], [27, 9, 1]]) {
+  for (const [level, rank, cost] of [[14, 0, 1], [17, 3, 1], [21, 6, 1], [24, 9, 1]]) {
     const state = { ...store.state, xp: xpAt(level), skills: { sj_arc: 1, ...(rank ? { sj_cross: rank } : {}) } }
     assert.deepEqual(skillRequirement(state, 'sj_cross'), { ok: true, nextLevel: rank + 1, cost, bookCost: 0 })
   }
@@ -103,10 +104,10 @@ test('cross purchase and downgrade are atomic and survive reload without double 
 })
 
 test('campaign rejects cross ranks above each realm gate even when points are sufficient', () => {
-  for (const [level, rank] of [[16, 1], [20, 4], [23, 7], [26, 10], [27, 11]]) {
+  for (const [level, rank] of [[13, 1], [16, 4], [20, 7], [23, 10], [27, 11]]) {
     assert.equal(fixture({ xp: xpAt(level), skills: { sj_cross: rank } }).store.error, 'corrupt', `${level}/${rank}`)
   }
-  for (const [level, rank] of [[17, 3], [21, 6], [24, 9], [27, 10]]) {
+  for (const [level, rank] of [[14, 3], [17, 6], [21, 9], [24, 10]]) {
     assert.equal(fixture({ xp: xpAt(level), skills: { sj_cross: rank } }).store.readOnly, false, `${level}/${rank}`)
   }
 })
@@ -121,8 +122,8 @@ test('cross receives the fixed qi weapon flow bonus with readable names', () => 
 
 test('cross detail requirements show the next realm at ranks zero, three, six and nine', () => {
   const { store } = fixture()
-  for (const [rank, characterLevel, label] of [[0, 17, '筑基 · 巅峰'],
-    [3, 21, '金丹 · 初期'], [6, 24, '金丹 · 中期'], [9, 27, '金丹 · 巅峰']]) {
+  for (const [rank, characterLevel, label] of [[0, 14, '筑基 · 中期'],
+    [3, 17, '筑基 · 巅峰'], [6, 21, '金丹 · 初期'], [9, 24, '金丹 · 中期']]) {
     const state = { ...store.state, skills: { sj_arc: 1, ...(rank ? { sj_cross: rank } : {}) } }
     const before = JSON.stringify(state), info = skillPresentation(state, 'sj_cross')
     assert.equal(info.nextRequirement.characterLevel, characterLevel)

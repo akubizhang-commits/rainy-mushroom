@@ -15,11 +15,12 @@ const copy = value => JSON.parse(JSON.stringify(value))
 const stageLevels = [1, 4, 7, 11, 14, 17, 21, 24, 27]
 const thresholds = stageLevels.map(cultivationLevelXp)
 const allocation = [
-  ['sj_arc', 'sj_yujian', 'sj_bone'], ['sj_moon', 'vajra', 'sj_wanjian'], ['sj_qinglian'],
-  ['sj_line', 'sj_shadow', 'sj_sancai', 'sj_flight', 'sj_spirit'], ['sj_moon_triple', 'sj_mark'], ['sj_cross', 'sj_gate', 'sj_formation'],
-  ['sj_heart', 'evo_wanjian', 'evo_tiandi'], ['evo_wuwo'], ['evo_sixiang'],
+  ['sj_arc', 'sj_yujian', 'sj_bone'], ['sj_moon', 'vajra', 'sj_wanjian'], ['sj_qinglian', 'sj_mark'],
+  ['sj_moon_triple', 'sj_shadow', 'sj_sancai', 'sj_flight', 'sj_spirit'], ['sj_cross'], ['sj_gate', 'sj_formation'],
+  ['sj_line', 'sj_heart', 'evo_wanjian', 'evo_wuwo'], ['evo_tiandi'], ['evo_sixiang'],
 ]
-const authoredUnlocks = {sj_yujian:2,sj_line:13,sj_mark:16,sj_gate:19,evo_tiandi:22}
+// 2026-11-09：剑破虚空21级、蚀骨剑意7级、一剑开天24级均与所在阶段起始等级一致，不再单列。
+const authoredUnlocks = {sj_yujian:2,sj_gate:19}
 const definitions = [...GROWTH_SKILLS, ...GROWTH_EVOLUTIONS]
 const gifts = giftSkills(3)
 
@@ -65,11 +66,11 @@ function reject(store, storage, action, reason) {
   assert.equal(storage.writes, writes)
 }
 
-test('nine immutable stages cover all 30 levels with the approved 6/10/5 allocation', () => {
+test('nine immutable stages cover all 30 levels with the approved 8/8/6 allocation', () => {
   assert.equal(GROWTH_STAGES.length, 9)
   assert.deepEqual(GROWTH_STAGES.map(stage => stage.skillIds), allocation)
   assert.deepEqual(['炼气', '筑基', '金丹'].map(realm =>
-    GROWTH_STAGES.filter(stage => stage.realm === realm).flatMap(stage => stage.skillIds).length), [7, 10, 5])
+    GROWTH_STAGES.filter(stage => stage.realm === realm).flatMap(stage => stage.skillIds).length), [8, 8, 6])
   assert.deepEqual(allocation.flat().slice().sort(), definitions.map(row => row.id).sort())
   for (const [i, stage] of GROWTH_STAGES.entries()) {
     assert.equal(stage.minLevel, stageLevels[i])
@@ -198,7 +199,7 @@ test('current-schema investments below their starting realm are rejected without
 for (const id of ['evo_tiandi', 'evo_wuwo', 'evo_sixiang']) {
   test(`${id} at its current unlock stays valid through reload, downgrade and battle`, () => {
     const row = GROWTH_EVOLUTIONS.find(row => row.id === id)
-    const patch = stateFor(id, cultivationLevelXp(id==='evo_tiandi'?22:21))
+    const patch = stateFor(id, cultivationLevelXp(id==='evo_tiandi'?24:21))
     patch.skills[row.parent] = 1
     patch.skills[row.passive] = 1
     Object.assign(patch, { evolutionRanks: { [id]: 1 }, evolutions: [id],
@@ -207,7 +208,7 @@ for (const id of ['evo_tiandi', 'evo_wuwo', 'evo_sixiang']) {
     const before = copy(store.state), raw = storage.raw
     assert.deepEqual(new TowerCampaignStore(storage, 0).state, before)
     assert.equal(storage.raw, raw, 'current-schema reload does not rewrite retained investments')
-    reject(store, storage, { type: 'learnSkill', id }, id==='evo_tiandi'?'realm-locked':'stage-locked')
+    reject(store, storage, { type: 'learnSkill', id }, id==='evo_sixiang'?'stage-locked':'realm-locked')
     const preview = decreaseSkillQuote(store.state, row.passive)
     assert.equal(preview.evolutionRanks[id], 1, 'paired passive rank does not gate the retained evolution')
     assert.equal(store.act({ type: 'decreaseSkill', id: row.passive }, 0).ok, true)
@@ -225,11 +226,11 @@ for (const id of ['evo_tiandi', 'evo_wuwo', 'evo_sixiang']) {
 }
 
 test('retained-evolution compatibility keeps the pre-existing realm, book, parent and SP validation', () => {
-  const id = 'evo_tiandi', patch = stateFor(id, cultivationLevelXp(22))
+  const id = 'evo_tiandi', patch = stateFor(id, cultivationLevelXp(24))
   Object.assign(patch, { books: ['sj_line', 'sj_mark', id], evolutionRanks: { [id]: 1 }, evolutions: [id] })
   const { store } = fixture(patch)
   for (const change of [
-    { xp: cultivationLevelXp(22)-1 }, { books: ['sj_line', 'sj_mark'] },
+    { xp: cultivationLevelXp(24)-1 }, { books: ['sj_line', 'sj_mark'] },
     { skills: { ...patch.skills, sj_yujian: 10, sj_arc: 10, sj_wanjian: 10, sj_cross: 10, vajra: 4, sj_spirit: 3 } },
     { evolutionRanks: { [id]: 2 } },
   ]) {

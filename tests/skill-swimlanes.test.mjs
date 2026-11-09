@@ -21,12 +21,12 @@ test('heart appears in the early golden core passive column',()=>{
 test('every current skill stays at its approved phase and column, with genuine blank cells',()=>{
  const layout=draw()
  const expected=[
-  ['sj_arc','lianqi-early',1],['sj_moon','lianqi-middle',1],['sj_moon_triple','zhuji-middle',1],['sj_sancai','zhuji-early',3],['sj_wanjian','lianqi-middle',3],['sj_qinglian','lianqi-peak',3],['sj_spirit','zhuji-early',4],
+  ['sj_arc','lianqi-early',1],['sj_moon','lianqi-middle',1],['sj_moon_triple','zhuji-early',1],['sj_sancai','zhuji-early',3],['sj_wanjian','lianqi-middle',3],['sj_qinglian','lianqi-peak',3],['sj_spirit','zhuji-early',4],
   ['sj_yujian','lianqi-early',2],['vajra','lianqi-middle',4],
-  ['sj_cross','zhuji-peak',1],['sj_heart','jindan-early',4],
-  ['sj_line','zhuji-early',1],['sj_formation','zhuji-peak',3],['sj_shadow','zhuji-early',2],['sj_flight','zhuji-early',0],
-  ['sj_bone','lianqi-early',4],['sj_mark','zhuji-middle',0],['sj_gate','zhuji-peak',0],
-  ['evo_wanjian','jindan-early',2],['evo_tiandi','jindan-early',1],['evo_wuwo','jindan-middle',3],['evo_sixiang','jindan-peak',3],
+  ['sj_cross','zhuji-middle',1],['sj_heart','jindan-early',4],
+  ['sj_line','jindan-early',1],['sj_formation','zhuji-peak',3],['sj_shadow','zhuji-early',2],['sj_flight','zhuji-early',0],
+  ['sj_bone','lianqi-early',4],['sj_mark','lianqi-peak',0],['sj_gate','zhuji-peak',0],
+  ['evo_wanjian','jindan-early',2],['evo_tiandi','jindan-middle',1],['evo_wuwo','jindan-early',3],['evo_sixiang','jindan-peak',3],
  ]
  assert.equal(layout.columns,5)
  assert.equal(Object.keys(layout.positions).length,22)
