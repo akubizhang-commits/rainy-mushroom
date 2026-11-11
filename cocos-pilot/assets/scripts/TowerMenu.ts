@@ -1114,8 +1114,10 @@ export class TowerMenu {
   const loreFont = h < 620 ? 22 : 24;
   const text = stories[this.selectedTowerFloor - 1], textHeight = this.textHeight(text, 228, loreFont);
   this.label(story, text, 0, h / 2 - 234 - textHeight / 2, 228, textHeight, loreFont, C.text);
+  const entryReason = this.blocked() || (this.selectedTowerFloor > count(this.state.clearedFloor) + 1 ? '通关前层后开放' : '');
+  // 2026-11-09：较长的不可入场原因（如“档案只读，暂不能操作”）用小字，避免在80高的按钮里折成三行溢出。
   this.button(story, '入场', 0, -h / 2 + 88, 236, 80,
-   () => this.handlers.enterFloor(this.selectedTowerFloor), this.blocked() || (this.selectedTowerFloor > count(this.state.clearedFloor) + 1 ? '通关前层后开放' : ''), true, 30);
+   () => this.handlers.enterFloor(this.selectedTowerFloor), entryReason, true, entryReason.length > 7 ? 20 : 30);
   if (this.notice) this.label(story, this.notice, 0, -h / 2 + 155, 240, 46, 20, C.warning, true);
  }
 
