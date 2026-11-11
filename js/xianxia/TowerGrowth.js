@@ -169,7 +169,8 @@ export const GROWTH_SKILLS = freeze([
   }, { name: '玄月斩', kind: 'active', clear: 0, learnLevel: 4 }),
   skill('sj_moon_triple', {
     // 2026-11-09 用户确认：筑基剑气功法应强于炼气的玄月斩，逐月斩伤害×1.5。
-    damage: damageCurve(6, 1.15).map(d => d * 1.5), cooldown: 10, windup: .18,
+    // 2026-11-09 复测C2：剑气筑基期逐月斩不强于流云斩填点，冷却10→7秒，每次施放伤害不变。
+    damage: damageCurve(6, 1.15).map(d => d * 1.5), cooldown: 7, windup: .18,
     radius: 140, reach: 420, speed: 800, width: 180, bladeWidth: 12,
     target_cap: 6, single_dps_factor: 1 / 10, hit_assumption: .5,
     rule: '窄斜月、扁横月、深弧月依次飞出，每道沿固定方向飞行420距离；三道均分整招伤害，各道同敌最多命中一次。所有等级保持三道，碰到地形提前消散。',
@@ -225,7 +226,8 @@ export const GROWTH_SKILLS = freeze([
   // 2026-11-09 用户确认（方案A）：御剑流筑基中期单体功法。锁定范围内的Boss（无Boss时取当前血量最高者），
   // 一柄重剑连续穿刺；1–2/3–5/6–9/10级3/4/5/6刺，各刺平分整招伤害，只打锁定目标。目标死亡时就近改锁。
   skill('sj_jinghong', {
-    damage: damageCurve(11.7, 1.18), cooldown: 8, windup: .3,
+    // 2026-11-09 复测C5：御剑F9仍略慢，伤害+5%（11.7→12.3）。
+    damage: damageCurve(12.3, 1.18), cooldown: 8, windup: .3,
     reach: 420, radius: 40, target_cap: 1,
     single_dps_factor: 1 / 8, hit_assumption: .85,
     rule: '锁定420范围内的Boss，无Boss时锁定当前血量最高的敌人；0.18秒后重剑连续穿刺，每0.22秒一刺，1/3/6/10级共3/4/5/6刺，各刺平分整招伤害，只命中锁定目标；锁定目标死亡时改锁240范围内的下一个目标，没有目标则该刺落空。',
