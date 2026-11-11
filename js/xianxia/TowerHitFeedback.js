@@ -7,8 +7,9 @@ export const HIT_PROFILES = Object.freeze({
   sj_gate: { shape: 'cleave', strength: 1.55, duration: .21 },
   sj_yujian: { shape: 'stab', strength: .95, duration: .15 },
   sj_arc: { shape: 'slash', strength: 1, duration: .15 },
-  sj_moon: { shape: 'slash', strength: 1, duration: .15 },
-  sj_moon_triple: { shape: 'slash', strength: 1, duration: .15 },
+  // 2026-11-09 打击感：玄月斩宽幅横扫略重，逐月斩三道均分略轻。
+  sj_moon: { shape: 'slash', strength: 1.12, duration: .16 },
+  sj_moon_triple: { shape: 'slash', strength: .9, duration: .14 },
   sj_cross: { shape: 'cross', strength: 1.2, duration: .16 },
   sj_wanjian: { shape: 'graze', strength: .55, duration: .11 },
   sj_qinglian: { shape: 'graze', strength: .35, duration: .12 },
@@ -21,6 +22,44 @@ export const HIT_PROFILES = Object.freeze({
   sj_shadow: { shape: 'shadow', strength: 1, duration: .18 },
   sj_jinghong: { shape: 'stab', strength: 1.1, duration: .15 },
 })
+// 末击加重倍率（原两仪/四象/万剑归宗×1.35、剑影×1.4；2026-11-09 补惊鸿剑末刺、三才末剑、青莲第三轮）。
+const TERMINAL_WEIGHT = Object.freeze({ sj_formation: 1.35, evo_sixiang: 1.35, evo_wanjian: 1.35, sj_shadow: 1.4,
+  sj_jinghong: 1.35, sj_sancai: 1.35, sj_qinglian: 1.6 })
+
+// 2026-11-09 打击感分档（game-feel）：轻=常驻/多段，中=普通出招，重=大招与末击。
+// 只决定表现：音效、镜头震动、受击怪物的动画定格。不改伤害、碰撞或AI。
+const BASE_TIER = Object.freeze({
+  sj_yujian: 'light', sj_wanjian: 'light', sj_qinglian: 'light', evo_wuwo: 'light', sj_formation: 'light', evo_sixiang: 'light',
+  sj_arc: 'medium', sj_moon: 'medium', sj_moon_triple: 'medium', sj_shadow: 'medium', sj_sancai: 'medium',
+  sj_jinghong: 'medium', evo_wanjian: 'medium', sj_mark: 'medium',
+  sj_line: 'heavy', sj_cross: 'heavy', evo_tiandi: 'heavy', sj_gate: 'heavy',
+})
+const SOUND_OF = Object.freeze({
+  sj_arc: 'slash', sj_shadow: 'slash', sj_moon: 'crescent', sj_moon_triple: 'crescent', sj_cross: 'crescent',
+  sj_yujian: 'stab', sj_line: 'stab', sj_jinghong: 'stab', evo_wanjian: 'stab', evo_tiandi: 'heavy',
+  sj_wanjian: 'graze', sj_qinglian: 'graze', evo_wuwo: 'graze',
+  sj_sancai: 'drop', sj_formation: 'drop', evo_sixiang: 'drop',
+})
+// 已有专属音效或镜头冲击的来源不再重复。
+const OWN_SOUND = new Set(['sj_mark', 'sj_gate'])
+const OWN_KICK = new Set(['evo_tiandi', 'evo_wanjian', 'sj_gate'])
+export const HIT_TIERS = Object.freeze({
+  light: Object.freeze({ hold: 0, kick: 0, gap: .08 }),
+  medium: Object.freeze({ hold: .04, kick: 0, gap: .07 }),
+  heavy: Object.freeze({ hold: .07, kick: .32, gap: .1 }),
+})
+/** Presentation-only response for one settled positive hit, or null. */
+export function hitImpact(hit) {
+  if (!hit || hit.kind !== 'hit' || hit.hostile || hit.targetId == null || !(hit.damage > 0)) return null
+  const skill = skillOf(hit), meta = hit.impact ?? hit.shadowImpact
+  if (!HIT_PROFILES[skill] || !meta || !Number.isInteger(meta.pulseIndex) || !Number.isInteger(meta.pulseCount)) return null
+  const terminal = meta.pulseCount > 1 && meta.pulseIndex === meta.pulseCount
+  const tier = terminal && TERMINAL_WEIGHT[skill] ? 'heavy' : BASE_TIER[skill] ?? 'light'
+  const t = HIT_TIERS[tier]
+  const sound = OWN_SOUND.has(skill) ? null : tier === 'heavy' && skill !== 'sj_cross' ? 'heavy' : SOUND_OF[skill] ?? null
+  return { skill, tier, terminal, sound, hold: t.hold, gap: t.gap,
+    kick: OWN_KICK.has(skill) ? 0 : t.kick * (hit.critical ? 1.3 : 1) }
+}
 const skillOf = hit => hit.impact?.skill ?? (hit.source === 'shadow' ? 'sj_shadow' : hit.source)
 const started = hit => hit?.startedAt ?? hit?.expiresAt - .25
 export function skillHitFeedback(hit, time, onset = started(hit)) {
@@ -38,7 +77,9 @@ export function skillHitFeedback(hit, time, onset = started(hit)) {
     meta.pulseIndex < 1 || meta.pulseIndex > meta.pulseCount) return null
   const terminal = meta.pulseCount > 1 && meta.pulseIndex === meta.pulseCount
   let strength = profile.strength * (hit.critical ? 1.15 : 1)
-  if (terminal && ['sj_formation','evo_sixiang','sj_shadow','evo_wanjian'].includes(skill)) strength *= skill==='sj_shadow'?1.4:1.35
+  if (terminal && TERMINAL_WEIGHT[skill]) strength *= TERMINAL_WEIGHT[skill]
+  // 2026-11-09 打击感：流云斩三斩逐斩加重（与25%/33%/42%伤害分配一致）。
+  if (skill === 'sj_arc') strength *= [.85, 1, 1.15][meta.pulseIndex - 1] ?? 1
   strength = Math.min(1.6,strength)
   let dx = meta.dirX/length, dy = meta.dirY/length
   if (profile.shape === 'rain' || (profile.shape === 'cleave' && skill!=='sj_gate')) { dx=0; dy=-1 }

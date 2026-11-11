@@ -30,6 +30,7 @@ import {TowerSkillEffects} from './TowerSkillEffects';
 import {SwordArcArt} from './SwordArcArt';
 import {SwordLineArt} from './SwordLineArt';
 import {SwordShadowArt} from './SwordShadowArt';
+import {TowerHitImpact} from './TowerHitImpact';
 import {TowerHitArt} from './TowerHitArt';
 import {TowerDamageNumbers} from './TowerDamageNumbers';
 import {TowerDebuffIcons} from './TowerDebuffIcons';
@@ -97,7 +98,7 @@ export class TowerView {
  private qinglianArt=new QinglianVortexArt();private qinglianLayer:Node|null=null;
  private lineArt=new SwordLineArt();private lineLayer:Node|null=null;
  private shadowArt=new SwordShadowArt();private shadowLayer:Node|null=null;
- private hitArt=new TowerHitArt();
+ private hitArt=new TowerHitArt();private hitImpact=new TowerHitImpact();
  private damageNumbers=new TowerDamageNumbers();
  private debuffIcons=new TowerDebuffIcons();
  private targetDebuffIcons=new TowerDebuffIcons();
@@ -759,7 +760,7 @@ export class TowerView {
   this.arcArt.reset();
   this.lineArt.reset();this.convergenceArt.reset();this.qinglianArt.reset();
   this.shadowArt.reset();
-  this.tiandiArt.reset();this.hitArt.reset();
+  this.tiandiArt.reset();this.hitArt.reset();this.hitImpact?.reset();
   this.crossBurstArt.reset();this.qiArt.reset();
   this.orbitArt.reset();
   this.sancaiArt.reset();this.formationArt.reset();
@@ -980,7 +981,8 @@ export class TowerView {
   this.camera.x=p.x;this.camera.y=p.y+(this.landscape?12:40);
   const heavyKick=p.hp>0?this.tiandiArt.cameraKick(s.time):{x:0,y:0};
   const convergenceKick=this.convergenceArt.cameraKick(s),burstKick=this.burstArt.cameraKick(s);
-  if(!presentationPreferences().reducedMotion){this.camera.x+=heavyKick.x+convergenceKick.x+burstKick.x;this.camera.y+=heavyKick.y+convergenceKick.y+burstKick.y;}
+  this.hitImpact.sync(this.monsterLayer,s);const hitKick=this.hitImpact.cameraKick(s.time);
+  if(!presentationPreferences().reducedMotion){this.camera.x+=heavyKick.x+convergenceKick.x+burstKick.x+hitKick.x;this.camera.y+=heavyKick.y+convergenceKick.y+burstKick.y+hitKick.y;}
   const sx=(x:number)=>x-this.camera.x,sy=(y:number)=>y-this.camera.y;
   const floorReady=this.environmentGround&&this.environmentProps?this.environmentArt.draw(this.environmentGround,this.environmentProps,s,this.camera,W,H,this.monsterLayer):false;
   g.clear();drawTowerArena(g,this.camera,W,H,s.arenaVersion,!!floorReady);
@@ -1156,7 +1158,7 @@ export class TowerView {
    const x=sx(e.x),y=sy(e.y),r=e.radius||18;if(x<-W/2-margin||x>W/2+margin||y<-H/2-margin||y>H/2+margin)continue;
    if(this.monsterMechanics?.isObject(e))continue;
    const family=e.family||e.archetype?.split('_')[0]||'boar',style=FAMILY[family]||FAMILY.boar;
-   const size=this.monsterArt.draw(this.monsterLayer,e.id,art,x,y,e.x,p.x,r,{time:s.time,ai:e.ai,worldY:e.y,hp:e.hp,mechanic:e.mechanic,role:e.role,rank:e.rank});
+   const size=this.monsterArt.draw(this.monsterLayer,e.id,art,x,y,e.x,p.x,r,{time:this.hitImpact.monsterTime(e,s.time),ai:e.ai,worldY:e.y,hp:e.hp,mechanic:e.mechanic,role:e.role,rank:e.rank});
    if(size)this.monsterMechanics?.styleActor(e,this.monsterLayer.children.find(node=>node.name===`妖兽素材-${e.id}`));
    const impact=bodyReactions.get(e.id);
    if(size&&impact)this.monsterArt.applyImpact(e.id,impact);
@@ -1441,7 +1443,7 @@ export class TowerView {
   this.shadowArt.destroy();this.shadowLayer=null;
   this.sancaiArt.destroy();
   this.monsterMechanics?.destroy();this.monsterMechanics=null;
-  this.clearBattleFeedback();this.ritual?.destroy();this.ritualAudio.destroy();this.skillEffects=null;this.flightSwordArt.destroy();this.flightArt.destroy();this.flightLayer=null;this.ningshenArt.destroy();this.ningshenLayer=null;this.jianguArt.destroy();this.jianguLayer=null;this.bumieArt.destroy();this.bumieLayer=null;this.jianxinArt.destroy();this.jianxinLayer=null;this.arcArt.destroy();this.arcLayer=null;this.burstArt.destroy();this.burstLayer=null;this.convergenceArt.destroy();this.convergenceLayer=null;this.qinglianArt.destroy();this.qinglianLayer=null;this.lineArt.destroy();this.lineLayer=null;this.tiandiArt.destroy();this.tiandiLayer=null;this.crossBurstArt.destroy();this.qiArt.destroy();this.qiLayer=null;this.orbitArt.destroy();this.formationArt.destroy();this.sixiangArt.destroy();this.formationLayer=null;this.bodyFallbacks.clear();this.environmentArt.destroy();this.hudArt.destroy();this.stoneArt.destroy();this.projectileArt.destroy();this.monsterArt.destroy();this.characterArt.destroy();this.platform.destroy();this.menu?.destroy();this.root.destroy();
+  this.clearBattleFeedback();this.hitImpact?.destroy();this.ritual?.destroy();this.ritualAudio.destroy();this.skillEffects=null;this.flightSwordArt.destroy();this.flightArt.destroy();this.flightLayer=null;this.ningshenArt.destroy();this.ningshenLayer=null;this.jianguArt.destroy();this.jianguLayer=null;this.bumieArt.destroy();this.bumieLayer=null;this.jianxinArt.destroy();this.jianxinLayer=null;this.arcArt.destroy();this.arcLayer=null;this.burstArt.destroy();this.burstLayer=null;this.convergenceArt.destroy();this.convergenceLayer=null;this.qinglianArt.destroy();this.qinglianLayer=null;this.lineArt.destroy();this.lineLayer=null;this.tiandiArt.destroy();this.tiandiLayer=null;this.crossBurstArt.destroy();this.qiArt.destroy();this.qiLayer=null;this.orbitArt.destroy();this.formationArt.destroy();this.sixiangArt.destroy();this.formationLayer=null;this.bodyFallbacks.clear();this.environmentArt.destroy();this.hudArt.destroy();this.stoneArt.destroy();this.projectileArt.destroy();this.monsterArt.destroy();this.characterArt.destroy();this.platform.destroy();this.menu?.destroy();this.root.destroy();
   this.portraitGraphics=null;this.portraitRealm='';
  }
 }
