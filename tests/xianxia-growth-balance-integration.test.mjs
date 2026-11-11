@@ -12,7 +12,7 @@ import {ARCHETYPES,FLOORS} from '../js/xianxia/TowerContent.js'
 test('targeted boss HP tuning preserves early bosses, attack and speed',()=>{
   for(let floor=1;floor<=9;floor++){
     const a=ARCHETYPES.find(a=>a.id===FLOORS[floor-1].boss_id),scale=FLOORS[floor-1].floor_stat_scale
-    const stats=towerEnemyStats(a,floor,20),factor=[1,1,1.55,1.2,1.5,1.45,1.2,1.65,1.65][floor-1]
+    const stats=towerEnemyStats(a,floor,20),factor=[1,1,1.55,.85,1.5,1.45,1.2,1.65,1.65][floor-1] // 2026-11-09：F4 1.2→.85
     assert.equal(stats.hp,scale.boss_hp*(a.floor_hp_factor??1)*factor*monsterHealthMultiplier(stats))
     assert.equal(stats.damage,scale.boss_damage)
     assert.equal(stats.moveSpeed,a.move_speed*(a.floor_speed_factor??1))

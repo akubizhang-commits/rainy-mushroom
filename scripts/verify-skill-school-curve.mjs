@@ -115,10 +115,22 @@ function play(f, seed, mode) {
   const run = new TowerRun({ attemptId: 1, floor: f.floor, seed, xp: f.xp, hp: stats(f.xp, f.loadout).maxHp,
     loadout: f.loadout, arenaVersion: 1 })
   assert.equal(run._playtestAssist, false)
-  const encounters = new Map(); let seen = new Set(), received = 0, nextCheck = 15, minHp = 1
+  const encounters = new Map(), breakthroughs = []; let seen = new Set(), received = 0, nextCheck = 15, minHp = 1
   const maxSeconds = 1500
   while (['playing', 'paused'].includes(run.state.phase) && run.state.time < maxSeconds) {
-    if (run.state.phase === 'paused') { run.resume(); continue } // level-up / breakthrough pauses
+    if (run.state.phase === 'paused') {
+      // 2026-11-09：真实玩家在修为到1800/6600时会在安全节点破境（F4第6波筑基、F7金丹）。
+      // 默认按破境成功处理；--breakthrough=off 恢复旧口径（跳过破境，修为封顶）。
+      const s0 = run.state, b = s0.breakthrough
+      if (option('breakthrough', 'on') !== 'off' && b?.safe && [1800, 6600].includes(s0.player.xp)) {
+        b.sequence = (b.sequence ?? 0) + 1
+        b.lastResult = { sequence: b.sequence, id: s0.player.xp === 1800 ? 'ningyuan' : 'jiuzhuan', success: true }
+        run.commitBreakthrough({ cursor: s0.killLedger.length, rawXp: s0.rawKillXp, ticks: s0.ticks,
+          sequence: b.sequence, gate: s0.player.xp, wave: s0.wave })
+        breakthroughs.push({ time: Math.round(s0.time), wave: s0.wave, gate: s0.player.xp - 1 })
+      }
+      run.resume(); continue
+    }
     const s = run.state, p = s.player
     run.setViewport({ xmin: p.x - 560, xmax: p.x + 560, ymin: p.y - 315, ymax: p.y + 315 })
     // move: always dodge. half: dodge one second in every three, otherwise stand (closer to a stand-and-shoot player).
@@ -136,7 +148,7 @@ function play(f, seed, mode) {
   const s = run.state
   const times = role => [...encounters.values()].filter(e => e.role === role && e.deadAt && e.firstDamage).map(e => e.deadAt - e.firstDamage)
   return { school, floor: f.floor, mode, seed, outcome: ['playing', 'paused'].includes(s.phase) ? 'timeout' : s.phase,
-    seconds: s.time, kills: s.killLedger.length, received, maxHp: s.player.maxHp, minHp,
+    seconds: s.time, breakthroughs, kills: s.killLedger.length, received, maxHp: s.player.maxHp, minHp,
     bossSeconds: times('boss')[0] ?? null, eliteMedian: (() => { const t = times('elite').sort((a, b) => a - b); return t.length ? t[Math.floor(t.length / 2)] : null })() }
 }
 
@@ -146,7 +158,7 @@ for (const floor of floors) {
   const f = fixture(floor); fixtures.push({ floor, xp: f.xp, spent: f.points.spent, available: f.points.available, bought: f.bought })
   for (const mode of modes) for (const seed of seeds) {
     const row = play(f, seed, mode); rows.push(row)
-    console.log(JSON.stringify({ school, floor, mode, seed, outcome: row.outcome, s: Math.round(row.seconds), boss: row.bossSeconds && Math.round(row.bossSeconds) }))
+    console.log(JSON.stringify({ school, floor, mode, seed, outcome: row.outcome, s: Math.round(row.seconds), boss: row.bossSeconds && Math.round(row.bossSeconds), bt: row.breakthroughs.map(b => b.wave) }))
     writeFileSync(resolve(out, `${school}.json`), JSON.stringify({ school, fixtures, rows }, null, 1))
   }
 }

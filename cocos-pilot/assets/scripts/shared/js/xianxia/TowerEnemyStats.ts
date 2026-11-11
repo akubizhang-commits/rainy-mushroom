@@ -8,7 +8,10 @@ import { monsterAttributes, monsterHealthMultiplier } from './TowerMonsterAttrib
 export const ENEMY_INCOMING_DAMAGE_MULTIPLIER = 2
 
 // Fixed floor budgets, calibrated against ordinary natural gear, never player stats.
-export const BOSS_HP_MULTIPLIERS = Object.freeze([1, 1, 1.55, 1.2, 1.5, 1.45, 1.2, 1.65, 1.65])
+// 2026-11-09 F4难度尖峰调查（.agents/tasks/f4-difficulty-spike-2026-11-09.md）：伏潭鳄王 1.2→0.85，约降29%。
+export const BOSS_HP_MULTIPLIERS = Object.freeze([1, 1, 1.55, 0.85, 1.5, 1.45, 1.2, 1.65, 1.65])
+// 同一调查：F4第15波两只4阶蝙蝠精英保留4阶与形态，只把血量降到原来的0.35/0.75（约5.6万→2.6万）。
+export const ENCOUNTER_HP_MULTIPLIERS = Object.freeze({ bat_elite_f4_w15_n4: .35 / .75, bat_elite_f4_w15_n5: .35 / .75 })
 // Fixed authored floor/role/family stats. Never uses the player's level.
 export function towerEnemyStats(archetype, floor, wave = 1) {
   const base=towerEnemyBaseStats(archetype,floor,wave)
@@ -26,7 +29,8 @@ function towerEnemyBaseStats(archetype, floor, wave) {
     return {
       hp: MONSTER_RANK_BASELINE.normal_hp[archetype.rank]
         * (archetype.floor_hp_factor ?? 1) * early
-        * (elite ? MONSTER_RANK_BASELINE.elite_hp_multiplier_by_rank[archetype.rank] : 1),
+        * (elite ? MONSTER_RANK_BASELINE.elite_hp_multiplier_by_rank[archetype.rank] : 1)
+        * (ENCOUNTER_HP_MULTIPLIERS[archetype.id] ?? 1),
       damage: MONSTER_RANK_BASELINE.normal_damage[archetype.rank]
         * (elite ? MONSTER_RANK_BASELINE.elite_damage_multiplier : 1),
       moveSpeed: archetype.move_speed * (archetype.floor_speed_factor ?? 1),

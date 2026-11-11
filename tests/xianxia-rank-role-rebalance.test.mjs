@@ -23,7 +23,9 @@ test('same species/rank share a normal baseline across floors; elite authored ra
  for(const a of ARCHETYPES.filter(a=>a.role==='elite'&&a.roster_revision==='rank-role-v1')){
   const n=ARCHETYPES.find(n=>n.role==='normal'&&n.species===a.species&&n.rank===a.rank);assert.ok(n,a.id)
   const e=towerEnemyStats(a,9,18),b=towerEnemyStats(n,9,18)
-  assert.ok(Math.abs(e.hp/b.hp-MONSTER_RANK_BASELINE.elite_hp_multiplier_by_rank[a.rank])<1e-9);assert.ok(Math.abs(e.damage/b.damage-MONSTER_RANK_BASELINE.elite_damage_multiplier)<1e-9)
+  // 2026-11-09：F4第15波两只蝙蝠精英另有单独血量系数（ENCOUNTER_HP_MULTIPLIERS）。
+  const encounter=(await import('../js/xianxia/TowerEnemyStats.js')).ENCOUNTER_HP_MULTIPLIERS[a.id]??1
+  assert.ok(Math.abs(e.hp/b.hp-MONSTER_RANK_BASELINE.elite_hp_multiplier_by_rank[a.rank]*encounter)<1e-9);assert.ok(Math.abs(e.damage/b.damage-MONSTER_RANK_BASELINE.elite_damage_multiplier)<1e-9)
   assert.equal(e.moveSpeed,b.moveSpeed)
   assert.deepEqual(towerEnemyStats(n,6,18),b)
  }
