@@ -41,7 +41,7 @@ test('reduced motion removes travelling effects and expiration clears every effe
  assert.deepEqual(low.blades,[])
  assert.ok(low.swords.every(s=>s.landed))
  assert.equal(low.breath,1)
- for(const age of [-.01,3,4]){
+ for(const age of [-.01,6,7]){
   const state=sancaiMotion(150,age,3)
   assert.equal(state.visible,false)
   assert.deepEqual(state.swords,[])

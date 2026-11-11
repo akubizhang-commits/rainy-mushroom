@@ -78,8 +78,9 @@ export function skillForm(id, level = 1, parentLevel = 1, trainedLevel = level) 
           width: 30, interval: .08, initialDelay: at(skill, 'delay', lv) })
         break
       case 'sj_sancai':
-        Object.assign(form, { shape: 'triangle', hits: 3, eyes: 3,
-          initialDelay: .35, interval: 1, duration: 3 })
+        // 2026-11-09 用户确认（方案A）：持续6秒，每秒落一剑共6剑，三剑各落两轮。
+        Object.assign(form, { shape: 'triangle', hits: 6, eyes: 3,
+          initialDelay: .35, interval: 1, duration: 6 })
         break
       case 'sj_formation':
         Object.assign(form, { shape: 'circle', hits: at(skill, 'pulseCount', lv), eyes: 2,
@@ -88,6 +89,7 @@ export function skillForm(id, level = 1, parentLevel = 1, trainedLevel = level) 
         break
       case 'sj_qinglian':
         // Three judgment rounds at release, +1s and +2s (outer, middle, inner). No target cap.
+        // 2026-11-09 用户确认（方案C）：持续4秒只延长莲瓣画面，第3秒后不再判定。
         Object.assign(form, { shape: 'lotus', radius: QINGLIAN_RINGS[0].radius, hits: 3,
           interval: 1, initialDelay: 0, duration: skill.duration, rings: QINGLIAN_RINGS, targetCap: null })
         break

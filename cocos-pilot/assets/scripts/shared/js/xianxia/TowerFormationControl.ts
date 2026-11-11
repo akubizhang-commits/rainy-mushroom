@@ -4,7 +4,7 @@ import {sancaiContains} from './TowerSancai'
 import {monsterSlowStrength} from './TowerMonsterAttributes'
 
 export const FORMATION_SLOWS = Object.freeze({sj_sancai: .2, sj_formation: .3, evo_sixiang: .4})
-const durations = {sj_sancai: 3, sj_formation: 8, evo_sixiang: 8}
+const durations = {sj_sancai: 6, sj_formation: 8, evo_sixiang: 8}
 
 // Same circles/triangles/diamonds as the damage fields, including enemy hurtboxes.
 export function formationContains(zone, enemy) {

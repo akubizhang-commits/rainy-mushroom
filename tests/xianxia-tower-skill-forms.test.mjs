@@ -660,7 +660,7 @@ test('qinglian rings are 8/12/16 judgment petals on one 200 radius, with the out
   assert.ok(form.rings[2].alpha < form.rings[0].alpha)
   assert.equal(form.hits, 3)
   assert.equal(form.interval, 1)
-  assert.equal(form.duration, 3)
+  assert.equal(form.duration, 4)
   assert.equal(form.targetCap, null)
   for (const [k, ring] of form.rings.entries()) {
     // Every visual petal is a judgment blade; each blade starts at the eye and reaches the ring radius.
@@ -704,7 +704,7 @@ test('qinglian lands 36 hits in total on a single target and nothing beyond 200 
   close(perRound.reduce((sum, share) => sum + share, 0), 1)
 })
 
-test('qinglian casts on an 8 second cooldown, judges three rounds one second apart, lasts 3 seconds and survives snapshot restore', () => {
+test('qinglian casts on an 8 second cooldown, judges three rounds one second apart, lasts 4 seconds and survives snapshot restore', () => {
   const run = new TowerRun({ attemptId: 11, floor: 9, seed: 123, xp: 0, hp: 100,
     loadout: { growthVersion: 1, active: { sj_yujian: 1, sj_qinglian: 1 }, passive: {}, evolutions: [], evolutionLevels: {},
       tutorialWaves: 0, weaponId: 'eq_sword_suwen', weaponQuality: 1, weaponRefine: 0 } })
@@ -718,7 +718,7 @@ test('qinglian casts on an 8 second cooldown, judges three rounds one second apa
   close(run.state.cooldowns.sj_qinglian, started + 8)
   const pulseTimes = new Map()
   let zone = null
-  for (let i = 0; i < Math.round(4 * 60); i++) {
+  for (let i = 0; i < Math.round(5 * 60); i++) {
     run.advance(STEP)
     const live = run.state.zones.find(z => z.kind === 'qinglian')
     if (live) {
@@ -735,7 +735,7 @@ test('qinglian casts on an 8 second cooldown, judges three rounds one second apa
   assert.equal(zone.targetCap, null)
   assert.deepEqual([...pulseTimes.keys()].sort(), [1, 2, 3])
   const times = [1, 2, 3].map(p => pulseTimes.get(p))
-  assert.ok(Math.abs(zone.expiresAt - times[0] - 3) <= 2 * STEP, 'the burst lasts 3 seconds from its first round')
+  assert.ok(Math.abs(zone.expiresAt - times[0] - 4) <= 2 * STEP, 'the burst lasts 4 seconds from its first round')
   for (let i = 1; i < 3; i++) assert.ok(Math.abs((times[i] - times[i - 1]) - 1) <= 2 * STEP, `round ${i + 1} follows one second later`)
   assert.equal(run.state.zones.filter(z => z.kind === 'qinglian').length, 0)
 })

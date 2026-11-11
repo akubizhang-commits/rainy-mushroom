@@ -250,7 +250,7 @@ test('the three learnable evolutions have independent realm gates and approved c
     assert.equal(rankCap(id, 5399, 9), 0)
     assert.equal(rankCap(id, 5400, 5), 0)
     assert.equal(rankCap(id, 5400, 6), 0)
-    assert.equal(rankCap(id, 9359, 9), 1)
+    assert.equal(rankCap(id, 9359, 9), id === 'evo_sixiang' ? 0 : 1)
     assert.equal(rankCap(id, 10920, 9), id === 'evo_sixiang' ? 1 : 2)
   }
 })

@@ -53,7 +53,8 @@ const FORMAT = 'xianxia-sect-tower-campaign'
 // 87：2026-11-06 悟道点改为每级1点＋突破筑基／金丹各3点，特殊功法每级1点；旧档重置本模式。
 // 90：2026-11-09 青莲剑阵改为3秒三轮判定、不限目标，战斗快照中的青莲zone结构与伤害含义变化；旧档按开发期约定重置本模式。
 // 91：2026-11-09 蚀骨剑意、逐月斩、双月斩、剑破虚空、周天剑域、一剑开天的可学等级与等级段调整，旧投入可能早于新开放等级；旧档按开发期约定重置本模式。
-const SCHEMA = 92
+// 93：2026-11-09 三才剑阵6秒6击、青莲剑阵持续4秒、四象一阶需求27级，战斗快照中的剑阵zone结构变化；旧档按开发期约定重置本模式。
+const SCHEMA = 93
 const UINT32_MAX = 0xffffffff
 const copy = value => JSON.parse(JSON.stringify(value))
 const object = value => value !== null && typeof value === 'object' && !Array.isArray(value)

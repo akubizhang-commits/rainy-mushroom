@@ -193,15 +193,16 @@ export const GROWTH_SKILLS = freeze([
     // 2026-11-09 方案A：剑数改为 6/8/10/12（沿用原分档：1–2/3–5/6–9/10 级），只影响画面与覆盖，伤害共用命中间隔。
     swords: [6, 6, 8, 8, 8, 10, 10, 10, 10, 12],
     target_cap: 6, single_dps_factor: 1 / .6, hit_assumption: .6,
-    rule: '发动起冷却6秒，剑阵持续4秒；飞剑变速游走并带近身剑意；生效期间伤害乘10/7，以每轮最多7击补偿原6秒10击。所有环绕剑对同一目标共用0.6秒命中间隔，不乘剑数。周天剑域保留常驻与原伤害。',
+    rule: '发动起冷却6秒，剑阵持续4秒；飞剑变速游走并带近身剑意；生效期间伤害乘10/7，以每轮最多7击补偿原6秒10击。所有环绕剑对同一目标共用0.6秒命中间隔，不乘剑数。',
   }, { ...oldSkills.get('sj_wanjian'), pointCosts: [...activeCosts] }),
-  // 青莲剑阵：持续3秒，每秒一轮，外层→中层→内层依次判定；同一目标三轮合计36次命中，伤害合计为整招预算。
+  // 青莲剑阵：持续4秒，前3秒每秒一轮，外层→中层→内层依次判定；同一目标三轮合计36次命中，伤害合计为整招预算。
   skill('sj_qinglian', {
     // 2026-11-09：冷却9→8秒，每次施放伤害不变（先测试再看）。
-    damage: damageCurve(8, 1.15).map((d, i) => d * FORMATION_EARLY_DAMAGE[i]), cooldown: 8, windup: .8, duration: 3,
+    // 2026-11-09 用户确认（方案C）：持续3→4秒，只延长莲瓣画面；三轮判定时间与伤害不变。
+    damage: damageCurve(8, 1.15).map((d, i) => d * FORMATION_EARLY_DAMAGE[i]), cooldown: 8, windup: .8, duration: 4,
     hit_interval: 1, reach: QINGLIAN_RINGS[0].radius, target_cap: null,
     single_dps_factor: 1 / 8, hit_assumption: .6,
-    rule: '起阵0.8秒后三层莲瓣剑环旋转爆发3秒，每秒一轮。第一轮外层16瓣占整招预算20%，第二轮中层12瓣占35%，第三轮内层8瓣占45%；每瓣对范围内每个目标各结算一次，同一目标三轮合计36次命中。攻击目标数不限，不减速敌人。',
+    rule: '起阵0.8秒后三层莲瓣剑环旋转爆发4秒，前3秒每秒一轮判定，第4秒只保留剑环余势、不再结算伤害。第一轮外层16瓣占整招预算20%，第二轮中层12瓣占35%，第三轮内层8瓣占45%；每瓣对范围内每个目标各结算一次，同一目标三轮合计36次命中。攻击目标数不限，不减速敌人。',
   }, { name: '青莲剑阵', kind: 'active', clear: 0 }),
   skill('sj_line', {
     // 2026-11-09：改为金丹初期可学，各级伤害×1.5（一剑开天按既有继承规则同步）。
@@ -222,11 +223,12 @@ export const GROWTH_SKILLS = freeze([
   skill('sj_sancai', {
     slow_fraction: FORMATION_SLOWS.sj_sancai,
     // 2026-11-09：冷却8→10秒，每次施放伤害不变（先测试再看）。
-    damage: damageCurve(6 * 1.25, 1.12), cooldown: 10, windup: .25,
-    reach: 320, duration: 3, hit_interval: 1, pulseCount: 3,
+    // 2026-11-09 用户确认：持续3→6秒、6次落剑；1–10级伤害×3.85，满级单目标秒伤约8。
+    damage: damageCurve(6 * 1.25, 1.12).map(d => d * 3.85), cooldown: 10, windup: .25,
+    reach: 320, duration: 6, hit_interval: 1, pulseCount: 6,
     radius: [150, 150, 150, 165, 165, 165, 180, 180, 180, 180],
     target_cap: 6, single_dps_factor: 1 / 10, hit_assumption: .65,
-    rule: '前方敌群脚下布下固定三角剑阵，0.35/1.35/2.35秒三剑依次落下，三击均分整阵伤害，每击最多6目标。阵内怪物行走减速20%，含精英与Boss；离阵或3秒到期立即解除，重叠只取最强，不影响攻击、冲锋或跳跃。',
+    rule: '前方敌群脚下布下固定三角剑阵，0.35秒起每秒落一剑，三剑轮流各落两次共6击，六击均分整阵伤害，每击最多6目标。阵内怪物行走减速20%，含精英与Boss；离阵或6秒到期立即解除，重叠只取最强，不影响攻击、冲锋或跳跃。',
   }, { name: '三才剑阵', kind: 'active', clear: 0 }),
   skill('sj_formation', {
     slow_fraction: FORMATION_SLOWS.sj_formation,
@@ -304,7 +306,8 @@ const evolutionRequirements = [
   { characterLevel: 27, realm: '金丹巅峰', clear: 0 },
 ]
 const requirementsForEvolution = id => evolutionRequirements.map((row, index) =>
-  id === 'evo_sixiang' && index === 1 ? { ...row, characterLevel: 30, realm: '金丹十层' }
+  // 2026-11-09：四象剑阵一阶需求与开放等级27（金丹巅峰）一致。
+  id === 'evo_sixiang' ? (index === 1 ? { ...row, characterLevel: 30, realm: '金丹十层' } : { ...row, characterLevel: 27, realm: '金丹巅峰' })
     : id === 'evo_tiandi' && index === 0 ? { ...row, characterLevel: 24, realm: '金丹中期' } : row)
 // Rank three is intentionally undefined until the next realm is designed.
 const evolutionBudgets = {

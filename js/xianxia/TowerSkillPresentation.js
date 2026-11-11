@@ -103,7 +103,7 @@ function presentRank(state, id) {
   const pct = (key, label, value, condition = '') => add(key, label, percent(value), '', condition)
   const descriptions = {
     sj_line: '剑气沿狭长直线贯穿敌人；精进后沿同一道剑路连续穿刺。',
-    sj_qinglian: '剑气凝成三层莲瓣形剑刃，外、中、内三环每秒一轮依次展开并顺时针旋转切割，持续3秒；整招伤害按外20%、中35%、内45%分配，同一目标一招合计承受36次命中，目标数不限。',
+    sj_qinglian: '剑气凝成三层莲瓣形剑刃，外、中、内三环每秒一轮依次展开并顺时针旋转切割，持续4秒，前3秒判定；整招伤害按外20%、中35%、内45%分配，同一目标一招合计承受36次命中，目标数不限。',
     sj_shadow: '在目标位置留下剑痕，短暂延迟后由不同方向接连斩落。',
     evo_tiandi: '蓄势凝成一柄巨剑，一击劈开前方敌阵；地面裂光随后消散。',
     sj_spirit: '凝聚神识：灵力低于30%时，战斗中回灵速度大幅提升，灵力条转为青色并显示“凝神回灵”。每级另增加10点神识（10%施法速度，提高灵力上限和恢复）与4%御剑术索敌距离；同时扩大灵石、材料和地面治疗物的拾取范围。适合灵力消耗高的流派。',
@@ -164,18 +164,18 @@ function presentRank(state, id) {
       if (evo) add('innerDamage', '内圈剑伤（每次）', damage(raw) * evo.innerMultiplier[level - 1])
       add('hitInterval', '同目标命中间隔', form.interval, '秒')
       add('swords', '环绕剑数量', form.swords, '把')
-      description = `${form.swords}把飞剑循阵环绕身边，以剑锋及阵中灵力绞杀附近敌人。${evo ? '内圈剑意覆盖近身空隙，内外圈共用同一次命中间隔。' : '3／6／10级增至5／6／8把飞剑，并同步扩大剑环和剑身覆盖范围。剑圈内侧留有近身空隙。'}`
+      description = `${form.swords}把飞剑循阵环绕身边，以剑锋及阵中灵力绞杀附近敌人。${evo ? '内圈剑意覆盖近身空隙，内外圈共用同一次命中间隔。' : '3／6／10级增至8／10／12把飞剑，并同步扩大剑环和剑身覆盖范围。飞剑变速错轨游走，剑圈内侧有近身剑意。'}`
       if (!evo) description += `剑环持续${fmt(val('duration'))}秒，发动起计算${fmt(skillCooldown(cooldown,loadout))}秒冷却；结束后剑环消失，冷却完成自动再次发动。`
     } else if (base.id === 'sj_sancai') {
       const total = damage(raw)
       add('tickDamage', '落剑伤害（每次）', total / form.hits)
-      add('fullDamage', '剑阵伤害（全程上限）', total, '', '三次落剑全部命中')
+      add('fullDamage', '剑阵伤害（全程上限）', total, '', '六次落剑全部命中')
       add('ticks', '落剑次数', form.hits)
       add('initialDelay', '首击延迟', form.initialDelay, '秒')
       add('hitInterval', '落剑间隔', form.interval, '秒')
       add('duration', '持续时间', form.duration, '秒')
       pct('slow', '阵内基础行走减速', val('slow_fraction'), '实际幅度受控制抗性削减；含精英与Boss；重叠取最强，离阵解除，不影响出招')
-      description = '在前方敌群脚下布下三角剑阵，三柄灵剑依次落下，每次斩击阵内最多6个敌人。阵内怪物行走减速20%，含精英与Boss，实际幅度受控制抗性削减；离阵或剑阵消散立即恢复，重叠取最强，不影响攻击、冲锋或跳跃。4级、7级扩大范围，始终只有三次落剑。'
+      description = '在前方敌群脚下布下三角剑阵，持续6秒，三柄灵剑轮流落下，每秒一剑共6次，每次斩击阵内最多6个敌人。阵内怪物行走减速20%，含精英与Boss，实际幅度受控制抗性削减；离阵或剑阵消散立即恢复，重叠取最强，不影响攻击、冲锋或跳跃。4级、7级扩大范围，各级均为六次落剑。'
     } else if (base.id === 'sj_formation') {
       pct('slow', '阵内基础行走减速', evo ? evo.slow_fraction : val('slow_fraction'), '实际幅度受控制抗性削减；含精英与Boss；重叠取最强，离阵解除，不影响出招')
       if (evo) cooldown = evo.cooldown
@@ -349,9 +349,9 @@ function describeForm(id, form) {
     sj_line: '首刺锁定起点与方向，后续穿刺沿原剑路发出。',
     sj_shadow: '出招时固定落点，后续剑痕不追随敌人。',
     sj_wanjian: '飞剑沿不同轨迹护身，随人物移动；剑身扫过或敌人进入近身剑意范围时命中，同一目标每0.6秒最多受击一次。',
-    sj_qinglian: '阵眼固定在施放位置，不追随人物；起阵0.8秒后爆发，持续3秒，外层16瓣、中层12瓣、内层8瓣依次各判定一轮，不限目标，不减速敌人。',
+    sj_qinglian: '阵眼固定在施放位置，不追随人物；起阵0.8秒后爆发，持续4秒，前3秒外层16瓣、中层12瓣、内层8瓣依次各判定一轮，不限目标，不减速敌人。',
     sj_formation: '起手时锁定落点，剑阵固定在原地，不追随敌人；剑雨余光不追加伤害。',
-    sj_sancai: '起手时选择敌群落点，剑阵固定在原地；三剑共用三次伤害预算，减速不影响敌人出招。',
+    sj_sancai: '起手时选择敌群落点，剑阵固定在原地；三剑轮流落下共六次，均分整阵伤害，减速不影响敌人出招。',
     evo_wanjian: '归宗落点固定，穿刺与末段合剑各自命中所在剑路。',
     evo_tiandi: '蓄势末段同时锁定起点与方向，人物移动不改变剑路；地面裂光不追加伤害。',
     evo_wuwo: '飞剑沿不同轨迹护身，剑境随人物移动；近身剑意与飞剑共用命中间隔。',

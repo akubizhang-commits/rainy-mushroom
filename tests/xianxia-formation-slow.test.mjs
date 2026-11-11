@@ -17,7 +17,7 @@ test('all monster ranks receive the strongest field only, with exact lifetime an
   const e={...enemy,role}
   for(const [id,f] of [['sj_sancai',.8],['sj_formation',.7],['evo_sixiang',.6]]){
    const z=zone(id);near(move([z],e,1),f);near(move([z,z],e,2),f)
-   near(move([z],e,.99),1);near(move([z],e,id==='sj_sancai'?4:9),1)
+   near(move([z],e,.99),1);near(move([z],e,id==='sj_sancai'?7:9),1)
    near(move([z],e,2,()=>false),1);near(move([{...z,hostile:true}],e,2),1)
    near(move([{...z,renderOnly:true}],e,2),1);near(move([z],{...e,hp:0},2),1)
   }

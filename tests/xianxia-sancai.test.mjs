@@ -30,7 +30,7 @@ function placedFixture(rank=1) {
 }
 
 // 2026-11-09：三才剑阵移到筑基巅峰（17 级），等级段 17/21/24/27。
-test('Sancai learns independently at 17, has phased ranks and a fixed three-hit budget',()=>{
+test('Sancai learns independently at 17, has phased ranks and a fixed six-hit budget',()=>{
  const d=definition();assert.ok(d,'Sancai exists')
  assert.equal(d.name,'三才剑阵');assert.equal(d.learnLevel,17);assert.equal(d.damageType,'hybrid')
  assert.deepEqual(d.prerequisites,{});assert.deepEqual(d.pointCosts,Array(10).fill(1))
@@ -41,10 +41,10 @@ test('Sancai learns independently at 17, has phased ranks and a fixed three-hit 
  for(const [level,cap] of [[17,3],[21,6],[24,9],[27,10]])assert.equal(rankCap(d.id,cultivationLevelXp(level)),cap)
  const combat=COMBAT_SKILLS.find(s=>s.id===d.id)
  for(let rank=1;rank<=11;rank++){
-  near(combat.damage[rank-1],6*1.25*1.12**(rank-1)) // 2026-11-06：三才伤害×1.25
+  near(combat.damage[rank-1],6*1.25*1.12**(rank-1)*3.85) // 2026-11-06：三才伤害×1.25；2026-11-09：×3.85
   const f=skillForm(d.id,rank)
-  assert.equal(f.shape,'triangle');assert.equal(f.hits,3);assert.equal(f.eyes,3)
-  near(f.initialDelay,.35);near(f.interval,1);near(f.duration,3)
+  assert.equal(f.shape,'triangle');assert.equal(f.hits,6);assert.equal(f.eyes,3)
+  near(f.initialDelay,.35);near(f.interval,1);near(f.duration,6)
   assert.equal(f.radius,rank>=7?180:rank>=4?165:150)
   assert.equal(castActionTiming(d.id,3).releases.length,1)
  }
@@ -75,16 +75,16 @@ test('slow affects all ranks, nonstacking, and ends on exit or at exactly three 
  near(sancaiMovementMultiplier([],e,2),1)
 })
 
-test('real cast releases once, freezes its center and performs only three budgeted pulses',()=>{
+test('real cast releases once, freezes its center and performs only six budgeted pulses',()=>{
  const {run,s,enemy}=placedFixture()
  const pulses=new Map(),hits=new Map();let center,spent
- for(let frame=0;frame<230;frame++){
+ for(let frame=0;frame<430;frame++){
   run.advance(1/60)
   for(const z of s.zones.filter(z=>z.kind==='sancai')){
    if(!center){center={x:z.x,y:z.y,start:z.startedAt};spent=s.manaState.spent;s.cooldowns.sj_sancai=9999}
-   near(z.x,center.x);near(z.y,center.y);near(z.expiresAt-z.startedAt,3)
+   near(z.x,center.x);near(z.y,center.y);near(z.expiresAt-z.startedAt,6)
    const c=z.castContext,a=stats(c.xp,c.loadout).attack-weaponFlatAttack(c.loadout.weapon)+c.weaponAttack
-   near(z.damage*3/a,7.5,'whole cast budget')
+   near(z.damage*6/a,7.5*3.85,'whole cast budget')
   }
   for(const e of s.effects){
    if(e.kind==='sancai')pulses.set(e.id,e)
@@ -92,8 +92,8 @@ test('real cast releases once, freezes its center and performs only three budget
   }
   if(center&&frame===50)enemy.x+=10
  }
- assert.ok(center);assert.equal(pulses.size,3);assert.equal(hits.size,3)
- assert.deepEqual([...pulses.values()].map(e=>e.pulseIndex),[1,2,3])
+ assert.ok(center);assert.equal(pulses.size,6);assert.equal(hits.size,6)
+ assert.deepEqual([...pulses.values()].map(e=>e.pulseIndex),[1,2,3,4,5,6])
  for(const [i,e] of [...pulses.values()].entries())near(e.startedAt-center.start,.35+i)
  near(spent,5);near(s.manaState.spent,5)
  assert.equal(s.zones.some(z=>z.kind==='sancai'),false)
@@ -164,7 +164,7 @@ test('Sancai shares formation equipment bonuses, thunder element and panel budge
  const p=skillPresentation(state,'sj_sancai')
  assert.ok(p);assert.match(p.description,/三/);assert.match(p.description,/20%/)
  const values=Object.fromEntries(p.stats.map(row=>[row.key,row.value]))
- near(values.fullDamage,values.tickDamage*3);near(values.duration,3);near(values.manaCost,5)
+ near(values.fullDamage,values.tickDamage*6);near(values.duration,6);near(values.manaCost,5)
 })
 
 test('learning and refunds preserve save atomicity and active field contexts',async()=>{
@@ -201,7 +201,7 @@ test('equipment plus-one keeps training range in real casts, panel and restored 
   }
   const z=run.state.zones.find(z=>z.kind==='sancai')
   assert.ok(z);assert.equal(z.radius,expectedRadius,`trained ${trained}`)
-  assert.equal(z.parentLevel,trained+1);assert.equal(z.hits,3)
+  assert.equal(z.parentLevel,trained+1);assert.equal(z.hits,6)
   const panel=skillPresentation({...fresh,activeRun:{snapshot:run.snapshot()}},'sj_sancai')
   assert.equal(panel.currentForm.radius,expectedRadius)
   assert.equal(panel.learnedLevel,trained);assert.equal(panel.effectiveLevel,trained+1)

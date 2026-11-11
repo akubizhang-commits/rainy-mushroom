@@ -9,17 +9,20 @@ export const SANCAI_COLORS = {
 const mix=(a,b,t)=>({x:a.x+(b.x-a.x)*t,y:a.y+(b.y-a.y)*t})
 const scale=(p,s)=>({x:p.x*s,y:p.y*s})
 const clamp=x=>Math.max(0,Math.min(1,x))
+const SANCAI_DURATION=6,SANCAI_STRIKES=6
 export function sancaiMotion(radius,age,pulseIndex,reduced=false){
  const empty={visible:false,fade:0,breath:1,swords:[],flows:[],blades:[]}
- if(age<0||age>=3)return empty
+ // 2026-11-09：持续6秒共6击；三剑首轮落下后钉在阵眼，第二轮(第4–6击)在原阵眼再次斩落发光。
+ if(age<0||age>=SANCAI_DURATION)return empty
  const v=sancaiVertices({radius}),order=[0,2,1],tones=['water','fire','wood']
- const fade=clamp(age/.12)*clamp((3-age)/.3)
+ const fade=clamp(age/.12)*clamp((SANCAI_DURATION-age)/.3)
  const swords=order.map((vi,i)=>{
   const progress=clamp((age-(.35+i-.28))/.28),landed=pulseIndex>i
+  const strike=pulseIndex>i+3?.35+i+3:.35+i
   return {...v[vi],tone:tones[i],landed,progress,
    lift:reduced||landed?0:145*(1-progress*progress),
    visible:reduced?landed:progress>0,
-   impact:landed?clamp(1-(age-(.35+i))/.32):0}
+   impact:landed?clamp(1-(age-strike)/.32):0}
  })
  const flows=[],blades=[]
  if(!reduced){
@@ -32,7 +35,7 @@ export function sancaiMotion(radius,age,pulseIndex,reduced=false){
   // Glints on the closing edge are symmetric: no implied fire -> water cycle.
   const t=(1-Math.cos(age*2.3))*.5
   flows.push({tone:'fire',points:[mix(v[2],v[0],clamp(t-.035)),mix(v[2],v[0],t)]})
-  for(let wave=0;wave<Math.min(3,pulseIndex);wave++)for(let j=0;j<4;j++){
+  for(let wave=0;wave<Math.min(SANCAI_STRIKES,pulseIndex);wave++)for(let j=0;j<4;j++){
    const u=(age-(.35+wave+j*.038))/.36
    if(u<0||u>=1)continue
    const start=scale(v[(wave+j)%3],.82)
@@ -42,7 +45,7 @@ export function sancaiMotion(radius,age,pulseIndex,reduced=false){
     const t=clamp(u-k*.044)
     return mix(mix(start,control,t),mix(control,end,t),t)
    })
-   blades.push({wave,tone:wave===2?tones[j%3]:tones[wave],points,alpha:Math.sin(Math.PI*u)})
+   blades.push({wave,tone:wave%3===2?tones[j%3]:tones[wave%3],points,alpha:Math.sin(Math.PI*u)})
   }
  }
  return {visible:true,fade,breath:reduced?1:.87+.13*Math.sin(age*4.3),

@@ -200,7 +200,7 @@ test('current-schema investments below their starting realm are rejected without
 for (const id of ['evo_tiandi', 'evo_sixiang']) {
   test(`${id} at its current unlock stays valid through reload, downgrade and battle`, () => {
     const row = GROWTH_EVOLUTIONS.find(row => row.id === id)
-    const patch = stateFor(id, cultivationLevelXp(id==='evo_tiandi'?24:21))
+    const patch = stateFor(id, cultivationLevelXp(id==='evo_tiandi'?24:27))
     patch.skills[row.parent] = 1
     patch.skills[row.passive] = 1
     Object.assign(patch, { evolutionRanks: { [id]: 1 }, evolutions: [id],
@@ -209,7 +209,7 @@ for (const id of ['evo_tiandi', 'evo_sixiang']) {
     const before = copy(store.state), raw = storage.raw
     assert.deepEqual(new TowerCampaignStore(storage, 0).state, before)
     assert.equal(storage.raw, raw, 'current-schema reload does not rewrite retained investments')
-    reject(store, storage, { type: 'learnSkill', id }, id==='evo_sixiang'?'stage-locked':'realm-locked')
+    reject(store, storage, { type: 'learnSkill', id }, 'realm-locked')
     const preview = decreaseSkillQuote(store.state, row.passive)
     assert.equal(preview.evolutionRanks[id], 1, 'paired passive rank does not gate the retained evolution')
     assert.equal(store.act({ type: 'decreaseSkill', id: row.passive }, 0).ok, true)
@@ -286,7 +286,7 @@ test('class rank caps follow new growth and evolution rank two retains its origi
     assert.equal(skillRequirement({ ...state, xp: 10919 }, row.id).reason, row.id === 'evo_sixiang' ? 'stage-locked' : 'realm-locked')
     assert.equal(skillRequirement({ ...state, clearedFloor: 8, researchPurchases: 0 }, row.id).ok, true)
     assert.equal(skillRequirement({ ...state, evolutionRanks: { [row.id]: 2 } }, row.id).reason, 'max-level')
-    assert.equal(rankCap(row.id, 6601, 6), row.id === 'evo_tiandi' ? 0 : 1, 'current saves enforce current first-learning gates')
+    assert.equal(rankCap(row.id, 6601, 6), ['evo_tiandi', 'evo_sixiang'].includes(row.id) ? 0 : 1, 'current saves enforce current first-learning gates')
     assert.equal(rankCap(row.id, TOWER_XP_CAP, 9), 2)
   }
 })
