@@ -41,6 +41,7 @@ import { skillCooldown, castActionTiming, equipmentCastSpeed, equipmentAttackPro
 import { towerEnemyStats, towerEnemyRadius, ENEMY_INCOMING_DAMAGE_MULTIPLIER } from './TowerEnemyStats.js'
 import { skillForm, skillHitShare, orbitSwordPose, convergenceRainMultiplier, qinglianRoundHits, qinglianRingForPulse } from './TowerSkillForms.js'
 import { sancaiContains, sancaiTarget } from './TowerSancai.js'
+import { jinghongSpawnDir, JINGHONG_SCAR } from './TowerJinghong.js'
 import { swordQiPoseIndex, swordQiReleaseOffset, swordQiHits, swordQiTravelLimit } from './TowerSwordQi.js'
 import { newYujianState, yujianGenerationInterval, retimeYujian, turnYujian, yujianHeading, yujianHoverPose, stepYujianFlight,
   yujianVisualPose, validYujianState, validYujianShot, avoidYujianBoundary, YUJIAN_TAIL } from './TowerYujian.js'
@@ -2135,15 +2136,14 @@ export class TowerRun {
     if (!e) e = jinghongTarget(this._targets(z, form.retargetRadius))
     if (!e) return
     z.targetId = e.id; z.x = e.x; z.y = e.y
-    // Thrusts come from alternating sides of the original lock direction.
-    const turn = [0, .9, -.9, .45, -.45, 0][(pulse - 1) % 6]
-    const base = Math.atan2(z.dirY, z.dirX) + turn
-    const dirX = Math.cos(base), dirY = Math.sin(base)
+    // The sword appeared on a deterministic random side and travels through the target.
+    const spawn = jinghongSpawnDir(z.id, pulse, z.dirX, z.dirY), dirX = -spawn.x, dirY = -spawn.y
     outgoing.push({ target: e.id, damage: z.damage, direct: true, source: 'sj_jinghong',
       impact: { skill: form.id, dirX, dirY, pulseIndex: pulse, pulseCount: form.hits, castId: z.id },
       castContext: z.castContext, weaponCastId: z.weaponCastId })
-    this._effect('jinghong', e.x, e.y, e.radius, { ...formGeometry(form, pulse, s.time),
-      dirX, dirY, faceX: dirX, faceY: dirY, expiresAt: s.time + .3, targetIds: [e.id] })
+    // The scar outlives the sword; the presentation reads its full window from this effect.
+    this._effect('jinghong', e.x, e.y, e.radius, { ...formGeometry(form, pulse, s.time), castId: z.id, lockX: z.dirX, lockY: z.dirY,
+      dirX, dirY, faceX: dirX, faceY: dirY, expiresAt: s.time + JINGHONG_SCAR, targetIds: [e.id] })
   }
 
   _zones(incoming, outgoing, onCast) {

@@ -230,7 +230,7 @@ export const GROWTH_SKILLS = freeze([
     damage: damageCurve(12.3, 1.18), cooldown: 8, windup: .3,
     reach: 420, radius: 40, target_cap: 1,
     single_dps_factor: 1 / 8, hit_assumption: .85,
-    rule: '锁定420范围内的Boss，无Boss时锁定当前血量最高的敌人；0.18秒后重剑连续穿刺，每0.22秒一刺，1/3/6/10级共3/4/5/6刺，各刺平分整招伤害，只命中锁定目标；锁定目标死亡时改锁240范围内的下一个目标，没有目标则该刺落空。',
+    rule: '锁定420范围内的Boss，无Boss时锁定当前血量最高的敌人；重剑在目标四周随机方位显形，停顿0.35秒后穿身而过，首刺于0.43秒命中，之后每0.22秒一刺，1/3/6/10级共3/4/5/6刺，各刺平分整招伤害，只命中锁定目标；锁定目标死亡时改锁240范围内的下一个目标，没有目标则该刺落空。',
   }, { name: '惊鸿剑', kind: 'active', clear: 0 }),
   skill('sj_sancai', {
     slow_fraction: FORMATION_SLOWS.sj_sancai,

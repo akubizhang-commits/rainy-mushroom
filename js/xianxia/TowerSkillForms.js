@@ -2,6 +2,7 @@
 import { COMBAT_SKILLS as GROWTH_SKILLS, COMBAT_EVOLUTIONS as GROWTH_EVOLUTIONS } from './TowerCombatSkills.js'
 import { wuwoSwordPose } from './WuwoMotion.js'
 import { QINGLIAN_RINGS } from './TowerGrowth.js'
+import { JINGHONG_LEAD } from './TowerJinghong.js'
 
 const SKILLS = Object.fromEntries(GROWTH_SKILLS.map(skill => [skill.id, skill]))
 const EVOLUTIONS = Object.fromEntries(GROWTH_EVOLUTIONS.map(skill => [skill.id, skill]))
@@ -76,9 +77,9 @@ export function skillForm(id, level = 1, parentLevel = 1, trainedLevel = level) 
           width: 30, interval: .08, initialDelay: at(skill, 'delay', lv) })
         break
       case 'sj_jinghong':
-        // 锁定单体，0.18秒飞抵后每0.22秒一刺；刺数随等级段 3/4/5/6。
+        // 锁定单体；每柄重剑显形后停顿0.35秒再0.08秒刺穿，首刺0.43秒，之后每0.22秒一刺；刺数随等级段 3/4/5/6。
         Object.assign(form, { shape: 'jinghong', hits: [3, 4, 5, 6][node],
-          initialDelay: .18, interval: .22, retargetRadius: 240 })
+          initialDelay: JINGHONG_LEAD, interval: .22, retargetRadius: 240 })
         break
       case 'sj_sancai':
         // 2026-11-09 用户确认（方案A）：持续6秒，每秒落一剑共6剑，三剑各落两轮。

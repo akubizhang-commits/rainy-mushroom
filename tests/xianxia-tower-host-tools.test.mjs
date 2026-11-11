@@ -10,6 +10,7 @@ import * as pillTools from '../js/xianxia/TowerPills.js'
 import * as alchemyTools from '../js/xianxia/TowerAlchemy.js'
 import * as materialLootTools from '../js/xianxia/TowerMaterialLoot.js'
 import * as hitFeedbackTools from '../js/xianxia/TowerHitFeedback.js'
+import * as jinghongTools from '../js/xianxia/TowerJinghong.js'
 import * as shadowTools from '../js/xianxia/TowerShadow.js'
 import * as yujianTools from '../js/xianxia/TowerYujian.js'
 import * as tierTools from '../js/xianxia/TowerEquipmentTiers.js'
@@ -66,7 +67,7 @@ import * as forging from '../js/xianxia/TowerForging.js'
 // Optional post-build regression: TOWER_HOST_BUNDLE=/absolute/path/to/index.*.js
 // runs the same host behavior against Creator's emitted icon loader and Babel
 // helpers. This catches array-only spread lowering that native Node TS cannot.
-const sources = Object.fromEntries(['TowerStatusIconArt', 'TowerPreferences', 'TowerKeyboardNavigation', 'QingpingAudio', 'TowerHitImpact', 'SwordBurstArt', 'ConvergenceArt', 'QinglianVortexArt', 'TowerHitArt', 'TowerMenuChrome', 'LiangyiPainter', 'SixiangPainter', 'LiangyiFormationArt', 'SixiangFormationArt', 'TowerMonsterMechanicsView', 'SwordArcArt', 'SwordLineArt', 'SwordShadowArt', 'SwordTiandiArt', 'SwordQiArt', 'OrbitSwordArt', 'TowerSkillEffects', 'TowerDepthOrder', 'TowerEnvironmentArt', 'TowerStoneArt', 'TowerProjectileArt', 'TowerSectScene', 'WeaponQualityArt', 'TowerCharacterArt', 'TowerMonsterArt', 'TowerSkillIcons', 'TowerSkillTreeCatalog', 'TowerSkillTreeLayout', 'TowerPlayerHud', 'TowerInventoryPanel', 'TowerMenu', 'TowerArenaView', 'TowerView'].map(name => [
+const sources = Object.fromEntries(['TowerStatusIconArt', 'TowerPreferences', 'TowerKeyboardNavigation', 'QingpingAudio', 'TowerHitImpact', 'JinghongSwordArt', 'SwordBurstArt', 'ConvergenceArt', 'QinglianVortexArt', 'TowerHitArt', 'TowerMenuChrome', 'LiangyiPainter', 'SixiangPainter', 'LiangyiFormationArt', 'SixiangFormationArt', 'TowerMonsterMechanicsView', 'SwordArcArt', 'SwordLineArt', 'SwordShadowArt', 'SwordTiandiArt', 'SwordQiArt', 'OrbitSwordArt', 'TowerSkillEffects', 'TowerDepthOrder', 'TowerEnvironmentArt', 'TowerStoneArt', 'TowerProjectileArt', 'TowerSectScene', 'WeaponQualityArt', 'TowerCharacterArt', 'TowerMonsterArt', 'TowerSkillIcons', 'TowerSkillTreeCatalog', 'TowerSkillTreeLayout', 'TowerPlayerHud', 'TowerInventoryPanel', 'TowerMenu', 'TowerArenaView', 'TowerView'].map(name => [
   name,
   stripTypeScriptTypes(
     readFileSync(new URL(`../cocos-pilot/assets/scripts/${name}.ts`, import.meta.url), 'utf8')
@@ -426,6 +427,8 @@ function launch(t, storage, { assisted = true, menuOnly = false, frame = { width
   context.SwordLineArt = runInNewContext(`(() => { ${sources.SwordLineArt}\nreturn SwordLineArt })()`, context)
   context.SwordShadowArt = runInNewContext(`(() => { ${sources.SwordShadowArt}\nreturn SwordShadowArt })()`, context)
   context.hitImpact = hitFeedbackTools.hitImpact
+  Object.assign(context, jinghongTools)
+  context.JinghongSwordArt = runInNewContext(`(() => { ${sources.JinghongSwordArt}\nreturn JinghongSwordArt })()`, context)
   context.TowerHitImpact = runInNewContext(`(() => { ${sources.TowerHitImpact}\nreturn TowerHitImpact })()`, context)
   context.TowerHitArt = runInNewContext(`(() => { ${sources.TowerHitArt}\nreturn TowerHitArt })()`, context)
   context.SwordTiandiArt = runInNewContext(`(() => { ${sources.SwordTiandiArt}\nreturn SwordTiandiArt })()`, context)

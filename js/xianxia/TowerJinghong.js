@@ -1,0 +1,49 @@
+// 惊鸿剑：战斗与画面共用的出剑时序与方位（2026-11-09 用户要求）。
+// 每一刺：重剑在目标周围随机方位显形 → 停顿 HOLD 秒让玩家看清 → 用 DASH_IN 秒冲过目标身体，
+// 在冲过身体中心的瞬间结算伤害 → 再用 DASH_OUT 秒穿出后立即消失，只留剑痕 SCAR 秒。
+export const JINGHONG_HOLD = .35
+export const JINGHONG_DASH_IN = .08
+export const JINGHONG_DASH_OUT = .04
+export const JINGHONG_LEAD = JINGHONG_HOLD + JINGHONG_DASH_IN
+export const JINGHONG_SCAR = .6
+// 显形处离目标中心的距离；穿出终点在另一侧 SPAWN_DISTANCE * EXIT_RATIO 处。
+export const JINGHONG_SPAWN_DISTANCE = 150
+export const JINGHONG_EXIT_RATIO = .5
+
+// 确定性散列：同一施放的同一刺永远同一方位（快照恢复、暂停重绘不跳变）。
+function hash(text) {
+  let h = 2166136261
+  for (let i = 0; i < text.length; i++) { h ^= text.charCodeAt(i); h = Math.imul(h, 16777619) }
+  return (h >>> 0) / 4294967296
+}
+
+// 显形方位避开施法者一侧（±55°），避免重剑盖住人物。
+const AVOID = 55 * Math.PI / 180
+/** Unit vector from the target toward the sword's spawn point for one thrust.
+ * Consecutive thrusts are pushed at least ~70° apart so they visibly come from new sides.
+ * lockX/lockY is the cast direction (caster → target); the caster side is excluded. */
+export function jinghongSpawnDir(castId, pulse, lockX = 1, lockY = 0) {
+  const base = hash(`${castId}`) * Math.PI * 2
+  const step = 1.25 + hash(`${castId}:${pulse}`) * 1.9
+  let angle = base + (pulse - 1) * step
+  const caster = Math.atan2(-lockY, -lockX)
+  const gap = Math.atan2(Math.sin(angle - caster), Math.cos(angle - caster))
+  if (Math.abs(gap) < AVOID) angle = caster + (gap < 0 ? -1 : 1) * (AVOID + (AVOID - Math.abs(gap)))
+  return { x: Math.cos(angle), y: Math.sin(angle) }
+}
+
+/** Sword offset from the target centre at time t relative to the hit (t=0 is the hit).
+ * Returns null outside the sword's visible window. */
+export function jinghongSwordOffset(castId, pulse, t, lockX = 1, lockY = 0) {
+  if (t < -JINGHONG_LEAD || t >= JINGHONG_DASH_OUT) return null
+  const d = jinghongSpawnDir(castId, pulse, lockX, lockY), R = JINGHONG_SPAWN_DISTANCE
+  if (t < -JINGHONG_DASH_IN) {
+    const age = t + JINGHONG_LEAD
+    return { x: d.x * R, y: d.y * R, phase: 'hold', age, dirX: -d.x, dirY: -d.y }
+  }
+  // Linear dash from +R to -R*EXIT; crosses the centre exactly at t=0.
+  const travel = R * (1 + JINGHONG_EXIT_RATIO)
+  const u = (t + JINGHONG_DASH_IN) / (JINGHONG_DASH_IN + JINGHONG_DASH_OUT)
+  const along = R - travel * u
+  return { x: d.x * along, y: d.y * along, phase: 'dash', age: t + JINGHONG_LEAD, dirX: -d.x, dirY: -d.y }
+}

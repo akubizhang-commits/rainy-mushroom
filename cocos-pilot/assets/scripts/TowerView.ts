@@ -31,6 +31,7 @@ import {SwordArcArt} from './SwordArcArt';
 import {SwordLineArt} from './SwordLineArt';
 import {SwordShadowArt} from './SwordShadowArt';
 import {TowerHitImpact} from './TowerHitImpact';
+import {JinghongSwordArt} from './JinghongSwordArt';
 import {TowerHitArt} from './TowerHitArt';
 import {TowerDamageNumbers} from './TowerDamageNumbers';
 import {TowerDebuffIcons} from './TowerDebuffIcons';
@@ -98,7 +99,7 @@ export class TowerView {
  private qinglianArt=new QinglianVortexArt();private qinglianLayer:Node|null=null;
  private lineArt=new SwordLineArt();private lineLayer:Node|null=null;
  private shadowArt=new SwordShadowArt();private shadowLayer:Node|null=null;
- private hitArt=new TowerHitArt();private hitImpact=new TowerHitImpact();
+ private hitArt=new TowerHitArt();private hitImpact=new TowerHitImpact();private jinghongArt=new JinghongSwordArt();private jinghongLayer:Node|null=null;
  private damageNumbers=new TowerDamageNumbers();
  private debuffIcons=new TowerDebuffIcons();
  private targetDebuffIcons=new TowerDebuffIcons();
@@ -454,7 +455,7 @@ export class TowerView {
   this.bumieArt.clearBindings();this.bumieLayer=null;
   this.jianxinArt.clearBindings();this.jianxinLayer=null;
   this.arcArt.clearBindings();this.arcLayer=null;
-  this.lineArt.clearBindings();this.lineLayer=null;this.burstArt.clearBindings();this.burstLayer=null;this.convergenceArt.clearBindings();this.convergenceLayer=null;this.qinglianArt.clearBindings();this.qinglianLayer=null;
+  this.lineArt.clearBindings();this.lineLayer=null;this.burstArt.clearBindings();this.burstLayer=null;this.jinghongArt?.clearBindings();this.jinghongLayer=null;this.convergenceArt.clearBindings();this.convergenceLayer=null;this.qinglianArt.clearBindings();this.qinglianLayer=null;
   this.shadowArt.clearBindings();this.shadowLayer=null;
   this.tiandiArt.clearBindings();this.tiandiLayer=null;
   this.crossBurstArt.clearBindings();this.qiArt.clearBindings();this.qiLayer=null;
@@ -555,6 +556,8 @@ export class TowerView {
   this.warnings=this.node('攻击预警',root).addComponent(Graphics);
   this.monsterLayer=this.node('妖兽静态素材',root);
   this.orbitArt.preload();
+  // 惊鸿剑在妖兽之上：重剑穿身与剑痕需要盖在身体上才看得清。
+  this.jinghongLayer=this.node('惊鸿剑特效层',root);this.jinghongArt.preload();
   this.formationLayer=this.node('剑阵落剑层',root);this.sancaiArt.preload();this.formationArt.preload();this.sixiangArt.preload();
   this.shadowLayer=this.node('分光连斩层',root);this.shadowArt.preload();
   this.foreground=this.node('战斗前景',root).addComponent(Graphics);
@@ -760,7 +763,7 @@ export class TowerView {
   this.arcArt.reset();
   this.lineArt.reset();this.convergenceArt.reset();this.qinglianArt.reset();
   this.shadowArt.reset();
-  this.tiandiArt.reset();this.hitArt.reset();this.hitImpact?.reset();
+  this.tiandiArt.reset();this.hitArt.reset();this.hitImpact?.reset();this.jinghongArt?.reset();
   this.crossBurstArt.reset();this.qiArt.reset();
   this.orbitArt.reset();
   this.sancaiArt.reset();this.formationArt.reset();
@@ -1025,6 +1028,7 @@ export class TowerView {
    shield.ellipse(sx(p.x),sy(p.y)+44,40,58);shield.stroke();
   }
   if(this.burstLayer)this.burstArt.sync(this.burstLayer,this.foreground,s,this.camera);
+  if(this.jinghongLayer)this.jinghongArt.sync(this.jinghongLayer,s,this.camera);
   const legacyHits={...s,effects:(s.effects||[]).filter((e:any)=>!this.hitArt.covered.has(e.id))};
   this.skillEffects?.drawWuwoHits(this.foreground,legacyHits,this.camera);
   this.skillEffects?.drawShadowHits(this.foreground,legacyHits,this.camera);
@@ -1443,7 +1447,7 @@ export class TowerView {
   this.shadowArt.destroy();this.shadowLayer=null;
   this.sancaiArt.destroy();
   this.monsterMechanics?.destroy();this.monsterMechanics=null;
-  this.clearBattleFeedback();this.hitImpact?.destroy();this.ritual?.destroy();this.ritualAudio.destroy();this.skillEffects=null;this.flightSwordArt.destroy();this.flightArt.destroy();this.flightLayer=null;this.ningshenArt.destroy();this.ningshenLayer=null;this.jianguArt.destroy();this.jianguLayer=null;this.bumieArt.destroy();this.bumieLayer=null;this.jianxinArt.destroy();this.jianxinLayer=null;this.arcArt.destroy();this.arcLayer=null;this.burstArt.destroy();this.burstLayer=null;this.convergenceArt.destroy();this.convergenceLayer=null;this.qinglianArt.destroy();this.qinglianLayer=null;this.lineArt.destroy();this.lineLayer=null;this.tiandiArt.destroy();this.tiandiLayer=null;this.crossBurstArt.destroy();this.qiArt.destroy();this.qiLayer=null;this.orbitArt.destroy();this.formationArt.destroy();this.sixiangArt.destroy();this.formationLayer=null;this.bodyFallbacks.clear();this.environmentArt.destroy();this.hudArt.destroy();this.stoneArt.destroy();this.projectileArt.destroy();this.monsterArt.destroy();this.characterArt.destroy();this.platform.destroy();this.menu?.destroy();this.root.destroy();
+  this.clearBattleFeedback();this.hitImpact?.destroy();this.jinghongArt?.destroy();this.ritual?.destroy();this.ritualAudio.destroy();this.skillEffects=null;this.flightSwordArt.destroy();this.flightArt.destroy();this.flightLayer=null;this.ningshenArt.destroy();this.ningshenLayer=null;this.jianguArt.destroy();this.jianguLayer=null;this.bumieArt.destroy();this.bumieLayer=null;this.jianxinArt.destroy();this.jianxinLayer=null;this.arcArt.destroy();this.arcLayer=null;this.burstArt.destroy();this.burstLayer=null;this.convergenceArt.destroy();this.convergenceLayer=null;this.qinglianArt.destroy();this.qinglianLayer=null;this.lineArt.destroy();this.lineLayer=null;this.tiandiArt.destroy();this.tiandiLayer=null;this.crossBurstArt.destroy();this.qiArt.destroy();this.qiLayer=null;this.orbitArt.destroy();this.formationArt.destroy();this.sixiangArt.destroy();this.formationLayer=null;this.bodyFallbacks.clear();this.environmentArt.destroy();this.hudArt.destroy();this.stoneArt.destroy();this.projectileArt.destroy();this.monsterArt.destroy();this.characterArt.destroy();this.platform.destroy();this.menu?.destroy();this.root.destroy();
   this.portraitGraphics=null;this.portraitRealm='';
  }
 }

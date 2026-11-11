@@ -8,6 +8,8 @@ const ROOT=path.resolve(__dirname,'..'),OUT=path.resolve(process.env.FEEL_OUT||p
 // 2026-11-09 打击感分档验证：当前全部攻击技能（周天剑域已退役）。
 const SKILLS=[['sj_yujian','御剑术'],['sj_arc','流云斩'],['sj_moon','玄月斩'],['sj_moon_triple','逐月斩'],['sj_cross','双月斩'],['sj_line','剑破虚空'],['evo_tiandi','一剑开天'],['sj_shadow','分光连斩'],['sj_jinghong','惊鸿剑'],['sj_wanjian','周天剑阵'],['sj_qinglian','青莲剑阵'],['sj_sancai','三才剑阵'],['sj_formation','两仪剑阵'],['evo_sixiang','四象剑阵']];
 const PARENT={evo_sixiang:'sj_formation',evo_tiandi:'sj_line'};
+// FEEL_ONLY=sj_jinghong 只录一个技能，便于逐帧审片。
+if(process.env.FEEL_ONLY)SKILLS.splice(0,SKILLS.length,...SKILLS.filter(([id])=>id===process.env.FEEL_ONLY));
 async function main(){
  fs.mkdirSync(OUT,{recursive:true});
  const {skillForm}=await import(pathToFileURL(path.join(ROOT,'js/xianxia/TowerSkillForms.js')));

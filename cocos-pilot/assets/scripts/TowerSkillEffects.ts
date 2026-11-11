@@ -65,32 +65,8 @@ export class TowerSkillEffects {
   }
  }
  /** 惊鸿剑：锁定期间重剑悬于目标上方指向目标；每刺一道御剑术配色的穿刺剑光，0.3秒淡出。 */
- private jinghong(g:Graphics,e:any,time:number,zone:boolean){
-  // 2026-11-09 打击感：重剑加长加粗（约120px），穿刺剑光加宽，命中瞬间白芯闪光。
-  const started=e.startedAt??time,x=e.x-this.cx,y=e.y-this.cy+36;
-  if(!Number.isFinite(x+y))return;
-  const d=Math.hypot(e.dirX??1,e.dirY??0)||1,dx=(e.dirX??1)/d,dy=(e.dirY??0)/d;
-  const blade=(sx:number,sy:number,ex:number,ey:number,a:number,w:number)=>{
-   this.lineColor(g,109,224,248,38*a,w*2.6);g.moveTo(sx,sy);g.lineTo(ex,ey);g.stroke();
-   this.lineColor(g,109,224,248,130*a,w);g.moveTo(sx,sy);g.lineTo(ex,ey);g.stroke();
-   this.lineColor(g,237,255,255,240*a,Math.max(1.6,w*.38));g.moveTo(sx,sy);g.lineTo(ex,ey);g.stroke();
-  };
-  if(zone){
-   if(time>=e.expiresAt)return;
-   const fade=Math.min(1,(time-started)/.12)*Math.min(1,Math.max(0,(e.expiresAt-time)/.2));
-   const bob=Math.sin(time*9)*3,top=y+150+bob,tip=y+32+bob;
-   blade(x,top,x,tip,fade,6);
-   // 剑格与剑首：横向护手和一颗青色剑首。
-   this.lineColor(g,185,248,255,200*fade,3.2);g.moveTo(x-16,top-14);g.lineTo(x+16,top-14);g.stroke();
-   this.lineColor(g,109,224,248,220*fade,2.4);g.circle(x,top+8,4);g.stroke();
-   return;
-  }
-  const age=time-started;if(age<0||age>=.32)return;
-  const a=1-age/.32,reach=170*Math.min(1,age/.05+.4);
-  blade(x-dx*reach,y-dy*reach,x+dx*22,y+dy*22,a,5.5);
-  if(age<.06){this.paint(g,245,255,255,200*(1-age/.06));g.circle(x,y,9);g.fill();}
-  this.lineColor(g,200,250,255,190*a,2.6);g.circle(x,y,8+age*95);g.stroke();
- }
+ /** 惊鸿剑改由 JinghongSwordArt 绘制（重剑精灵、停顿与剑痕）；此处只占位，避免落入通用绘制。 */
+ private jinghong(_g:Graphics,_e:any,_time:number,_zone:boolean){}
  /** One readable jade cut settles into one scar. No recurring particles or cuts. */
  drawQingpingMarks(g:Graphics,s:any,camera:{x:number;y:number}){
   if(!s?.player||s.player.hp<=0)return;
