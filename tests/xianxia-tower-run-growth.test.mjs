@@ -205,7 +205,7 @@ function target(run, range = 100) {
 
 test('growth loadouts accept all current skills, cap ranks including one-rank flight, and retain legacy validation', () => {
   const run = make({ xp: 10920, loadout: growth(maxSkills('active'), maxSkills('passive'), maxEvolutions, 3) })
-  assert.equal(Object.keys(run.state.loadout.active).length, 11)
+  assert.equal(Object.keys(run.state.loadout.active).length, 12)
   assert.equal(Object.keys(run.state.loadout.passive).length, 7)
   assert.equal(run.state.loadout.evolutions.length, 4)
   assert.equal(run.state.base.tutorialWaves, 3)

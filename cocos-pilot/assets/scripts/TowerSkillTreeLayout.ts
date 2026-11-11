@@ -53,7 +53,8 @@ export function layoutSkillTree(skills: TreeSkill[], stages: TreeStage[], availa
   const occupied = new Map<number, number>();
   for (const id of stage.skillIds) {
    if (!definitions.has(id) || seen.has(id)) continue;
-   const column = definitions.get(id)?.kind === 'passive' && !TREE_COLUMNS[0].ids.includes(id)
+   // Passives sit in the last (心法) column unless a flow column lists them explicitly.
+   const column = definitions.get(id)?.kind === 'passive' && !TREE_COLUMNS.slice(0, -1).some(c => c.ids.includes(id))
     ? columns - 1 : columnIndex.get(id);
    if (column === undefined) throw new Error(`Missing skill display column: ${id}`);
    const slot = occupied.get(column) || 0;

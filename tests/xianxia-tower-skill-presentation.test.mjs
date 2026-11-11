@@ -250,7 +250,7 @@ test('zero-price upgrades need no currency balance; paid books stay free after r
 })
 test('all definitions own explicit damage types and presentation follows metadata',()=>{
  const expected={
-  sj_yujian:'physical',sj_arc:'physical',sj_moon:'physical',sj_moon_triple:'physical',sj_cross:'physical',sj_line:'physical',sj_shadow:'hybrid',
+  sj_yujian:'physical',sj_arc:'physical',sj_moon:'physical',sj_moon_triple:'physical',sj_cross:'physical',sj_line:'physical',sj_shadow:'hybrid',sj_jinghong:'physical',
   evo_wanjian:'physical',evo_tiandi:'physical',sj_mark:'none',sj_gate:'hybrid',
   sj_wanjian:'hybrid',sj_qinglian:'hybrid',sj_formation:'hybrid',sj_sancai:'hybrid',evo_wuwo:'hybrid',evo_sixiang:'hybrid',
   sj_spirit:'none',sj_heart:'none',sj_bone:'none',vajra:'none',sj_flight:'none',

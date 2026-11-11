@@ -107,6 +107,7 @@ function presentRank(state, id) {
     sj_line: '剑气沿狭长直线贯穿敌人；精进后沿同一道剑路连续穿刺。',
     sj_qinglian: '剑气凝成三层莲瓣形剑刃，外、中、内三环每秒一轮依次展开并顺时针旋转切割，持续4秒，前3秒判定；整招伤害按外20%、中35%、内45%分配，同一目标一招合计承受36次命中，目标数不限。',
     sj_shadow: '在目标位置留下剑痕，短暂延迟后由不同方向接连斩落。',
+    sj_jinghong: '召出一柄重剑，锁定范围内的Boss，没有Boss时锁定当前血量最高的敌人，从不同方向连续穿刺；只伤锁定目标，专攻单体强敌。',
     evo_tiandi: '蓄势凝成一柄巨剑，一击劈开前方敌阵；地面裂光随后消散。',
     sj_spirit: '凝聚神识：灵力低于30%时，战斗中回灵速度大幅提升，灵力条转为青色并显示“凝神回灵”。每级另增加10点神识（10%施法速度，提高灵力上限和恢复）与4%御剑术索敌距离；同时扩大灵石、材料和地面治疗物的拾取范围。适合灵力消耗高的流派。',
     sj_heart: '提高普攻与功法的暴击几率，持续功法伤害每次独立判定；基础暴击倍率150%。',
@@ -196,7 +197,7 @@ function presentRank(state, id) {
       if (evo) cooldown = evo.cooldown
       const total = damage(raw) * (evo ? evo.cooldown / val('cooldown') * budget : 1)
       const weightedShadow = base.id === 'sj_shadow' && form.hits >= 3
-      add('hitDamage', base.id === 'sj_shadow' ? (weightedShadow ? '剑影伤害（首斩）' : '剑影伤害（每斩）') : base.id === 'sj_arc' ? '剑气伤害（首击）' : '剑气伤害（每击）', total * (base.id === 'sj_arc' || weightedShadow ? skillHitShare(base.id, parentLevel, 1) : 1 / form.hits))
+      add('hitDamage', base.id === 'sj_shadow' ? (weightedShadow ? '剑影伤害（首斩）' : '剑影伤害（每斩）') : base.id === 'sj_arc' ? '剑气伤害（首击）' : base.id === 'sj_jinghong' ? '惊鸿剑伤（每刺）' : '剑气伤害（每击）', total * (base.id === 'sj_arc' || weightedShadow ? skillHitShare(base.id, parentLevel, 1) : 1 / form.hits))
       if (weightedShadow) {
         for (let pulse = 2; pulse <= form.hits; pulse++)
           add(`shadowHit${pulse}`, `剑影伤害（第${pulse}斩）`, total * skillHitShare(base.id, parentLevel, pulse))
@@ -226,6 +227,8 @@ function presentRank(state, id) {
     if (cooldown !== null) cooldown = skillCooldown(cooldown, loadout)
     const geometryFields = flyingBlade
       ? [['reach', 'reach', '索敌距离', ''], ['target_cap', 'targetCap', '每发目标上限', ''], ['width', 'width', '刃面横宽', '']]
+      : form.shape === 'jinghong'
+        ? [['reach', 'reach', '索敌距离', ''], ['target_cap', 'targetCap', '锁定目标数', '']]
       : form.shape === 'cross-burst'
         ? [['radius', 'radius', '前方攻击距离', ''], ['target_cap', 'targetCap', '每次目标上限', '']]
       : form.shape === 'cross'
@@ -307,7 +310,7 @@ function describeForm(id, form) {
     sj_yujian: `${form.swords}把追踪飞剑`, sj_arc: `${swordQiFormName(id, form)}，${form.hits}道月牙`,
     sj_moon: '原地宽幅月弧横扫', sj_moon_triple: '斜斩、横斩、下劈三发月牙',
     sj_cross: `${swordQiFormName(id, form)}，原地爆发一次`,
-    sj_line: `${form.hits}次同路穿刺`, sj_shadow: `${form.hits}道交错剑痕`,
+    sj_line: `${form.hits}次同路穿刺`, sj_shadow: `${form.hits}道交错剑痕`, sj_jinghong: `锁定单体，${form.hits}次穿刺`,
     sj_wanjian: `${form.swords}剑环身`, sj_qinglian: '三层莲瓣剑环，每秒一轮判定', sj_formation: '双眼圆形剑阵', sj_sancai: '三剑三角阵',
     evo_wanjian: `${form.hits - 1}次向心穿刺＋1记合剑`, evo_tiandi: '一道巨剑重斩',
     evo_wuwo: `${form.swords}剑错轨巡游与近身剑意`, evo_sixiang: '四眼菱形剑阵',
@@ -338,6 +341,7 @@ function describeForm(id, form) {
   else if (form.shape === 'orbit') lines.push(`范围：剑环轨道半径${form.radius}，剑身外缘约${form.radius + form.bladeLength / 2 + form.bladeWidth / 2}${id === 'sj_wanjian' ? `，内侧约${form.innerRadius}为近身空隙` : `，内圈覆盖至半径${form.innerRadius}`}。`)
   else if (form.shape === 'triangle') lines.push(`范围：三角形内部，中心至顶点${form.radius}，最远布置距离${form.reach}。`)
   else if (form.shape === 'diamond') lines.push(`范围：菱形内部，中心至顶点${form.radius}。`)
+  else if (form.shape === 'jinghong') lines.push(`范围：索敌距离${form.reach}，只锁定1个目标；目标死亡时在${form.retargetRadius}范围内改锁。`)
   else if (form.shape === 'shadow') lines.push(`范围：落点周围半径${form.radius}内的交错剑路，剑路宽${form.width}。`)
   else lines.push(`范围：落点半径${form.radius}的圆形区域${form.reach ? `，最远布置距离${form.reach}` : ''}。`)
   const lock = {
@@ -350,6 +354,7 @@ function describeForm(id, form) {
       : '两道月牙交叉飞行，锋面共同朝向前进方向、末端后掠；离体后保持形状与方向，共用每敌一次命中，尾光无伤害。',
     sj_line: '首刺锁定起点与方向，后续穿刺沿原剑路发出。',
     sj_shadow: '出招时固定落点，后续剑痕不追随敌人。',
+    sj_jinghong: '重剑跟随锁定目标，只命中该目标；目标死亡时改锁240范围内的下一个目标，没有目标则剩余穿刺落空。',
     sj_wanjian: '飞剑沿不同轨迹护身，随人物移动；剑身扫过或敌人进入近身剑意范围时命中，同一目标每0.6秒最多受击一次。',
     sj_qinglian: '阵眼固定在施放位置，不追随人物；起阵0.8秒后爆发，持续4秒，前3秒外层16瓣、中层12瓣、内层8瓣依次各判定一轮，不限目标，不减速敌人。',
     sj_formation: '起手时锁定落点，剑阵固定在原地，不追随敌人；剑雨余光不追加伤害。',

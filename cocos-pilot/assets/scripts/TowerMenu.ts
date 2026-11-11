@@ -30,7 +30,7 @@ import { inventoryEntries } from './shared/js/xianxia/TowerInventory';
 import { TowerInventoryPanel } from './TowerInventoryPanel';
 import { TowerLibraryPanel } from './TowerLibraryPanel';
 import { layoutSkillTree } from './TowerSkillTreeLayout';
-import { TREE_BRANCHES, COMMON_SKILL_IDS, FUTURE_SKILLS, DISPLAY_STAGES, COLUMN_INDEX } from './TowerSkillTreeCatalog';
+import { TREE_BRANCHES, TREE_COLUMNS, COMMON_SKILL_IDS, FUTURE_SKILLS, DISPLAY_STAGES, COLUMN_INDEX } from './TowerSkillTreeCatalog';
 import { RESONANCE_SCHOOLS, RESONANCE_TIER_NAMES, resonanceFromRanks, resonanceSchoolOf, stateResonance } from './shared/js/xianxia/TowerResonance';
 import { skillPresentation } from './shared/js/xianxia/TowerSkillPresentation';
 
@@ -1474,7 +1474,9 @@ export class TowerMenu {
  }
  private skillFlow(id: string) {
   const school = RESONANCE_SCHOOLS.find(row => row.id === resonanceSchoolOf(id));
-  return school?.name || branches[COLUMN_INDEX[id] ?? 2]?.name || '通用';
+  // 御剑飞行等不计共鸣的技能按所在御剑列显示流派。
+  return school?.name || (TREE_COLUMNS.find(c => c.name === '御剑')?.ids.includes(id) ? '御剑' : null)
+   || branches[COLUMN_INDEX[id] ?? 2]?.name || '通用';
  }
  private skillCadence(skill: any, detailed = false) {
   if (skill.future) return '未开放';
@@ -1554,6 +1556,7 @@ export class TowerMenu {
    }
    case 'sj_line': line(-29, -29, 29, 29); sword(0, 0, -.7); break;
    case 'sj_shadow': sword(-13, -4, -.25); sword(13, 4, -.25); break;
+   case 'sj_jinghong': sword(0, 6, 0); g.circle(0, -24, 6); g.stroke(); line(-14, -24, -8, -24); line(8, -24, 14, -24); break;
    case 'sj_wanjian': ring(29); sword(0, 0, .4); break;
    case 'sj_qinglian': ring(29); ring(16); g.circle(0, 0, 4); g.stroke(); break;
    case 'sj_formation': ring(28); line(-28, 0, 28, 0); g.circle(-12, 9, 5); g.circle(12, -9, 5); g.stroke(); break;

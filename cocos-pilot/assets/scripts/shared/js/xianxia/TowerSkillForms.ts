@@ -77,6 +77,11 @@ export function skillForm(id, level = 1, parentLevel = 1, trainedLevel = level) 
         Object.assign(form, { shape: 'shadow', hits: [1, 2, 3, 4][node],
           width: 30, interval: .08, initialDelay: at(skill, 'delay', lv) })
         break
+      case 'sj_jinghong':
+        // 锁定单体，0.18秒飞抵后每0.22秒一刺；刺数随等级段 3/4/5/6。
+        Object.assign(form, { shape: 'jinghong', hits: [3, 4, 5, 6][node],
+          initialDelay: .18, interval: .22, retargetRadius: 240 })
+        break
       case 'sj_sancai':
         // 2026-11-09 用户确认（方案A）：持续6秒，每秒落一剑共6剑，三剑各落两轮。
         Object.assign(form, { shape: 'triangle', hits: 6, eyes: 3,

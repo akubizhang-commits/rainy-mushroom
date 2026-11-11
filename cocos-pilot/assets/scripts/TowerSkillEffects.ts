@@ -5,7 +5,7 @@ import {SHADOW_LIFT,shadowPreviewLine,shadowHitFeedback} from './shared/js/xianx
 import {sancaiVertices} from './shared/js/xianxia/TowerSancai';
 import {drawQinglianWindup,drawQinglianBurst} from './QinglianFormationArt';
 
-const FRIENDLY=new Set(['basic_swing','arc','cross','line','tiandi','tiandi_windup','shadow','formation','sancai','qinglian','convergence','sword_rain','orbit','wuwo','hit','gate','armor_heal','sword_charge','sword_burst_charge','sword_burst','sword_burst_hit']);
+const FRIENDLY=new Set(['jinghong','basic_swing','arc','cross','line','tiandi','tiandi_windup','shadow','formation','sancai','qinglian','convergence','sword_rain','orbit','wuwo','hit','gate','armor_heal','sword_charge','sword_burst_charge','sword_burst','sword_burst_hit']);
 /** Geometric skill presentation. Every damaging frontier comes from combat.
  * Uses one existing Graphics layer and cached colors: no per-frame nodes,
  * textures, tweens, timers, particles, random choices or gameplay writes.
@@ -25,6 +25,7 @@ export class TowerSkillEffects {
   this.orbit(g,s,orbitSprites,waist);
   for(const z of s.zones||[])if(this.handles(z)&&!formationSprites?.has(z.id)&&!shadowSprites?.has(z.id)){
    if(z.kind==='shadow'&&z.source==='sj_shadow')this.shadow(g,z,s.time,true,s.arenaVersion);
+   else if(z.kind==='jinghong')this.jinghong(g,z,s.time,true);
    else this.item(g,z,s.time,true);
   }
   for(const e of s.effects||[])if(this.handles(e)){
@@ -35,6 +36,7 @@ export class TowerSkillEffects {
     if(!shadowSprites?.has(e.id))this.shadow(g,e,s.time,false,s.arenaVersion);
     continue;
    }
+   if(e.kind==='jinghong'){this.jinghong(g,e,s.time,false);continue;}
    if(e.kind==='arc'&&arcSprites?.has(e.id))continue;
    if(e.kind==='line'&&e.source==='sj_line'&&!e.hostile)continue; // Ground qi retired; chest sword/rift owns this effect.
    if(e.kind==='tiandi'&&e.source==='evo_tiandi'&&tiandiSprites?.has(e.id))continue;
@@ -61,6 +63,29 @@ export class TowerSkillEffects {
    if(e.kind==='formation'&&(s.zones||[]).some((z:any)=>z.kind==='formation'&&z.x===e.x&&z.y===e.y))continue;
    this.item(g,e,s.time,false);
   }
+ }
+ /** 惊鸿剑：锁定期间重剑悬于目标上方指向目标；每刺一道御剑术配色的穿刺剑光，0.3秒淡出。 */
+ private jinghong(g:Graphics,e:any,time:number,zone:boolean){
+  const started=e.startedAt??time,x=e.x-this.cx,y=e.y-this.cy+36;
+  if(!Number.isFinite(x+y))return;
+  const d=Math.hypot(e.dirX??1,e.dirY??0)||1,dx=(e.dirX??1)/d,dy=(e.dirY??0)/d;
+  if(zone){
+   if(time>=e.expiresAt)return;
+   const fade=Math.min(1,(time-started)/.12)*Math.min(1,Math.max(0,(e.expiresAt-time)/.2));
+   const bob=Math.sin(time*9)*3,top=y+70+bob,tip=y+18+bob;
+   this.lineColor(g,109,224,248,40*fade,10);g.moveTo(x,top);g.lineTo(x,tip);g.stroke();
+   this.lineColor(g,109,224,248,120*fade,4);g.moveTo(x,top);g.lineTo(x,tip);g.stroke();
+   this.lineColor(g,237,255,255,230*fade,1.4);g.moveTo(x,top);g.lineTo(x,tip);g.stroke();
+   this.lineColor(g,185,248,255,170*fade,2);g.moveTo(x-9,top-10);g.lineTo(x+9,top-10);g.stroke();
+   return;
+  }
+  const age=time-started;if(age<0||age>=.3)return;
+  const a=1-age/.3,reach=110*Math.min(1,age/.06+.35);
+  const sx=x-dx*reach,sy=y-dy*reach,ex=x+dx*16,ey=y+dy*16;
+  this.lineColor(g,109,224,248,40*a,10);g.moveTo(sx,sy);g.lineTo(ex,ey);g.stroke();
+  this.lineColor(g,109,224,248,120*a,4);g.moveTo(sx,sy);g.lineTo(ex,ey);g.stroke();
+  this.lineColor(g,237,255,255,235*a,1.4);g.moveTo(sx,sy);g.lineTo(ex,ey);g.stroke();
+  this.lineColor(g,200,250,255,160*a,2);g.circle(x,y,6+age*60);g.stroke();
  }
  /** One readable jade cut settles into one scar. No recurring particles or cuts. */
  drawQingpingMarks(g:Graphics,s:any,camera:{x:number;y:number}){

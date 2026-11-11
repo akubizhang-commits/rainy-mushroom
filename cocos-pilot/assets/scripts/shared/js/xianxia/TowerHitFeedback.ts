@@ -21,6 +21,7 @@ export const HIT_PROFILES = Object.freeze({
   sj_line: { shape: 'stab', strength: 1.05, duration: .15 },
   evo_tiandi: { shape: 'cleave', strength: 1.4, duration: .18 },
   sj_shadow: { shape: 'shadow', strength: 1, duration: .18 },
+  sj_jinghong: { shape: 'stab', strength: 1.1, duration: .15 },
 })
 const skillOf = hit => hit.impact?.skill ?? (hit.source === 'shadow' ? 'sj_shadow' : hit.source)
 const started = hit => hit?.startedAt ?? hit?.expiresAt - .25

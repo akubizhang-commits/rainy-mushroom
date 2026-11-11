@@ -17,7 +17,7 @@ const thresholds = stageLevels.map(cultivationLevelXp)
 const allocation = [
   // 2026-11-09：青莲→筑基初期，三才→筑基巅峰，两仪→金丹初期；周天剑域（evo_wuwo）退役但仍留在阶段表中供旧逻辑计算。
   ['sj_arc', 'sj_yujian', 'sj_bone'], ['sj_moon', 'vajra', 'sj_wanjian'], ['sj_mark'],
-  ['sj_moon_triple', 'sj_shadow', 'sj_qinglian', 'sj_flight', 'sj_spirit'], ['sj_cross'], ['sj_gate', 'sj_sancai'],
+  ['sj_moon_triple', 'sj_shadow', 'sj_qinglian', 'sj_flight', 'sj_spirit'], ['sj_cross', 'sj_jinghong'], ['sj_gate', 'sj_sancai'],
   ['sj_line', 'sj_heart', 'sj_formation', 'evo_wanjian', 'evo_wuwo'], ['evo_tiandi'], ['evo_sixiang'],
 ]
 // 2026-11-09：剑破虚空21级、蚀骨剑意7级、一剑开天24级均与所在阶段起始等级一致，不再单列。
@@ -71,7 +71,7 @@ test('nine immutable stages cover all 30 levels with the approved 7/8/7 allocati
   assert.equal(GROWTH_STAGES.length, 9)
   assert.deepEqual(GROWTH_STAGES.map(stage => stage.skillIds), allocation)
   assert.deepEqual(['炼气', '筑基', '金丹'].map(realm =>
-    GROWTH_STAGES.filter(stage => stage.realm === realm).flatMap(stage => stage.skillIds).length), [7, 8, 7])
+    GROWTH_STAGES.filter(stage => stage.realm === realm).flatMap(stage => stage.skillIds).length), [7, 9, 7])
   assert.deepEqual(allocation.flat().slice().sort(), definitions.map(row => row.id).sort())
   for (const [i, stage] of GROWTH_STAGES.entries()) {
     assert.equal(stage.minLevel, stageLevels[i])

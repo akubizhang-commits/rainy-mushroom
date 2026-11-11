@@ -10,7 +10,7 @@ export const RESONANCE_SCHOOLS = Object.freeze([
     skills: Object.freeze(['sj_arc', 'sj_moon', 'sj_moon_triple', 'sj_cross', 'sj_line', 'evo_tiandi']),
     tiers: Object.freeze([Object.freeze([4, .20]), Object.freeze([8, .28]), Object.freeze([18, .34])]) }),
   Object.freeze({ id: 'yujian', name: '御剑',
-    skills: Object.freeze(['sj_yujian', 'sj_shadow', 'evo_wanjian']),
+    skills: Object.freeze(['sj_yujian', 'sj_shadow', 'sj_jinghong', 'evo_wanjian']),
     tiers: Object.freeze([Object.freeze([5, .12]), Object.freeze([11, .22]), Object.freeze([17, .30])]) }),
   Object.freeze({ id: 'formation', name: '剑阵',
     skills: Object.freeze(['sj_wanjian', 'sj_qinglian', 'sj_sancai', 'sj_formation', 'evo_sixiang']),

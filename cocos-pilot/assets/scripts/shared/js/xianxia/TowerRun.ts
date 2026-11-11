@@ -57,14 +57,14 @@ const GROWTH_LIMITS = Object.fromEntries(['active', 'passive'].map(kind =>
   [kind, GROWTH_SKILLS.filter(skill => skill.kind === kind).length]))
 const GEVO = Object.fromEntries(COMBAT_EVOLUTIONS.map(e => [e.id, e]))
 const WEAPONS = ['eq_sword_suwen', 'eq_sword_qingxiao', 'eq_sword_zhenyue']
-const DIRECT_CAST_SKILLS = ['basic_attack', 'sj_yujian', 'sj_arc', 'sj_moon', 'sj_moon_triple', 'sj_cross', 'sj_line', 'sj_shadow']
+const DIRECT_CAST_SKILLS = ['basic_attack', 'sj_yujian', 'sj_arc', 'sj_moon', 'sj_moon_triple', 'sj_cross', 'sj_line', 'sj_shadow', 'sj_jinghong']
 const SWORD_QI_SOURCES = ['sj_moon', 'sj_moon_triple', 'sj_cross']
 const SWORD_QI_TAIL = .36
 // Zone/render names are not skill IDs. Resolve them before asking the shared
 // weapon module for S/F attribution; already-scaled wound/gate never enter it.
 const WEAPON_SOURCES = {
   sword_burst: 'sj_gate', gate: 'sj_gate',
-  shadow: 'sj_shadow', formation: 'sj_formation', sancai: 'sj_sancai', orbit: 'sj_wanjian',
+  shadow: 'sj_shadow', formation: 'sj_formation', sancai: 'sj_sancai', orbit: 'sj_wanjian', jinghong: 'sj_jinghong',
   sword_rain: 'sj_yujian', rain: 'sj_yujian',
   evo_wanjian: 'sj_yujian', evo_tiandi: 'sj_line',
   evo_wuwo: 'sj_wanjian', evo_sixiang: 'sj_formation',
@@ -137,6 +137,14 @@ function inPolygon(p, vertices, radius = 0) {
     sign = Math.sign(cross)
   }
   return inside
+}
+
+// 惊鸿剑：Boss优先，其次当前血量最高；同血量保持原有距离顺序。
+function jinghongTarget(targets) {
+  let best = null
+  for (const e of targets) if (!best || (e.role === 'boss') > (best.role === 'boss')
+    || (e.role === 'boss') === (best.role === 'boss') && e.hp > best.hp + EPS) best = e
+  return best
 }
 
 function formFor(id, level, loadout) {
@@ -322,7 +330,7 @@ function validWeaponState(s, legacy) {
   // source must not bypass cast accounting or borrow another skill's affixes.
   if (s.projectiles.some(p => !p.hostile && !['sj_yujian', ...SWORD_QI_SOURCES].includes(p.source))
     || s.zones.some(z => !z.hostile && !z.renderOnly
-      && (!['shadow', 'formation', 'sancai', 'sword_rain', 'qinglian'].includes(z.kind)
+      && (!['shadow', 'formation', 'sancai', 'sword_rain', 'qinglian', 'jinghong'].includes(z.kind)
         || z.direct !== !['formation', 'sancai'].includes(z.kind)))) return false
   if (!object(w) || Object.keys(w).sort().join(',') !==
     'casts,effectiveCasts,entryMaxHp,focusCount,nextCastId,ringId'
@@ -414,7 +422,7 @@ function validFormCast(c, time) {
 function validFormZone(z) {
   if (z.formId === undefined) return z.castContext?.loadout?.growthVersion !== 1
     && z.pulseCount === undefined && z.pulseIndex === undefined
-  const parents = { shadow: 'sj_shadow', formation: 'sj_formation', sancai: 'sj_sancai', sword_rain: 'sj_yujian', qinglian: 'sj_qinglian' }
+  const parents = { shadow: 'sj_shadow', formation: 'sj_formation', sancai: 'sj_sancai', sword_rain: 'sj_yujian', qinglian: 'sj_qinglian', jinghong: 'sj_jinghong' }
   const parent = parents[z.kind], loadout = z.castContext?.loadout
   if (!parent || loadout?.growthVersion !== 1 || z.parentLevel !== loadout.active[parent]) return false
   const special = z.kind === 'sword_rain'
@@ -439,6 +447,7 @@ function validFormZone(z) {
     && (parent !== 'sj_sancai' || !z.hostile && z.direct === false)
     && z.phase === (z.pulseIndex ? 'active' : 'windup')
     && (!special || finite(z.originX) && finite(z.originY))
+    && (parent !== 'sj_jinghong' || typeof z.targetId === 'string' && z.direct === true)
 }
 
 // Piercing receipts outlive temporary actors. The allocation ledger retains
@@ -791,7 +800,7 @@ export function validateTowerSnapshot(s, legacy = false) {
         && s.enemies.some(e => e.id === z.ownerId && e.ai.attack?.id === z.attackId)
         && ['toX', 'toY', 'width', 'angle', 'faceX', 'faceY'].every(k => finite(z[k]))
         && typeof z.locked === 'boolean' && ['circle', 'capsule', 'sector'].includes(z.shape)
-      return ['shadow', 'formation', 'sancai', 'sword_rain', 'qinglian', 'web', 'stone'].includes(z.kind)
+      return ['shadow', 'formation', 'sancai', 'sword_rain', 'qinglian', 'jinghong', 'web', 'stone'].includes(z.kind)
         && finite(z.damage) && z.damage >= 0 && finite(z.nextAt) && finite(z.interval) && z.interval > 0
         // Authored zones are checked against their exact form by validFormZone.
         // Keep the legacy bound only for zones without a form (rank2 rain has 25 pulses).
@@ -1537,6 +1546,7 @@ export class TowerRun {
     const targets = this._targets(p, reach * (id === 'sj_yujian' ? 1 + this._passive('sj_spirit', 'reach_bonus') : 1))
     if (id === 'sj_sancai') return sancaiTarget(targets, p, form.radius,
       (a, b) => this.state.arenaVersion !== 1 || pillarSight(a, b))
+    if (id === 'sj_jinghong') return jinghongTarget(targets)
     return id === 'sj_yujian' ? targets.find(e => this._yujianUnreservedHp(e, outgoing) > EPS
       && this._yujianDamage(e, 1, this.state.loadout) > EPS) : targets[0]
   }
@@ -1777,6 +1787,15 @@ export class TowerRun {
         { ...formGeometry(form, c.pulseIndex, s.time), radius: form.width / 2, reach,
           dirX: dir.x, dirY: dir.y, faceX: dir.x, faceY: dir.y, toX: end.x, toY: end.y,
           targetIds: targets.map(e => e.id) })
+    } else if (id === 'sj_jinghong') {
+      // The locked sword follows its target; each thrust is resolved in _jinghongPulse.
+      const target = this._skillTarget(id, form, outgoing)
+      if (!target) return
+      const lock = facing(target.x - p.x, target.y - p.y, dir.x, dir.y)
+      this._zone('jinghong', target.x, target.y, form.radius, base / form.hits, form.initialDelay,
+        form.hits, form.targetCap, form.interval, false, true, { ...formGeometry(form, 0, s.time),
+          formId: form.id, formLevel: c.level, parentLevel: c.level, targetId: target.id,
+          originX: p.x, originY: p.y, dirX: lock.x, dirY: lock.y, faceX: lock.x, faceY: lock.y, ...context })
     } else if (id === 'sj_qinglian') {
       // The formation stays where it was cast. Its three judgment rounds are resolved in _qinglianPulse.
       this._zone('qinglian', p.x, p.y, form.radius, base, 0, form.hits, form.targetCap,
@@ -2026,6 +2045,7 @@ export class TowerRun {
     const s = this.state, form = skillForm(z.formId, z.formLevel, z.parentLevel,
       z.castContext?.loadout?.trainedSkills?.active?.[z.formId] ?? z.parentLevel)
     if (z.kind === 'qinglian') return this._qinglianPulse(z, form, outgoing)
+    if (z.kind === 'jinghong') return this._jinghongPulse(z, form, outgoing)
     const pulse = ++z.pulseIndex
     let origin = z, end = null, width = form.width, kind = z.kind, shape = form.shape
     let targets, terminal = false
@@ -2107,6 +2127,25 @@ export class TowerRun {
     this._effect('qinglian', z.x, z.y, form.radius,
       { ...formGeometry(form, pulse, s.time), shape: 'lotus', rings: form.rings,
         targetIds: rows.map(row => row.e.id) })
+  }
+
+  // One thrust per pulse on the locked enemy only. A dead or missing target is
+  // replaced by the Boss/highest-HP enemy near the sword; with none, the thrust misses.
+  _jinghongPulse(z, form, outgoing) {
+    const s = this.state, pulse = ++z.pulseIndex
+    let e = s.enemies.find(item => item.id === z.targetId && item.hp > 0)
+    if (!e) e = jinghongTarget(this._targets(z, form.retargetRadius))
+    if (!e) return
+    z.targetId = e.id; z.x = e.x; z.y = e.y
+    // Thrusts come from alternating sides of the original lock direction.
+    const turn = [0, .9, -.9, .45, -.45, 0][(pulse - 1) % 6]
+    const base = Math.atan2(z.dirY, z.dirX) + turn
+    const dirX = Math.cos(base), dirY = Math.sin(base)
+    outgoing.push({ target: e.id, damage: z.damage, direct: true, source: 'sj_jinghong',
+      impact: { skill: form.id, dirX, dirY, pulseIndex: pulse, pulseCount: form.hits, castId: z.id },
+      castContext: z.castContext, weaponCastId: z.weaponCastId })
+    this._effect('jinghong', e.x, e.y, e.radius, { ...formGeometry(form, pulse, s.time),
+      dirX, dirY, faceX: dirX, faceY: dirY, expiresAt: s.time + .3, targetIds: [e.id] })
   }
 
   _zones(incoming, outgoing, onCast) {

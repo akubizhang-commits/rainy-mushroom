@@ -57,6 +57,8 @@ SCHOOLS.formationWY = [['sj_wanjian', 10], ['evo_wuwo', 2], ['sj_qinglian', 6], 
 SCHOOLS.formationQL = [['sj_wanjian', 10], ['sj_qinglian', 10], ['sj_sancai', 6], ['sj_formation', 10], ['evo_sixiang', 2], ['sj_sancai', 10], ['evo_wuwo', 2], ['sj_arc', 10]]
 // formationQL 会先把青莲点满，导致后期买不到两仪。formationQL2 青莲先点到 6，两仪开放后优先两仪，更接近真实玩家。
 SCHOOLS.formationQL2 = [['sj_wanjian', 10], ['sj_qinglian', 6], ['sj_sancai', 6], ['sj_formation', 10], ['evo_sixiang', 2], ['sj_qinglian', 10], ['sj_sancai', 10], ['evo_wuwo', 2], ['sj_arc', 10]]
+// 2026-11-09：御剑流加入筑基中期惊鸿剑后的路线。分光先到6，惊鸿剑开放后优先点满。
+SCHOOLS.yujianJH = [['sj_yujian', 10], ['sj_shadow', 6], ['sj_jinghong', 10], ['evo_wanjian', 2], ['sj_shadow', 10], ['sj_arc', 10]]
 // Mixed builds: formation core plus a second school's skills (does mixing beat staying in one school?)
 SCHOOLS.mixA = [['sj_wanjian', 10], ['sj_formation', 10], ['evo_sixiang', 2], ['sj_yujian', 10], ['sj_sancai', 10], ['sj_arc', 10]]
 SCHOOLS.mixB = [['sj_wanjian', 10], ['sj_formation', 10], ['evo_sixiang', 2], ['sj_shadow', 10], ['sj_sancai', 10], ['sj_arc', 10]]

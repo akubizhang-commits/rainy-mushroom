@@ -5,8 +5,8 @@ import { MANA_COSTS } from '../../js/xianxia/TowerCharacterStats.js'
 const S = Object.fromEntries(GROWTH_SKILLS.map(s => [s.id, s])), E = Object.fromEntries(GROWTH_EVOLUTIONS.map(s => [s.id, s]))
 const v = (s, k, lv) => Array.isArray(s[k]) ? s[k][lv - 1] : s[k]
 const f = n => n == null ? '—' : n >= 100 ? n.toFixed(0) : n >= 10 ? n.toFixed(1) : n.toFixed(2)
-const ids = ['sj_arc','sj_moon','sj_moon_triple','sj_cross','sj_line','sj_yujian','sj_shadow','sj_wanjian','sj_qinglian','sj_sancai','sj_formation']
-const school = { sj_arc:'通用', sj_moon:'剑气', sj_moon_triple:'剑气', sj_cross:'剑气', sj_line:'剑气', sj_yujian:'御剑', sj_shadow:'御剑', sj_wanjian:'剑阵', sj_qinglian:'剑阵', sj_sancai:'剑阵', sj_formation:'剑阵' }
+const ids = ['sj_arc','sj_moon','sj_moon_triple','sj_cross','sj_line','sj_yujian','sj_shadow','sj_jinghong','sj_wanjian','sj_qinglian','sj_sancai','sj_formation']
+const school = { sj_arc:'通用', sj_moon:'剑气', sj_moon_triple:'剑气', sj_cross:'剑气', sj_line:'剑气', sj_yujian:'御剑', sj_shadow:'御剑', sj_jinghong:'御剑', sj_wanjian:'剑阵', sj_qinglian:'剑阵', sj_sancai:'剑阵', sj_formation:'剑阵' }
 function row(id, lv) {
   const s = S[id], form = skillForm(id, lv, 1, lv), d = v(s, 'damage', lv), cd = id === 'sj_yujian' ? 1 : s.cooldown
   let total = d, cap = form.targetCap ?? v(s, 'target_cap', lv), note = ''

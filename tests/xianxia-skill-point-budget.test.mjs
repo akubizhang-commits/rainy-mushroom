@@ -18,7 +18,7 @@ function fixture(patch={}){
 }
 test('every skill charges and refunds its fixed price through max rank and reload',()=>{
  const prices={sj_arc:1,sj_wanjian:1,sj_qinglian:1,sj_yujian:1,sj_cross:1,sj_moon:1,sj_moon_triple:1,sj_sancai:1,sj_spirit:1,sj_heart:1,vajra:1,
-  sj_line:1,sj_shadow:1,sj_formation:1,sj_mark:1,sj_bone:1,sj_gate:1,sj_flight:1,
+  sj_line:1,sj_shadow:1,sj_jinghong:1,sj_formation:1,sj_mark:1,sj_bone:1,sj_gate:1,sj_flight:1,
   evo_wanjian:2,evo_wuwo:4,evo_tiandi:2,evo_sixiang:4}
  // 2026-11-09：周天剑域（evo_wuwo）并入周天剑阵后退役，不可学习。
  for(const d of [...GROWTH_SKILLS,...GROWTH_EVOLUTIONS].filter(d=>d.id!=='evo_wuwo')){

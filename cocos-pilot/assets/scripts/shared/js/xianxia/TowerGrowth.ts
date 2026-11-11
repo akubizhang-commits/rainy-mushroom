@@ -23,7 +23,8 @@ export const GROWTH_STAGES = freeze([
   // 2026-11-09 用户确认：青莲剑阵→筑基初期，三才剑阵→筑基巅峰，两仪剑阵→金丹初期；周天剑域并入周天剑阵后退役。
   { id: 'lianqi-peak', realm: '炼气', phase: '巅峰', skillIds: ['sj_mark'] },
   { id: 'zhuji-early', realm: '筑基', phase: '初期', skillIds: ['sj_moon_triple', 'sj_shadow', 'sj_qinglian', 'sj_flight', 'sj_spirit'] },
-  { id: 'zhuji-middle', realm: '筑基', phase: '中期', skillIds: ['sj_cross'] },
+  // 2026-11-09 用户确认：新增御剑流筑基中期单体功法惊鸿剑（方案A）。
+  { id: 'zhuji-middle', realm: '筑基', phase: '中期', skillIds: ['sj_cross', 'sj_jinghong'] },
   { id: 'zhuji-peak', realm: '筑基', phase: '巅峰', skillIds: ['sj_gate', 'sj_sancai'] },
   { id: 'jindan-early', realm: '金丹', phase: '初期', skillIds: ['sj_line', 'sj_heart', 'sj_formation', 'evo_wanjian', 'evo_wuwo'] },
   { id: 'jindan-middle', realm: '金丹', phase: '中期', skillIds: ['evo_tiandi'] },
@@ -76,7 +77,7 @@ const oldSkills = new Map(SKILLS.map(skill => [skill.id, skill]))
 // Hybrid spends one attack budget equally on physical and spell damage.
 // Sword scars use their own hybrid budget; utility buffs deal no damage.
 const damageTypes = {
-  sj_yujian: 'physical', sj_arc: 'physical', sj_moon: 'physical', sj_moon_triple: 'physical', sj_cross: 'physical', sj_line: 'physical', sj_shadow: 'hybrid',
+  sj_yujian: 'physical', sj_arc: 'physical', sj_moon: 'physical', sj_moon_triple: 'physical', sj_cross: 'physical', sj_line: 'physical', sj_shadow: 'hybrid', sj_jinghong: 'physical',
   sj_wanjian: 'hybrid', sj_formation: 'hybrid', sj_sancai: 'hybrid', sj_qinglian: 'hybrid',
   sj_mark: 'none', sj_gate: 'hybrid',
   sj_spirit: 'none', sj_heart: 'none', sj_bone: 'none', vajra: 'none', sj_flight: 'none',
@@ -223,6 +224,14 @@ export const GROWTH_SKILLS = freeze([
     target_cap: 3, single_dps_factor: 1 / 6, hit_assumption: .5,
     rule: '固定落点；留印0.65秒后首斩，后续每0.08秒交错斩击，1/3/6/10级共1/2/3/4斩；每斩最多3目标。1–5级各斩平分，6级和10级保留上一级各斩伤害，新增斩承接升级增量；同段数期间各斩同比成长，总伤害预算不变。',
   }),
+  // 2026-11-09 用户确认（方案A）：御剑流筑基中期单体功法。锁定范围内的Boss（无Boss时取当前血量最高者），
+  // 一柄重剑连续穿刺；1–2/3–5/6–9/10级3/4/5/6刺，各刺平分整招伤害，只打锁定目标。目标死亡时就近改锁。
+  skill('sj_jinghong', {
+    damage: damageCurve(11.7, 1.18), cooldown: 8, windup: .3,
+    reach: 420, radius: 40, target_cap: 1,
+    single_dps_factor: 1 / 8, hit_assumption: .85,
+    rule: '锁定420范围内的Boss，无Boss时锁定当前血量最高的敌人；0.18秒后重剑连续穿刺，每0.22秒一刺，1/3/6/10级共3/4/5/6刺，各刺平分整招伤害，只命中锁定目标；锁定目标死亡时改锁240范围内的下一个目标，没有目标则该刺落空。',
+  }, { name: '惊鸿剑', kind: 'active', clear: 0 }),
   skill('sj_sancai', {
     slow_fraction: FORMATION_SLOWS.sj_sancai,
     // 2026-11-09：冷却8→10秒，每次施放伤害不变（先测试再看）。

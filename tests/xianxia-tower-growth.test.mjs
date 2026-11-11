@@ -37,9 +37,9 @@ test('explicit playtest bonus extends available SP without changing natural sour
 })
 
 test('growth rows retain level-addressable effects without changing the legacy five-level catalog', () => {
-  assert.deepEqual(GROWTH_SKILLS.filter(row => !['sj_flight', 'sj_cross', 'sj_spirit','sj_moon','sj_moon_triple','sj_sancai','sj_qinglian'].includes(row.id)).map(row => row.id), SKILLS.filter(row => row.id !== 'magnet').map(row => row.id))
+  assert.deepEqual(GROWTH_SKILLS.filter(row => !['sj_flight', 'sj_cross', 'sj_spirit','sj_moon','sj_moon_triple','sj_sancai','sj_qinglian','sj_jinghong'].includes(row.id)).map(row => row.id), SKILLS.filter(row => row.id !== 'magnet').map(row => row.id))
   assert.deepEqual(GROWTH_EVOLUTIONS.map(row => row.id), EVOLUTIONS.map(row => row.id))
-  for (const row of GROWTH_SKILLS.filter(row => !['sj_flight', 'sj_cross', 'sj_spirit','sj_moon','sj_moon_triple','sj_sancai','sj_qinglian'].includes(row.id))) {
+  for (const row of GROWTH_SKILLS.filter(row => !['sj_flight', 'sj_cross', 'sj_spirit','sj_moon','sj_moon_triple','sj_sancai','sj_qinglian','sj_jinghong'].includes(row.id))) {
     const max = row.kind === 'active' ? 10 : row.id === 'sj_mark' ? 1 : row.id === 'sj_gate' ? 2 : 4
     assert.equal(row.maxLevel, max)
     assert.equal(row.pointCosts.length, max)
@@ -118,9 +118,9 @@ test('all fully invested nodes cost 142 after the starter gift, and an overspend
     skills: Object.fromEntries(GROWTH_SKILLS.map(row => [row.id, row.maxLevel])),
     evolutionRanks: Object.fromEntries(GROWTH_EVOLUTIONS.map(row => [row.id, 2])),
   })
-  // 152 = former 142 plus 青莲剑阵 at ten ranks, one point each.
-  assert.equal(spentPoints(full), 152)
-  assert.equal(growthSummary(full).available, -117)
+  // 162 = former 142 plus 青莲剑阵 and 惊鸿剑 at ten ranks, one point each.
+  assert.equal(spentPoints(full), 162)
+  assert.equal(growthSummary(full).available, -127)
   const extra = state({ skills: { ...giftSkills(3), sj_line: 10, sj_shadow: 10, sj_formation: 10, sj_wanjian: 10 } })
   assert.equal(quote(extra, 'vajra').reason, 'insufficient-points')
 })

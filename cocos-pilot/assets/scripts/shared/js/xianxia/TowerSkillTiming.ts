@@ -47,7 +47,7 @@ export function skillCastTime(seconds, loadout, scalable = false) {
 // remain in the form data and never pass through this table.
 export const CAST_ACTIONS = Object.freeze({
   sj_yujian: [.20, .08], sj_arc: [.18, .06], sj_moon: [.18, .06], sj_moon_triple: [.18, .08], sj_cross: [.30, .08],
-  sj_wanjian: [.18, .06], sj_qinglian: [.8, .4], sj_line: [.35, .08], sj_shadow: [.15, .05],
+  sj_wanjian: [.18, .06], sj_qinglian: [.8, .4], sj_line: [.35, .08], sj_shadow: [.15, .05], sj_jinghong: [.30, .08],
   sj_sancai: [.25, .05], sj_formation: [.35, .08], evo_wanjian: [.35, .10],
   evo_wuwo: [.20, .05], evo_tiandi: [.45, .10], evo_sixiang: [.45, .10],
 })
