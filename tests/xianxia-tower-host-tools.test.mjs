@@ -1738,7 +1738,7 @@ for (const frame of [{ width: 1280, height: 720 }, { width: 844, height: 390 }, 
     press(game, '功法'); expandFutureRealms(game)
     for (const [id, category, flow] of [
       ['sj_yujian', '物理攻击', '御剑'], ['sj_arc', '物理攻击', '剑气'],
-      ['sj_wanjian', '物理＋法术攻击', '剑阵'], ['sj_qinglian', '物理＋法术攻击', '剑阵'], ['sj_gate', '物理＋法术攻击', '通用'],
+      ['sj_wanjian', '物理＋法术攻击', '剑阵'], ['sj_qinglian', '物理＋法术攻击', '剑阵'], ['sj_gate', '物理＋法术攻击', '剑气'],
       ['vajra', '被动功法', '通用'], ['future_yingling', '辅助', '通用'],
     ]) {
       press(game, `功法节点-${id}`)

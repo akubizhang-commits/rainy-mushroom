@@ -2,8 +2,9 @@ import { GROWTH_STAGES } from './shared/js/xianxia/TowerGrowth';
 
 /** Fixed display slots only; these columns never grant skills or add prerequisites. */
 export const TREE_COLUMNS = [
- { name: '通用', ids: ['sj_mark', 'sj_gate', 'future_qianying'] },
- { name: '剑气', ids: ['sj_arc', 'sj_moon', 'sj_moon_triple', 'sj_cross', 'sj_line', 'evo_tiandi', 'future_taixu', 'future_shenxiao', 'future_liexu'] },
+ { name: '通用', ids: ['future_qianying'] },
+ // 2026-11-09：蚀骨剑意、剑罡爆裂移入剑气列（仍是被动，不计共鸣）。
+ { name: '剑气', ids: ['sj_arc', 'sj_moon', 'sj_mark', 'sj_moon_triple', 'sj_cross', 'sj_gate', 'sj_line', 'evo_tiandi', 'future_taixu', 'future_shenxiao', 'future_liexu'] },
  // 85号：分光连斩归入御剑流派，参与御剑共鸣。
  // 2026-11-09：新增惊鸿剑（参与御剑共鸣）；御剑飞行移入御剑列，仍是被动，不计共鸣。
  { name: '御剑', ids: ['sj_yujian', 'sj_shadow', 'sj_jinghong', 'evo_wanjian', 'sj_flight'] },
@@ -13,14 +14,14 @@ export const TREE_COLUMNS = [
 
 /** Display-only grouping from approved proposal 38; never a purchase prerequisite. */
 export const TREE_BRANCHES = [
- { name: '剑气', ids: ['sj_arc', 'sj_moon', 'sj_moon_triple', 'sj_cross', 'sj_line', 'sj_mark', 'evo_tiandi'] },
+ { name: '剑气', ids: ['sj_arc', 'sj_moon', 'sj_moon_triple', 'sj_cross', 'sj_line', 'sj_mark', 'sj_gate', 'evo_tiandi'] },
  { name: '剑阵', ids: ['sj_wanjian', 'sj_qinglian', 'sj_sancai', 'sj_formation', 'evo_sixiang'] },
 ];
 
 /** Shared display membership: each existing skill appears and is purchased once. */
 export const COMMON_SKILL_IDS = [
  'sj_yujian', 'sj_spirit', 'sj_shadow', 'sj_jinghong', 'evo_wanjian', 'sj_heart',
- 'sj_bone', 'sj_gate', 'vajra', 'sj_flight',
+ 'sj_bone', 'vajra', 'sj_flight',
 ];
 
 export type FutureSkill = {

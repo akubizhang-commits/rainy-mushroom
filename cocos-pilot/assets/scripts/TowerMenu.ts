@@ -1474,8 +1474,8 @@ export class TowerMenu {
  }
  private skillFlow(id: string) {
   const school = RESONANCE_SCHOOLS.find(row => row.id === resonanceSchoolOf(id));
-  // 御剑飞行等不计共鸣的技能按所在御剑列显示流派。
-  return school?.name || (TREE_COLUMNS.find(c => c.name === '御剑')?.ids.includes(id) ? '御剑' : null)
+  // 不计共鸣的被动（御剑飞行、蚀骨剑意、剑罡爆裂）按所在流派列显示流派。
+  return school?.name || TREE_COLUMNS.find(c => ['剑气', '御剑', '剑阵'].includes(c.name) && c.ids.includes(id))?.name
    || branches[COLUMN_INDEX[id] ?? 2]?.name || '通用';
  }
  private skillCadence(skill: any, detailed = false) {

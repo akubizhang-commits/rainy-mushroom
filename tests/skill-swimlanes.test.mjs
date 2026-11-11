@@ -25,7 +25,7 @@ test('every current skill stays at its approved phase and column, with genuine b
   ['sj_yujian','lianqi-early',2],['vajra','lianqi-middle',4],
   ['sj_cross','zhuji-middle',1],['sj_heart','jindan-early',4],
   ['sj_line','jindan-early',1],['sj_formation','jindan-early',3],['sj_shadow','zhuji-early',2],['sj_flight','zhuji-early',2],['sj_jinghong','zhuji-middle',2],
-  ['sj_bone','lianqi-early',4],['sj_mark','lianqi-peak',0],['sj_gate','zhuji-peak',0],
+  ['sj_bone','lianqi-early',4],['sj_mark','lianqi-peak',1],['sj_gate','zhuji-peak',1],
   ['evo_wanjian','jindan-early',2],['evo_tiandi','jindan-middle',1],['evo_sixiang','jindan-peak',3],
  ]
  assert.equal(layout.columns,5)
