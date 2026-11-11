@@ -78,3 +78,4 @@
 - 蟒王/蛇女、蛛姬、蝠妖行走：11-08 用 Scenario 接入（30 CU），见 xianxia-walks-2026-11-07/README-11-08.md。A 表的行走缺口已全部补齐；这些形态的普攻和技能仍是立绘。
 - Boss 技能第一批：11-09 用 Scenario 接入（40 CU）。熊王 M07 stomp、M04 guard，犀王 M07 stomp，牛魔王 M15 roar，见 xianxia-boss-skills-2026-11-09。仍是立绘的 Boss 技能：熊王 M09、M02，犀王 M20（开始冲锋前），牛魔王 M19、M05，以及各精英技能。
 - 熊王 M09 heave：11-09 晚用 Meowa 接入（15 积分），见 xianxia-boss-skills-2026-11-09b。明日五条请求已备好：xianxia-boss-skills-2026-11-10-prep。
+- 第二批技能：11-11 用 Scenario 接入（50 CU）。牛魔王 M19 channel、犀王 M20 brace、狼妖精英 M05 howl、虎妖和隼妖精英 M07 stomp，见 xianxia-boss-skills-2026-11-11。仍是立绘的技能：牛魔王 M05、熊妖精英 M02、蝠妖精英 M07、白虎 M06/M01/M19/M02、鳄王 M12/M02、蛛姬和蛇女的技能（M16 等关键帧），以及所有射击。
