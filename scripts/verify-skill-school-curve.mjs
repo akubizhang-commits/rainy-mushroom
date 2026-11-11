@@ -33,6 +33,7 @@ const ENTRY = {
   8: { xp: 8707, gear: ['eq_sword_qiyao', 'eq_armor_wuyin', 'eq_ring_taihe'] },
   9: { xp: 10732, gear: ['eq_sword_qiyao', 'eq_armor_wuyin', 'eq_ring_taihe'] },
 }
+// --xp=N 覆盖入场修为（用于27–30级、学四象后的F9复测）。
 // Buy order with target ranks. Items that are gated are skipped and retried after other purchases.
 const SCHOOLS = {
   // 剑气玩家优先点剑气专属的玄月斩，流云斩是所有流派共用的过渡技能。
@@ -74,7 +75,7 @@ function fixture(floor) {
   const disk = { getItem: k => k === TOWER_CAMPAIGN_KEY ? raw : null, setItem: (k, v) => { raw = v } }
   let store = new TowerCampaignStore(disk, 0); store.act({ type: 'sync' }, 0)
   const env = JSON.parse(raw)
-  const state = { ...structuredClone(store.state), skillsInitialized: true, skills: { sj_arc: 1 }, xp: entry.xp,
+  const state = { ...structuredClone(store.state), skillsInitialized: true, skills: { sj_arc: 1 }, xp: Number(option('xp', entry.xp)),
     clearedFloor: floor - 1, spiritStones: 50000 }
   if (entry.gear) {
     const [w, a, r] = entry.gear
