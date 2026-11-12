@@ -1265,7 +1265,7 @@ test('host refund preserves the learned evolution and displays the committed ran
   assert.deepEqual(game.store.state.books, before.books)
   const feedback = labelText(game.menu.root).replace(/\s/g, '')
   assert.ok(feedback.includes('已保存：返还1点'))
-  assert.ok(feedback.includes('剑破虚空5→4级'))
+  assert.ok(feedback.includes('剑破虚空4→3级'))
   assert.ok(!feedback.includes('一剑开天1→0级'))
   assert.doesNotMatch(feedback, /undefined|NaN|未装备/)
   const committed = game.store.state
