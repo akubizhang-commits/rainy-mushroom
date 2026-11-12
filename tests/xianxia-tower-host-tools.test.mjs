@@ -1230,8 +1230,8 @@ test('host refund preserves the learned evolution and displays the committed ran
   const storage = disk()
   seed(storage, { patch: {
     xp: 10920, clearedFloor: 9, tutorialWaves: 3, researchPurchases: 0,
-    // 2026-11-09：流云斩不计共鸣；逐月斩1＋剑破虚空5＋一剑开天2＝8点，正好剑气二重。
-    skills: { sj_yujian: 1, sj_arc: 2, sj_moon_triple: 1, sj_wanjian: 1, sj_line: 5, sj_mark: 1 },
+    // 2026-11-09：流云斩不计共鸣；剑破虚空4＋一剑开天2＝6点，正好剑气二重。
+    skills: { sj_yujian: 1, sj_arc: 2, sj_wanjian: 1, sj_line: 4, sj_mark: 1 },
     books: ['sj_line', 'sj_mark', 'evo_tiandi'],
     evolutionRanks: { evo_tiandi: 1 }, evolutions: ['evo_tiandi'],
   } })
@@ -1258,7 +1258,7 @@ test('host refund preserves the learned evolution and displays the committed ran
   const staleClick = button(game, 'decreaseSkill-sj_line').events.get(Button.EventType.CLICK)
   press(game, 'decreaseSkill-sj_line')
   assert.equal(game.store.state.skills.sj_arc, 2)
-  assert.equal(game.store.state.skills.sj_line, 4)
+  assert.equal(game.store.state.skills.sj_line, 3)
   assert.equal(game.store.state.evolutionRanks.evo_tiandi, 1)
   assert.equal(game.store.state.skills.sj_mark, 1)
   assert.equal(game.store.state.spiritStones, before.spiritStones)
