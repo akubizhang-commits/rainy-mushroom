@@ -1400,7 +1400,8 @@ export class TowerMenu {
   const schoolId = resonanceSchoolOf(skill.id);
   const before = stateResonance(this.state);
   const after = resonanceFromRanks(this.resonanceRanks([{ id: skill.id, to: this.skillLevel(skill) + 1 }]));
-  if (before.main && after.main !== before.main) return `主修将变为${this.resonanceName(after.main)}`;
+  // A main-school switch only matters when a bonus is active; +0% labels are not worth a warning.
+  if (before.main && before.bonus > 0 && after.main !== before.main) return `主修将变为${this.resonanceName(after.main)}`;
   if (!schoolId) return '';
   const a = before.schools.find((row: any) => row.id === schoolId), b = after.schools.find((row: any) => row.id === schoolId);
   if (b.tier > a.tier) return `达成${b.name}${RESONANCE_TIER_NAMES[b.tier]}`
@@ -1409,7 +1410,7 @@ export class TowerMenu {
  }
  private resonanceLoss(changes: { id: string; to: number }[]) {
   const before = stateResonance(this.state), after = resonanceFromRanks(this.resonanceRanks(changes));
-  if (!before.main) return '';
+  if (!before.main || !(before.bonus > 0)) return '';
   const name = this.resonanceName(before.main);
   if (after.main !== before.main) return after.main ? `主修将变为${this.resonanceName(after.main)}` : `${name}共鸣失效`;
   if (after.tier < before.tier) return `${name}共鸣降为${RESONANCE_TIER_NAMES[after.tier] || '无'}`;
@@ -1472,7 +1473,7 @@ export class TowerMenu {
     20, main && school.tier === index + 1 ? C.primary : C.text, false, 4);
   });
   if (school.next !== null) this.skillCopy(`再投入${school.next - school.points}点达到${RESONANCE_TIER_NAMES[school.tier + 1]}`, 20, C.primary, false, 8);
-  this.skillCopy('只有投入最多的流派共鸣生效。只计功法与进阶的悟道点；心法、通用技能和开局赠送的流云斩1级不计入。', 18, C.muted, false, 8);
+  this.skillCopy('只有共鸣加成最高的流派生效（加成相同时比投入点数）。只计主动功法与进阶的悟道点；被动技能和流云斩不计入。', 18, C.muted, false, 8);
  }
  private skillFlow(id: string) {
   const school = RESONANCE_SCHOOLS.find(row => row.id === resonanceSchoolOf(id));

@@ -2,12 +2,12 @@ import { GROWTH_STAGES } from './shared/js/xianxia/TowerGrowth';
 
 /** Fixed display slots only; these columns never grant skills or add prerequisites. */
 export const TREE_COLUMNS = [
- { name: '通用', ids: ['future_qianying'] },
  // 2026-11-09：蚀骨剑意、剑罡爆裂移入剑气列（仍是被动，不计共鸣）。
  { name: '剑气', ids: ['sj_arc', 'sj_moon', 'sj_mark', 'sj_moon_triple', 'sj_cross', 'sj_gate', 'sj_line', 'evo_tiandi', 'future_taixu', 'future_shenxiao', 'future_liexu'] },
  // 85号：分光连斩归入御剑流派，参与御剑共鸣。
  // 2026-11-09：新增惊鸿剑（参与御剑共鸣）；御剑飞行移入御剑列，仍是被动，不计共鸣。
- { name: '御剑', ids: ['sj_yujian', 'sj_shadow', 'sj_jinghong', 'evo_wanjian', 'sj_flight'] },
+ // 2026-11-09：通用列移除；千影归锋（剑影分身）预览并入御剑列。
+ { name: '御剑', ids: ['sj_yujian', 'sj_shadow', 'sj_jinghong', 'evo_wanjian', 'sj_flight', 'future_qianying'] },
  { name: '剑阵', ids: ['sj_wanjian', 'sj_qinglian', 'sj_sancai', 'sj_formation', 'evo_sixiang', 'future_xinghe', 'future_duankong'] },
  { name: '心法', ids: ['sj_spirit', 'sj_heart', 'sj_bone', 'vajra', 'future_yingling', 'future_shenshi', 'future_xubu'] },
 ];

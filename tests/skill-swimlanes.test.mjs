@@ -15,20 +15,20 @@ const draw=(options={},width=720,defs=definitions)=>layoutSkillTree(defs,catalog
 test('heart appears in the early golden core passive column',()=>{
  const position=draw().positions.sj_heart
  assert.equal(position.stageId,'jindan-early')
- assert.equal(position.column,4)
+ assert.equal(position.column,3)
 })
 
 test('every current skill stays at its approved phase and column, with genuine blank cells',()=>{
  const layout=draw()
  const expected=[
-  ['sj_arc','lianqi-early',1],['sj_moon','lianqi-middle',1],['sj_moon_triple','zhuji-early',1],['sj_sancai','zhuji-peak',3],['sj_wanjian','lianqi-middle',3],['sj_qinglian','zhuji-early',3],['sj_spirit','zhuji-early',4],
-  ['sj_yujian','lianqi-early',2],['vajra','lianqi-middle',4],
-  ['sj_cross','zhuji-middle',1],['sj_heart','jindan-early',4],
-  ['sj_line','jindan-early',1],['sj_formation','jindan-early',3],['sj_shadow','zhuji-early',2],['sj_flight','zhuji-early',2],['sj_jinghong','zhuji-middle',2],
-  ['sj_bone','lianqi-early',4],['sj_mark','lianqi-peak',1],['sj_gate','zhuji-peak',1],
-  ['evo_wanjian','jindan-early',2],['evo_tiandi','jindan-middle',1],['evo_sixiang','jindan-peak',3],
+  ['sj_arc','lianqi-early',0],['sj_moon','lianqi-middle',0],['sj_moon_triple','zhuji-early',0],['sj_sancai','zhuji-peak',2],['sj_wanjian','lianqi-middle',2],['sj_qinglian','zhuji-early',2],['sj_spirit','zhuji-early',3],
+  ['sj_yujian','lianqi-early',1],['vajra','lianqi-middle',3],
+  ['sj_cross','zhuji-middle',0],['sj_heart','jindan-early',3],
+  ['sj_line','jindan-early',0],['sj_formation','jindan-early',2],['sj_shadow','zhuji-early',1],['sj_flight','zhuji-early',1],['sj_jinghong','zhuji-middle',1],
+  ['sj_bone','lianqi-early',3],['sj_mark','lianqi-peak',0],['sj_gate','zhuji-peak',0],
+  ['evo_wanjian','jindan-early',1],['evo_tiandi','jindan-middle',0],['evo_sixiang','jindan-peak',2],
  ]
- assert.equal(layout.columns,5)
+ assert.equal(layout.columns,4) // 2026-11-09：通用列移除
  // 2026-11-09：周天剑域退役，不再显示。
  assert.equal(Object.keys(layout.positions).length,22)
  assert.equal(layout.positions.evo_wuwo,undefined)
@@ -37,7 +37,7 @@ test('every current skill stays at its approved phase and column, with genuine b
   assert.equal(layout.positions[id].column,column,id)
  }
  assert.equal(layout.groups.filter(g=>!g.future).flatMap(g=>g.lanes).length,9)
- assert.deepEqual(Array.from(layout.columnHeaders,c=>c.name),['通用','剑气','御剑','剑阵','心法'])
+ assert.deepEqual(Array.from(layout.columnHeaders,c=>c.name),['剑气','御剑','剑阵','心法'])
 })
 
 test('future realms collapse independently without moving any current skill',()=>{
@@ -92,7 +92,7 @@ test('five columns fit the viewport; source order and learning state never rearr
  const layout=draw({},520,[...definitions,{id:'extra_passive',kind:'passive'}])
  const custom=layoutSkillTree([...definitions,{id:'extra_passive',kind:'passive'}],catalog.DISPLAY_STAGES.map(s=>s.id==='lianqi-early'?{...s,skillIds:[...s.skillIds,'extra_passive']}:s),520)
  const a=custom.positions.sj_bone,b=custom.positions.extra_passive
- assert.equal(b.column,4)
+ assert.equal(b.column,3)
  assert.ok(b.top>=a.top+a.height)
  assert.equal(custom.labelWidth,0)
  for(const p of Object.values(custom.positions)){assert.ok(p.x-p.width/2>=0);assert.ok(p.x+p.width/2<=520)}
@@ -102,8 +102,8 @@ test('five columns fit the viewport; source order and learning state never rearr
 test('flight and the shadow skill both sit in the yujian column',()=>{
  const layout=draw()
  const flight=layout.positions.sj_flight,shadow=layout.positions.sj_shadow
- assert.equal(flight.column,2)
- assert.equal(shadow.column,2)
+ assert.equal(flight.column,1)
+ assert.equal(shadow.column,1)
  assert.equal(flight.stageId,'zhuji-early')
  assert.equal(shadow.stageId,'zhuji-early')
 })
