@@ -44,3 +44,20 @@
 - `cocos-pilot/assets/scripts/TowerHitImpact.ts`：音效、震动、定格。
 - `cocos-pilot/assets/scripts/TowerView.ts`：接入以上两处。
 - `cocos-pilot/assets/scripts/TowerSkillEffects.ts`：惊鸿剑矢量特效。
+
+## 剑类音效重做尝试（未接入）
+
+用户反馈惊鸿剑的"叮叮叮"不符合风格。之后做了七版候选音效，用户都不满意，决定先不接入。游戏里仍是上面的分档音效。
+
+| 版本 | 内容 | 用户反馈 |
+|---|---|---|
+| v2 | 破空、低频闷击、末刺重击 | 像打鼓 |
+| v3 | 风切噪声、剑鸣 | 剑鸣像"叮"，破空像割草 |
+| v4 | 平滑"唰"、谐波长音剑鸣 | 剑鸣像弹棉花 |
+| v5 | 金属非谐泛音剑鸣 | 像按铃 |
+| v6 | Freesound 770035 拔剑录音，截剑鸣与摩擦"唰" | 剑鸣去掉开头摩擦；破空像金属摩擦 |
+| v7 | 录音只取金属余音，配 v4 的"唰" | 不满意，先不接入 |
+
+- 候选音频在 `candidates/`，试听拼接在 `preview-*.wav`，各版生成脚本是 `prepare-audio-v2.py` 到 `prepare-audio-v7.py`，每版的参数和哈希在对应的 `audio-manifest-v*.json`。
+- 录音参考原文件在 `reference/770035__vrymaa__sword-unsheathe.wav`。来源是 Freesound，作者 Vrymaa，授权 CC0，可商用，不需要署名。
+- 结论：本地合成很难做出满意的剑鸣和破空。后续优先找专门的剑挥破空录音和清亮剑鸣录音（CC0 或已购授权），或者用 Scenario 生成后再试听。
