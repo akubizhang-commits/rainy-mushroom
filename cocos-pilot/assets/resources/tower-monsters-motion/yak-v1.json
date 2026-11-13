@@ -1,7 +1,7 @@
 {
   "version": 2,
   "width": 3840,
-  "height": 3552,
+  "height": 3936,
   "facing": "left",
   "anchor": [
     0.5,
@@ -675,6 +675,138 @@
         0.353,
         0.8847
       ]
+    },
+    "summon-000": {
+      "x": 3072,
+      "y": 3168,
+      "w": 384,
+      "h": 384,
+      "displayScale": 1.25,
+      "anchor": [
+        0.5,
+        0.9
+      ]
+    },
+    "summon-001": {
+      "x": 3456,
+      "y": 3168,
+      "w": 384,
+      "h": 384,
+      "displayScale": 1.25,
+      "anchor": [
+        0.5,
+        0.9
+      ]
+    },
+    "summon-002": {
+      "x": 0,
+      "y": 3552,
+      "w": 384,
+      "h": 384,
+      "displayScale": 1.25,
+      "anchor": [
+        0.5,
+        0.9
+      ]
+    },
+    "summon-003": {
+      "x": 384,
+      "y": 3552,
+      "w": 384,
+      "h": 384,
+      "displayScale": 1.25,
+      "anchor": [
+        0.5,
+        0.9
+      ]
+    },
+    "summon-004": {
+      "x": 768,
+      "y": 3552,
+      "w": 384,
+      "h": 384,
+      "displayScale": 1.25,
+      "anchor": [
+        0.5,
+        0.9
+      ]
+    },
+    "summon-005": {
+      "x": 1152,
+      "y": 3552,
+      "w": 384,
+      "h": 384,
+      "displayScale": 1.25,
+      "anchor": [
+        0.5,
+        0.9
+      ]
+    },
+    "summon-006": {
+      "x": 1536,
+      "y": 3552,
+      "w": 384,
+      "h": 384,
+      "displayScale": 1.25,
+      "anchor": [
+        0.5,
+        0.9
+      ]
+    },
+    "summon-007": {
+      "x": 1920,
+      "y": 3552,
+      "w": 384,
+      "h": 384,
+      "displayScale": 1.25,
+      "anchor": [
+        0.5,
+        0.9
+      ]
+    },
+    "summon-008": {
+      "x": 2304,
+      "y": 3552,
+      "w": 384,
+      "h": 384,
+      "displayScale": 1.25,
+      "anchor": [
+        0.5,
+        0.9
+      ]
+    },
+    "summon-009": {
+      "x": 2688,
+      "y": 3552,
+      "w": 384,
+      "h": 384,
+      "displayScale": 1.25,
+      "anchor": [
+        0.5,
+        0.9
+      ]
+    },
+    "summon-010": {
+      "x": 3072,
+      "y": 3552,
+      "w": 384,
+      "h": 384,
+      "displayScale": 1.25,
+      "anchor": [
+        0.5,
+        0.9
+      ]
+    },
+    "summon-011": {
+      "x": 3456,
+      "y": 3552,
+      "w": 384,
+      "h": 384,
+      "displayScale": 1.25,
+      "anchor": [
+        0.5,
+        0.9
+      ]
     }
   },
   "clips": {
@@ -811,8 +943,40 @@
           8
         ]
       }
+    },
+    "summon": {
+      "frames": [
+        "summon-000",
+        "summon-001",
+        "summon-002",
+        "summon-003",
+        "summon-004",
+        "summon-005",
+        "summon-006",
+        "summon-007",
+        "summon-008",
+        "summon-009",
+        "summon-010",
+        "summon-011"
+      ],
+      "fps": 10,
+      "loop": false,
+      "phases": {
+        "windup": [
+          0,
+          4
+        ],
+        "active": [
+          4,
+          2
+        ],
+        "recovery": [
+          6,
+          6
+        ]
+      }
     }
   },
   "damageEvents": [],
-  "sourceSha256": "63d05edf97fff5438c0df6167a1bf23d6a2a484c4ad12cead182fe8abbf6e4fc"
+  "sourceSha256": "0d3099b45c6248e0dab313175d65ed4d13a86dc80e9d709da04c675f585c1114"
 }
