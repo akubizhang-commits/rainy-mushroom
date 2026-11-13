@@ -26,7 +26,7 @@ function fixture(){
   return {x:Math.cos(angle)*100,y:Math.sin(angle)*100,angle,baseX:Math.cos(angle)*84,baseY:Math.sin(angle)*84,
    tipX:Math.cos(angle)*116,tipY:Math.sin(angle)*116}
  }
- const Art=runInNewContext(`(()=>{${source('TowerSkillEffects')};return TowerSkillEffects})()`,{Color,Graphics,skillForm,orbitSwordPose,swordQiSegments,swordQiVisualLift,swordQiPoseIndex,SHADOW_LIFT,shadowPreviewLine,shadowHitFeedback,Math,Number})
+ const Art=runInNewContext(`(()=>{${source('TowerSkillEffects')};return TowerSkillEffects})()`,{Color,Graphics,skillForm,orbitSwordPose,orbitMotionTime:s=>Number.isFinite(s?.orbitClock)?s.orbitClock:s?.time??0,swordQiSegments,swordQiVisualLift,swordQiPoseIndex,SHADOW_LIFT,shadowPreviewLine,shadowHitFeedback,Math,Number})
  const state={time:10,phase:'paused',player:{x:0,y:0,hp:100},loadout:{active:{},passive:{},evolutions:[],evolutionLevels:{}},zones:[],effects:[],enemies:[]}
  return {art:new Art(),g:new Graphics(),state,poses}
 }

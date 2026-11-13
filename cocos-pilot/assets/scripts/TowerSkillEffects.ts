@@ -1,5 +1,5 @@
 import {Color,Graphics} from 'cc';
-import {skillForm,orbitSwordPose} from './shared/js/xianxia/TowerSkillForms';
+import {skillForm,orbitSwordPose,orbitMotionTime} from './shared/js/xianxia/TowerSkillForms';
 import {swordQiSegments,swordQiVisualLift,swordQiPoseIndex} from './shared/js/xianxia/TowerSwordQi';
 import {SHADOW_LIFT,shadowPreviewLine,shadowHitFeedback} from './shared/js/xianxia/TowerShadow';
 import {sancaiVertices} from './shared/js/xianxia/TowerSancai';
@@ -314,7 +314,7 @@ export class TowerSkillEffects {
   if(outerSprites)return;
   const originX=waist?.x??x,originY=waist?.y??y+57;
   for(let i=0;i<f.swords;i++){
-   const p=orbitSwordPose(f,s.time,i);
+   const p=orbitSwordPose(f,evo?s.time:orbitMotionTime(s),i);
    this.blade(g,originX+p.baseX,originY+p.baseY,originX+p.tipX,originY+p.tipY,f.bladeWidth,220,false);
   }
  }

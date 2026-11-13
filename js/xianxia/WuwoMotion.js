@@ -3,8 +3,9 @@
 function point(form, time, index) {
   const seed = (index * .61803398875) % 1
   const phase = index * Math.PI * 2 / form.swords + .24 * Math.sin(index * 2.3)
-  const speed = (.62 + .43 * ((index * .38196601125 + .13) % 1))
-    * (index % 4 === 2 ? -1 : 1) * form.motionSpeed
+  // 2026-11-13 用户决定：取消反向游剑，所有飞剑同向环绕。
+  const base = form.speedBase ?? .62, spread = form.speedSpread ?? .43, wave = form.speedWave ?? .60
+  const speed = (base + spread * ((index * .38196601125 + .13) % 1)) * form.motionSpeed
   const depth = .28 + .19 * ((index * .73 + .2) % 1)
   const height = 24 * Math.sin(index * 2.12)
   const tilt = .055 * Math.sin(index * 1.71)
@@ -12,8 +13,8 @@ function point(form, time, index) {
   // collision samples use the same path without mutable phase accumulators.
   const frequency = Math.PI * 2 / (2.7 + 2.2 * seed)
   const offset = index * 2.399963
-  const speedFactor = 1 + .60 * Math.sin(time * frequency + offset)
-  const angle = speed * (time + .60 / frequency *
+  const speedFactor = 1 + wave * Math.sin(time * frequency + offset)
+  const angle = speed * (time + wave / frequency *
     (Math.cos(offset) - Math.cos(time * frequency + offset))) + phase
   const radius = form.radius * (.69 + .29 * seed + .025 * Math.sin(time * .48 + index))
   const x = radius * Math.cos(angle), z = radius * Math.sin(angle)

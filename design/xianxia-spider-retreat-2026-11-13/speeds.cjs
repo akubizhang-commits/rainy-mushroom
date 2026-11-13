@@ -1,0 +1,10 @@
+const fs=require('node:fs'),path=require('node:path'),{createServer}=require('node:http');
+const {chromium}=require('/Users/zhangnu/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright');
+const ROOT=path.resolve(__dirname,'../..');
+(async()=>{const server=createServer((req,res)=>{const f=path.resolve(ROOT,'.'+new URL(req.url,'http://localhost').pathname);if(!f.startsWith(ROOT+path.sep)){res.writeHead(403).end();return;}fs.readFile(f,(e,b)=>{if(e){res.writeHead(404).end();return;}res.setHeader('Content-Type',({'.html':'text/html','.js':'text/javascript','.json':'application/json','.wasm':'application/wasm'})[path.extname(f)]||'application/octet-stream');res.end(b)})});await new Promise(r=>server.listen(0,'127.0.0.1',r));
+const browser=await chromium.launch({headless:true,executablePath:'/Users/zhangnu/Library/Caches/ms-playwright/chromium_headless_shell-1247/chrome-headless-shell-mac-arm64/chrome-headless-shell'});
+try{const page=await browser.newPage();await page.goto(`http://127.0.0.1:${server.address().port}/cocos-pilot/build/web-mobile/index.html?ruleset=xianxia&tower=1&smoke=1`);
+await page.waitForFunction(()=>window.__towerTest?.host?.menu,null,{timeout:120000});
+console.log(JSON.stringify(await page.evaluate(()=>{const h=window.__towerTest.host;h.enterTraining();const s=h.run.state,out={player:s.player.moveSpeed??null,playerKeys:Object.keys(s.player).filter(k=>/speed/i.test(k))};
+ for(const id of ['spider_elite_f1_w15_n4','spider_elite_f3_w5_n1','spider_normal_r1','bat_elite_f4_w15_n4']){const e=h.run._enemy({id:'x',archetype:id,x:0,y:0});if(!e){out[id]=null;continue}out[id]={role:e.role,family:e.family,moveSpeed:e.moveSpeed}}return out})));
+}finally{await browser.close();server.close();}})().catch(e=>{console.error(e);process.exitCode=1});

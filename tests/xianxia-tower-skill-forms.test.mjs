@@ -214,11 +214,13 @@ test('orbit blades sweep the annulus while sharing one target interval', () => {
   const hits = sample(run, 1.6)
   assert.ok(hits.length >= 2, 'a stationary target on the ring is reached by rotating swords')
   for (let i = 1; i < hits.length; i++) assert.ok(hits[i].at - hits[i - 1].at >= .6 - STEP / 2)
-  for (const hit of hits) close(hit.damage, attackFor(run, 'sj_wanjian') * coefficient('sj_wanjian', 10) * 10 / 7)
+  // 2026-11-13: the target sits outside the inner field, so blade hits carry the level-10 4-sword compensation (×1.25).
+  assert.ok(enemy.x - run.state.player.x > skillForm('sj_wanjian', 10).innerRadius + enemy.radius)
+  for (const hit of hits) close(hit.damage, attackFor(run, 'sj_wanjian') * coefficient('sj_wanjian', 10) * 10 / 7 * 1.25)
 })
 
 test('each additional orbit sword tier expands both the ring and its outer reach', () => {
-  const stages = [[1, 6], [3, 8], [6, 10], [10, 12]]
+  const stages = [[1, 4], [3, 4], [6, 4], [10, 4]] // 2026-11-13 用户决定：固定 4 把
   let previous
   for (const [rank, count] of stages) {
     const form = skillForm('sj_wanjian', rank)
@@ -226,7 +228,7 @@ test('each additional orbit sword tier expands both the ring and its outer reach
     assert.equal(form.swords, count)
     assert.equal(form.innerRadius, 90, 'the close field keeps one radius across upgrades')
     if (previous) {
-      assert.ok(form.radius > previous.radius, 'more swords orbit farther from the player')
+      assert.ok(form.radius > previous.radius, 'higher tiers orbit farther from the player')
       assert.ok(form.bladeLength > previous.bladeLength, 'the blade coverage also grows')
       assert.ok(outer > previous.outer, 'the actual outer attack boundary expands')
     }

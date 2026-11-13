@@ -1,0 +1,420 @@
+import {applyEquipmentSkillLevels} from './TowerEquipmentSkillLevels.js'
+import {COMBAT_SKILLS,COMBAT_EVOLUTIONS} from './TowerCombatSkills.js'
+import {skillManaCost} from './TowerCharacterStats.js'
+import {NINGSHEN_SURGE} from './TowerSpirit.js'
+import { outgoingDamageFactor } from './TowerAttributeRules.js'
+// Read-only presentation of current growth skills. Damage excludes crits and
+// conditional procs; hybrid ratios describe the budget before equipment bonuses.
+import { GROWTH_SKILLS, GROWTH_EVOLUTIONS, GROWTH_STAGES, skillRequirement, skillLearnLevel } from './TowerGrowth.js'
+import { combatLoadout } from './TowerCampaign.js'
+import { stats as combatStats } from './TowerRun.js'
+import { formatSpiritStones } from './TowerEconomy.js'
+import { weaponDamageModifiers } from './TowerWeapons.js'
+import { ELEMENT_NAMES, skillElement } from './TowerWeaponElements.js'
+import { skillCooldown, castActionTiming, equipmentCastSpeed } from './TowerSkillTiming.js'
+import { skillForm, skillHitShare, convergenceRainMultiplier } from './TowerSkillForms.js'
+
+const skills = new Map(GROWTH_SKILLS.map(s => [s.id, s]))
+const evolutions = new Map(GROWTH_EVOLUTIONS.map(s => [s.id, s]))
+const combatDefinitions=new Map([...COMBAT_SKILLS,...COMBAT_EVOLUTIONS].map(d=>[d.id,d]))
+const categoryLabels = {
+  physical: '物理攻击', hybrid: '物理＋法术攻击', magic: '法术攻击',
+  inherited: '伤害类型继承', none: '被动功法',
+}
+const field = (s, key, rank) => Array.isArray(s[key]) ? s[key][rank - 1] : s[key]
+const fmt = n => String(Number(n.toFixed(3)))
+const percent = n => `${fmt(n * 100)}%`
+const stageAt = level => {
+  if (level === 30) return '金丹 · 十层'
+  const stage = GROWTH_STAGES.find(stage => level >= stage.minLevel && level <= stage.maxLevel)
+  return stage ? `${stage.realm} · ${stage.phase}` : '元婴 · 初期'
+}
+
+// Show the first attainable realm, including the realm of a required skill rank.
+function attainableLevel(definition, req) {
+  return Math.max(definition.learnLevel, req.characterLevel,
+    ...Object.entries(req.prerequisites || {}).map(([id, rank]) => {
+      const prerequisite = skills.get(id)
+      return Math.max(prerequisite.learnLevel, prerequisite.rankRequirements[rank - 1].characterLevel)
+    }))
+}
+
+function rankRuleLines(definition) {
+  if (!definition.rankRequirements.some(req => Object.keys(req.prerequisites || {}).length > 0)) return []
+  const bands = []
+  definition.rankRequirements.forEach((req, index) => {
+    const level = attainableLevel(definition, req)
+    const last = bands[bands.length - 1]
+    if (last && last.level === level) last.end = index + 1
+    else bands.push({ level, start: index + 1, end: index + 1 })
+  })
+  return bands.map(band => {
+    const required = definition.rankRequirements[band.start - 1].prerequisites || {}
+    const extra = Object.entries(required).map(([id, rank]) => `${skills.get(id).name}${rank}级`).join('、')
+    return `${band.start === band.end ? band.start : `${band.start}–${band.end}`}级：${stageAt(band.level)}${extra ? `，需${extra}` : ''}`
+  })
+}
+
+function requirements(state, definition, learned, inTower) {
+  if (learned >= definition.maxLevel) return { lines: [], detail: null }
+  const nextLevel = learned + 1
+  const req = definition.rankRequirements?.[nextLevel - 1]
+  const characterLevel = Math.max(skillLearnLevel(state, definition), attainableLevel(definition, req))
+  const prerequisites = { ...(req.prerequisites || {}) }, clear = 0
+  const quote = skillRequirement(state, definition.id, { inTower })
+  const stage = GROWTH_STAGES.find(row => characterLevel >= row.minLevel && characterLevel <= row.maxLevel)
+  const exactLevel = stage && characterLevel !== stage.minLevel && characterLevel !== 30 ? `（${characterLevel}级）` : ''
+  const lines = [`角色${stageAt(characterLevel)}${exactLevel}`]
+  for (const [id, rank] of Object.entries(prerequisites)) lines.push(`${skills.get(id).name} ${rank}级`)
+  lines.push(`悟道点 ${definition.pointCosts[nextLevel - 1]}`)
+  if (quote.bookCost) lines.push(`经卷 ${formatSpiritStones(quote.bookCost)}灵石`)
+  return { lines, detail: { nextLevel, characterLevel, stage: stageAt(characterLevel),
+    clear, prerequisites, cost: definition.pointCosts[nextLevel - 1], bookCost: quote.bookCost,
+    canUpgrade: quote.ok && (state.spiritStones ?? 0) >= quote.bookCost, reason: quote.reason || null } }
+}
+
+/** Campaign state in; detached presentation out. Unknown IDs return null.
+ * cooldown: seconds (main cast cycle), manaCost: points spent once at the start of an active cast.
+ * Active-run snapshot XP/loadout take precedence over camp profile values.
+ */
+function presentRank(state, id) {
+  const trainingDefinition=skills.get(id)||evolutions.get(id)
+  const definition=combatDefinitions.get(id)
+  if (!definition) return null
+  const snapshot = state.activeRun?.snapshot
+  const loadout = applyEquipmentSkillLevels(snapshot?.loadout || combatLoadout(state))
+  const xp = snapshot?.player.xp ?? state.xp
+  const trained=loadout.trainedSkills??loadout
+  const effective={...state,xp,skills:{...trained.active,...trained.passive},evolutionRanks:{...trained.evolutionLevels},tutorialWaves:loadout.tutorialWaves}
+  const learned=(definition.kind==='evolution'?effective.evolutionRanks:effective.skills)[id]||0
+  const level=learned?(definition.kind==='evolution'?loadout.evolutionLevels[id]:loadout[definition.kind][id]):1,preview=!learned
+  const { attack, magicAttack } = combatStats(xp, loadout)
+  const boneRank = loadout.passive.sj_bone || 0
+  const bone = boneRank ? field(combatDefinitions.get('sj_bone'), 'damage_bonus', boneRank) : 0
+  const typedDamage = (type, base) => base * outgoingDamageFactor(loadout, id, type, true)
+  const damage = multiplier => multiplier * (definition.damageType === 'hybrid'
+    ? (typedDamage('physical', attack) + typedDamage('magic', magicAttack)) / 2
+    : typedDamage(definition.damageType, definition.damageType === 'magic' ? magicAttack : attack))
+  const rows = []
+  const add = (key, label, value, unit = '', condition = '') => {
+    const text = `${label} ${typeof value === 'number' ? fmt(value) : value}${unit}${condition ? `（${condition}）` : ''}`
+    rows.push({ key, label, value, unit, text, ...(condition ? { condition } : {}) })
+  }
+  const pct = (key, label, value, condition = '') => add(key, label, percent(value), '', condition)
+  const descriptions = {
+    sj_line: '剑气沿狭长直线贯穿敌人；精进后沿同一道剑路连续穿刺。',
+    sj_qinglian: '剑气凝成三层莲瓣形剑刃，外、中、内三环每秒一轮依次展开并顺时针旋转切割，持续4秒，前3秒判定；整招伤害按外20%、中35%、内45%分配，同一目标一招合计承受36次命中，目标数不限。',
+    sj_shadow: '在目标位置留下剑痕，短暂延迟后由不同方向接连斩落。',
+    sj_jinghong: '召出一柄重剑，锁定范围内的Boss，没有Boss时锁定当前血量最高的敌人，从不同方向连续穿刺；只伤锁定目标，专攻单体强敌。',
+    evo_tiandi: '蓄势凝成一柄巨剑，一击劈开前方敌阵；地面裂光随后消散。',
+    sj_spirit: '凝聚神识：灵力低于30%时，战斗中回灵速度大幅提升，灵力条转为青色并显示“凝神回灵”。每级另增加10点神识（10%施法速度，提高灵力上限和恢复）与4%御剑术索敌距离；同时扩大灵石、材料和地面治疗物的拾取范围。适合灵力消耗高的流派。',
+    sj_heart: '提高普攻与功法的暴击几率，持续功法伤害每次独立判定；基础暴击倍率150%。',
+    sj_mark: '冷却就绪后，普攻或攻击功法直接命中一个存活敌人，施加3秒蚀骨破绽：后续直接伤害提高20%，物理防御降低20%；不削减法术防御或机关护甲。内置冷却10秒，全技能共享；触发这一击不增伤。持续伤害和衍生伤害不触发，不叠层、不刷新。无持续伤害、施法动作或特效动画。',
+    sj_bone: '提高攻击伤害与移动速度，剑痕与爆裂也享受伤害加成。移速可与御剑飞行叠加。',
+    sj_gate: '剑破虚空（含一剑开天）、双月斩、分光连斩收尾命中时引动体内爆裂，0.2秒后中心受伤，白色剑气错落外射并在命中周围敌人时造成伤害。每次重招最多一次，触发后冷却10秒；普攻和飞剑不消耗蓄势。爆点跟随目标，目标死亡留在最后位置。',
+    vajra: '被动减少受到的伤害，护身纹不产生吸收护盾。',
+    sj_flight: '脚踏飞剑滑行，提高移动速度，可与剑骨叠加；受到的减速幅度降低50%，不缩短持续时间、不解除定身；仍受地形阻挡。',
+  }
+  let description = descriptions[id] || '', cooldown = null
+  const evo = definition.kind === 'evolution' ? definition : null
+  const base = evo ? combatDefinitions.get(evo.parent) : definition
+  const parentLevel = evo ? loadout.active[evo.parent] || 1 : level
+  const val = key => field(base, key, parentLevel)
+  const budget = evo ? evo.budgetMultipliers[level - 1] : 1
+  const damageType = definition.damageType
+  const category = categoryLabels[damageType]
+  const form = { ...skillForm(id, level, parentLevel, learned || 1) }
+  const spiritRank = loadout.passive.sj_spirit || 0
+  if (id === 'sj_yujian' && spiritRank) form.reach *= 1 + field(combatDefinitions.get('sj_spirit'), 'reach_bonus', spiritRank)
+  const flyingBlade = ['crescent-projectile', 'cross-projectile'].includes(form.shape)
+  if (id === 'sj_arc') description = '挥剑如流云，向身前连续斩出三道月弧，逐斩增强，对近身敌人造成伤害。'
+  if (id === 'sj_moon') description = '挥出一道宽阔的玄月剑气，在原地横扫周围大范围敌人。每次施放对同一敌人造成一次伤害，最多命中6个目标。'
+  if (id === 'sj_moon_triple') description = '依次释放斜斩、横斩、下劈三道月牙剑气，沿固定方向贯穿敌人；各道均分整招伤害，各级均为三发。'
+  if (id === 'sj_cross') description = '向角色前方原地斩出两道白紫交叉剑气，蓝黑剑气衬于底层，剑气不向外飞行。攻击前方180°范围内的可见敌人，最多命中8个目标，每个目标仅受一次伤害。4级和7级扩大范围。'
+  if (['sj_line','evo_tiandi','sj_cross','sj_shadow'].includes(id)) description += id==='sj_shadow'?'收尾一击属于重击，可触发已就绪的剑罡爆裂。':'属于重击功法，可触发已就绪的剑罡爆裂。'
+  if (flyingBlade) description += `${id === 'sj_cross' ? '整发' : '每道'}对同一敌人最多命中1次，遇阻挡或战场边界消散，尾光不造成伤害。`
+  // Runtime geometry counts emitted swords; the panel counts hits per enemy.
+  if (id === 'sj_yujian') form.hits = form.swords
+
+  if (base.kind === 'active') {
+    add('manaCost', '灵力值消耗', skillManaCost(form.id || id), '点', '每招扣除一次；不足时自动服用回灵丹，无丹药则等待恢复，普攻继续；多段和持续伤害不重复扣除');
+    cooldown = val('cooldown') ?? null
+    const raw = val('damage')
+    if (base.id === 'sj_yujian') {
+      const swords = val('swords'), perSword = damage(raw * val('sword_damage_share'))
+      cooldown = val('generation_interval')
+      add('roundDamage', '每剑伤害', perSword)
+      add('swordDamage', '每剑伤害', perSword)
+      add('swords', '悬停上限', swords, '把')
+      add('storedDamage', '满蓄总伤害', perSword * swords)
+      description = `每${fmt(skillCooldown(cooldown,loadout))}秒生成1把飞剑，最多悬停${swords}把；按目标血量分配足够飞剑同时出击，扣除在途剑的预计伤害，多余继续悬停；多目标自动寻敌，命中后消散并逐把补充。`
+      if (evo) {
+        const total = damage(raw * convergenceRainMultiplier(level))
+        add('rainTickDamage', '归宗剑伤（每击）', total / form.hits)
+        add('rainFullDamage', '归宗剑伤（全程上限）', total, '', '命中每道穿刺与最终合剑')
+        add('rainCooldown', '归宗周期', skillCooldown(evo.rainCooldown, loadout), '秒')
+        add('rainTicks', '归宗击数', form.hits)
+        add('rainInterval', '归宗剑击间隔', form.interval, '秒')
+        add('rainTargetCap', '每击目标上限', form.targetCap)
+        description += `定时从${form.hits - 1}个方向向固定落点刺剑，最后合为一剑。归宗出剑时暂停普通飞剑，结束后恢复追击。`
+      }
+    } else if (base.id === 'sj_wanjian') {
+      if (evo) cooldown = null
+      else add('duration', '持续时间', val('duration'), '秒')
+      add('tickDamage', evo ? '外圈剑伤（每次）' : '环绕剑伤（每次）', damage(raw) * (evo ? budget : val('cycle_damage_multiplier')))
+      if (evo) add('innerDamage', '内圈剑伤（每次）', damage(raw) * evo.innerMultiplier[level - 1])
+      add('hitInterval', '同目标命中间隔', form.interval, '秒')
+      add('swords', '环绕剑数量', form.swords, '把')
+      description = `${form.swords}把飞剑循阵环绕身边，以剑锋及阵中灵力绞杀附近敌人。${evo ? '内圈剑意覆盖近身空隙，内外圈共用同一次命中间隔。' : '3／6／10级增至8／10／12把飞剑，并同步扩大剑环和剑身覆盖范围。飞剑变速错轨游走，剑圈内侧有近身剑意。'}`
+      if (!evo) description += `剑环持续${fmt(val('duration'))}秒，发动起计算${fmt(skillCooldown(cooldown,loadout))}秒冷却；结束后剑环消失，冷却完成自动再次发动。`
+    } else if (base.id === 'sj_sancai') {
+      const total = damage(raw)
+      add('tickDamage', '落剑伤害（每次）', total / form.hits)
+      add('fullDamage', '剑阵伤害（全程上限）', total, '', '六次落剑全部命中')
+      add('ticks', '落剑次数', form.hits)
+      add('initialDelay', '首击延迟', form.initialDelay, '秒')
+      add('hitInterval', '落剑间隔', form.interval, '秒')
+      add('duration', '持续时间', form.duration, '秒')
+      pct('slow', '阵内基础行走减速', val('slow_fraction'), '实际幅度受控制抗性削减；含精英与Boss；重叠取最强，离阵解除，不影响出招')
+      description = '在前方敌群脚下布下三角剑阵，持续6秒，三柄灵剑轮流落下，每秒一剑共6次，每次斩击阵内最多6个敌人。阵内怪物行走减速20%，含精英与Boss，实际幅度受控制抗性削减；离阵或剑阵消散立即恢复，重叠取最强，不影响攻击、冲锋或跳跃。4级、7级扩大范围，各级均为六次落剑。'
+    } else if (base.id === 'sj_formation') {
+      pct('slow', '阵内基础行走减速', evo ? evo.slow_fraction : val('slow_fraction'), '实际幅度受控制抗性削减；含精英与Boss；重叠取最强，离阵解除，不影响出招')
+      if (evo) cooldown = evo.cooldown
+      const total = damage(raw) * budget * val('ticks') * (evo ? evo.cooldown / val('cooldown') : 1)
+      add('tickDamage', '剑阵伤害（每脉冲）', total / form.hits)
+      add('fullDamage', '剑阵伤害（全程上限）', total, '', '留在阵内命中全部脉冲')
+      add('ticks', '脉冲次数', form.hits)
+      add('initialDelay', '首击延迟', form.initialDelay, '秒')
+      add('hitInterval', '脉冲间隔', form.interval, '秒')
+      add('duration', '持续时间', form.duration, '秒')
+      description = evo
+        ? `四个阵眼构成菱形剑阵，轮流引动剑气，最后四眼合鸣；同敌全程最多${form.hits}击。${level === 1 ? '二阶扩大剑阵范围，增加至20次打击。' : '二阶剑阵覆盖更大的菱形范围。'}`
+        : `在施法范围内最近的敌人脚下布下圆形剑阵，双眼交替引动落剑；${form.hits > 6 ? '最后双眼合鸣，' : ''}同敌全程最多${form.hits}击。剑阵范围随等级扩大。`
+      description += `阵内怪物行走减速${evo ? 40 : 30}%，含精英与Boss，实际幅度受控制抗性削减；重叠取最强，离阵或8秒结束立即恢复，不影响攻击、冲锋或跳跃。`
+    } else {
+      if (evo) cooldown = evo.cooldown
+      const total = damage(raw) * (evo ? evo.cooldown / val('cooldown') * budget : 1)
+      const weightedShadow = base.id === 'sj_shadow' && form.hits >= 3
+      add('hitDamage', base.id === 'sj_shadow' ? (weightedShadow ? '剑影伤害（首斩）' : '剑影伤害（每斩）') : base.id === 'sj_arc' ? '剑气伤害（首击）' : base.id === 'sj_jinghong' ? '惊鸿剑伤（每刺）' : '剑气伤害（每击）', total * (base.id === 'sj_arc' || weightedShadow ? skillHitShare(base.id, parentLevel, 1) : 1 / form.hits))
+      if (weightedShadow) {
+        for (let pulse = 2; pulse <= form.hits; pulse++)
+          add(`shadowHit${pulse}`, `剑影伤害（第${pulse}斩）`, total * skillHitShare(base.id, parentLevel, pulse))
+      }
+      if (base.id === 'sj_arc') {
+        add('arcHit2Damage', '剑气伤害（第二斩）', total * skillHitShare(base.id, parentLevel, 2))
+        add('arcHit3Damage', '剑气伤害（第三斩）', total * skillHitShare(base.id, parentLevel, 3))
+      }
+      add('fullDamage', '整招伤害上限', total, '', '同一敌人命中全部剑击')
+      add('hits', '同敌最多命中', form.hits, '次')
+      if (base.id === 'sj_shadow') add('delay', '剑影首斩延迟', form.initialDelay, '秒')
+      if (form.hits > 1) add('hitInterval', '连续剑击间隔', form.interval, '秒')
+    }
+    const action = castActionTiming(form.id, form.hits ?? 1, equipmentCastSpeed(loadout,xp))
+    const baseAction = castActionTiming(form.id, form.hits ?? 1)
+    add('baseWindup', '基础施法时间', baseAction.windup, '秒')
+    add('windup', '当前施法时间', action.windup, '秒')
+    add('actionDuration', '动作总时长', action.duration, '秒', '含连发与收招，可移动')
+    description += '施法与普攻依次执行；已释放效果独立运行。施法速度不改变持续伤害频率。'
+    if (['sj_arc', 'sj_moon', 'sj_moon_triple', 'sj_line'].includes(form.id) && action.releases.length > 1) {
+      const intervalRow = rows.find(row => row.key === 'hitInterval')
+      if (intervalRow) {
+        intervalRow.value = action.releases[1] - action.releases[0]
+        intervalRow.text = `${intervalRow.label} ${fmt(intervalRow.value)}秒`
+      }
+    }
+    if (cooldown !== null) cooldown = skillCooldown(cooldown, loadout)
+    const geometryFields = flyingBlade
+      ? [['reach', 'reach', '索敌距离', ''], ['target_cap', 'targetCap', '每发目标上限', ''], ['width', 'width', '刃面横宽', '']]
+      : form.shape === 'jinghong'
+        ? [['reach', 'reach', '索敌距离', ''], ['target_cap', 'targetCap', '锁定目标数', '']]
+      : form.shape === 'cross-burst'
+        ? [['radius', 'radius', '前方攻击距离', ''], ['target_cap', 'targetCap', '每次目标上限', '']]
+      : form.shape === 'cross'
+        ? [['target_cap', 'targetCap', '每击目标上限', ''], ['width', 'width', '十字横宽', '']]
+        : form.shape === 'sector'
+          ? [['radius', 'radius', '半径', ''], ['target_cap', 'targetCap', '每击目标上限', ''], ['angle', 'angle', '扇区角度', '°']]
+          : [['reach', 'reach', '射程', ''], ['radius', 'radius', '半径', ''], ['target_cap', 'targetCap', '每击目标上限', ''], ['width', 'width', '宽度', ''], ['angle', 'angle', '扇区角度', '°']]
+    for (const [key, formKey, label, unit] of geometryFields) {
+      if (form[formKey] > 0) add(key, label, form[formKey], unit)
+    }
+    if (evo) description += `进阶后替代${base.name}施放，继承其修炼等级；基础等级与进阶等级共同决定伤害。`
+    else {
+      const replacing = GROWTH_EVOLUTIONS.find(e => e.parent === id && effective.evolutionRanks[e.id])
+      if (replacing) description += `已进阶为${replacing.name}；继续修炼本功法可提升进阶伤害，退点会同步降低伤害。当前攻击伤害请查看该进阶功法。`
+    }
+    description += '伤害已计入当前装备与被动，未计暴击与附加伤害。'
+  } else {
+    const value = key => field(definition, key, level)
+    if (id === 'sj_spirit') {
+      add('lowManaRegen', '回灵速度', `×${fmt(NINGSHEN_SURGE.multipliers[Math.min(level, NINGSHEN_SURGE.multipliers.length) - 1])}`, '', `灵力低于${percent(NINGSHEN_SURGE.threshold)}时`)
+      pct('reachBonus', '御剑术索敌距离加成', value('reach_bonus'))
+      pct('pickupBonus', '拾取半径加成', value('pickup_bonus'))
+      add('awareness', '神识增加', level*10, '点')
+    } else if (id === 'sj_heart') {
+      pct('critChance', '暴击率', value('crit_chance'))
+      pct('critMultiplier', '基础暴击倍率', 1.5)
+    } else if (id === 'sj_mark') {
+      pct('scarVulnerability', '后续直接伤害提高', value('vulnerability'))
+      pct('armorBreak', '物理防御降低', .2)
+      add('duration', '蚀骨破绽持续', value('duration'), '秒')
+      add('icd', '内置冷却', value('icd'), '秒')
+    } else if (id === 'sj_bone') {
+      pct('damageBonus', '攻击伤害加成', value('damage_bonus'))
+      pct('speedBonus', '移速加成', value('speed_bonus'))
+    } else if (id === 'sj_gate') {
+      add('procCap', '每目标爆裂伤害', attack * value('proc_damage'), '', '指定重招命中触发，冷却10秒；中心爆裂与周围剑气对各目标仅结算一次伤害')
+      add('triggerCooldown', '触发间隔', value('trigger_cooldown'), '秒')
+      add('target_cap', '周围目标上限', value('target_cap'))
+      add('radius', '爆裂半径', value('radius'))
+    } else if (id === 'vajra') {
+      pct('reduction', '常驻减伤', value('reduction'))
+      pct('reductionCap', '常驻减伤合计上限', .15)
+    } else if (id === 'sj_flight') {
+      pct('speedBonus', '移速加成', value('speed_bonus'))
+      pct('slowResistance', '减速抗性', value('slow_resistance'))
+    }
+  }
+  if (evo) {
+    add('trainingRank', '继承基础修炼', `${base.name}${parentLevel}级`,
+      '', effective.skills[evo.parent] ? '' : '尚未修炼，按1级预览')
+    description += '保留进阶时基础功法至少保留1级；须先退还进阶，才能退空基础功法。'
+  }
+  if (damageType === 'hybrid') description += '造成物理与法术混合伤害，基础伤害按物理攻击力×50%＋法术攻击力×50%计算，再乘功法倍率，各自享受对应伤害加成。'
+  const element = skillElement(id)
+  if (damageType !== 'none') {
+    add('element', '伤害属性', element === 'none' ? '无属性' : `${ELEMENT_NAMES[element]}属性`)
+    description += '面板伤害按武器平均攻击计算；每次施放的实际攻击会在武器范围内浮动。'
+  }
+  const requirement = requirements(effective, trainingDefinition, learned, !!snapshot)
+  return { id, name: definition.name, category, damageType, element, cooldown, manaCost: base.kind==='active' ? skillManaCost(form.id || id) : 0,
+    description: `${preview ? '首级预览。' : ''}${description}`,
+    statLines: rows.map(row => row.text), requirementLines: requirement.lines,
+    rankRuleLines: rankRuleLines(trainingDefinition),
+    preview, maxed: learned >= trainingDefinition.maxLevel, learnedLevel: learned, previewLevel: level, effectiveLevel:level, equipmentLevels:learned?level-learned:0,
+    stats: rows, nextRequirement: requirement.detail, currentForm: form, formLines: describeForm(id, form) }
+}
+
+function swordQiFormName(id, form) {
+  if (id === 'sj_arc') return '近身三斩'
+  if (id === 'sj_moon') return '原地横扫'
+  if (id === 'sj_moon_triple') return '三重月牙'
+  if (id === 'sj_cross') return form.shape === 'cross-burst' ? '前方双剑气交叉斩' : form.shape === 'cross' ? '近身十字斩'
+    : form.width > field(skills.get(id), 'width', 1) ? '大型飞行十字斩' : '飞行十字斩'
+  return null
+}
+
+function describeForm(id, form) {
+  const shape = {
+    sj_yujian: `${form.swords}把追踪飞剑`, sj_arc: `${swordQiFormName(id, form)}，${form.hits}道月牙`,
+    sj_moon: '原地宽幅月弧横扫', sj_moon_triple: '斜斩、横斩、下劈三发月牙',
+    sj_cross: `${swordQiFormName(id, form)}，原地爆发一次`,
+    sj_line: `${form.hits}次同路穿刺`, sj_shadow: `${form.hits}道交错剑痕`, sj_jinghong: `锁定单体，${form.hits}次穿刺`,
+    sj_wanjian: `${form.swords}剑环身`, sj_qinglian: '三层莲瓣剑环，每秒一轮判定', sj_formation: '双眼圆形剑阵', sj_sancai: '三剑三角阵',
+    evo_wanjian: `${form.hits - 1}次向心穿刺＋1记合剑`, evo_tiandi: '一道巨剑重斩',
+    evo_wuwo: `${form.swords}剑错轨巡游与近身剑意`, evo_sixiang: '四眼菱形剑阵',
+  }[id]
+  if (!shape) {
+    if (id === 'sj_gate') return ['形态：目标体内爆裂，白色长短剑气紧凑错落外射。',
+      `范围：目标周围半径${form.radius}，周围最多${form.targetCap}个目标，加上中心目标，各受一次伤害。`,
+      '规则：剑破虚空／一剑开天、双月斩、分光收尾触发；每次重招一次，内置冷却10秒。']
+    const scope = {
+      sj_heart: '作用范围：自身的直接攻击。',
+      sj_mark: '作用范围：一次直接命中的一个存活敌人；易伤对无甲目标也有效。',
+      sj_spirit: '作用范围：自身灵力恢复（灵力低于30%时）、御剑术索敌距离及自身周围灵石、材料和地面治疗物的拾取范围。',
+    }[id] || '作用范围：自身。'
+    return [id === 'sj_mark' ? '形态：自动施加减益，无施法动作、特效动画或独立伤害。' : '形态：被动生效，不增加攻击次数。', scope]
+  }
+  const lines = [`形态：${shape}。`, form.hits === null
+    ? `打击：持续环绕，同一敌人每${fmt(form.interval)}秒最多1击。`
+    : `打击：${id === 'evo_wanjian' ? '归宗一轮' : '整招'}对同一敌人最多${form.hits}击。`]
+  if (id === 'evo_wanjian') lines.push(`范围：最远选点距离${form.reach}，飞剑从距落点${form.radius}处沿宽${form.width}的剑路刺入；末段合剑宽${form.width * 2}，从施法起点贯穿落点后再延伸${form.radius}。`)
+  else if (form.shape === 'projectile') lines.push(`范围：索敌距离${form.reach}，每剑追击一个目标。`)
+  else if (['crescent-projectile', 'cross-projectile'].includes(form.shape)) lines.push(`范围：${id === 'sj_cross' ? '两道交叉月牙的弧形刃面，整体横宽' : '刃面横宽'}${fmt(form.width)}，最远飞行${form.range || form.reach}，遇地形阻挡或战场边界提前消散；索敌距离${form.reach}。`)
+  else if (form.shape === 'cross') lines.push(`范围：身前相交的两道月牙弧形刃面，整体横宽${fmt(form.width)}、刃宽${form.bladeWidth}；刃面间空隙不造成伤害。`)
+  else if (form.shape === 'cross-burst') lines.push(`范围：以施放朝向为准，前方180°、距离${form.radius}内的可见敌人；不命中身后目标。`)
+  else if (id === 'sj_moon') lines.push(`范围：原地横扫${form.angle}°，横向${form.width}、纵向${form.radius}；月弧不飞行。`)
+  else if (form.shape === 'sector') lines.push(`范围：前方${form.angle}°扇区，半径${form.radius}。`)
+  else if (form.shape === 'line') lines.push(`范围：最长${form.reach}、宽${form.width}的直线剑路。`)
+  else if (form.shape === 'lotus') lines.push(`范围：三层莲瓣剑环，半径约${form.rings.map(ring => ring.radius).join('、')}像素（0.6m、1.2m、2.0m），内4剑、中6剑、外8剑；每0.5秒判定一次，判定剑扫过的环才命中。`)
+  else if (form.shape === 'orbit') lines.push(`范围：剑环轨道半径${form.radius}，剑身外缘约${form.radius + form.bladeLength / 2 + form.bladeWidth / 2}${id === 'sj_wanjian' ? `，内侧约${form.innerRadius}为近身空隙` : `，内圈覆盖至半径${form.innerRadius}`}。`)
+  else if (form.shape === 'triangle') lines.push(`范围：三角形内部，中心至顶点${form.radius}，最远布置距离${form.reach}。`)
+  else if (form.shape === 'diamond') lines.push(`范围：菱形内部，中心至顶点${form.radius}。`)
+  else if (form.shape === 'jinghong') lines.push(`范围：索敌距离${form.reach}，只锁定1个目标；目标死亡时在${form.retargetRadius}范围内改锁。`)
+  else if (form.shape === 'shadow') lines.push(`范围：落点周围半径${form.radius}内的交错剑路，剑路宽${form.width}。`)
+  else lines.push(`范围：落点半径${form.radius}的圆形区域${form.reach ? `，最远布置距离${form.reach}` : ''}。`)
+  const lock = {
+    sj_yujian: '无目标时逐把蓄剑；按血量派剑并计入在途伤害，多余悬停，高血量目标可全部集火。',
+    sj_arc: '整招方向固定，三斩分别从人物当时的位置挥出。',
+    sj_moon: '施放时在原地横扫一次，月弧不飞行；消散期间不追加伤害。',
+    sj_moon_triple: '整招方向固定，三发分别从人物当时位置射出；离体后不跟随人物或追敌，尾光无伤害。',
+    sj_cross: form.shape === 'cross-burst' ? '白紫双刃在角色前方交叉斩出，蓝黑剑气为底层衬影；整招固定在施放位置与朝向，不飞行、不命中身后目标。每个目标只结算一次，底层衬影和消散余光不追加伤害。'
+      : form.shape === 'cross' ? '两道月牙在身前固定位置交叉斩击，锋面共同朝前、末端后掠，共用每敌一次命中。'
+      : '两道月牙交叉飞行，锋面共同朝向前进方向、末端后掠；离体后保持形状与方向，共用每敌一次命中，尾光无伤害。',
+    sj_line: '首刺锁定起点与方向，后续穿刺沿原剑路发出。',
+    sj_shadow: '出招时固定落点，后续剑痕不追随敌人。',
+    sj_jinghong: '重剑跟随锁定目标，只命中该目标；目标死亡时改锁240范围内的下一个目标，没有目标则剩余穿刺落空。',
+    sj_wanjian: '飞剑沿不同轨迹护身，随人物移动；剑身扫过或敌人进入近身剑意范围时命中，同一目标每0.6秒最多受击一次。',
+    sj_qinglian: '阵眼固定在施放位置，不追随人物；起阵0.8秒后爆发，持续4秒，前3秒外层16瓣、中层12瓣、内层8瓣依次各判定一轮，不限目标，不减速敌人。',
+    sj_formation: '起手时锁定落点，剑阵固定在原地，不追随敌人；剑雨余光不追加伤害。',
+    sj_sancai: '起手时选择敌群落点，剑阵固定在原地；三剑轮流落下共六次，均分整阵伤害，减速不影响敌人出招。',
+    evo_wanjian: '归宗落点固定，穿刺与末段合剑各自命中所在剑路。',
+    evo_tiandi: '蓄势末段同时锁定起点与方向，人物移动不改变剑路；地面裂光不追加伤害。',
+    evo_wuwo: '飞剑沿不同轨迹护身，剑境随人物移动；近身剑意与飞剑共用命中间隔。',
+    evo_sixiang: '施放后四个阵眼固定在原地，阵眼数量不倍增击数。',
+  }[id]
+  lines.push(`定位：${lock}`)
+  if (form.targetCap > 0 && form.shape !== 'projectile') lines.push(`每击最多覆盖${form.targetCap}个敌人。`)
+  return lines
+}
+
+function compareForms(current, next) {
+  const lines = []
+  const currentName = swordQiFormName(current.id, current), nextName = swordQiFormName(next.id, next)
+  if (currentName && currentName !== nextName) lines.push(`形态突破：${currentName} → ${nextName}。`)
+  const geometryKeys = form => !swordQiFormName(form.id, form) ? null
+    : form.shape === 'cross-burst' ? ['radius']
+      : form.shape === 'sector' ? ['radius', 'angle']
+      : form.shape === 'cross' ? ['width', 'bladeWidth'] : ['reach', 'width', 'bladeWidth']
+  const currentGeometry = geometryKeys(current), nextGeometry = geometryKeys(next)
+  for (const [key, label, unit] of [
+    ['hits', '同敌最多命中', '击'], ['swords', '剑数', '把'], ['eyes', '阵眼', '个'],
+    ['radius', '范围半径', ''], ['reach', '射程', ''], ['width', '剑路宽度', ''],
+    ['angle', '扇区角度', '°'], ['targetCap', '每击目标上限', '个'],
+    ['interval', '命中间隔', '秒'], ['duration', '持续时间', '秒'],
+  ]) {
+    if (['radius', 'reach', 'width', 'angle'].includes(key)
+      && (currentGeometry && !currentGeometry.includes(key) || nextGeometry && !nextGeometry.includes(key))) continue
+    const shownLabel = currentName && key === 'reach' ? '索敌距离'
+      : currentName && key === 'width' ? '刃面横宽' : label
+    if (current[key] !== next[key] && current[key] != null && next[key] != null)
+      lines.push(`${shownLabel}：${fmt(current[key])} → ${fmt(next[key])}${unit}。`)
+  }
+  if (currentName === nextName && ['shape', 'hits', 'swords', 'eyes'].every(key => current[key] === next[key]))
+    lines.unshift('本级形态不变，沿用当前打击方式。')
+  return lines
+}
+
+/** Predict by copying the current combat loadout, so in-run previews keep the
+ * snapshot's XP, equipment, passives and parent rank without spending anything. */
+export function skillPresentation(state, id) {
+  const current = presentRank(state, id)
+  if (!current) return null
+  if (current.maxed) return { ...current, nextForm: null, nextFormLines: [], nextPreview: null }
+  const definition = skills.get(id) || evolutions.get(id)
+  const snapshot = state.activeRun?.snapshot
+  let nextLoadout = JSON.parse(JSON.stringify(snapshot?.loadout || combatLoadout(state)))
+  const rank = current.learnedLevel + 1
+  const nextTrained=nextLoadout.trainedSkills??nextLoadout
+  if (definition.kind === 'evolution') {
+    nextTrained.evolutionLevels[id] = rank
+    if (!nextLoadout.evolutions.includes(id)) nextLoadout.evolutions.push(id)
+  } else nextTrained[definition.kind === 'active' ? 'active' : 'passive'][id] = rank
+  nextLoadout=applyEquipmentSkillLevels(nextLoadout)
+  const projected = presentRank({ ...state, activeRun: { snapshot: {
+    player: { xp: snapshot?.player.xp ?? state.xp }, loadout: nextLoadout,
+  } } }, id)
+  return { ...current, nextForm: projected.currentForm,
+    nextFormLines: current.preview ? ['学习后获得上述首级形态。'] : compareForms(current.currentForm, projected.currentForm),
+    nextPreview: { level: rank, effectiveLevel:projected.effectiveLevel, currentForm: projected.currentForm, formLines: projected.formLines,
+      description: projected.description, stats: projected.stats, statLines: projected.statLines, cooldown: projected.cooldown } }
+}

@@ -7,6 +7,8 @@ type Entry = { done: boolean; image: ImageAsset | null; texture: Texture2D | nul
 // Spider death has no delivered clip, so its existing on-screen pose stays this long before cleanup removes it.
 const SPIDER_DEATH_HOLD_SECONDS = 1.5;
 type Actor = { node: Node; sprite: Sprite; transform: UITransform; family: string; x: number; facing: number; seen: boolean; top?:number; worldY?:number; enraged?:boolean; diedAt?:number; motionTime?:number; moving?:boolean; bodySize?:number };
+// Spider walk stride: 143 world units/s at 12 fps ≈ 12 units per frame (full-speed cadence unchanged).
+const SPIDER_STRIDE = 12;
 const families = new Set(['boar', 'wolf', 'bear', 'tiger', 'tiger-humanoid', 'white-tiger', 'ape', 'snake', 'crocodile', 'scorpion', 'centipede', 'rhino', 'yak', 'falcon', 'spider-lady', 'spider', 'bat', 'spider-queen', 'snake-lady', 'bear-humanoid', 'crocodile-humanoid', 'wolf-humanoid', 'falcon-humanoid', 'ape-humanoid', 'bat-humanoid', 'boar-humanoid', 'scorpion-humanoid','centipede-humanoid']);
 export type MonsterMotion = {
  time: number;
@@ -182,6 +184,7 @@ export class TowerMonsterArt {
  private rageFrames = new Map<string, SpriteFrame>();
  private observations = new Map<string | number,{hp?:number;hitAt:number}>();
  private phaseTracks = new Map<string | number, PhaseTrack>();
+ private travel = new Map<string | number, number>();
 
  beginFrame() {
   for(const renderer of this.speciesRenderers.values())renderer.beginFrame();
@@ -226,6 +229,9 @@ export class TowerMonsterArt {
   if (animate) this.loadMotion();
   const prior=this.actors.get(id);
   const moving=motion?.moving ?? (prior?.motionTime===motion?.time ? prior?.moving : !!prior && (Math.abs(worldX-prior.x)>.01 || Math.abs((motion?.worldY??0)-(prior.worldY??0))>.01));
+  // 2026-11-13: ground distance covered, so a spider's legs advance with its actual displacement
+  // (hit-stop freezes animation time but not the simulation position).
+  if(animate&&prior&&moving){const t=this.travel.get(id)??0;this.travel.set(id,t+Math.hypot(worldX-prior.x,(motion?.worldY??0)-(prior.worldY??0)));}
   const animatedFrame = animate ? this.motionFrame(id, {...motion,moving}) : null;
   const frame = animatedFrame || entry.frame;
   if (!frame) return 0;
@@ -308,6 +314,7 @@ export class TowerMonsterArt {
    this.remove(id, actor);this.observations.delete(id);
   }
   for (const [id, track] of this.phaseTracks) if (!track.seen) this.phaseTracks.delete(id);
+  for (const id of this.travel.keys()) if (!this.actors.has(id)) this.travel.delete(id);
  }
 
  clearBindings() {
@@ -322,7 +329,7 @@ export class TowerMonsterArt {
   for(const renderer of this.speciesRenderers.values())renderer.destroy();this.speciesRenderers.clear();
   for (const entry of this.entries.values()) this.release(entry);
   this.entries.clear();
-  this.releaseMotion(); this.phaseTracks.clear();
+  this.releaseMotion(); this.phaseTracks.clear(); this.travel.clear();
   // Body animation paths belong exclusively to this floor's monster renderer.
   // Shared portraits and skill effects keep their host-lifetime cache.
   if(this.motionRequested){
@@ -409,7 +416,8 @@ export class TowerMonsterArt {
   if(!track||track.key!==key||motion.time<track.time){track={key,start:Math.min(start,motion.time),time:motion.time,seen:true};this.phaseTracks.set(id,track);}
   track.time=motion.time;track.seen=true;
   const age=Math.max(0,motion.time-track.start),length=count??clip.frames.length;
-  const n=hold?0:clip.loop?Math.floor(age*clip.fps)%length:end!==undefined?Math.min(length-1,Math.floor(age/Math.max(1e-8,end-track.start)*length)):Math.min(length-1,Math.floor(age*clip.fps));
+  // Spider walk: one frame per SPIDER_STRIDE world units travelled, so feet never slide.
+  const n=hold?0:name==='move'&&this.motionFamily==='spider'?Math.floor((this.travel.get(id)??0)/SPIDER_STRIDE)%length:clip.loop?Math.floor(age*clip.fps)%length:end!==undefined?Math.min(length-1,Math.floor(age/Math.max(1e-8,end-track.start)*length)):Math.min(length-1,Math.floor(age*clip.fps));
   return (this.motionFamily==='boar'&&m?.enraged?this.rageFrames:this.motionFrames).get(clip.frames[offset+n])||null;
  }
 

@@ -176,7 +176,8 @@ for (const id of ['falcon_elite', 'spider_elite']) {
   test(`${id} advances, retreats and holds its distance band during cooldown`, () => {
     const { run, enemy } = fixture(id, 60, id === 'spider_elite' ? 3 : undefined)
     enemy.ai.cooldowns[id === 'spider_elite' ? 'web' : 'shot'] = run.state.time + 20
-    ticks(run, enemy, 90)
+    // 2026-11-13: spiders back off at 55% speed, so they need longer to open the 120-unit gap.
+    ticks(run, enemy, id === 'spider_elite' ? 150 : 90)
     close(separation(run, enemy), 180)
     assert.equal(enemy.ai.mode, 'approach')
     enemy.x = CENTER.x + 400; enemy.y = CENTER.y

@@ -33,6 +33,8 @@ import { enemyAttackSpec, enemyCombatStyle, normalSkillKind } from './TowerEnemy
 // 83号：普通怪技能冷却第1–3层15秒、第4层起10秒；出生4秒后才可首次释放。
 const NORMAL_SKILL_FIRST_DELAY = 4
 const normalSkillCooldown = floor => floor <= 3 ? 15 : 10
+// Spiders back off slower than they advance (2026-11-13 user report: lockstep retreat looked wrong).
+const SPIDER_RETREAT_PACE = .55
 const isNormalSkill = (e, attack) => e.role === 'normal' && !!attack && attack.kind !== 'bite'
 import { validateWeapon, weaponDamageModifiers, weaponFlatAttack, weaponAttackRange, rollWeaponAttack,
   weaponAttackProfile, weaponElementBonus, weaponFlatMagicAttack, weaponMagicAttackRange } from './TowerWeapons'
@@ -41,7 +43,7 @@ import { newAttackActions, canStartSkill, startSkillAction, validAttackActions, 
 import { validateEquipment, ringDamageModifiers, armorModifiers, equipmentDamageMultiplier, equipmentDefenses } from './TowerEquipment'
 import { skillCooldown, castActionTiming, equipmentCastSpeed, equipmentAttackProfile } from './TowerSkillTiming'
 import { towerEnemyStats, towerEnemyRadius, ENEMY_INCOMING_DAMAGE_MULTIPLIER } from './TowerEnemyStats'
-import { skillForm, skillHitShare, orbitSwordPose, convergenceRainMultiplier, qinglianRoundHits, qinglianRingForPulse } from './TowerSkillForms'
+import { skillForm, skillHitShare, orbitSwordPose, orbitReach, convergenceRainMultiplier, qinglianRoundHits, qinglianRingForPulse } from './TowerSkillForms'
 import { sancaiContains, sancaiTarget } from './TowerSancai'
 import { jinghongSpawnDir, JINGHONG_SCAR } from './TowerJinghong'
 import { swordQiPoseIndex, swordQiReleaseOffset, swordQiHits, swordQiTravelLimit } from './TowerSwordQi'
@@ -636,6 +638,8 @@ export function validateTowerSnapshot(s, legacy = false) {
       || !object(s.cooldowns) || !Object.values(s.cooldowns).every(v => finite(v) && v >= 0)
       || (s.orbitUntil !== undefined && (!finite(s.orbitUntil) || s.orbitUntil < 0
         || s.orbitUntil > s.time + GS.sj_wanjian.duration + EPS))
+      || (s.orbitClock !== undefined && (!finite(s.orbitClock) || s.orbitClock < 0))
+      || (s.orbitPace !== undefined && (!finite(s.orbitPace) || s.orbitPace < 0 || s.orbitPace > 4))
       || !finite(s.waveStartedAt) || s.waveStartedAt > s.time
       || !finite(s.hurtUntil) || !finite(s.nextWindupAt) || !finite(s.supportAt)
       || typeof s.supportReleased !== 'boolean' || !finite(s.gateReadyAt)
@@ -1478,10 +1482,20 @@ export class TowerRun {
     if (previous.active.sj_wanjian !== level
       || (previous.evolutionLevels.evo_wuwo ?? 0) !== (loadout.evolutionLevels.evo_wuwo ?? 0)) return
     const bladeRadius = form.bladeWidth / 2
+    // 2026-11-13: the base orbit runs on its own motion clock. A living monster inside the outer reach
+    // speeds the swords up, none slows them down; the pace blends over form.paceRamp seconds.
+    let clockBefore = s.time, clockAfter = s.time
+    if (!evolved && form.combatPace) {
+      const goal = this._targets(p, orbitReach(form)).length ? form.combatPace : form.idlePace
+      const pace = finite(s.orbitPace) ? s.orbitPace : goal, step = (form.combatPace - form.idlePace) * STEP / form.paceRamp
+      s.orbitPace = pace + Math.max(-step, Math.min(step, goal - pace))
+      clockBefore = finite(s.orbitClock) ? s.orbitClock : s.time
+      clockAfter = s.orbitClock = clockBefore + s.orbitPace * STEP
+    }
     const sweeps = []
     for (let i = 0; i < form.swords; i++) {
-      const before = orbitSwordPose(form, Math.max(0, s.time - STEP), i)
-      const after = orbitSwordPose(form, s.time, i)
+      const before = orbitSwordPose(form, evolved ? Math.max(0, s.time - STEP) : clockBefore, i)
+      const after = orbitSwordPose(form, clockAfter, i)
       const a = before.collision ?? before, b = after.collision ?? after
       sweeps.push([
         { x: oldPlayer.x + a.baseX, y: oldPlayer.y + a.baseY },
@@ -1499,7 +1513,10 @@ export class TowerRun {
     const context = { castContext: s.actions?.orbit?.castContext ?? castContext(s) }
     for (const e of hits) {
       const outer = distance(e, p) + e.radius >= form.radius - form.bladeLength / 2 - bladeRadius
-      const factor = evolved ? (outer ? this._evolutionBudget('evo_wuwo') : GEVO.evo_wuwo.innerMultiplier[loadout.evolutionLevels.evo_wuwo - 1]) : GS.sj_wanjian.cycle_damage_multiplier
+      // 2026-11-13: blade (non-field) hits of the base orbit carry the per-level 4-sword compensation.
+      const fieldHit = field && distance(e, p) <= form.innerRadius + e.radius
+      const factor = evolved ? (outer ? this._evolutionBudget('evo_wuwo') : GEVO.evo_wuwo.innerMultiplier[loadout.evolutionLevels.evo_wuwo - 1])
+        : GS.sj_wanjian.cycle_damage_multiplier * (fieldHit ? 1 : GS.sj_wanjian.blade_compensation?.[level - 1] ?? 1)
       outgoing.push({ target: e.id, damage: castAttack(context.castContext) * levelValue('sj_wanjian', 'damage', level, loadout) * factor,
         direct: true, source: form.id, ...context,
         impact: { skill: form.id, dirX: -(e.y-p.y) || 0, dirY: (e.x-p.x) || 1,
@@ -1599,7 +1616,7 @@ export class TowerRun {
         c.pulseIndex++
       } else if (c.skill === 'sj_wanjian') {
         s.actions.orbit = { startedAt: s.time, castContext: c.castContext }
-        if (c.formId !== 'evo_wuwo') s.orbitUntil = s.time + GS.sj_wanjian.duration
+        if (c.formId !== 'evo_wuwo') { s.orbitUntil = s.time + GS.sj_wanjian.duration; s.orbitPace = undefined; if (!finite(s.orbitClock)) s.orbitClock = s.time }
         c.pulseIndex++
       } else this._releaseSkill(c, outgoing)
       if (c.pulseIndex < timing.releases.length) c.releaseAt = c.startedAt + timing.releases[c.pulseIndex]
@@ -2470,8 +2487,13 @@ export class TowerRun {
           && (s.arenaVersion !== 1 || pillarSight(e,s.player))) {
           // Spacing remains active while a shot is cooling. Cap the step at the
           // band edge so fast actors do not oscillate across it.
-          const gap = d < style.preferredMin ? d - style.preferredMin : Math.max(0, d - style.preferredMax)
-          const travel = Math.min(Math.abs(gap), moveSpeed * STEP), sign = Math.sign(gap)
+          let gap = d < style.preferredMin ? d - style.preferredMin : Math.max(0, d - style.preferredMax)
+          // 2026-11-13 user report: a spider backing away at full speed, with the blocked player glued to it,
+          // moved in lockstep. Spiders back off at 55% speed and hold their ground once in body contact.
+          const spider = e.family === 'spider'
+          if (spider && gap < 0 && d <= standingDistance(e, s.player) + 6) gap = 0
+          const pace = spider && gap < 0 ? SPIDER_RETREAT_PACE : 1
+          const travel = Math.min(Math.abs(gap), moveSpeed * pace * STEP), sign = Math.sign(gap)
           const old = { x: e.x, y: e.y }
           e.x += dir.x * travel * sign; e.y += dir.y * travel * sign
           boundActor(e, s.arenaVersion)

@@ -1,6 +1,6 @@
 import {towerResources as resources} from './TowerResources';
 import {Color,Graphics,ImageAsset,isValid,Node,Rect,Sprite,SpriteFrame,Texture2D,UITransform} from 'cc';
-import {skillForm,orbitSwordPose} from './shared/js/xianxia/TowerSkillForms';
+import {skillForm,orbitSwordPose,orbitMotionTime} from './shared/js/xianxia/TowerSkillForms';
 import {setTowerDepth} from './TowerDepthOrder';
 
 type TrailPoint={x:number;y:number;worldX:number;worldY:number;time:number};
@@ -26,6 +26,8 @@ export class OrbitSwordArt {
  private lastTime=-1;private lastX=NaN;private lastY=NaN;
  private historyTime=new Float64Array(HISTORY_CAP);
  private historyX=new Float64Array(HISTORY_CAP);private historyY=new Float64Array(HISTORY_CAP);
+ // 2026-11-13: the base orbit's motion clock (combat-paced) is sampled with the player so trails follow the same path.
+ private historyClock=new Float64Array(HISTORY_CAP);private sampleClock=0;private clockOf:(time:number)=>number=t=>t;
  private historyHead=0;private historyCount=0;private sampleX=0;private sampleY=0;
  private stroke=new Color(145,226,244,255);
  private flowRequested=false;private flowImage:ImageAsset|null=null;private flowTexture:Texture2D|null=null;
@@ -83,19 +85,21 @@ export class OrbitSwordArt {
   // 剑域形态的周天剑阵最多 12 柄：固定一个 12 柄的复用池，升级时不重建节点。
   const capacity=f.swords>8||f.motion==='wuwo'?12:8;
   while(this.actors.length<capacity)this.actors.push(this.createActor(parent));
-  if(changed)this.remember(time,originX,originY);
+  const clock=evolution?time:orbitMotionTime(s);
+  this.clockOf=evolution?(t=>t):(t=>{this.samplePlayer(t);return this.sampleClock});
+  if(changed)this.remember(time,originX,originY,clock);
   for(let i=0;i<this.actors.length;i++){
    const actor=this.actors[i];actor.node.active=i<f.swords;
    if(!actor.node.active)continue;
-   const pose=orbitSwordPose(f,time,i),x=originX+pose.x,y=originY+pose.y;
+   const pose=orbitSwordPose(f,clock,i),x=originX+pose.x,y=originY+pose.y;
    actor.node.setPosition(x-camera.x,y-camera.y);actor.node.angle=pose.angle*180/Math.PI;
    setTowerDepth(actor.node,p.y+('depthY' in pose?pose.depthY:pose.y));
    const visible=('length' in pose?pose.length:f.bladeLength)*VISUAL_LENGTH,spriteWidth=ART.width*visible/ART.span;
    actor.ui.setContentSize(spriteWidth,spriteWidth*ART.height/ART.width);
    if(changed||bindingsChanged)this.drawTail(actor,f,time,pose.angle,x,y,i);
   }
-  // 2026-11-09：周天剑阵改用剑域形态（motion==='wuwo'），同样显示脚下冰蓝光环。
-  this.drawFlow(parent,evolution||f.motion==='wuwo'?f:null,time,p.x-camera.x,p.y-camera.y,p.y);
+  // 2026-11-13 用户决定：周天剑阵不再显示脚下冰蓝光环；只有（已退役的）周天剑域进化保留。
+  this.drawFlow(parent,evolution?f:null,time,p.x-camera.x,p.y-camera.y,p.y);
   this.state=s;this.lastTime=time;this.lastX=originX;this.lastY=originY;
   return true;
  }
@@ -148,30 +152,31 @@ export class OrbitSwordArt {
   }
   return {node,ui,sprite,tail,lastTrail};
  }
- private remember(time:number,x:number,y:number){
-  this.historyTime[this.historyHead]=time;this.historyX[this.historyHead]=x;this.historyY[this.historyHead]=y;
+ private remember(time:number,x:number,y:number,clock:number){
+  this.historyTime[this.historyHead]=time;this.historyX[this.historyHead]=x;this.historyY[this.historyHead]=y;this.historyClock[this.historyHead]=clock;
   this.historyHead=(this.historyHead+1)%HISTORY_CAP;
   this.historyCount=Math.min(HISTORY_CAP,this.historyCount+1);
  }
  private samplePlayer(time:number){
   const first=(this.historyHead+HISTORY_CAP-this.historyCount)%HISTORY_CAP;
   if(time<=this.historyTime[first]){
-   this.sampleX=this.historyX[first];this.sampleY=this.historyY[first];return;
+   this.sampleX=this.historyX[first];this.sampleY=this.historyY[first];this.sampleClock=this.historyClock[first];return;
   }
   for(let i=this.historyCount-1;i>0;i--){
    const a=(first+i-1)%HISTORY_CAP,b=(first+i)%HISTORY_CAP;
    if(time>=this.historyTime[a]){
     const k=Math.min(1,(time-this.historyTime[a])/Math.max(1e-9,this.historyTime[b]-this.historyTime[a]));
     this.sampleX=this.historyX[a]+(this.historyX[b]-this.historyX[a])*k;
-    this.sampleY=this.historyY[a]+(this.historyY[b]-this.historyY[a])*k;return;
+    this.sampleY=this.historyY[a]+(this.historyY[b]-this.historyY[a])*k;
+    this.sampleClock=this.historyClock[a]+(this.historyClock[b]-this.historyClock[a])*k;return;
    }
   }
   const last=(this.historyHead+HISTORY_CAP-1)%HISTORY_CAP;
-  this.sampleX=this.historyX[last];this.sampleY=this.historyY[last];
+  this.sampleX=this.historyX[last];this.sampleY=this.historyY[last];this.sampleClock=this.historyClock[last];
  }
  private drawTail(actor:Actor,f:any,time:number,angle:number,x:number,y:number,index:number){
   const g=actor.tail,dx=Math.cos(angle),dy=Math.sin(angle);g.clear();
-  const current=orbitSwordPose(f,time,index);
+  const current=orbitSwordPose(f,this.clockOf(time),index);
   const evolved=f.id==='evo_wuwo'||f.motion==='wuwo',speed='speedFactor' in current?current.speedFactor:1;
   const steps=evolved?TRAIL_SEGMENTS:8;
   const wake=evolved?.65+.25*Math.max(0,(speed-.4)/1.2):TRAIL_SECONDS;
@@ -185,11 +190,11 @@ export class OrbitSwordArt {
    trail.radial=f.radius+f.bladeLength*(strand?-.1:.18);
    for(let j=0;j<=steps;j++){
     const point=points[j],t=Math.max(0,time-wake*(1-j/steps));
-    this.samplePlayer(t);
+    const motionT=this.clockOf(t);this.samplePlayer(t);
     if(evolved){
      // Emit from the hilt, so the visible wake is behind the sword rather
      // than buried under its body. Both glow and core follow this same path.
-     const pose=orbitSwordPose(f,t,index),offset=-('length' in pose?pose.length:f.bladeLength)/2;
+     const pose=orbitSwordPose(f,motionT,index),offset=-('length' in pose?pose.length:f.bladeLength)/2;
      point.worldX=this.sampleX+pose.x+Math.cos(pose.angle)*offset;
      point.worldY=this.sampleY+pose.y+Math.sin(pose.angle)*offset;
     }else{

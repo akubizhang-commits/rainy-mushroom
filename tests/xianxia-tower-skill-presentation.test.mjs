@@ -146,8 +146,9 @@ test('next-rank effects cross actual form thresholds without changing the frozen
  assert.equal(arc.learnedLevel,6,'uses the battle rank, not the higher camp rank')
  const orbit=skillPresentation(s,'sj_wanjian')
  assert.equal(orbit.currentForm.hits,null);assert.equal(orbit.nextForm.hits,null)
- // 2026-11-09 方案A：剑数 6/8/10/12，5 级 8 柄、6 级 10 柄。
- assert.equal(orbit.currentForm.swords,8);assert.equal(orbit.nextForm.swords,10)
+ // 2026-11-13 用户决定：各级固定 4 把，升级不再显示剑数变化。
+ assert.equal(orbit.currentForm.swords,4);assert.equal(orbit.nextForm.swords,4)
+ assert.ok(!orbit.nextFormLines.some(line=>line.includes('剑数')),'no sword-count change line')
  const evolution=skillPresentation(s,'evo_sixiang')
  assert.equal(evolution.learnedLevel,1);assert.equal(evolution.currentForm.hits,16);assert.equal(evolution.nextForm.hits,20)
  assert.equal(evolution.currentForm.radius,288,'current presentation keeps the battle evolution rank')

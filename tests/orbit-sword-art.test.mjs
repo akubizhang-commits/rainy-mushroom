@@ -3,7 +3,7 @@ import assert from 'node:assert/strict'
 import { readFileSync } from 'node:fs'
 import { stripTypeScriptTypes } from 'node:module'
 import { runInNewContext } from 'node:vm'
-import { skillForm, orbitSwordPose } from '../js/xianxia/TowerSkillForms.js'
+import { skillForm, orbitSwordPose, orbitMotionTime } from '../js/xianxia/TowerSkillForms.js'
 
 const camera = { x: 3, y: 7 }
 const close = (a, b) => assert.ok(Math.abs(a - b) < 1e-6, `${a} != ${b}`)
@@ -38,7 +38,7 @@ function fixture() {
     stroke() { this.calls.push(['stroke', this.strokeColor.a, this.lineWidth]) }
   }
   const context = { Node, UITransform, Sprite, Texture2D, SpriteFrame, Color, Rect, Graphics,
-    ImageAsset: class {}, skillForm, orbitSwordPose, setTowerDepth: (n, y) => { n.towerGroundY = y },
+    ImageAsset: class {}, skillForm, orbitSwordPose, orbitMotionTime, setTowerDepth: (n, y) => { n.towerGroundY = y },
     isValid: n => !!n?.isValid, console: { warn: message => warnings.push(message) },
     resources: { load: (path, type, callback) => requests.push({ path, callback }) } }
   const source = readFileSync(new URL('../cocos-pilot/assets/scripts/OrbitSwordArt.ts', import.meta.url), 'utf8')
@@ -60,14 +60,14 @@ test('orbit sprites hide in cooldown and reappear for the next active window', (
   s.loadout.growthVersion = 1
   s.orbitUntil = 4
   art.syncTower(parent, s, camera)
-  // 2026-11-09：周天剑阵改用剑域形态，1–3 级 6 柄。
-  assert.equal(active(art).length, 6)
+  // 2026-11-13 用户决定：各级固定 4 把飞剑。
+  assert.equal(active(art).length, 4)
   s.time = 4
   art.syncTower(parent, s, camera)
   assert.equal(active(art).length, 0)
   s.time = 6; s.orbitUntil = 10
   art.syncTower(parent, s, camera)
-  assert.equal(active(art).length, 6)
+  assert.equal(active(art).length, 4)
 })
 
 test('approved sword span tracks combat at every count tier, reusing one base pool', () => {
@@ -75,7 +75,7 @@ test('approved sword span tracks combat at every count tier, reusing one base po
   // 2026-11-09：周天剑阵改用修长冷色剑体 v2；画面剑长为判定剑长的 1.25 倍并保持贴图比例。
   assert.equal(requests[0].path, 'tower-skill-fx/orbit-sword-v2')
   let pool
-  for (const [level, count] of [[1, 6], [3, 8], [6, 10], [10, 12], [1, 6]]) {
+  for (const [level, count] of [[1, 4], [3, 4], [6, 4], [10, 4], [1, 4]]) {
     s.loadout.active.sj_wanjian = level
     const before = JSON.stringify(s), f = skillForm('sj_wanjian', level)
     assert.equal(art.syncTower(parent, s, camera), true)
@@ -103,11 +103,12 @@ test('evolution grows to twelve pooled swords and downgrading hides surplus acto
   const first = art.actors[0]
   s.loadout.evolutions = ['evo_wuwo']; s.loadout.evolutionLevels.evo_wuwo = 2
   art.syncTower(parent, s, camera)
+  // 2026-11-13：退役的周天剑域仍是 12 把；卸下进化后回到基础剑阵固定的 4 把，复用池仍为 12。
   assert.equal(active(art).length, 12); assert.equal(art.actors.length, 12)
   assert.equal(art.actors[0], first)
   s.loadout.evolutions = []; s.loadout.evolutionLevels = {}
   art.syncTower(parent, s, camera)
-  assert.equal(active(art).length, 12); assert.equal(art.actors.length, 12)
+  assert.equal(active(art).length, 4); assert.equal(art.actors.length, 12)
 })
 
 test('wuwo uses the supplied waist anchor, shared tangent span and unlifted depth',()=>{
@@ -142,9 +143,9 @@ test('wuwo ground ring stays optional, follows feet rather than waist, and relea
  close(f.art.flowNode.y,s.player.y-camera.y)
  assert.equal(f.art.flowFrames.length,16)
  const frame=f.art.flowFrame,texture=f.art.flowTexture
- // 2026-11-09：基础周天剑阵也使用剑域形态，卸下进阶后地环仍随剑阵显示。
+ // 2026-11-13 用户决定：基础周天剑阵移除脚下光环；卸下进阶后地环隐藏。
  s.loadout.evolutions=[];f.art.syncTower(f.parent,s,camera)
- assert.equal(f.art.flowNode.active,true)
+ assert.equal(f.art.flowNode.active,false)
  f.art.destroy();assert.equal(image.refs,0);assert.ok(frame.dead&&texture.dead)
 })
 
@@ -253,7 +254,7 @@ test('skill removal, death, re-entry and destruction release bindings without st
   assert.ok(nodes.every(n => !n.isValid && !n.parent))
   const next = new f.Node('new battle')
   f.art.syncTower(next, state(3, 0), camera)
-  assert.equal(active(f.art).length, 8); assert.equal(f.art.historyCount, 1)
+  assert.equal(active(f.art).length, 4); assert.equal(f.art.historyCount, 1)
   assert.ok(f.art.actors.every(a => a.node.parent === next))
   const frame = f.art.frame, texture = f.art.texture
   f.art.destroy(); f.art.destroy()

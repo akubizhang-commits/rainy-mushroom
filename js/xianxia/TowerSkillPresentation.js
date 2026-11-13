@@ -165,7 +165,7 @@ function presentRank(state, id) {
       if (evo) add('innerDamage', '内圈剑伤（每次）', damage(raw) * evo.innerMultiplier[level - 1])
       add('hitInterval', '同目标命中间隔', form.interval, '秒')
       add('swords', '环绕剑数量', form.swords, '把')
-      description = `${form.swords}把飞剑循阵环绕身边，以剑锋及阵中灵力绞杀附近敌人。${evo ? '内圈剑意覆盖近身空隙，内外圈共用同一次命中间隔。' : '3／6／10级增至8／10／12把飞剑，并同步扩大剑环和剑身覆盖范围。飞剑变速错轨游走，剑圈内侧有近身剑意。'}`
+      description = `${form.swords}把飞剑循阵环绕身边，以剑锋及阵中灵力绞杀附近敌人。${evo ? '内圈剑意覆盖近身空隙，内外圈共用同一次命中间隔。' : '剑环和剑身覆盖范围随等级扩大。飞剑同向游走，范围内有敌人时加速、无敌人时放缓，剑圈内侧有近身剑意。'}`
       if (!evo) description += `剑环持续${fmt(val('duration'))}秒，发动起计算${fmt(skillCooldown(cooldown,loadout))}秒冷却；结束后剑环消失，冷却完成自动再次发动。`
     } else if (base.id === 'sj_sancai') {
       const total = damage(raw)

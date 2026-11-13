@@ -193,10 +193,13 @@ export const GROWTH_SKILLS = freeze([
     // Seven possible hits per activation replace ten per old six-second cycle.
     cooldown: 6, duration: 4, cycle_damage_multiplier: 10 / 7,
     radius: [90, 90, 95, 95, 100, 105, 105, 110, 110, 120],
-    // 2026-11-09 方案A：剑数改为 6/8/10/12（沿用原分档：1–2/3–5/6–9/10 级），只影响画面与覆盖，伤害共用命中间隔。
-    swords: [6, 6, 8, 8, 8, 10, 10, 10, 10, 12],
+    // 2026-11-13 用户决定：各级固定 4 把飞剑（原 6/8/10/12）。伤害不乘剑数，但外圈覆盖随剑数减少。
+    swords: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4],
+    // 2026-11-13 用户要求补偿 4 把剑带来的外圈伤害下降：剑扫命中（不含近身剑意）按级乘此系数。
+    // 由 design/xianxia-orbit-sword-tidy-2026-11-13/compensation.mjs 按覆盖带面积加权的命中次数比算出；1–5 级未下降，不补。
+    blade_compensation: [1, 1, 1, 1, 1, 1.26, 1.26, 1.23, 1.23, 1.25],
     target_cap: 6, single_dps_factor: 1 / .6, hit_assumption: .6,
-    rule: '发动起冷却6秒，剑阵持续4秒；飞剑变速游走并带近身剑意；生效期间伤害乘10/7，以每轮最多7击补偿原6秒10击。所有环绕剑对同一目标共用0.6秒命中间隔，不乘剑数。',
+    rule: '发动起冷却6秒，剑阵持续4秒；飞剑变速游走并带近身剑意；生效期间伤害乘10/7，以每轮最多7击补偿原6秒10击。所有环绕剑对同一目标共用0.6秒命中间隔，不乘剑数。固定4把剑后，6–10级剑扫命中乘1.23–1.26补偿外圈覆盖。',
   }, { ...oldSkills.get('sj_wanjian'), pointCosts: [...activeCosts] }),
   // 青莲剑阵：持续4秒，前3秒每秒一轮，外层→中层→内层依次判定；同一目标三轮合计36次命中，伤害合计为整招预算。
   skill('sj_qinglian', {

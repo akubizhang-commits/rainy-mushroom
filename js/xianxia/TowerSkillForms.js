@@ -99,11 +99,14 @@ export function skillForm(id, level = 1, parentLevel = 1, trainedLevel = level) 
         break
       case 'sj_wanjian':
         // 2026-11-09 方案A：周天剑阵改用原周天剑域的变速游剑与近身剑意，冷却、伤害不变。
-        Object.assign(form, { shape: 'orbit', hits: null, swords: [6, 8, 10, 12][node],
+        // 2026-11-13 用户决定：各级固定 4 把飞剑。
+        Object.assign(form, { shape: 'orbit', hits: null, swords: 4,
           interval: .6, bladeLength: 36 + 2 * (form.radius - 90), bladeWidth: 10,
           // A new visible blade reaches each bearing at least once per damage window.
           angularSpeed: Math.max(1.8, Math.PI * 2 / ([4, 5, 6, 8][node] * .6)),
-          innerRadius: 67, motion: 'wuwo', motionSpeed: 2.6 })
+          innerRadius: 67, motion: 'wuwo', motionSpeed: 2.6,
+          // 2026-11-13 用户决定：收窄每把剑的随机速度差；技能范围内有怪时加速，没有怪时减速（0.5 秒平滑过渡）。
+          speedBase: .9, speedSpread: .2, speedWave: .15, combatPace: 1.35, idlePace: .45, paceRamp: .5 })
         form.innerRadius = (form.radius - form.bladeLength / 2) * 1.25
         form.radius *= 1.25
         break
@@ -115,6 +118,8 @@ export function skillForm(id, level = 1, parentLevel = 1, trainedLevel = level) 
   if (id === 'evo_wuwo') {
     // 退役的周天剑域沿用改动前的几何：基础周天剑阵的半径已×1.25，这里先还原。
     if (form.motion === 'wuwo') form.radius /= 1.25
+    // 2026-11-13: the combat pace and narrowed speed spread belong to the base orbit only; keep the retired evolution's motion.
+    for (const key of ['speedBase', 'speedSpread', 'speedWave', 'combatPace', 'idlePace', 'paceRamp']) delete form[key]
     const oldRadius = form.radius + (evolution === 1 ? 24 : 48)
     Object.assign(form, { radius: oldRadius * 1.25, swords: evolution === 1 ? 8 : 12,
       innerRadius: (oldRadius - form.bladeLength / 2) * 1.25, motionSpeed: 2.6 })
@@ -184,6 +189,14 @@ export function qinglianRoundHits(form, centre, target, pulse) {
 
 // Local coordinates: the caller adds the actual player position. Both renderer
 // and collision use the same radial blade, including the spaces between swords.
+/** Motion clock of the base orbit: advances at the combat-dependent pace while active (TowerRun). */
+export function orbitMotionTime(state) {
+  return Number.isFinite(state?.orbitClock) ? state.orbitClock : state?.time ?? 0
+}
+/** Outer attack reach of the orbit swords (also the "monster in range" test for the pace). */
+export function orbitReach(form) {
+  return form.radius + form.bladeLength / 2 + form.bladeWidth / 2
+}
 export function orbitSwordPose(form, time, index) {
   if (form.id === 'evo_wuwo' || form.motion === 'wuwo') return wuwoSwordPose(form, time, index)
   const angle = time * form.angularSpeed + index * Math.PI * 2 / form.swords
