@@ -90,7 +90,7 @@ test('approved sword span tracks combat at every count tier, reusing one base po
       close(a.node.y, s.player.y + 57 + p.y - camera.y)
       close(a.node.towerGroundY, s.player.y + p.depthY)
       close(a.node.angle, p.angle * 180 / Math.PI)
-      close(a.ui.width * 628 / 640, p.length * 1.25)
+      close(a.ui.width * 628 / 640, p.length * .9)
       close(a.ui.height, a.ui.width * 112 / 640)
       assert.equal(a.ui.anchorX, .5); assert.equal(a.ui.anchorY, .5)
     }
@@ -121,7 +121,7 @@ test('wuwo uses the supplied waist anchor, shared tangent span and unlifted dept
   const p=orbitSwordPose(form,s.time,i)
   close(a.node.x,waist.x+p.x);close(a.node.y,waist.y+p.y)
   close(a.node.towerGroundY,s.player.y+p.depthY)
-  close(a.ui.width*628/640,p.length*1.25)
+  close(a.ui.width*628/640,p.length*.9)
  }
  const ids=active(art).map(a=>a.node)
  s.time+=1/60

@@ -1,0 +1,12 @@
+fix(xianxia): falcon flight size, disable cut falcon-humanoid M07, smaller 周天剑阵 swords; prep side-view bear
+
+- Low-rank falcon: flight and bite frames drew at 63% of the hover portrait's wingspan; every
+  falcon-v1 frame now carries displayScale ×1.4566 (bite 1.5628). PNG unchanged.
+- Elite falcon (falcon-humanoid) M07 stomp: source video cut the spread wing and the fitted clip
+  drew up to 1.29× the cell width; M07 falls back to the portrait until regenerated with folded wings.
+- 周天剑阵: visual blade length 1.25 → 0.9 of the hit length (≈28% smaller); hits unchanged.
+- Bear-humanoid side view (user option 2): accepted the user's side-profile reference, padded it,
+  cut a side portrait, uploaded asset_PjvciyB9rKC9MoYZPnvUks5Z and prepared 5 Scenario requests
+  (walk, slam, M07, M04, M09; 50 CU) for 2026-11-14. Nothing wired yet.
+
+Targeted tests pass; build OK; orbit in-game check re-run.

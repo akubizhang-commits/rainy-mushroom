@@ -8,8 +8,8 @@ type Trail={radial:number;maxAlpha:number;maxWidth:number;points:TrailPoint[]};
 type Actor={node:Node;ui:UITransform;sprite:Sprite;tail:Graphics;lastTrail:Trail[]};
 // 2026-11-09：周天剑阵改用由剑破虚空白金剑派生的修长冷色剑体（orbit-sword-v2，原图与v1保留）。
 const ART={path:'tower-skill-fx/orbit-sword-v2',width:640,height:112,span:628,thickness:84};
-// 画面剑长为判定剑长的 1.25 倍，并保持贴图比例，避免剑身被横向压扁显得粗短。
-const VISUAL_LENGTH=1.25;
+// 画面剑长与判定剑长的比例，保持贴图比例。2026-11-13 用户要求飞剑改小：1.25 → 0.9（只改画面，判定不变）。
+const VISUAL_LENGTH=.9;
 // 尾迹配色与御剑术一致：宽淡青辉光、青色亮边、细白芯。
 const YUJIAN_GLOW=[109,224,248],YUJIAN_CORE=[237,255,255];
 const TRAIL_SECONDS=.18,TRAIL_SEGMENTS=20,HISTORY_CAP=64;
