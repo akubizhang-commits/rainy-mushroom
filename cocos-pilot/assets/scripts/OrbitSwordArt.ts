@@ -2,14 +2,14 @@ import {towerResources as resources} from './TowerResources';
 import {Color,Graphics,ImageAsset,isValid,Node,Rect,Sprite,SpriteFrame,Texture2D,UITransform} from 'cc';
 import {skillForm,orbitSwordPose,orbitMotionTime} from './shared/js/xianxia/TowerSkillForms';
 import {setTowerDepth} from './TowerDepthOrder';
+import {YUJIAN_LENGTH} from './shared/js/xianxia/TowerYujian';
 
 type TrailPoint={x:number;y:number;worldX:number;worldY:number;time:number};
 type Trail={radial:number;maxAlpha:number;maxWidth:number;points:TrailPoint[]};
 type Actor={node:Node;ui:UITransform;sprite:Sprite;tail:Graphics;lastTrail:Trail[]};
-// 2026-11-09：周天剑阵改用由剑破虚空白金剑派生的修长冷色剑体（orbit-sword-v2，原图与v1保留）。
-const ART={path:'tower-skill-fx/orbit-sword-v2',width:640,height:112,span:628,thickness:84};
-// 画面剑长与判定剑长的比例，保持贴图比例。2026-11-13 用户要求飞剑改小：1.25 → 0.9（只改画面，判定不变）。
-const VISUAL_LENGTH=.9;
+// 2026-11-09 用户要求：周天剑阵飞剑与御剑术外型、大小完全一致——同一张 orbit-sword-v1，显示尺寸同御剑术（YUJIAN_LENGTH）。
+// 判定几何不变；v2 修长剑模保留在资源中。
+const ART={path:'tower-skill-fx/orbit-sword-v1',width:544,height:128,span:496,thickness:88};
 // 尾迹配色与御剑术一致：宽淡青辉光、青色亮边、细白芯。
 const YUJIAN_GLOW=[109,224,248],YUJIAN_CORE=[237,255,255];
 const TRAIL_SECONDS=.18,TRAIL_SEGMENTS=20,HISTORY_CAP=64;
@@ -94,8 +94,8 @@ export class OrbitSwordArt {
    const pose=orbitSwordPose(f,clock,i),x=originX+pose.x,y=originY+pose.y;
    actor.node.setPosition(x-camera.x,y-camera.y);actor.node.angle=pose.angle*180/Math.PI;
    setTowerDepth(actor.node,p.y+('depthY' in pose?pose.depthY:pose.y));
-   const visible=('length' in pose?pose.length:f.bladeLength)*VISUAL_LENGTH,spriteWidth=ART.width*visible/ART.span;
-   actor.ui.setContentSize(spriteWidth,spriteWidth*ART.height/ART.width);
+   // 与御剑术相同：剑身可见长度 YUJIAN_LENGTH，贴图按原比例。
+   actor.ui.setContentSize(YUJIAN_LENGTH*ART.width/ART.span,YUJIAN_LENGTH*ART.height/ART.span);
    if(changed||bindingsChanged)this.drawTail(actor,f,time,pose.angle,x,y,i);
   }
   // 2026-11-13 用户决定：周天剑阵不再显示脚下冰蓝光环；只有（已退役的）周天剑域进化保留。

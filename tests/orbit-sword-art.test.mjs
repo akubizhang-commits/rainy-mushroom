@@ -1,4 +1,5 @@
 import test from 'node:test'
+import { YUJIAN_LENGTH } from '../js/xianxia/TowerYujian.js'
 import assert from 'node:assert/strict'
 import { readFileSync } from 'node:fs'
 import { stripTypeScriptTypes } from 'node:module'
@@ -38,14 +39,14 @@ function fixture() {
     stroke() { this.calls.push(['stroke', this.strokeColor.a, this.lineWidth]) }
   }
   const context = { Node, UITransform, Sprite, Texture2D, SpriteFrame, Color, Rect, Graphics,
-    ImageAsset: class {}, skillForm, orbitSwordPose, orbitMotionTime, setTowerDepth: (n, y) => { n.towerGroundY = y },
+    ImageAsset: class {}, YUJIAN_LENGTH, skillForm, orbitSwordPose, orbitMotionTime, setTowerDepth: (n, y) => { n.towerGroundY = y },
     isValid: n => !!n?.isValid, console: { warn: message => warnings.push(message) },
     resources: { load: (path, type, callback) => requests.push({ path, callback }) } }
   const source = readFileSync(new URL('../cocos-pilot/assets/scripts/OrbitSwordArt.ts', import.meta.url), 'utf8')
     .replace(/^import .*$/gm, '').replace(/\bexport /g, '')
   runInNewContext(stripTypeScriptTypes(source, { mode: 'transform' }) + '\nglobalThis.Art=OrbitSwordArt', context)
   const art = new context.Art(), parent = new Node('actors')
-  return { art, parent, Node, requests, warnings, load(error = null, size = [640, 112]) {
+  return { art, parent, Node, requests, warnings, load(error = null, size = [544, 128]) {
     const image = { width: size[0], height: size[1], refs: 0,
       addRef() { this.refs++ }, decRef() { this.refs-- } }
     requests.at(-1).callback(error, error ? null : image)
@@ -73,7 +74,8 @@ test('orbit sprites hide in cooldown and reappear for the next active window', (
 test('approved sword span tracks combat at every count tier, reusing one base pool', () => {
   const { art, parent, requests } = ready(), s = state()
   // 2026-11-09：周天剑阵改用修长冷色剑体 v2；画面剑长为判定剑长的 1.25 倍并保持贴图比例。
-  assert.equal(requests[0].path, 'tower-skill-fx/orbit-sword-v2')
+  // 2026-11-09：周天剑阵与御剑术共用 orbit-sword-v1，显示大小同御剑术。
+  assert.equal(requests[0].path, 'tower-skill-fx/orbit-sword-v1')
   let pool
   for (const [level, count] of [[1, 4], [3, 4], [6, 4], [10, 4], [1, 4]]) {
     s.loadout.active.sj_wanjian = level
@@ -90,8 +92,8 @@ test('approved sword span tracks combat at every count tier, reusing one base po
       close(a.node.y, s.player.y + 57 + p.y - camera.y)
       close(a.node.towerGroundY, s.player.y + p.depthY)
       close(a.node.angle, p.angle * 180 / Math.PI)
-      close(a.ui.width * 628 / 640, p.length * .9)
-      close(a.ui.height, a.ui.width * 112 / 640)
+      close(a.ui.width * 496 / 544, YUJIAN_LENGTH)
+      close(a.ui.height, a.ui.width * 128 / 544)
       assert.equal(a.ui.anchorX, .5); assert.equal(a.ui.anchorY, .5)
     }
   }
@@ -121,7 +123,7 @@ test('wuwo uses the supplied waist anchor, shared tangent span and unlifted dept
   const p=orbitSwordPose(form,s.time,i)
   close(a.node.x,waist.x+p.x);close(a.node.y,waist.y+p.y)
   close(a.node.towerGroundY,s.player.y+p.depthY)
-  close(a.ui.width*628/640,p.length*.9)
+  close(a.ui.width*496/544,YUJIAN_LENGTH)
  }
  const ids=active(art).map(a=>a.node)
  s.time+=1/60
