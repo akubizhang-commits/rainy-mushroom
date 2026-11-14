@@ -159,6 +159,20 @@ export class TowerInventoryPanel {
   this.host.clickable(node, run, enabled && !this.busy);
   return node;
  }
+ /** 56px touch target around a 30px drawn box; checked state is jade fill plus a drawn tick, not a glyph. */
+ private checkbox(parent: Node, name: string, x: number, y: number, checked: boolean, enabled: boolean, run: () => void) {
+  const node = this.host.node(name, parent, 56, 56); node.setPosition(x, y);
+  const g = node.addComponent(Graphics), side = 30, r = 7;
+  g.fillColor = new Color(!enabled ? BAG_COLORS.disabled : checked ? BAG_COLORS.jade : BAG_COLORS.paper);
+  g.strokeColor = new Color(!enabled ? BAG_COLORS.edge : checked ? BAG_COLORS.jade : BAG_COLORS.muted);
+  g.lineWidth = 2; g.roundRect(-side / 2, -side / 2, side, side, r); g.fill(); g.stroke();
+  if (checked) {
+   g.strokeColor = new Color(BAG_COLORS.paper); g.lineWidth = 3.5;
+   g.moveTo(-8, 0); g.lineTo(-2, -6); g.lineTo(9, 7); g.stroke();
+  }
+  this.host.clickable(node, run, enabled && !this.busy);
+  return node;
+ }
  // Navigation glyphs deliberately have breathing room; item art uses its own sizing rules.
  private filterTab(parent: Node, name: string, category: string, x: number, y: number, w: number, run: () => void, selected = false) {
   const node = this.host.node(name, parent, w, 72); node.setPosition(x, y);
@@ -441,8 +455,7 @@ export class TowerInventoryPanel {
   for(const [i,row] of rows.entries()){
    const count=Math.min(row.count,this.saleItems[row.id]||0),y=-47-i*94;
    this.saleItems[row.id]=count;
-   const toggle=this.button(list.content,'勾选出售-'+row.id,-w/2+58,y,56,56,()=>{this.saleItems[row.id]=count?0:1;host.redraw();});
-   toggle.children.forEach(n=>n.getComponent(Label)&&(n.getComponent(Label)!.string=count?'✓':'□'));
+   this.checkbox(list.content,'勾选出售-'+row.id,-w/2+58,y,!!count,true,()=>{this.saleItems[row.id]=count?0:1;host.redraw();});
    this.itemIcon(list.content,'出售图标-'+row.id,row.category,BAG_COLORS.jade,row.id,54).setPosition(-w/2+130,y);
    this.text(list.content,row.name+' · 持有 '+row.count,-w/2+290,y+14,230,30,21);
    this.text(list.content,'单价 '+row.item.sellPrice+' 下品灵石',-w/2+290,y-18,230,26,18,BAG_COLORS.muted);
@@ -490,9 +503,8 @@ export class TowerInventoryPanel {
    const y=-pitch/2-4-i*pitch,picked=!!this.gearPicks[row.id],top=row.quality===4&&row.tier!=='fan';
    const line=host.node('批量装备-'+row.id,list.content,w-56,pitch-8);line.setPosition(0,y);
    host.panel(line,picked?BAG_COLORS.selected:BAG_COLORS.cell,picked?BAG_COLORS.jade:BAG_COLORS.edge,8);
-   const toggle=this.button(line,'勾选-'+row.id,-(w-56)/2+40,0,52,52,()=>{
-    if(picked)delete this.gearPicks[row.id];else this.gearPicks[row.id]=true;this.remember();this.saleMessage='';host.redraw();},quote.ok);
-   toggle.children.forEach(n=>n.getComponent(Label)&&(n.getComponent(Label)!.string=picked?'✓':''));
+   this.checkbox(line,'勾选-'+row.id,-(w-56)/2+40,0,picked,quote.ok,()=>{
+    if(picked)delete this.gearPicks[row.id];else this.gearPicks[row.id]=true;this.remember();this.saleMessage='';host.redraw();});
    const cell=host.node('批量装备图标-'+row.id,line,64,64);cell.setPosition(-(w-56)/2+112,0);
    TowerInventoryPanel.drawCell(host,cell,this.state,row);
    const detail=inventoryDetail(this.state,row);
