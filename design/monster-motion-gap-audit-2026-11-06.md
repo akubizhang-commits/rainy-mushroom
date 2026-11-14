@@ -81,3 +81,5 @@
 - 第二批技能：11-11 用 Scenario 接入（50 CU）。牛魔王 M19 channel、犀王 M20 brace、狼妖精英 M05 howl、虎妖和隼妖精英 M07 stomp，见 xianxia-boss-skills-2026-11-11。仍是立绘的技能：牛魔王 M05、熊妖精英 M02、蝠妖精英 M07、白虎 M06/M01/M19/M02、鳄王 M12/M02、蛛姬和蛇女的技能（M16 等关键帧），以及所有射击。
 - 第三批技能：11-12 用 Scenario 接入（50 CU）。蝠妖精英 M07 stomp，白虎 M06 charge、M19 channel、M01 cast，蛇女 M03 heal，见 xianxia-boss-skills-2026-11-12。仍是立绘的技能：所有 M02 狂暴（熊妖精英、鳄王、白虎、猪王，需走完整狂暴流程）、牛魔王 M05、鳄王 M12、蛛姬 M10/M22/M11、蛇女 M16/M11、隼妖 M11，以及所有射击。
 - 第四批技能：11-13 用 Scenario 接入（50 CU）。牛魔王 M05 summon、鳄王 M12 cast、蛛姬 M22 summon / M11 cast、蛇女 M11 cast，见 xianxia-boss-skills-2026-11-13。剩余仍是立绘的技能：所有 M02 狂暴（需完整狂暴流程，待用户决定）、鳄王/鳄精英 M08（暂缓）、蛛姬 M10（蛛网弹体）、蛇女 M16（等关键帧），以及所有射击。
+- 熊妖侧身：11-14 用 Scenario 重做（50 CU）。图集只含 move、slam、stomp、guard 四个动作（68 帧），heave 已移除；熊王 M09 退回静态立绘，待补侧身版（10 CU）。见 xianxia-bear-humanoid-side-2026-11-13。
+- 熊妖侧身补齐：11-14 晚用 Meowa（15 积分）做了侧身 M09 heave，图集恢复 80 帧（3840×3936），熊王 M04/M07/M09 都有侧身动作。
