@@ -1,4 +1,6 @@
+import { NORMAL_HP_BY_FLOOR, NORMAL_DAMAGE_BY_FLOOR } from '../js/xianxia/TowerEnemyStats.js' // 2026-11-09：普通怪按楼层加血降伤，精英不受影响
 import test from 'node:test'
+const near=(a,b)=>assert.ok(Math.abs(a-b)<=1e-6*Math.max(1,Math.abs(b)),`${a} != ${b}`)
 import assert from 'node:assert/strict'
 import {ARCHETYPES, FLOORS} from '../js/xianxia/TowerContent.js'
 import {TowerRun, validateTowerSnapshot} from '../js/xianxia/TowerRun.js'
@@ -26,8 +28,8 @@ test('named rank-six elite keeps the approved 28x HP and 1.7x attack with nonzer
  const a=ARCHETYPES.find(a=>a.id===id);assert.ok(a)
  const stats=towerEnemyStats(a,8,15)
  const normal=ARCHETYPES.find(n=>n.role==='normal'&&n.species==='spider'&&n.rank===6)
- assert.equal(stats.hp,towerEnemyStats(normal,8,15).hp*28)
- assert.equal(stats.damage,towerEnemyStats(normal,8,15).damage*1.7)
+ near(stats.hp,towerEnemyStats(normal,8,15).hp/NORMAL_HP_BY_FLOOR[7]*28)
+ near(stats.damage,towerEnemyStats(normal,8,15).damage/NORMAL_DAMAGE_BY_FLOOR[7]*1.7)
  const p=CORE_DROP_RULES[8].chancesByRole.elite[6]
  assert.ok(p>0&&p<=1)
 })

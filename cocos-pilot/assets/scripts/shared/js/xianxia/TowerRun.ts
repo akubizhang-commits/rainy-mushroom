@@ -1427,8 +1427,8 @@ export class TowerRun {
     this._pruneWeaponState()
   }
   _canStartSkill() { return canStartSkill(this.state.actions, this.state.time, this._basicReady()) }
-  _startSkillAction(skill, duration) {
-    startSkillAction(this.state.actions, this.state.time, duration, skill, this._basicReady())
+  _startSkillAction(skill, duration, castSpeed = 0) {
+    startSkillAction(this.state.actions, this.state.time, duration, skill, this._basicReady(), castSpeed)
   }
   _advanceBasic(outgoing) {
     const s = this.state, a = s.actions, b = a?.basic
@@ -1669,7 +1669,7 @@ export class TowerRun {
       if(p.mana<cost){this._startBasic(onCast);return}
       p.mana-=cost;s.manaState.spent+=cost
       const timing = castActionTiming(form.id, form.hits ?? 1, equipmentCastSpeed(loadout,p.xp))
-      this._startSkillAction(chosen, timing.duration)
+      this._startSkillAction(chosen, timing.duration, equipmentCastSpeed(loadout,p.xp))
       const dir = facing(target.x - p.x, target.y - p.y, p.faceX, p.faceY)
       p.faceX = dir.x; p.faceY = dir.y
       const c = { skill: id, level, x: p.x, y: p.y, targetX: target.x, targetY: target.y,

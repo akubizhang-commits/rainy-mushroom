@@ -140,7 +140,8 @@ export const GROWTH_SKILLS = freeze([
   skill('sj_yujian', {
     // 2026-11-06：1–9级按比例压低，10级不变，御剑前期不再领先、后期保持中庸。
     damage: [1.2, 1.5, ...Array.from({ length: 8 }, (_, i) => 1.8 * 1.13 ** i)]
-      .map((value, i) => value * [.5, .5, .52, .65, .72, .8, .85, .9, .95, 1][i]),
+      // 2026-11-09 小怪加血后御剑清怪不足：1–9级压低倍率改为 .75–.97（原 .5–.95），10级不变。
+      .map((value, i) => value * [.75, .75, .75, .8, .85, .9, .92, .95, .97, 1][i]),
     // damage retains the one-second budget used by evolution balance.
     generation_interval: Array.from({ length: 10 }, (_, i) => .5 ** (i / 9)),
     sword_damage_share: Array.from({ length: 10 }, (_, i) => .5 ** (i / 9)),
@@ -222,10 +223,10 @@ export const GROWTH_SKILLS = freeze([
   }),
   skill('sj_shadow', {
     // Less frequent releases carry 20/11 of the former per-cast budget.
-    damage: damageCurve(6.4, (2.64 * 1.20 ** 9 / 3.52) ** (1 / 9)), cooldown: 6, windup: .12,
+    damage: damageCurve(6.4, (2.64 * 1.20 ** 9 / 3.52) ** (1 / 9)).map(d => d * 1.6), cooldown: 6, windup: .12, // 2026-11-09 小怪加血后御剑清怪补强：伤害×1.6、每斩目标3→6
     reach: 360, delay: .65,
     radius: [80, 80, 90, 90, 100, 110, 110, 120, 120, 130],
-    target_cap: 3, single_dps_factor: 1 / 6, hit_assumption: .5,
+    target_cap: 6, single_dps_factor: 1 / 6, hit_assumption: .5,
     rule: '固定落点；留印0.65秒后首斩，后续每0.08秒交错斩击，1/3/6/10级共1/2/3/4斩；每斩最多3目标。1–5级各斩平分，6级和10级保留上一级各斩伤害，新增斩承接升级增量；同段数期间各斩同比成长，总伤害预算不变。',
   }),
   // 2026-11-09 用户确认（方案A）：御剑流筑基中期单体功法。锁定范围内的Boss（无Boss时取当前血量最高者），
@@ -298,7 +299,7 @@ export const GROWTH_SKILLS = freeze([
 const evolutionEffects = {
   evo_wanjian: {
     regularMultiplier: 1, rainCooldown: 15, rainDamageBudgetSeconds: 8, rainDamageDurationByRank: [1.1, 1.4], rainTicks: 6,
-    rainTickInterval: .2, rainRadius: 160, rainTargetCap: 6,
+    rainTickInterval: .2, rainRadius: 160, rainTargetCap: 8 /* 2026-11-09：6→8，小怪加血后御剑清怪补强 */,
     rule: '进阶替换御剑；继承御剑术实际等级的伤害，剑雨按原8秒预算及施放期间停火损失计算伤害，基础冷却15秒，各段平分总预算。降低基础等级会同步降低进阶伤害。',
   },
   evo_wuwo: {

@@ -1,3 +1,4 @@
+import { NORMAL_HP_BY_FLOOR, NORMAL_DAMAGE_BY_FLOOR } from '../js/xianxia/TowerEnemyStats.js' // 2026-11-09：普通怪按楼层加血降伤，精英不受影响
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import { TowerRun, validateTowerSnapshot } from '../js/xianxia/TowerRun.js'
@@ -35,8 +36,8 @@ test('floor-three elites use the approved rank-based HP/damage budget without ea
   for (const archetype of ARCHETYPES.filter(a => a.role === 'elite')) {
     const baseline = towerEnemyStats({ ...archetype, role: 'normal' }, 3, 20)
     const expected = towerEnemyStats(archetype, 3, 20)
-    assert.ok(Math.abs(expected.hp / baseline.hp - MONSTER_RANK_BASELINE.elite_hp_multiplier_by_rank[archetype.rank]) < 1e-10)
-    assert.ok(Math.abs(expected.damage / baseline.damage - MONSTER_RANK_BASELINE.elite_damage_multiplier) < 1e-10)
+    assert.ok(Math.abs(expected.hp / baseline.hp * NORMAL_HP_BY_FLOOR[2] - MONSTER_RANK_BASELINE.elite_hp_multiplier_by_rank[archetype.rank]) < 1e-10)
+    assert.ok(Math.abs(expected.damage / baseline.damage * NORMAL_DAMAGE_BY_FLOOR[2] - MONSTER_RANK_BASELINE.elite_damage_multiplier) < 1e-10)
     for (const wave of [1, 5, 6, 10, 20]) assert.deepEqual(towerEnemyStats(archetype, 3, wave), expected)
   }
 })

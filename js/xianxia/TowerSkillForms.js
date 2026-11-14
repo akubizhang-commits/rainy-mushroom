@@ -132,7 +132,7 @@ export function skillForm(id, level = 1, parentLevel = 1, trainedLevel = level) 
   }
   if (id === 'evo_wanjian') Object.assign(form, { shape: 'line', hits: evolution === 1 ? 19 : 25,
     swords: evolution === 1 ? 18 : 24, radius: 160, reach: 440, width: 28,
-    targetCap: 6, initialDelay: .2, interval: .1 })
+    targetCap: 8, initialDelay: .2, interval: .1 })
   if (!form.duration && form.hits) form.duration = form.initialDelay
     + Math.max(0, form.hits - 1) * form.interval
   const result = Object.freeze(form)

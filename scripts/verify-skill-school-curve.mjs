@@ -137,19 +137,24 @@ function play(f, seed, mode) {
     if (mode === 'move' || mode === 'half' && s.time % 3 < 1) steerMechanics(run); else run.setInput(0, 0)
     run.advance(1 / 60)
     minHp = Math.min(minHp, p.hp / p.maxHp)
-    for (const e of s.enemies) if (['elite', 'boss'].includes(e.role) && !e.temporary) {
+    for (const e of s.enemies) if (['normal', 'elite', 'boss'].includes(e.role) && !e.temporary) {
       if (!encounters.has(e.id)) encounters.set(e.id, { id: e.id, role: e.role, firstDamage: null, deadAt: null })
       if (e.hp < e.maxHp) encounters.get(e.id).firstDamage ??= s.time
     }
     for (const k of s.killLedger) { const e = encounters.get(k.id); if (e) e.deadAt ??= s.time }
     const next = new Set(); for (const fx of s.effects) { next.add(fx.id); if (!seen.has(fx.id) && fx.kind === 'player_hit') received += fx.damage || 0 } seen = next
     if (s.time >= nextCheck) { assert.ok(validateTowerSnapshot(run.snapshot())); nextCheck += 15 }
+    if (process.env.TRACE_HP && Math.floor(s.time*60) % 600 === 0) console.error(`t=${s.time.toFixed(0)} wave=${s.wave} hp=${p.hp.toFixed(0)}/${p.maxHp.toFixed(0)} alive=${s.enemies.filter(e=>e.hp>0).length} elites=${s.enemies.filter(e=>e.hp>0&&e.role!=='normal').length}`)
   }
   const s = run.state
   const times = role => [...encounters.values()].filter(e => e.role === role && e.deadAt && e.firstDamage).map(e => e.deadAt - e.firstDamage)
   return { school, floor: f.floor, mode, seed, outcome: ['playing', 'paused'].includes(s.phase) ? 'timeout' : s.phase,
-    seconds: s.time, breakthroughs, kills: s.killLedger.length, received, maxHp: s.player.maxHp, minHp,
-    bossSeconds: times('boss')[0] ?? null, eliteMedian: (() => { const t = times('elite').sort((a, b) => a - b); return t.length ? t[Math.floor(t.length / 2)] : null })() }
+    seconds: s.time, wave: s.wave, alive: s.enemies.filter(e => e.hp > 0).length, breakthroughs, kills: s.killLedger.length, received, maxHp: s.player.maxHp, minHp,
+    bossSeconds: times('boss')[0] ?? null,
+    // 2026-11-09：普通怪从首次受伤到死亡的时间分布（P25/中位/P75），以及受伤当帧即死的比例。
+    normalTtk: (() => { const t = times('normal').sort((a, b) => a - b); if (!t.length) return null
+      const q = k => +t[Math.min(t.length - 1, Math.floor(t.length * k))].toFixed(2)
+      return { n: t.length, p25: q(.25), median: q(.5), p75: q(.75), instant: +(t.filter(x => x < 1/30).length / t.length).toFixed(2) } })(), eliteMedian: (() => { const t = times('elite').sort((a, b) => a - b); return t.length ? t[Math.floor(t.length / 2)] : null })() }
 }
 
 mkdirSync(out, { recursive: true })
@@ -158,7 +163,7 @@ for (const floor of floors) {
   const f = fixture(floor); fixtures.push({ floor, xp: f.xp, spent: f.points.spent, available: f.points.available, bought: f.bought })
   for (const mode of modes) for (const seed of seeds) {
     const row = play(f, seed, mode); rows.push(row)
-    console.log(JSON.stringify({ school, floor, mode, seed, outcome: row.outcome, s: Math.round(row.seconds), boss: row.bossSeconds && Math.round(row.bossSeconds), bt: row.breakthroughs.map(b => b.wave) }))
+    console.log(JSON.stringify({ school, floor, mode, seed, outcome: row.outcome, s: Math.round(row.seconds), boss: row.bossSeconds && Math.round(row.bossSeconds), bt: row.breakthroughs.map(b => b.wave), normal: row.normalTtk, wave: row.wave, alive: row.alive, received: Math.round(row.received) }))
     writeFileSync(resolve(out, `${school}.json`), JSON.stringify({ school, fixtures, rows }, null, 1))
   }
 }

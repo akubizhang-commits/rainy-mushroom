@@ -25,9 +25,11 @@ test('same species/rank share a normal baseline across floors; elite authored ra
   const e=towerEnemyStats(a,9,18),b=towerEnemyStats(n,9,18)
   // 2026-11-09：F4第15波两只蝙蝠精英另有单独血量系数（ENCOUNTER_HP_MULTIPLIERS）。
   const encounter=(await import('../js/xianxia/TowerEnemyStats.js')).ENCOUNTER_HP_MULTIPLIERS[a.id]??1
-  assert.ok(Math.abs(e.hp/b.hp-MONSTER_RANK_BASELINE.elite_hp_multiplier_by_rank[a.rank]*encounter)<1e-9);assert.ok(Math.abs(e.damage/b.damage-MONSTER_RANK_BASELINE.elite_damage_multiplier)<1e-9)
+  // 2026-11-09：普通怪按楼层加血降伤（F9 与 F6 倍率不同），比例要先除去普通怪的楼层系数。
+  const {NORMAL_HP_BY_FLOOR:H,NORMAL_DAMAGE_BY_FLOOR:Dm}=await import('../js/xianxia/TowerEnemyStats.js')
+  assert.ok(Math.abs(e.hp/b.hp*H[8]-MONSTER_RANK_BASELINE.elite_hp_multiplier_by_rank[a.rank]*encounter)<1e-9);assert.ok(Math.abs(e.damage/b.damage*Dm[8]-MONSTER_RANK_BASELINE.elite_damage_multiplier)<1e-9)
   assert.equal(e.moveSpeed,b.moveSpeed)
-  assert.deepEqual(towerEnemyStats(n,6,18),b)
+  const f6=towerEnemyStats(n,6,18);assert.ok(Math.abs(f6.hp/H[5]-b.hp/H[8])<1e-9&&Math.abs(f6.damage/Dm[5]-b.damage/Dm[8])<1e-9)
  }
  for(const a of ARCHETYPES.filter(a=>a.role==='normal')){
   const enemy={family:a.species,role:'normal'};initializeMonsterMechanics({state:{floor:9,time:0}},enemy);assert.equal(enemy.mechanic,undefined)

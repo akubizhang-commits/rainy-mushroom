@@ -1,3 +1,4 @@
+import { NORMAL_HP_BY_FLOOR, NORMAL_DAMAGE_BY_FLOOR } from '../js/xianxia/TowerEnemyStats.js' // 2026-11-09：普通怪按楼层加血降伤，精英不受影响
 import {monsterHealthMultiplier} from '../js/xianxia/TowerMonsterAttributes.js'
 import {currentCampaignSchema} from './helpers/tower-schema.mjs'
 import test from 'node:test'
@@ -10,8 +11,8 @@ const hp=[0,4,4,8,20,24,28,28,28,28]
 test('elite durability follows explicit rank budgets; normal and boss budgets do not inherit it',()=>{
  for(const a of ARCHETYPES.filter(a=>a.role==='elite')){
   const e=towerEnemyStats(a,9,18),n=towerEnemyStats({...a,role:'normal'},9,18)
-  assert.ok(Math.abs(e.hp/n.hp-hp[a.rank])<1e-9,a.id)
-  assert.ok(Math.abs(e.damage/n.damage-1.7)<1e-9,a.id)
+  assert.ok(Math.abs(e.hp/n.hp*NORMAL_HP_BY_FLOOR[8]-hp[a.rank])<1e-9,a.id)
+  assert.ok(Math.abs(e.damage/n.damage*NORMAL_DAMAGE_BY_FLOOR[8]-1.7)<1e-9,a.id)
   const early=towerEnemyStats(a,1,18);assert.deepEqual({...early,attackInterval:e.attackInterval},e);assert.equal(early.attackInterval,a.species==='spider'?1.8:e.attackInterval)
   assert.equal(e.moveSpeed,n.moveSpeed)
   const attack=enemyAttackSpec({...e,radius:34,family:'wolf',role:'elite'},50,0)

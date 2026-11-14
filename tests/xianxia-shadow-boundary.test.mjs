@@ -35,9 +35,9 @@ for(const [i,v] of HEX_VERTICES.entries())test(`all slash directions retain lega
 })
 
 test('central slash keeps its full span, target limit and per-target damage',()=>{
-  const center={x:33,y:-60},targets=Array.from({length:4},(_,i)=>({id:`target-${i}`,x:30+i,y:-60,hp:100,radius:3}))
+  const center={x:33,y:-60},targets=Array.from({length:7},(_,i)=>({id:`target-${i}`,x:30+i,y:-60,hp:100,radius:3}))
   const {hits,effect}=pulse(center,0,3,1,targets)
-  assert.equal(hits.length,3);assert.ok(hits.every(h=>h.damage===100));assert.ok(Math.abs(effect.reach-180)<1e-6)
+  assert.equal(hits.length,6);assert.ok(hits.every(h=>h.damage===100)) // 2026-11-09：每斩目标3→6;assert.ok(Math.abs(effect.reach-180)<1e-6)
 })
 
 test('shadow still stops at a pillar, including a cast centered inside stone',()=>{

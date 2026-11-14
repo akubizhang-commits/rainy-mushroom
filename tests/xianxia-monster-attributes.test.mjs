@@ -1,3 +1,4 @@
+import { NORMAL_HP_BY_FLOOR, NORMAL_DAMAGE_BY_FLOOR } from '../js/xianxia/TowerEnemyStats.js' // 2026-11-09：普通怪按楼层加血降伤，精英不受影响
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import { ARCHETYPES, MONSTER_RANK_BASELINE } from '../js/xianxia/TowerContent.js'
@@ -26,7 +27,7 @@ test('mixed damage EHP stays at the previous authored HP budget',()=>{
   for(const a of ARCHETYPES.filter(a=>a.role==='normal')) {
     const s=towerEnemyStats(a,4,10)
     const parts=mitigateMonsterDamage({...s,hp:s.hp},0,{physical:50,magic:50})
-    const previous=MONSTER_RANK_BASELINE.normal_hp[a.rank]*(a.floor_hp_factor??1)
+    const previous=MONSTER_RANK_BASELINE.normal_hp[a.rank]*(a.floor_hp_factor??1)*NORMAL_HP_BY_FLOOR[3]
     near(s.hp/(parts.physical+parts.magic)*100,previous)
   }
 })

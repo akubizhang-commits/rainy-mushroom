@@ -8,6 +8,11 @@ export const ENEMY_INCOMING_DAMAGE_MULTIPLIER = 2
 // Fixed floor budgets, calibrated against ordinary natural gear, never player stats.
 // 2026-11-09 F4难度尖峰调查（.agents/tasks/f4-difficulty-spike-2026-11-09.md）：伏潭鳄王 1.2→0.85，约降29%。
 export const BOSS_HP_MULTIPLIERS = Object.freeze([1, 1, 1.55, 0.85, 1.5, 1.45, 1.2, 1.65, 1.65])
+// 2026-11-09 用户确认（方案A）：小怪基本被秒，普通怪按楼层加血、降伤，三流派平均存活约3秒、数量不变。
+// 加血让同时在场的怪变多，伤害按约0.15倍下调以免前期输局。F1为教学层不变。
+// 复测：reports/skill-growth-check-2026-11-09/normal-ttk/。
+export const NORMAL_HP_BY_FLOOR = Object.freeze([1, 3, 6, 5, 11, 6.5, 8.5, 11, 10])
+export const NORMAL_DAMAGE_BY_FLOOR = Object.freeze([1, .15, .15, .15, .15, .15, .15, .15, .15])
 // 同一调查：F4第15波两只4阶蝙蝠精英保留4阶与形态，只把血量降到原来的0.35/0.75（约5.6万→2.6万）。
 export const ENCOUNTER_HP_MULTIPLIERS = Object.freeze({ bat_elite_f4_w15_n4: .35 / .75, bat_elite_f4_w15_n5: .35 / .75 })
 // Fixed authored floor/role/family stats. Never uses the player's level.
@@ -27,10 +32,10 @@ function towerEnemyBaseStats(archetype, floor, wave) {
     return {
       hp: MONSTER_RANK_BASELINE.normal_hp[archetype.rank]
         * (archetype.floor_hp_factor ?? 1) * early
-        * (elite ? MONSTER_RANK_BASELINE.elite_hp_multiplier_by_rank[archetype.rank] : 1)
+        * (elite ? MONSTER_RANK_BASELINE.elite_hp_multiplier_by_rank[archetype.rank] : NORMAL_HP_BY_FLOOR[floor - 1] ?? 1)
         * (ENCOUNTER_HP_MULTIPLIERS[archetype.id] ?? 1),
       damage: MONSTER_RANK_BASELINE.normal_damage[archetype.rank]
-        * (elite ? MONSTER_RANK_BASELINE.elite_damage_multiplier : 1),
+        * (elite ? MONSTER_RANK_BASELINE.elite_damage_multiplier : NORMAL_DAMAGE_BY_FLOOR[floor - 1] ?? 1),
       moveSpeed: archetype.move_speed * (archetype.floor_speed_factor ?? 1),
     }
   }
@@ -40,8 +45,8 @@ function towerEnemyBaseStats(archetype, floor, wave) {
       ? scale.early_elite_hp_multiplier : 1
   return {
     hp: scale[`${role}_hp`] * (archetype.floor_hp_factor ?? 1) * early
-      * (role === 'boss' ? BOSS_HP_MULTIPLIERS[floor - 1] : 1),
-    damage: scale[`${role}_damage`],
+      * (role === 'boss' ? BOSS_HP_MULTIPLIERS[floor - 1] : role === 'normal' ? NORMAL_HP_BY_FLOOR[floor - 1] ?? 1 : 1),
+    damage: scale[`${role}_damage`] * (role === 'normal' ? NORMAL_DAMAGE_BY_FLOOR[floor - 1] ?? 1 : 1),
     moveSpeed: archetype.move_speed * (archetype.floor_speed_factor ?? 1),
   }
 }

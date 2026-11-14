@@ -14,8 +14,8 @@ function shotBudget(rank){
  return s.projectiles[0].damage/p.attack/interval
 }
 test('released swords retain early budgets and carry the approved high-rank growth',()=>{
- // 2026-11-06：1–9级按 [.5,.5,.52,.65,…] 压低，10级不变。
- for(const [rank,budget] of [[1,1.2*.5],[2,1.5*.5],[3,1.8*.52],[4,2.034*.65],[10,4.234689864803]] )near(shotBudget(rank),budget)
+ // 2026-11-09：1–9级压低倍率改为 [.75,.75,.75,.8,…]，10级不变。
+ for(const [rank,budget] of [[1,1.2*.75],[2,1.5*.75],[3,1.8*.75],[4,2.034*.8],[10,4.234689864803]] )near(shotBudget(rank),budget)
 })
 test('schema60 resets only this mode and failed replacement keeps the old save intact',()=>{
  const data=new Map([['other-game','keep']]);let fail=false

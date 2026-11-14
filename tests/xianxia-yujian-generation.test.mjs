@@ -32,12 +32,12 @@ test('stored swords distribute over several enemies and share equal per-sword da
  enemies(r,2);release(r,3*interval+.01)
  assert.equal(r.state.projectiles.length,3)
  assert.equal(new Set(r.state.projectiles.map(s=>s.targetId)).size,2)
- assert.ok(r.state.projectiles.every(s=>Math.abs(s.damage-209.88*.52*interval)<1e-8))
+ assert.ok(r.state.projectiles.every(s=>Math.abs(s.damage-209.88*.75*interval)<1e-8))
 })
 test('rank one can replenish while its previous sword is still in flight',()=>{
  const r=make(1);enemies(r,1);release(r,1);release(r,2)
  assert.equal(r.state.projectiles.length,2)
- assert.ok(r.state.projectiles.every(s=>Math.abs(s.damage-139.92*.5)<1e-8))
+ assert.ok(r.state.projectiles.every(s=>Math.abs(s.damage-139.92*.75)<1e-8))
 })
 test('a weak lone enemy receives only enough swords and the rest remain stored',()=>{
  const r=make(10);for(let i=1;i<=10;i++)tick(r,i*.5)

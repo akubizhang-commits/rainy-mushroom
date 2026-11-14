@@ -25,7 +25,7 @@ test('all 29 level transitions compound without rounding and breakthroughs repla
 
 // 2026-11-06（84/85号复测）基础数值调整：御剑1–9级按比例压低，流云斩×1.3，剑破虚空×1.5，两仪7–10级×1.25。
 // 2026-11-09：剑破虚空改为金丹初期可学，再×1.5（合计×2.25）。
-const EXTRA = { sj_yujian: [.5,.5,.52,.65,.72,.8,.85,.9,.95,1], sj_arc: Array(10).fill(1.3), sj_line: Array(10).fill(1.5 * 1.5), sj_formation: [1,1,1,1,1,1,1.25,1.25,1.25,1.25],
+const EXTRA = { sj_yujian: [.75,.75,.75,.8,.85,.9,.92,.95,.97,1], sj_arc: Array(10).fill(1.3), sj_line: Array(10).fill(1.5 * 1.5), sj_formation: [1,1,1,1,1,1,1.25,1.25,1.25,1.25],
   // 2026-11-09 方案B2：周天剑阵 1–7 级伤害压低。
   sj_wanjian: [.5,.5,.52,.6,.68,.78,.9,1,1,1] }
 const extra = (id, i) => EXTRA[id]?.[i] ?? 1
@@ -33,7 +33,7 @@ test('six active curves have distinct starting damage and exact per-rank growth 
   for (const [id, base, multiplier, interval] of [
     ['sj_yujian', 1.2, 1.13, 1], ['sj_arc', 1.2, 1.15, 3.5],
     ['sj_wanjian', .30, 1.2, 6], ['sj_line', 14.4, 1.1, 12],
-    ['sj_shadow', 6.4, (2.64*1.2**9/3.52)**(1/9), 6], ['sj_formation', 32 / 15 * 1.65, 1.15, 12],
+    ['sj_shadow', 6.4 * 1.6, (2.64*1.2**9/3.52)**(1/9), 6], ['sj_formation', 32 / 15 * 1.65, 1.15, 12],
   ]) {
     const row = skill(id)
     near(row.damage[0], base * extra(id, 0))
@@ -53,8 +53,9 @@ test('six active curves have distinct starting damage and exact per-rank growth 
   assert.ok(dps('sj_wanjian', 6) < dps('sj_arc', 6))
   near(skill('sj_wanjian').damage[7], .30 * 1.2 ** 7)
   assert.ok(dps('sj_line', 6) > dps('sj_shadow', 6))
-  assert.ok(dps('sj_line', 10) > dps('sj_shadow', 10))
-  assert.equal(skill('sj_shadow').target_cap, 3)
+  // 2026-11-09：小怪加血后分光连斩×1.6，10级单体略高于剑破虚空（6.6对6.4）；6级仍是剑破虚空更高。
+  assert.ok(dps('sj_shadow', 10) > dps('sj_line', 10))
+  assert.equal(skill('sj_shadow').target_cap, 6) // 2026-11-09：3→6
 })
 
 test('rank caps unlock on the approved levels and do not bypass learning, floor or point gates', () => {

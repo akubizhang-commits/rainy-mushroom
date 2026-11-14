@@ -53,7 +53,7 @@ const FORMAT = 'xianxia-sect-tower-campaign'
 // 91：2026-11-09 蚀骨剑意、逐月斩、双月斩、剑破虚空、周天剑域、一剑开天的可学等级与等级段调整，旧投入可能早于新开放等级；旧档按开发期约定重置本模式。
 // 93：2026-11-09 三才剑阵6秒6击、青莲剑阵持续4秒、四象一阶需求27级，战斗快照中的剑阵zone结构变化；旧档按开发期约定重置本模式。
 // 94：2026-11-09 惊鸿剑出剑时序改为显形停顿0.35秒后穿刺（首刺0.18→0.43秒），战斗快照中的惊鸿剑zone时序变化；旧档按开发期约定重置本模式。
-const SCHEMA = 94
+const SCHEMA = 95
 const UINT32_MAX = 0xffffffff
 const copy = value => JSON.parse(JSON.stringify(value))
 const object = value => value !== null && typeof value === 'object' && !Array.isArray(value)

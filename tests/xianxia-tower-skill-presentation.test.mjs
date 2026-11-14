@@ -88,7 +88,7 @@ test('evolution replacement and conditional budgets retain distinct units',()=>{
  assert.equal(line.cooldown,12);assert.equal(y.cooldown,.5**(5/9))
  // 85号：面板数值含主修流派共鸣。
  const res=id=>resonanceDamageFactor(combatLoadout(s),id)
- close(value(y,'rainTickDamage')*19,115*1.25*(1.8*1.13**3)*.8*convergenceRainMultiplier(1)*res('sj_yujian')) // 御剑6级×0.8
+ close(value(y,'rainTickDamage')*19,115*1.25*(1.8*1.13**3)*.9*convergenceRainMultiplier(1)*res('sj_yujian')) // 御剑6级×0.9（2026-11-09）
  close(value(f,'tickDamage')*16,105*1.25*COMBAT_SKILLS.find(d=>d.id==='sj_formation').damage[5]*6*2*(15/12)*res('sj_formation'))
  assert.match(skillPresentation(s,'sj_line').description,/进阶/)
  assert.equal(skillPresentation(s,'evo_wuwo').cooldown,null)
@@ -124,7 +124,7 @@ test('active snapshot supplies live XP and frozen equipment, without mutating it
  const s=fresh(); const run=new TowerRun({attemptId:1,floor:1,seed:123,hp:100,xp:1485,loadout:combatLoadout(s)})
  s.activeRun={snapshot:run.snapshot()};s.xp=10920;equip(s)
  const before=JSON.stringify(s),p=skillPresentation(s,'sj_yujian')
- close(value(p,'roundDamage'),(110*cultivationAt(1485).attackMultiplier+5)*1.2*.5); // 御剑1级×0.5assert.equal(JSON.stringify(s),before)
+ close(value(p,'roundDamage'),(110*cultivationAt(1485).attackMultiplier+5)*1.2*.75); // 御剑1级×0.75（2026-11-09）assert.equal(JSON.stringify(s),before)
 })
 test('next-rank effects cross actual form thresholds without changing the frozen run or camp',()=>{
  const s=fresh();s.skills={sj_yujian:1,sj_arc:6,sj_line:5,sj_shadow:9,sj_formation:9,sj_wanjian:5}
@@ -270,9 +270,9 @@ test('all definitions own explicit damage types and presentation follows metadat
 })
 test('damage type definitions preserve unsplit total damage for all six active skills',()=>{
  const s=fresh()
- // 2026-11-06：御剑1级×0.5，流云斩×1.3，剑破虚空×1.5；2026-11-09：剑破虚空再×1.5，周天剑阵1级×0.5（方案B2）。
- const examples=[['sj_yujian','roundDamage',60],['sj_arc','fullDamage',156],
-  ['sj_line','hitDamage',3240],['sj_shadow','hitDamage',640],
+ // 2026-11-06：御剑1级×0.5，流云斩×1.3，剑破虚空×1.5；2026-11-09：剑破虚空再×1.5，周天剑阵1级×0.5（方案B2）；御剑1级×0.75、分光连斩×1.6（小怪加血后）。
+ const examples=[['sj_yujian','roundDamage',90],['sj_arc','fullDamage',156],
+  ['sj_line','hitDamage',3240],['sj_shadow','hitDamage',640*1.6],
  ['sj_wanjian','tickDamage',300/7*.5],['sj_formation','tickDamage',176]]
  const run=new TowerRun({attemptId:1,floor:1,seed:123,hp:100,xp:0,loadout:combatLoadout(s)})
  run._random=()=>1

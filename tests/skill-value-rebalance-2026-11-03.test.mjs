@@ -35,8 +35,8 @@ test('formation and derived explosions retain their damage without triggering co
 test('shadow cadence compensation preserves its authored growth and per-rank cost',()=>{
  const d=GROWTH_SKILLS.find(s=>s.id==='sj_shadow')
  assert.equal(d.cooldown,6)
- near(d.damage[0],6.4)
- near(d.damage[9],2.64*1.2**9*20/11)
+ near(d.damage[0],6.4*1.6) // 2026-11-09：分光连斩×1.6
+ near(d.damage[9],2.64*1.2**9*20/11*1.6)
  for(let i=1;i<10;i++)assert.ok(d.damage[i]>d.damage[i-1])
  assert.deepEqual(d.pointCosts,Array(10).fill(1))
 })

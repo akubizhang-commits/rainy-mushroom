@@ -311,7 +311,7 @@ test('27-point pursuit build keeps its evolution using only level points', () =>
 
 // 2026-11-06（84/85号复测）基础数值调整：御剑1–9级按比例压低，流云斩×1.3，剑破虚空×1.5，两仪7–10级×1.25。
 // 2026-11-09：剑破虚空改为金丹初期可学，再×1.5（合计×2.25）。
-const EXTRA = { sj_yujian: [.5,.5,.52,.65,.72,.8,.85,.9,.95,1], sj_arc: Array(10).fill(1.3), sj_line: Array(10).fill(1.5 * 1.5), sj_formation: [1,1,1,1,1,1,1.25,1.25,1.25,1.25],
+const EXTRA = { sj_yujian: [.75,.75,.75,.8,.85,.9,.92,.95,.97,1], sj_arc: Array(10).fill(1.3), sj_line: Array(10).fill(1.5 * 1.5), sj_formation: [1,1,1,1,1,1,1.25,1.25,1.25,1.25],
   // 2026-11-09 方案B2：周天剑阵 1–7 级伤害压低。
   sj_wanjian: [.5,.5,.52,.6,.68,.78,.9,1,1,1] }
 const extra = (id, i) => EXTRA[id]?.[i] ?? 1
@@ -319,7 +319,7 @@ test('six active curves preserve normalized per-target budgets and constant atta
   for (const [id, base, interval, factor, multiplier] of [
     ['sj_yujian', 1.2, 1, 1, 1.13], ['sj_arc', 1.2, 3.5, 1/4, 1.15],
     ['sj_wanjian', .3, 6, 1 / .6, 1.2], ['sj_line', 14.4, 12, 1/12, 1.1],
-    ['sj_shadow', 6.4, 6, 1/6, (2.64*1.2**9/3.52)**(1/9)], ['sj_formation', 32 / 15 * 1.65, 12, .5, 1.15],
+    ['sj_shadow', 6.4 * 1.6, 6, 1/6, (2.64*1.2**9/3.52)**(1/9)], ['sj_formation', 32 / 15 * 1.65, 12, .5, 1.15],
   ]) {
     const row = skill(id)
     assert.equal(row.cooldown ?? row.hit_interval, interval)
