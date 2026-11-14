@@ -18,8 +18,8 @@ import {stats as combatStats,characterCombatAttributes} from './shared/js/xianxi
 import { BlockInputEvents, Button, Color, Graphics, ImageAsset, isValid, Label, LabelOutline, LabelShadow, Mask, Node, ScrollView, Sprite, SpriteFrame, Texture2D, UITransform, Vec2 } from 'cc';
 import { combatLoadout } from './shared/js/xianxia/TowerCampaign';
 import { classProfile } from './shared/js/xianxia/TowerClassProfiles';
-import { weaponName, weaponDescription, WEAPONS } from './shared/js/xianxia/TowerWeapons';
-import { equipmentName, equipmentDescription, EQUIPMENT } from './shared/js/xianxia/TowerEquipment';
+import { weaponName, weaponDescription, WEAPONS, createFixedWeapon } from './shared/js/xianxia/TowerWeapons';
+import { equipmentName, equipmentDescription, EQUIPMENT, createFixedEquipment } from './shared/js/xianxia/TowerEquipment';
 import { ARCHETYPES, ECONOMY, FLOORS } from './shared/js/xianxia/TowerContent';
 import { GROWTH_SKILLS, GROWTH_EVOLUTIONS, GROWTH_STAGES, growthStageAt, skillStage, decreaseSkillQuote, giftSkills, growthSummary, rankCap, skillRequirement } from './shared/js/xianxia/TowerGrowth';
 import { DIANJUAN_DRAW_COST, DIANJUAN_STARTER, DIANJUAN_CAMPAIGN_TOTAL, FIRST_CLEAR_REWARDS, FIRST_CLEAR_MATERIALS, formatSpiritStones, splitSpiritStones } from './shared/js/xianxia/TowerEconomy';
@@ -126,6 +126,7 @@ export class TowerMenu {
  private mixedResult: any = null;
  private mixedResultView: 'closed' | 'reveal' | 'overview' | 'detail' = 'closed';
  private mixedResultIndex = 0;
+ private mixedWishDetail = '';
  private gearOpen = false;
  private commerceDialog = '';
  private commerceNotice = '';
@@ -223,7 +224,7 @@ export class TowerMenu {
   if (nextPage !== 'library' || inTower) { this.respecOpen = false; this.showLearningTools = false; }
   if (nextPage !== 'pills') { this.apothecaryOpen = false; this.apothecarySelection = ''; }
   if (nextPage !== 'home') this.homeDetailsOpen = false;
-  if (nextPage !== 'hall') { this.mixedOpen = false; this.mixedResultView = 'closed'; }
+  if (nextPage !== 'hall') { this.mixedOpen = false; this.mixedResultView = 'closed'; this.mixedWishDetail = ''; }
   if (nextPage !== 'forge') { this.gearOpen = false; this.forgeDialog = 'closed'; this.forgeResult = null; this.forgeError = ''; }
   if (nextPage === 'tower' && (this.currentPage !== 'tower' || state?.clearedFloor !== this.state?.clearedFloor)) {
    this.selectedTowerFloor = this.alchemySourceFloor || Math.min(9, count(state?.clearedFloor) + 1);
@@ -1971,10 +1972,10 @@ export class TowerMenu {
   button('返回宗门',-w/2+92,h/2-52,136,72,()=>{this.mixedOpen=false;redraw();});
   this.label(page,'机缘抽奖',0,h/2-40,300,50,30,C.text,true);
   this.headerWallet(page);
-  ['fa','bao','ling'].forEach((tier,i)=>button(['法器池','宝器池','灵器池'][i],w*(-.415+i*.165),h/2-106,w*.15,54,()=>{this.mixedTier=tier;this.mixedText='';redraw();},this.mixedTier===tier,mixedTierUnlocked(this.state,tier)));
+  ['fa','bao','ling'].forEach((tier,i)=>button(['法器池','宝器池','灵器池'][i],w*(-.415+i*.165),h/2-106,w*.15,54,()=>{this.mixedTier=tier;this.mixedText='';this.mixedWishDetail='';redraw();},this.mixedTier===tier,mixedTierUnlocked(this.state,tier)));
   this.label(page,trial?'试玩池 · 最高上品 · 不计正式保底':`最多 ${40-pool.dry} 抽出极品 · ${pool.miss?'下次极品必中当前心愿':'极品未中心愿后，下次极品必中'}`,-w*.22,h/2-165,w*.52,50,23,C.text,true);
   const left=-w*.25;
-  this.label(page,trial?'正式池心愿 · 试玩期间不生效':'选择心愿 · 切换或取消会清空心愿未中记录',left,h/2-207,w*.47,42,21,C.muted,true);
+  this.label(page,trial?'正式池心愿 · 试玩期间不生效':'点击装备查看信息并设为心愿',left,h/2-207,w*.47,42,21,C.muted,true);
   const wishes=mixedTopItems(this.mixedTier),wishW=w*.47,wishH=Math.max(100,h-422),wishCols=3,wishPitch=wishW/3;
   const wishList=this.commerceScroll(page,'心愿物品列表',left,h/2-234-wishH/2,wishW,wishH,Math.ceil(wishes.length/wishCols)*132);
   wishes.forEach((d:any,i:number)=>{
@@ -1985,7 +1986,8 @@ export class TowerMenu {
    TowerInventoryPanel.drawQualityFrame(icon.getComponent(Graphics)!,80,d.tier,d.quality||4,TowerInventoryPanel.cellFill);
    if(chosen)this.label(icon,'✓',-26,26,28,28,22,C.primary,true);
    this.label(wishList,(chosen?'已选 · ':'')+d.name+(illustrative?'·示意':''),x,y-62,wishPitch-8,40,22,chosen?C.primary:C.text,true);
-   this.clickable(icon,()=>{const result:any=this.act({type:'setMixedWish',tier:this.mixedTier,targetId:chosen?null:d.id});if(!result?.ok)this.mixedText='设置失败：'+result?.reason;redraw();},!trial&&!this.blocked());
+   // Tapping inspects the item like the backpack; the wish toggle lives in that sheet.
+   this.clickable(icon,()=>{this.mixedWishDetail=d.id;redraw();},true);
   });
   button('抽取历史',-w/2+175,-h/2+57,280,68,()=>{this.mixedView=this.mixedView==='history'?'closed':'history';redraw();},this.mixedView==='history');
   let text=trial?'试玩独立奖励池\n\n下品装备 20% · 中品装备 20%\n上品装备 20% · 极品装备 0%\n基础丹药 15% · 进阶丹药 15%\n材料 10%\n\n试玩不改变正式池的保底及心愿记录。':'正式池极品概率 3%，最多40抽出极品。\n\n单抽100点眷，十连1000点眷。\n第1、4、7层首通各得2000点眷（突破筑基、金丹时正好可抽新阶装备）；九层合计6000。重刷不产出。';
@@ -2020,6 +2022,37 @@ export class TowerMenu {
    this.mixedResult=latest;this.mixedResultIndex=0;this.mixedResultView='overview';redraw();
   });
   if(this.mixedResult&&this.mixedResultView!=='closed')this.mixedSettlement(redraw);
+  else if(this.mixedWishDetail)this.mixedWishSheet(redraw,trial);
+ }
+
+ private mixedWishSheet(redraw: () => void, trial: boolean) {
+  const d:any=mixedTopItems(this.mixedTier).find((x:any)=>x.id===this.mixedWishDetail);
+  if(!d){this.mixedWishDetail='';return;}
+  const pool=this.state.mixedDraw.pools[this.mixedTier],chosen=pool.targetId===d.id,weapon=d.category==='weapon';
+  const w=Math.min(this.designWidth-64,640),h=Math.min(this.designHeight-48,620);
+  const shade=this.node('心愿物品详情遮罩',this.root,this.designWidth,this.designHeight);
+  shade.addComponent(BlockInputEvents);drawMenuVeil(shade,this.designWidth,this.designHeight);
+  const close=()=>{this.mixedWishDetail='';redraw();};
+  const panel=this.node('心愿物品详情',shade,w,h);panel.addComponent(BlockInputEvents);this.panel(panel,C.panel,C.edge,12);
+  this.modalHeading(panel,'物品信息',w,h,close,true);
+  // A fixed-identity preview instance renders the exact backpack card without owning it.
+  const item=weapon?createFixedWeapon(d.id,'preview'):createFixedEquipment(d.id,'preview');
+  const previewState={...this.state,weapons:weapon?{preview:item}:{},equipment:weapon?{}:{preview:item}};
+  const row=inventoryEntries(previewState).find((r:any)=>r.id==='preview');
+  const detail=this.node('心愿物品卡片',panel,w-40,h-182);detail.setPosition(0,16);
+  if(row)this.shopPreview.renderItemPreview(detail,previewState,row,w-40,h-182,{
+   node:this.node.bind(this),panel:this.panel.bind(this),label:this.label.bind(this),
+   clickable:this.clickable.bind(this),textHeight:this.textHeight.bind(this),
+   character:()=>{},action:()=>({ok:false}),redraw,page:()=>{},
+   equipmentIcon:(parent,id,fallback)=>this.equipmentArtwork(parent,id,fallback,d.id),
+   pillIcon:()=>{},
+  });
+  this.label(panel,trial?'试玩期间心愿不生效':chosen?'当前心愿 · 取消会清空心愿未中记录':'设为心愿会清空当前池的心愿未中记录',0,-h/2+96,w-48,28,20,C.muted,true);
+  this.commerceButton(panel,'关闭物品信息','关闭',-w/4,-h/2+42,w/2-36,60,close);
+  this.commerceButton(panel,chosen?'取消心愿':'设为心愿',chosen?'取消心愿':'设为心愿',w/4,-h/2+42,w/2-36,60,()=>{
+   const result:any=this.act({type:'setMixedWish',tier:this.mixedTier,targetId:chosen?null:d.id});
+   this.mixedText=result?.ok?'':'设置失败：'+result?.reason;this.mixedWishDetail='';redraw();
+  },true,!trial&&!this.blocked());
  }
 
  private mixedSettlement(redraw: () => void) {

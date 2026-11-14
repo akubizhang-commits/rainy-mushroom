@@ -253,6 +253,9 @@ export class TowerView {
    }else if(action.type==='decreaseSkill'){
     const names=(r.changes||[]).map((c:any)=>`${(GROWTH_SKILLS as any[]).find(s=>s.id===c.id)?.name||(SKILLS as any[]).find(s=>s.id===c.id)?.name||c.id} ${c.from}→${c.to}`);
     this.notice=`已返还${r.returned}悟道点${names.length>1?'，关联功法同步退点':''}；经卷保留。`;
+   }else if(action.type==='viewInventoryItem'){
+    // Clearing a new-item dot is silent; a notice here would shrink the backpack grid.
+    this.notice='';
    }else this.notice=action.type==='usePill'?'丹药已服用':['buyBook','learnSkill'].includes(action.type)?'修习已保存，进入战斗后自动生效':action.type==='respecSkills'?'已重修：实际投入点数已返还，经卷和教学领悟保留':['setLoadout','equipEquipment'].includes(action.type)?'装备配装已保存':'已保存';
    if(this.store.state.activeRun&&(this.screen==='skills'||['setLoadout','selectLoadout','equipEquipment'].includes(action.type))){
     // Campaign commits both permanent allocation and the paused combat snapshot.
