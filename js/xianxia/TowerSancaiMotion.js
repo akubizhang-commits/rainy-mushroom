@@ -1,8 +1,10 @@
 import {sancaiVertices} from './TowerSancai.js'
 
 // Presentation only: no random source, combat mutation or wall clock.
+// 2026-11-14 用户反馈颜色太深：流光、落剑与阵眼改用国画矿物色（石青、朱砂、石绿），降饱和、略提亮。
+// 原值 water[100,205,255] fire[255,111,72] wood[145,242,111]。
 export const SANCAI_COLORS = {
- water:[100,205,255], fire:[255,111,72], wood:[145,242,111],
+ water:[132,190,212], fire:[226,140,112], wood:[150,200,138],
 }
 const mix=(a,b,t)=>({x:a.x+(b.x-a.x)*t,y:a.y+(b.y-a.y)*t})
 const scale=(p,s)=>({x:p.x*s,y:p.y*s})

@@ -31,7 +31,8 @@ export class SancaiFormationArt {
     this.frame=null;this.texture=null;this.image=null;
    }
   });
-  resources.load('tower-skill-fx/sancai-triad-v1',ImageAsset,(error,image)=>{
+  // 2026-11-14 用户反馈颜色太深、不够国风：改用降饱和的矿物色阵盘 v2（v1 保留）。
+  resources.load('tower-skill-fx/sancai-triad-v2',ImageAsset,(error,image)=>{
    if(this.dead||error||!image)return;
    try{
     image.addRef();this.plateImage=image;this.plateTexture=new Texture2D();this.plateTexture.image=image;
