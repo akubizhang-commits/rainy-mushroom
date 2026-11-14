@@ -3620,8 +3620,7 @@ for (const [rank, pulses] of [[1,1],[6,2],[10,3]]) {
     game.draw(); assert.equal(art.attack,null,'completed actions are cleared')
     assert.equal(poses.at(-1).ordinal,-1,'the character returns to idle once the volley is over')
     const firstStart=events[0].startedAt
-    // 剑破虚空是大招：清冷却的同时也越过2秒大招间隔。
-    s.cooldowns.sj_line=0; s.actions.heavyUntil=0
+    s.cooldowns.sj_line=0
     for(let i=0;i<20;i++)tick()
     assert.ok(art.attack.start>firstStart,'a new volley may start a fresh action')
   })
