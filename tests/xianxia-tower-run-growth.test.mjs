@@ -1,3 +1,4 @@
+import { equipmentCastSpeed } from '../js/xianxia/TowerSkillTiming.js'
 import { cultivationAt, TOWER_XP_CAP } from '../js/xianxia/TowerProfile.js'
 import test from 'node:test'
 import assert from 'node:assert/strict'
@@ -328,7 +329,8 @@ test('all active skills share the action slot and evolutions replace parent rele
   const run = make({ xp: 10920, loadout: growth(maxSkills('active'), maxSkills('passive'), maxEvolutions, 3) })
   const enemy = target(run, 100), events = []
   for (const id of Object.keys(run.state.cooldowns)) run.state.cooldowns[id] = 0
-  for (let i=0;i<360;i++) {
+  // 5个大招之间各隔2秒（施法速度会缩短），12秒内都能轮到。
+  for (let i=0;i<720;i++) {
     enemy.hp=1e12
     enemy.x=run.state.player.x+100;enemy.y=run.state.player.y
     run.advance(STEP, e=>events.push(e))
@@ -340,6 +342,11 @@ test('all active skills share the action slot and evolutions replace parent rele
   for(const id of ['sj_line','sj_formation','sj_wanjian'])assert.ok(!ids.has(id), `replaced ${id}`)
   const starts=events.filter(e=>e.pulseIndex===1).filter((e,i,all)=>!i||e.startedAt!==all[i-1].startedAt)
   for(let i=1;i<starts.length;i++)assert.ok(starts[i].startedAt>=starts[i-1].endsAt-1e-8)
+  const heavy=starts.filter(e=>['sj_cross','sj_sancai','evo_tiandi','evo_sixiang','evo_wanjian'].includes(e.skill))
+  assert.ok(heavy.length>=5)
+  const gap=2/(1+equipmentCastSpeed(run.state.loadout,run.state.player.xp))
+  assert.ok(gap>1&&gap<2,'fixture has cast speed, which shortens the heavy gap')
+  for(let i=1;i<heavy.length;i++)assert.ok(heavy[i].startedAt-heavy[i-1].startedAt>=gap-1e-8,`heavy gap ${heavy[i].skill}`)
 })
 
 test('active releases preserve per-sword, per-window and whole-field damage units', () => {
