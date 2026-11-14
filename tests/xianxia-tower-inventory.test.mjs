@@ -330,7 +330,7 @@ test('cross-category acquisition order and viewed dots persist across restart wi
  assert.ok(restored.state.weapons[a]&&restored.state.weapons[c]);
 });
 
-test('equipment uses current preset only; any of three presets blocks dismantling',()=>{
+test('equipment uses current preset only; any of three presets blocks selling',()=>{
  const f=setup(1280,720,{spiritStones:5000,contribution:5000});
  for(const category of ['weapon','armor','ring']){
   const id=draw(f,category),before=copy(f.store.state.loadouts);
@@ -338,15 +338,15 @@ test('equipment uses current preset only; any of three presets blocks dismantlin
   assert.equal(f.store.state.loadouts[0][category+'Id'],id);
   assert.deepEqual(copy(f.store.state.loadouts.slice(1)),before.slice(1));
   click(f.menu,'装备槽-'+category);
-  assert.equal(all(f.menu.root).some(n=>n.name==='分解'),false);
+  assert.equal(all(f.menu.root).some(n=>n.name==='出售'),false);
   assert.ok(find(f.menu,'解除').getComponent(Button).interactable);
   const third=copy(f.store.state.loadouts[2]);third[category+'Id']=id;
   assert.ok(f.store.act({type:'setLoadout',index:2,loadout:third},1800000000000).ok);
   assert.ok(f.store.act({type:'setLoadout',index:0,loadout:before[0]},1800000000000).ok);
   f.menu.render(f.store.state,'inventory');select(f,id);
-  assert.match(inventoryTools.inventoryQuote(f.store.state,id,'dismantle').reason,/配装三/);
-  assert.equal(inventoryTools.inventoryQuote(f.store.state,id,'dismantle').ok,false);
-  assert.equal(f.store.act({type:category==='weapon'?'dismantleWeapon':'dismantleEquipment',id},1800000000000).ok,false);
+  assert.match(inventoryTools.inventoryQuote(f.store.state,id,'sell').reason,/配装三/);
+  assert.equal(inventoryTools.inventoryQuote(f.store.state,id,'sell').ok,false);
+  assert.equal(f.store.act({type:'sellGear',ids:[id]},1800000000000).ok,false);
  }
 });
 
@@ -370,34 +370,34 @@ test('equipped items leave the backpack grid and return after replacement or une
  }
 });
 
-test('single dismantle requires confirmation, returns real spirit stones once and persists removal',()=>{
+test('single fan-gear sale requires confirmation, returns real spirit stones once and persists removal',()=>{
  const f=setup(1280,720,{spiritStones:5000,contribution:5000});const id=draw(f,'ring');select(f,id);
- const expected=inventoryTools.inventoryQuote(f.store.state,id,'dismantle').refund;
- const before=stateJSON(f);click(f.menu,'分解');assert.equal(stateJSON(f),before);
+ const expected=inventoryTools.inventoryQuote(f.store.state,id,'sell').refund;
+ const before=stateJSON(f);click(f.menu,'出售');assert.equal(stateJSON(f),before);
  assert.match(text(find(f.menu,'背包分解确认遮罩')),new RegExp(`×${expected}`));
- click(f.menu,'取消分解');assert.equal(stateJSON(f),before);
- click(f.menu,'分解');const callback=find(f.menu,'确认分解').events.get(Button.EventType.CLICK);
+ click(f.menu,'取消出售');assert.equal(stateJSON(f),before);
+ click(f.menu,'出售');const callback=find(f.menu,'确认出售').events.get(Button.EventType.CLICK);
  const stones=f.store.state.spiritStones;callback();callback();
  assert.equal(f.store.state.equipment[id],undefined);assert.equal(f.store.state.spiritStones,stones+expected);
  assert.equal(f.store.state.inventoryMeta[id],undefined);
- assert.equal(f.calls.filter(a=>a.type==='dismantleEquipment').length,1);
+ assert.equal(f.calls.filter(a=>a.type==='sellGear').length,1);
  assert.equal(new campaign.TowerCampaignStore(f.storage,1800000000000).state.equipment[id],undefined);
 });
 
 test('starter protection; save failure keeps item and refund atomic, then permits retry',()=>{
  const f=setup(1280,720,{spiritStones:5000,contribution:5000});const id=draw(f,'armor');select(f,id);
- click(f.menu,'分解');
+ click(f.menu,'出售');
  const before=stateJSON(f),disk=f.data.get(campaign.TOWER_CAMPAIGN_KEY);f.storage.fail=true;
- click(f.menu,'确认分解');assert.equal(stateJSON(f),before);assert.equal(f.data.get(campaign.TOWER_CAMPAIGN_KEY),disk);
+ click(f.menu,'确认出售');assert.equal(stateJSON(f),before);assert.equal(f.data.get(campaign.TOWER_CAMPAIGN_KEY),disk);
  assert.ok(f.store.state.equipment[id]);f.storage.fail=false;
- click(f.menu,'分解');click(f.menu,'确认分解');assert.equal(f.store.state.equipment[id],undefined);
- for(const id of ['iron','basic-armor','basic-ring'])assert.equal(inventoryTools.inventoryQuote(f.store.state,id,'dismantle').ok,false);
+ click(f.menu,'出售');click(f.menu,'确认出售');assert.equal(f.store.state.equipment[id],undefined);
+ for(const id of ['iron','basic-armor','basic-ring'])assert.equal(inventoryTools.inventoryQuote(f.store.state,id,'sell').ok,false);
 });
 
 test('stale confirmation rechecks changed preset references',()=>{
- const f=setup(1280,720,{spiritStones:5000,contribution:5000});const id=draw(f);select(f,id);click(f.menu,'分解');
+ const f=setup(1280,720,{spiritStones:5000,contribution:5000});const id=draw(f);select(f,id);click(f.menu,'出售');
  assert.ok(f.store.act({type:'setLoadout',index:2,loadout:{...f.store.state.loadouts[2],weaponId:id}},1800000000000).ok);
- const before=stateJSON(f);click(f.menu,'确认分解');assert.equal(stateJSON(f),before);assert.ok(f.store.state.weapons[id]);
+ const before=stateJSON(f);click(f.menu,'确认出售');assert.equal(stateJSON(f),before);assert.ok(f.store.state.weapons[id]);
 });
 
 test('pills stack outside gear capacity, consume one in camp and never mutate in a battle/read-only menu',()=>{
@@ -414,13 +414,13 @@ test('pills stack outside gear capacity, consume one in camp and never mutate in
  f.menu.render({...f.store.state,readOnly:true},'inventory');assert.equal(find(f.menu,'使用').getComponent(Button).interactable,false);
 });
 
-test('capacity prevents charging, pills do not count and dismantling frees exactly one slot',()=>{
+test('capacity prevents charging, pills do not count and selling frees exactly one slot',()=>{
  const f=setup(1280,720,{spiritStones:100000,contribution:100000});
  for(let i=0;i<237;i++)assert.ok(f.store.act(purchaseAction(f.store.state,'ring'),1800000000000).ok);
  assert.deepEqual(inventoryTools.inventoryCapacity(f.store.state),{used:240,max:240});
  const before=stateJSON(f),result=f.store.act(purchaseAction(f.store.state),1800000000000);
  assert.equal(result.reason,'capacity');assert.equal(stateJSON(f),before);
- f.menu.render(f.store.state,'inventory');select(f,'gear-1');click(f.menu,'分解');click(f.menu,'确认分解');
+ f.menu.render(f.store.state,'inventory');select(f,'gear-1');click(f.menu,'出售');click(f.menu,'确认出售');
  assert.equal(inventoryTools.inventoryCapacity(f.store.state).used,239);
  assert.ok(f.store.act(purchaseAction(f.store.state),1800000000000).ok);
  assert.equal(inventoryTools.inventoryCapacity(f.store.state).used,240);
@@ -440,14 +440,14 @@ test('filters can clear empty results, sorting is stable and all navigation reta
  select(f,id);assert.match(text(find(f.menu,'背包详情区')),/凡器/);
 });
 
-test('viewing, equipping and dismantling never alter forge RNG, prices or pity counters',()=>{
+test('viewing, equipping and selling never alter forge RNG, prices or pity counters',()=>{
  const f=setup(1280,720,{spiritStones:5000,contribution:5000});const id=draw(f,'weapon');
  const forge=state=>copy({forgeRng:state.forgeRng,forgeBossPity:state.forgeBossPity,forgeSequence:state.forgeSequence,forgeReceipts:state.forgeReceipts,rng:state.rng,equipmentRng:state.equipmentRng,weaponPity:state.weaponPity,
   equipmentPity:state.equipmentPity,equipmentDraws:state.equipmentDraws,weaponSequence:state.weaponSequence,
   equipmentSequence:state.equipmentSequence});
  const before=forge(f.store.state),price=copy(forgingTools.FORGING_RECIPES);
- const stones=f.store.state.spiritStones,refund=forgingTools.dismantleStoneRefund(f.store.state.weapons[id]);
- select(f,id);click(f.menu,'分解');click(f.menu,'确认分解');
+ const stones=f.store.state.spiritStones,refund=forgingTools.equipmentSellPrice(f.store.state.weapons[id]);
+ select(f,id);click(f.menu,'出售');click(f.menu,'确认出售');
  assert.deepEqual(forge(f.store.state),before);assert.deepEqual(forgingTools.FORGING_RECIPES,price);
  assert.equal(f.store.state.spiritStones,stones+refund);
 });
@@ -478,7 +478,7 @@ test('equipped items can be removed atomically and remain usable after reload',(
   assert.equal(f.store.act(quote.action,1800000000000).ok,false); assert.equal(stateJSON(f),before);
   f.storage.fail=false; assert.ok(f.store.act(quote.action,1800000000000).ok);
   assert.equal(f.store.state.loadouts[0][category+'Id'],'');
-  assert.ok(inventoryTools.inventoryQuote(f.store.state,id,'dismantle').ok);
+  assert.ok(inventoryTools.inventoryQuote(f.store.state,id,'sell').ok);
  }
  const loaded=new campaign.TowerCampaignStore(f.storage,1800000000000);
  assert.equal(loaded.state.loadouts[0].weaponId,'');
@@ -760,14 +760,14 @@ for(const category of ['weapon','armor','ring'])test(`equip closes details only 
  assert.ok(find(f.menu,'背包物品区'));
 });
 
-for(const category of ['weapon','armor','ring'])test(`retired lock flag cannot block dismantling: ${category}`,()=>{
+for(const category of ['weapon','armor','ring'])test(`retired lock flag cannot block selling: ${category}`,()=>{
  const f=setup(1280,720,{spiritStones:5000,contribution:5000});const id=draw(f,category);
  const record=JSON.parse(f.data.get(campaign.TOWER_CAMPAIGN_KEY));const saved=JSON.parse(record.data);
  (category==='weapon'?saved.weapons:saved.equipment)[id].locked=true;
  record.data=JSON.stringify(saved);record.checksum=checksum(record.data);f.data.set(campaign.TOWER_CAMPAIGN_KEY,JSON.stringify(record));
  const store=new campaign.TowerCampaignStore(f.storage,1800000000000);
  assert.equal(store.readOnly,false);
- const quote=inventoryTools.inventoryQuote(store.state,id,'dismantle');assert.equal(quote.ok,true);
+ const quote=inventoryTools.inventoryQuote(store.state,id,'sell');assert.equal(quote.ok,true);
  assert.equal(store.act(quote.action,1800000000000).ok,true);
  assert.equal((category==='weapon'?store.state.weapons:store.state.equipment)[id],undefined);
 });
@@ -845,9 +845,9 @@ for (const [width,height] of [[844,390],[1280,720]]) test(`paper menu header and
  assert.equal(all(f.menu.root).some(n=>n.name==='宗门设置遮罩'),false);
 });
 
-test('dismantle close preserves selection, item and currency without executing action',()=>{
+test('sale confirmation close preserves selection, item and currency without executing action',()=>{
  const f=setup(844,390,{spiritStones:5000,contribution:5000});const id=draw(f);select(f,id);
- const before=stateJSON(f);click(f.menu,'分解');
+ const before=stateJSON(f);click(f.menu,'出售');
  const panel=find(f.menu,'分解确认面板');bounded(panel,f.menu.root);
  click(f.menu,'关闭分解确认');
  assert.equal(all(f.menu.root).some(n=>n.name==='分解确认面板'),false);
@@ -892,7 +892,7 @@ for (const [width,height] of [[844,390],[1280,720]]) test(`alchemy ${width}x${he
  assert.equal(all(f.menu.root).some(n=>n.name==='背包物品-huichun'),false);
  select(f,'huichuncao');assert.equal(all(f.menu.root).some(n=>n.name==='不可服用'),false);
  assert.equal(find(f.menu,'物品操作区').getComponent(UITransform).contentSize.height,64);
- click(f.menu,'返回背包');click(f.menu,'出售');click(f.menu,'勾选出售-huichuncao');click(f.menu,'确认出售');assert.equal(f.store.state.pills.huichuncao,1);
+ click(f.menu,'返回背包');click(f.menu,'批量出售');click(f.menu,'出售材料');click(f.menu,'勾选出售-huichuncao');click(f.menu,'确认出售');assert.equal(f.store.state.pills.huichuncao,1);
 });
 
 test('paper experience ring draws only earned progress clockwise and hides zero or capped progress',()=>{
@@ -1000,11 +1000,11 @@ for(const [w,h] of [[1280,720],[844,390]])test(`breakthrough materials can sell 
  const f=setup(w,h,{xp:1800,pills:{xiaoyue:3,chilin:2}}),before=f.store.state.spiritStones;
  select(f,'xiaoyue');assert.match(text(f.menu.root),/75%/);assert.match(text(f.menu.root),/80下品灵石/);
  assert.equal(all(find(f.menu,'物品操作区')).some(n=>n.name==='出售'),false);
- click(f.menu,'返回背包');click(f.menu,'出售');click(f.menu,'勾选出售-xiaoyue');
+ click(f.menu,'返回背包');click(f.menu,'批量出售');click(f.menu,'出售材料');click(f.menu,'勾选出售-xiaoyue');
  click(f.menu,'出售＋-xiaoyue');assert.match(text(f.menu.root),/获得 160 下品灵石/);
  click(f.menu,'确认出售');assert.equal(f.store.state.pills.xiaoyue,1);
  assert.equal(f.store.state.xp,1800);assert.equal(f.store.state.spiritStones,before+160);
- click(f.menu,'出售');click(f.menu,'勾选出售-xiaoyue');click(f.menu,'确认出售');
+ click(f.menu,'批量出售');click(f.menu,'出售材料');click(f.menu,'勾选出售-xiaoyue');click(f.menu,'确认出售');
  assert.equal(f.store.state.pills.xiaoyue,0);assert.match(text(f.menu.root),/出售/);
 });
 
@@ -1305,7 +1305,7 @@ test('batch material sale is atomic, retryable, and rejects stale or invalid sel
 });
 test('batch sale selection supports multiple materials and duplicate clicks charge once',()=>{
  const f=setup(844,390,{pills:{forge_xuantie:5,forge_lingmu:4}});
- click(f.menu,'出售');click(f.menu,'勾选出售-forge_xuantie');click(f.menu,'勾选出售-forge_lingmu');
+ click(f.menu,'批量出售');click(f.menu,'出售材料');click(f.menu,'勾选出售-forge_xuantie');click(f.menu,'勾选出售-forge_lingmu');
  const submit=find(f.menu,'确认出售').events.get(Button.EventType.CLICK);submit();submit();
  assert.equal(f.calls.filter(a=>a.type==='sellMaterials').length,1);
  assert.equal(f.store.state.pills.forge_xuantie,4);assert.equal(f.store.state.pills.forge_lingmu,3);

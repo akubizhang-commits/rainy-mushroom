@@ -1,4 +1,4 @@
-import { FORGING_RECIPES, dismantleStoneRefund } from './TowerForging.js'
+import { FORGING_RECIPES, equipmentSellPrice, dismantleMaterials } from './TowerForging.js'
 import { equipmentSourceLabel } from './TowerEquipmentSources.js'
 import { campaignMaxHp } from './TowerCampaign.js'
 import { ALCHEMY_MATERIALS, ALCHEMY_RECIPES } from './TowerAlchemy.js'
@@ -91,14 +91,43 @@ export function inventoryQuote(state, id, operation) {
         loadout: { ...copy(state.loadouts[state.selectedLoadout]), weaponId: id } }
       : { type: 'equipEquipment', category, id } }
   }
-  if (operation === 'dismantle') {
-    if (isStarterEquipment(item)) return fail('基础赠送装备不可分解')
-    if (row.usedBy.length) return fail(`${row.usedBy.map(u => u.name).join('、')}正在使用`)
-    const refund = dismantleStoneRefund(item)
-    if (state.spiritStones > STONE_CAP - refund) return fail('灵石已达存储上限')
-    return { ok: true, refund, action: { type: weapon ? 'dismantleWeapon' : 'dismantleEquipment', id } }
+  if (operation === 'sell' || operation === 'dismantle') {
+    const quote = gearDisposalQuote(state, [id], operation)
+    return quote.ok ? { ...quote, refund: quote.gained } : quote
   }
   return fail('不支持的操作')
+}
+/** Equipment the batch panel may list: owned, not starter gear, not in any loadout. */
+export function disposableGear(state) {
+  return inventoryEntries(state, { category: 'equipment', sort: 'quality' })
+    .filter(row => !isStarterEquipment(row.item) && !row.usedBy.length)
+}
+/** Quote for selling (stones) or dismantling (materials) one or more equipment pieces. */
+export function gearDisposalQuote(state, ids, operation) {
+  const fail = reason => ({ ok: false, reason })
+  const verb = operation === 'sell' ? '出售' : '分解'
+  if (blocked(state, operation)) return fail(blocked(state, operation))
+  if (!Array.isArray(ids) || !ids.length) return fail(`请选择要${verb}的装备`)
+  const rows = inventoryEntries(state, { category: 'equipment' })
+  let gained = 0
+  const materials = {}
+  for (const id of ids) {
+    const row = rows.find(r => r.id === id)
+    if (!row) return fail('物品已不在背包')
+    if (isStarterEquipment(row.item)) return fail(`基础赠送装备不可${verb}`)
+    if (row.usedBy.length) return fail(`${row.usedBy.map(u => u.name).join('、')}正在使用`)
+    if (operation === 'sell') gained += equipmentSellPrice(row.item)
+    else {
+      const returned = dismantleMaterials(row.item)
+      if (!returned.length) return fail('凡器没有可回收的炼器材料，只能出售')
+      for (const a of returned) materials[a.id] = (materials[a.id] || 0) + a.count
+    }
+  }
+  if (operation === 'sell' && state.spiritStones > STONE_CAP - gained) return fail('灵石已达存储上限')
+  if (Object.entries(materials).some(([m, n]) => (state.pills?.[m] || 0) > TOWER_RESOURCE_CAP - n)) return fail('材料已达存储上限')
+  const returned = Object.entries(materials).map(([m, count]) => ({ id: m, count, name: CAMP_PILLS[m]?.name || m }))
+  return { ok: true, gained, materials: returned,
+    action: { type: operation === 'sell' ? 'sellGear' : 'dismantleGear', ids: [...ids] } }
 }
 export function inventoryDescription(state, row) {
   if (row.category === 'material') {

@@ -2,7 +2,7 @@ import test from 'node:test'
 import assert from 'node:assert/strict'
 import {TowerCampaignStore} from '../js/xianxia/TowerCampaign.js'
 import {checksum} from '../js/xianxia/Checksum.js'
-import {forgingRecipe,forgingQuote,dismantleStoneRefund} from '../js/xianxia/TowerForging.js'
+import {forgingRecipe,forgingQuote,equipmentSellPrice} from '../js/xianxia/TowerForging.js'
 import {createFixedWeapon,weaponFlatAttack,weaponFlatMagicAttack} from '../js/xianxia/TowerWeapons.js'
 import {stats,characterCombatAttributes} from '../js/xianxia/TowerRun.js'
 import {EQUIPMENT_RANGES} from '../js/xianxia/TowerEquipmentRanges.js'
@@ -42,7 +42,7 @@ test('purchase survives save failure, retry and reload without duplicate gear or
   assert.equal(store.state.spiritStones,before.spiritStones-(type==='buyGear'?72:20))
   assert.equal(store.state.pills.forge_xuantie,type==='buyGear'?2:0)
   const gear=store.state.weapons[result.ids[0]];assert.equal(gear.definitionId,'eq_sword_qingfeng')
-  assert.equal(dismantleStoneRefund(gear),28)
+  assert.equal(equipmentSellPrice(gear),28)
   const loadout={...store.state.loadouts[0],weaponId:gear.id}
   assert.equal(store.act({type:'setLoadout',index:0,loadout},0).ok,true)
   const reload=new TowerCampaignStore(disk,0);assert.equal(reload.readOnly,false)

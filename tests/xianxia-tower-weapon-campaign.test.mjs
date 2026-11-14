@@ -214,7 +214,7 @@ test('combined capacity240 rejects before charging, advancing RNG/pity/sequence,
   const kept = clone(store.state.weapons)
   rejected(store, disk, forge(store), 'capacity')
   assert.deepEqual(store.state.weapons, kept)
-  act(store, { type: 'dismantleWeapon', id: 'weapon-1' })
+  act(store, { type: 'sellGear', ids: ['weapon-1'] })
   act(store, forge(store))
   assert.equal(store.state.weaponSequence, 238)
   assert.equal(store.state.weapons['weapon-238'].id, 'weapon-238')
@@ -236,26 +236,26 @@ test('weapon refinement is disabled even with ample funds or unavailable storage
 
 test('locking is removed and dismantling still rejects iron and every referenced loadout', () => {
   const { store, disk } = fixture(ownedPatch())
-  rejected(store, disk, { type: 'dismantleWeapon', id: 'iron' })
+  rejected(store, disk, { type: 'sellGear', ids: ['iron'] })
   rejected(store, disk, { type: 'lockWeapon', id: 'weapon-1', locked: true })
   rejected(store, disk, { type: 'lockWeapon', id: 'weapon-1', locked: false })
   for (let index = 0; index < 3; index++) {
     equip(store, 'weapon-1', index)
-    rejected(store, disk, { type: 'dismantleWeapon', id: 'weapon-1' })
+    rejected(store, disk, { type: 'sellGear', ids: ['weapon-1'] })
     equip(store, 'iron', index)
   }
   for (const locked of [undefined, null, 0, 'false']) rejected(store, disk, { type: 'lockWeapon', id: 'weapon-1', locked })
   rejected(store, disk, { type: 'lockWeapon', id: 'missing', locked: true })
-  rejected(store, disk, { type: 'dismantleWeapon', id: 'missing' })
+  rejected(store, disk, { type: 'sellGear', ids: ['missing'] })
 })
 
 for (const [quality, refund] of [[1, 9], [2, 96], [3, 288], [4, 480]]) {
-  test(`dismantling quality${quality} refunds exactly${refund} spirit stones, never the full forge costs`, () => {
+  test(`selling quality${quality} refunds exactly${refund} spirit stones, never the full forge costs`, () => {
     const patch = ownedPatch({ tier:quality===1?'fan':'fa',quality,xp:225 })
     patch.weaponCounters['weapon-1'] = 3
     const { store, disk } = fixture(patch)
     const before = clone(store.state)
-    act(store, { type: 'dismantleWeapon', id: 'weapon-1' })
+    act(store, { type: 'sellGear', ids: ['weapon-1'] })
     assert.equal(store.state.contribution, before.contribution)
     assert.equal(store.state.spiritStones, before.spiritStones + refund)
     assert.equal(store.state.weapons['weapon-1'], undefined)
@@ -264,13 +264,13 @@ for (const [quality, refund] of [[1, 9], [2, 96], [3, 288], [4, 480]]) {
     assert.equal(store.state.rng, before.rng)
     assert.equal(store.state.weaponPity, before.weaponPity)
     reload(disk, store.state)
-    rejected(store, disk, { type: 'dismantleWeapon', id: 'weapon-1' })
+    rejected(store, disk, { type: 'sellGear', ids: ['weapon-1'] })
   })
 }
 
 for (const action of [
   { type: 'craftGear', id: 'weapon:ling:q1', count:1, sequence:1, requestId:'atomic-forge' },
-  { type: 'dismantleWeapon', id: 'weapon-1' },
+  { type: 'sellGear', ids: ['weapon-1'] },
 ]) {
   test(`${action.type} save failure is atomic; retry matches one successful transaction exactly`, () => {
     const { store, disk } = fixture(ownedPatch({ xp: cultivationLevelXp(21), weaponPity: 19 }))
@@ -357,7 +357,7 @@ test('valid standalone snapshots cannot swap equipped instances, improve affixes
   }
   for (const action of [
     forge(store),
-      { type: 'dismantleWeapon', id: 'weapon-2' },
+      { type: 'sellGear', ids: ['weapon-2'] },
   ]) rejected(store, disk, action, 'in-tower')
   act(store, { type: 'checkpoint', snapshot: original })
   reload(disk, store.state)

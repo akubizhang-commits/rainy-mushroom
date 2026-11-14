@@ -80,13 +80,13 @@ test('failed ten-item forge restores balances, RNG, wishes and inventory in ever
     assert.equal(records.get(TOWER_CAMPAIGN_KEY), saved)
   }
 })
-test('starter fan equipment stays protected while ordinary fan can be dismantled', () => {
+test('starter fan equipment stays protected while ordinary fan can be sold', () => {
   const { store } = fixture(1)
-  assert.equal(inventoryQuote(store.state, 'iron', 'dismantle').ok, false)
-  assert.equal(inventoryQuote(store.state, 'basic-armor', 'dismantle').ok, false)
+  assert.equal(inventoryQuote(store.state, 'iron', 'sell').ok, false)
+  assert.equal(inventoryQuote(store.state, 'basic-armor', 'sell').ok, false)
   const r = store.act({ type: 'buyGear', id: 'weapon:fan:q1', count: 1, sequence: 1, requestId: 'starter' }, now)
   assert.ok(r.ok)
-  assert.ok(store.act({ type: 'dismantleWeapon', id: r.ids[0] }, now).ok)
+  assert.ok(store.act({ type: 'sellGear', ids: [r.ids[0]] }, now).ok)
 })
 
 test('direct runs and restored snapshots cannot bypass equipment realm requirements', () => {

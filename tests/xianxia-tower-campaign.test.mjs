@@ -11,7 +11,7 @@ import { checksum } from '../js/xianxia/Checksum.js'
 import { ARCHETYPES } from '../js/xianxia/TowerContent.js'
 import { CORE_DROP_RULES, CORE_RANK_VALUES } from '../js/xianxia/TowerLoot.js'
 import { FORGE_MATERIALS } from '../js/xianxia/TowerForgeMaterials.js'
-import { forgingRecipe, dismantleStoneRefund } from '../js/xianxia/TowerForging.js'
+import { forgingRecipe, equipmentSellPrice } from '../js/xianxia/TowerForging.js'
 
 const STONE_VALUES = [1, 100, 10000, 1000000]
 function stoneLoot(snapshot) {
@@ -195,7 +195,7 @@ test('retired draw channels cannot charge currency or advance historical pity', 
   assert.equal(store.state.weaponPity,19)
 })
 
-test('duplicate fixed forgings preserve instances and refund only on explicit dismantling', () => {
+test('duplicate fixed forgings preserve instances and refund only on explicit sale', () => {
   for (const quality of [1,2,3,4]) {
     const {store,disk}=forgingFixture()
     // Six products in a pool of at most three necessarily contain duplicates.
@@ -206,14 +206,14 @@ test('duplicate fixed forgings preserve instances and refund only on explicit di
     const [first,second]=matches, before=copy(first), contribution=store.state.contribution, stones=store.state.spiritStones
     assert.deepEqual({...second,id:first.id},first)
     assert.notEqual(first.id,second.id)
-    assert.equal(store.act({type:'dismantleWeapon',id:second.id},0).ok,true)
+    assert.equal(store.act({ type: 'sellGear', ids: [second.id] },0).ok,true)
     assert.equal(store.state.contribution,contribution)
-    assert.equal(store.state.spiritStones,stones+dismantleStoneRefund(second))
+    assert.equal(store.state.spiritStones,stones+equipmentSellPrice(second))
     assert.deepEqual(store.state.weapons[first.id],before)
     assert.equal(store.state.weapons[second.id],undefined)
     assert.equal(store.state.weaponCounters[second.id],undefined)
     assert.deepEqual(new TowerCampaignStore(disk,0).state,store.state)
-    reject(store,disk,{type:'dismantleWeapon',id:second.id},'unowned-weapon')
+    reject(store,disk,{ type: 'sellGear', ids: [second.id] },'unowned-gear')
   }
 })
 

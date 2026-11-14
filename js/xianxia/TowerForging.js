@@ -61,8 +61,16 @@ export function forgingQuote(state,id,count,mode='craft'){
  return {ok:true,...result}
 }
 
-// Recover only the stone component; materials and sect service fees are consumed.
-export function dismantleStoneRefund(item){
- const recipe=forgingRecipe(`${item.category||'weapon'}:${item.tier}:q${item.quality}`)
+const gearRecipe=item=>forgingRecipe(`${item.category||'weapon'}:${item.tier}:q${item.quality}`)
+// Selling recovers only the stone component (40%); materials and sect service fees are consumed.
+export function equipmentSellPrice(item){
+ const recipe=gearRecipe(item)
  return recipe?Math.floor(recipe.spiritStones*(recipe.source==='shopOnly'?3:1)*2/5):0
+}
+// Approved 2026-11-14: dismantling returns half of the same tier/quality recipe's
+// materials, rounded down per material, and no stones. 凡器 recipes have none.
+export const DISMANTLE_MATERIAL_SHARE=.5
+export function dismantleMaterials(item){
+ const recipe=gearRecipe(item)
+ return (recipe?.ingredients||[]).map(a=>({id:a.id,count:Math.floor(a.count*DISMANTLE_MATERIAL_SHARE)})).filter(a=>a.count>0)
 }

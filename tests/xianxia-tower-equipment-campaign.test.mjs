@@ -1,6 +1,6 @@
 import { currentCampaignSchema } from './helpers/tower-schema.mjs'
 import { FORGE_MATERIALS } from '../js/xianxia/TowerForgeMaterials.js'
-import { forgingRecipe, dismantleStoneRefund } from '../js/xianxia/TowerForging.js'
+import { forgingRecipe, equipmentSellPrice } from '../js/xianxia/TowerForging.js'
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import { TowerCampaignStore, TOWER_CAMPAIGN_KEY, combatLoadout } from '../js/xianxia/TowerCampaign.js'
@@ -177,7 +177,7 @@ for (const category of categories) {
 
   test(`${category} rejects malformed instance IDs for every equipment mutation`, () => {
     const { store, disk } = fixture(inventory(category))
-    for (const type of ['equipEquipment', 'refineEquipment', 'lockEquipment', 'dismantleEquipment']) {
+    for (const type of ['equipEquipment', 'refineEquipment', 'lockEquipment', 'sellGear', 'dismantleGear']) {
       for (const id of [undefined, null, '', 1, '__proto__', 'iron', 'gear-999', ['gear-1'], {}]) {
         reject(store, disk, { type, category, id, locked: true })
       }
@@ -250,29 +250,29 @@ for (const category of categories) {
       assert.deepEqual(store.state.loadouts, presets)
       // Also check a reference in an unselected preset.
       act(store, { type: 'selectLoadout', index: (index + 1) % 3 })
-      reject(store, disk, { type: 'dismantleEquipment', id: 'gear-1' })
+      reject(store, disk, { type: 'sellGear', ids: ['gear-1'] })
       act(store, { type: 'selectLoadout', index })
       act(store, { type: 'equipEquipment', category, id: `basic-${category}` })
     }
     reject(store, disk, { type: 'lockEquipment', id: 'gear-1', locked: true })
-    reject(store, disk, { type: 'dismantleEquipment', id: `basic-${category}` })
+    reject(store, disk, { type: 'sellGear', ids: [`basic-${category}`] })
     for (const locked of [undefined, null, 0, 'false']) {
       reject(store, disk, { type: 'lockEquipment', id: 'gear-1', locked })
     }
     reject(store, disk, { type: 'lockEquipment', id: 'gear-1', locked: false })
-    act(store, { type: 'dismantleEquipment', id: 'gear-1' })
+    act(store, { type: 'sellGear', ids: ['gear-1'] })
     assert.equal(store.state.equipment['gear-1'], undefined)
     assert.equal(store.state.equipmentCounters['gear-1'], undefined)
     assert.equal(store.state.equipmentSequence, 1, 'dismantling does not recycle sequence numbers')
     assert.equal(store.state.contribution, before.contribution)
-    assert.equal(store.state.spiritStones, before.spiritStones+dismantleStoneRefund(before.equipment['gear-1']))
-    reject(store, disk, { type: 'dismantleEquipment', id: 'gear-1' })
+    assert.equal(store.state.spiritStones, before.spiritStones+equipmentSellPrice(before.equipment['gear-1']))
+    reject(store, disk, { type: 'sellGear', ids: ['gear-1'] })
   })
 
   for (const action of [
     {type:'craftGear',id:`${category}:ling:q1`,count:1,sequence:1,requestId:'save-failure'},
     { type: 'equipEquipment', category, id: 'gear-1' },
-    { type: 'dismantleEquipment', id: 'gear-1' },
+    { type: 'sellGear', ids: ['gear-1'] },
   ]) {
     test(`${category} ${action.type} save failure publishes nothing and retries deterministically`, () => {
       const { store, disk } = fixture(inventory(category))
@@ -316,7 +316,7 @@ test('combined capacity240 rejects both draw kinds atomically and freed slots ne
   assert.equal(Object.keys(store.state.weapons).length + Object.keys(store.state.equipment).length, 240)
   reject(store, disk, forgeAction(store,'armor'), 'capacity')
   reject(store, disk, forgeAction(store,'weapon'), 'capacity')
-  act(store, { type: 'dismantleEquipment', id: 'gear-1' })
+  act(store, { type: 'sellGear', ids: ['gear-1'] })
   const next = draw(store, 'armor')
   assert.equal(next.id, 'gear-238')
   assert.equal(store.state.equipment['gear-1'], undefined)
@@ -328,13 +328,13 @@ test('both categories dismantle for a portion of stone cost without refunding co
     const patch = inventory(category, quality)
     const { store, disk } = fixture(patch)
     const before = clone(store.state)
-    act(store, { type: 'dismantleEquipment', id: 'gear-1' })
+    act(store, { type: 'sellGear', ids: ['gear-1'] })
     assert.equal(store.state.contribution, before.contribution)
-    assert.equal(store.state.spiritStones, before.spiritStones+dismantleStoneRefund(before.equipment['gear-1']))
+    assert.equal(store.state.spiritStones, before.spiritStones+equipmentSellPrice(before.equipment['gear-1']))
     assert.deepEqual(store.state.equipmentRng, before.equipmentRng)
     assert.deepEqual(store.state.equipmentPity, before.equipmentPity)
     assert.deepEqual(store.state.equipmentDraws, before.equipmentDraws)
-    reject(store, disk, { type: 'dismantleEquipment', id: 'gear-1' })
+    reject(store, disk, { type: 'sellGear', ids: ['gear-1'] })
     reload(disk, store.state)
   }
 })
@@ -395,7 +395,7 @@ test('running battle requires a pause for equipment changes and rejects forged s
   ]) reject(store, disk, action, 'refinement-disabled')
   for (const action of [
     { type: 'drawEquipment', category: 'ring', tier: 'fan' },
-    { type: 'dismantleEquipment', id: 'gear-2' },
+    { type: 'sellGear', ids: ['gear-2'] },
   ]) reject(store, disk, action, 'in-tower')
   reject(store,disk,{type:'equipEquipment',category:'ring',id:'gear-2'},'pause-required')
   const run = TowerRun.restore(entered.snapshot)

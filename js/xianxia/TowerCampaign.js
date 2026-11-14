@@ -5,7 +5,7 @@ import { VITALITY_HP } from './TowerEquipmentBases.js'
 import { regenerationAmount, maximumRegenerationAmount } from './TowerAttributeRules.js'
 import { breakthroughReady } from './TowerBreakthrough.js'
 import {freshMixedDraw,validMixedDraw,applyMixedDraw} from './TowerMixedDraw.js'
-import { forgingQuote, forgingRecipe, rollForgedGear, dismantleStoneRefund } from './TowerForging.js'
+import { forgingQuote, forgingRecipe, rollForgedGear, equipmentSellPrice, dismantleMaterials } from './TowerForging.js'
 import { materialDrops, materialSummary, rareForgeDrops } from './TowerMaterialLoot.js'
 import { cultivationPillAllowance, freshCultivationPillUses, cultivationStockQuote, cultivationUseQuote } from './TowerPills.js'
 import { alchemyQuote } from './TowerAlchemy.js'
@@ -629,22 +629,10 @@ export class TowerCampaignStore {
       case 'drawForge':
       case 'drawEquipment': return fail(state.activeRun?'in-tower':'retired-forge')
       case 'equipEquipment':
-      case 'refineEquipment':
-      case 'dismantleEquipment': return this._equipmentAction(state, action)
+      case 'refineEquipment': return this._equipmentAction(state, action)
       case 'drawWeapon': return fail(state.activeRun?'in-tower':'retired-forge')
-      case 'dismantleWeapon': {
-        if (!own(state.weapons, action.id)) return fail('unowned-weapon')
-        const weapon = state.weapons[action.id]
-        if (isStarterEquipment(weapon)) return fail('starter-weapon')
-        if (state.loadouts.some(loadout => loadout.weaponId === action.id)) return fail('equipped-weapon')
-        const refund = dismantleStoneRefund(weapon)
-        if (state.spiritStones > STONE_CAP - refund) return fail('capacity')
-        state.spiritStones += refund
-        delete state.weapons[action.id]
-        delete state.weaponCounters[action.id]
-        if (state.inventoryMeta) delete state.inventoryMeta[action.id]
-        return { ok: true, id: action.id, refund }
-      }
+      case 'sellGear':
+      case 'dismantleGear': return this._disposeGear(state, action)
       case 'refineWeapon': return fail('refinement-disabled')
       case 'setLoadout':
         if (!integer(action.index, 2)) return fail('invalid-index')
@@ -913,15 +901,43 @@ export class TowerCampaignStore {
       state.mana = Math.min(state.mana, primaryAttributes(state.xp,combatLoadout(state)).maxMana)
       return { ok: true, id: item.id, category: item.category }
     }
-    if (isStarterEquipment(item)) return fail('starter-equipment')
-    if (state.loadouts.some(row => row[`${item.category}Id`] === item.id)) return fail('equipped-equipment')
-    const refund = dismantleStoneRefund(item)
-    if (state.spiritStones > STONE_CAP - refund) return fail('capacity')
-    state.spiritStones += refund
-    delete state.equipment[item.id]
-    if (state.inventoryMeta) delete state.inventoryMeta[item.id]
-    if (item.category === 'ring') delete state.equipmentCounters[item.id]
-    return { ok: true, id: item.id, refund }
+    return fail('refinement-disabled')
+  }
+
+  // Atomic batch: every id is validated before anything changes; one failure leaves the save untouched.
+  _disposeGear(state, action) {
+    const selling = action.type === 'sellGear'
+    if (state.activeRun) return fail('in-tower')
+    if (!Array.isArray(action.ids) || !action.ids.length || action.ids.length > EQUIPMENT_CAPACITY
+      || new Set(action.ids).size !== action.ids.length) return fail('invalid-items')
+    let gained = 0
+    const materials = {}, items = []
+    for (const id of action.ids) {
+      const weapon = own(state.weapons, id), gear = own(state.equipment, id)
+      if (!weapon && !gear) return fail('unowned-gear')
+      const item = weapon ? state.weapons[id] : state.equipment[id], category = weapon ? 'weapon' : item.category
+      if (isStarterEquipment(item)) return fail(weapon ? 'starter-weapon' : 'starter-equipment')
+      if (state.loadouts.some(row => row[`${category}Id`] === id)) return fail(weapon ? 'equipped-weapon' : 'equipped-equipment')
+      if (selling) gained += equipmentSellPrice(item)
+      else {
+        const returned = dismantleMaterials(item)
+        if (!returned.length) return fail('no-materials')
+        for (const row of returned) materials[row.id] = (materials[row.id] || 0) + row.count
+      }
+      items.push({ id, weapon, category })
+    }
+    if (selling && (!Number.isSafeInteger(gained) || state.spiritStones > stoneCapFor(this.allowPlaytestTools) - gained)) return fail('capacity')
+    if (Object.entries(materials).some(([id, n]) => (state.pills[id] || 0) > TOWER_RESOURCE_CAP - n)) return fail('material-capacity')
+    for (const { id, weapon, category } of items) {
+      if (weapon) { delete state.weapons[id]; delete state.weaponCounters[id] }
+      else { delete state.equipment[id]; if (category === 'ring') delete state.equipmentCounters[id] }
+      if (state.inventoryMeta) delete state.inventoryMeta[id]
+    }
+    if (selling) state.spiritStones += gained
+    for (const [id, n] of Object.entries(materials)) state.pills[id] = (state.pills[id] || 0) + n
+    const returned = Object.entries(materials).map(([id, count]) => ({ id, count }))
+    return { ok: true, ids: [...action.ids], ...(action.ids.length === 1 ? { id: action.ids[0] } : {}),
+      ...(selling ? { gained, refund: gained } : { materials: returned }) }
   }
 
   _breakthrough(state, action) {

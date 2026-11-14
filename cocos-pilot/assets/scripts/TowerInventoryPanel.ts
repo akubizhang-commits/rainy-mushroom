@@ -2,7 +2,7 @@ import { MENU_COLORS, ITEM_COLORS } from './TowerMenuChrome';
 import { drawMenuVeil, drawMenuClose, drawMenuBack, isMenuBack } from './TowerMenuChrome';
 import { equipmentTier } from './shared/js/xianxia/TowerEquipmentTiers';
 import { BlockInputEvents, Button, Color, Graphics, Label, Mask, Node, ScrollView, UITransform, Vec2 } from 'cc';
-import { inventoryCapacity, inventoryEntries, inventoryDescription, inventoryDetail, inventoryQuote } from './shared/js/xianxia/TowerInventory';
+import { inventoryCapacity, inventoryEntries, inventoryDescription, inventoryDetail, inventoryQuote, disposableGear, gearDisposalQuote } from './shared/js/xianxia/TowerInventory';
 
 const BAG_COLORS = ITEM_COLORS;
 // Equipment detail tokens: backpack, comparison and shop use the same card.
@@ -33,6 +33,8 @@ export class TowerInventoryPanel {
  private saleMessage = '';
  private saleOffset = 0;
  private saleScroll: ScrollView | null = null;
+ private saleMode: 'material' | 'sell' | 'dismantle' = 'material';
+ private gearPicks: Record<string, boolean> = {};
  // Shared by the inventory and forge settlement; colors follow design document 41.
  static tierColor(tier: string) {
   return equipmentTier(tier)?.color || BAG_COLORS.muted;
@@ -136,7 +138,7 @@ export class TowerInventoryPanel {
   this.grid = null; this.details = null; this.comparison = null;
  }
  select(id: string) { this.selected = id; this.filters = { category: 'all', sort: 'recent' }; this.gridOffset = 0; this.detailOffset = 0; this.comparisonOffset = 0; }
- leave() { this.confirmation = ''; this.selling = false; this.saleItems = {}; this.remember(); }
+ leave() { this.confirmation = ''; this.selling = false; this.saleItems = {}; this.gearPicks = {}; this.remember(); }
  private text(parent: Node, text: string, x: number, y: number, w: number, h: number, size = 22, tint = BAG_COLORS.ink, center = false) {
   const label = this.host.label(parent, text, x, y, w, h, size, tint, center);
   label.overflow = Label.Overflow.CLAMP;
@@ -273,18 +275,20 @@ export class TowerInventoryPanel {
   // an old button cannot submit the same operation twice.
   this.confirmation = '';
   try {
-   const command = operation === 'sell' ? { ...quote.action, count: Math.min(this.state.pills[id], this.saleQuantity) } : quote.action;
+   const material = operation === 'sell' && quote.action.type === 'sellMaterial';
+   const command = material ? { ...quote.action, count: Math.min(this.state.pills[id], this.saleQuantity) } : quote.action;
    const result = this.host.action(command);
    if (result?.ok && operation === 'equip') {
     this.selected = ''; this.detailOffset = 0;
    }
    this.message = result?.ok === false ? '操作未完成，物品未变更，请查看提示后重试。'
     : operation === 'sell' ? `已出售，获得${result?.gained || 0}下品灵石。`
-    : operation === 'dismantle' ? `已分解，返还${quote.refund}下品灵石。`
+    : operation === 'dismantle' ? `已分解，获得${TowerInventoryPanel.materialText(quote.materials)}。`
       : operation === 'equip' ? '已穿戴。' : operation === 'unequip' ? '已解除穿戴。' : '已服用一颗。';
   } finally { this.busy = false; }
   this.host.redraw();
  }
+ static materialText(materials: any[] = []) { return materials.map(m => `${m.name}×${m.count}`).join('、') || '无'; }
  render(root: Node, state: any, width: number, height: number, host: BagHost, notice = '') {
   this.root = root; this.host = host; this.state = state;
   const gap = 16, characterW = Math.floor((width - gap) * .36), leftW = width - gap - characterW;
@@ -311,7 +315,13 @@ export class TowerInventoryPanel {
   host.panel(left, BAG_COLORS.surface, BAG_COLORS.edge);
   const capacity = inventoryCapacity(state), top = height / 2;
   this.text(left, `储物袋 · 装备 ${capacity.used}/${capacity.max} · 丹药／材料不占格`, 0, top - 22, leftW - 24, 36, 20);
-  this.button(left,'出售',leftW/2-76,-height/2+42,124,60,()=>{this.selected='';this.selling=true;this.saleItems={};this.saleMessage='';this.saleOffset=0;host.redraw();},!state.activeRun&&!state.readOnly);
+  const openBatch=(mode:'material'|'sell'|'dismantle')=>{this.selected='';this.selling=true;this.saleMode=mode;this.saleItems={};this.gearPicks={};this.saleMessage='';this.saleOffset=0;host.redraw();};
+  const batchOpen=!state.activeRun&&!state.readOnly;
+  // Node names stay distinct from the detail sheet's single-item 出售/分解 actions.
+  for(const [name,caption,mode,x] of [['批量出售','出售',disposableGear(state).length?'sell':'material',leftW/2-76],['批量分解','分解','dismantle',leftW/2-216]] as [string,string,'material'|'sell'|'dismantle',number][]){
+   const n=this.button(left,name,x,-height/2+42,124,60,()=>openBatch(mode),batchOpen);
+   n.children.forEach(c=>c.getComponent(Label)&&(c.getComponent(Label)!.string=caption));
+  }
   const categories = [['all', '全部'], ['equipment', '装备'], ['pill', '丹药'], ['material', '材料']];
   const tabW = (leftW - 28) / 5;
   categories.forEach(([value, name], i) => this.filterTab(left, value==='material' && this.filters.category==='material' ? this.filters.materialType==='forge'?'炼器材':this.filters.materialType==='alchemy'?'炼丹材':'材料' : name, value,
@@ -390,8 +400,18 @@ export class TowerInventoryPanel {
   if (hasPrimary) this.button(actions, row.item.material ? '直接突破' : row.category === 'pill' ? '使用' : row.equipped ? '解除' : '穿戴',
    0, actionHeight / 2 - actionH / 2, actionW, actionH,
    () => this.execute(row.id, primary), !!primaryQuote.ok, true);
-  if (hasDismantle) {
-   const dismantle = inventoryQuote(state, row.id, row.item.material ? 'sell' : 'dismantle');
+  if (hasDismantle && !row.item.material) {
+   // Equipment: 出售 for stones above 分解 for materials, both in the lower action area.
+   [['出售', 'sell', 78], ['分解', 'dismantle', 0]].forEach(([name, operation, lift]: any) => {
+    const quote = inventoryQuote(state, row.id, operation);
+    const button = this.button(actions, name, 0, 0, actionW, actionH, () => {
+     this.remember(); this.confirmation = `${operation}:${row.id}`; host.redraw();
+    }, !!quote.ok, true);
+    button.setPosition(0, -cardH + actionHeight / 2 + 116 + lift);
+    if (quote.ok && operation === 'dismantle') host.panel(button, BAG_COLORS.dismantle, BAG_COLORS.dismantle);
+   });
+  } else if (hasDismantle) {
+   const dismantle = inventoryQuote(state, row.id, 'sell');
    const button = this.button(actions, row.item.material ? '出售' : '分解', 0, -actionHeight / 2 + actionH / 2, actionW, actionH, () => {
     this.remember(); this.confirmation = row.id; this.saleQuantity = 1; host.redraw();
    }, !!dismantle.ok, true);
@@ -410,7 +430,11 @@ export class TowerInventoryPanel {
   const shade=host.node('批量出售遮罩',root,size.width,size.height);shade.addComponent(BlockInputEvents);drawMenuVeil(shade,size.width,size.height);
   const w=Math.min(900,size.width-48),h=Math.min(570,size.height-48);
   const panel=host.node('批量出售面板',shade,w,h);host.panel(panel,BAG_COLORS.card,BAG_COLORS.edge);panel.addComponent(BlockInputEvents);
-  this.text(panel,'选择要出售的材料',0,h/2-35,w-48,42,26,BAG_COLORS.jade);
+  const tabs:[string,'material'|'sell'|'dismantle'][]=[['出售装备','sell'],['分解装备','dismantle'],['出售材料','material']];
+  const tabW=Math.min(200,(w-64)/3);
+  tabs.forEach(([name,mode],i)=>this.button(panel,name,(i-1)*(tabW+12),h/2-38,tabW,56,()=>{
+   this.remember();this.saleMode=mode;this.saleItems={};this.gearPicks={};this.saleMessage='';this.saleOffset=0;host.redraw();},true,this.saleMode===mode));
+  if(this.saleMode!=='material'){this.renderGearBatch(panel,w,h);return;}
   const rows=allRows.filter(row=>row.item.material&&inventoryQuote(this.state,row.id,'sell').ok);
   const list=this.scroller(panel,'出售材料列表',0,12,w-40,h-180,rows.length*94+8,this.saleOffset);
   this.saleScroll=list.scroll;
@@ -444,6 +468,62 @@ export class TowerInventoryPanel {
    }finally{this.busy=false;}
    host.redraw();
   },items.length>0&&!this.state.activeRun&&!this.state.readOnly,true);
+ }
+ /** Batch equipment sale or dismantle. Loadout/starter gear is never listed; 极品 is never quick-selected. */
+ private renderGearBatch(panel: Node, w: number, h: number) {
+  const host=this.host,mode=this.saleMode as 'sell'|'dismantle',verb=mode==='sell'?'出售':'分解';
+  const rows=disposableGear(this.state).map((row:any)=>({row,quote:gearDisposalQuote(this.state,[row.id],mode)}));
+  for(const id of Object.keys(this.gearPicks))if(!rows.some(r=>r.row.id===id&&r.quote.ok))delete this.gearPicks[id];
+  const quick:[string,number][]=[['下品',1],['中品',2],['上品',3]];
+  const quickW=112;
+  this.text(panel,'快速勾选',-w/2+70,h/2-100,100,32,20,BAG_COLORS.muted,true);
+  quick.forEach(([name,quality],i)=>this.button(panel,'全选'+name,-w/2+180+i*(quickW+10),h/2-100,quickW,48,()=>{
+   const pick=rows.filter(r=>r.quote.ok&&r.row.quality===quality);
+   const all=pick.length>0&&pick.every(r=>this.gearPicks[r.row.id]);
+   for(const r of pick)all?delete this.gearPicks[r.row.id]:this.gearPicks[r.row.id]=true;
+   this.remember();this.saleMessage='';host.redraw();},rows.some(r=>r.quote.ok&&r.row.quality===quality)));
+  this.button(panel,'清空',-w/2+180+3*(quickW+10),h/2-100,quickW,48,()=>{this.gearPicks={};this.remember();host.redraw();},Object.keys(this.gearPicks).length>0);
+  const pitch=84,listH=h-260;
+  const list=this.scroller(panel,'批量装备列表',0,h/2-136-listH/2,w-40,listH,rows.length*pitch+8,this.saleOffset);
+  this.saleScroll=list.scroll;
+  rows.forEach(({row,quote},i)=>{
+   const y=-pitch/2-4-i*pitch,picked=!!this.gearPicks[row.id],top=row.quality===4&&row.tier!=='fan';
+   const line=host.node('批量装备-'+row.id,list.content,w-56,pitch-8);line.setPosition(0,y);
+   host.panel(line,picked?BAG_COLORS.selected:BAG_COLORS.cell,picked?BAG_COLORS.jade:BAG_COLORS.edge,8);
+   const toggle=this.button(line,'勾选-'+row.id,-(w-56)/2+40,0,52,52,()=>{
+    if(picked)delete this.gearPicks[row.id];else this.gearPicks[row.id]=true;this.remember();this.saleMessage='';host.redraw();},quote.ok);
+   toggle.children.forEach(n=>n.getComponent(Label)&&(n.getComponent(Label)!.string=picked?'✓':''));
+   const cell=host.node('批量装备图标-'+row.id,line,64,64);cell.setPosition(-(w-56)/2+112,0);
+   TowerInventoryPanel.drawCell(host,cell,this.state,row);
+   const detail=inventoryDetail(this.state,row);
+   this.text(line,row.shortName||row.name,-(w-56)/2+300,12,240,30,22,BAG_COLORS.ink);
+   this.text(line,detail.rank+(top?' · 不参与快速勾选':''),-(w-56)/2+300,-18,240,26,18,top?BAG_COLORS.warning:BAG_COLORS.muted);
+   const value=!quote.ok?quote.reason:mode==='sell'?`${quote.gained} 下品灵石`:TowerInventoryPanel.materialText(quote.materials);
+   const valueLabel=this.text(line,value,(w-56)/2-190,0,340,pitch-16,18,quote.ok?BAG_COLORS.ink:BAG_COLORS.muted);
+   valueLabel.horizontalAlign=Label.HorizontalAlign.RIGHT;
+   host.clickable(line,()=>{if(picked)delete this.gearPicks[row.id];else this.gearPicks[row.id]=true;this.remember();this.saleMessage='';host.redraw();},quote.ok);
+  });
+  if(!rows.length)this.text(list.content,`没有可${verb}的装备（穿戴中、配装中和基础赠送装备不列出）`,0,-40,w-64,44,22,BAG_COLORS.muted,true);
+  const ids=rows.filter(r=>this.gearPicks[r.row.id]).map(r=>r.row.id);
+  const total=ids.length?gearDisposalQuote(this.state,ids,mode):null;
+  const summary=this.saleMessage||(!ids.length?`勾选要${verb}的装备 · 穿戴中与配装中的装备不会列出`
+   :!total!.ok?total!.reason:mode==='sell'?`已选 ${ids.length} 件 · 获得 ${total!.gained} 下品灵石`
+   :`已选 ${ids.length} 件 · 获得 ${TowerInventoryPanel.materialText(total!.materials)}`);
+  this.text(panel,summary,0,-h/2+104,w-56,44,20,BAG_COLORS.ink,true);
+  this.button(panel,'取消'+verb,-140,-h/2+44,220,64,()=>{this.selling=false;this.gearPicks={};host.redraw();});
+  let submitted=false;
+  const confirm=this.button(panel,'确认'+verb,140,-h/2+44,220,64,()=>{
+   if(submitted||this.busy||!this.selling||!total?.ok)return;
+   submitted=true;this.busy=true;
+   try{
+    const result=host.action(total.action);
+    if(result?.ok){this.selling=false;this.gearPicks={};
+     this.message=mode==='sell'?`已出售 ${ids.length} 件装备，获得 ${result.gained} 下品灵石。`:`已分解 ${ids.length} 件装备，获得 ${TowerInventoryPanel.materialText(total.materials)}。`;}
+    else this.saleMessage=`${verb}未完成，装备和资源均未变更，请重试。`;
+   }finally{this.busy=false;}
+   host.redraw();
+  },!!total?.ok&&!this.state.activeRun&&!this.state.readOnly,true);
+  if(total?.ok&&mode==='dismantle')host.panel(confirm,BAG_COLORS.dismantle,BAG_COLORS.dismantle);
  }
  // Shop inspection uses the exact backpack card without inventory actions or ownership requirements.
  renderItemPreview(parent: Node, state: any, row: any, width: number, height: number, host: BagHost, offset = 0) {
@@ -519,11 +599,12 @@ export class TowerInventoryPanel {
   setFont(card);
  }
  private confirm(parent: Node, width: number, height: number) {
-  const using = this.confirmation.startsWith('use:');
-  const id = using ? this.confirmation.slice(4) : this.confirmation, row = inventoryEntries(this.state).find((r: any) => r.id === id);
+  const prefix = this.confirmation.match(/^(use|sell|dismantle):/)?.[1];
+  const using = prefix === 'use';
+  const id = prefix ? this.confirmation.slice(prefix.length + 1) : this.confirmation, row = inventoryEntries(this.state).find((r: any) => r.id === id);
   if (!row) { this.confirmation = ''; return; }
-  const selling = !using && !!row.item.material;
-  const operation = using ? 'use' : selling ? 'sell' : 'dismantle';
+  const selling = !using && !!row.item.material, gearSale = prefix === 'sell' && !row.item.material;
+  const operation = using ? 'use' : selling || gearSale ? 'sell' : 'dismantle';
   const quote = inventoryQuote(this.state, id, operation);
   const quantity = Math.min(row.count, Math.max(1, this.saleQuantity));
   const overlay = this.host.node('背包分解确认遮罩', parent, width, height);
@@ -535,26 +616,31 @@ export class TowerInventoryPanel {
   const close = this.host.node('关闭分解确认', sheet, 72, 72);
   close.setPosition(sheetW / 2 - 42, sheetH / 2 - 42); drawMenuClose(close);
   this.host.clickable(close, cancel, !this.busy);
-  this.text(sheet, using ? '确认修为损失' : selling ? '出售材料' : '分解装备', -24, sheetH / 2 - 42, sheetW - 112, 52, 30, BAG_COLORS.ink);
-  if(!using&&!selling){
+  this.text(sheet, using ? '确认修为损失' : selling ? '出售材料' : gearSale ? '出售装备' : '分解装备', -24, sheetH / 2 - 42, sheetW - 112, 52, 30, BAG_COLORS.ink);
+  if(operation==='dismantle'){
    this.text(sheet,row.name,0,64,sheetW-64,38,24,BAG_COLORS.ink,true);
-   this.text(sheet,'分解返还',0,28,sheetW-64,28,20,BAG_COLORS.muted,true);
+   this.text(sheet,'分解获得材料',0,28,sheetW-64,28,20,BAG_COLORS.muted,true);
+   this.text(sheet,quote.ok?TowerInventoryPanel.materialText(quote.materials):quote.reason,0,-14,sheetW-64,64,quote.ok?24:20,quote.ok?BAG_COLORS.ink:BAG_COLORS.warning,true);
+   this.text(sheet,'分解后无法恢复，不返还灵石',0,-60,sheetW-64,30,20,BAG_COLORS.muted,true);
+  }else if(gearSale){
+   this.text(sheet,row.name,0,64,sheetW-64,38,24,BAG_COLORS.ink,true);
+   this.text(sheet,'出售获得',0,28,sheetW-64,28,20,BAG_COLORS.muted,true);
    const reward=this.host.node('分解返还灵石',sheet,56,56);reward.setPosition(-46,-14);
    const fallback=reward.addComponent(Graphics);fallback.fillColor=new Color('#A4C6D4');
    fallback.moveTo(0,24);fallback.lineTo(15,0);fallback.lineTo(0,-24);fallback.lineTo(-15,0);fallback.close();fallback.fill();
    this.host.stoneIcon?.(reward,0,fallback);
    this.text(sheet,`×${quote.refund||0}`,40,-14,112,40,28,BAG_COLORS.ink,true);
-   this.text(sheet,quote.ok?'下品灵石 · 分解后无法恢复':quote.reason,0,-60,sheetW-64,30,20,BAG_COLORS.muted,true);
+   this.text(sheet,quote.ok?'下品灵石 · 出售后无法恢复':quote.reason,0,-60,sheetW-64,30,20,BAG_COLORS.muted,true);
   }else this.text(sheet,using?quote.confirmation:`${row.name} × ${quantity}\n获得 ${row.item.sellPrice * quantity} 下品灵石`,
    0,selling?50:12,sheetW-64,selling?92:sheetH-184,24,BAG_COLORS.ink,true);
   if (selling) {
    TowerInventoryPanel.quantityControl(this.host,sheet,0,-38,quantity,row.count,n=>{this.saleQuantity=n;this.host.redraw();},()=>row.count,['−','+','最大']);
   }
   const buttonW = (sheetW - 80) / 2;
-  this.button(sheet, using ? '取消服用' : selling ? '取消出售' : '取消分解', -(buttonW + 16) / 2, -sheetH / 2 + 56, buttonW, 72, cancel);
-  const confirm = this.button(sheet, using ? '确认服用' : selling ? '确认出售' : '确认分解', (buttonW + 16) / 2, -sheetH / 2 + 56, buttonW, 72,
+  this.button(sheet, using ? '取消服用' : selling || gearSale ? '取消出售' : '取消分解', -(buttonW + 16) / 2, -sheetH / 2 + 56, buttonW, 72, cancel);
+  const confirm = this.button(sheet, using ? '确认服用' : selling || gearSale ? '确认出售' : '确认分解', (buttonW + 16) / 2, -sheetH / 2 + 56, buttonW, 72,
    () => this.execute(id, operation, true), quote.ok, true);
-  if (quote.ok && !selling && !using) this.host.panel(confirm, BAG_COLORS.dismantle, BAG_COLORS.dismantle, 12);
+  if (quote.ok && operation === 'dismantle') this.host.panel(confirm, BAG_COLORS.dismantle, BAG_COLORS.dismantle, 12);
 
  }
 }
