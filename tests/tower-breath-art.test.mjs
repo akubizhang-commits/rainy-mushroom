@@ -25,7 +25,7 @@ test('mouth landmarks follow both snake forms, mirror, scale and actor visibilit
  const actorSource=stripTypeScriptTypes(readFileSync(new URL('../cocos-pilot/assets/scripts/TowerMonsterArt.ts',import.meta.url),'utf8').replace(/^import .*$/gm,''),{mode:'transform'}).replace(/^export /gm,'');
  const Art=runInNewContext(actorSource+';TowerMonsterArt',{});
  const art=new Art();
- for(const [family,u,v,anchorY] of [['snake-lady',.426,.258,.1],['snake',.19,.32,.5]]){
+ for(const [family,u,v,anchorY] of [['snake-lady',.41,.235,.1],['snake',.19,.32,.5]]){
   for(const scaleX of [-1,1]) {
    const actor={family,seen:true,node:{position:{x:35,y:-20},scale:{x:scaleX,y:1.2}},transform:{anchorX:.5,anchorY,width:220,height:220}};
    art.actors.set('snake',actor);

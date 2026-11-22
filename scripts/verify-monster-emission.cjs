@@ -1,7 +1,7 @@
 const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
 const {createServer}=require('node:http');
 const {chromium}=require('/Users/zhangnu/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright');
-const root=path.resolve(__dirname,'..'),out=path.join(root,'reports/monster-emission-2026-11-05');
+const root=path.resolve(__dirname,'..'),out=path.join(root,'design/xianxia-ranged-emission-2026-11-22/verify');
 (async()=>{
  const {ARCHETYPES}=await import('../js/xianxia/TowerContent.js');
  const forms=['snake','snake-lady','scorpion','scorpion-humanoid','bat','bat-humanoid','falcon','falcon-humanoid'];
@@ -28,6 +28,8 @@ const root=path.resolve(__dirname,'..'),out=path.join(root,'reports/monster-emis
      const e=h.run._enemy({id:'emitter',archetype:c.archetype,x:-120*face,y:-80});
      Object.assign(e,{role,hp:100000,maxHp:100000});if(e.mechanic){e.mechanic.phase='idle';for(const k of Object.keys(e.mechanic.cooldowns))e.mechanic.cooldowns[k]=999;}
      s.enemies=[e];e.ai.entryUntil=e.ai.readyAt=e.ai.graceUntil=0;
+     // 2026-11-22: normal enemies now spawn with a floor cooldown on their family shot; clear it for the fixture.
+     for(const k of Object.keys(e.ai.cooldowns||{}))e.ai.cooldowns[k]=0;
      const spec=h.run._baseAttackSpec(e);if(!spec||spec.kind!=='shot')throw Error('No real ranged spec: '+c.archetype);
      h.run._newAttack(e,spec);e.ai.mode='active';e.ai.until=11;h.run._enemyActions([],s.player);
      h.camera={x:0,y:0};h.draw();window.emissionStart=JSON.parse(JSON.stringify(s.projectiles));
@@ -40,7 +42,7 @@ const root=path.resolve(__dirname,'..'),out=path.join(root,'reports/monster-emis
     const data=await page.evaluate(()=>{
      const h=window.__towerTest.host,s=h.run.state,rows=[];
      const renderer=[h.monsterArt,...h.monsterArt.speciesRenderers.values()].find(r=>r.actors.has('emitter'));
-     const actor=renderer.actors.get('emitter'),uvs={snake:[.19,.32],'snake-lady':[.426,.258],scorpion:[.65,.255],'scorpion-humanoid':[.78,.20],bat:[.40,.65],'bat-humanoid':[.36,.30],falcon:[.48,.50],'falcon-humanoid':[.40,.39]};
+     const actor=renderer.actors.get('emitter'),uvs={snake:[.19,.32],'snake-lady':[.41,.235],scorpion:[.65,.255],'scorpion-humanoid':[.78,.20],bat:[.395,.60],'bat-humanoid':[.36,.30],falcon:[.285,.635],'falcon-humanoid':[.325,.235]};
      h.camera={x:37,y:-23};h.draw();
      const uv=uvs[actor.family],socket={x:actor.node.position.x+(uv[0]-actor.transform.anchorX)*actor.transform.width*actor.node.scale.x,
       y:actor.node.position.y+(1-uv[1]-actor.transform.anchorY)*actor.transform.height*actor.node.scale.y};

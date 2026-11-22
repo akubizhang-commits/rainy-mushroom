@@ -59,15 +59,17 @@ export class TowerMonsterArt {
   this.archetypeArt??=new Map((ARCHETYPES as any[]).map(a=>[a.id,a.art_family]));
   return this.archetypeArt.get(archetype||'')||family;
  }
- /** Measured portrait landmarks: mouths, scorpion stingers and falcon wing roots.
+ /** Measured portrait landmarks: mouths/beaks and scorpion stingers.
+  * 2026-11-22 user report (some shots left from the feet): re-measured on the current portraits; bat moved up from
+  * below the chin to the mouth, snake-lady from the neck to the mouth, both falcons from the back/chest to the beak.
   * UVs use the delivered left-facing image; support is its opaque ground anchor.
   * All ranged windup/active poses currently use portraits, including flying beasts. */
  private static emissionLandmark(family:string):{u:number;v:number;support:number}|null {
   const marks:Record<string,[number,number,number]>={
-   snake:[.19,.32,.9492],'snake-lady':[.426,.258,.9],
+   snake:[.19,.32,.9492],'snake-lady':[.41,.235,.9],
    scorpion:[.65,.255,.9453],'scorpion-humanoid':[.78,.20,.9],
-   bat:[.40,.65,.72],'bat-humanoid':[.36,.30,.9],
-   falcon:[.48,.50,.72],'falcon-humanoid':[.40,.39,.9]
+   bat:[.395,.60,.72],'bat-humanoid':[.36,.30,.9],
+   falcon:[.285,.635,.72],'falcon-humanoid':[.325,.235,.9]
   };
   const m=marks[family];return m?{u:m[0],v:m[1],support:m[2]}:null;
  }
@@ -120,7 +122,7 @@ export class TowerMonsterArt {
  mouthPosition(id:string|number):{x:number;y:number}|null {
   const a=this.actors.get(id);
   if(!a||!a.seen||a.diedAt!==undefined)return null;
-  const uv=a.family==='snake-lady'?[.426,.258]:a.family==='snake'?[.19,.32]:null;
+  const uv=a.family==='snake-lady'?[.41,.235]:a.family==='snake'?[.19,.32]:null;
   if(!uv)return null;
   return {x:a.node.position.x+(uv[0]-a.transform.anchorX)*a.transform.width*a.node.scale.x,
    y:a.node.position.y+(1-uv[1]-a.transform.anchorY)*a.transform.height*a.node.scale.y};
