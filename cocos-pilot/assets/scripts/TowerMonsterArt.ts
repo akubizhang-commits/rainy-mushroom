@@ -6,6 +6,7 @@ import { Color, Graphics, ImageAsset, isValid, JsonAsset, Node, Rect, Size, Spri
 type Entry = { done: boolean; image: ImageAsset | null; texture: Texture2D | null; frame: SpriteFrame | null };
 // Spider death has no delivered clip, so its existing on-screen pose stays this long before cleanup removes it.
 const SPIDER_DEATH_HOLD_SECONDS = 1.5;
+const STATIC_FALL_SECONDS = .5;
 type Actor = { node: Node; sprite: Sprite; transform: UITransform; family: string; x: number; facing: number; seen: boolean; top?:number; worldY?:number; enraged?:boolean; diedAt?:number; motionTime?:number; moving?:boolean; bodySize?:number };
 // Spider walk stride: 143 world units/s at 12 fps ≈ 12 units per frame (full-speed cadence unchanged).
 const SPIDER_STRIDE = 12;
@@ -311,6 +312,20 @@ export class TowerMonsterArt {
      continue;
     }
    }
+   // Portraits without a death clip: tip over and fade at the confirmed kill, then remove.
+   // Death ends rage at once (base colour and base scale), and body size stays at the Boss/elite size.
+   const pureStatic=!(clip&&actor.family===this.motionFamily)&&!(this.motionFamily==='spider'&&actor.family==='spider');
+   if(pureStatic&&time!==undefined&&killed?.has(id)){
+    actor.diedAt??=time;
+    const t=Math.min(1,Math.max(0,time-actor.diedAt)/STATIC_FALL_SECONDS);
+    if(t<1){
+     const e=t*t,sign=Math.sign(actor.node.scale.x)||1;
+     actor.node.setScale(sign,1,1);
+     actor.node.angle=-(actor.facing<0?-1:1)*90*e;
+     actor.sprite.color=new Color(255,255,255,Math.round(255*(1-e)));
+     continue;
+    }
+   }
    this.remove(id, actor);this.observations.delete(id);
   }
   for (const [id, track] of this.phaseTracks) if (!track.seen) this.phaseTracks.delete(id);
@@ -344,13 +359,13 @@ export class TowerMonsterArt {
   const atlas=this.motionAtlas,ai=motion.ai,m=motion.mechanic;
   if(!atlas||!this.motionTexture||!ai)return null;
   // 2026-11-09: the rhino Boss charges only through M06, and through M20 once it starts charging a pillar; both play the charge clip by mechanic phase.
-  // 2026-11-09/11-11: skill clips by mechanic phase (11-11 adds rhino M20 brace before the charge, yak M19 channel, wolf-humanoid M05 howl, tiger/falcon-humanoid M07 stomp; 11-12 adds bat-humanoid M07 stomp, white-tiger M06 charge / M19 channel / M01 cast, snake-lady M03 heal; 11-13 adds yak M05 summon, crocodile-humanoid M12 cast, spider-lady M22 summon / M11 cast, snake-lady M11 cast; M02 rage stays static): bear-humanoid M07 stomp / M04 guard / M09 heave (Meowa), rhino M07 stomp, yak M15 roar. Other skills stay static.
+  // 2026-11-09/11-11: skill clips by mechanic phase (11-11 adds rhino M20 brace before the charge, yak M19 channel, wolf-humanoid M05 howl, tiger/falcon-humanoid M07 stomp; 11-12 adds bat-humanoid M07 stomp, white-tiger M06 charge / M19 channel / M01 cast, snake-lady M03 heal; 11-13 adds yak M05 summon, crocodile-humanoid M12 cast, spider-lady M22 summon / M11 cast, snake-lady M11 cast; 11-22 adds white-tiger / crocodile-humanoid / bear-humanoid elite M02 enrage): bear-humanoid M07 stomp / M04 guard / M09 heave (Meowa), rhino M07 stomp, yak M15 roar. Other skills stay static.
   const skillClip=this.motionFamily==='rhino'&&(m?.skillId==='M06'||m?.skillId==='M20'&&m.chargeStarted)?'charge'
-   :({'bear-humanoid':{M07:'stomp',M04:'guard',M09:'heave'},rhino:{M07:'stomp',M20:'brace'},yak:{M15:'roar',M19:'channel',M05:'summon'},'wolf-humanoid':{M05:'howl'},'tiger-humanoid':{M07:'stomp'},/* 2026-11-13 user report: falcon-humanoid M07 stomp grew ~1.3× wider than the cell and its wing is cut by the source video edge; back to the portrait until regenerated with folded wings. */'bat-humanoid':{M07:'stomp'},'white-tiger':{M06:'charge',M19:'channel',M01:'cast'},'snake-lady':{M03:'heal',M11:'cast'},'crocodile-humanoid':{M12:'cast'},'spider-lady':{M22:'summon',M11:'cast'}} as Record<string,Record<string,string>>)[this.motionFamily]?.[m?.skillId??'']||'';
+   :({'bear-humanoid':{M07:'stomp',M04:'guard',M09:'heave',M02:'enrage'},rhino:{M07:'stomp',M20:'brace'},yak:{M15:'roar',M19:'channel',M05:'summon'},'wolf-humanoid':{M05:'howl'},'tiger-humanoid':{M07:'stomp'},/* 2026-11-13 user report: falcon-humanoid M07 stomp grew ~1.3× wider than the cell and its wing is cut by the source video edge; back to the portrait until regenerated with folded wings. */'bat-humanoid':{M07:'stomp'},'white-tiger':{M06:'charge',M19:'channel',M01:'cast',/* 2026-11-22 M02 rage activation: the windup plays the roar; red and x1.2 start only after it completes. */M02:'enrage'},'snake-lady':{M03:'heal',M11:'cast'},'crocodile-humanoid':{M12:'cast',M02:'enrage'},'spider-lady':{M22:'summon',M11:'cast'}} as Record<string,Record<string,string>>)[this.motionFamily]?.[m?.skillId??'']||'';
   if(skillClip&&m&&['windup','active','recovery'].includes(m.phase||'')&&atlas.clips[skillClip]?.phases?.[m.phase!]) {
    const clip=atlas.clips[skillClip];let [offset,count]=clip.phases![m.phase!];
-   // M01/M05/M07/M09/M11/M15/M19/M22 resolve on the impact tick (no mechanic active phase), so their recovery opens with the clip's impact frames.
-   const instant=['M01','M05','M07','M09','M11','M15','M19','M22'].includes(m.skillId),act=clip.phases!.active;
+   // M01/M02/M05/M07/M09/M11/M15/M19/M22 resolve on the impact tick (no mechanic active phase), so their recovery opens with the clip's impact frames.
+   const instant=['M01','M02','M05','M07','M09','M11','M15','M19','M22'].includes(m.skillId),act=clip.phases!.active;
    if(instant&&m.phase==='recovery'&&act&&act[0]+act[1]===offset){offset=act[0];count+=act[1];}
    // M20 starts directly in its 2s active setup (no windup) and its charge has its own windup, so brace plays windup+active there.
    if(skillClip==='brace'&&m.phase==='active'&&clip.phases!.windup&&act){offset=clip.phases!.windup[0];count=clip.phases!.windup[1]+act[1];}

@@ -1,0 +1,68 @@
+{
+  "submitted_at": "2026-11-22 00:3x Asia/Shanghai",
+  "team_id": "team_Ur9UBLcjfvXmu2iaNKV7cFVh",
+  "project_id": "proj_k6xCHLGuh1JrUQ7Vzo8vsZYV",
+  "model_id": "model_pruna-p-video-2-pro",
+  "uploaded_assets": {
+    "crocodile-reference-v3.png": "asset_5BcttrcesignLN1HkcMsjvoq",
+    "white-tiger-reference-green-v2.png": "asset_sdvagHTpWgSxuFactVjRZgvD",
+    "bear-humanoid-side-reference-green.png": "asset_PjvciyB9rKC9MoYZPnvUks5Z",
+    "crocodile-reference-v4.png": "asset_4SZW8NdPbWzXr1CFMost2D5m"
+  },
+  "jobs": [
+    {
+      "name": "crocodile-humanoid-m02",
+      "seed": 202611201,
+      "job_id": "job_bJbEwnVtWiEzo4jA6414hEyb",
+      "status": "success",
+      "output_asset": "asset_nBoSZe7n2UHkgN5w57MneEhK",
+      "cuCost": 10,
+      "review": "rejected (colour drift: brown crocodile / tiger tint change); originals kept"
+    },
+    {
+      "name": "white-tiger-m02",
+      "seed": 202611202,
+      "job_id": "job_6rEc9Mc2JAkUf79QyNBknUpi",
+      "status": "success",
+      "output_asset": "asset_N3wYEg12mq55xGz34ingAPTk",
+      "cuCost": 10,
+      "review": "rejected (colour drift: brown crocodile / tiger tint change); originals kept"
+    },
+    {
+      "name": "bear-humanoid-elite-m02",
+      "seed": 202611203,
+      "job_id": "job_mHnwxEp3tnWbP2iCerYW5xSW",
+      "status": "success",
+      "output_asset": "asset_ooYYnC7Z5vECBrDgokiRC9UD",
+      "cuCost": 10,
+      "review": "not installed: bear-humanoid atlas is owned by another session"
+    }
+  ],
+  "pending": [],
+  "cu_used_this_window": 30,
+  "cu_note": "Scenario window ends 2026-11-22 08:00 Beijing; about 20 CU left, not spent",
+  "second_window": {
+    "submitted_at": "2026-11-22 ~10:30 Asia/Shanghai",
+    "cu_used": 20,
+    "jobs": [
+      {
+        "name": "white-tiger-m02-v2",
+        "seed": 202611212,
+        "job_id": "job_nhKvMsZ7ozANCzY2Sn1G9N1J",
+        "output_asset": "asset_s9BjS4znCXpqnaD4ijrPoCK1",
+        "cuCost": 10,
+        "reference": "asset_sdvagHTpWgSxuFactVjRZgvD",
+        "review": "accepted, installed as white-tiger-v1 enrage clip"
+      },
+      {
+        "name": "crocodile-humanoid-m02-v2",
+        "seed": 202611221,
+        "job_id": "job_vSeHt8txBztCRF8Nvi5QP24Y",
+        "output_asset": "asset_Le5sESs4Zw5HtKVp8L7ZMwfd",
+        "cuCost": 10,
+        "reference": "asset_4SZW8NdPbWzXr1CFMost2D5m (crocodile-reference-v4)",
+        "review": "accepted, installed as crocodile-humanoid-v1 enrage clip"
+      }
+    ]
+  }
+}

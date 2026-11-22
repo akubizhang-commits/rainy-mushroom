@@ -1,0 +1,649 @@
+{
+  "cases": [
+    {
+      "floor": 9,
+      "family": "white-tiger",
+      "rank": 7,
+      "role": "boss",
+      "authored": {
+        "floor": 9,
+        "wave": 20,
+        "rank": 7,
+        "name": "镇魇白虎",
+        "skills": [
+          "M06",
+          "M01",
+          "M19",
+          "M02"
+        ]
+      },
+      "windupFrames": [
+        "enrage-000",
+        "enrage-001",
+        "enrage-002",
+        "enrage-003",
+        "enrage-004",
+        "enrage-005",
+        "enrage-006",
+        "enrage-007",
+        "enrage-008",
+        "enrage-009",
+        "enrage-010",
+        "enrage-011"
+      ],
+      "active": {
+        "frame": "static",
+        "scale": 1.2,
+        "color": 115,
+        "alpha": 255,
+        "angle": 0,
+        "enraged": true,
+        "skill": "",
+        "phase": "idle",
+        "time": 169.25,
+        "until": 184.25,
+        "present": true
+      },
+      "hold": 14,
+      "expired": {
+        "frame": "static",
+        "scale": 1,
+        "color": 255,
+        "alpha": 255,
+        "angle": 0,
+        "enraged": false,
+        "skill": "",
+        "phase": "idle",
+        "time": 184.25,
+        "until": 184.25,
+        "present": true
+      },
+      "death": {
+        "out": [
+          {
+            "time": 184.35,
+            "present": true,
+            "angle": 0,
+            "alpha": 255
+          },
+          {
+            "time": 184.45,
+            "present": true,
+            "angle": 3.599999999999591,
+            "alpha": 245
+          },
+          {
+            "time": 184.55,
+            "present": true,
+            "angle": 14.400000000002455,
+            "alpha": 214
+          },
+          {
+            "time": 184.65,
+            "present": true,
+            "angle": 32.40000000000246,
+            "alpha": 163
+          },
+          {
+            "time": 184.75,
+            "present": true,
+            "angle": 57.60000000000164,
+            "alpha": 92
+          },
+          {
+            "time": 184.85,
+            "present": false,
+            "angle": null,
+            "alpha": null
+          },
+          {
+            "time": 184.95,
+            "present": false,
+            "angle": null,
+            "alpha": null
+          },
+          {
+            "time": 185.05,
+            "present": false,
+            "angle": null,
+            "alpha": null
+          },
+          {
+            "time": 185.15,
+            "present": false,
+            "angle": null,
+            "alpha": null
+          },
+          {
+            "time": 185.25,
+            "present": false,
+            "angle": null,
+            "alpha": null
+          }
+        ],
+        "kills": 1
+      },
+      "trace": [
+        {
+          "frame": "static",
+          "scale": 1,
+          "color": 255,
+          "alpha": 255,
+          "angle": 0,
+          "enraged": false,
+          "skill": "",
+          "phase": "idle",
+          "time": 167.017,
+          "until": 0,
+          "present": true
+        },
+        {
+          "frame": "enrage-000",
+          "scale": 1,
+          "color": 255,
+          "alpha": 255,
+          "angle": 0,
+          "enraged": false,
+          "skill": "M02",
+          "phase": "windup",
+          "time": 167.75,
+          "until": 0,
+          "present": true,
+          "hp": 0.18993012419619942,
+          "alive": true,
+          "cd": {
+            "M06": 100167.01666666666,
+            "M01": 100167.01666666666,
+            "M19": 100167.01666666666,
+            "M02": 167.01666666666668
+          },
+          "uses": {
+            "M06": 0,
+            "M01": 0,
+            "M19": 0,
+            "M02": 1
+          }
+        },
+        {
+          "frame": "enrage-000",
+          "scale": 1,
+          "color": 255,
+          "alpha": 255,
+          "angle": 0,
+          "enraged": false,
+          "skill": "M02",
+          "phase": "windup",
+          "time": 167.85,
+          "until": 0,
+          "present": true
+        },
+        {
+          "frame": "enrage-001",
+          "scale": 1,
+          "color": 255,
+          "alpha": 255,
+          "angle": 0,
+          "enraged": false,
+          "skill": "M02",
+          "phase": "windup",
+          "time": 167.95,
+          "until": 0,
+          "present": true
+        },
+        {
+          "frame": "enrage-002",
+          "scale": 1,
+          "color": 255,
+          "alpha": 255,
+          "angle": 0,
+          "enraged": false,
+          "skill": "M02",
+          "phase": "windup",
+          "time": 168.05,
+          "until": 0,
+          "present": true
+        },
+        {
+          "frame": "enrage-003",
+          "scale": 1,
+          "color": 255,
+          "alpha": 255,
+          "angle": 0,
+          "enraged": false,
+          "skill": "M02",
+          "phase": "windup",
+          "time": 168.15,
+          "until": 0,
+          "present": true
+        }
+      ]
+    },
+    {
+      "floor": 4,
+      "family": "crocodile-humanoid",
+      "rank": 4,
+      "role": "boss",
+      "authored": {
+        "floor": 4,
+        "wave": 20,
+        "rank": 4,
+        "name": "伏潭鳄王",
+        "skills": [
+          "M08",
+          "M12",
+          "M02"
+        ]
+      },
+      "windupFrames": [
+        "enrage-000",
+        "enrage-001",
+        "enrage-002",
+        "enrage-003",
+        "enrage-004",
+        "enrage-005",
+        "enrage-006",
+        "enrage-007",
+        "enrage-008",
+        "enrage-009",
+        "enrage-010",
+        "enrage-011"
+      ],
+      "active": {
+        "frame": "static",
+        "scale": 1.2,
+        "color": 115,
+        "alpha": 255,
+        "angle": 0,
+        "enraged": true,
+        "skill": "",
+        "phase": "idle",
+        "time": 126.933,
+        "until": 141.93333333333334,
+        "present": true
+      },
+      "hold": 14,
+      "expired": {
+        "frame": "static",
+        "scale": 1,
+        "color": 255,
+        "alpha": 255,
+        "angle": 0,
+        "enraged": false,
+        "skill": "",
+        "phase": "idle",
+        "time": 141.933,
+        "until": 141.93333333333334,
+        "present": true
+      },
+      "death": {
+        "out": [
+          {
+            "time": 142.03,
+            "present": true,
+            "angle": 0,
+            "alpha": 255
+          },
+          {
+            "time": 142.13,
+            "present": true,
+            "angle": 3.599999999999591,
+            "alpha": 245
+          },
+          {
+            "time": 142.23,
+            "present": true,
+            "angle": 14.399999999998364,
+            "alpha": 214
+          },
+          {
+            "time": 142.33,
+            "present": true,
+            "angle": 32.40000000000246,
+            "alpha": 163
+          },
+          {
+            "time": 142.43,
+            "present": true,
+            "angle": 57.60000000000164,
+            "alpha": 92
+          },
+          {
+            "time": 142.53,
+            "present": false,
+            "angle": null,
+            "alpha": null
+          },
+          {
+            "time": 142.63,
+            "present": false,
+            "angle": null,
+            "alpha": null
+          },
+          {
+            "time": 142.73,
+            "present": false,
+            "angle": null,
+            "alpha": null
+          },
+          {
+            "time": 142.83,
+            "present": false,
+            "angle": null,
+            "alpha": null
+          },
+          {
+            "time": 142.93,
+            "present": false,
+            "angle": null,
+            "alpha": null
+          }
+        ],
+        "kills": 1
+      },
+      "trace": [
+        {
+          "frame": "static",
+          "scale": 1,
+          "color": 255,
+          "alpha": 255,
+          "angle": 0,
+          "enraged": false,
+          "skill": "",
+          "phase": "idle",
+          "time": 124.7,
+          "until": 0,
+          "present": true
+        },
+        {
+          "frame": "enrage-000",
+          "scale": 1,
+          "color": 255,
+          "alpha": 255,
+          "angle": 0,
+          "enraged": false,
+          "skill": "M02",
+          "phase": "windup",
+          "time": 125.433,
+          "until": 0,
+          "present": true,
+          "hp": 0.18905922950135212,
+          "alive": true,
+          "cd": {
+            "M08": 100124.7,
+            "M12": 100124.7,
+            "M02": 124.7
+          },
+          "uses": {
+            "M08": 0,
+            "M12": 0,
+            "M02": 1
+          }
+        },
+        {
+          "frame": "enrage-000",
+          "scale": 1,
+          "color": 255,
+          "alpha": 255,
+          "angle": 0,
+          "enraged": false,
+          "skill": "M02",
+          "phase": "windup",
+          "time": 125.533,
+          "until": 0,
+          "present": true
+        },
+        {
+          "frame": "enrage-001",
+          "scale": 1,
+          "color": 255,
+          "alpha": 255,
+          "angle": 0,
+          "enraged": false,
+          "skill": "M02",
+          "phase": "windup",
+          "time": 125.633,
+          "until": 0,
+          "present": true
+        },
+        {
+          "frame": "enrage-002",
+          "scale": 1,
+          "color": 255,
+          "alpha": 255,
+          "angle": 0,
+          "enraged": false,
+          "skill": "M02",
+          "phase": "windup",
+          "time": 125.733,
+          "until": 0,
+          "present": true
+        },
+        {
+          "frame": "enrage-003",
+          "scale": 1,
+          "color": 255,
+          "alpha": 255,
+          "angle": 0,
+          "enraged": false,
+          "skill": "M02",
+          "phase": "windup",
+          "time": 125.833,
+          "until": 0,
+          "present": true
+        }
+      ]
+    },
+    {
+      "floor": 6,
+      "family": "bear-humanoid",
+      "rank": 4,
+      "role": "elite",
+      "species": "bear",
+      "authored": {
+        "floor": 6,
+        "wave": 5,
+        "rank": 4,
+        "name": "铁掌",
+        "skills": [
+          "M02"
+        ]
+      },
+      "windupFrames": [
+        "enrage-000",
+        "enrage-001",
+        "enrage-002",
+        "enrage-003",
+        "enrage-004",
+        "enrage-005",
+        "enrage-006",
+        "enrage-007",
+        "enrage-008",
+        "enrage-009",
+        "enrage-010",
+        "enrage-011"
+      ],
+      "active": {
+        "frame": "slam-000",
+        "scale": 1.2,
+        "color": 115,
+        "alpha": 255,
+        "angle": 0,
+        "enraged": true,
+        "skill": "",
+        "phase": "idle",
+        "time": 31.117,
+        "until": 46.11666666666667,
+        "present": true
+      },
+      "hold": 14,
+      "expired": {
+        "frame": "static",
+        "scale": 1,
+        "color": 255,
+        "alpha": 255,
+        "angle": 0,
+        "enraged": false,
+        "skill": "",
+        "phase": "idle",
+        "time": 46.117,
+        "until": 46.11666666666667,
+        "present": true
+      },
+      "death": {
+        "out": [
+          {
+            "time": 46.22,
+            "present": true,
+            "angle": 0,
+            "alpha": 255
+          },
+          {
+            "time": 46.32,
+            "present": true,
+            "angle": 3.6000000000001027,
+            "alpha": 245
+          },
+          {
+            "time": 46.42,
+            "present": true,
+            "angle": 14.399999999999386,
+            "alpha": 214
+          },
+          {
+            "time": 46.52,
+            "present": true,
+            "angle": 32.39999999999939,
+            "alpha": 163
+          },
+          {
+            "time": 46.62,
+            "present": true,
+            "angle": 57.59999999999959,
+            "alpha": 92
+          },
+          {
+            "time": 46.72,
+            "present": false,
+            "angle": null,
+            "alpha": null
+          },
+          {
+            "time": 46.82,
+            "present": false,
+            "angle": null,
+            "alpha": null
+          },
+          {
+            "time": 46.92,
+            "present": false,
+            "angle": null,
+            "alpha": null
+          },
+          {
+            "time": 47.02,
+            "present": false,
+            "angle": null,
+            "alpha": null
+          },
+          {
+            "time": 47.12,
+            "present": false,
+            "angle": null,
+            "alpha": null
+          }
+        ],
+        "kills": 1
+      },
+      "trace": [
+        {
+          "frame": "static",
+          "scale": 1,
+          "color": 255,
+          "alpha": 255,
+          "angle": 0,
+          "enraged": false,
+          "skill": "",
+          "phase": "idle",
+          "time": 28.9,
+          "until": 0,
+          "present": true
+        },
+        {
+          "frame": "enrage-000",
+          "scale": 1,
+          "color": 255,
+          "alpha": 255,
+          "angle": 0,
+          "enraged": false,
+          "skill": "M02",
+          "phase": "windup",
+          "time": 29.617,
+          "until": 0,
+          "present": true,
+          "hp": 0.18772379419006002,
+          "alive": true,
+          "cd": {
+            "M02": 28.9
+          },
+          "uses": {
+            "M02": 1
+          }
+        },
+        {
+          "frame": "enrage-000",
+          "scale": 1,
+          "color": 255,
+          "alpha": 255,
+          "angle": 0,
+          "enraged": false,
+          "skill": "M02",
+          "phase": "windup",
+          "time": 29.717,
+          "until": 0,
+          "present": true
+        },
+        {
+          "frame": "enrage-001",
+          "scale": 1,
+          "color": 255,
+          "alpha": 255,
+          "angle": 0,
+          "enraged": false,
+          "skill": "M02",
+          "phase": "windup",
+          "time": 29.817,
+          "until": 0,
+          "present": true
+        },
+        {
+          "frame": "enrage-002",
+          "scale": 1,
+          "color": 255,
+          "alpha": 255,
+          "angle": 0,
+          "enraged": false,
+          "skill": "M02",
+          "phase": "windup",
+          "time": 29.917,
+          "until": 0,
+          "present": true
+        },
+        {
+          "frame": "enrage-003",
+          "scale": 1,
+          "color": 255,
+          "alpha": 255,
+          "angle": 0,
+          "enraged": false,
+          "skill": "M02",
+          "phase": "windup",
+          "time": 30.017,
+          "until": 0,
+          "present": true
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "status": "PASS"
+}
