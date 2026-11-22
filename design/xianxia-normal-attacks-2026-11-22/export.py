@@ -16,6 +16,13 @@ COUNTS = {'windup': 6, 'active': 2, 'recovery': 8}
 JOBS = {
     # 2026-11-22 crocodile-humanoid ordinary sweep (normal attack), 20 frames 9/3/8 like the other sweeps.
     # Built on the current runtime atlas (enrage included, displayScale already corrected).
+    # White tiger v1 salvage: the swipe itself (source 24-33) carries a dark green motion trail, so those frames are skipped;
+    # windup ends on the drawn-back arm (22) and active opens on the extended follow-through (36).
+    'white-tiger': [('sweep', 'white-tiger-sweep', {'windup': (2, 23), 'active': (36, 42), 'recovery': (42, 92), 'counts': {'windup': 9, 'active': 3, 'recovery': 8}})],
+    # Snake-lady v1 salvage: from source 36 the face turns into a large red mouth with spray (until ~80) and the tail then
+    # swings wide, so the clip stops before the spit (head drawn back, then leaning forward) and recovers by replaying the
+    # windup in reverse back to the resting pose.
+    'snake-lady': [('shot', 'snake-lady-shot', {'windup': (1, 31), 'active': [31, 32, 33], 'recovery': [30, 26, 22, 18, 14, 10, 6, 1], 'counts': {'windup': 9}})],
     'crocodile-humanoid': [('sweep', 'crocodile-humanoid-sweep', {'windup': (8, 34), 'active': (34, 46), 'recovery': (46, 92), 'counts': {'windup': 9, 'active': 3, 'recovery': 8}})],
 }
 W, H = 3840, 4096
@@ -55,6 +62,8 @@ def build(fam):
         s = (wb[3] - wb[1]) / (sb[3] - sb[1]); ox = (wb[0] + wb[2]) / 2 - (sb[0] + sb[2]) / 2 * s; oy = wb[3] - sb[3] * s
         ids, phases, n = [], {}, 0
         for ph in ('windup', 'active', 'recovery'):
+            if isinstance(win[ph], list):  # explicit 0-based source indices (e.g. a reversed windup as recovery)
+                phases[ph] = [n, len(win[ph])]; ids += win[ph]; n += len(win[ph]); continue
             a, b = win[ph]; c = win.get('counts', COUNTS)[ph]; phases[ph] = [n, c]
             for i in range(c): ids.append(a + round(i * (b - a) / c)); n += 1
         keyed = [load(raw / f'{i + 1:03}.png') for i in ids]; bs = [box(k) for k in keyed]

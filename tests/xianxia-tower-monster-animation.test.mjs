@@ -595,9 +595,9 @@ test('rank-five serpent queen walks only on displacement with independent moveme
  const image=f.finish('tower-monsters-motion/snake-lady-v1',ImageAsset,new ImageAsset(data.width,data.height));f.finish('tower-monsters-motion/snake-lady-v1',JsonAsset,new JsonAsset(data));
  render(1,100);const r=f.art.speciesRenderers.get('snake-lady'),a=r.actors.get('snake-lady1');assert.equal(a.sprite.spriteFrame,r.entries.get('snake-lady').frame);
  render(1.1,98);const frame=a.sprite.spriteFrame;assert.equal(frame.rect.width,480);render(1.1,98);assert.equal(a.sprite.spriteFrame,frame);render(1.3,96);assert.notEqual(a.sprite.spriteFrame,frame);render(1.4,96);assert.equal(a.sprite.spriteFrame,r.entries.get('snake-lady').frame);
- for(const mode of ['windup','active','recovery']){for(const kind of ['shot']){render(2,90,{ai:{mode,until:3,attack:{id:'snake-lady-'+kind,kind,startedAt:1,active:.2,dirX:-1}}});assert.equal(a.sprite.spriteFrame,r.entries.get('snake-lady').frame);}phasedSkill(r,a,data.clips.heal,mode,render,'M03',false);phasedSkill(r,a,data.clips.cast,mode,render,'M11',true);}
+ for(const mode of ['windup','active','recovery']){{render(2,90,{ai:{mode,until:3,attack:{id:'snake-lady-shot',kind:'shot',startedAt:1,active:.2,recovery:.7,dirX:-1}}});const sh=data.clips.shot,[o,c]=sh.phases[mode];assert.ok(sh.frames.slice(o,o+c).map(k=>r.motionFrames.get(k)).includes(a.sprite.spriteFrame),'shot '+mode+' plays the shot phase');}phasedSkill(r,a,data.clips.heal,mode,render,'M03',false);phasedSkill(r,a,data.clips.cast,mode,render,'M11',true);}
  render(3,70);f.art.beginFrame();f.art.endFrame(4,new Set(['snake-lady1']));f.art.beginFrame();f.art.endFrame(4.6,new Set(['snake-lady1']));assert.equal(r.actors.size,0);f.art.destroy();assert.equal(image.refs,0);
- const png=readFileSync(resource('snake-lady-v1.png'));assert.equal(createHash('sha256').update(png).digest('hex'),data.sourceSha256);assert.equal(png.readUInt32BE(16),3840);assert.equal(png.readUInt32BE(20),2496);assert.equal(png[25],6);assert.equal(Object.keys(data.frames).length,48);
+ const png=readFileSync(resource('snake-lady-v1.png'));assert.equal(createHash('sha256').update(png).digest('hex'),data.sourceSha256);assert.equal(png.readUInt32BE(16),3840);assert.equal(png.readUInt32BE(20),3264);assert.equal(png[25],6);assert.equal(Object.keys(data.frames).length,68);
 });
 
 test('rank-six spider lady walks only on displacement with independent movement and static combat',()=>{
@@ -631,9 +631,9 @@ test('rank-seven white tiger walks only on displacement with independent movemen
  const image=f.finish('tower-monsters-motion/white-tiger-v1',ImageAsset,new ImageAsset(data.width,data.height));f.finish('tower-monsters-motion/white-tiger-v1',JsonAsset,new JsonAsset(data));
  render(1,100);const r=f.art.speciesRenderers.get('white-tiger'),a=r.actors.get('white-tiger1');assert.equal(a.sprite.spriteFrame,r.entries.get('white-tiger').frame);
  render(1.1,98);const frame=a.sprite.spriteFrame;assert.equal(frame.rect.width,480);render(1.1,98);assert.equal(a.sprite.spriteFrame,frame);render(1.3,96);assert.notEqual(a.sprite.spriteFrame,frame);render(1.4,96);assert.equal(a.sprite.spriteFrame,r.entries.get('white-tiger').frame);
- for(const mode of ['windup','active','recovery']){for(const kind of ['sweep']){render(2,90,{ai:{mode,until:3,attack:{id:'white-tiger-'+kind,kind,startedAt:1,active:.2,dirX:-1}}});assert.equal(a.sprite.spriteFrame,r.entries.get('white-tiger').frame);}phasedSkill(r,a,data.clips.enrage,mode,render,'M02',true);phasedSkill(r,a,data.clips.charge,mode,render,'M06',false);phasedSkill(r,a,data.clips.channel,mode,render,'M19',true);phasedSkill(r,a,data.clips.cast,mode,render,'M01',true);}
+ for(const mode of ['windup','active','recovery']){for(const kind of ['sweep','bite']){render(2,90,{ai:{mode,until:3,attack:{id:'white-tiger-'+kind,kind,startedAt:1,active:.2,recovery:.9,dirX:-1}}});const sw=data.clips.sweep,[o,c]=sw.phases[mode];assert.ok(sw.frames.slice(o,o+c).map(k=>r.motionFrames.get(k)).includes(a.sprite.spriteFrame),kind+' '+mode+' plays the sweep phase');}phasedSkill(r,a,data.clips.enrage,mode,render,'M02',true);phasedSkill(r,a,data.clips.charge,mode,render,'M06',false);phasedSkill(r,a,data.clips.channel,mode,render,'M19',true);phasedSkill(r,a,data.clips.cast,mode,render,'M01',true);}
  render(3,70);f.art.beginFrame();f.art.endFrame(4,new Set(['white-tiger1']));f.art.beginFrame();f.art.endFrame(4.6,new Set(['white-tiger1']));assert.equal(r.actors.size,0);f.art.destroy();assert.equal(image.refs,0);
- const png=readFileSync(resource('white-tiger-v1.png'));assert.equal(createHash('sha256').update(png).digest('hex'),data.sourceSha256);assert.equal(png.readUInt32BE(16),3840);assert.equal(png.readUInt32BE(20),3648);assert.equal(png[25],6);assert.equal(Object.keys(data.frames).length,78);
+ const png=readFileSync(resource('white-tiger-v1.png'));assert.equal(createHash('sha256').update(png).digest('hex'),data.sourceSha256);assert.equal(png.readUInt32BE(16),3840);assert.equal(png.readUInt32BE(20),3968);assert.equal(png[25],6);assert.equal(Object.keys(data.frames).length,98);
 });
 
 test('boar charge phases use per-frame hoof anchors at the unchanged world origin',()=>{
@@ -734,4 +734,21 @@ test('death after a charge restores the death foot anchor while retaining enlarg
  const a=f.art.actors.get('boar1');assert.notEqual(a.transform.anchor.y,1-f.art.motionAtlas.anchor[1]);
  f.art.beginFrame();f.art.endFrame(11,new Set(['boar1']));
  closeSize(a.transform.contentSize.width,183.04);assert.equal(a.transform.anchor.y,1-f.art.motionAtlas.anchor[1]);
+});
+
+test('static-portrait ordinary attacks lean back, lunge and settle; shots are at rest on release',()=>{
+ const f=setup(),Art=f.art.constructor,size=200;
+ const at=(mode,time,kind='bite',facing=1,extra={})=>Art.attackPose({time,ai:{mode,until:mode==='windup'?2:mode==='active'?2.2:3,attack:{kind,startedAt:1,active:.2,recovery:.8,dirX:facing}},...extra},facing,size);
+ for(const facing of [1,-1]){
+  const w=at('windup',1.9,'bite',facing),a=at('active',2.2,'bite',facing),r0=at('recovery',2.21,'bite',facing),r1=at('recovery',3,'bite',facing);
+  assert.ok(w.dx*facing<0&&w.angle*facing>0,'windup leans away from the target');
+  assert.ok(a.dx*facing>0&&a.angle*facing<0,'active lunges toward the target');
+  assert.ok(Math.abs(r0.dx)>Math.abs(r1.dx)&&Math.abs(r1.dx)<1e-9&&Math.abs(r1.angle)<1e-9,'recovery settles at rest');
+  const sw=at('windup',1.99,'shot',facing),sa=at('active',2.05,'shot',facing),sr=at('recovery',2.4,'shot',facing);
+  assert.ok(sw.dx*facing<0);assert.ok(Math.abs(sa.dx)<1e-12&&Math.abs(sa.angle)<1e-12,"shot at rest on release");assert.ok(sr.dx*facing>0);
+  assert.ok(Math.abs(a.dx)<=.09*size+1e-9&&Math.abs(w.dx)<=.04*size+1e-9);
+ }
+ assert.equal(at('windup',1.5,'charge'),null);
+ assert.equal(at('windup',1.5,'bite',1,{mechanic:{skillId:'M11',phase:'windup'}}),null);
+ assert.equal(Art.attackPose({time:1,ai:{mode:'approach',until:0}},1,size),null);
 });

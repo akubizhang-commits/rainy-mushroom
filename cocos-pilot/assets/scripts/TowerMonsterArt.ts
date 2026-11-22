@@ -91,6 +91,25 @@ export class TowerMonsterArt {
   return {x:shot.x+ox*weight,y:shot.y+oy*weight,
    angle:Math.atan2(shot.vy+oy*slope,shot.vx+ox*slope),lift:oy*weight};
  }
+ /** 2026-11-22 fallback for ordinary attacks that still show the static portrait: melee leans back in the windup,
+  * lunges toward the target in the active window and eases back in recovery; shots rear back in the windup and are
+  * exactly at rest when the projectile leaves (the mouth socket stays valid), then nudge forward and settle.
+  * Skills (mechanic phases) and charges keep their own presentation. Presentation only; nothing feeds back. */
+ static attackPose(motion:MonsterMotion|undefined,facing:number,size:number):{dx:number;angle:number}|null {
+  const ai=motion?.ai,a=ai?.attack,m=motion?.mechanic;
+  if(!motion||!ai||!a||!['windup','active','recovery'].includes(ai.mode)||a.kind==='charge'||['windup','active','recovery'].includes(m?.phase||''))return null;
+  const t=motion.time,until=ai.until;
+  const duration=ai.mode==='windup'?until-(a.startedAt??t):ai.mode==='active'?a.active:a.recovery;
+  if(![t,until,duration].every(Number.isFinite)||duration!<=0||!Number.isFinite(size)||size<=0)return null;
+  const p=Math.max(0,Math.min(1,1-(until-t)/duration!)),ease=(v:number)=>v*v*(3-2*v),f=facing<0?-1:1;
+  const shot=a.kind==='shot',back=shot?.05:.04,reach=shot?.025:.09,tilt=shot?6:5,lean=shot?3:7;
+  let k=0,deg=0; // k: share of body size toward the target; deg: forward tilt
+  if(ai.mode==='windup'){const e=ease(p);k=-back*e;deg=-tilt*e;}
+  else if(ai.mode==='active'){if(!shot){const e=ease(Math.min(1,p*2));k=-back+(back+reach)*e;deg=-tilt+(tilt+lean)*e;}}
+  else{const e=shot?Math.sin(Math.PI*Math.min(1,p*1.6)):1-ease(p);k=reach*e;deg=lean*e;}
+  // Cocos angles are counter-clockwise; a forward tilt toward +x is clockwise.
+  return {dx:k*size*f,angle:-deg*f};
+ }
  // Each delivered species owns its lazy texture cache and independent phase clocks.
  private speciesRenderers = new Map<string,TowerMonsterArt>();
  constructor(private motionFamily: 'boar' | 'wolf' | 'spider' | 'bat' | 'falcon' | 'crocodile' | 'bear' | 'tiger' | 'rhino' | 'yak' | 'wolf-humanoid' | 'tiger-humanoid' | 'falcon-humanoid' | 'bear-humanoid' | 'snake' | 'boar-humanoid' | 'crocodile-humanoid' | 'white-tiger' | 'snake-lady' | 'spider-lady' | 'bat-humanoid' = 'boar') {}
@@ -273,7 +292,9 @@ export class TowerMonsterArt {
   const feet:Record<string,number>={boar:.9492,ape:.9492,tiger:.9062,'tiger-humanoid':.9,'white-tiger':.9,centipede:.9258,wolf:.8984,falcon:.72,snake:.9492,bear:.9492,scorpion:.9453,crocodile:.84,spider:.8457,rhino:.9,yak:.9,bat:.72,'spider-lady':.9,'spider-queen':.9,'snake-lady':.9,'bear-humanoid':.9,'crocodile-humanoid':.9,'wolf-humanoid':.9,'falcon-humanoid':.9,'ape-humanoid':.9,'bat-humanoid':.9,'boar-humanoid':.9,'scorpion-humanoid':.9,'centipede-humanoid':.9};
   const rage=(motion?.hp===undefined||motion.hp>0)&&motion?.mechanic?.enraged?1.2:1;
   const lift=motion?.worldY===undefined?0:size*((animatedFrame ? anchor[1] : feet[family]??.9)-anchor[1])*rage;
-  actor.node.setPosition(x, y+lift);
+  const pose=animatedFrame?null:TowerMonsterArt.attackPose(motion,actor.facing,size);
+  actor.node.setPosition(x+(pose?.dx??0), y+lift);
+  actor.node.angle=pose?.angle??0;
   actor.top=y+lift+renderSize*anchor[1]*rage;
   setTowerDepth(actor.node,motion?.worldY??y);
   // The restored side-view crocodile faces left. The frontal spider still
@@ -379,10 +400,10 @@ export class TowerMonsterArt {
   }
   // Crocodile sweep follows the existing combat phases; mechanics retain their own presentation.
   // 83号：普通熊掌抓、虎爪是普通攻击 bite，复用各自的挥击动作，避免出招时静止。
-  if((this.motionFamily==='crocodile'||this.motionFamily==='bear'&&['slam','bite'].includes(ai.attack?.kind??'')||this.motionFamily==='tiger'&&['sweep','bite'].includes(ai.attack?.kind??'')||(this.motionFamily==='wolf-humanoid'||this.motionFamily==='tiger-humanoid'||/* 2026-11-22 sweep clip */this.motionFamily==='crocodile-humanoid')&&['sweep','bite'].includes(ai.attack?.kind??'')||this.motionFamily==='falcon-humanoid'&&ai.attack?.kind==='bite'||(this.motionFamily==='snake'||this.motionFamily==='boar-humanoid')&&ai.attack?.kind==='bite'||this.motionFamily==='boar-humanoid'&&ai.attack?.kind==='charge'||this.motionFamily==='bear-humanoid'&&['slam','bite'].includes(ai.attack?.kind??'')||this.motionFamily==='rhino'&&['sweep','charge'].includes(ai.attack?.kind??'')||this.motionFamily==='yak'&&ai.attack?.kind==='slam'||(this.motionFamily==='bat'||this.motionFamily==='falcon')&&ai.attack?.kind==='bite') && ai.attack && ['windup','active','recovery'].includes(ai.mode)
+  if((this.motionFamily==='crocodile'||this.motionFamily==='bear'&&['slam','bite'].includes(ai.attack?.kind??'')||this.motionFamily==='tiger'&&['sweep','bite'].includes(ai.attack?.kind??'')||(this.motionFamily==='wolf-humanoid'||this.motionFamily==='tiger-humanoid'||/* 2026-11-22 sweep clips */this.motionFamily==='crocodile-humanoid'||this.motionFamily==='white-tiger')&&['sweep','bite'].includes(ai.attack?.kind??'')||this.motionFamily==='falcon-humanoid'&&ai.attack?.kind==='bite'||(this.motionFamily==='snake'||this.motionFamily==='boar-humanoid')&&ai.attack?.kind==='bite'||this.motionFamily==='boar-humanoid'&&ai.attack?.kind==='charge'||this.motionFamily==='bear-humanoid'&&['slam','bite'].includes(ai.attack?.kind??'')||this.motionFamily==='rhino'&&['sweep','charge'].includes(ai.attack?.kind??'')||this.motionFamily==='yak'&&ai.attack?.kind==='slam'||(this.motionFamily==='bat'||this.motionFamily==='falcon')&&ai.attack?.kind==='bite'||/* 2026-11-22 */this.motionFamily==='snake-lady'&&ai.attack?.kind==='shot') && ai.attack && ['windup','active','recovery'].includes(ai.mode)
     && !['windup','active','recovery'].includes(m?.phase||'')) {
    // 低阶妖蝠、妖隼普攻：飞行帧+程序前扑残影（2026-11-06用户验收）；音波/羽弹 shot 仍保持立绘。
-   const clip=atlas.clips[(this.motionFamily==='boar-humanoid'||this.motionFamily==='rhino')&&ai.attack.kind==='charge'?'charge':(this.motionFamily==='bear'||this.motionFamily==='bear-humanoid'||this.motionFamily==='yak')?'slam':(this.motionFamily==='bat'||this.motionFamily==='falcon'||this.motionFamily==='snake'||this.motionFamily==='boar-humanoid')?'bite':'sweep'],range=clip?.phases?.[ai.mode];
+   const clip=atlas.clips[this.motionFamily==='snake-lady'?'shot':(this.motionFamily==='boar-humanoid'||this.motionFamily==='rhino')&&ai.attack.kind==='charge'?'charge':(this.motionFamily==='bear'||this.motionFamily==='bear-humanoid'||this.motionFamily==='yak')?'slam':(this.motionFamily==='bat'||this.motionFamily==='falcon'||this.motionFamily==='snake'||this.motionFamily==='boar-humanoid')?'bite':'sweep'],range=clip?.phases?.[ai.mode];
    if(!clip||!range)return null;
    const [offset,count]=range;
    const duration=ai.mode==='windup'?ai.until-ai.attack.startedAt:
@@ -497,7 +518,7 @@ export class TowerMonsterArt {
   }
   return Object.entries(value.clips).every(([name, raw]) => {
    const clip = raw as MotionClip;
-   return ['move','gore','bite','sweep','slam','howl','cast','charge','stomp','guard','roar','heave','channel','brace','heal','summon','charge-start','charge-loop','charge-end','enrage','hit','death'].includes(name) && clip
+   return ['move','gore','bite','sweep','slam','howl','cast','charge','stomp','guard','roar','heave','channel','brace','heal','summon','charge-start','charge-loop','charge-end','enrage','shot','hit','death'].includes(name) && clip
     && Number.isFinite(clip.fps) && clip.fps > 0 && typeof clip.loop === 'boolean'
     && (['move','charge-loop'].includes(name) || !clip.loop) && Array.isArray(clip.frames) && clip.frames.length > 0
     && clip.frames.every(key => Object.prototype.hasOwnProperty.call(value.frames, key));
