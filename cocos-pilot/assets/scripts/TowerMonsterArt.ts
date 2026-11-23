@@ -66,9 +66,12 @@ export class TowerMonsterArt {
   * All ranged windup/active poses currently use portraits, including flying beasts. */
  private static emissionLandmark(family:string):{u:number;v:number;support:number}|null {
   const marks:Record<string,[number,number,number]>={
-   snake:[.19,.32,.9492],'snake-lady':[.41,.235,.9],
+   // snake: 2026-11-23 shots release on the shot clip's open-mouth frame (cell mouth .13,.53; anchor .531,.9834; displayScale
+   // 1.3068), expressed in portrait terms: u=.5+(.13-.531)*1.3068, v=.9492-(.9834-.53)*1.3068.
+   snake:[.5+(.13-.531)*1.3068,.9492-(.9834-.53)*1.3068,.9492],'snake-lady':[.41,.235,.9],
    scorpion:[.65,.255,.9453],'scorpion-humanoid':[.78,.20,.9],
-   bat:[.395,.60,.72],'bat-humanoid':[.36,.30,.9],
+   // bat: 2026-11-23 shot clip open-mouth frame (cell .40,.57; anchor .4954,.7458; displayScale 1.0817).
+   bat:[.5+(.40-.4954)*1.0817,.72-(.7458-.57)*1.0817,.72],'bat-humanoid':[.36,.30,.9],
    falcon:[.285,.635,.72],'falcon-humanoid':[.325,.235,.9]
   };
   const m=marks[family];return m?{u:m[0],v:m[1],support:m[2]}:null;
@@ -400,10 +403,10 @@ export class TowerMonsterArt {
   }
   // Crocodile sweep follows the existing combat phases; mechanics retain their own presentation.
   // 83号：普通熊掌抓、虎爪是普通攻击 bite，复用各自的挥击动作，避免出招时静止。
-  if((this.motionFamily==='crocodile'||this.motionFamily==='bear'&&['slam','bite'].includes(ai.attack?.kind??'')||this.motionFamily==='tiger'&&['sweep','bite'].includes(ai.attack?.kind??'')||(this.motionFamily==='wolf-humanoid'||this.motionFamily==='tiger-humanoid'||/* 2026-11-22 sweep clips */this.motionFamily==='crocodile-humanoid'||this.motionFamily==='white-tiger')&&['sweep','bite'].includes(ai.attack?.kind??'')||this.motionFamily==='falcon-humanoid'&&ai.attack?.kind==='bite'||(this.motionFamily==='snake'||this.motionFamily==='boar-humanoid')&&ai.attack?.kind==='bite'||this.motionFamily==='boar-humanoid'&&ai.attack?.kind==='charge'||this.motionFamily==='bear-humanoid'&&['slam','bite'].includes(ai.attack?.kind??'')||this.motionFamily==='rhino'&&['sweep','charge'].includes(ai.attack?.kind??'')||this.motionFamily==='yak'&&ai.attack?.kind==='slam'||(this.motionFamily==='bat'||this.motionFamily==='falcon')&&ai.attack?.kind==='bite'||/* 2026-11-22 */this.motionFamily==='snake-lady'&&ai.attack?.kind==='shot') && ai.attack && ['windup','active','recovery'].includes(ai.mode)
+  if((this.motionFamily==='crocodile'||this.motionFamily==='bear'&&['slam','bite'].includes(ai.attack?.kind??'')||this.motionFamily==='tiger'&&['sweep','bite'].includes(ai.attack?.kind??'')||(this.motionFamily==='wolf-humanoid'||this.motionFamily==='tiger-humanoid'||/* 2026-11-22 sweep clips */this.motionFamily==='crocodile-humanoid'||this.motionFamily==='white-tiger')&&['sweep','bite'].includes(ai.attack?.kind??'')||this.motionFamily==='falcon-humanoid'&&ai.attack?.kind==='bite'||(this.motionFamily==='snake'||this.motionFamily==='boar-humanoid')&&ai.attack?.kind==='bite'||this.motionFamily==='boar-humanoid'&&ai.attack?.kind==='charge'||this.motionFamily==='bear-humanoid'&&['slam','bite'].includes(ai.attack?.kind??'')||this.motionFamily==='rhino'&&['sweep','charge'].includes(ai.attack?.kind??'')||this.motionFamily==='yak'&&ai.attack?.kind==='slam'||(this.motionFamily==='bat'||this.motionFamily==='falcon')&&ai.attack?.kind==='bite'||/* 2026-11-22 */this.motionFamily==='snake-lady'&&ai.attack?.kind==='shot'||this.motionFamily==='spider-lady'&&ai.attack?.kind==='bite'||(this.motionFamily==='snake'||this.motionFamily==='bat-humanoid'||this.motionFamily==='bat')&&ai.attack?.kind==='shot') && ai.attack && ['windup','active','recovery'].includes(ai.mode)
     && !['windup','active','recovery'].includes(m?.phase||'')) {
    // 低阶妖蝠、妖隼普攻：飞行帧+程序前扑残影（2026-11-06用户验收）；音波/羽弹 shot 仍保持立绘。
-   const clip=atlas.clips[this.motionFamily==='snake-lady'?'shot':(this.motionFamily==='boar-humanoid'||this.motionFamily==='rhino')&&ai.attack.kind==='charge'?'charge':(this.motionFamily==='bear'||this.motionFamily==='bear-humanoid'||this.motionFamily==='yak')?'slam':(this.motionFamily==='bat'||this.motionFamily==='falcon'||this.motionFamily==='snake'||this.motionFamily==='boar-humanoid')?'bite':'sweep'],range=clip?.phases?.[ai.mode];
+   const clip=atlas.clips[ai.attack.kind==='shot'?'shot':this.motionFamily==='spider-lady'?'bite':(this.motionFamily==='boar-humanoid'||this.motionFamily==='rhino')&&ai.attack.kind==='charge'?'charge':(this.motionFamily==='bear'||this.motionFamily==='bear-humanoid'||this.motionFamily==='yak')?'slam':(this.motionFamily==='bat'||this.motionFamily==='falcon'||this.motionFamily==='snake'||this.motionFamily==='boar-humanoid')?'bite':'sweep'],range=clip?.phases?.[ai.mode];
    if(!clip||!range)return null;
    const [offset,count]=range;
    const duration=ai.mode==='windup'?ai.until-ai.attack.startedAt:

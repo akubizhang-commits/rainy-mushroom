@@ -7,7 +7,12 @@ const {createServer}=require('node:http');
 const {chromium}=require('/Users/zhangnu/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright');
 const ROOT=path.resolve(__dirname,'..');
 const OUT=path.join(ROOT,'design/xianxia-normal-attacks-2026-11-22/game-review');
-const CASES=[{floor:4,family:'crocodile-humanoid',rank:4,role:'boss',clip:'sweep'},{floor:9,family:'white-tiger',rank:7,role:'boss',clip:'sweep'},{floor:5,family:'snake-lady',rank:5,role:'boss',clip:'shot'}];
+const CASES=[{floor:4,family:'crocodile-humanoid',rank:4,role:'boss',clip:'sweep'},{floor:9,family:'white-tiger',rank:7,role:'boss',clip:'sweep'},{floor:5,family:'snake-lady',rank:5,role:'boss',clip:'shot'},
+ // 2026-11-23 clips: spider-lady bite, snake / bat / bat-humanoid shot.
+ {floor:5,family:'spider-lady',rank:6,role:'normal',archetype:'spider_normal_r6',clip:'bite'},
+ {floor:3,family:'snake',rank:3,role:'elite',archetype:'snake_elite',clip:'shot'},
+ {floor:3,family:'bat',rank:3,role:'boss',archetype:'bat_boss',clip:'shot'},
+ {floor:4,family:'bat-humanoid',rank:4,role:'elite',archetype:'bat_elite_rank4',clip:'shot'}];
 
 (async()=>{
  fs.mkdirSync(OUT,{recursive:true});
@@ -30,13 +35,15 @@ const CASES=[{floor:4,family:'crocodile-humanoid',rank:4,role:'boss',clip:'sweep
    page.on('pageerror',e=>report.errors.push(c.family+': '+e.message));
    await page.goto(`http://127.0.0.1:${server.address().port}/cocos-pilot/build/web-mobile/index.html?ruleset=xianxia&tower=1&smoke=1`);
    await page.waitForFunction(()=>!!window.__towerTest?.host?.menu,null,{timeout:30000});
-   const authored=await page.evaluate(({floor,role,species})=>{
+   const authored=await page.evaluate(({floor,role,species,archetype})=>{
     const h=window.__towerTest.host;
     h.enterTraining();
     const Run=h.run.constructor;
     h.run=new Run({attemptId:1,floor,seed:17,hp:100,xp:0,arenaVersion:1,loadout:h.run.state.loadout});
     const run=h.run;run.setPlaytestAssist(true);
-    const want=e=>e.role===role&&(!species||e.family===species||e.species===species||String(e.archetype||e.id).startsWith(species));
+    const want=e=>archetype?e.archetype===archetype:e.role===role&&(!species||e.family===species||e.species===species||String(e.archetype||e.id).startsWith(species));
+    // 2026-11-23: normal/elite cases spawn the authored archetype directly instead of clearing waves until it appears.
+    if(archetype){run.pause();const x=run._enemy({id:'case',archetype,x:155,y:0});run.state.enemies=[x];x.ai.entryUntil=x.ai.readyAt=x.ai.graceUntil=0;}
     for(let i=0;i<20000&&!run.state.enemies.some(want);i++){
      run.resume();
      for(const e of [...run.state.enemies])run._damageEnemy({target:e.id,damage:1e12,direct:false,scaled:true,source:'fixture'});
@@ -50,7 +57,7 @@ const CASES=[{floor:4,family:'crocodile-humanoid',rank:4,role:'boss',clip:'sweep
     s.enemies=[e];s.pending=[];s.reserved=[];s.projectiles=[];s.effects=[];s.zones=[];s.drops=[];
     if(s.monsterMechanics)s.monsterMechanics.zones=[];
     h.camera={x:0,y:0};h.attackTargetId=e.id;h.draw();
-    return {floor:s.floor,wave:s.wave,rank:e.rank,name:e.name,skills:e.mechanic.skills};
+    return {floor:s.floor,wave:s.wave,rank:e.rank,name:e.name,skills:e.mechanic?.skills||[]};
    },c);
    assert.equal(authored.rank,c.rank);
    // Wait for the motion atlas, then return to the base pose.
@@ -62,9 +69,9 @@ const CASES=[{floor:4,family:'crocodile-humanoid',rank:4,role:'boss',clip:'sweep
      const r=h.monsterArt.speciesRenderers.get(family),a=r.actors.get(e.id)||h.monsterArt.actors.get(e.id);
      const frame=a?.sprite.spriteFrame;const name=frame?[...r.motionFrames].find(([,f])=>f===frame)?.[0]??'static':null;
      return {frame:name,scale:a?Math.abs(a.node.scale.y):null,color:a?a.sprite.color.g:null,alpha:a?a.sprite.color.a:null,angle:a?a.node.angle:null,
-      enraged:e.mechanic.enraged,skill:e.mechanic.skillId,phase:e.mechanic.phase,time:+run.state.time.toFixed(3),until:e.mechanic.enrageUntil,present:!!a};
+      enraged:e.mechanic?.enraged,skill:e.mechanic?.skillId,phase:e.mechanic?.phase,time:+run.state.time.toFixed(3),until:e.mechanic?.enrageUntil,present:!!a};
     };
-    for(const id of e.mechanic.skills)e.mechanic.cooldowns[id]=run.state.time+100000;
+    if(e.mechanic)for(const id of e.mechanic.skills)e.mechanic.cooldowns[id]=run.state.time+100000;
     return window.__read();
    },c.family);
    // Real AI: the boss walks in and attacks with its ordinary sweep/bite.

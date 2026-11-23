@@ -23,6 +23,14 @@ JOBS = {
     # swings wide, so the clip stops before the spit (head drawn back, then leaning forward) and recovers by replaying the
     # windup in reverse back to the resting pose.
     'snake-lady': [('shot', 'snake-lady-shot', {'windup': (1, 31), 'active': [31, 32, 33], 'recovery': [30, 26, 22, 18, 14, 10, 6, 1], 'counts': {'windup': 9}})],
+    # Spider-lady ordinary bite: rear and raise the front legs (2-18), stab (18-26), hold then settle (40-70).
+    'spider-lady': [('bite', 'spider-lady-bite', {'windup': (2, 18), 'active': (18, 26), 'recovery': (40, 70), 'counts': {'windup': 9, 'active': 3, 'recovery': 8}})],
+    # Snake shot: head drawn back (2-28); the red spray (29-36) is skipped, active is the open-mouth strike (38/40/42).
+    'snake': [('shot', 'snake-shot', {'windup': (2, 28), 'active': [37, 39, 41], 'recovery': (44, 96), 'counts': {'windup': 9, 'recovery': 8}})],
+    # Bat-humanoid shot v2: wings fold and the head pulls back (2-22), screech (22-30), wings reopen to rest (86-110).
+    'bat-humanoid': [('shot', 'bat-humanoid-shot', {'windup': (2, 22), 'active': (22, 30), 'recovery': (86, 112), 'counts': {'windup': 9, 'active': 3, 'recovery': 8}})],
+    # Bat shot: wings rise and the head pulls back (2-20), screech with the mouth open (22-30), wings settle back (40-96).
+    'bat': [('shot', 'bat-shot', {'windup': (2, 20), 'active': (22, 30), 'recovery': (40, 96), 'counts': {'windup': 9, 'active': 3, 'recovery': 8}})],
     'crocodile-humanoid': [('sweep', 'crocodile-humanoid-sweep', {'windup': (8, 34), 'active': (34, 46), 'recovery': (46, 92), 'counts': {'windup': 9, 'active': 3, 'recovery': 8}})],
 }
 W, H = 3840, 4096
@@ -55,7 +63,11 @@ def build(fam):
     for k, r in meta['frames'].items():
         cells.append((k, old.crop((r['x'], r['y'], r['x'] + r['w'], r['y'] + r['h'])), {kk: v for kk, v in r.items() if kk not in 'xywh'}))
     kept = {k: hashlib.sha256(f.tobytes()).hexdigest() for k, f, _ in cells}
-    wb = box(cells[[k for k, _, _ in cells].index(meta['clips']['move']['frames'][0])][1])
+    mi = [k for k, _, _ in cells].index(meta['clips']['move']['frames'][0]); mcell = cells[mi][1]
+    # 2026-11-23: the walk frame may sit in a smaller cell and/or carry its own displayScale (snake: 384 cell, 1.3068).
+    # Express its box in 480-cell coordinates and carry its displayScale into the new frames, so the clip matches
+    # the walk's on-screen size instead of its raw pixels.
+    wb = tuple(v * 480 / mcell.width for v in box(mcell)); base_ds = cells[mi][2].get('displayScale', 1.0)
     composed = []; report = {}
     for clip, src, win in JOBS[fam]:
         clean = (HERE / src / 'clean-frames').is_dir(); raw = HERE / src / ('clean-frames' if clean else 'raw-frames'); load = (lambda p: Image.open(p).convert('RGBA')) if clean else key; sb = box(load(raw / '001.png'))
@@ -93,7 +105,7 @@ def build(fam):
     for clip, phases, frames, ds, anchor in composed:
         for k, f in frames:
             f.save(out / f'{k}.png')
-            cells.append((k, f.resize((small, small), Image.Resampling.LANCZOS), dict(displayScale=round(ds, 4), anchor=anchor)))
+            cells.append((k, f.resize((small, small), Image.Resampling.LANCZOS), dict(displayScale=round(ds * base_ds, 4), anchor=anchor)))
         meta['clips'][clip] = dict(frames=[k for k, _ in frames], fps=10, loop=False, phases=phases)
     if column:
         place = {k: (r['x'], r['y']) for k, r in meta['frames'].items()}; n = 0
