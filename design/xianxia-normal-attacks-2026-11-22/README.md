@@ -50,3 +50,10 @@ spider-lady-web（`spider-lady-web-request.json`，seed 202611242）未提交，
 - 真实游戏：`scripts/verify-normal-attacks-2026-11-22.cjs` 新增 4 例（直接生成指定原型），前摇/生效/收招全部播放片段，无立像混入。
 
 剩余普攻缺口：蛛姬蛛网、妖隼与隼将 shot、蝠将 bite；可选重做白虎 sweep、蛇后 shot。
+
+## 2026-11-23 下午（未花额度）
+
+- 蝠将普攻 bite：复用 shot v2 的嘶鸣片段，叠加程序前扑（`attackPose` 的近战前探），出招时不再是立像。真实游戏验收通过。
+- 蛛姬蛛网：在游戏里不会出现，撤回请求。蛛姬精英和 Boss 都带 M10，M10 会取代普通蛛网，而且没有退回咬击的分支，所以精英和 Boss 只放技能；咬击只有普通怪会用（已接入 bite 片段）。
+- 分身份验收（`scripts/verify-normal-attacks-2026-11-22.cjs` 共 12 例全部通过）：蛛姬普通；妖蛇普通、精英；妖蝠普通、精英、Boss；蝠将普通（咬击、射击）、精英。每例检查前摇/生效/收招都播片段、暂停时帧不变、死亡后角色移除；新片段所有帧都没有贴格子边（边缘 alpha 为 0）；截图核对出射点在嘴部、脚底贴影子、"音波"预警标签正常。
+- 明日请求：`falcon-shot-request.json`（用已留白的 asset_FcXss…）、`falcon-humanoid-shot-request.json`（本地已做留白参考图 `falcon-humanoid-reference-green-padded.png`，需先上传，上传不花 CU）、可选 `white-tiger-sweep-v2-request.json`。
