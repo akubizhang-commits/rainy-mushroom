@@ -397,7 +397,7 @@ test('crocodile movement and sweep preserve detail, timing, pause and mechanic f
  phase(3.18,'recovery',4.08);assert.equal(pose(),'sweep-012');
  phase(4.07,'recovery',4.08);assert.equal(pose(),'sweep-023');
  assert.equal(a.node.scale.x,-1);assert.equal(a.node.position.y,30);
- phase(3.1,'active',3.18,{mechanic:{skillId:'M08',phase:'active'}});assert.equal(a.sprite.spriteFrame,crocodile.entries.get('crocodile').frame);
+ phase(3.1,'active',3.18,{mechanic:{skillId:'M08',phase:'active',startedAt:2,activatesAt:3,until:3.2}});assert.ok(pose().startsWith('sweep-'),'2026-11-24 interim: M08 plays the sweep');
  phase(2.5,'windup',3);assert.equal(pose(),'sweep-004','loading mid-phase restores exact progress');
  const bad=copy(data);bad.clips.sweep.phases.active=[23,2];assert.equal(crocodile.validMotion(bad),false);
  assert.deepEqual(data.damageEvents,[]);
@@ -583,7 +583,7 @@ test('upright crocodile walks only on displacement with independent movement and
  const image=f.finish('tower-monsters-motion/crocodile-humanoid-v1',ImageAsset,new ImageAsset(data.width,data.height));f.finish('tower-monsters-motion/crocodile-humanoid-v1',JsonAsset,new JsonAsset(data));
  render(1,100);const r=f.art.speciesRenderers.get('crocodile-humanoid'),a=r.actors.get('crocodile-humanoid1');assert.equal(a.sprite.spriteFrame,r.entries.get('crocodile-humanoid').frame);
  render(1.1,98);const frame=a.sprite.spriteFrame;assert.equal(frame.rect.width,480);render(1.1,98);assert.equal(a.sprite.spriteFrame,frame);render(1.3,96);assert.notEqual(a.sprite.spriteFrame,frame);render(1.4,96);assert.equal(a.sprite.spriteFrame,r.entries.get('crocodile-humanoid').frame);
- for(const mode of ['windup','active','recovery']){for(const kind of ['sweep','bite']){render(2,90,{ai:{mode,until:3,attack:{id:'crocodile-humanoid-'+kind,kind,startedAt:1,active:.2,recovery:.9,dirX:-1}}});const sw=data.clips.sweep,[o,c]=sw.phases[mode];assert.ok(sw.frames.slice(o,o+c).map(k=>r.motionFrames.get(k)).includes(a.sprite.spriteFrame),kind+' '+mode+' plays the sweep phase');}for(const skillId of ['M08']){render(2.1,80,{mechanic:{skillId,phase:mode}});assert.equal(a.sprite.spriteFrame,r.entries.get('crocodile-humanoid').frame);}phasedSkill(r,a,data.clips.cast,mode,render,'M12',false);phasedSkill(r,a,data.clips.enrage,mode,render,'M02',true);}
+ for(const mode of ['windup','active','recovery']){for(const kind of ['sweep','bite']){render(2,90,{ai:{mode,until:3,attack:{id:'crocodile-humanoid-'+kind,kind,startedAt:1,active:.2,recovery:.9,dirX:-1}}});const sw=data.clips.sweep,[o,c]=sw.phases[mode];assert.ok(sw.frames.slice(o,o+c).map(k=>r.motionFrames.get(k)).includes(a.sprite.spriteFrame),kind+' '+mode+' plays the sweep phase');}phasedSkill(r,a,data.clips.sweep,mode,render,'M08',true);for(const skillId of []){render(2.1,80,{mechanic:{skillId,phase:mode}});assert.equal(a.sprite.spriteFrame,r.entries.get('crocodile-humanoid').frame);}phasedSkill(r,a,data.clips.cast,mode,render,'M12',false);phasedSkill(r,a,data.clips.enrage,mode,render,'M02',true);}
  render(3,70);f.art.beginFrame();f.art.endFrame(4,new Set(['crocodile-humanoid1']));f.art.beginFrame();f.art.endFrame(4.6,new Set(['crocodile-humanoid1']));assert.equal(r.actors.size,0);f.art.destroy();assert.equal(image.refs,0);
  const png=readFileSync(resource('crocodile-humanoid-v1.png'));assert.equal(createHash('sha256').update(png).digest('hex'),data.sourceSha256);assert.equal(png.readUInt32BE(16),3840);assert.equal(png.readUInt32BE(20),2880);assert.equal(png[25],6);assert.equal(Object.keys(data.frames).length,66);
 });
