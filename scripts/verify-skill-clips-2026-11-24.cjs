@@ -9,7 +9,9 @@ const ROOT=path.resolve(__dirname,'..');
 const OUT=path.join(ROOT,'design/xianxia-boss-skills-2026-11-24/game-review');
 const CASES=[
  {floor:3,family:'spider-lady',rank:4,role:'boss',archetype:'spider_boss',clip:'web',skill:'M10',kind:'M10'},
- {floor:5,family:'spider-lady',rank:4,role:'elite',archetype:'spider_elite_f5_w15_n4',clip:'web',skill:'M10',kind:'M10'}];
+ {floor:5,family:'spider-lady',rank:4,role:'elite',archetype:'spider_elite_f5_w15_n4',clip:'web',skill:'M10',kind:'M10'},
+ {floor:7,family:'falcon-humanoid',rank:4,role:'elite',archetype:'falcon_elite_f7_w10_n2',clip:'stomp',skill:'M07',kind:'M07',block:['shot','bite']},
+ {floor:6,family:'falcon-humanoid',rank:6,role:'boss',archetype:'falcon_boss',clip:'stomp',skill:'M07',kind:'M07',block:['shot','bite']}];
 
 (async()=>{
  fs.mkdirSync(OUT,{recursive:true});
@@ -85,7 +87,7 @@ const CASES=[
    const sweepFrames=[...seen].filter(f=>f&&f.startsWith(c.clip+'-'));
    console.log(c.family,[...modes],sweepFrames.length,[...seen].filter(f=>!f?.startsWith(c.clip+'-')));
    // M10 has no observable active phase (windup goes straight to recovery); recovery opens on the throw frames.
-   if(c.kind)assert.ok(['windup','recovery'].every(m=>modes.has(m+':'+c.kind)),c.kind+' happens');assert.ok(sweepFrames.length>=6,c.clip+' plays');assert.ok(['web-006','web-007'].every(f=>seen.has(f)),'throw (active) frames show');assert.ok([...seen].every(f=>f&&f.startsWith(c.clip+'-')),'no static/other frames during attack');
+   if(c.kind)assert.ok(['windup','recovery'].every(m=>modes.has(m+':'+c.kind)),c.kind+' happens');assert.ok(sweepFrames.length>=6,c.clip+' plays');if(c.clip==='web')assert.ok(['web-006','web-007'].every(f=>seen.has(f)),'throw (active) frames show');assert.ok([...seen].every(f=>f&&f.startsWith(c.clip+'-')),'no static/other frames during attack');
    // Pause: the frame and position hold while the run is paused. Death: the actor leaves after the death presentation.
    const held=await page.evaluate(async()=>{const h=window.__towerTest.host,e=window.__boss;const a0=window.__read();
     for(let i=0;i<20;i++){h.draw();await new Promise(r=>setTimeout(r,20));}const a1=window.__read();

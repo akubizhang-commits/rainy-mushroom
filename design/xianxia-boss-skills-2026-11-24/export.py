@@ -16,6 +16,9 @@ COUNTS = {'windup': 6, 'active': 2, 'recovery': 8}
 JOBS = {
     # 2026-11-24 spider-lady M10 (缚足蛛网) v1: rear up with both arms raised (2-33), the net strands drawn by the video
     # (source 36-43) are skipped, active is the arms-forward throw (44, 46), then hold and settle (76-100).
+    # Falcon-humanoid M07 stomp v2 (padded reference, wings folded): leg lift (2-38), stomp (39-44, rocks/feathers removed by
+    # despeckle), settle (60-100). Replaces the 11-11 v1 stomp frames (wing cut by the video edge, already off in routing).
+    'falcon-humanoid': [('stomp', 'falcon-humanoid-m07', {'windup': (2, 38), 'active': (39, 44), 'recovery': (60, 100), 'despeckle': True, 'replace': True})],
     'spider-lady': [('web', 'spider-lady-m10', {'windup': (2, 34), 'active': [44, 46], 'recovery': (76, 100)})],
 }
 W, H = 3840, 4096
@@ -63,6 +66,9 @@ def build(fam):
     cells = []
     for k, r in meta['frames'].items():
         cells.append((k, old.crop((r['x'], r['y'], r['x'] + r['w'], r['y'] + r['h'])), {kk: v for kk, v in r.items() if kk not in 'xywh'}))
+    for clip, _, win in JOBS[fam]:
+        if win.get('replace') and clip in meta['clips']:
+            old_keys = set(meta['clips'].pop(clip)['frames']); cells = [c for c in cells if c[0] not in old_keys]
     kept = {k: hashlib.sha256(f.tobytes()).hexdigest() for k, f, _ in cells}
     mi = [k for k, _, _ in cells].index(meta['clips']['move']['frames'][0]); mcell = cells[mi][1]
     # 2026-11-23: the walk frame may sit in a smaller cell and/or carry its own displayScale (snake: 384 cell, 1.3068).
