@@ -74,7 +74,8 @@ test('encyclopedia shows fixed stats, unique quality and explicit art gaps', asy
     const icon=LIBRARY_ENTRIES.find(e=>e.id===d.id).icon
     if(icon){assert.equal(icon,`tower-equipment/${d.id}`);assert.ok(fs.existsSync(new URL(`../cocos-pilot/assets/resources/${icon}.png`,import.meta.url)))}
   }
-  assert.equal(LIBRARY_ENTRIES.find(e=>e.id==='eq_sword_wangshu').icon,'')
+  // 2026-11-24: the 望舒 sword icon has since been delivered (passes scripts/art/item_icon.py --check); it was the last gap.
+  assert.equal(LIBRARY_ENTRIES.find(e=>e.id==='eq_sword_wangshu').icon,'tower-equipment/eq_sword_wangshu')
 })
 test('top ring and armor identities retain their mutually exclusive combat roles',()=>{
  const pick=(tier,category,role)=>create(expected.find(d=>d.tier===tier&&d.category===category&&d.quality===4&&d.role===role))
