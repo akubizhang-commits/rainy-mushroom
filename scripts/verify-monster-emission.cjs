@@ -17,7 +17,7 @@ const root=path.resolve(__dirname,'..'),out=path.join(root,'design/xianxia-range
  try{
   browser=await chromium.launch({headless:true,channel:'chrome'});
   for(const viewport of [{width:1280,height:720},{width:844,height:390}]){
-   const page=await browser.newPage({viewport});page.on('pageerror',e=>report.errors.push(e.message));
+   const page=await browser.newPage({viewport});global.__lastPage=page;page.on('pageerror',e=>report.errors.push(e.message));
    await page.goto(`http://127.0.0.1:${server.address().port}/cocos-pilot/build/web-mobile/index.html?ruleset=xianxia&tower=1&smoke=1`);
    await page.waitForFunction(()=>window.__towerTest?.host?.menu&&!window.__towerTest.host.host.assetLoading?.blocked,null,{timeout:90000});
    for(const c of cases)for(const face of [-1,1])for(const role of ['normal','elite','boss']){
@@ -37,7 +37,8 @@ const root=path.resolve(__dirname,'..'),out=path.join(root,'design/xianxia-range
     await page.waitForFunction(()=>{
      const h=window.__towerTest.host;h.draw();
      return !h.host.assetLoading?.blocked&&h.projectileLayer.children.some(n=>/^(毒液|飞羽|音波)-/.test(n.name))
-      &&[h.monsterArt,...h.monsterArt.speciesRenderers.values()].some(r=>r.actors.has('emitter'));
+      // 2026-11-24: under load the motion atlas can arrive after the actor; the clip-frame socket needs it loaded.
+      &&[h.monsterArt,...h.monsterArt.speciesRenderers.values()].some(r=>r.actors.has('emitter')&&r.motionFrames?.size>0);
     },null,{timeout:90000});
     const data=await page.evaluate(()=>{
      const h=window.__towerTest.host,s=h.run.state,rows=[];
@@ -108,10 +109,16 @@ const root=path.resolve(__dirname,'..'),out=path.join(root,'design/xianxia-range
     },skill);
     await page.waitForFunction(skill=>{
      const h=window.__towerTest.host;h.draw();
-     return skill==='M10'?h.monsterMechanics.webArt.webs.size>0:h.monsterMechanics.spiritFlowArt.plumes.size>0;
+     const loaded=[h.monsterArt,...h.monsterArt.speciesRenderers.values()].some(r=>r.actors.has('mechanic-owner')&&r.motionFrames?.size>0);
+     // A web keeps the hand position from its creation; one created before the atlas arrived is dropped and recreated.
+     if(!loaded&&skill==='M10'){const w=h.monsterMechanics.webArt.webs;for(const v of w.values())v.node.destroy();w.clear();}
+     return loaded&&(skill==='M10'?h.monsterMechanics.webArt.webs.size>0:h.monsterMechanics.spiritFlowArt.plumes.size>0);
     },skill,{timeout:90000});
     const record=await page.evaluate(skill=>{
      const h=window.__towerTest.host,s=h.run.state,kind=skill==='M10'?'web':'spirit';
+     // 2026-11-24: a web keeps the hand position from its creation draw, which under load can come before the clip frame
+     // is shown. Recreate it from the settled pose (paused, so the pose is stable) before measuring.
+     h.draw();if(skill==='M10'){const w=h.monsterMechanics.webArt.webs;for(const v of w.values())v.node.destroy();w.clear();h.draw();}
      const point=h.monsterArt.attachmentPosition('mechanic-owner',kind);
      let actual;
      if(skill==='M10'){
@@ -124,7 +131,7 @@ const root=path.resolve(__dirname,'..'),out=path.join(root,'design/xianxia-range
      const before=JSON.stringify(s);h.draw();h.draw();
      return{point,actual,paused:before===JSON.stringify(s)};
     },skill);
-    assert.ok(Math.hypot(record.actual.x-record.point.x,record.actual.y-record.point.y)<.01);
+    assert.ok(Math.hypot(record.actual.x-record.point.x,record.actual.y-record.point.y)<.01,skill+' attachment mismatch '+JSON.stringify(record));
     assert.ok(record.paused);
     await page.screenshot({path:path.join(out,`${skill}-attachment-${viewport.width}.png`)});
     const clean=await page.evaluate(skill=>{
@@ -144,7 +151,9 @@ const root=path.resolve(__dirname,'..'),out=path.join(root,'design/xianxia-range
    await page.close();
   }
   assert.deepEqual(report.errors,[]);report.status='PASS';
- }catch(e){report.status='FAIL';report.error=String(e);throw e;}
+ }catch(e){report.status='FAIL';report.error=String(e);report.stack=String(e.stack||'');report.actual=e.actual;report.expected=e.expected;
+  // 2026-11-24: keep evidence of intermittent failures.
+  try{await global.__lastPage?.screenshot({path:path.join(out,'failure.png')});}catch{}throw e;}
  finally{fs.writeFileSync(path.join(out,'browser-report.json'),JSON.stringify(report,null,2)+'\n');await browser?.close();await new Promise(r=>server.close(r));}
  console.log('PASS: 96 ranged release cases plus M10/M03 attachments in two landscape sizes; model socket, flight, camera, pause, owner death, restored poses and cleanup');
 })().catch(e=>{console.error(e);process.exitCode=1});
