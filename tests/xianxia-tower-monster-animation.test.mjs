@@ -352,7 +352,7 @@ test('bat flight keeps native480 detail, pauses and falls back for undelivered c
  phase(2.97,'recovery',3.67);assert.equal(pose(),'bite-012');phase(3.66,'recovery',3.67);assert.equal(pose(),'bite-019');
  assert.equal(a.node.scale.x,1);assert.equal(a.node.position.y,30);
  render(3.7,{ai:{mode:'windup',until:4.55,attack:{...bite,kind:'shot'}}});assert.ok(data.clips.shot.frames.slice(0,9).map(k=>bat.motionFrames.get(k)).includes(a.sprite.spriteFrame),'bat shot windup plays the shot clip');
- render(3.7,{ai:{mode:'windup',until:4.55,attack:bite},mechanic:{skillId:'M07',phase:'windup'}});assert.equal(a.sprite.spriteFrame,bat.entries.get('bat').frame);
+ render(3.7,{ai:{mode:'windup',until:4.55,attack:bite},mechanic:{skillId:'M07',phase:'windup',startedAt:3.5,activatesAt:4.5,until:5}});assert.ok(data.clips.shot.frames.map(k=>bat.motionFrames.get(k)).includes(a.sprite.spriteFrame),'2026-11-24 elite M07 reuses the shot clip');
  const bad=copy(data);bad.clips.bite.phases.recovery=[12,9];assert.equal(bat.validMotion(bad),false);
  render(3);f.art.beginFrame();f.art.endFrame(4,new Set(['bat1']));f.art.beginFrame();f.art.endFrame(4.6,new Set(['bat1']));assert.equal(bat.actors.size,0);assert.equal(f.art.constructor.artFamily('bat','bat_elite_rank4'),'bat-humanoid');
  const png=readFileSync(resource('bat-v1.png'));assert.equal(png.readUInt32BE(16),3840);assert.equal(png.readUInt32BE(20),3168);assert.equal(createHash('sha256').update(png).digest('hex'),data.sourceSha256);f.art.destroy();assert.equal(image.refs,0);
@@ -375,7 +375,7 @@ test('falcon flight keeps native384 detail, pauses and falls back for undelivere
  phase(2.97,'recovery',3.67);assert.equal(pose(),'bite-012');phase(3.66,'recovery',3.67);assert.equal(pose(),'bite-019');
  assert.equal(a.node.scale.x,1);assert.equal(a.node.position.y,30);
  render(3.7,{ai:{mode:'windup',until:4.55,attack:{...bite,kind:'shot'}}});assert.ok(data.clips.shot.frames.slice(0,9).map(k=>falcon.motionFrames.get(k)).includes(a.sprite.spriteFrame),'2026-11-24 feather shot plays the shot windup');
- render(3.7,{ai:{mode:'windup',until:4.55,attack:bite},mechanic:{skillId:'M07',phase:'windup'}});assert.equal(a.sprite.spriteFrame,falcon.entries.get('falcon').frame);
+ render(3.7,{ai:{mode:'windup',until:4.55,attack:bite},mechanic:{skillId:'M07',phase:'windup',startedAt:3.5,activatesAt:4.5,until:5}});assert.ok(data.clips.shot.frames.map(k=>falcon.motionFrames.get(k)).includes(a.sprite.spriteFrame),'2026-11-24 elite M07 reuses the shot clip');
  const bad=copy(data);bad.clips.bite.phases.recovery=[12,9];assert.equal(falcon.validMotion(bad),false);
  render(3);f.art.beginFrame();f.art.endFrame(4,new Set(['falcon1']));f.art.beginFrame();f.art.endFrame(4.6,new Set(['falcon1']));assert.equal(falcon.actors.size,0);assert.equal(f.art.constructor.artFamily('falcon','falcon_elite'),'falcon-humanoid');
  const png=readFileSync(resource('falcon-v1.png'));assert.equal(png.readUInt32BE(16),3840);assert.equal(png.readUInt32BE(20),2304);assert.equal(createHash('sha256').update(png).digest('hex'),data.sourceSha256);f.art.destroy();assert.equal(image.refs,0);
