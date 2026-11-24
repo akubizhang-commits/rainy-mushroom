@@ -158,7 +158,9 @@ export class TowerMonsterArt {
   if(!a){for(const r of this.speciesRenderers.values()){const p=r.attachmentPosition(id,kind);if(p)return p;}return null;}
   if(!a.seen||a.diedAt!==undefined)return null;
   const webs:Record<string,[number,number]>={spider:[.5,.56],'spider-lady':[.235,.465],'spider-queen':[.32,.53]};
-  const uv=kind==='web'?webs[a.family]:a.family==='snake-lady'?[.47,.44]:[.5,.5];
+  // 2026-11-24: during the M10 throw clip the web leaves the outstretched hand (clip cell .10,.42).
+  const throwing=kind==='web'&&a.family==='spider-lady'&&!!this.motionAtlas?.clips.web?.frames.some(k=>this.motionFrames.get(k)===a.sprite.spriteFrame);
+  const uv=throwing?[.10,.42]:kind==='web'?webs[a.family]:a.family==='snake-lady'?[.47,.44]:[.5,.5];
   if(!uv)return null;
   return {x:a.node.position.x+(uv[0]-a.transform.anchorX)*a.transform.width*a.node.scale.x,
    y:a.node.position.y+(1-uv[1]-a.transform.anchorY)*a.transform.height*a.node.scale.y};
@@ -391,11 +393,11 @@ export class TowerMonsterArt {
   // 2026-11-09: the rhino Boss charges only through M06, and through M20 once it starts charging a pillar; both play the charge clip by mechanic phase.
   // 2026-11-09/11-11: skill clips by mechanic phase (11-11 adds rhino M20 brace before the charge, yak M19 channel, wolf-humanoid M05 howl, tiger/falcon-humanoid M07 stomp; 11-12 adds bat-humanoid M07 stomp, white-tiger M06 charge / M19 channel / M01 cast, snake-lady M03 heal; 11-13 adds yak M05 summon, crocodile-humanoid M12 cast, spider-lady M22 summon / M11 cast, snake-lady M11 cast; 11-22 adds white-tiger / crocodile-humanoid / bear-humanoid elite M02 enrage): bear-humanoid M07 stomp / M04 guard / M09 heave (Meowa), rhino M07 stomp, yak M15 roar. Other skills stay static.
   const skillClip=this.motionFamily==='rhino'&&(m?.skillId==='M06'||m?.skillId==='M20'&&m.chargeStarted)?'charge'
-   :({'bear-humanoid':{M07:'stomp',M04:'guard',M09:'heave',M02:'enrage'},rhino:{M07:'stomp',M20:'brace'},yak:{M15:'roar',M19:'channel',M05:'summon'},'wolf-humanoid':{M05:'howl'},'tiger-humanoid':{M07:'stomp'},/* 2026-11-13 user report: falcon-humanoid M07 stomp grew ~1.3× wider than the cell and its wing is cut by the source video edge; back to the portrait until regenerated with folded wings. */'bat-humanoid':{M07:'stomp'},'white-tiger':{M06:'charge',M19:'channel',M01:'cast',/* 2026-11-22 M02 rage activation: the windup plays the roar; red and x1.2 start only after it completes. */M02:'enrage'},'snake-lady':{M03:'heal',M11:'cast'},'crocodile-humanoid':{M12:'cast',M02:'enrage'},'spider-lady':{M22:'summon',M11:'cast'}} as Record<string,Record<string,string>>)[this.motionFamily]?.[m?.skillId??'']||'';
+   :({'bear-humanoid':{M07:'stomp',M04:'guard',M09:'heave',M02:'enrage'},rhino:{M07:'stomp',M20:'brace'},yak:{M15:'roar',M19:'channel',M05:'summon'},'wolf-humanoid':{M05:'howl'},'tiger-humanoid':{M07:'stomp'},/* 2026-11-13 user report: falcon-humanoid M07 stomp grew ~1.3× wider than the cell and its wing is cut by the source video edge; back to the portrait until regenerated with folded wings. */'bat-humanoid':{M07:'stomp'},'white-tiger':{M06:'charge',M19:'channel',M01:'cast',/* 2026-11-22 M02 rage activation: the windup plays the roar; red and x1.2 start only after it completes. */M02:'enrage'},'snake-lady':{M03:'heal',M11:'cast'},'crocodile-humanoid':{M12:'cast',M02:'enrage'},'spider-lady':{M22:'summon',M11:'cast',/* 2026-11-24 */M10:'web'}} as Record<string,Record<string,string>>)[this.motionFamily]?.[m?.skillId??'']||'';
   if(skillClip&&m&&['windup','active','recovery'].includes(m.phase||'')&&atlas.clips[skillClip]?.phases?.[m.phase!]) {
    const clip=atlas.clips[skillClip];let [offset,count]=clip.phases![m.phase!];
    // M01/M02/M05/M07/M09/M11/M15/M19/M22 resolve on the impact tick (no mechanic active phase), so their recovery opens with the clip's impact frames.
-   const instant=['M01','M02','M05','M07','M09','M11','M15','M19','M22'].includes(m.skillId),act=clip.phases!.active;
+   const instant=['M01','M02','M05','M07','M09','M10','M11','M15','M19','M22'].includes(m.skillId),act=clip.phases!.active;
    if(instant&&m.phase==='recovery'&&act&&act[0]+act[1]===offset){offset=act[0];count+=act[1];}
    // M20 starts directly in its 2s active setup (no windup) and its charge has its own windup, so brace plays windup+active there.
    if(skillClip==='brace'&&m.phase==='active'&&clip.phases!.windup&&act){offset=clip.phases!.windup[0];count=clip.phases!.windup[1]+act[1];}
@@ -525,7 +527,7 @@ export class TowerMonsterArt {
   }
   return Object.entries(value.clips).every(([name, raw]) => {
    const clip = raw as MotionClip;
-   return ['move','gore','bite','sweep','slam','howl','cast','charge','stomp','guard','roar','heave','channel','brace','heal','summon','charge-start','charge-loop','charge-end','enrage','shot','hit','death'].includes(name) && clip
+   return ['move','gore','bite','sweep','slam','howl','cast','charge','stomp','guard','roar','heave','channel','brace','heal','summon','charge-start','charge-loop','charge-end','enrage','shot','web','hit','death'].includes(name) && clip
     && Number.isFinite(clip.fps) && clip.fps > 0 && typeof clip.loop === 'boolean'
     && (['move','charge-loop'].includes(name) || !clip.loop) && Array.isArray(clip.frames) && clip.frames.length > 0
     && clip.frames.every(key => Object.prototype.hasOwnProperty.call(value.frames, key));
