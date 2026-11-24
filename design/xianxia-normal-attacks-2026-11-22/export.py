@@ -33,7 +33,7 @@ JOBS = {
     'bat': [('shot', 'bat-shot', {'windup': (2, 20), 'active': (22, 30), 'recovery': (40, 96), 'counts': {'windup': 9, 'active': 3, 'recovery': 8}})],
     # 2026-11-24 falcon shot v1 salvage: from source ~31 it throws white feather darts and a feather burst (until ~95),
     # so the clip stops at the wing beat (28-30, a few loose feathers removed by despeckle) and recovers by replaying the windup.
-    'falcon': [('shot', 'falcon-shot', {'windup': (2, 26), 'active': [27, 28, 29], 'recovery': [26, 23, 19, 15, 11, 7, 3, 1], 'counts': {'windup': 9}, 'despeckle': True})],
+    'falcon': [('shot', 'falcon-shot', {'windup': (2, 26), 'active': [27, 28, 29], 'recovery': [26, 23, 19, 15, 11, 7, 3, 1], 'counts': {'windup': 9}, 'despeckle': True, 'stabilize': True})],
     # Falcon-humanoid shot v1 salvage: from ~24 the wing smears green and from ~36 both wings spread past the frame.
     # Keep the folded-wing lean and the head/arm thrust (21-23), then replay the windup in reverse.
     'falcon-humanoid': [('shot', 'falcon-humanoid-shot', {'windup': (2, 21), 'active': [21, 22, 23], 'recovery': [20, 17, 14, 11, 8, 5, 2, 1], 'counts': {'windup': 9}})],
@@ -102,6 +102,13 @@ def build(fam):
             for i in range(c): ids.append(a + round(i * (b - a) / c)); n += 1
         keyed = [load(raw / f'{i + 1:03}.png') for i in ids]
         if win.get('despeckle'): keyed = [despeckle(k) for k in keyed]
+        if win.get('stabilize'):  # 2026-11-24: pin the body (densest 40-row band) to the first frame's height; wings still move
+            def core(im):
+                rows = (np.array(im.getchannel('A')) >= 128).sum(1); return int(np.argmax(np.convolve(rows, np.ones(40), 'same')))
+            ref = core(keyed[0]); moved = []
+            for k in keyed:
+                d = ref - core(k); c = Image.new('RGBA', k.size); c.paste(k, (0, d), k); moved.append(c)
+            keyed = moved
         bs = [box(k) for k in keyed]
         ux0, uy0, ux1, uy1 = min(b[0] for b in bs), min(b[1] for b in bs), max(b[2] for b in bs), max(b[3] for b in bs)
         ds, anchor = 1.0, list(meta['anchor'])

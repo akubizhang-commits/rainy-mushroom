@@ -42,7 +42,7 @@ const root=path.resolve(__dirname,'..'),out=path.join(root,'design/xianxia-range
     const data=await page.evaluate(()=>{
      const h=window.__towerTest.host,s=h.run.state,rows=[];
      const renderer=[h.monsterArt,...h.monsterArt.speciesRenderers.values()].find(r=>r.actors.has('emitter'));
-     const actor=renderer.actors.get('emitter'),uvs={snake:[.13,.53]/* shot clip open-mouth cell */,'snake-lady':[.41,.235],scorpion:[.65,.255],'scorpion-humanoid':[.78,.20],bat:[.40,.57]/* shot clip cell */,'bat-humanoid':[.36,.30],falcon:[.35,.47],'falcon-humanoid':[.27,.26]/* 2026-11-24 shot clip release cells */};
+     const actor=renderer.actors.get('emitter'),uvs={snake:[.13,.53]/* shot clip open-mouth cell */,'snake-lady':[.41,.235],scorpion:[.65,.255],'scorpion-humanoid':[.78,.20],bat:[.40,.57]/* shot clip cell */,'bat-humanoid':[.36,.30],falcon:[.35,.54],'falcon-humanoid':[.27,.26]/* 2026-11-24 shot clip release cells */};
      h.camera={x:37,y:-23};h.draw();
      const uv=uvs[actor.family],socket={x:actor.node.position.x+(uv[0]-actor.transform.anchorX)*actor.transform.width*actor.node.scale.x,
       y:actor.node.position.y+(1-uv[1]-actor.transform.anchorY)*actor.transform.height*actor.node.scale.y};

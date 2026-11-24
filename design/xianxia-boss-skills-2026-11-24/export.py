@@ -9,7 +9,7 @@
 # so a smaller cell needs no 480/small compensation; displayScale is only the fit scale ds. Existing atlases were corrected.
 # Every existing runtime frame is copied byte-identically. usage: export.py bear-humanoid|rhino|yak
 from pathlib import Path
-from PIL import Image, ImageFilter
+from PIL import Image, ImageFilter, ImageDraw
 import numpy as np, json, hashlib, sys
 ROOT = Path(__file__).resolve().parents[2]; RES = ROOT / 'cocos-pilot/assets/resources/tower-monsters-motion'; HERE = Path(__file__).resolve().parent
 COUNTS = {'windup': 6, 'active': 2, 'recovery': 8}
@@ -18,7 +18,9 @@ JOBS = {
     # (source 36-43) are skipped, active is the arms-forward throw (44, 46), then hold and settle (76-100).
     # Falcon-humanoid M07 stomp v2 (padded reference, wings folded): leg lift (2-38), stomp (39-44, rocks/feathers removed by
     # despeckle), settle (60-100). Replaces the 11-11 v1 stomp frames (wing cut by the video edge, already off in routing).
-    'falcon-humanoid': [('stomp', 'falcon-humanoid-m07', {'windup': (2, 38), 'active': (39, 44), 'recovery': (60, 100), 'despeckle': True, 'replace': True})],
+    'falcon-humanoid': [('stomp', 'falcon-humanoid-m07', {'windup': (2, 38), 'active': (39, 44), 'recovery': (60, 100), 'despeckle': True, 'replace': True,
+        # 2026-11-24 hand cleanup of the rocks left beside the landing foot (480-cell circles x, y, r per clip frame)
+        'erase': {6: [(22, 422, 20), (28, 452, 22), (66, 418, 9), (44, 431, 7), (68, 446, 22)], 7: [(62, 433, 14)]}})],
     'spider-lady': [('web', 'spider-lady-m10', {'windup': (2, 34), 'active': [44, 46], 'recovery': (76, 100)})],
 }
 W, H = 3840, 4096
@@ -97,6 +99,9 @@ def build(fam):
         size = round(480 * s); frames = []
         for j, im in enumerate(keyed):
             f = Image.new('RGBA', (480, 480)); sc = im.resize((size, size), Image.Resampling.LANCZOS); f.paste(sc, (round(ox), round(oy)), sc)
+            for x, y, r in win.get('erase', {}).get(j, []):
+                m = Image.new('L', f.size, 0); ImageDraw.Draw(m).ellipse((x - r, y - r, x + r, y + r), fill=255)
+                al = np.array(f.getchannel('A')); al[np.array(m) > 0] = 0; f.putalpha(Image.fromarray(al))
             frames.append((f'{clip}-{j:03}', f))
         composed.append((clip, phases, frames, ds, [round(anchor[0], 4), round(anchor[1], 4)]))
         report[clip] = dict(cleanFrames=clean, source=src, sourceIndices=ids, phases=phases, scale=s, offset=[ox, oy], fitDisplayScale=ds)

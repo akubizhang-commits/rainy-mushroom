@@ -10,7 +10,7 @@
 | falcon-humanoid M07 裂地重踏 stomp v2 | job_iqdAdUjGuhTJ4byHpHLM32wg | asset_qzC1Msua9TsGqrEyx1qBaqkf | asset_Dma9kEzsbNuspoRPcnZZjT92（留白版） | 202611242 | 通过，已接入。11-11 v1 因翅膀出画撤下；v2 全程收翅。前摇 2–38（抬腿），生效 39–44（踏地，despeckle 去掉大部分碎石羽毛），收招 60–100 |
 
 - 隼将 M07：替换图集里旧的 stomp 帧（导出 `replace`），重新接入路由。真实游戏验收（精英第 7 层、Boss 第 6 层）通过。
-- 已知问题：踏地瞬间脚边仍有两三块贴着脚的小碎石（与身体相连，去不掉）。
+- 踏地瞬间脚边的碎石：同日在导出脚本里用 `erase` 手工圈掉（生效帧 6、7），已清理。
 
 今日额度 50 CU 全部用完：妖隼 shot、隼将 shot、白虎 sweep v2（不通过）、蛛姬 M10、隼将 M07。
 
