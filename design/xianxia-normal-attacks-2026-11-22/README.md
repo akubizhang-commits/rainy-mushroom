@@ -57,3 +57,14 @@ spider-lady-web（`spider-lady-web-request.json`，seed 202611242）未提交，
 - 蛛姬蛛网：在游戏里不会出现，撤回请求。蛛姬精英和 Boss 都带 M10，M10 会取代普通蛛网，而且没有退回咬击的分支，所以精英和 Boss 只放技能；咬击只有普通怪会用（已接入 bite 片段）。
 - 分身份验收（`scripts/verify-normal-attacks-2026-11-22.cjs` 共 12 例全部通过）：蛛姬普通；妖蛇普通、精英；妖蝠普通、精英、Boss；蝠将普通（咬击、射击）、精英。每例检查前摇/生效/收招都播片段、暂停时帧不变、死亡后角色移除；新片段所有帧都没有贴格子边（边缘 alpha 为 0）；截图核对出射点在嘴部、脚底贴影子、"音波"预警标签正常。
 - 明日请求：`falcon-shot-request.json`（用已留白的 asset_FcXss…）、`falcon-humanoid-shot-request.json`（本地已做留白参考图 `falcon-humanoid-reference-green-padded.png`，需先上传，上传不花 CU）、可选 `white-tiger-sweep-v2-request.json`。
+
+## 2026-11-24 妖隼、隼将 shot（20 CU）
+
+| 片段 | job | 视频 asset | 参考 asset | seed | 结果 |
+|---|---|---|---|---|---|
+| falcon shot | job_GQWbbeVgCcQqYTi6h3cp7y81 | asset_DgnmzVMkzyZxZLjQYzuWPYtn | asset_FcXssedCibGXfj1ZQxhhMJfm | 202611251 | 部分可用：源 31 起射出白色羽镖、羽毛四散。抢救前摇 2–26（扬翅），生效 27–29（下拍，去散羽），收招倒放前摇 |
+| falcon-humanoid shot | job_A2tZstwJgAphK1835Aoa5gbk | asset_78TSa8E4yXf5Hipn1tPNrUUt | asset_Dma9kEzsbNuspoRPcnZZjT92（本地留白版上传） | 202611252 | 部分可用：源 24 起翅膀发绿糊，36 起双翅张开出画。抢救前摇 2–21，生效 21–23（探头伸臂），收招倒放前摇 |
+
+- `export.py` 新增 `despeckle`：只保留最大的不透明连通块，去掉飘散的羽毛。
+- 出射点改为 shot-009 出手帧的喙部。远程出射检查 96 组通过；普攻验收新增 5 例（妖隼普通、精英；隼将普通、精英、Boss）全部通过。
+- 已知问题：妖隼前摇里身体上下摆动较大；隼将前摇动作幅度小，出手是硬切。之后额度宽裕时可重做。

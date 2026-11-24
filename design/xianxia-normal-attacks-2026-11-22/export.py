@@ -31,6 +31,12 @@ JOBS = {
     'bat-humanoid': [('shot', 'bat-humanoid-shot', {'windup': (2, 22), 'active': (22, 30), 'recovery': (86, 112), 'counts': {'windup': 9, 'active': 3, 'recovery': 8}})],
     # Bat shot: wings rise and the head pulls back (2-20), screech with the mouth open (22-30), wings settle back (40-96).
     'bat': [('shot', 'bat-shot', {'windup': (2, 20), 'active': (22, 30), 'recovery': (40, 96), 'counts': {'windup': 9, 'active': 3, 'recovery': 8}})],
+    # 2026-11-24 falcon shot v1 salvage: from source ~31 it throws white feather darts and a feather burst (until ~95),
+    # so the clip stops at the wing beat (28-30, a few loose feathers removed by despeckle) and recovers by replaying the windup.
+    'falcon': [('shot', 'falcon-shot', {'windup': (2, 26), 'active': [27, 28, 29], 'recovery': [26, 23, 19, 15, 11, 7, 3, 1], 'counts': {'windup': 9}, 'despeckle': True})],
+    # Falcon-humanoid shot v1 salvage: from ~24 the wing smears green and from ~36 both wings spread past the frame.
+    # Keep the folded-wing lean and the head/arm thrust (21-23), then replay the windup in reverse.
+    'falcon-humanoid': [('shot', 'falcon-humanoid-shot', {'windup': (2, 21), 'active': [21, 22, 23], 'recovery': [20, 17, 14, 11, 8, 5, 2, 1], 'counts': {'windup': 9}})],
     'crocodile-humanoid': [('sweep', 'crocodile-humanoid-sweep', {'windup': (8, 34), 'active': (34, 46), 'recovery': (46, 92), 'counts': {'windup': 9, 'active': 3, 'recovery': 8}})],
 }
 W, H = 3840, 4096
@@ -39,6 +45,22 @@ def key(path):
     ex = a[:, :, 1] - np.maximum(a[:, :, 0], a[:, :, 2]); al = np.clip((55 - ex) / 35, 0, 1) * 255
     a[:, :, 1] = np.minimum(a[:, :, 1], np.maximum(a[:, :, 0], a[:, :, 2]))
     im = Image.fromarray(a.astype('uint8')).convert('RGBA'); im.putalpha(Image.fromarray(al.astype('uint8')).filter(ImageFilter.MinFilter(3))); return im
+def despeckle(im):
+    """Keep only the largest opaque component (8-connected, alpha>=32), dilated 3px so soft edges survive."""
+    a = np.array(im.getchannel('A')) >= 32; h, w = a.shape; lab = np.zeros((h, w), np.int32); n = 0; sizes = {}
+    for y0, x0 in zip(*np.nonzero(a)):
+        if lab[y0, x0]: continue
+        n += 1; stack = [(y0, x0)]; lab[y0, x0] = n; c = 0
+        while stack:
+            y, x = stack.pop(); c += 1
+            for dy in (-1, 0, 1):
+                for dx in (-1, 0, 1):
+                    yy, xx = y + dy, x + dx
+                    if 0 <= yy < h and 0 <= xx < w and a[yy, xx] and not lab[yy, xx]: lab[yy, xx] = n; stack.append((yy, xx))
+        sizes[n] = c
+    if not sizes: return im
+    keep = Image.fromarray(((lab == max(sizes, key=sizes.get)) * 255).astype('uint8')).filter(ImageFilter.MaxFilter(7))
+    out = im.copy(); out.putalpha(Image.fromarray(np.minimum(np.array(im.getchannel('A')), np.array(keep)))); return out
 box = lambda im: im.getchannel('A').point(lambda v: 255 if v >= 32 else 0).getbbox()
 def pack(cells, small):
     """480 cells in 8 columns, then small cells fill free 480 slots of the last row, then shelf rows below."""
@@ -78,7 +100,9 @@ def build(fam):
                 phases[ph] = [n, len(win[ph])]; ids += win[ph]; n += len(win[ph]); continue
             a, b = win[ph]; c = win.get('counts', COUNTS)[ph]; phases[ph] = [n, c]
             for i in range(c): ids.append(a + round(i * (b - a) / c)); n += 1
-        keyed = [load(raw / f'{i + 1:03}.png') for i in ids]; bs = [box(k) for k in keyed]
+        keyed = [load(raw / f'{i + 1:03}.png') for i in ids]
+        if win.get('despeckle'): keyed = [despeckle(k) for k in keyed]
+        bs = [box(k) for k in keyed]
         ux0, uy0, ux1, uy1 = min(b[0] for b in bs), min(b[1] for b in bs), max(b[2] for b in bs), max(b[3] for b in bs)
         ds, anchor = 1.0, list(meta['anchor'])
         if not (ux0 * s + ox >= 8 and ux1 * s + ox <= 472 and uy0 * s + oy >= 8 and uy1 * s + oy <= 472):

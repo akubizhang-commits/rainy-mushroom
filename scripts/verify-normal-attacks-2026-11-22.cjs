@@ -19,7 +19,13 @@ const CASES=[{floor:4,family:'crocodile-humanoid',rank:4,role:'boss',clip:'sweep
  {floor:4,family:'bat-humanoid',rank:4,role:'normal',archetype:'bat_normal_r4',clip:'shot',kind:'shot',block:['bite']},
  {floor:2,family:'snake',rank:2,role:'normal',archetype:'snake_normal',clip:'shot',kind:'shot',block:['bite']},
  {floor:1,family:'bat',rank:1,role:'normal',archetype:'bat_normal',clip:'shot',kind:'shot',block:['bite']},
- {floor:2,family:'bat',rank:2,role:'elite',archetype:'bat_elite',clip:'shot',kind:'shot'}];
+ {floor:2,family:'bat',rank:2,role:'elite',archetype:'bat_elite',clip:'shot',kind:'shot'},
+ // 2026-11-24 falcon / falcon-humanoid feather shot (salvaged v1 clips).
+ {floor:1,family:'falcon',rank:1,role:'normal',archetype:'falcon_normal_rank1',clip:'shot',kind:'shot',block:['bite']},
+ {floor:2,family:'falcon',rank:2,role:'elite',archetype:'falcon_elite_rank2',clip:'shot',kind:'shot'},
+ {floor:4,family:'falcon-humanoid',rank:4,role:'normal',archetype:'falcon_normal_r4',clip:'shot',kind:'shot',block:['bite']},
+ {floor:4,family:'falcon-humanoid',rank:4,role:'elite',archetype:'falcon_elite',clip:'shot',kind:'shot'},
+ {floor:6,family:'falcon-humanoid',rank:6,role:'boss',archetype:'falcon_boss',clip:'shot',kind:'shot'}];
 
 (async()=>{
  fs.mkdirSync(OUT,{recursive:true});
