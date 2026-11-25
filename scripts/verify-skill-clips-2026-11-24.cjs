@@ -19,7 +19,9 @@ const CASES=[
  {floor:5,family:'snake-lady',rank:4,role:'elite',archetype:'snake_elite_f5_w5_n1',clip:'cast',skill:'M07',kind:'M07',block:['shot','bite']},
  // 2026-11-24 interim M08 on the existing sweep clips.
  {floor:4,family:'crocodile-humanoid',rank:4,role:'boss',archetype:'crocodile_boss',clip:'sweep',skill:'M08',kind:'M08',block:['sweep','bite']},
- {floor:4,family:'crocodile',rank:3,role:'elite',archetype:'crocodile_elite',clip:'sweep',skill:'M08',kind:'M08',block:['sweep','bite']}];
+ {floor:4,family:'crocodile',rank:3,role:'elite',archetype:'crocodile_elite',clip:'sweep',skill:'M08',kind:'M08',block:['sweep','bite']},
+ // 2026-11-25 snake-lady M16 breath (three keyframe-driven videos).
+ {floor:5,family:'snake-lady',rank:5,role:'boss',archetype:'snake_boss',clip:'breath',skill:'M16',kind:'M16',block:['shot','bite']}];
 
 (async()=>{
  fs.mkdirSync(OUT,{recursive:true});
