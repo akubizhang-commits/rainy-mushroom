@@ -15,3 +15,12 @@
 | crocodile-humanoid-m08 | 原姿 → 原姿 | 同上 |
 
 接入时 M16 需逐帧标记口部挂点，吐息要跟着嘴走。M08 片段需检查尾尖不出画、尾长不漂移、收势回到原姿（11-04 百炼两版就是败在这三点）。
+
+## 2026-11-26 安排（用户 11-25 交由助手决定）
+
+1. `crocodile-m08-v2`、`crocodile-humanoid-m08-v2`（20 CU）：补完最后一个技能缺口。鳄王需先上传 `crocodile-humanoid-reference-padded.png`。
+2. `white-tiger-sweep-v3`（10 CU）：替换跳帧抢救版的硬切出爪。
+3. `falcon-humanoid-shot-v2`（10 CU）：替换前摇小、出手硬切的抢救版。
+4. `falcon-shot-v2`（10 CU）：替换收招倒放的抢救版。
+
+任一条不通过就保留现有版本，原片照常保留。11-25 当晚 Meowa 仅 10 点试用积分（HD 动作最低 15 点），未使用。
