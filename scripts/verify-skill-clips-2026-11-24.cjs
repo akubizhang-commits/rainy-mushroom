@@ -6,7 +6,7 @@ const path=require('node:path');
 const {createServer}=require('node:http');
 const {chromium}=require('/Users/zhangnu/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright');
 const ROOT=path.resolve(__dirname,'..');
-const OUT=path.join(ROOT,'design/xianxia-boss-skills-2026-11-24/game-review');
+const OUT=path.join(ROOT,'design/xianxia-boss-skills-2026-11-24/game-review',process.env.VIEWPORT&&process.env.VIEWPORT!=='1280x720'?'viewport-'+process.env.VIEWPORT:'');
 const CASES=[
  {floor:3,family:'spider-lady',rank:4,role:'boss',archetype:'spider_boss',clip:'web',skill:'M10',kind:'M10'},
  {floor:5,family:'spider-lady',rank:4,role:'elite',archetype:'spider_elite_f5_w15_n4',clip:'web',skill:'M10',kind:'M10'},
@@ -40,7 +40,8 @@ const CASES=[
  try{
   browser=await chromium.launch({headless:true,executablePath:'/Users/zhangnu/Library/Caches/ms-playwright/chromium_headless_shell-1247/chrome-headless-shell-mac-arm64/chrome-headless-shell'});
   for(const c of CASES){
-   const page=await browser.newPage({viewport:{width:1280,height:720}});
+   // 2026-11-25: VIEWPORT=844x390 runs the small landscape size required by the monster art standard.
+   const [vw,vh]=(process.env.VIEWPORT||'1280x720').split('x').map(Number);const page=await browser.newPage({viewport:{width:vw,height:vh}});
    page.on('pageerror',e=>report.errors.push(c.family+': '+e.message));
    await page.goto(`http://127.0.0.1:${server.address().port}/cocos-pilot/build/web-mobile/index.html?ruleset=xianxia&tower=1&smoke=1`);
    await page.waitForFunction(()=>!!window.__towerTest?.host?.menu,null,{timeout:30000});
