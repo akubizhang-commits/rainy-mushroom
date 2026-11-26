@@ -73,8 +73,8 @@ export class TowerMonsterArt {
    // bat: 2026-11-23 shot clip open-mouth frame (cell .40,.57; anchor .4954,.7458; displayScale 1.0817).
    bat:[.5+(.40-.4954)*1.0817,.72-(.7458-.57)*1.0817,.72],'bat-humanoid':[.36,.30,.9],
    // falcon / falcon-humanoid: 2026-11-24 shot clip release frame shot-009 (falcon cell beak .35,.54 after the 11-24 body stabilization; anchor .5,.68; ds 1.4566 /
-   // falcon-humanoid cell beak .27,.26; anchor .4113,.864; ds 1).
-   falcon:[.5+(.35-.5)*1.4566,.72-(.68-.54)*1.4566,.72],'falcon-humanoid':[.5+(.27-.4113),.9-(.864-.26),.9]
+   // falcon-humanoid 2026-11-27 re-cut, release shot-009 = the coiled forward lean: cell beak .285,.30; anchor .3435,.89; ds 1.2075).
+   falcon:[.5+(.35-.5)*1.4566,.72-(.68-.54)*1.4566,.72],'falcon-humanoid':[.5+(.285-.3435)*1.2075,.9-(.89-.30)*1.2075,.9]
   };
   const m=marks[family];return m?{u:m[0],v:m[1],support:m[2]}:null;
  }

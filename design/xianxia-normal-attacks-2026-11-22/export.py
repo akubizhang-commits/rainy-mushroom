@@ -18,7 +18,12 @@ JOBS = {
     # Built on the current runtime atlas (enrage included, displayScale already corrected).
     # White tiger v1 salvage: the swipe itself (source 24-33) carries a dark green motion trail, so those frames are skipped;
     # windup ends on the drawn-back arm (22) and active opens on the extended follow-through (36).
-    'white-tiger': [('sweep', 'white-tiger-sweep', {'windup': (2, 23), 'active': (36, 42), 'recovery': (42, 92), 'counts': {'windup': 9, 'active': 3, 'recovery': 8}})],
+    # 2026-11-27: the swipe strikes toward screen-left (24-25, claws reaching out on the facing side) and then follows
+    # through to the right (29+). v1 used only the follow-through (36-42), so in game the tiger seemed to claw away from
+    # the player. Active is now 24/25 (strike) + 29 (sweep across); recovery 30-92. 'degreen' drops pixels whose green
+    # exceeds red and blue (the trail's green tint) and despeckle drops trail pieces no longer touching the body; a short
+    # dark smear stays at the claws and reads as the swipe. 26-28 stay skipped (trail covers the legs).
+    'white-tiger': [('sweep', 'white-tiger-sweep', {'windup': (2, 23), 'active': [24, 25, 29], 'recovery': (30, 92), 'counts': {'windup': 9, 'recovery': 8}, 'degreen': True, 'despeckle': True})],
     # Snake-lady v1 salvage: from source 36 the face turns into a large red mouth with spray (until ~80) and the tail then
     # swings wide, so the clip stops before the spit (head drawn back, then leaning forward) and recovers by replaying the
     # windup in reverse back to the resting pose.
@@ -33,10 +38,14 @@ JOBS = {
     'bat': [('shot', 'bat-shot', {'windup': (2, 20), 'active': (22, 30), 'recovery': (40, 96), 'counts': {'windup': 9, 'active': 3, 'recovery': 8}})],
     # 2026-11-24 falcon shot v1 salvage: from source ~31 it throws white feather darts and a feather burst (until ~95),
     # so the clip stops at the wing beat (28-30, a few loose feathers removed by despeckle) and recovers by replaying the windup.
-    'falcon': [('shot', 'falcon-shot', {'windup': (2, 26), 'active': [27, 28, 29], 'recovery': [26, 23, 19, 15, 11, 7, 3, 1], 'counts': {'windup': 9}, 'despeckle': True, 'stabilize': True})],
+    # 2026-11-27: recovery no longer replays the windup backwards; it uses the real settle after the darts (62-74: wings
+    # rise and the bird returns to the hover pose), with despeckle removing the drifting feathers. 31-61 stay skipped.
+    'falcon': [('shot', 'falcon-shot', {'windup': (2, 26), 'active': [27, 28, 29], 'recovery': [62, 63, 64, 65, 66, 68, 70, 74], 'counts': {'windup': 9}, 'despeckle': True, 'stabilize': True})],
     # Falcon-humanoid shot v1 salvage: from ~24 the wing smears green and from ~36 both wings spread past the frame.
     # Keep the folded-wing lean and the head/arm thrust (21-23), then replay the windup in reverse.
-    'falcon-humanoid': [('shot', 'falcon-humanoid-shot', {'windup': (2, 21), 'active': [21, 22, 23], 'recovery': [20, 17, 14, 11, 8, 5, 2, 1], 'counts': {'windup': 9}})],
+    # 2026-11-27: 'degreen' clears the green smear on 24-34, so the windup now runs into the deep forward lean (2-28)
+    # and the release is the coiled lean with the wing opening (29/31/33); recovery replays the lean back to rest.
+    'falcon-humanoid': [('shot', 'falcon-humanoid-shot', {'windup': (2, 29), 'active': [29, 31, 33], 'recovery': [31, 27, 23, 19, 15, 10, 5, 1], 'counts': {'windup': 9}, 'degreen': True})],
     'crocodile-humanoid': [('sweep', 'crocodile-humanoid-sweep', {'windup': (8, 34), 'active': (34, 46), 'recovery': (46, 92), 'counts': {'windup': 9, 'active': 3, 'recovery': 8}})],
 }
 W, H = 3840, 4096
@@ -45,6 +54,10 @@ def key(path):
     ex = a[:, :, 1] - np.maximum(a[:, :, 0], a[:, :, 2]); al = np.clip((55 - ex) / 35, 0, 1) * 255
     a[:, :, 1] = np.minimum(a[:, :, 1], np.maximum(a[:, :, 0], a[:, :, 2]))
     im = Image.fromarray(a.astype('uint8')).convert('RGBA'); im.putalpha(Image.fromarray(al.astype('uint8')).filter(ImageFilter.MinFilter(3))); return im
+def degreen(im, th=8):
+    """2026-11-27: clear pixels still tinted green after keying (dark green motion trails)."""
+    a = np.array(im); m = a[..., 1].astype(int) > np.maximum(a[..., 0], a[..., 2]).astype(int) + th
+    a[..., 3] = np.where(m, 0, a[..., 3]); return Image.fromarray(a)
 def despeckle(im):
     """Keep only the largest opaque component (8-connected, alpha>=32), dilated 3px so soft edges survive."""
     a = np.array(im.getchannel('A')) >= 32; h, w = a.shape; lab = np.zeros((h, w), np.int32); n = 0; sizes = {}
@@ -101,6 +114,7 @@ def build(fam):
             a, b = win[ph]; c = win.get('counts', COUNTS)[ph]; phases[ph] = [n, c]
             for i in range(c): ids.append(a + round(i * (b - a) / c)); n += 1
         keyed = [load(raw / f'{i + 1:03}.png') for i in ids]
+        if win.get('degreen'): keyed = [degreen(k) for k in keyed]
         if win.get('despeckle'): keyed = [despeckle(k) for k in keyed]
         if win.get('stabilize'):  # 2026-11-24: pin the body (densest 40-row band) to the first frame's height; wings still move
             def core(im):

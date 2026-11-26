@@ -15,8 +15,11 @@ ROOT = Path(__file__).resolve().parents[2]; RES = ROOT / 'cocos-pilot/assets/res
 COUNTS = {'windup': 6, 'active': 2, 'recovery': 8}
 JOBS = {
     # 2026-11-26 M08 回旋尾扫 v2 salvages. Croc-humanoid (padded reference): windup = knees bend (2-16), active = the tail
-    # swings low in front (17-23); 24-80 the tail stretches long and the body leans (skipped); recovery 81-116 settles.
-    'crocodile-humanoid': [('tail', 'crocodile-humanoid-m08', {'windup': (2, 16), 'active': [17, 19, 21, 23], 'recovery': (81, 117)})],
+    # swings low in front (17-23); 24-70 the tail stretches long and the body leans (skipped).
+    # 2026-11-27: recovery used to cut 23 -> 81 (hunched side-on -> upright, mean diff 3.19). It now swings the tail
+    # back through the windup (22..11, real footage played backwards) and joins the real tail retract at 76 (11->76
+    # diff 1.99), settling at 87 (closest frame to rest, 0.58). Largest step is now 2.6.
+    'crocodile-humanoid': [('tail', 'crocodile-humanoid-m08', {'windup': (2, 16), 'active': [17, 19, 21, 23], 'recovery': [22, 19, 16, 13, 11, 76, 79, 87]})],
     # Beast crocodile: body and feet stay still, only the tail whips. Tail tip touches the frame edge at source 16-18 (skipped).
     'crocodile': [('tail', 'crocodile-m08', {'windup': (1, 11), 'active': [11, 13, 15, 19, 21], 'recovery': (22, 60)})],
 }
