@@ -1,15 +1,21 @@
 {
- "status": "prepared, submit after 2026-11-26 08:00 Asia/Shanghai",
- "note": "白虎普攻 sweep 第三版。v1 出爪带拖影和红色爪光（现用跳帧抢救版，出手是硬切），v2 衣摆变红、爪带红绿光弧。v3 放慢动作、去掉所有\"攻击感\"词，只描述手臂位置。",
- "modelId": "model_pruna-p-video-2-pro",
- "parameters": {
-  "duration": 5,
-  "resolution": "480p",
-  "mode": "cost",
-  "promptUpsampler": "off",
-  "image": "asset_sdvagHTpWgSxuFactVjRZgvD",
-  "lastFrameImage": "asset_sdvagHTpWgSxuFactVjRZgvD",
-  "seed": 202611263,
-  "prompt": "The exact upright white tiger warrior in the reference moves its right arm in place. Over the first second it slowly raises the right hand up beside its right ear with the claws open. Then over half a second it brings the open right hand down and across in front of its chest toward screen left, ending with the arm stretched forward and low. It holds that pose briefly, then slowly lowers the arm and returns to the exact original standing pose and holds it. The arm and claws stay sharp and fully visible in every frame. Both feet stay planted. Exactly two arms and two legs. Keep the same three-quarter left view, white tiger head, white and black striped fur, silver hair, armor, belt and kilt with their original colours. No walking, turning around, jumping, second movement, extra limbs or weapon. Fixed camera, fixed size, pure uniform bright green #00FF00 background. The whole character stays inside the frame with wide margins at all times. Do not change any colours or tint. No motion blur, motion trails, afterimages, speed lines, smears, glow, glowing claws, coloured light, energy, liquid, spray, projectiles, feathers flying off, particles, dust, rocks, cracks, shadow or text."
- }
+  "status": "rejected",
+  "note": "白虎普攻 sweep 第三版。v1 出爪带拖影和红色爪光（现用跳帧抢救版，出手是硬切），v2 衣摆变红、爪带红绿光弧。v3 放慢动作、去掉所有\"攻击感\"词，只描述手臂位置。",
+  "modelId": "model_pruna-p-video-2-pro",
+  "parameters": {
+    "duration": 5,
+    "resolution": "480p",
+    "mode": "cost",
+    "promptUpsampler": "off",
+    "image": "asset_sdvagHTpWgSxuFactVjRZgvD",
+    "lastFrameImage": "asset_sdvagHTpWgSxuFactVjRZgvD",
+    "seed": 202611263,
+    "prompt": "The exact upright white tiger warrior in the reference moves its right arm in place. Over the first second it slowly raises the right hand up beside its right ear with the claws open. Then over half a second it brings the open right hand down and across in front of its chest toward screen left, ending with the arm stretched forward and low. It holds that pose briefly, then slowly lowers the arm and returns to the exact original standing pose and holds it. The arm and claws stay sharp and fully visible in every frame. Both feet stay planted. Exactly two arms and two legs. Keep the same three-quarter left view, white tiger head, white and black striped fur, silver hair, armor, belt and kilt with their original colours. No walking, turning around, jumping, second movement, extra limbs or weapon. Fixed camera, fixed size, pure uniform bright green #00FF00 background. The whole character stays inside the frame with wide margins at all times. Do not change any colours or tint. No motion blur, motion trails, afterimages, speed lines, smears, glow, glowing claws, coloured light, energy, liquid, spray, projectiles, feathers flying off, particles, dust, rocks, cracks, shadow or text."
+  },
+  "result": {
+    "job": "job_TjjfBoSSiZngG6RYxGfxPmNA",
+    "asset": "asset_jS7BNZVDG62k7s9pZyUMUKAT",
+    "video": "design/xianxia-normal-attacks-2026-11-22/white-tiger-sweep-v3.mp4",
+    "reviewNote": "第46帧起手掌喷出大片黑烟与黑羽，铺满画面直到结尾，无法去除；46帧前只有抬手推掌，不构成横扫。保留 v1 抢救版。帧存 white-tiger-sweep/raw-frames-v3。"
+  }
 }
