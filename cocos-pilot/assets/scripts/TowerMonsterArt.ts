@@ -4,9 +4,9 @@ import {ARCHETYPES} from './shared/js/xianxia/TowerContent';
 import { Color, Graphics, ImageAsset, isValid, JsonAsset, Node, Rect, Size, Sprite, SpriteFrame, Texture2D, UITransform } from 'cc';
 
 type Entry = { done: boolean; image: ImageAsset | null; texture: Texture2D | null; frame: SpriteFrame | null };
-// Spider death has no delivered clip, so its existing on-screen pose stays this long before cleanup removes it.
-const SPIDER_DEATH_HOLD_SECONDS = 1.5;
 const STATIC_FALL_SECONDS = .5;
+// Spider death has no delivered clip: its on-screen pose is held and fades out over the same .5s other portraits take to fall.
+const SPIDER_DEATH_HOLD_SECONDS = STATIC_FALL_SECONDS;
 type Actor = { node: Node; sprite: Sprite; transform: UITransform; family: string; x: number; facing: number; seen: boolean; top?:number; worldY?:number; enraged?:boolean; diedAt?:number; deathOffset?:{x:number;y:number}; motionTime?:number; moving?:boolean; bodySize?:number };
 // Spider walk stride: 143 world units/s at 12 fps ≈ 12 units per frame (full-speed cadence unchanged).
 const SPIDER_STRIDE = 12;
@@ -337,7 +337,8 @@ export class TowerMonsterArt {
    // Spider atlas has no death clip: the pose on screen at death is held until cleanup.
    if(!clip && this.motionFamily==='spider' && actor.family==='spider' && time!==undefined && (actor.diedAt!==undefined || killed?.has(id))) {
     actor.diedAt??=time;
-    if(time-actor.diedAt < SPIDER_DEATH_HOLD_SECONDS) {pin(actor);continue;}
+    const held=(time-actor.diedAt)/SPIDER_DEATH_HOLD_SECONDS;
+    if(held<1) {actor.sprite.color=new Color(255,255,255,Math.round(255*(1-held*held)));pin(actor);continue;}
    }
    if(time!==undefined && clip && actor.family===this.motionFamily && (actor.diedAt!==undefined || killed?.has(id))) {
     actor.diedAt??=time;actor.enraged=false;

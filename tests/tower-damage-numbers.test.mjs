@@ -27,7 +27,7 @@ test('damage starts beside rendered upper body, not the ground collision radius'
 test('simultaneous direct, bleed, wound and attached damage have separate readable rows',()=>{
  const a=setup();a.s.effects=['normal','weapon_bleed','wound','weapon_on_hit'].map((source,i)=>a.hit(String(i),source));a.draw()
  const rows=a.visible().map(p=>p.node.position.y).sort((x,y)=>x-y)
- assert.equal(rows.length,4);for(let i=1;i<rows.length;i++)assert.ok(rows[i]-rows[i-1]>=32)
+ assert.equal(rows.length,4);for(let i=1;i<rows.length;i++)assert.ok(rows[i]-rows[i-1]>=22)
 })
 test('rapid hit bursts are bounded per enemy and receipts are not replayed',()=>{
  const a=setup();a.s.effects=Array.from({length:20},(_,i)=>a.hit(String(i)));a.draw()
@@ -54,7 +54,7 @@ test('nearby targets do not paint text over one another',()=>{
  const a=setup();a.anchors.set('wolf',{x:0,y:160,halfWidth:80})
  a.s.effects=[a.hit('a'),{...a.hit('b'),targetId:'wolf'}];a.draw()
  const [one,two]=a.visible().map(p=>p.node.position)
- assert.ok(Math.abs(one.x-two.x)>70||Math.abs(one.y-two.y)>=44)
+ assert.ok(Math.abs(one.x-two.x)>70||Math.abs(one.y-two.y)>=22)
 })
 
 test('top strip and map together prefer a nearby free side, not a position under the feet',()=>{

@@ -46,18 +46,22 @@ export class TowerDamageNumbers {
    const text=(e:any)=>`${Number(e.damage.toFixed(e.damage<10?1:0))}${e.source==='weapon_bleed'?' · 流血':e.source==='wound'?' · 剑痕':e.source==='weapon_on_hit'?' · '+(e.element==='none'?'附伤':ELEMENT_NAMES[e.element]||'附伤'):''}`;
    // Conservative glyph widths leave space for Chinese labels and the outline.
    const width=Math.max(...group.map(e=>Array.from(text(e)).reduce((sum,ch)=>sum+(ch.charCodeAt(0)>255?1:.68),0)*(e.critical&&e.source!=='weapon_on_hit'?22:18)+12));
-   const height=group.length*44,age=Math.max(0,s.time-newest.at);
+   // 2026-11-27: rows used a fixed 44px pitch, so a burst spread into a loose column away from the target.
+   // Rows now stack at their glyph height (22px, 26px for a critical row) and sit 6px off the body.
+   const rowHeight=(e:any)=>e.critical&&e.source!=='weapon_on_hit'?26:22;
+   const rowY:number[]=[];group.forEach((e,i)=>rowY.push(i?rowY[i-1]+(rowHeight(group[i-1])+rowHeight(e))/2:0));
+   const height=rowY[rowY.length-1]+rowHeight(group[0]),age=Math.max(0,s.time-newest.at);
    const drift=prefs.reducedMotion?0:Math.min(.65,age)*18;
    const left=-viewport.width/2+12,right=viewport.width/2-12;
    const bottom=-viewport.height/2+24,top=viewport.height/2-24;
-   const center=a.x-camera.x,gap=a.halfWidth+12+drift*.5;
+   const center=a.x-camera.x,gap=a.halfWidth+6+drift*.5;
    let x=center+gap+width/2;
    if(x+width/2>right)x=center-gap-width/2;
    x=Math.max(left+width/2,Math.min(right-width/2,x));
-   let y=Math.max(bottom,Math.min(top-height+44,a.y-camera.y+drift));
+   let y=Math.max(bottom,Math.min(top-height+rowHeight(group[0]),a.y-camera.y+drift));
    // Avoid other targets' text blocks too. In a dense pack, omit an overflow
    // block rather than paint illegible numbers over another block.
-   const overlaps=(cy:number)=>placed.some(p=>Math.abs(x-p.x)<(width+p.width)/2+6&&cy<p.y+p.height&&cy+height>p.y);
+   const overlaps=(cy:number)=>placed.some(p=>Math.abs(x-p.x)<(width+p.width)/2+4&&cy<p.y+p.height&&cy+height>p.y);
    if(overlaps(y)){
     const initialY=y,initialX=x;
     const sides=[initialX,center-gap-width/2,center+gap+width/2]
@@ -66,7 +70,7 @@ export class TowerDamageNumbers {
     // Search both sides at each nearby height before moving far from the body.
     for(let step=0;step<=Math.ceil(viewport.height/16)&&!found;step++){
      for(const candidate of step===0?[initialY]:[initialY+step*16,initialY-step*16]){
-      if(candidate<bottom||candidate+height-44>top)continue;
+      if(candidate<bottom||candidate+height-rowHeight(group[0])>top)continue;
       for(const px of sides){x=px;if(!overlaps(candidate)){y=candidate;found=true;break;}}
       if(found)break;
      }
@@ -92,7 +96,7 @@ export class TowerDamageNumbers {
    item.node.active=s.player.hp>0;
    item.label.string=text(e);
    item.label.color=bleed?new Color('#E88989'):wound?new Color('#8DDBBE'):extra?new Color(255,192,103,255):e.critical?new Color(255,235,139,255):new Color(240,250,255,255);
-   item.node.setPosition(x,y+row*44,0);
+   item.node.setPosition(x,y+rowY[row],0);
    item.opacity.opacity=Math.round(255*Math.min(1,(.65-age)/.22));
   }
   }

@@ -331,8 +331,9 @@ test('low-rank spider owns its atlas, phases and frontal pose; death holds front
  // 2026-11-27: the held corpse stays on its world point when the camera follows the player (it used to slide with the screen).
  const at={...actor.node.position};f.art.beginFrame();f.art.endFrame(10.1,new Set(['spider1']),(x,y)=>({x:x-30,y:y-40}));assert.deepEqual([actor.node.position.x,actor.node.position.y],[at.x,at.y]);
  f.art.beginFrame();f.art.endFrame(10.2,new Set(['spider1']),(x,y)=>({x:x-30-45,y:y-40+12}));assert.deepEqual([actor.node.position.x,actor.node.position.y],[at.x-45,at.y+12]);
- f.art.beginFrame();f.art.endFrame(11,new Set(['spider1']));assert.equal(name(),'hit-000');
- f.art.beginFrame();f.art.endFrame(13,new Set(['spider1']));f.art.beginFrame();f.art.endFrame(13.6,new Set(['spider1']));assert.equal(spider.actors.size,0);
+ f.art.beginFrame();f.art.endFrame(10.4,new Set(['spider1']));assert.equal(name(),'hit-000');assert.ok(actor.sprite.color.a<255&&actor.sprite.color.a>0);assert.equal(spider.actors.size,1);
+ // 2026-11-27: same .5s as the other portraits' fall-and-fade (was 1.5s).
+ f.art.beginFrame();f.art.endFrame(10.5,new Set(['spider1']));assert.equal(spider.actors.size,0);
  assert.equal(f.art.constructor.artFamily('spider','spider_boss'),'spider-lady');
  const png=readFileSync(resource('spider-v1.png'));assert.equal(png.readUInt32BE(16),data.width);assert.equal(png.readUInt32BE(20),data.height);assert.equal(png[25],6);assert.equal(createHash('sha256').update(png).digest('hex'),data.sourceSha256);
  assert.deepEqual(data.damageEvents,[]);f.art.destroy();assert.equal(texture.refs,0);assert.equal(image.refs,0);
