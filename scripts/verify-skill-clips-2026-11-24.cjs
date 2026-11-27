@@ -12,11 +12,11 @@ const CASES=[
  {floor:5,family:'spider-lady',rank:4,role:'elite',archetype:'spider_elite_f5_w15_n4',clip:'web',skill:'M10',kind:'M10'},
  {floor:7,family:'falcon-humanoid',rank:4,role:'elite',archetype:'falcon_elite_f7_w10_n2',clip:'stomp',skill:'M07',kind:'M07',block:['shot','bite']},
  {floor:6,family:'falcon-humanoid',rank:6,role:'boss',archetype:'falcon_boss',clip:'stomp',skill:'M07',kind:'M07',block:['shot','bite']},
- // 2026-11-24 elite M07 reusing existing clips (no credits).
- {floor:2,family:'bat',rank:2,role:'elite',archetype:'bat_elite',clip:'shot',skill:'M07',kind:'M07',block:['shot','bite']},
- {floor:2,family:'falcon',rank:2,role:'elite',archetype:'falcon_elite_rank2',clip:'shot',skill:'M07',kind:'M07',block:['shot','bite']},
- {floor:3,family:'snake',rank:3,role:'elite',archetype:'snake_elite',clip:'shot',skill:'M07',kind:'M07',block:['shot','bite']},
- {floor:5,family:'snake-lady',rank:4,role:'elite',archetype:'snake_elite_f5_w5_n1',clip:'cast',skill:'M07',kind:'M07',block:['shot','bite']},
+ // Elite M07: bat, falcon, snake and snake-lady have their own stomp clips (2026-11-27; 11-24 they reused shot/cast).
+ {floor:2,family:'bat',rank:2,role:'elite',archetype:'bat_elite',clip:'stomp',skill:'M07',kind:'M07',block:['shot','bite']},
+ {floor:2,family:'falcon',rank:2,role:'elite',archetype:'falcon_elite_rank2',clip:'stomp',skill:'M07',kind:'M07',block:['shot','bite']},
+ {floor:3,family:'snake',rank:3,role:'elite',archetype:'snake_elite',clip:'stomp',skill:'M07',kind:'M07',block:['shot','bite']},
+ {floor:5,family:'snake-lady',rank:4,role:'elite',archetype:'snake_elite_f5_w5_n1',clip:'stomp',skill:'M07',kind:'M07',block:['shot','bite']},
  // 2026-11-24 interim M08 on the existing sweep clips.
  {floor:4,family:'crocodile-humanoid',rank:4,role:'boss',archetype:'crocodile_boss',clip:'tail',skill:'M08',kind:'M08',block:['sweep','bite']},
  {floor:4,family:'crocodile',rank:3,role:'elite',archetype:'crocodile_elite',clip:'tail',skill:'M08',kind:'M08',block:['sweep','bite']},

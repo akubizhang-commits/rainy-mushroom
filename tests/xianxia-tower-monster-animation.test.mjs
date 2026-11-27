@@ -352,10 +352,10 @@ test('bat flight keeps native480 detail, pauses and falls back for undelivered c
  phase(2.97,'recovery',3.67);assert.equal(pose(),'bite-012');phase(3.66,'recovery',3.67);assert.equal(pose(),'bite-019');
  assert.equal(a.node.scale.x,1);assert.equal(a.node.position.y,30);
  render(3.7,{ai:{mode:'windup',until:4.55,attack:{...bite,kind:'shot'}}});assert.ok(data.clips.shot.frames.slice(0,9).map(k=>bat.motionFrames.get(k)).includes(a.sprite.spriteFrame),'bat shot windup plays the shot clip');
- render(3.7,{ai:{mode:'windup',until:4.55,attack:bite},mechanic:{skillId:'M07',phase:'windup',startedAt:3.5,activatesAt:4.5,until:5}});assert.ok(data.clips.shot.frames.map(k=>bat.motionFrames.get(k)).includes(a.sprite.spriteFrame),'2026-11-24 elite M07 reuses the shot clip');
+ render(3.7,{ai:{mode:'windup',until:4.55,attack:bite},mechanic:{skillId:'M07',phase:'windup',startedAt:3.5,activatesAt:4.5,until:5}});assert.ok(data.clips.stomp.frames.map(k=>bat.motionFrames.get(k)).includes(a.sprite.spriteFrame),'2026-11-27 elite M07 plays its own stomp clip');
  const bad=copy(data);bad.clips.bite.phases.recovery=[12,9];assert.equal(bat.validMotion(bad),false);
  render(3);f.art.beginFrame();f.art.endFrame(4,new Set(['bat1']));f.art.beginFrame();f.art.endFrame(4.6,new Set(['bat1']));assert.equal(bat.actors.size,0);assert.equal(f.art.constructor.artFamily('bat','bat_elite_rank4'),'bat-humanoid');
- const png=readFileSync(resource('bat-v1.png'));assert.equal(png.readUInt32BE(16),3840);assert.equal(png.readUInt32BE(20),3168);assert.equal(createHash('sha256').update(png).digest('hex'),data.sourceSha256);f.art.destroy();assert.equal(image.refs,0);
+ const png=readFileSync(resource('bat-v1.png'));assert.equal(png.readUInt32BE(16),3840);assert.equal(png.readUInt32BE(20),3936);assert.equal(createHash('sha256').update(png).digest('hex'),data.sourceSha256);f.art.destroy();assert.equal(image.refs,0);
 });
 
 test('falcon flight keeps native384 detail, pauses and falls back for undelivered comfalcon',()=>{
@@ -375,10 +375,10 @@ test('falcon flight keeps native384 detail, pauses and falls back for undelivere
  phase(2.97,'recovery',3.67);assert.equal(pose(),'bite-012');phase(3.66,'recovery',3.67);assert.equal(pose(),'bite-019');
  assert.equal(a.node.scale.x,1);assert.equal(a.node.position.y,30);
  render(3.7,{ai:{mode:'windup',until:4.55,attack:{...bite,kind:'shot'}}});assert.ok(data.clips.shot.frames.slice(0,9).map(k=>falcon.motionFrames.get(k)).includes(a.sprite.spriteFrame),'2026-11-24 feather shot plays the shot windup');
- render(3.7,{ai:{mode:'windup',until:4.55,attack:bite},mechanic:{skillId:'M07',phase:'windup',startedAt:3.5,activatesAt:4.5,until:5}});assert.ok(data.clips.shot.frames.map(k=>falcon.motionFrames.get(k)).includes(a.sprite.spriteFrame),'2026-11-24 elite M07 reuses the shot clip');
+ render(3.7,{ai:{mode:'windup',until:4.55,attack:bite},mechanic:{skillId:'M07',phase:'windup',startedAt:3.5,activatesAt:4.5,until:5}});assert.ok(data.clips.stomp.frames.map(k=>falcon.motionFrames.get(k)).includes(a.sprite.spriteFrame),'2026-11-27 elite M07 plays its own stomp clip');
  const bad=copy(data);bad.clips.bite.phases.recovery=[12,9];assert.equal(falcon.validMotion(bad),false);
  render(3);f.art.beginFrame();f.art.endFrame(4,new Set(['falcon1']));f.art.beginFrame();f.art.endFrame(4.6,new Set(['falcon1']));assert.equal(falcon.actors.size,0);assert.equal(f.art.constructor.artFamily('falcon','falcon_elite'),'falcon-humanoid');
- const png=readFileSync(resource('falcon-v1.png'));assert.equal(png.readUInt32BE(16),3840);assert.equal(png.readUInt32BE(20),2304);assert.equal(createHash('sha256').update(png).digest('hex'),data.sourceSha256);f.art.destroy();assert.equal(image.refs,0);
+ const png=readFileSync(resource('falcon-v1.png'));assert.equal(png.readUInt32BE(16),3840);assert.equal(png.readUInt32BE(20),2688);assert.equal(createHash('sha256').update(png).digest('hex'),data.sourceSha256);f.art.destroy();assert.equal(image.refs,0);
 });
 
 test('crocodile movement and sweep preserve detail, timing, pause and mechanic fallback',()=>{
@@ -547,7 +547,7 @@ test('low-rank snake slithers only on displacement; shots and mechanics keep the
  render(1.5,96);assert.notEqual(a.sprite.spriteFrame,frame);render(1.6,96);assert.equal(a.sprite.spriteFrame,r.entries.get('snake').frame);
  for(const mode of ['windup','active','recovery']){render(2,90,{ai:{mode,until:3,attack:{id:'snake-shot',kind:'shot',startedAt:1,active:.1,recovery:.7,dirX:-1}}});const sh=data.clips.shot,[so,sc]=sh.phases[mode];assert.ok(sh.frames.slice(so,so+sc).map(k=>r.motionFrames.get(k)).includes(a.sprite.spriteFrame),'snake shot '+mode);}const bite=data.clips.bite;assert.deepEqual(bite.phases,{windup:[0,9],active:[9,3],recovery:[12,8]});for(const mode of ['windup','active','recovery']){render(2,90,{ai:{mode,until:3,attack:{id:'snake-bite',kind:'bite',startedAt:1,active:2,recovery:2,dirX:-1}}});const [o,c]=bite.phases[mode];assert.ok(bite.frames.slice(o,o+c).map(k=>r.motionFrames.get(k)).includes(a.sprite.spriteFrame),'snake bite '+mode);assert.equal(a.sprite.spriteFrame.rect.width,480);}
  render(3,70);f.art.beginFrame();f.art.endFrame(4,new Set(['snake1']));f.art.beginFrame();f.art.endFrame(4.6,new Set(['snake1']));assert.equal(r.actors.size,0);f.art.destroy();assert.equal(image.refs,0);
- const png=readFileSync(resource('snake-v1.png'));assert.equal(createHash('sha256').update(png).digest('hex'),data.sourceSha256);assert.equal(png.readUInt32BE(16),3840);assert.equal(png.readUInt32BE(20),2976);assert.equal(png[25],6);assert.equal(Object.keys(data.frames).length,56);
+ const png=readFileSync(resource('snake-v1.png'));assert.equal(createHash('sha256').update(png).digest('hex'),data.sourceSha256);assert.equal(png.readUInt32BE(16),3840);assert.equal(png.readUInt32BE(20),3360);assert.equal(png[25],6);assert.equal(Object.keys(data.frames).length,73);
 });
 
 test('upright bear walks only on displacement with independent movement and static combat',()=>{
@@ -597,7 +597,7 @@ test('rank-five serpent queen walks only on displacement with independent moveme
  render(1.1,98);const frame=a.sprite.spriteFrame;assert.equal(frame.rect.width,480);render(1.1,98);assert.equal(a.sprite.spriteFrame,frame);render(1.3,96);assert.notEqual(a.sprite.spriteFrame,frame);render(1.4,96);assert.equal(a.sprite.spriteFrame,r.entries.get('snake-lady').frame);
  for(const mode of ['windup','active','recovery']){{render(2,90,{ai:{mode,until:3,attack:{id:'snake-lady-shot',kind:'shot',startedAt:1,active:.2,recovery:.7,dirX:-1}}});const sh=data.clips.shot,[o,c]=sh.phases[mode];assert.ok(sh.frames.slice(o,o+c).map(k=>r.motionFrames.get(k)).includes(a.sprite.spriteFrame),'shot '+mode+' plays the shot phase');}phasedSkill(r,a,data.clips.heal,mode,render,'M03',false);phasedSkill(r,a,data.clips.breath,mode,render,'M16',false);phasedSkill(r,a,data.clips.cast,mode,render,'M11',true);}
  render(3,70);f.art.beginFrame();f.art.endFrame(4,new Set(['snake-lady1']));f.art.beginFrame();f.art.endFrame(4.6,new Set(['snake-lady1']));assert.equal(r.actors.size,0);f.art.destroy();assert.equal(image.refs,0);
- const png=readFileSync(resource('snake-lady-v1.png'));assert.equal(createHash('sha256').update(png).digest('hex'),data.sourceSha256);assert.equal(png.readUInt32BE(16),3840);assert.equal(png.readUInt32BE(20),3904);assert.equal(png[25],6);assert.equal(Object.keys(data.frames).length,98);
+ const png=readFileSync(resource('snake-lady-v1.png'));assert.equal(createHash('sha256').update(png).digest('hex'),data.sourceSha256);assert.equal(png.readUInt32BE(16),4096);assert.equal(png.readUInt32BE(20),3904);assert.equal(png[25],6);assert.equal(Object.keys(data.frames).length,113);
 });
 
 test('rank-six spider lady walks only on displacement with independent movement and static combat',()=>{
@@ -619,9 +619,9 @@ test('rank-four bat warrior walks only on displacement with independent movement
  const image=f.finish('tower-monsters-motion/bat-humanoid-v1',ImageAsset,new ImageAsset(data.width,data.height));f.finish('tower-monsters-motion/bat-humanoid-v1',JsonAsset,new JsonAsset(data));
  render(1,100);const r=f.art.speciesRenderers.get('bat-humanoid'),a=r.actors.get('bat-humanoid1');assert.equal(a.sprite.spriteFrame,r.entries.get('bat-humanoid').frame);
  render(1.1,98);const frame=a.sprite.spriteFrame;assert.equal(frame.rect.width,480);render(1.1,98);assert.equal(a.sprite.spriteFrame,frame);render(1.3,96);assert.notEqual(a.sprite.spriteFrame,frame);render(1.4,96);assert.equal(a.sprite.spriteFrame,r.entries.get('bat-humanoid').frame);
- for(const mode of ['windup','active','recovery']){{render(2,90,{ai:{mode,until:3,attack:{id:'bat-humanoid-bite',kind:'bite',startedAt:1,active:.2,recovery:.6,dirX:-1}}});const sh=data.clips.shot,[o,c]=sh.phases[mode];assert.ok(sh.frames.slice(o,o+c).map(k=>r.motionFrames.get(k)).includes(a.sprite.spriteFrame),'bite '+mode+' borrows the screech');}{render(2,90,{ai:{mode,until:3,attack:{id:'bat-humanoid-shot',kind:'shot',startedAt:1,active:.1,recovery:.7,dirX:-1}}});const sh=data.clips.shot,[so,sc]=sh.phases[mode];assert.ok(sh.frames.slice(so,so+sc).map(k=>r.motionFrames.get(k)).includes(a.sprite.spriteFrame),'bat-humanoid shot '+mode);}phasedSkill(r,a,data.clips.stomp,mode,render,'M07',true);}
+ for(const mode of ['windup','active','recovery']){{render(2,90,{ai:{mode,until:3,attack:{id:'bat-humanoid-bite',kind:'bite',startedAt:1,active:.2,recovery:.6,dirX:-1}}});const sh=data.clips.bite,[o,c]=sh.phases[mode];assert.ok(sh.frames.slice(o,o+c).map(k=>r.motionFrames.get(k)).includes(a.sprite.spriteFrame),'bite '+mode+' plays the 2026-11-27 bite clip');}{render(2,90,{ai:{mode,until:3,attack:{id:'bat-humanoid-shot',kind:'shot',startedAt:1,active:.1,recovery:.7,dirX:-1}}});const sh=data.clips.shot,[so,sc]=sh.phases[mode];assert.ok(sh.frames.slice(so,so+sc).map(k=>r.motionFrames.get(k)).includes(a.sprite.spriteFrame),'bat-humanoid shot '+mode);}phasedSkill(r,a,data.clips.stomp,mode,render,'M07',true);}
  render(3,70);f.art.beginFrame();f.art.endFrame(4,new Set(['bat-humanoid1']));f.art.beginFrame();f.art.endFrame(4.6,new Set(['bat-humanoid1']));assert.equal(r.actors.size,0);f.art.destroy();assert.equal(image.refs,0);
- const png=readFileSync(resource('bat-humanoid-v1.png'));assert.equal(createHash('sha256').update(png).digest('hex'),data.sourceSha256);assert.equal(png.readUInt32BE(16),3840);assert.equal(png.readUInt32BE(20),2496);assert.equal(png[25],6);assert.equal(Object.keys(data.frames).length,52);
+ const png=readFileSync(resource('bat-humanoid-v1.png'));assert.equal(createHash('sha256').update(png).digest('hex'),data.sourceSha256);assert.equal(png.readUInt32BE(16),3840);assert.equal(png.readUInt32BE(20),3264);assert.equal(png[25],6);assert.equal(Object.keys(data.frames).length,72);
 });
 
 test('rank-seven white tiger walks only on displacement with independent movement and static combat',()=>{

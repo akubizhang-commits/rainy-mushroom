@@ -13,8 +13,8 @@ const CASES=[{floor:4,family:'crocodile-humanoid',rank:4,role:'boss',clip:'sweep
  {floor:3,family:'snake',rank:3,role:'elite',archetype:'snake_elite',clip:'shot'},
  {floor:3,family:'bat',rank:3,role:'boss',archetype:'bat_boss',clip:'shot'},
  {floor:4,family:'bat-humanoid',rank:4,role:'elite',archetype:'bat_elite_rank4',clip:'shot'},
- // 2026-11-23 reuse without credits: bat-humanoid normal bite plays the screech plus a lunge.
- {floor:4,family:'bat-humanoid',rank:4,role:'normal',archetype:'bat_normal_r4',clip:'shot',kind:'bite',block:['shot']},
+ // 2026-11-27 bat-humanoid normal bite has its own clip (11-23 to 11-26 it borrowed the screech plus a lunge).
+ {floor:4,family:'bat-humanoid',rank:4,role:'normal',archetype:'bat_normal_r4',clip:'bite',kind:'bite',block:['shot']},
  // 2026-11-23 per-role acceptance of the new clips (65 standard: normal / elite / boss each checked in game, plus pause and death). Spider-lady elites/bosses make no ordinary attack (web is replaced by M10, no bite fallback), so only the normal bites.
  {floor:4,family:'bat-humanoid',rank:4,role:'normal',archetype:'bat_normal_r4',clip:'shot',kind:'shot',block:['bite']},
  {floor:2,family:'snake',rank:2,role:'normal',archetype:'snake_normal',clip:'shot',kind:'shot',block:['bite']},
