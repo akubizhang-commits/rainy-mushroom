@@ -10,6 +10,7 @@
     "cocos:sync": "node scripts/cocos/sync-shared.mjs",
     "cocos:build": "node scripts/cocos/build.mjs web-mobile",
     "cocos:build:wechat": "node scripts/cocos/build.mjs wechatgame",
+    "cocos:serve:remote": "node scripts/cocos/serve-remote.mjs",
     "cocos:test": "node --test tests/cocos-package.test.mjs tests/current-entry.test.mjs",
     "release:check": "node scripts/check-release.mjs --strict",
     "release:build": "node scripts/cocos/build.mjs wechatgame --release"

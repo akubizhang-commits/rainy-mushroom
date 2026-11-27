@@ -1,9 +1,9 @@
 import {stampBuild} from '../release-integrity.mjs'
 import {validateWebEntry} from './validate-web-entry.mjs'
-import {packageWechat} from './package-wechat.mjs'
+import {packageWechat,resolveRemoteBaseUrl} from './package-wechat.mjs'
 import {spawnSync} from 'node:child_process'
-import {copyFileSync,existsSync,mkdirSync,writeFileSync} from 'node:fs'
-import {resolve} from 'node:path'
+import {copyFileSync,existsSync,mkdirSync,readFileSync,writeFileSync} from 'node:fs'
+import {relative,resolve} from 'node:path'
 const root=resolve(import.meta.dirname,'../..'),platform=process.argv[2]||'web-mobile'
 if(!['web-mobile','wechatgame'].includes(platform))throw Error('Unsupported pilot build platform')
 const creator=process.env.COCOS_CREATOR_PATH||'/Applications/CocosCreator.app/Contents/MacOS/CocosCreator'
@@ -20,7 +20,13 @@ if(![0,36].includes(result.status)||!log.includes(`build Task (${platform}) Fini
 if(platform==='web-mobile')copyFileSync(resolve(root,'cocos-pilot/assets/resources/loading/keyart.jpg'),resolve(root,'cocos-pilot/build/web-mobile/loading-keyart.jpg'))
 if(platform==='web-mobile')validateWebEntry(resolve(root,'cocos-pilot/build/web-mobile'))
 stampBuild(resolve(root,'cocos-pilot/build',platform))
-if(platform==='wechatgame'){const report=packageWechat(resolve(root,'cocos-pilot/build/wechatgame'));writeFileSync(resolve(root,'cocos-pilot/package-report.json'),JSON.stringify(report,null,2)+'\n');console.log('WeChat main package:',(report.mainBytes/1024/1024).toFixed(2)+' MiB')}
+if(platform==='wechatgame'){
+ // The resources bundle (all tower art/audio) is served from remoteAssetBaseUrl; upload cocos-pilot/build/wechatgame-remote/ there.
+ const server=resolveRemoteBaseUrl(JSON.parse(readFileSync(resolve(root,'release/settings.json'),'utf8')),process.env),outDir=resolve(root,'cocos-pilot/build/wechatgame-remote')
+ const report=packageWechat(resolve(root,'cocos-pilot/build/wechatgame'),{remote:{bundles:['resources'],server,outDir}});report.remoteRoot=relative(root,report.remoteRoot)
+ writeFileSync(resolve(root,'cocos-pilot/package-report.json'),JSON.stringify(report,null,2)+'\n');const mib=n=>(n/1024/1024).toFixed(2)+' MiB'
+ console.log('WeChat main package:',mib(report.mainBytes),'total:',mib(report.totalBytes));console.log('WeChat remote assets:',mib(Object.values(report.remoteBytes).reduce((n,x)=>n+x,0)),'in',outDir,'served from',server)
+}
 console.log(`Built ${platform}: ${root}/cocos-pilot/build/${platform}; log: ${logDir}/${platform}.log`)
 
 if(process.argv.includes('--release')){const check=spawnSync(process.execPath,[resolve(root,'scripts/check-release.mjs'),'--strict'],{stdio:'inherit'});if(check.status!==0)process.exit(check.status||1)}
