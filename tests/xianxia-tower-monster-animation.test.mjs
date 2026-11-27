@@ -328,6 +328,9 @@ test('low-rank spider owns its atlas, phases and frontal pose; death holds front
  // Spider atlas has no death clip: the existing hit-000 pose on screen at death is held until cleanup.
  f.art.beginFrame();f.art.endFrame(10,new Set(['spider1']));assert.equal(spider.actors.size,1);assert.equal(name(),'hit-000');assert.equal(actor.node.scale.x,1);
  f.art.beginFrame();f.art.endFrame(10,new Set(['spider1']));assert.equal(name(),'hit-000');
+ // 2026-11-27: the held corpse stays on its world point when the camera follows the player (it used to slide with the screen).
+ const at={...actor.node.position};f.art.beginFrame();f.art.endFrame(10.1,new Set(['spider1']),(x,y)=>({x:x-30,y:y-40}));assert.deepEqual([actor.node.position.x,actor.node.position.y],[at.x,at.y]);
+ f.art.beginFrame();f.art.endFrame(10.2,new Set(['spider1']),(x,y)=>({x:x-30-45,y:y-40+12}));assert.deepEqual([actor.node.position.x,actor.node.position.y],[at.x-45,at.y+12]);
  f.art.beginFrame();f.art.endFrame(11,new Set(['spider1']));assert.equal(name(),'hit-000');
  f.art.beginFrame();f.art.endFrame(13,new Set(['spider1']));f.art.beginFrame();f.art.endFrame(13.6,new Set(['spider1']));assert.equal(spider.actors.size,0);
  assert.equal(f.art.constructor.artFamily('spider','spider_boss'),'spider-lady');

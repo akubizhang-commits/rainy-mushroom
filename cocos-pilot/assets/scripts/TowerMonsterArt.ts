@@ -7,7 +7,7 @@ type Entry = { done: boolean; image: ImageAsset | null; texture: Texture2D | nul
 // Spider death has no delivered clip, so its existing on-screen pose stays this long before cleanup removes it.
 const SPIDER_DEATH_HOLD_SECONDS = 1.5;
 const STATIC_FALL_SECONDS = .5;
-type Actor = { node: Node; sprite: Sprite; transform: UITransform; family: string; x: number; facing: number; seen: boolean; top?:number; worldY?:number; enraged?:boolean; diedAt?:number; motionTime?:number; moving?:boolean; bodySize?:number };
+type Actor = { node: Node; sprite: Sprite; transform: UITransform; family: string; x: number; facing: number; seen: boolean; top?:number; worldY?:number; enraged?:boolean; diedAt?:number; deathOffset?:{x:number;y:number}; motionTime?:number; moving?:boolean; bodySize?:number };
 // Spider walk stride: 143 world units/s at 12 fps ≈ 12 units per frame (full-speed cadence unchanged).
 const SPIDER_STRIDE = 12;
 const families = new Set(['boar', 'wolf', 'bear', 'tiger', 'tiger-humanoid', 'white-tiger', 'ape', 'snake', 'crocodile', 'scorpion', 'centipede', 'rhino', 'yak', 'falcon', 'spider-lady', 'spider', 'bat', 'spider-queen', 'snake-lady', 'bear-humanoid', 'crocodile-humanoid', 'wolf-humanoid', 'falcon-humanoid', 'ape-humanoid', 'bat-humanoid', 'boar-humanoid', 'scorpion-humanoid','centipede-humanoid']);
@@ -288,7 +288,7 @@ export class TowerMonsterArt {
   else if (attack?.kind==='shot' && (attack.emissionFaceX===-1||attack.emissionFaceX===1)) actor.facing=attack.emissionFaceX;
   else if (Math.abs(dx) > .01) actor.facing = dx < 0 ? -1 : 1;
   else if (Math.abs(playerX - worldX) > .01) actor.facing = playerX < worldX ? -1 : 1;
-  actor.x = worldX; actor.worldY=motion?.worldY; actor.enraged=!!motion?.mechanic?.enraged; actor.seen = true; actor.diedAt=undefined; actor.motionTime=motion?.time; actor.moving=moving;
+  actor.x = worldX; actor.worldY=motion?.worldY; actor.enraged=!!motion?.mechanic?.enraged; actor.seen = true; actor.diedAt=undefined; actor.deathOffset=undefined; actor.motionTime=motion?.time; actor.moving=moving;
   actor.sprite.spriteFrame = frame;
   const size = TowerMonsterArt.bodySize(family,motion?.role,radius,motion?.rank);
   actor.bodySize=size;
@@ -324,12 +324,20 @@ export class TowerMonsterArt {
 
  endFrame(time?:number, killed?:Set<string|number>, project?:(x:number,y:number)=>{x:number;y:number}) {
   for(const renderer of this.speciesRenderers.values())renderer.endFrame(time,killed,project);
+  // 2026-11-27: the camera follows the player, so a held corpse must be re-projected every frame or it slides
+  // with the screen. Keep the on-screen offset (feet lift, attack pose) it had relative to its world point at death.
+  const pin=(actor:Actor)=>{
+   if(!project||actor.worldY===undefined)return;
+   const p=project(actor.x,actor.worldY);
+   if(!actor.deathOffset){const at=actor.node.position;actor.deathOffset={x:at.x-p.x,y:at.y-p.y};}
+   actor.node.setPosition(p.x+actor.deathOffset.x,p.y+actor.deathOffset.y);
+  };
   for (const [id, actor] of this.actors) if (!actor.seen) {
    const clip=this.motionAtlas?.clips.death;
    // Spider atlas has no death clip: the pose on screen at death is held until cleanup.
    if(!clip && this.motionFamily==='spider' && actor.family==='spider' && time!==undefined && (actor.diedAt!==undefined || killed?.has(id))) {
     actor.diedAt??=time;
-    if(time-actor.diedAt < SPIDER_DEATH_HOLD_SECONDS) continue;
+    if(time-actor.diedAt < SPIDER_DEATH_HOLD_SECONDS) {pin(actor);continue;}
    }
    if(time!==undefined && clip && actor.family===this.motionFamily && (actor.diedAt!==undefined || killed?.has(id))) {
     actor.diedAt??=time;actor.enraged=false;
@@ -358,6 +366,7 @@ export class TowerMonsterArt {
      actor.node.setScale(sign,1,1);
      actor.node.angle=-(actor.facing<0?-1:1)*90*e;
      actor.sprite.color=new Color(255,255,255,Math.round(255*(1-e)));
+     pin(actor);
      continue;
     }
    }
