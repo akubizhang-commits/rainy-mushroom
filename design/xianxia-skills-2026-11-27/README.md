@@ -11,3 +11,9 @@
 - 导出：`export.py`（复制自 11-26，新增 `degreen` 去掉残留绿色）。蛇后图集已用到 4096 宽的 256 侧栏。
 - 运行时：蝠将 bite 改播 `bite`，去掉借用时的程序前扑；妖蝠、妖隼、妖蛇、蛇后精英 M07 改播 `stomp`。
 - 真实游戏：1280×720 与 844×390 下普攻、技能、发射物验收全部通过；npm test 2401/2401。
+
+## 2026-11-27 later: local fixes (no CU)
+
+- Snake M07: grey rock shards stuck to the tail and body on the slam frames. `degrey` (grey blobs of at least 150 px) runs on clip frames 6-9 only, because on later frames it cut belly highlights; the remaining loose bits on frames 6-10 and 13 are removed with hand-placed `erase` circles. Some pale smear stays where a shard overlapped the body; erasing it would cut holes in the tail.
+- Bat-humanoid bite: the recovery jumped from the lunge (source 66) straight to standing (74, thumbnail diff 17.7). Recovery is now `[66, 67, 68, 70, 72, 74, 78, 92]`. On 68-72 the wing tip is cut by the right frame edge, so the new `fadeRight` option fades the last 28 px of those frames to transparent instead of leaving a flat cut.
+- Atlas sizes are unchanged (snake-v1 3840x3360, bat-humanoid-v1 3840x3264).

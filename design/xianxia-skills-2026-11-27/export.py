@@ -15,11 +15,18 @@ ROOT = Path(__file__).resolve().parents[2]; RES = ROOT / 'cocos-pilot/assets/res
 COUNTS = {'windup': 6, 'active': 2, 'recovery': 8}
 JOBS = {
     # Bat-humanoid bite: 24-52 a red burst / beam comes out of the mouth (skipped). Windup 2-24 crouch and lunge,
-    # active 54/60/64 open jaws snapping shut (clean), recovery skips 68-72 (wing tip touches the frame edge).
-    'bat-humanoid': [('bite', 'bat-humanoid-bite', {'windup': (2, 24), 'active': [54, 60, 64], 'recovery': [66, 74, 78, 82, 86, 92, 100, 110], 'counts': {'windup': 9}, 'degreen': True, 'despeckle': True})],
+    # active 54/60/64 open jaws snapping shut (clean).
+    # 2026-11-27 later: recovery jumped from the lunge (66) straight to standing (74, diff 17.7). It now passes 67/68/70/72
+    # where the wing opens; on 68-72 the wing tip is cut by the right frame edge, so 'fadeRight' fades the last 28 px
+    # of those clip frames (alpha ramp to 0 at the edge) instead of leaving a flat cut.
+    'bat-humanoid': [('bite', 'bat-humanoid-bite', {'windup': (2, 24), 'active': [54, 60, 64], 'recovery': [66, 67, 68, 70, 72, 74, 78, 92], 'counts': {'windup': 9}, 'degreen': True, 'despeckle': True, 'fadeRight': {14: 28, 15: 28, 16: 28}})],
     # Snake M07: rears up (2-22); 24-52 pink glow trail and flying rocks (skipped); head on the ground 56-64 (loose rocks
     # removed by despeckle); recovery 66-100.
-    'snake': [('stomp', 'snake-m07', {'windup': (2, 22), 'active': [56, 60, 64], 'recovery': (66, 100), 'degreen': True, 'despeckle': True})],
+    # 2026-11-27 later: grey rock shards stuck to the body on the slam frames (clip 6-9) are removed with 'degrey' (grey
+    # blobs >= 150 px; on later frames it would cut belly highlights), then despeckle drops the pieces left loose; the
+    # pale shards under the tail (clip frames 6, 10 and 13) are erased by hand.
+    'snake': [('stomp', 'snake-m07', {'windup': (2, 22), 'active': [56, 60, 64], 'recovery': (66, 100), 'degreen': True, 'degrey': [6, 7, 8, 9], 'degreyMin': 150, 'despeckle': True,
+               'erase': {6: [(285, 400, 10)], 7: [(300, 282, 6)], 8: [(297, 224, 5), (305, 233, 8), (321, 236, 6)], 9: [(300, 270, 5), (302, 262, 8), (305, 278, 8), (308, 294, 8)], 10: [(316, 415, 6), (318, 428, 14), (306, 407, 6), (326, 413, 6)], 13: [(366, 335, 14), (374, 365, 18), (380, 395, 18), (382, 420, 14)]}})],
     # Snake-lady M07: tail rises (2-19; 20-22 tail tip touches the top edge), 28-36 smears and a green ring (skipped),
     # active 26/40/44 the tail whips down, recovery 48-110 with the drifting flecks removed by despeckle.
     # The atlas only has a 256 side column left (15 cells), so this clip has 5+3+7 frames.
@@ -40,6 +47,24 @@ def degreen(im, th=8):
     """2026-11-27: clear pixels still tinted green after keying (green-tinted trails, rings and glow fringes)."""
     a = np.array(im); m = a[..., 1].astype(int) > np.maximum(a[..., 0], a[..., 2]).astype(int) + th
     a[..., 3] = np.where(m, 0, a[..., 3]); return Image.fromarray(a)
+def degrey(im, big=60):
+    """2026-11-27: drop flying rock shards: 8-connected blobs of low-saturation grey (max-min < 28, 50 < max < 235)
+    of at least `big` pixels. Small grey specks inside the body (belly highlights) stay."""
+    a = np.array(im); c = a[..., :3].astype(int); mx, mn = c.max(2), c.min(2)
+    g = (a[..., 3] > 0) & (mx - mn < 28) & (mx < 235) & (mx > 50); h, w = g.shape; seen = np.zeros_like(g); drop = np.zeros_like(g)
+    for y0, x0 in zip(*np.nonzero(g)):
+        if seen[y0, x0]: continue
+        stack = [(y0, x0)]; seen[y0, x0] = True; comp = []
+        while stack:
+            y, x = stack.pop(); comp.append((y, x))
+            for dy in (-1, 0, 1):
+                for dx in (-1, 0, 1):
+                    yy, xx = y + dy, x + dx
+                    if 0 <= yy < h and 0 <= xx < w and g[yy, xx] and not seen[yy, xx]: seen[yy, xx] = True; stack.append((yy, xx))
+        if len(comp) >= big:
+            for y, x in comp: drop[y, x] = True
+    drop = np.array(Image.fromarray((drop * 255).astype('uint8')).filter(ImageFilter.MaxFilter(3))) > 0
+    a[..., 3] = np.where(drop, 0, a[..., 3]); return Image.fromarray(a)
 def despeckle(im):
     """Keep only the largest opaque component (8-connected, alpha>=32), dilated 3px so soft edges survive."""
     a = np.array(im.getchannel('A')) >= 32; h, w = a.shape; lab = np.zeros((h, w), np.int32); n = 0; sizes = {}
@@ -101,7 +126,11 @@ def build(fam):
             for i in range(c): ids.append((ph, a + round(i * (b - a) / c))); n += 1
         keyed = [load(srcs[ph] / f'{i + 1:03}.png') for ph, i in ids]; ids = [f'{win.get("srcs", {}).get(ph, src)}:{i}' for ph, i in ids]
         if win.get('degreen'): keyed = [degreen(k) for k in keyed]
+        if win.get('degrey'): keyed = [degrey(k, win.get('degreyMin', 60)) if j in win['degrey'] else k for j, k in enumerate(keyed)]  # clip frame indices
         if win.get('despeckle'): keyed = [despeckle(k) for k in keyed]
+        for j, px in win.get('fadeRight', {}).items():  # clip frame index -> ramp width at the right frame edge
+            a = np.array(keyed[j]); w = a.shape[1]; ramp = np.clip((w - 1 - np.arange(w)) / px, 0, 1)
+            a[..., 3] = (a[..., 3] * ramp[None, :]).astype('uint8'); keyed[j] = Image.fromarray(a)
         bs = [box(k) for k in keyed]
         ux0, uy0, ux1, uy1 = min(b[0] for b in bs), min(b[1] for b in bs), max(b[2] for b in bs), max(b[3] for b in bs)
         ds, anchor = 1.0, list(meta['anchor'])
