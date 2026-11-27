@@ -2896,6 +2896,18 @@ test('paper battle HUD HP ratio stays readable and skill points remain actionabl
   assert.equal(game.run.state.phase, 'paused')
 })
 
+test('equipment-boosted skill levels above the growth cap do not break the battle HUD', t => {
+  // 2026-11-27 regression: a saved run had loadout.passive.sj_mark=2 (equipment boost) while sj_mark caps at 1,
+  // and TowerView.draw threw "Invalid growth sj_mark rank", leaving the game on the loading screen.
+  const storage = disk(); seed(storage)
+  const { game } = launch(t, storage, { assisted: false })
+  game.enterFloor(1)
+  const loadout = game.run.state.loadout
+  loadout.trainedSkills = { active: { ...loadout.active }, passive: { ...loadout.passive, sj_mark: 1 }, evolutionLevels: { ...(loadout.evolutionLevels ?? {}) } }
+  loadout.passive = { ...loadout.passive, sj_mark: 2 }
+  assert.doesNotThrow(() => game.draw())
+})
+
 test('only the attacked monster appears in the centered health panel', t => {
   const storage = disk(); seed(storage)
   const { game } = launch(t, storage, { assisted: false })

@@ -1326,7 +1326,9 @@ export class TowerView {
    // Mechanic cast text keeps its own row when debuffs occupy the HP underside.
    if(this.bossMechanicLabel)this.bossMechanicLabel.node.setPosition(0,this.targetDebuffIcons.hasActiveIcons?-53:-25);
   }
-  const available=growthSummary({...this.store.state,xp:p.xp,skills:{...s.loadout.active,...s.loadout.passive},tutorialWaves:s.loadout.tutorialWaves??this.store.state.tutorialWaves}).available;
+  // Equipment skill-level boosts can exceed a skill's growth cap; growth points count the trained levels only.
+  const trained=s.loadout.trainedSkills??s.loadout;
+  const available=growthSummary({...this.store.state,xp:p.xp,skills:{...trained.active,...trained.passive},tutorialWaves:s.loadout.tutorialWaves??this.store.state.tutorialWaves}).available;
   if(this.skillBadge)this.skillBadge.active=available>0;
   this.advanceNotice(s.time);
   this.foot!.string=s.time<this.breakthroughUntil?this.breakthroughText:'';
