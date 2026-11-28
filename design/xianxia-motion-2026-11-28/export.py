@@ -24,6 +24,9 @@ JOBS = {
     # Crocodile hit: 2-10 head jerks up and back, played out and back (12+ turns sideways). Death: 56-76 sinks flat, legs splayed.
     'crocodile': [('hit', 'crocodile-hit-death', {'windup': [2, 4, 6], 'active': [8, 10], 'recovery': [8, 6, 3], 'degreen': True, 'despeckle': True}),
                   ('death', 'crocodile-hit-death', {'windup': [56, 58, 60], 'active': [62, 64, 66], 'recovery': [68, 70, 72, 76], 'degreen': True, 'despeckle': True})],
+    # Boar-humanoid: 14-33 head and chest jerk back and settle; 86-108 knees buckle and it falls face down, still from 108.
+    'boar-humanoid': [('hit', 'boar-humanoid-hit-death', {'windup': [14, 17, 20], 'active': [23, 26], 'recovery': [28, 30, 33], 'degreen': True, 'despeckle': True}),
+                      ('death', 'boar-humanoid-hit-death', {'windup': [86, 88, 90, 92], 'active': [94, 96, 98], 'recovery': [100, 102, 104, 108, 116], 'degreen': True, 'despeckle': True})],
 }
 # 2026-11-28: the snake-lady atlas was full (4096x3904, its 256 side column used by stomp). Repack it on a 4096-wide shelf
 # with its 480 cells resampled to 384 (still above the 256 native minimum) and new frames at 256.
