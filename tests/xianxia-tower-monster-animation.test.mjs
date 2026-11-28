@@ -343,7 +343,7 @@ test('bat flight keeps native480 detail, pauses and falls back for undelivered c
  const f=setup(),data=JSON.parse(readFileSync(resource('bat-v1.json'),'utf8'));
  const render=(time,extra={})=>{f.art.beginFrame();return f.art.draw(f.parent,'bat1','bat',20,30,50,0,18,{time,hp:100,worldY:70,role:'boss',ai:{mode:'approach',until:0},...extra})};
  render(1);f.staticImage('bat');const image=f.finish('tower-monsters-motion/bat-v1',ImageAsset,new ImageAsset(data.width,data.height));f.finish('tower-monsters-motion/bat-v1',JsonAsset,new JsonAsset(data));
- assert.equal(render(1),275);const bat=f.art.speciesRenderers.get('bat'),a=bat.actors.get('bat1');assert.equal(a.sprite.spriteFrame.rect.width,480);const frame=a.sprite.spriteFrame;render(1);assert.equal(a.sprite.spriteFrame,frame);render(1.2);assert.notEqual(a.sprite.spriteFrame,frame);assert.equal(a.node.position.y,30);
+ assert.equal(render(1),275);const bat=f.art.speciesRenderers.get('bat'),a=bat.actors.get('bat1');assert.equal(a.sprite.spriteFrame.rect.width,384);const frame=a.sprite.spriteFrame;render(1);assert.equal(a.sprite.spriteFrame,frame);render(1.2);assert.notEqual(a.sprite.spriteFrame,frame);assert.equal(a.node.position.y,30);
  render(2,{ai:{mode:'windup',until:3,attack:{startedAt:2,active:.2,dirX:1}}});assert.equal(a.sprite.spriteFrame,bat.entries.get('bat').frame);
  // Ordinary bite: procedural lunge frames on the real phases; sonic shot keeps the portrait.
  const pose=()=>[...bat.motionFrames].find(([,fr])=>fr===a.sprite.spriteFrame)?.[0];
@@ -358,8 +358,11 @@ test('bat flight keeps native480 detail, pauses and falls back for undelivered c
  render(3.7,{ai:{mode:'windup',until:4.55,attack:{...bite,kind:'shot'}}});assert.ok(data.clips.shot.frames.slice(0,9).map(k=>bat.motionFrames.get(k)).includes(a.sprite.spriteFrame),'bat shot windup plays the shot clip');
  render(3.7,{ai:{mode:'windup',until:4.55,attack:bite},mechanic:{skillId:'M07',phase:'windup',startedAt:3.5,activatesAt:4.5,until:5}});assert.ok(data.clips.stomp.frames.map(k=>bat.motionFrames.get(k)).includes(a.sprite.spriteFrame),'2026-11-27 elite M07 plays its own stomp clip');
  const bad=copy(data);bad.clips.bite.phases.recovery=[12,9];assert.equal(bat.validMotion(bad),false);
- render(3);f.art.beginFrame();f.art.endFrame(4,new Set(['bat1']));f.art.beginFrame();f.art.endFrame(4.6,new Set(['bat1']));assert.equal(bat.actors.size,0);assert.equal(f.art.constructor.artFamily('bat','bat_elite_rank4'),'bat-humanoid');
- const png=readFileSync(resource('bat-v1.png'));assert.equal(png.readUInt32BE(16),3840);assert.equal(png.readUInt32BE(20),3936);assert.equal(createHash('sha256').update(png).digest('hex'),data.sourceSha256);f.art.destroy();assert.equal(image.refs,0);
+ // 2026-11-28 hit and death clips: an idle HP drop flinches through the hit clip; a kill plays the death clip, then cleanup.
+ render(3.5,{hp:90});render(3.6,{hp:80});assert.equal(pose(),data.clips.hit.frames[0]);render(3.8,{hp:80});assert.ok(data.clips.hit.frames.includes(pose()));render(4.1,{hp:80});assert.ok(!data.clips.hit.frames.includes(pose()));
+ render(4.2,{hp:80});f.art.beginFrame();f.art.endFrame(4.3,new Set(['bat1']));assert.equal(pose(),data.clips.death.frames[0]);f.art.beginFrame();f.art.endFrame(4.8,new Set(['bat1']));assert.equal(pose(),data.clips.death.frames[5]);
+ f.art.beginFrame();f.art.endFrame(4.3+data.clips.death.frames.length/10+.36,new Set(['bat1']));assert.equal(bat.actors.size,0);assert.equal(f.art.constructor.artFamily('bat','bat_elite_rank4'),'bat-humanoid');
+ const png=readFileSync(resource('bat-v1.png'));assert.equal(png.readUInt32BE(16),4096);assert.equal(png.readUInt32BE(20),3840);assert.equal(createHash('sha256').update(png).digest('hex'),data.sourceSha256);f.art.destroy();assert.equal(image.refs,0);
 });
 
 test('falcon flight keeps native384 detail, pauses and falls back for undelivered comfalcon',()=>{
@@ -389,7 +392,7 @@ test('crocodile movement and sweep preserve detail, timing, pause and mechanic f
  const f=setup(),data=JSON.parse(readFileSync(resource('crocodile-v1.json'),'utf8'));
  const render=(time,extra={})=>{f.art.beginFrame();return f.art.draw(f.parent,'crocodile1','crocodile',20,30,50,0,18,{time,hp:100,worldY:70,role:'boss',ai:{mode:'approach',until:0},...extra})};
  render(1);f.staticImage('crocodile');const image=f.finish('tower-monsters-motion/crocodile-v1',ImageAsset,new ImageAsset(data.width,data.height));f.finish('tower-monsters-motion/crocodile-v1',JsonAsset,new JsonAsset(data));
- closeSize(render(1),274.56);const crocodile=f.art.speciesRenderers.get('crocodile'),a=crocodile.actors.get('crocodile1');assert.equal(a.sprite.spriteFrame.rect.width,480);const frame=a.sprite.spriteFrame;render(1);assert.equal(a.sprite.spriteFrame,frame);render(1.2);assert.notEqual(a.sprite.spriteFrame,frame);assert.equal(a.node.position.y,30);
+ closeSize(render(1),274.56);const crocodile=f.art.speciesRenderers.get('crocodile'),a=crocodile.actors.get('crocodile1');assert.equal(a.sprite.spriteFrame.rect.width,384);const frame=a.sprite.spriteFrame;render(1);assert.equal(a.sprite.spriteFrame,frame);render(1.2);assert.notEqual(a.sprite.spriteFrame,frame);assert.equal(a.node.position.y,30);
  const attack={id:'sweep1',startedAt:2,active:.18,recovery:.9,dirX:1};
  const pose=()=>[...crocodile.motionFrames].find(([,f])=>f===a.sprite.spriteFrame)?.[0];
  const phase=(time,mode,until,extra={})=>render(time,{ai:{mode,until,attack},...extra});
@@ -405,8 +408,11 @@ test('crocodile movement and sweep preserve detail, timing, pause and mechanic f
  phase(2.5,'windup',3);assert.equal(pose(),'sweep-004','loading mid-phase restores exact progress');
  const bad=copy(data);bad.clips.sweep.phases.active=[23,2];assert.equal(crocodile.validMotion(bad),false);
  assert.deepEqual(data.damageEvents,[]);
- render(3);f.art.beginFrame();f.art.endFrame(4,new Set(['crocodile1']));f.art.beginFrame();f.art.endFrame(4.6,new Set(['crocodile1']));assert.equal(crocodile.actors.size,0);assert.equal(f.art.constructor.artFamily('crocodile','crocodile_boss'),'crocodile-humanoid');
- const png=readFileSync(resource('crocodile-v1.png'));assert.equal(png.readUInt32BE(16),3840);assert.equal(png.readUInt32BE(20),3648);assert.equal(createHash('sha256').update(png).digest('hex'),data.sourceSha256);f.art.destroy();assert.equal(image.refs,0);
+ // 2026-11-28 hit and death clips: an idle HP drop flinches through the hit clip; a kill plays the death clip, then cleanup.
+ render(3.5,{hp:90});render(3.6,{hp:80});assert.equal(pose(),data.clips.hit.frames[0]);render(3.8,{hp:80});assert.ok(data.clips.hit.frames.includes(pose()));render(4.1,{hp:80});assert.ok(!data.clips.hit.frames.includes(pose()));
+ render(4.2,{hp:80});f.art.beginFrame();f.art.endFrame(4.3,new Set(['crocodile1']));assert.equal(pose(),data.clips.death.frames[0]);f.art.beginFrame();f.art.endFrame(4.8,new Set(['crocodile1']));assert.equal(pose(),data.clips.death.frames[5]);
+ f.art.beginFrame();f.art.endFrame(4.3+data.clips.death.frames.length/10+.36,new Set(['crocodile1']));assert.equal(crocodile.actors.size,0);assert.equal(f.art.constructor.artFamily('crocodile','crocodile_boss'),'crocodile-humanoid');
+ const png=readFileSync(resource('crocodile-v1.png'));assert.equal(png.readUInt32BE(16),4096);assert.equal(png.readUInt32BE(20),3456);assert.equal(createHash('sha256').update(png).digest('hex'),data.sourceSha256);f.art.destroy();assert.equal(image.refs,0);
 });
 
  test('bear walk keeps fixed frame, simulation clock and static combat fallback',()=>{
@@ -598,10 +604,10 @@ test('rank-five serpent queen walks only on displacement with independent moveme
  render(1,100);f.staticImage('snake-lady');assert.ok(f.requests.some(r=>r.path==='tower-monsters-motion/snake-lady-v1'),'snake-lady must load the upright walking atlas');
  const image=f.finish('tower-monsters-motion/snake-lady-v1',ImageAsset,new ImageAsset(data.width,data.height));f.finish('tower-monsters-motion/snake-lady-v1',JsonAsset,new JsonAsset(data));
  render(1,100);const r=f.art.speciesRenderers.get('snake-lady'),a=r.actors.get('snake-lady1');assert.equal(a.sprite.spriteFrame,r.entries.get('snake-lady').frame);
- render(1.1,98);const frame=a.sprite.spriteFrame;assert.equal(frame.rect.width,480);render(1.1,98);assert.equal(a.sprite.spriteFrame,frame);render(1.3,96);assert.notEqual(a.sprite.spriteFrame,frame);render(1.4,96);assert.equal(a.sprite.spriteFrame,r.entries.get('snake-lady').frame);
+ render(1.1,98);const frame=a.sprite.spriteFrame;assert.equal(frame.rect.width,384);render(1.1,98);assert.equal(a.sprite.spriteFrame,frame);render(1.3,96);assert.notEqual(a.sprite.spriteFrame,frame);render(1.4,96);assert.equal(a.sprite.spriteFrame,r.entries.get('snake-lady').frame);
  for(const mode of ['windup','active','recovery']){{render(2,90,{ai:{mode,until:3,attack:{id:'snake-lady-shot',kind:'shot',startedAt:1,active:.2,recovery:.7,dirX:-1}}});const sh=data.clips.shot,[o,c]=sh.phases[mode];assert.ok(sh.frames.slice(o,o+c).map(k=>r.motionFrames.get(k)).includes(a.sprite.spriteFrame),'shot '+mode+' plays the shot phase');}phasedSkill(r,a,data.clips.heal,mode,render,'M03',false);phasedSkill(r,a,data.clips.breath,mode,render,'M16',false);phasedSkill(r,a,data.clips.cast,mode,render,'M11',true);}
  render(3,70);f.art.beginFrame();f.art.endFrame(4,new Set(['snake-lady1']));f.art.beginFrame();f.art.endFrame(4.6,new Set(['snake-lady1']));assert.equal(r.actors.size,0);f.art.destroy();assert.equal(image.refs,0);
- const png=readFileSync(resource('snake-lady-v1.png'));assert.equal(createHash('sha256').update(png).digest('hex'),data.sourceSha256);assert.equal(png.readUInt32BE(16),4096);assert.equal(png.readUInt32BE(20),3904);assert.equal(png[25],6);assert.equal(Object.keys(data.frames).length,113);
+ const png=readFileSync(resource('snake-lady-v1.png'));assert.equal(createHash('sha256').update(png).digest('hex'),data.sourceSha256);assert.equal(png.readUInt32BE(16),4096);assert.equal(png.readUInt32BE(20),3904);assert.equal(png[25],6);assert.equal(Object.keys(data.frames).length,126);
 });
 
 test('rank-six spider lady walks only on displacement with independent movement and static combat',()=>{

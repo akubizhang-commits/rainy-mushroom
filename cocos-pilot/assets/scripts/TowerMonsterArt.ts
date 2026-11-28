@@ -5,6 +5,7 @@ import { Color, Graphics, ImageAsset, isValid, JsonAsset, Node, Rect, Size, Spri
 
 type Entry = { done: boolean; image: ImageAsset | null; texture: Texture2D | null; frame: SpriteFrame | null };
 const STATIC_FALL_SECONDS = .5;
+const HIT_SECONDS = .4;
 // Spider death has no delivered clip: its on-screen pose is held and fades out over the same .5s other portraits take to fall.
 const SPIDER_DEATH_HOLD_SECONDS = STATIC_FALL_SECONDS;
 type Actor = { node: Node; sprite: Sprite; transform: UITransform; family: string; x: number; facing: number; seen: boolean; top?:number; worldY?:number; enraged?:boolean; diedAt?:number; deathOffset?:{x:number;y:number}; motionTime?:number; moving?:boolean; bodySize?:number };
@@ -422,10 +423,10 @@ export class TowerMonsterArt {
   }
   // Crocodile sweep follows the existing combat phases; mechanics retain their own presentation.
   // 83号：普通熊掌抓、虎爪是普通攻击 bite，复用各自的挥击动作，避免出招时静止。
-  if((this.motionFamily==='crocodile'||this.motionFamily==='bear'&&['slam','bite'].includes(ai.attack?.kind??'')||this.motionFamily==='tiger'&&['sweep','bite'].includes(ai.attack?.kind??'')||(this.motionFamily==='wolf-humanoid'||this.motionFamily==='tiger-humanoid'||/* 2026-11-22 sweep clips */this.motionFamily==='crocodile-humanoid'||this.motionFamily==='white-tiger')&&['sweep','bite'].includes(ai.attack?.kind??'')||this.motionFamily==='falcon-humanoid'&&ai.attack?.kind==='bite'||(this.motionFamily==='snake'||this.motionFamily==='boar-humanoid')&&ai.attack?.kind==='bite'||this.motionFamily==='boar-humanoid'&&ai.attack?.kind==='charge'||this.motionFamily==='bear-humanoid'&&['slam','bite'].includes(ai.attack?.kind??'')||this.motionFamily==='rhino'&&['sweep','charge'].includes(ai.attack?.kind??'')||this.motionFamily==='yak'&&ai.attack?.kind==='slam'||(this.motionFamily==='bat'||this.motionFamily==='falcon')&&ai.attack?.kind==='bite'||/* 2026-11-22 */this.motionFamily==='snake-lady'&&ai.attack?.kind==='shot'||this.motionFamily==='spider-lady'&&ai.attack?.kind==='bite'||(this.motionFamily==='snake'||this.motionFamily==='bat-humanoid'||this.motionFamily==='bat'||/* 2026-11-24 */this.motionFamily==='falcon'||this.motionFamily==='falcon-humanoid')&&ai.attack?.kind==='shot'||/* 2026-11-27 bat-humanoid bite clip (spider-lady never uses the ordinary web: every spider elite/boss has M10, which replaces it) */this.motionFamily==='bat-humanoid'&&ai.attack?.kind==='bite') && ai.attack && ['windup','active','recovery'].includes(ai.mode)
+  if((this.motionFamily==='crocodile'||this.motionFamily==='bear'&&['slam','bite'].includes(ai.attack?.kind??'')||this.motionFamily==='tiger'&&['sweep','bite'].includes(ai.attack?.kind??'')||(this.motionFamily==='wolf-humanoid'||this.motionFamily==='tiger-humanoid'||/* 2026-11-22 sweep clips */this.motionFamily==='crocodile-humanoid'||this.motionFamily==='white-tiger')&&['sweep','bite'].includes(ai.attack?.kind??'')||this.motionFamily==='falcon-humanoid'&&ai.attack?.kind==='bite'||(this.motionFamily==='snake'||this.motionFamily==='boar-humanoid')&&ai.attack?.kind==='bite'||this.motionFamily==='boar-humanoid'&&ai.attack?.kind==='charge'||this.motionFamily==='bear-humanoid'&&['slam','bite'].includes(ai.attack?.kind??'')||this.motionFamily==='rhino'&&['sweep','charge'].includes(ai.attack?.kind??'')||this.motionFamily==='yak'&&ai.attack?.kind==='slam'||(this.motionFamily==='bat'||this.motionFamily==='falcon')&&ai.attack?.kind==='bite'||/* 2026-11-22 */this.motionFamily==='snake-lady'&&ai.attack?.kind==='shot'||this.motionFamily==='spider-lady'&&ai.attack?.kind==='bite'||(this.motionFamily==='snake'||this.motionFamily==='bat-humanoid'||this.motionFamily==='bat'||/* 2026-11-24 */this.motionFamily==='falcon'||this.motionFamily==='falcon-humanoid')&&ai.attack?.kind==='shot'||/* 2026-11-27 bat-humanoid bite clip (spider-lady never uses the ordinary web: every spider elite/boss has M10, which replaces it) */this.motionFamily==='bat-humanoid'&&ai.attack?.kind==='bite'||/* 2026-11-28 normal snake-lady bite clip */this.motionFamily==='snake-lady'&&ai.attack?.kind==='bite') && ai.attack && ['windup','active','recovery'].includes(ai.mode)
     && !['windup','active','recovery'].includes(m?.phase||'')) {
    // 低阶妖蝠、妖隼普攻：飞行帧+程序前扑残影（2026-11-06用户验收）；音波/羽弹 shot 仍保持立绘。
-   const clip=atlas.clips[ai.attack.kind==='shot'?'shot':this.motionFamily==='spider-lady'||this.motionFamily==='bat-humanoid'?'bite':(this.motionFamily==='boar-humanoid'||this.motionFamily==='rhino')&&ai.attack.kind==='charge'?'charge':(this.motionFamily==='bear'||this.motionFamily==='bear-humanoid'||this.motionFamily==='yak')?'slam':(this.motionFamily==='bat'||this.motionFamily==='falcon'||this.motionFamily==='snake'||this.motionFamily==='boar-humanoid')?'bite':'sweep'],range=clip?.phases?.[ai.mode];
+   const clip=atlas.clips[ai.attack.kind==='shot'?'shot':this.motionFamily==='spider-lady'||this.motionFamily==='bat-humanoid'||this.motionFamily==='snake-lady'?'bite':(this.motionFamily==='boar-humanoid'||this.motionFamily==='rhino')&&ai.attack.kind==='charge'?'charge':(this.motionFamily==='bear'||this.motionFamily==='bear-humanoid'||this.motionFamily==='yak')?'slam':(this.motionFamily==='bat'||this.motionFamily==='falcon'||this.motionFamily==='snake'||this.motionFamily==='boar-humanoid')?'bite':'sweep'],range=clip?.phases?.[ai.mode];
    if(!clip||!range)return null;
    const [offset,count]=range;
    const duration=ai.mode==='windup'?ai.until-ai.attack.startedAt:
@@ -437,14 +438,14 @@ export class TowerMonsterArt {
   // Other combat poses have no delivered animation.
   if((this.motionFamily==='bat'||this.motionFamily==='falcon'||this.motionFamily==='crocodile'||this.motionFamily==='bear'||this.motionFamily==='tiger'||this.motionFamily==='rhino'||this.motionFamily==='yak'||this.motionFamily==='wolf-humanoid'||this.motionFamily==='tiger-humanoid'||this.motionFamily==='falcon-humanoid'||this.motionFamily==='bear-humanoid'||this.motionFamily==='snake'||this.motionFamily==='boar-humanoid'||this.motionFamily==='crocodile-humanoid'||this.motionFamily==='white-tiger'||this.motionFamily==='snake-lady'||this.motionFamily==='spider-lady'||this.motionFamily==='bat-humanoid')) {
    if(ai.mode!=='approach'||['windup','active','recovery'].includes(m?.phase||''))return null;
+   // 2026-11-28: families with a hit clip flinch on damage while idle; the walk cycle still wins while moving.
+   const hitAt=this.observeHit(id,motion),hit=atlas.clips.hit;
+   if(hit&&!motion.moving&&motion.time-hitAt<HIT_SECONDS)return this.motionFrames.get(hit.frames[Math.min(hit.frames.length-1,Math.floor((motion.time-hitAt)/HIT_SECONDS*hit.frames.length))])||null;
    if((this.motionFamily==='tiger'||this.motionFamily==='rhino'||this.motionFamily==='yak'||this.motionFamily==='wolf-humanoid'||this.motionFamily==='tiger-humanoid'||this.motionFamily==='falcon-humanoid'||this.motionFamily==='bear-humanoid'||this.motionFamily==='snake'||this.motionFamily==='boar-humanoid'||this.motionFamily==='crocodile-humanoid'||this.motionFamily==='white-tiger'||this.motionFamily==='snake-lady'||this.motionFamily==='spider-lady'||this.motionFamily==='bat-humanoid')&&!motion.moving)return null;
    const clip=atlas.clips.move;
    return this.motionFrames.get(clip.frames[Math.floor(Math.max(0,motion.time)*clip.fps)%clip.frames.length])||null;
   }
-  let obs=this.observations.get(id);
-  if(!obs){obs={hp:motion.hp,hitAt:-Infinity};this.observations.set(id,obs);}
-  if(motion.hp!==undefined && obs.hp!==undefined && motion.hp>0 && motion.hp<obs.hp)obs.hitAt=motion.time;
-  obs.hp=motion.hp;
+  const hitAt=this.observeHit(id,motion);
   const wolf=this.motionFamily==='wolf',spider=this.motionFamily==='spider';
   let name=motion.moving?'move':(wolf||spider)?'bite':'gore',start=motion.time,end:number|undefined,hold=!motion.moving;
   let offset=0,count:number|undefined;
@@ -469,7 +470,7 @@ export class TowerMonsterArt {
    else {offset=ai.mode==='windup'?0:ai.mode==='active'?16:22;count=ai.mode==='windup'?16:ai.mode==='active'?6:10;}
    start=ai.mode==='windup'?ai.attack.startedAt:ai.mode==='active'?ai.until-ai.attack.active:motion.time;
   // 2026-11-13: a hit flinch only replaces the idle pose; while the actor is displaced (e.g. a spider elite backing away) the walk cycle wins, otherwise it slides in the flinch pose.
-  } else if(!motion.moving&&motion.time-obs.hitAt<.4) {name='hit';hold=false;start=obs.hitAt;end=obs.hitAt+.4;}
+  } else if(!motion.moving&&motion.time-hitAt<HIT_SECONDS) {name='hit';hold=false;start=hitAt;end=hitAt+HIT_SECONDS;}
   const clip=atlas.clips[name];if(!clip)return null;
   const key=`${name}:${hold}:${offset}:${end??''}:${ai.attack?.id??''}:${m?.startedAt??''}`;
   let track=this.phaseTracks.get(id);
@@ -479,6 +480,15 @@ export class TowerMonsterArt {
   // Spider walk: one frame per SPIDER_STRIDE world units travelled, so feet never slide.
   const n=hold?0:name==='move'&&this.motionFamily==='spider'?Math.floor((this.travel.get(id)??0)/SPIDER_STRIDE)%length:clip.loop?Math.floor(age*clip.fps)%length:end!==undefined?Math.min(length-1,Math.floor(age/Math.max(1e-8,end-track.start)*length)):Math.min(length-1,Math.floor(age*clip.fps));
   return (this.motionFamily==='boar'&&m?.enraged?this.rageFrames:this.motionFrames).get(clip.frames[offset+n])||null;
+ }
+
+ /** Last time this actor's HP dropped (while alive), tracked across frames. */
+ private observeHit(id:string|number,motion:MonsterMotion){
+  let obs=this.observations.get(id);
+  if(!obs){obs={hp:motion.hp,hitAt:-Infinity};this.observations.set(id,obs);}
+  if(motion.hp!==undefined && obs.hp!==undefined && motion.hp>0 && motion.hp<obs.hp)obs.hitAt=motion.time;
+  obs.hp=motion.hp;
+  return obs.hitAt;
  }
 
  private loadMotion() {

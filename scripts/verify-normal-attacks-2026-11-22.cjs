@@ -15,6 +15,8 @@ const CASES=[{floor:4,family:'crocodile-humanoid',rank:4,role:'boss',clip:'sweep
  {floor:4,family:'bat-humanoid',rank:4,role:'elite',archetype:'bat_elite_rank4',clip:'shot'},
  // 2026-11-27 bat-humanoid normal bite has its own clip (11-23 to 11-26 it borrowed the screech plus a lunge).
  {floor:4,family:'bat-humanoid',rank:4,role:'normal',archetype:'bat_normal_r4',clip:'bite',kind:'bite',block:['shot']},
+ // 2026-11-28 normal snake-lady (floor 8) bite has its own clip; it used to stand still as the portrait.
+ {floor:8,family:'snake-lady',rank:4,role:'normal',archetype:'snake_normal_r4',clip:'bite',kind:'bite',block:['shot']},
  // 2026-11-23 per-role acceptance of the new clips (65 standard: normal / elite / boss each checked in game, plus pause and death). Spider-lady elites/bosses make no ordinary attack (web is replaced by M10, no bite fallback), so only the normal bites.
  {floor:4,family:'bat-humanoid',rank:4,role:'normal',archetype:'bat_normal_r4',clip:'shot',kind:'shot',block:['bite']},
  {floor:2,family:'snake',rank:2,role:'normal',archetype:'snake_normal',clip:'shot',kind:'shot',block:['bite']},
